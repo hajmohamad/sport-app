@@ -3,6 +3,10 @@
   "WorkspaceRootPath": "C:\\Users\\Dour-Andish\\Desktop\\git\\sport-app\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Dour-Andish\\Desktop\\git\\sport-app\\obj\\Debug\\net8.0\\sport-app-backend.AssemblyInfo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:obj\\Debug\\net8.0\\sport-app-backend.AssemblyInfo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{27B63680-A5B7-55C3-C88B-EBD5D7F12023}|sport-app-backend.csproj|c:\\users\\dour-andish\\desktop\\git\\sport-app\\dockerfile||{8B382828-6202-11D1-8870-0000F87579D2}",
       "RelativeMoniker": "D:0:0:{27B63680-A5B7-55C3-C88B-EBD5D7F12023}|sport-app-backend.csproj|solutionrelative:dockerfile||{8B382828-6202-11D1-8870-0000F87579D2}"
     },
@@ -43,19 +47,32 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
+              "Title": "sport-app-backend.AssemblyInfo.cs",
+              "DocumentMoniker": "C:\\Users\\Dour-Andish\\Desktop\\git\\sport-app\\obj\\Debug\\net8.0\\sport-app-backend.AssemblyInfo.cs",
+              "RelativeDocumentMoniker": "obj\\Debug\\net8.0\\sport-app-backend.AssemblyInfo.cs",
+              "ToolTip": "C:\\Users\\Dour-Andish\\Desktop\\git\\sport-app\\obj\\Debug\\net8.0\\sport-app-backend.AssemblyInfo.cs",
+              "RelativeToolTip": "obj\\Debug\\net8.0\\sport-app-backend.AssemblyInfo.cs",
+              "ViewState": "AgIAAAQAAAAAAAAAAAAgwBIAAAArAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-24T12:46:32.849Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
               "Title": "Dockerfile",
               "DocumentMoniker": "C:\\Users\\Dour-Andish\\Desktop\\git\\sport-app\\Dockerfile",
               "RelativeDocumentMoniker": "Dockerfile",
               "ToolTip": "C:\\Users\\Dour-Andish\\Desktop\\git\\sport-app\\Dockerfile",
               "RelativeToolTip": "Dockerfile",
-              "ViewState": "AgIAAAkAAAAAAAAAAAAAABMAAAAsAAAAAAAAAA==",
+              "ViewState": "AgIAAAcAAAAAAAAAAAAAABMAAAAuAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
               "WhenOpened": "2025-03-24T12:40:03.332Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 2,
               "Title": "Program.cs",
               "DocumentMoniker": "C:\\Users\\Dour-Andish\\Desktop\\git\\sport-app\\Program.cs",
               "RelativeDocumentMoniker": "Program.cs",
@@ -63,8 +80,7 @@
               "RelativeToolTip": "Program.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAADAAAAApAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-24T12:20:01.095Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-03-24T12:20:01.095Z"
             }
           ]
         }
