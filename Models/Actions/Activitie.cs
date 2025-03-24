@@ -12,6 +12,7 @@ public class Activitie
     public ActivitiesEnum ActivityEnum;
     public double CaloriesLost { get; set; }
     public double Duration { get; set; }
+    public double Distance { get; set; }
     public DateTime DateTime{ get; set; }
     public int AthleteId { get; set; }
     public required Athlete Athlete { get; set; }

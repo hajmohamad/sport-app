@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
@@ -22,48 +23,48 @@ namespace sport_app_backend.Repository
 
         public async Task<ApiResponse> ActivityReport(string phoneNumber)
         {
-
             var athlete = await _context.Athletes.FirstOrDefaultAsync(x => x.PhoneNumber == phoneNumber);
-            if (athlete is null) return new ApiResponse() { Message = "User is not an athlete", Action = false };// Ensure the user is an athlete
+            if (athlete is null)
+                return new ApiResponse() { Message = "User is not an athlete", Action = false };
 
-            var activities = await  _context.Activities.Where(x => x.AthleteId == athlete.Id && x.DateTime >= DateTime.Now.AddDays(-30)).ToListAsync();
-            return new ApiResponse() { Message = "Activities found",
-             Action = true,
-              Result = activities.Select(x => new {
-                x.Id,
-                Date = x.DateTime.ToString("yyyy-MM-dd"),
-                 x.CaloriesLost, 
-                 x.Duration, SportEnum = x.ActivityEnum.ToString() }).ToList() };
+            var today = DateTime.Now.Date;
+            var daysSinceSaturday = (int)today.DayOfWeek == 0 ? 6 : (int)today.DayOfWeek - 6;
+            var lastSaturday = today.AddDays(-daysSinceSaturday);
+
+            var activities = await _context.Activities
+                .Where(x => x.AthleteId == athlete.Id && x.DateTime >= lastSaturday)
+                .ToListAsync();
+
+            return new ApiResponse()
+            {
+                Message = "Activities found",
+                Action = true,
+                Result = activities.Select(x => new
+                {
+                    x.Id,
+                    Date = x.DateTime.ToString("yyyy-MM-dd"),
+                    x.CaloriesLost,
+                    x.Duration,
+                    SportEnum = x.ActivityEnum.ToString()
+                }).ToList()
+            };
         }
+
 
         public async Task<ApiResponse> AddActivity(string phoneNumber, AddActivityDto addSportDto)
         {
             var athlete = await _context.Athletes.FirstOrDefaultAsync(x => x.PhoneNumber == phoneNumber);
             if (athlete is null) return new ApiResponse() { Message = "User is not an athlete", Action = false };// Ensure the user is an athlete
-            var metValues = new System.Collections.Generic.Dictionary<ActivitiesEnum, double>
-        {
-            { ActivitiesEnum.RUNNING, 9.8 },
-            { ActivitiesEnum.WALKING, 3.8 },
-            { ActivitiesEnum.CYCLING, 7.5 },
-            { ActivitiesEnum.SWIMMING, 8.3 },
-            { ActivitiesEnum.BASKETBALL, 6.5 },
-            { ActivitiesEnum.SOCCER, 7.0 },
-            { ActivitiesEnum.TENNIS, 6.0 },
-            { ActivitiesEnum.BADMINTON, 5.5 },
-            { ActivitiesEnum.DANCING, 5.0 },
-            { ActivitiesEnum.VOLLEYBALL, 4.0 }     };
-            if (string.IsNullOrEmpty(addSportDto.ActivitiyEnum))
-            {
-                return new ApiResponse() { Message = "ActivityEnum cannot be null or empty", Action = false };
-            }
-            var sportEnum = Enum.Parse<ActivitiesEnum>(addSportDto.ActivitiyEnum);
-            var met = metValues[sportEnum];
 
-            var sport = new Activitie(){
+            var sportEnum = Enum.Parse<ActivitiesEnum>(addSportDto.ActivitiyEnum);
+
+            var sport = new Activitie()
+            {
                 AthleteId = athlete.Id,
                 Athlete = athlete,
                 ActivityEnum = sportEnum,
-                CaloriesLost = met*athlete.CurrentWeight* (addSportDto.Duration/60),
+                CaloriesLost = addSportDto.CaloriesLost,
+                Distance = addSportDto.Distance,
                 Duration = addSportDto.Duration,
                 DateTime = DateTime.Now
             };
@@ -71,21 +72,24 @@ namespace sport_app_backend.Repository
             await _context.Activities.AddAsync(sport);
             await _context.SaveChangesAsync();
 
-            return new ApiResponse(){
+            return new ApiResponse()
+            {
                 Message = "Sport added successfully",
                 Action = true,
-                Result = new{
+                Result = new
+                {
                     sport.CaloriesLost,
                     sport.Duration,
+                    sport.Distance,
                     SportEnum = sport.ActivityEnum.ToString()
-                    
+
                 }
             };
 
 
 
         }
-        
+
         public async Task<ApiResponse> AddWaterIntake(string phoneNumber, WaterInTakeDto waterInTakeDto)
         {
             var athlete = await _context.Athletes.FirstOrDefaultAsync(x => x.PhoneNumber == phoneNumber);
@@ -122,11 +126,11 @@ namespace sport_app_backend.Repository
             };
         }
 
-        public async Task<ApiResponse> DeleteActivity(string phoneNumber,int activityId)
-        { 
+        public async Task<ApiResponse> DeleteActivity(string phoneNumber, int activityId)
+        {
             var athlete = await _context.Athletes.FirstOrDefaultAsync(x => x.PhoneNumber == phoneNumber);
             if (athlete is null) return new ApiResponse() { Message = "User is not an athlete", Action = false };// Ensure the user is an athlete
-            var activity = await _context.Activities.FirstOrDefaultAsync(x => x.Id == activityId&& x.AthleteId == athlete.Id);
+            var activity = await _context.Activities.FirstOrDefaultAsync(x => x.Id == activityId && x.AthleteId == athlete.Id);
             if (activity is null) return new ApiResponse() { Message = "Activity not found", Action = false };
             _context.Activities.Remove(activity);
             await _context.SaveChangesAsync();
@@ -136,7 +140,7 @@ namespace sport_app_backend.Repository
                 Action = true
 
             };
-            }
+        }
 
         public async Task<ApiResponse> SubmitAthleteQuestions(string phoneNumber, AthleteQuestionDto AthleteQuestionDto)
         {
@@ -236,21 +240,40 @@ namespace sport_app_backend.Repository
                 Action = true
             };
         }
-        //report last 30 days
+
+
         public async Task<ApiResponse> WeightReport(string phoneNumber)
         {
             var athlete = await _context.Athletes.FirstOrDefaultAsync(x => x.PhoneNumber == phoneNumber);
-            if (athlete is null) return new ApiResponse() { Message = "User is not an athlete", Action = false };// Ensure the user is an athlete
-            var weightEntries = _context.WeightEntries.Where(x => x.AthleteId == athlete.Id && x.CurrentDate >= DateTime.Now.AddDays(-30)).OrderByDescending(x => x.CurrentDate).ToList();
+            if (athlete is null)
+                return new ApiResponse() { Message = "User is not an athlete", Action = false };
+
+           
+            PersianCalendar pc = new PersianCalendar();
+            DateTime today = DateTime.Now;
+            int persianYear = pc.GetYear(today);
+            int persianMonth = pc.GetMonth(today);
+            DateTime firstDayOfPersianMonth = pc.ToDateTime(persianYear, persianMonth, 1, 0, 0, 0, 0);
+
+            // دریافت رکوردهای وزن از اول ماه شمسی تاکنون
+            var weightEntries = await _context.WeightEntries
+                .Where(x => x.AthleteId == athlete.Id && x.CurrentDate >= firstDayOfPersianMonth)
+                .OrderByDescending(x => x.CurrentDate)
+                .ToListAsync();
 
             return new ApiResponse()
             {
                 Message = "Weight report fetched successfully",
                 Action = true,
-                Result = weightEntries.Select(x => new { Date = x.CurrentDate.ToString("yyyy-MM-dd"), x.Weight }).ToList()
+                Result = weightEntries.Select(x => new
+                {
+                    Date = x.CurrentDate.ToString("yyyy-MM-dd"),
+                    x.Weight
+                }).ToList()
             };
         }
 
-        
+
+
     }
 }

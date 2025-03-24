@@ -23,11 +23,19 @@ public class UserRepository : IUserRepository
 
     }
 
-    public async Task<ApiResponse> AddRole(string phoneNumber, string role)
+
+    public async Task<ApiResponse> AddRoleGender(string phoneNumber, RoleGenderDto roleGenderDto)
     {
         var user = await _context.Users.FirstOrDefaultAsync(x => x.PhoneNumber == phoneNumber);
         if (user is null) return new ApiResponse() { Message = "User not found", Action = false };
-        if (role.Equals("Coach"))
+        if(roleGenderDto.Role is null) return new ApiResponse() { Message = "Role is null", Action = false };
+        if(roleGenderDto.Gender is null) return new ApiResponse() { Message = "Gender is null", Action = false };
+
+        var sportEnum = Enum.Parse<Gender>(roleGenderDto.Gender);
+        user.Gender = sportEnum;
+        
+
+        if (roleGenderDto.Role.Equals("Coach"))
         {
             user.TypeOfUser = TypeOfUser.COACH;
             var coach = new Coach()
@@ -53,7 +61,7 @@ public class UserRepository : IUserRepository
             };
 
         }
-        else if (role.Equals("Athlete"))
+        else if (roleGenderDto.Gender.Equals("Athlete"))
         {
             user.TypeOfUser = TypeOfUser.ATHLETE;
             user.Athlete = new Athlete

@@ -32,11 +32,11 @@ public class UserController(IUserRepository userRepository) : ControllerBase
 
     [HttpPut("add role")]
     [Authorize(Roles = "None")]
-    public async Task<IActionResult> AddRole([FromBody] string role)
+    public async Task<IActionResult> AddRoleGender([FromBody] RoleGenderDto roleGenderDto)
     {
         var PhoneNumber =  User.FindFirst(ClaimTypes.Name)?.Value;
         if (PhoneNumber is null) return BadRequest("PhoneNumber is null");
-        return Ok(await _userRepository.AddRole(PhoneNumber, role));
+        return Ok(await _userRepository.AddRoleGender(PhoneNumber, roleGenderDto));
     }
 
     [HttpPost("AccsessToken")]

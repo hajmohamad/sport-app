@@ -97,8 +97,7 @@ namespace sport_app_backend.Controller
 
         [HttpGet("get_water_in_day")]
         [Authorize(Roles = "Athlete")]
-        // This endpoint retrieves the water intake records for the current day for the authenticated athlete.
-        //this data for last30 days but in Hijri solar calendar
+        
         public async Task<IActionResult> GetWaterInDayForLast7Days()
         {
             var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
@@ -106,9 +105,12 @@ namespace sport_app_backend.Controller
             var athlete = await _context.Users
                 .Include(u => u.Athlete)
                 .FirstOrDefaultAsync(u => u.PhoneNumber == phoneNumber);
+            var today = DateTime.Now.Date;
+            var daysSinceSaturday = (int)today.DayOfWeek == 0 ? 6 : (int)today.DayOfWeek - 6;
+            var lastSaturday = today.AddDays(-daysSinceSaturday);
             if (athlete == null || athlete.Athlete == null) return NotFound("Athlete not found");
             var ListOfWaterInDay = await _context.WaterInDays
-                .Where(w => w.AthleteId == athlete.Athlete.Id && w.Date.Date >= DateTime.UtcNow.Date.AddDays(-70))
+                .Where(w => w.AthleteId == athlete.Athlete.Id && w.Date.Date >= lastSaturday)
                 .ToListAsync();
 
             return Ok(new ApiResponse()
@@ -156,7 +158,6 @@ namespace sport_app_backend.Controller
             var resualt = await _context.Users.Where(c => c.TypeOfUser == TypeOfUser.COACH).ToListAsync();
             return Ok(new ApiResponse() { Action = true, Message = "Coaches found", Result = resualt.Select(c => c.ToCoachForSearch()).ToList() });
         }
-
 
         [HttpGet("get_coach_profile/{coachId}")]//need to make it with id
         [Authorize(Roles = "Athlete")]
