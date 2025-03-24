@@ -11,7 +11,7 @@ using sport_app_backend.Data;
 namespace sport_app_backend.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250318180232_init")]
+    [Migration("20250324221521_init")]
     partial class init
     {
         /// <inheritdoc />
@@ -31,8 +31,8 @@ namespace sport_app_backend.Migrations
                     b.Property<int>("CurrentBodyForm")
                         .HasColumnType("int");
 
-                    b.Property<int>("CurrentWeight")
-                        .HasColumnType("int");
+                    b.Property<double>("CurrentWeight")
+                        .HasColumnType("double");
 
                     b.Property<int?>("FitnessLevel")
                         .HasColumnType("int");
@@ -44,14 +44,18 @@ namespace sport_app_backend.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
+                    b.Property<string>("PhoneNumber")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
                     b.Property<int>("TargetBodyForm")
                         .HasColumnType("int");
 
                     b.Property<int>("UserId")
                         .HasColumnType("int");
 
-                    b.Property<int>("WeightGoal")
-                        .HasColumnType("int");
+                    b.Property<double>("WeightGoal")
+                        .HasColumnType("double");
 
                     b.HasKey("Id");
 
@@ -78,6 +82,10 @@ namespace sport_app_backend.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("varchar(50)");
 
+                    b.Property<string>("PhoneNumber")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
                     b.Property<int>("StartCoachingYear")
                         .HasColumnType("int");
 
@@ -94,7 +102,7 @@ namespace sport_app_backend.Migrations
                     b.ToTable("Coaches");
                 });
 
-            modelBuilder.Entity("sport_app_backend.Models.Account.Coachplan", b =>
+            modelBuilder.Entity("sport_app_backend.Models.Account.CoachPlan", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -132,7 +140,7 @@ namespace sport_app_backend.Migrations
 
                     b.HasIndex("CoachId");
 
-                    b.ToTable("Coachplan");
+                    b.ToTable("CoachesPlan");
                 });
 
             modelBuilder.Entity("sport_app_backend.Models.Account.User", b =>
@@ -198,17 +206,45 @@ namespace sport_app_backend.Migrations
                     b.Property<int>("AthleteId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("EntryDate")
+                    b.Property<DateTime>("CurrentDate")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<int>("Weight")
-                        .HasColumnType("int");
+                    b.Property<double>("Weight")
+                        .HasColumnType("double");
 
                     b.HasKey("Id");
 
                     b.HasIndex("AthleteId");
 
-                    b.ToTable("WeightEntry");
+                    b.ToTable("WeightEntries");
+                });
+
+            modelBuilder.Entity("sport_app_backend.Models.Actions.Activitie", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<int>("AthleteId")
+                        .HasColumnType("int");
+
+                    b.Property<double>("CaloriesLost")
+                        .HasColumnType("double");
+
+                    b.Property<DateTime>("DateTime")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<double>("Distance")
+                        .HasColumnType("double");
+
+                    b.Property<double>("Duration")
+                        .HasColumnType("double");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AthleteId");
+
+                    b.ToTable("Activities");
                 });
 
             modelBuilder.Entity("sport_app_backend.Models.Actions.Exercise", b =>
@@ -634,7 +670,7 @@ namespace sport_app_backend.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("sport_app_backend.Models.Account.Coachplan", b =>
+            modelBuilder.Entity("sport_app_backend.Models.Account.CoachPlan", b =>
                 {
                     b.HasOne("sport_app_backend.Models.Account.Coach", "Coach")
                         .WithMany("Coachplans")
@@ -647,11 +683,24 @@ namespace sport_app_backend.Migrations
 
             modelBuilder.Entity("sport_app_backend.Models.Account.WeightEntry", b =>
                 {
-                    b.HasOne("sport_app_backend.Models.Account.Athlete", null)
+                    b.HasOne("sport_app_backend.Models.Account.Athlete", "Athlete")
                         .WithMany("WeightEntries")
                         .HasForeignKey("AthleteId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Athlete");
+                });
+
+            modelBuilder.Entity("sport_app_backend.Models.Actions.Activitie", b =>
+                {
+                    b.HasOne("sport_app_backend.Models.Account.Athlete", "Athlete")
+                        .WithMany()
+                        .HasForeignKey("AthleteId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Athlete");
                 });
 
             modelBuilder.Entity("sport_app_backend.Models.CoachQuestion", b =>

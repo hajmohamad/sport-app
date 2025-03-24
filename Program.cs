@@ -115,15 +115,10 @@ app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
 
-// using (var scope = app.Services.CreateScope())
-// {
-//     var env = scope.ServiceProvider.GetRequiredService<IWebHostEnvironment>();
-//     if (!env.IsDevelopment())
-//     {
-//         var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-//         dbContext.Database.Migrate();
-//     }
-// }
-
+using (var scope = app.Services.CreateScope())
+{
+    var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+    dbContext.Database.Migrate();
+}
 app.Run();
 

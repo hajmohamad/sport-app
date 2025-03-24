@@ -231,6 +231,9 @@ namespace sport_app_backend.Migrations
                     b.Property<DateTime>("DateTime")
                         .HasColumnType("datetime(6)");
 
+                    b.Property<double>("Distance")
+                        .HasColumnType("double");
+
                     b.Property<double>("Duration")
                         .HasColumnType("double");
 
