@@ -107,16 +107,15 @@ namespace sport_app_backend.Controller
                 .FirstOrDefaultAsync(u => u.PhoneNumber == phoneNumber);
             var today = DateTime.Now.Date;
             var daysSinceSaturday = (int)today.DayOfWeek == 0 ? 6 : (int)today.DayOfWeek - 6;
-            var lastSaturday = today.AddDays(-daysSinceSaturday);
+            var lastSaturday = today.AddDays(daysSinceSaturday);
             if (athlete == null || athlete.Athlete == null) return NotFound("Athlete not found");
-            var ListOfWaterInDay = await _context.WaterInDays
-                .Where(w => w.AthleteId == athlete.Athlete.Id && w.Date.Date >= lastSaturday)
+            var ListOfWaterInDay = await _context.WaterInDays.Where(w => w.AthleteId == athlete.Athlete.Id&& w.Date.Date >= lastSaturday.Date)
                 .ToListAsync();
 
             return Ok(new ApiResponse()
             {
                 Action = true,
-                Message = "Water intake found",
+                Message = "Water inday found",
                 Result = ListOfWaterInDay.Select(w => new WaterInDayDto()
                 {
 

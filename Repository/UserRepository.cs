@@ -31,11 +31,11 @@ public class UserRepository : IUserRepository
         if(roleGenderDto.Role is null) return new ApiResponse() { Message = "Role is null", Action = false };
         if(roleGenderDto.Gender is null) return new ApiResponse() { Message = "Gender is null", Action = false };
 
-        var sportEnum = Enum.Parse<Gender>(roleGenderDto.Gender);
+        var sportEnum = Enum.Parse<Gender>(roleGenderDto.Gender.ToUpper());
         user.Gender = sportEnum;
         
 
-        if (roleGenderDto.Role.Equals("Coach"))
+        if (roleGenderDto.Role.ToUpper().Equals("COACH"))
         {
             user.TypeOfUser = TypeOfUser.COACH;
             var coach = new Coach()
@@ -61,7 +61,7 @@ public class UserRepository : IUserRepository
             };
 
         }
-        else if (roleGenderDto.Gender.Equals("Athlete"))
+        else if (roleGenderDto.Role.ToUpper().Equals("ATHLETE"))
         {
             user.TypeOfUser = TypeOfUser.ATHLETE;
             user.Athlete = new Athlete

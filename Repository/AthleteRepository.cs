@@ -29,7 +29,7 @@ namespace sport_app_backend.Repository
 
             var today = DateTime.Now.Date;
             var daysSinceSaturday = (int)today.DayOfWeek == 0 ? 6 : (int)today.DayOfWeek - 6;
-            var lastSaturday = today.AddDays(-daysSinceSaturday);
+            var lastSaturday = today.AddDays(daysSinceSaturday);
 
             var activities = await _context.Activities
                 .Where(x => x.AthleteId == athlete.Id && x.DateTime >= lastSaturday)
