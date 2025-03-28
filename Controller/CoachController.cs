@@ -72,7 +72,20 @@ namespace sport_app_backend.Controller
             var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
             if (phoneNumber is null) return BadRequest(new ApiResponse { Action = false, Message = "PhoneNumber is null" });
             var result = await _coachRepository.UpdateCoachingPlane(phoneNumber, id, coachingPlaneDto);
-            return Ok("method not implemented");
+            if (result.Action != true) return BadRequest(result);
+            return Ok(result);
+        }
+        
+        //delete coaching plane
+        [HttpDelete("delete_coaching_plane/{id}")]
+        [Authorize(Roles = "Coach")]
+        public async Task<IActionResult> DeleteCoachingPlane([FromRoute] int id)
+        {
+            var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
+            if (phoneNumber is null) return BadRequest(new ApiResponse { Action = false, Message = "PhoneNumber is null" });
+            var result = await _coachRepository.DeleteCoachingPlane(phoneNumber, id);
+            if (result.Action != true) return BadRequest(result);
+            return Ok(result);
         }
 
         /// get coaching plane
@@ -80,19 +93,26 @@ namespace sport_app_backend.Controller
         [Authorize(Roles = "Coach")]
         public async Task<IActionResult> GetCoachingPlane()
         {
-          
             var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
             if (phoneNumber is null) return BadRequest(new ApiResponse { Action = false, Message = "PhoneNumber is null" });
             var coach = await _context.Coaches.Include(c => c.Coachplans).FirstOrDefaultAsync(c => c.PhoneNumber == phoneNumber);
             if (coach == null) return NotFound(new ApiResponse { Action = false, Message = "Coach not found" });
-            var coachingPlane = coach.Coachplans;
-
-            if (coachingPlane == null) return NotFound(new ApiResponse { Action = false, Message = "Coaching plane not found" });
+            var coachingPlane = coach.Coachplans.Where(x=>x.IsDeleted==false).ToList();
             var coachingPlaneDto = coachingPlane.Select(x => x.ToCoachingPlanResponse()).ToList();
-            
             return Ok(new ApiResponse { Action = true, Message = "Coaching plane found", Result = coachingPlaneDto });
 
-
+        }
+        
+        
+        [HttpGet("get_all_payment")]
+        [Authorize(Roles = "Coach")]
+        public async Task<IActionResult> GetAllPayment()
+        {
+            var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
+            if (phoneNumber is null) return BadRequest(new ApiResponse { Action = false, Message = "PhoneNumber is null" });
+            var result = await _coachRepository.GetAllPayment(phoneNumber);
+            if (result.Action != true) return BadRequest(result);
+            return Ok(result);
         }
 
 

@@ -9,24 +9,15 @@ using sport_app_backend.Models.Login_Sinup;
 
 namespace sport_app_backend.Repository;
 
-public class UserRepository : IUserRepository
+public class UserRepository(
+    ApplicationDbContext dbContext,
+    ITokenService tokenService,
+    ISendVerifyCodeService sendVerifyCode)
+    : IUserRepository
 {
-    private readonly ApplicationDbContext _context;
-    private readonly ISendVerifyCodeService _sendVerifyCode;
-    private readonly ITokenService _tokenService;
-
-    public UserRepository(ApplicationDbContext dbContext, ITokenService tokenService, ISendVerifyCodeService sendVerifyCode)
-    {
-        _context = dbContext;
-        _sendVerifyCode = sendVerifyCode;
-        _tokenService = tokenService;
-
-    }
-
-
     public async Task<ApiResponse> AddRoleGender(string phoneNumber, RoleGenderDto roleGenderDto)
     {
-        var user = await _context.Users.FirstOrDefaultAsync(x => x.PhoneNumber == phoneNumber);
+        var user = await dbContext.Users.FirstOrDefaultAsync(x => x.PhoneNumber == phoneNumber);
         if (user is null) return new ApiResponse() { Message = "User not found", Action = false };
         if(roleGenderDto.Role is null) return new ApiResponse() { Message = "Role is null", Action = false };
         if(roleGenderDto.Gender is null) return new ApiResponse() { Message = "Gender is null", Action = false };
@@ -46,8 +37,8 @@ public class UserRepository : IUserRepository
             };
             user.Coach = coach;
             user.TypeOfUser = TypeOfUser.COACH;
-            await _context.Coaches.AddAsync(user.Coach);
-            await _context.SaveChangesAsync();
+            await dbContext.Coaches.AddAsync(user.Coach);
+            await dbContext.SaveChangesAsync();
             return new ApiResponse()
             {
                 Message = "Coach added successfully",
@@ -55,7 +46,7 @@ public class UserRepository : IUserRepository
                 Result = new AddRoleResponse()
                 {
                     RefreshToken = user.RefreshToken,
-                    AccessToken = _tokenService.CreateToken(user),
+                    AccessToken = tokenService.CreateToken(user),
                     TypeOfUser = user.TypeOfUser.ToString()
                 }
             };
@@ -71,8 +62,8 @@ public class UserRepository : IUserRepository
                 PhoneNumber = user.PhoneNumber
             };
             user.TypeOfUser = TypeOfUser.ATHLETE;
-            await _context.Athletes.AddAsync(user.Athlete);
-            await _context.SaveChangesAsync();
+            await dbContext.Athletes.AddAsync(user.Athlete);
+            await dbContext.SaveChangesAsync();
             return new ApiResponse()
             {
                 Message = "Athlete added successfully",
@@ -80,7 +71,7 @@ public class UserRepository : IUserRepository
                 Result = new AddRoleResponse()
                 {
                     RefreshToken = user.RefreshToken,
-                    AccessToken = _tokenService.CreateToken(user),
+                    AccessToken = tokenService.CreateToken(user),
                     TypeOfUser = user.TypeOfUser.ToString()
                 }
             };
@@ -93,12 +84,12 @@ public class UserRepository : IUserRepository
 
     public async Task<ApiResponse> CheckCode(CheckCodeRequestDto checkCodeRequestDto)
     {
-        var user = await _context.CodeVerifies.FirstOrDefaultAsync(x => x.PhoneNumber == checkCodeRequestDto.PhoneNumber);
+        var user = await dbContext.CodeVerifies.FirstOrDefaultAsync(x => x.PhoneNumber == checkCodeRequestDto.PhoneNumber);
 
         if (user != null)
         {
-            _context.CodeVerifies.Remove(user);
-            await _context.SaveChangesAsync();
+            dbContext.CodeVerifies.Remove(user);
+            await dbContext.SaveChangesAsync();
             if (user.TimeCodeSend.AddMinutes(15) < DateTime.Now)
             {
                 return new ApiResponse()
@@ -111,7 +102,7 @@ public class UserRepository : IUserRepository
             {
                 if (user.Code == checkCodeRequestDto.Code)
                 {
-                    var userEntity = await _context.Users.FirstOrDefaultAsync(x => x.PhoneNumber == checkCodeRequestDto.PhoneNumber);
+                    var userEntity = await dbContext.Users.FirstOrDefaultAsync(x => x.PhoneNumber == checkCodeRequestDto.PhoneNumber);
                     if (userEntity != null)
                     {
                         userEntity.LastLogin = DateTime.Now;
@@ -123,22 +114,27 @@ public class UserRepository : IUserRepository
                             {
 
                                 RefreshToken = userEntity.RefreshToken,
-                                AccessToken = _tokenService.CreateToken(userEntity),
+                                AccessToken = tokenService.CreateToken(userEntity),
                                 TypeOfUser = userEntity.TypeOfUser.ToString()
                             }
                         };
                     }
                     else
-                    {   // create new user
-                        var newUser = new User()
+                    {  
+                        var username = Guid.NewGuid().ToString("N").Substring(0, 8);
+                        while (await dbContext.Users.AnyAsync(x => x.UserName == username))
                         {
+                            username = Guid.NewGuid().ToString("N").Substring(0, 8);
+                        }
+                        var newUser = new User
+                        {   UserName = username,
                             PhoneNumber = checkCodeRequestDto.PhoneNumber,
                             TypeOfUser = TypeOfUser.NONE,
+                            LastLogin = DateTime.Now
                         };
-                        newUser.LastLogin = DateTime.Now;
-                        _tokenService.CreateRefreshToken(newUser);
-                        var result = await _context.Users.AddAsync(newUser);
-                        var result2 = await _context.SaveChangesAsync();
+                        tokenService.CreateRefreshToken(newUser);
+                        await dbContext.Users.AddAsync(newUser);
+                        await dbContext.SaveChangesAsync();
 
 
                         return new ApiResponse()
@@ -148,7 +144,7 @@ public class UserRepository : IUserRepository
                             Result = new CheckCodeResponseDto()
                             {
                                 RefreshToken = newUser.RefreshToken,
-                                AccessToken = _tokenService.CreateToken(newUser),
+                                AccessToken = tokenService.CreateToken(newUser),
                                 TypeOfUser = newUser.TypeOfUser.ToString()
                             }
                         };
@@ -175,16 +171,16 @@ public class UserRepository : IUserRepository
 
     public async Task<ApiResponse> Login(string UserPhoneNumber)
     {
-        var user = await _context.CodeVerifies.FirstOrDefaultAsync(x => x.PhoneNumber == UserPhoneNumber);
+        var user = await dbContext.CodeVerifies.FirstOrDefaultAsync(x => x.PhoneNumber == UserPhoneNumber);
         if (user is null)
         {
-            await _context.CodeVerifies.AddAsync(new CodeVerify()
+            await dbContext.CodeVerifies.AddAsync(new CodeVerify()
             {
                 PhoneNumber = UserPhoneNumber,
-                Code = await _sendVerifyCode.SendCode(UserPhoneNumber),
+                Code = await sendVerifyCode.SendCode(UserPhoneNumber),
                 TimeCodeSend = DateTime.Now
             });
-            await _context.SaveChangesAsync();
+            await dbContext.SaveChangesAsync();
 
 
             return new ApiResponse()
@@ -197,15 +193,15 @@ public class UserRepository : IUserRepository
         {
             if (user.TimeCodeSend.AddMinutes(2) < DateTime.Now)
             {
-                _context.CodeVerifies.Remove(user);
-                await _context.SaveChangesAsync();
-                await _context.CodeVerifies.AddAsync(new CodeVerify()
+                dbContext.CodeVerifies.Remove(user);
+                await dbContext.SaveChangesAsync();
+                await dbContext.CodeVerifies.AddAsync(new CodeVerify()
                 {
                     PhoneNumber = UserPhoneNumber,
-                    Code = await _sendVerifyCode.SendCode(UserPhoneNumber),
+                    Code = await sendVerifyCode.SendCode(UserPhoneNumber),
                     TimeCodeSend = DateTime.Now
                 });
-                await _context.SaveChangesAsync();
+                await dbContext.SaveChangesAsync();
                 return new ApiResponse()
                 {
                     Action = true,
@@ -226,10 +222,84 @@ public class UserRepository : IUserRepository
 
     public async Task<ApiResponse> GenerateAccessToken(string refreshToken)
     {
-        var user = await _context.Users.FirstOrDefaultAsync(x => x.RefreshToken == refreshToken);
+        var user = await dbContext.Users.FirstOrDefaultAsync(x => x.RefreshToken == refreshToken);
         if (user is null) return new ApiResponse() { Message = "Invalid refresh token", Action = false };
         if (user.RefreshTokeNExpire < DateTime.Now) return new ApiResponse() { Message = "Refresh token expired", Action = false };
-        return new ApiResponse() { Message = "Success", Action = true, Result = new { AccessToken = _tokenService.CreateToken(user) } };
+        return new ApiResponse() { Message = "Success", Action = true, Result = new { AccessToken = tokenService.CreateToken(user) } };
     }
 
+    public async Task<ApiResponse> AddUsername(string phoneNumber, string username)
+    {
+        var user = await dbContext.Users.FirstOrDefaultAsync(x => x.PhoneNumber == phoneNumber);
+        if (user is null) return new ApiResponse() { Message = "User not found", Action = false };
+        var checkUserNameIsUniq = await dbContext.Users.FirstOrDefaultAsync(x => x.UserName == username);
+        if (checkUserNameIsUniq is not null)
+        {
+            return new ApiResponse()
+            {
+                Action = false,
+                Message = "Username is already taken"
+            };
+        }
+        user.UserName = username;
+        await dbContext.SaveChangesAsync();
+        return new ApiResponse() { Message = "Success", Action = true };
+    }
+    public async Task<ApiResponse> EditUserProfile(string phoneNumber, EditUserProfileDto editUserProfileDto)
+    {
+        var user= await dbContext.Users.FirstOrDefaultAsync(x => x.PhoneNumber == phoneNumber);
+        if (user is null) return new ApiResponse() { Message = "User not found", Action = false };
+        var findUserName= await dbContext.Users.FirstOrDefaultAsync(x => x.UserName == editUserProfileDto.UserName);
+        if(findUserName is not null) return new ApiResponse() { Message = "Username already exists", Action = false };// Ensure the user is an athlete
+        user.UserName = editUserProfileDto.UserName; user.FirstName = editUserProfileDto.FirstName;
+        user.LastName = editUserProfileDto.LastName;
+        user.BirthDate = Convert.ToDateTime(editUserProfileDto.BirthDate);
+        await dbContext.SaveChangesAsync();
+        return new ApiResponse()
+        {
+            Message = "user profile edited successfully",
+            Action = true
+        };
+    }
+
+    public async  Task<ApiResponse> GetUserProfileForEdit(string phoneNumber)
+    {
+        var user= await dbContext.Users.FirstOrDefaultAsync(x => x.PhoneNumber == phoneNumber);
+        if (user is null) return new ApiResponse() { Message = "User not found", Action = false };
+        return new ApiResponse()
+        {
+            Message = "user profile fetched successfully",
+            Action = true,
+            Result = new
+            {
+                user.UserName,
+                user.FirstName,
+                user.LastName,
+                user.BirthDate
+            }
+        };
+    }
+
+    public async Task<ApiResponse> Logout(string phoneNumber)
+    { var user = await dbContext.Users.FirstOrDefaultAsync(x => x.PhoneNumber == phoneNumber);
+        if (user is null) return new ApiResponse() { Message = "User not found", Action = false };
+        user.RefreshToken = null;
+        await dbContext.SaveChangesAsync();
+        return new ApiResponse() { Message = "Success", Action = true };
+    }
+
+    public async Task<ApiResponse> ReportApp(string phoneNumber, ReportAppDto reportAppDto)
+    {
+        var user = await dbContext.Users.FirstOrDefaultAsync(x => x.PhoneNumber == phoneNumber);
+        if (user is null) return new ApiResponse() { Message = "User not found", Action = false };
+        await dbContext.ReportApps.AddAsync(new ReportApp()
+        {   User = user,
+            UserId = user.Id,
+            Category = reportAppDto.Category,
+            Description = reportAppDto.Description
+        });
+        await dbContext.SaveChangesAsync();
+        return new ApiResponse() { Message = "Success", Action = true };
+        
+    }
 }

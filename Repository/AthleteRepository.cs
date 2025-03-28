@@ -154,12 +154,19 @@ namespace sport_app_backend.Repository
             return new ApiResponse()
             {
                 Message = "Payment added successfully",
-                Action = true
+                Action = true,
+                Result = new
+                {
+                    payment.Amount,
+                    payment.TransitionId
+                }
             };
             
 
 
         }
+
+       
 
         public async Task<ApiResponse> DeleteActivity(string phoneNumber, int activityId)
         {
@@ -307,6 +314,7 @@ namespace sport_app_backend.Repository
                 }).ToList()
             };
         }
+        
 
 
 

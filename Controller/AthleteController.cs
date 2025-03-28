@@ -18,17 +18,9 @@ namespace sport_app_backend.Controller
     
     [Route("api/[controller]")]
     [ApiController]
-    public class AthleteController : ControllerBase
+    public class AthleteController(IAthleteRepository athleteRepository, ApplicationDbContext context)
+        : ControllerBase
     {
-        private readonly IAthleteRepository _athleteRepository;
-        private readonly ApplicationDbContext _context;
-
-
-        public AthleteController(IAthleteRepository athleteRepository, ApplicationDbContext context)
-        {
-            _athleteRepository = athleteRepository;
-            _context = context;
-        }
         [HttpPost("add athlete question")]
         [Authorize(Roles = "Athlete")]
 
@@ -37,7 +29,7 @@ namespace sport_app_backend.Controller
             var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
             if (phoneNumber is null) return BadRequest("PhoneNumber is null");
 
-            var result = await _athleteRepository.SubmitAthleteQuestions(phoneNumber, athleteQuestionDto);
+            var result = await athleteRepository.SubmitAthleteQuestions(phoneNumber, athleteQuestionDto);
             if (!result.Action) return BadRequest(result.Message);
             return Ok();
         }
@@ -49,7 +41,7 @@ namespace sport_app_backend.Controller
             var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
             if (phoneNumber is null) return BadRequest("PhoneNumber is null");
 
-            var result = await _athleteRepository.AddWaterIntake(phoneNumber, waterInTakeDto);
+            var result = await athleteRepository.AddWaterIntake(phoneNumber, waterInTakeDto);
             if (!result.Action) return BadRequest(result);
             return Ok(result);
         }
@@ -61,7 +53,7 @@ namespace sport_app_backend.Controller
         {
             var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
             if (phoneNumber is null) return BadRequest("PhoneNumber is null");
-            var athlete = await _context.Athletes.Include(a => a.WaterInTake)
+            var athlete = await context.Athletes.Include(a => a.WaterInTake)
                 .FirstOrDefaultAsync(u => u.PhoneNumber == phoneNumber);
             if (athlete == null || athlete.WaterInTake == null)
             {
@@ -90,7 +82,7 @@ namespace sport_app_backend.Controller
         {
             var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
             if (phoneNumber is null) return BadRequest("PhoneNumber is null");
-            var result = await _athleteRepository.UpdateWaterInDay(phoneNumber);
+            var result = await athleteRepository.UpdateWaterInDay(phoneNumber);
             if (!result.Action) return BadRequest(result);
             return Ok(result);
         }
@@ -103,14 +95,14 @@ namespace sport_app_backend.Controller
         {
             var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
             if (phoneNumber is null) return BadRequest("PhoneNumber is null");
-            var athlete = await _context.Users
+            var athlete = await context.Users
                 .Include(u => u.Athlete)
                 .FirstOrDefaultAsync(u => u.PhoneNumber == phoneNumber);
             var today = DateTime.Now.Date;
             var daysSinceSaturday = (int)today.DayOfWeek == 0 ? 6 : (int)today.DayOfWeek - 6;
             var lastSaturday = today.AddDays(daysSinceSaturday);
             if (athlete == null || athlete.Athlete == null) return NotFound("Athlete not found");
-            var ListOfWaterInDay = await _context.WaterInDays.Where(w => w.AthleteId == athlete.Athlete.Id&& w.Date.Date >= lastSaturday.Date)
+            var ListOfWaterInDay = await context.WaterInDays.Where(w => w.AthleteId == athlete.Athlete.Id&& w.Date.Date >= lastSaturday.Date)
                 .ToListAsync();
 
             return Ok(new ApiResponse()
@@ -133,7 +125,7 @@ namespace sport_app_backend.Controller
         {
             var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
             if (phoneNumber is null) return BadRequest(new ApiResponse() { Action = false, Message = "PhoneNumber is null" });
-            var user = await _context.Users
+            var user = await context.Users
                 .Include(u => u.Athlete).FirstOrDefaultAsync(u => u.PhoneNumber == phoneNumber);
             if (user is null) return BadRequest(new ApiResponse() { Action = false, Message = "User not found" });
 
@@ -145,7 +137,7 @@ namespace sport_app_backend.Controller
         [Authorize(Roles = "Athlete")]
         public async Task<IActionResult> SearchCoaches([FromBody] string FullName)
         {
-            var resualt = await _context.Users.Where(c => (c.FirstName + " " + c.LastName).Contains(FullName) &&
+            var resualt = await context.Users.Where(c => (c.FirstName + " " + c.LastName).Contains(FullName) &&
             c.TypeOfUser == TypeOfUser.COACH).ToListAsync();
             return Ok(new ApiResponse() { Action = true, Message = "Coaches found", Result = resualt.Select(c => c.ToCoachForSearch()).ToList() });
 
@@ -155,7 +147,7 @@ namespace sport_app_backend.Controller
         [Authorize(Roles = "Athlete")]
         public async Task<IActionResult> GetCoaches()
         {
-            var resualt = await _context.Users.Where(c => c.TypeOfUser == TypeOfUser.COACH).ToListAsync();
+            var resualt = await context.Users.Where(c => c.TypeOfUser == TypeOfUser.COACH).ToListAsync();
             return Ok(new ApiResponse() { Action = true, Message = "Coaches found", Result = resualt.Select(c => c.ToCoachForSearch()).ToList() });
         }
 
@@ -163,7 +155,7 @@ namespace sport_app_backend.Controller
         [Authorize(Roles = "Athlete")]
         public async Task<IActionResult> GetCoachProfile([FromRoute] int coachId)
         {
-            var coach = await _context.Coaches.Include(c => c.Coachplans).FirstOrDefaultAsync(c => c.Id == coachId);
+            var coach = await context.Coaches.Include(c => c.Coachplans).FirstOrDefaultAsync(c => c.Id == coachId);
             if (coach == null) return BadRequest(new ApiResponse() { Action = false, Message = "Coach not found" });
 
             return Ok(new ApiResponse() { Action = true, Message = "Coach found", Result = coach.ToCoachProfileForAthleteDto() });
@@ -174,7 +166,7 @@ namespace sport_app_backend.Controller
         {
             var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
             if (phoneNumber is null) return BadRequest("PhoneNumber is null");
-            var result = await _athleteRepository.UpdateWeight(phoneNumber, weight);
+            var result = await athleteRepository.UpdateWeight(phoneNumber, weight);
             if (!result.Action) return BadRequest(result);
             return Ok(result);
         }
@@ -185,7 +177,7 @@ namespace sport_app_backend.Controller
         {
             var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
             if (phoneNumber is null) return BadRequest("PhoneNumber is null");
-            var result = await _athleteRepository.WeightReport(phoneNumber);
+            var result = await athleteRepository.WeightReport(phoneNumber);
             if (!result.Action) return BadRequest(result);
             return Ok(result);
         }
@@ -197,7 +189,7 @@ namespace sport_app_backend.Controller
         {
             var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
             if (phoneNumber is null) return BadRequest("PhoneNumber is null");
-            var result = await _athleteRepository.AddActivity(phoneNumber, AddActivityDto);
+            var result = await athleteRepository.AddActivity(phoneNumber, AddActivityDto);
             if (!result.Action) return BadRequest(result);
             return Ok(result);
         }
@@ -208,7 +200,7 @@ namespace sport_app_backend.Controller
         {
             var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
             if (phoneNumber is null) return BadRequest("PhoneNumber is null");
-            var result = await _athleteRepository.ActivityReport(phoneNumber);
+            var result = await athleteRepository.ActivityReport(phoneNumber);
             if (!result.Action) return BadRequest(result);
             return Ok(result);
         }
@@ -219,7 +211,7 @@ namespace sport_app_backend.Controller
         {
             var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
             if (phoneNumber is null) return BadRequest("PhoneNumber is null");
-            var result = await _athleteRepository.DeleteActivity(phoneNumber, activityId);
+            var result = await athleteRepository.DeleteActivity(phoneNumber, activityId);
             if (!result.Action) return BadRequest(result);
             return Ok(result);
         }
@@ -230,9 +222,13 @@ namespace sport_app_backend.Controller
         public async Task<IActionResult> BuyCoachingPlan([FromRoute] int planId){
             var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
             if (phoneNumber is null) return BadRequest("PhoneNumber is null");
-            var result = await _athleteRepository.BuyCoachingPlan(phoneNumber,planId);
+            var result = await athleteRepository.BuyCoachingPlan(phoneNumber,planId);
             if (!result.Action) return BadRequest(result);
             return Ok(result);
         }
+        
+        
     }
+
+  
 }

@@ -1,10 +1,12 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using sport_app_backend.Dtos;
 using sport_app_backend.Models.Account;
+using sport_app_backend.Models.Payments;
 using sport_app_backend.Models.TrainingPlan;
 
 namespace sport_app_backend.Mappers
@@ -61,10 +63,14 @@ namespace sport_app_backend.Mappers
         }
         public static CoachForSearch ToCoachForSearch(this User user)
         {
-            if (user.Coach == null) return new CoachForSearch();
+            if (user.Coach == null) return new CoachForSearch()
+            {
+                UserName = string.Empty
+            };
             return new CoachForSearch
             {
                 Id = user.Coach.Id,
+                UserName = user.UserName,
                 FirstName = user.FirstName ?? string.Empty,
                 LastName = user.LastName ?? string.Empty,
                 ImageProfile = user.ImageProfile ?? Array.Empty<byte>(),
@@ -80,6 +86,7 @@ namespace sport_app_backend.Mappers
             {
                 FirstName = coach.User?.FirstName ?? string.Empty,
                 LastName = coach.User?.LastName ?? string.Empty,
+                UserName = coach.User?.UserName ?? string.Empty,
                 Id = coach.Id,
                 ImageProfile = coach.User?.ImageProfile ?? Array.Empty<byte>(),
                 Bio = coach.User?.Bio ?? string.Empty,
@@ -104,6 +111,18 @@ namespace sport_app_backend.Mappers
                 HaveSupport = coachPlan.HaveSupport,
                 CommunicateType = coachPlan.CommunicateType,
                 TypeOfCoachingPlan = coachPlan.TypeOfCoachingPlan.ToString()
+            };
+        }
+
+        public static PaymentResponseDto ToPaymentResponseDto(this Payment payment)
+        {
+            return new PaymentResponseDto
+            {
+                transactionId = payment.TransitionId,
+                PaymentStatus = payment.PaymentStatus.ToString(),
+                Name = payment.Coach.User.FirstName + " " + payment.Coach.User.LastName,
+                Amount = payment.Amount.ToString(CultureInfo.InvariantCulture),
+                DateTime = payment.PaymentDate.ToString(CultureInfo.InvariantCulture)
             };
         }
 
