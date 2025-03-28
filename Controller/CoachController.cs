@@ -64,15 +64,14 @@ namespace sport_app_backend.Controller
         }
 
         ///edit coaching plane
-        [HttpPut("edit_coaching_plane")]
+        [HttpPut("edit_coaching_plane/{id}")]
         [Authorize(Roles = "Coach")]
-        public async Task<IActionResult> EditCoachingPlane(AddCoachingPlaneDto coachingPlaneDto)
+
+        public async Task<IActionResult> EditCoachingPlane([FromRoute] int id, AddCoachingPlaneDto coachingPlaneDto)
         {
             var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
             if (phoneNumber is null) return BadRequest(new ApiResponse { Action = false, Message = "PhoneNumber is null" });
-            // var result = await _coachRepository.EditCoachingPlane(phoneNumber, coachingPlaneDto);
-            // if (result.Action) return Ok(result);
-            // else return BadRequest(result);
+            var result = await _coachRepository.UpdateCoachingPlane(phoneNumber, id, coachingPlaneDto);
             return Ok("method not implemented");
         }
 

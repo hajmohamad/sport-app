@@ -15,8 +15,10 @@ public class Exercise
     [MaxLength(500)]
     public required string Description { get; set; }
     public int Calories { get; set; }
+    // Intermediate ,Beginner ,Advanced ,Unknown
+    public string? ExerciseLevel{get;set;}
     public required List<string> Image { get; set; }
-    public ExerciseEnum BaseCategory { get; set; }
-    public required List<ExerciseEnum> ActionsTage { get; set; }
+    public MuscleGroup BaseCategory { get; set; }
+    public required List<MuscleGroup> ActionsTage { get; set; }
    
 }

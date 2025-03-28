@@ -108,6 +108,10 @@ namespace sport_app_backend.Migrations
                     b.Property<int>("CoachId")
                         .HasColumnType("int");
 
+                    b.Property<string>("CommunicateType")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime(6)");
 
@@ -116,10 +120,13 @@ namespace sport_app_backend.Migrations
                         .HasMaxLength(500)
                         .HasColumnType("varchar(500)");
 
-                    b.Property<int>("DurationByDay")
-                        .HasColumnType("int");
+                    b.Property<bool>("HaveSupport")
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<bool>("IsActive")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<bool>("IsDeleted")
                         .HasColumnType("tinyint(1)");
 
                     b.Property<double>("Price")
@@ -237,6 +244,9 @@ namespace sport_app_backend.Migrations
                     b.Property<double>("Duration")
                         .HasColumnType("double");
 
+                    b.Property<string>("Name")
+                        .HasColumnType("longtext");
+
                     b.HasKey("Id");
 
                     b.HasIndex("AthleteId");
@@ -271,6 +281,9 @@ namespace sport_app_backend.Migrations
 
                     b.Property<string>("EnglishName")
                         .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("ExerciseLevel")
                         .HasColumnType("longtext");
 
                     b.Property<string>("Image")
@@ -371,11 +384,7 @@ namespace sport_app_backend.Migrations
                     b.Property<int>("CoachId")
                         .HasColumnType("int");
 
-                    b.Property<string>("DescriptionOfPlan")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<int>("DurationByDay")
+                    b.Property<int>("CoachPlanId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("PaymentDate")
@@ -384,22 +393,17 @@ namespace sport_app_backend.Migrations
                     b.Property<int>("PaymentStatus")
                         .HasColumnType("int");
 
-                    b.Property<string>("TitleOfPlan")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
                     b.Property<string>("TransitionId")
                         .IsRequired()
                         .HasColumnType("longtext");
-
-                    b.Property<int>("TypeOfCoachingPlan")
-                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("AthleteId");
 
                     b.HasIndex("CoachId");
+
+                    b.HasIndex("CoachPlanId");
 
                     b.ToTable("Payments");
                 });
@@ -520,9 +524,6 @@ namespace sport_app_backend.Migrations
 
                     b.Property<DateTime>("EndDate")
                         .HasColumnType("datetime(6)");
-
-                    b.Property<int>("NumberOfRepeats")
-                        .HasColumnType("int");
 
                     b.Property<int>("PaymentId")
                         .HasColumnType("int");
@@ -725,9 +726,17 @@ namespace sport_app_backend.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("sport_app_backend.Models.Account.CoachPlan", "CoachPlan")
+                        .WithMany()
+                        .HasForeignKey("CoachPlanId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Athlete");
 
                     b.Navigation("Coach");
+
+                    b.Navigation("CoachPlan");
                 });
 
             modelBuilder.Entity("sport_app_backend.Models.Program.ExerciseInDay", b =>

@@ -7,7 +7,7 @@ namespace sport_app_backend.Interface
     {
         Task<ApiResponse> SubmitCoachQuestions(string phoneNumber, CoachQuestionDto coachQuestionDto);
         Task<ApiResponse> AddCoachingPlane(string phoneNumber, AddCoachingPlaneDto addCoachingPlaneDto);
-        Task<ApiResponse> UpdateCoachingPlane(string phoneNumber, AddCoachingPlaneDto addCoachingPlaneDto);
+        Task<ApiResponse> UpdateCoachingPlane(string phoneNumber,int id, AddCoachingPlaneDto addCoachingPlaneDto);
         
     }
 }

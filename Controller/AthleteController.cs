@@ -15,6 +15,7 @@ using sport_app_backend.Models.Account;
 
 namespace sport_app_backend.Controller
 {
+    
     [Route("api/[controller]")]
     [ApiController]
     public class AthleteController : ControllerBase
@@ -219,6 +220,17 @@ namespace sport_app_backend.Controller
             var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
             if (phoneNumber is null) return BadRequest("PhoneNumber is null");
             var result = await _athleteRepository.DeleteActivity(phoneNumber, activityId);
+            if (!result.Action) return BadRequest(result);
+            return Ok(result);
+        }
+    
+
+        [HttpPost("buy_plan/{planId}")]//need to make it with id
+        [Authorize(Roles = "Athlete")]
+        public async Task<IActionResult> BuyCoachingPlan([FromRoute] int planId){
+            var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
+            if (phoneNumber is null) return BadRequest("PhoneNumber is null");
+            var result = await _athleteRepository.BuyCoachingPlan(phoneNumber,planId);
             if (!result.Action) return BadRequest(result);
             return Ok(result);
         }

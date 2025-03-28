@@ -12,6 +12,8 @@ using sport_app_backend.Interface;
 using sport_app_backend.Models;
 using sport_app_backend.Models.Account;
 using sport_app_backend.Models.Actions;
+using sport_app_backend.Models.Payments;
+using sport_app_backend.Models.Program;
 using sport_app_backend.Models.Question.A_Question;
 
 namespace sport_app_backend.Repository
@@ -45,7 +47,8 @@ namespace sport_app_backend.Repository
                     Date = x.DateTime.ToString("yyyy-MM-dd"),
                     x.CaloriesLost,
                     x.Duration,
-                    SportEnum = x.ActivityEnum.ToString()
+                    SportEnum = x.ActivityEnum.ToString(),
+                    x.Name
                 }).ToList()
             };
         }
@@ -124,6 +127,38 @@ namespace sport_app_backend.Repository
                 Message = "WaterIntake added successfully",
                 Action = true
             };
+        }
+
+        public async Task<ApiResponse> BuyCoachingPlan(string phoneNumber, int coachingPlanId)
+        {
+            var athlete = await _context.Athletes.Include(x=>x.AthleteQuestion).FirstOrDefaultAsync(x => x.PhoneNumber == phoneNumber);
+            if (athlete is null) return new ApiResponse() { Message = "User is not an athlete", Action = false };// Ensure the user is an athlete
+            if(athlete.AthleteQuestion is null) return new ApiResponse() { Message = "User has not completed the questions", Action = false };// Ensure the user is an athlete
+
+            var coachingplan = await _context.CoachesPlan.Include(x=>x.Coach).FirstOrDefaultAsync(x => x.Id == coachingPlanId& x.IsActive==true);
+            if (coachingplan is null) return new ApiResponse() { Message = "CoachingPlan not found", Action = false };
+            if(coachingplan.IsDeleted==true) return new ApiResponse() { Message = "CoachingPlan is deleted", Action = false };
+            var payment = new Payment()
+            {
+                Athlete = athlete,
+                AthleteId = athlete.Id,
+                CoachPlan = coachingplan,
+                CoachPlanId = coachingplan.Id,
+                CoachId = coachingplan.CoachId,
+                Coach = coachingplan.Coach,
+                TransitionId = Guid.NewGuid().ToString(),
+                Amount = coachingplan.Price,
+            };
+            await _context.Payments.AddAsync(payment);
+            await _context.SaveChangesAsync();
+            return new ApiResponse()
+            {
+                Message = "Payment added successfully",
+                Action = true
+            };
+            
+
+
         }
 
         public async Task<ApiResponse> DeleteActivity(string phoneNumber, int activityId)

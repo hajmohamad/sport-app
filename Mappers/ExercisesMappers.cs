@@ -20,8 +20,8 @@ namespace sport_app_backend.Mappers
                 Description = addExercisesRequestDto.Description,
                 Calories = addExercisesRequestDto.Calories,
                 Image = addExercisesRequestDto.Image,
-                BaseCategory = (ExerciseEnum)Enum.Parse(typeof(ExerciseEnum), addExercisesRequestDto.BaseCategory.ToUpper()),
-                ActionsTage = addExercisesRequestDto.ActionsTage.Select(x => (ExerciseEnum)Enum.Parse(typeof(ExerciseEnum), x.ToUpper())).ToList()};
+                BaseCategory = (MuscleGroup)Enum.Parse(typeof(MuscleGroup), addExercisesRequestDto.BaseCategory.ToUpper()),
+                ActionsTage = addExercisesRequestDto.ActionsTage.Select(x => (MuscleGroup)Enum.Parse(typeof(MuscleGroup), x.ToUpper())).ToList()};
         }
     }
 }
