@@ -21,6 +21,7 @@ namespace sport_app_backend.Interface
 
         public Task<ApiResponse> ActivityReport(string phoneNumber);
         public Task<ApiResponse> BuyCoachingPlan(string phoneNumber,int coachingPlanId);
+        public Task<ApiResponse> SearchCoaches(CoachNameSearchDto coachNameSearchDto);
 
 
         

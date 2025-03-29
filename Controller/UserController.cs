@@ -48,7 +48,7 @@ public class UserController(IUserRepository userRepository) : ControllerBase
     
     //add username
     [HttpPut("add username")]
-    [Authorize(Roles = "Athlete Coach")]
+    [Authorize(Roles = "Athlete,Coach")]
     public async Task<IActionResult> AddUsername([FromBody] string username)
     {
         var phoneNumber =  User.FindFirst(ClaimTypes.Name)?.Value;
@@ -59,7 +59,7 @@ public class UserController(IUserRepository userRepository) : ControllerBase
     }
 
     [HttpPut("edit_user_profile")]
-    [Authorize(Roles = "Athlete Coach")]
+    [Authorize(Roles = "Athlete,Coach")]
     public async Task<IActionResult> EditUserProfile([FromBody] EditUserProfileDto userProfileDto)
     {
         var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
@@ -70,7 +70,7 @@ public class UserController(IUserRepository userRepository) : ControllerBase
     }
 
     [HttpGet("get_user_profile_for_edit")]
-    [Authorize(Roles = "Athlete Coach")]
+    [Authorize(Roles = "Athlete,Coach")]
     public async Task<IActionResult> GetUserProfileForEdit()
     {
         var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
@@ -80,7 +80,7 @@ public class UserController(IUserRepository userRepository) : ControllerBase
         return Ok(result);
     }
     [HttpPost("report_app")]
-    [Authorize(Roles = "Athlete Coach")]
+    [Authorize(Roles = "Athlete,Coach")]
     public async Task<IActionResult> ReportApp([FromBody] ReportAppDto reportAppDto)
     {
         var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
@@ -91,7 +91,7 @@ public class UserController(IUserRepository userRepository) : ControllerBase
     }
     //logout
     [HttpDelete("logout")]
-    [Authorize(Roles = "Athlete Coach")]
+    [Authorize(Roles = "Athlete,Coach")]
     public async Task<IActionResult> Logout()
     {
         var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;

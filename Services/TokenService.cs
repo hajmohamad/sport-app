@@ -28,7 +28,7 @@ public class TokenService: ITokenService
             _key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["JWT:Signinkey"]));
         }
 
-    public string CreateRefreshToken(User user)
+    public async Task<string> CreateRefreshToken(User user)
     {
         
         var randomNumber = new byte[32];
@@ -36,7 +36,7 @@ public class TokenService: ITokenService
         rng.GetBytes(randomNumber);
         user.RefreshToken = Convert.ToBase64String(randomNumber);
         user.RefreshTokeNExpire= DateTime.Now.AddDays(90);
-        _context.SaveChanges();
+        await _context.SaveChangesAsync();
         return user.RefreshToken;
     }
 

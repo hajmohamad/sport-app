@@ -12,6 +12,7 @@ namespace sport_app_backend.Dtos
         public string? FirstName { get; set; }
         public string? LastName { get; set; }
         public string? BirthDate { get; set; }
+        public string? UserName { get; set; }
 
         public required string PhoneNumber { get; set; }
 

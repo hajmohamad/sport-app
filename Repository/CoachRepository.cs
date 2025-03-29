@@ -110,11 +110,16 @@ namespace sport_app_backend.Repository
 
         public async Task<ApiResponse> GetAllPayment(string phoneNumber)
         {
-            var coach = await context.Coaches.Include(x => x.User).Include(x => x.Payments).FirstOrDefaultAsync(x => x.PhoneNumber == phoneNumber);
-            if (coach is null) return new ApiResponse() { Message = "User is not a coach", Action = false };// Ensure the user is a coach
-            if(coach.Payments is { Count: 0 }) return new ApiResponse() { Message = "No payments found", Action = false };
+            var payments = await context.Payments
+                .Include(p => p.Coach)  // بارگذاری Coach
+                .ThenInclude(c => c.User)  // بارگذاری User داخل Coach
+                .Include(p => p.Athlete)  // بارگذاری Athlete
+                .ThenInclude(a => a.User)  // بارگذاری User داخل Athlete
+                .Where(p => p.Coach != null && p.Coach.PhoneNumber == phoneNumber).ToListAsync();;
+           
+           
             
-            var payments = coach.Payments.ToList();
+           
             return new ApiResponse()
             {
                 Message = "Payments found",

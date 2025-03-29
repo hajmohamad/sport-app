@@ -14,8 +14,11 @@ public class User
     public string? FirstName { get; set; }
     [StringLength(50)]
     public  string? LastName { get; set; }
-
-    public string UserName { get; set; } 
+    [MaxLength(15)]
+    [MinLength(6)]
+    public string? UserName { get; set; } 
+    [DataType(DataType.DateTime)]
+    [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}")]
     public DateTime BirthDate { get; set; }
     [Required]
     [StringLength(11)]
@@ -37,6 +40,7 @@ public class User
     public Athlete? Athlete { get; set; }
     public Coach? Coach { get; set; }
     public TypeOfUser TypeOfUser { get; set; }
+    
     public string? RefreshToken { get; set; }
     public DateTime RefreshTokeNExpire { get; set; }
 

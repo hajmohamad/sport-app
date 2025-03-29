@@ -133,13 +133,13 @@ namespace sport_app_backend.Controller
 
         }
 
-        [HttpGet("search_Coaches")]
+        [HttpPut("search_Coaches")]
         [Authorize(Roles = "Athlete")]
-        public async Task<IActionResult> SearchCoaches([FromBody] string FullName)
+        public async Task<IActionResult> SearchCoaches([FromBody] CoachNameSearchDto coachNameSearchDto)
         {
-            var resualt = await context.Users.Where(c => (c.FirstName + " " + c.LastName).Contains(FullName) &&
-            c.TypeOfUser == TypeOfUser.COACH).ToListAsync();
-            return Ok(new ApiResponse() { Action = true, Message = "Coaches found", Result = resualt.Select(c => c.ToCoachForSearch()).ToList() });
+            var resualt = await athleteRepository.SearchCoaches(coachNameSearchDto);
+            if (!resualt.Action) return BadRequest(resualt);
+            return Ok(resualt);
 
 
         }

@@ -9,6 +9,7 @@ using sport_app_backend.Controller;
 using sport_app_backend.Data;
 using sport_app_backend.Dtos;
 using sport_app_backend.Interface;
+using sport_app_backend.Mappers;
 using sport_app_backend.Models;
 using sport_app_backend.Models.Account;
 using sport_app_backend.Models.Actions;
@@ -133,7 +134,7 @@ namespace sport_app_backend.Repository
         {
             var athlete = await _context.Athletes.Include(x=>x.AthleteQuestion).FirstOrDefaultAsync(x => x.PhoneNumber == phoneNumber);
             if (athlete is null) return new ApiResponse() { Message = "User is not an athlete", Action = false };// Ensure the user is an athlete
-            if(athlete.AthleteQuestion is null) return new ApiResponse() { Message = "User has not completed the questions", Action = false };// Ensure the user is an athlete
+            // if(athlete.AthleteQuestion is null) return new ApiResponse() { Message = "User has not completed the questions", Action = false };// Ensure the user is an athlete
 
             var coachingplan = await _context.CoachesPlan.Include(x=>x.Coach).FirstOrDefaultAsync(x => x.Id == coachingPlanId& x.IsActive==true);
             if (coachingplan is null) return new ApiResponse() { Message = "CoachingPlan not found", Action = false };
@@ -166,7 +167,17 @@ namespace sport_app_backend.Repository
 
         }
 
-       
+        public async Task<ApiResponse> SearchCoaches(CoachNameSearchDto coachNameSearchDto)
+        {
+            var coaches = await  _context.Users.Where(c=>(c.FirstName+" "+c.LastName).Contains(coachNameSearchDto.FullName)&&c.TypeOfUser==TypeOfUser.COACH).ToListAsync();
+            return new ApiResponse()
+            {
+                Message = "Coaches found",
+                Action = true,
+                Result = coaches.Select(c => c.ToCoachForSearch()).ToList()
+            };
+        }
+
 
         public async Task<ApiResponse> DeleteActivity(string phoneNumber, int activityId)
         {

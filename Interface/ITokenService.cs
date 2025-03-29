@@ -5,6 +5,6 @@ namespace sport_app_backend.Interface;
 public interface ITokenService
 {
         string CreateToken(User user);
-        string CreateRefreshToken(User user);
+        Task<string> CreateRefreshToken(User user);
 
 }

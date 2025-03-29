@@ -22,6 +22,7 @@ namespace sport_app_backend.Mappers
                 LastName = user.LastName ?? string.Empty,
                 BirthDate = user.BirthDate.ToString("yyyy-MM-dd"),
                 PhoneNumber = user.PhoneNumber,
+                UserName= user.UserName ?? string.Empty,
                 Id = user.Id,
                 Gender = user.Gender.ToString(),
                 ImageProfile = user.ImageProfile ?? Array.Empty<byte>(),
@@ -120,7 +121,7 @@ namespace sport_app_backend.Mappers
             {
                 transactionId = payment.TransitionId,
                 PaymentStatus = payment.PaymentStatus.ToString(),
-                Name = payment.Coach.User.FirstName + " " + payment.Coach.User.LastName,
+                Name = payment.Athlete.User.FirstName + " " + payment.Athlete.User.LastName,
                 Amount = payment.Amount.ToString(CultureInfo.InvariantCulture),
                 DateTime = payment.PaymentDate.ToString(CultureInfo.InvariantCulture)
             };

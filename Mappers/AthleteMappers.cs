@@ -16,6 +16,7 @@ namespace sport_app_backend.Mappers
             {
                 FirstName = user.FirstName?? string.Empty,
                 LastName = user.LastName??string.Empty,
+                UserName = user.UserName,
                 BirthDate = user.BirthDate.ToString("yyyy-MM-dd"),
                 PhoneNumber = user.PhoneNumber,
                 Id = user.Id,

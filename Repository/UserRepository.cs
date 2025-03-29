@@ -82,91 +82,83 @@ public class UserRepository(
         }
     }
 
+
     public async Task<ApiResponse> CheckCode(CheckCodeRequestDto checkCodeRequestDto)
+{
+    var user = await dbContext.CodeVerifies.FirstOrDefaultAsync(x => x.PhoneNumber == checkCodeRequestDto.PhoneNumber);
+    if (user == null)
     {
-        var user = await dbContext.CodeVerifies.FirstOrDefaultAsync(x => x.PhoneNumber == checkCodeRequestDto.PhoneNumber);
-
-        if (user != null)
-        {
-            dbContext.CodeVerifies.Remove(user);
-            await dbContext.SaveChangesAsync();
-            if (user.TimeCodeSend.AddMinutes(15) < DateTime.Now)
-            {
-                return new ApiResponse()
-                {
-                    Action = false,
-                    Message = "Code Expired"
-                };
-            }
-            else
-            {
-                if (user.Code == checkCodeRequestDto.Code)
-                {
-                    var userEntity = await dbContext.Users.FirstOrDefaultAsync(x => x.PhoneNumber == checkCodeRequestDto.PhoneNumber);
-                    if (userEntity != null)
-                    {
-                        userEntity.LastLogin = DateTime.Now;
-                        return new ApiResponse()
-                        {
-                            Action = true,
-                            Message = "CodeIsCorrect",
-                            Result = new CheckCodeResponseDto()
-                            {
-
-                                RefreshToken = userEntity.RefreshToken,
-                                AccessToken = tokenService.CreateToken(userEntity),
-                                TypeOfUser = userEntity.TypeOfUser.ToString()
-                            }
-                        };
-                    }
-                    else
-                    {  
-                        var username = Guid.NewGuid().ToString("N").Substring(0, 8);
-                        while (await dbContext.Users.AnyAsync(x => x.UserName == username))
-                        {
-                            username = Guid.NewGuid().ToString("N").Substring(0, 8);
-                        }
-                        var newUser = new User
-                        {   UserName = username,
-                            PhoneNumber = checkCodeRequestDto.PhoneNumber,
-                            TypeOfUser = TypeOfUser.NONE,
-                            LastLogin = DateTime.Now
-                        };
-                        tokenService.CreateRefreshToken(newUser);
-                        await dbContext.Users.AddAsync(newUser);
-                        await dbContext.SaveChangesAsync();
-
-
-                        return new ApiResponse()
-                        {
-                            Action = true,
-                            Message = "CodeIsCorrect",
-                            Result = new CheckCodeResponseDto()
-                            {
-                                RefreshToken = newUser.RefreshToken,
-                                AccessToken = tokenService.CreateToken(newUser),
-                                TypeOfUser = newUser.TypeOfUser.ToString()
-                            }
-                        };
-                    }
-
-
-                }
-            }
-
-            return new ApiResponse()
-            {
-                Action = false,
-                Message = "CodeIsNotCorrect"
-            };
-        }
-
-        return new ApiResponse()
-        {
-            Action = false,
-            Message = "CodeIsNotCorrect"
-        };
+        return new ApiResponse { Action = false, Message = "CodeIsNotCorrect" };
     }
+    
+    dbContext.CodeVerifies.Remove(user);
+    await dbContext.SaveChangesAsync();
+    
+    if (user.TimeCodeSend.AddMinutes(15) < DateTime.Now)
+    {
+        return new ApiResponse { Action = false, Message = "Code Expired" };
+    }
+    
+    if (user.Code != checkCodeRequestDto.Code)
+    {
+        return new ApiResponse { Action = false, Message = "CodeIsNotCorrect" };
+    }
+    
+    var userEntity = await dbContext.Users.FirstOrDefaultAsync(x => x.PhoneNumber == checkCodeRequestDto.PhoneNumber);
+    if (userEntity != null)
+    {
+        userEntity.LastLogin = DateTime.Now;
+        return await GenerateSuccessResponse(userEntity);
+    }
+    
+    var newUser = await CreateNewUser(checkCodeRequestDto.PhoneNumber);
+    return await GenerateSuccessResponse(newUser);
+}
+
+private async Task<ApiResponse> GenerateSuccessResponse(User user)
+{
+    return new ApiResponse
+    {
+        Action = true,
+        Message = "CodeIsCorrect",
+        Result = new CheckCodeResponseDto
+        {
+            RefreshToken = await tokenService.CreateRefreshToken(user),
+            AccessToken = tokenService.CreateToken(user),
+            TypeOfUser = user.TypeOfUser.ToString()
+        }
+    };
+}
+
+private async Task<User> CreateNewUser(string phoneNumber)
+{
+    var username = GenerateUniqueUsername();
+    var newUser = new User
+    {
+        UserName =await GenerateUniqueUsername(),
+        PhoneNumber = phoneNumber,
+        TypeOfUser = TypeOfUser.NONE,
+        LastLogin = DateTime.Now
+    };
+    
+    await tokenService.CreateRefreshToken(newUser);
+    await dbContext.Users.AddAsync(newUser);
+    await dbContext.SaveChangesAsync();
+    
+    return newUser;
+}
+
+private async Task<string> GenerateUniqueUsername()
+{
+    string username;
+    do
+    {
+        username = Guid.NewGuid().ToString("N").Substring(0, 8);
+    } while (await dbContext.Users.AnyAsync(x => x.UserName == username));
+    
+    return username;
+}
+
 
 
     public async Task<ApiResponse> Login(string UserPhoneNumber)
@@ -233,7 +225,7 @@ public class UserRepository(
         var user = await dbContext.Users.FirstOrDefaultAsync(x => x.PhoneNumber == phoneNumber);
         if (user is null) return new ApiResponse() { Message = "User not found", Action = false };
         var checkUserNameIsUniq = await dbContext.Users.FirstOrDefaultAsync(x => x.UserName == username);
-        if (checkUserNameIsUniq is not null)
+        if (checkUserNameIsUniq is not null&& checkUserNameIsUniq!=user)
         {
             return new ApiResponse()
             {
@@ -250,7 +242,7 @@ public class UserRepository(
         var user= await dbContext.Users.FirstOrDefaultAsync(x => x.PhoneNumber == phoneNumber);
         if (user is null) return new ApiResponse() { Message = "User not found", Action = false };
         var findUserName= await dbContext.Users.FirstOrDefaultAsync(x => x.UserName == editUserProfileDto.UserName);
-        if(findUserName is not null) return new ApiResponse() { Message = "Username already exists", Action = false };// Ensure the user is an athlete
+        if(findUserName is not null&& findUserName!=user) return new ApiResponse() { Message = "Username already exists", Action = false };// Ensure the user is an athlete
         user.UserName = editUserProfileDto.UserName; user.FirstName = editUserProfileDto.FirstName;
         user.LastName = editUserProfileDto.LastName;
         user.BirthDate = Convert.ToDateTime(editUserProfileDto.BirthDate);
