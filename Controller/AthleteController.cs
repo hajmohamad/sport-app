@@ -31,7 +31,17 @@ namespace sport_app_backend.Controller
 
             var result = await athleteRepository.SubmitAthleteQuestions(phoneNumber, athleteQuestionDto);
             if (!result.Action) return BadRequest(result.Message);
-            return Ok();
+            return Ok(result);
+        }
+
+        [HttpPost("Add_FirstQuestions")]
+        [Authorize(Roles = "Athlete")]
+        public async Task<IActionResult> AddFirstQuestions([FromBody] AthleteFirstQuestionsDto athleteFirstQuestions)
+        {   var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
+            if (phoneNumber is null) return BadRequest("PhoneNumber is null");
+            var result = await athleteRepository.AthleteFirstQuestions(phoneNumber, athleteFirstQuestions);
+            if (!result.Action) return BadRequest(result);
+            return Ok(result);
         }
 
         [HttpPost("add_water_intake")]
@@ -155,7 +165,7 @@ namespace sport_app_backend.Controller
         [Authorize(Roles = "Athlete")]
         public async Task<IActionResult> GetCoachProfile([FromRoute] int coachId)
         {
-            var coach = await context.Coaches.Include(c => c.Coachplans).FirstOrDefaultAsync(c => c.Id == coachId);
+            var coach = await context.Coaches.Include(c => c.CoachingPlans).FirstOrDefaultAsync(c => c.Id == coachId);
             if (coach == null) return BadRequest(new ApiResponse() { Action = false, Message = "Coach not found" });
 
             return Ok(new ApiResponse() { Action = true, Message = "Coach found", Result = coach.ToCoachProfileForAthleteDto() });
@@ -217,12 +227,57 @@ namespace sport_app_backend.Controller
         }
     
 
-        [HttpPost("buy_plan/{planId}")]//need to make it with id
+        [HttpPost("buy_plan/{planId}")]
         [Authorize(Roles = "Athlete")]
         public async Task<IActionResult> BuyCoachingPlan([FromRoute] int planId){
             var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
             if (phoneNumber is null) return BadRequest("PhoneNumber is null");
             var result = await athleteRepository.BuyCoachingPlan(phoneNumber,planId);
+            if (!result.Action) return BadRequest(result);
+            return Ok(result);
+        }
+
+        [HttpPut("Update_TimeBeforeWorkout")]
+        [Authorize(Roles = "Athlete")]
+        public async Task<IActionResult> UpdateTimeBeforeWorkout([FromRoute] int timeBeforeWorkoutDto)
+        {
+            var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
+            if (phoneNumber is null) return BadRequest("PhoneNumber is null");
+            var athlete = await context.Athletes.FirstOrDefaultAsync(u => u.PhoneNumber == phoneNumber);
+            if (athlete is null) return BadRequest("User not found");
+            athlete.TimeBeforeWorkout = timeBeforeWorkoutDto;
+            return Ok(new ApiResponse()
+            {
+
+                Action = true,
+                Message = "TimeBeforeWorkout updated"
+              });
+            
+        }
+        [HttpPut("Update_RestTime")]
+        [Authorize(Roles = "Athlete")]
+        public async Task<IActionResult> UpdateRestTime([FromRoute] int restTimeDto)
+        {
+            var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
+            if (phoneNumber is null) return BadRequest("PhoneNumber is null");
+            var athlete = await context.Athletes.FirstOrDefaultAsync(u => u.PhoneNumber == phoneNumber);
+            if (athlete is null) return BadRequest("User not found");
+            athlete.RestTime = restTimeDto;
+            return Ok(new ApiResponse()
+            {
+
+                Action = true,
+                Message = "RestTime updated"
+            });
+            
+        }
+        [HttpGet("get_lastQuestion")]
+        [Authorize(Roles = "Athlete")]
+        public async Task<IActionResult> GetLastQuestion()
+        {
+            var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
+            if (phoneNumber is null) return BadRequest("PhoneNumber is null");
+            var result = await athleteRepository.GetLastQuestion(phoneNumber);
             if (!result.Action) return BadRequest(result);
             return Ok(result);
         }

@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace sport_app_backend.Models.Account;
 
@@ -13,6 +14,7 @@ public class WeightEntry
     public double Weight { get; set; }
     [Required]
     [DataType(DataType.Date)]
+    [Column(TypeName = "date")]
     public DateTime CurrentDate { get; set; }
 
 }

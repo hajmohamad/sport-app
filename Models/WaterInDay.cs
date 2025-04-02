@@ -12,7 +12,7 @@ public class WaterInDay
     public Athlete? Athlete {get; set;}      
     public int NumberOfCupsDrinked {get; set;}
     [DataType(DataType.Date)]
-    [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
+    [Column(TypeName = "date")]
     public DateTime Date {get; set;}
     
 }

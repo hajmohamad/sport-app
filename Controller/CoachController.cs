@@ -95,9 +95,9 @@ namespace sport_app_backend.Controller
         {
             var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
             if (phoneNumber is null) return BadRequest(new ApiResponse { Action = false, Message = "PhoneNumber is null" });
-            var coach = await _context.Coaches.Include(c => c.Coachplans).FirstOrDefaultAsync(c => c.PhoneNumber == phoneNumber);
+            var coach = await _context.Coaches.Include(c => c.CoachingPlans).FirstOrDefaultAsync(c => c.PhoneNumber == phoneNumber);
             if (coach == null) return NotFound(new ApiResponse { Action = false, Message = "Coach not found" });
-            var coachingPlane = coach.Coachplans.Where(x=>x.IsDeleted==false).ToList();
+            var coachingPlane = coach.CoachingPlans.Where(x=>x.IsDeleted==false).ToList();
             var coachingPlaneDto = coachingPlane.Select(x => x.ToCoachingPlanResponse()).ToList();
             return Ok(new ApiResponse { Action = true, Message = "Coaching plane found", Result = coachingPlaneDto });
 
@@ -113,6 +113,17 @@ namespace sport_app_backend.Controller
             var result = await _coachRepository.GetAllPayment(phoneNumber);
             if (result.Action != true) return BadRequest(result);
             return Ok(result);
+        }
+
+        [HttpGet("get_payment/{paymentId}")]
+        [Authorize(Roles = "Coach")]
+        public async Task<IActionResult> GetPayment([FromRoute] int paymentId){
+            var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
+            if (phoneNumber is null) return BadRequest(new ApiResponse { Action = false, Message = "PhoneNumber is null" });
+            var result = await _coachRepository.GetPayment(phoneNumber, paymentId);
+            if (result.Action != true) return BadRequest(result);
+            return Ok(result);
+            
         }
 
 

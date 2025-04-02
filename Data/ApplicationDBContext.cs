@@ -46,6 +46,7 @@ public class ApplicationDbContext : DbContext
     public DbSet<CoachPlan> CoachesPlan { get; set; }
     public DbSet<Activitie> Activities { get; set; }
     public DbSet<ReportApp> ReportApps { get; set; }
+    public DbSet<InjuryArea> InjuryAreas { get; set; }
 
 
 

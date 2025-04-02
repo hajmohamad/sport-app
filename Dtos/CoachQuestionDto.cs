@@ -14,5 +14,7 @@ namespace sport_app_backend.Dtos
         public bool ManagingRevenue { get; set; }
         public bool DifficultTrackAthletes { get; set; }
         public bool HardCommunicationWithAthletes { get; set; }
+        public required string FirstName { get; set; }
+        public required string LastName { get; set; }
     }
 }

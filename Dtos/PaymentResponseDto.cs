@@ -1,14 +1,15 @@
-﻿namespace sport_app_backend.Dtos;
+﻿using sport_app_backend.Models.Question.A_Question;
+
+namespace sport_app_backend.Dtos;
 
 public class PaymentResponseDto
 {
-    public required string transactionId { get; set; }
-    public required string PaymentStatus { get; set; }
-    public required string Name { get; set; }
-    public required string Amount { get; set; }
-    public required string DateTime { get; set; }
-    public byte[] ImageProfile { get; set; }=[];
-    
-    
-    
+    public string TransactionId { get; set; } = string.Empty;
+    public string Name { get; set; } = string.Empty;
+    public string Amount { get; set; }= string.Empty;
+    public string DateTime { get; set; }= string.Empty;
+    public string PaymentStatus { get; set; }= string.Empty;
+    public AthleteQuestionDto? AthleteQuestion { get; set; }
+    public double Weight { get; set; }
+    public int Height { get; set; }
 }

@@ -9,6 +9,7 @@ public class SuperSetExercise
     [Key]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int Id { get; set; }
+    
     public int ExerciseInDayId { get; set; }
     public ExerciseInDay? ExerciseInDay { get; set; }
 
