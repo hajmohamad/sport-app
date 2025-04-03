@@ -93,7 +93,7 @@ namespace sport_app_backend.Mappers
                 Bio = coach.User?.Bio ?? string.Empty,
                 Domain = coach.Domain?.Select(x => x.ToString()).ToList() ?? new List<string>(), // Ensure it's not null
                 StartCoachingYear = coach.StartCoachingYear,
-                Coachplans = coach.Coachplans.Where(x=>!x.IsDeleted)?.Select(x => x.ToCoachingPlanResponse()).ToList() ?? new List<CoachingPlanResponse>()
+                Coachplans = coach.CoachingPlans.Where(x=>!x.IsDeleted)?.Select(x => x.ToCoachingPlanResponse()).ToList() ?? new List<CoachingPlanResponse>()
             };
         }
 
@@ -115,18 +115,7 @@ namespace sport_app_backend.Mappers
             };
         }
 
-        public static PaymentResponseDto ToPaymentResponseDto(this Payment payment)
-        {
-            return new PaymentResponseDto
-            {
-                transactionId = payment.TransitionId,
-                PaymentStatus = payment.PaymentStatus.ToString(),
-                Name = payment.Athlete.User.FirstName + " " + payment.Athlete.User.LastName,
-                Amount = payment.Amount.ToString(CultureInfo.InvariantCulture),
-                DateTime = payment.PaymentDate.ToString(CultureInfo.InvariantCulture)
-            };
-        }
-
+  
 
     }
 

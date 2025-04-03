@@ -11,7 +11,7 @@ namespace sport_app_backend.Dtos
     {
         public int DaysPerWeekToExercise { get; set; }
         public int CurrentBodyForm { get; set; }
-        public int TargetBodyForm { get; set; }
+        public double CurrentWeight { get; set; }
         public string? ExerciseGoal { get; set; }
         public InjuryAreaDto? InjuryArea { get; set; }
         public string? FitnessLevel { get; set; }

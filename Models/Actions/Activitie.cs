@@ -10,7 +10,8 @@ public class Activitie
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int Id { get; set; }
     public string? Name{get; set;}
-    public ActivitiesEnum ActivityEnum;
+    
+    public ActivityCategory ActivityCategory {get; set;}
     public double CaloriesLost { get; set; }
     public double Duration { get; set; }
     public double Distance { get; set; }

@@ -16,11 +16,10 @@ namespace sport_app_backend.Dtos
     public int Height { get; set; }
     public double CurrentWeight { get; set; }
     public double WeightGoal { get; set; }
-    public string? FitnessLevel { get; set; }
-    public int CurrentBodyForm { get; set; }
-    public int TargetBodyForm { get; set; }
     public string? Gender { get; set; }
     public byte[] ImageProfile { get; set; } = Array.Empty<byte>();
+    public required int TimeBeforeWorkout { get; set; }=10;
+    public required int RestTime { get; set; } = 30;
 
     public string Bio { get; set; } = "";
 

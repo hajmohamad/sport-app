@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using sport_app_backend.Models;
 using sport_app_backend.Models.Account;
 using sport_app_backend.Models.Actions;
+using sport_app_backend.Models.Challenge_Achievement;
 using sport_app_backend.Models.Login_Sinup;
 using sport_app_backend.Models.Payments;
 using sport_app_backend.Models.Program;
@@ -46,7 +47,9 @@ public class ApplicationDbContext : DbContext
     public DbSet<CoachPlan> CoachesPlan { get; set; }
     public DbSet<Activitie> Activities { get; set; }
     public DbSet<ReportApp> ReportApps { get; set; }
-
+    public DbSet<InjuryArea> InjuryAreas { get; set; }
+    public DbSet<Challenge> Challenges { get; set; }
+    public DbSet<Achievement> Achievements { get; set; }
 
 
 

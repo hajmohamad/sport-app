@@ -16,13 +16,13 @@ namespace sport_app_backend.Repository
         public async Task<ApiResponse> AddCoachingPlane(string phoneNumber, AddCoachingPlaneDto addCoachingPlaneDto)
         {
          
-            var coach = await context.Coaches.Include(c => c.Coachplans).FirstOrDefaultAsync(c => c.PhoneNumber == phoneNumber);
+            var coach = await context.Coaches.Include(c => c.CoachingPlans).FirstOrDefaultAsync(c => c.PhoneNumber == phoneNumber);
             if (coach is null) return new ApiResponse() { Message = "User is not a coach", Action = false };// Ensure the user is a coach
             var coachingPlane = addCoachingPlaneDto.ToCoachPlane(coach);
-            coach.Coachplans ??= [];
-            coach.Coachplans.Add(coachingPlane);
+            coach.CoachingPlans ??= [];
+            coach.CoachingPlans.Add(coachingPlane);
             context.CoachesPlan.Add(coachingPlane);
-            context.SaveChanges();
+            await context.SaveChangesAsync();
             return new ApiResponse()
             {
                 Message = "Coaching plane added successfully",
@@ -37,6 +37,8 @@ namespace sport_app_backend.Repository
             if (user is null) return new ApiResponse() { Message = "User not found", Action = false };
             var coach = user.Coach;
             if (coach == null) return new ApiResponse() { Message = "User is not a coach", Action = false };// Ensure the user is a coach
+            user.FirstName=coachQuestionDto.FirstName;
+            user.LastName=coachQuestionDto.LastName;
             var coachQuestion = new CoachQuestion
             {
                 UserId = user.Id,
@@ -63,9 +65,9 @@ namespace sport_app_backend.Repository
         public async Task<ApiResponse> UpdateCoachingPlane(string phoneNumber,int id, AddCoachingPlaneDto addCoachingPlaneDto)
         {
 
-            var coach = await context.Coaches.Include(x=>x.Coachplans).FirstOrDefaultAsync(x=>x.PhoneNumber==phoneNumber);
+            var coach = await context.Coaches.Include(x=>x.CoachingPlans).FirstOrDefaultAsync(x=>x.PhoneNumber==phoneNumber);
             if(coach is null) return new ApiResponse() { Message = "User is not a coach", Action = false };// Ensure the user is a coach
-            var coachingPlane = coach.Coachplans.FirstOrDefault(x => x.Id == id);
+            var coachingPlane = coach.CoachingPlans.FirstOrDefault(x => x.Id == id);
             if (coachingPlane is null) return new ApiResponse() { Message = "Coaching plane not found", Action = false };
 
             var payments = context.Payments.Include(c=>c.CoachPlan).Where(c => c.Id == id).ToList();
@@ -73,8 +75,8 @@ namespace sport_app_backend.Repository
             {
                 coachingPlane.IsDeleted = true;
                 var newCoachPlan = addCoachingPlaneDto.ToCoachPlane(coach);
-                coach.Coachplans ??= [];
-                coach.Coachplans.Add(newCoachPlan);
+                coach.CoachingPlans ??= [];
+                coach.CoachingPlans.Add(newCoachPlan);
                 context.CoachesPlan.Add(newCoachPlan);
             }else{
                 coachingPlane.UpdateCoachingPlane(addCoachingPlaneDto);
@@ -94,9 +96,9 @@ namespace sport_app_backend.Repository
 
         public async Task<ApiResponse> DeleteCoachingPlane(string phoneNumber, int id)
         {
-            var coach = await context.Coaches.Include(x => x.Coachplans).FirstOrDefaultAsync(x => x.PhoneNumber == phoneNumber);
+            var coach = await context.Coaches.Include(x => x.CoachingPlans).FirstOrDefaultAsync(x => x.PhoneNumber == phoneNumber);
             if (coach is null) return new ApiResponse() { Message = "User is not a coach", Action = false };// Ensure the user is a coach
-            var coachingPlane = coach.Coachplans.FirstOrDefault(x => x.Id == id);
+            var coachingPlane = coach.CoachingPlans.FirstOrDefault(x => x.Id == id);
             if (coachingPlane is null) return new ApiResponse() { Message = "Coaching plane not found", Action = false };
             coachingPlane.IsDeleted = true;
             await context.SaveChangesAsync();
@@ -111,10 +113,10 @@ namespace sport_app_backend.Repository
         public async Task<ApiResponse> GetAllPayment(string phoneNumber)
         {
             var payments = await context.Payments
-                .Include(p => p.Coach)  // بارگذاری Coach
-                .ThenInclude(c => c.User)  // بارگذاری User داخل Coach
-                .Include(p => p.Athlete)  // بارگذاری Athlete
-                .ThenInclude(a => a.User)  // بارگذاری User داخل Athlete
+                .Include(p => p.Coach)  
+                .ThenInclude(c => c!.User)  
+                .Include(p => p.Athlete)  
+                .ThenInclude(a => a!.User)  
                 .Where(p => p.Coach != null && p.Coach.PhoneNumber == phoneNumber).ToListAsync();;
            
            
@@ -124,8 +126,31 @@ namespace sport_app_backend.Repository
             {
                 Message = "Payments found",
                 Action = true,
-                Result = payments.Where(p=> p.PaymentStatus == PaymentStatus.success).Select(x=>x.ToPaymentResponseDto())
+                Result = payments.Where(p=> p.PaymentStatus == PaymentStatus.success).Select(x=>x.ToAllPaymentResponseDto())
             };
+        }
+
+        public async Task<ApiResponse> GetPayment(string phoneNumber, int paymentId)
+        {
+            var payment = await context.Payments
+                .Include(p => p.Coach)  // بارگذاری Coach
+                .Include(p => p.Athlete)  // بارگذاری Athlete
+                .ThenInclude(a => a!.User)
+                .Include(a=>a.AthleteQuestion)// بارگذاری User داخل Athlete
+                .ThenInclude(I=> I!.InjuryArea)
+                .FirstOrDefaultAsync(p => p.Coach != null && p.Coach.PhoneNumber == phoneNumber&& p.Id==paymentId);
+            if(payment is null) return new ApiResponse() { Message = "Payment not found", Action = false };
+            
+            return new ApiResponse()
+            {
+                Message = "Payment found",
+                Action = true,
+                Result = payment.ToPaymentResponseDto()
+            };
+            
+            
+            
+
         }
     }
 }

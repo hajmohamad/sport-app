@@ -17,8 +17,8 @@ public class User
     [MaxLength(15)]
     [MinLength(6)]
     public string? UserName { get; set; } 
-    [DataType(DataType.DateTime)]
-    [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}")]
+    [DataType(DataType.Date)]
+    [Column(TypeName = "date")]
     public DateTime BirthDate { get; set; }
     [Required]
     [StringLength(11)]
@@ -26,9 +26,9 @@ public class User
 
     public required string PhoneNumber { get; set; }
 
-    [DataType(DataType.DateTime)]
-    [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd HH:mm:ss}")]
-    public DateTime CreateDate { get; set; }=DateTime.Now;
+    [DataType(DataType.Date)]
+    [Column(TypeName = "date")]
+    public DateTime CreateDate { get; set; }=DateTime.Now.Date;
 
     [DataType(DataType.DateTime)]
     [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd HH:mm:ss}")]

@@ -13,6 +13,7 @@ using sport_app_backend.Mappers;
 using sport_app_backend.Models;
 using sport_app_backend.Models.Account;
 using sport_app_backend.Models.Actions;
+using sport_app_backend.Models.Challenge_Achievement;
 using sport_app_backend.Models.Payments;
 using sport_app_backend.Models.Program;
 using sport_app_backend.Models.Question.A_Question;
@@ -48,7 +49,7 @@ namespace sport_app_backend.Repository
                     Date = x.DateTime.ToString("yyyy-MM-dd"),
                     x.CaloriesLost,
                     x.Duration,
-                    SportEnum = x.ActivityEnum.ToString(),
+                    SportEnum = x.ActivityCategory.ToString(),
                     x.Name
                 }).ToList()
             };
@@ -60,13 +61,13 @@ namespace sport_app_backend.Repository
             var athlete = await _context.Athletes.FirstOrDefaultAsync(x => x.PhoneNumber == phoneNumber);
             if (athlete is null) return new ApiResponse() { Message = "User is not an athlete", Action = false };// Ensure the user is an athlete
 
-            var sportEnum = Enum.Parse<ActivitiesEnum>(addSportDto.ActivitiyEnum);
+            var sportEnum = Enum.Parse<ActivityCategory>(addSportDto.ActivityCategory);
 
             var sport = new Activitie()
             {
                 AthleteId = athlete.Id,
                 Athlete = athlete,
-                ActivityEnum = sportEnum,
+                ActivityCategory = sportEnum,
                 CaloriesLost = addSportDto.CaloriesLost,
                 Distance = addSportDto.Distance,
                 Duration = addSportDto.Duration,
@@ -85,7 +86,7 @@ namespace sport_app_backend.Repository
                     sport.CaloriesLost,
                     sport.Duration,
                     sport.Distance,
-                    SportEnum = sport.ActivityEnum.ToString()
+                    ActivityCategory = sport.ActivityCategory.ToString()
 
                 }
             };
@@ -132,23 +133,25 @@ namespace sport_app_backend.Repository
 
         public async Task<ApiResponse> BuyCoachingPlan(string phoneNumber, int coachingPlanId)
         {
-            var athlete = await _context.Athletes.Include(x=>x.AthleteQuestion).FirstOrDefaultAsync(x => x.PhoneNumber == phoneNumber);
-            if (athlete is null) return new ApiResponse() { Message = "User is not an athlete", Action = false };// Ensure the user is an athlete
-            // if(athlete.AthleteQuestion is null) return new ApiResponse() { Message = "User has not completed the questions", Action = false };// Ensure the user is an athlete
+            var athlete = await _context.Athletes.Include(x=>x.AthleteQuestions).FirstOrDefaultAsync(x => x.PhoneNumber == phoneNumber);
+            if (athlete is null) return new ApiResponse() { Message = "User is not an athlete", Action = false };
+            if(athlete.AthleteQuestions.Count==0 ) return new ApiResponse() { Message = "User has not completed the questions", Action = false };
+            var lastQuestion = athlete.AthleteQuestions?.LastOrDefault();
 
-            var coachingplan = await _context.CoachesPlan.Include(x=>x.Coach).FirstOrDefaultAsync(x => x.Id == coachingPlanId& x.IsActive==true);
-            if (coachingplan is null) return new ApiResponse() { Message = "CoachingPlan not found", Action = false };
-            if(coachingplan.IsDeleted==true) return new ApiResponse() { Message = "CoachingPlan is deleted", Action = false };
+            var coachPlan = await _context.CoachesPlan.Include(x=>x.Coach).FirstOrDefaultAsync(x => x.Id == coachingPlanId& x.IsActive==true);
+            if (coachPlan is null) return new ApiResponse() { Message = "CoachingPlan not found", Action = false };
+            if(coachPlan.IsDeleted==true) return new ApiResponse() { Message = "CoachingPlan is deleted", Action = false };
             var payment = new Payment()
             {
                 Athlete = athlete,
                 AthleteId = athlete.Id,
-                CoachPlan = coachingplan,
-                CoachPlanId = coachingplan.Id,
-                CoachId = coachingplan.CoachId,
-                Coach = coachingplan.Coach,
+                CoachPlan = coachPlan,
+                CoachPlanId = coachPlan.Id,
+                CoachId = coachPlan.CoachId,
+                Coach = coachPlan.Coach,
                 TransitionId = Guid.NewGuid().ToString(),
-                Amount = coachingplan.Price,
+                Amount = coachPlan.Price,
+                AthleteQuestion = lastQuestion
             };
             await _context.Payments.AddAsync(payment);
             await _context.SaveChangesAsync();
@@ -178,7 +181,26 @@ namespace sport_app_backend.Repository
             };
         }
 
-
+        public async Task<ApiResponse> GetLastQuestion(string phoneNumber)
+        {
+            var athlete = await _context.Athletes.FirstOrDefaultAsync(x => x.PhoneNumber == phoneNumber);
+            if (athlete is null)
+            {
+                return new ApiResponse() { Message = "User is not an athlete", Action = false };
+            }
+            var lastQuestion = _context.AthleteQuestions
+                .Where(q => q.AthleteId == athlete.Id).Include(i=>i.InjuryArea)
+                .OrderByDescending(q => q.CreatedAt)
+                .FirstOrDefault();
+            if (lastQuestion is null) return new ApiResponse() { Message = "Question not found", Action = false };
+            
+            return new ApiResponse()
+            {
+                Message = "Question found",
+                Action = true,
+                Result = lastQuestion.ToAthleteQuestionDto()
+            };
+        }
         public async Task<ApiResponse> DeleteActivity(string phoneNumber, int activityId)
         {
             var athlete = await _context.Athletes.FirstOrDefaultAsync(x => x.PhoneNumber == phoneNumber);
@@ -201,31 +223,9 @@ namespace sport_app_backend.Repository
             if (athlete is null) return new ApiResponse() { Message = "User is not an athlete", Action = false };// Ensure the user is an athlete
             if (athlete.User is null) return new ApiResponse() { Message = "User not found", Action = false };
 
-            ExerciseGoal exercisegoal;
-            if (Enum.TryParse<ExerciseGoal>(athleteQuestionDto.ExerciseGoal, out var exerciseGoal))
-                exercisegoal = exerciseGoal;
-            else
-                return new ApiResponse { Message = "Invalid ExerciseGoal value", Action = false };
-
-            FitnessLevel fit;
-            if (Enum.TryParse<FitnessLevel>(athleteQuestionDto.FitnessLevel, out var fitnessLevel))
-                fit = fitnessLevel;
-            else
-                return new ApiResponse { Message = "Invalid FitnessLevel value", Action = false };
-
-            var athleteQuestion = new AthleteQuestion
-            {
-                AthleteId = athlete.Id,
-                Athlete = athlete,
-                CurrentBodyForm = athleteQuestionDto.CurrentBodyForm,
-                TargetBodyForm = athleteQuestionDto.TargetBodyForm,
-                DaysPerWeekToExercise = athleteQuestionDto.DaysPerWeekToExercise,
-                FitnessLevel = fit,
-                InjuryArea = athleteQuestionDto.InjuryArea?.ToInjuryArea(),
-                ExerciseGoal = exercisegoal,
-            };
-            athlete.AthleteQuestion = athleteQuestion;
-            _context.AthleteQuestions.Add(athleteQuestion);
+            var athleteQuestion = athleteQuestionDto.ToAthleteQuestion(athlete);
+            athlete.AthleteQuestions.Add(athleteQuestion);
+           await _context.AthleteQuestions.AddAsync(athleteQuestion);
 
             await _context.SaveChangesAsync();
             return new ApiResponse()
@@ -236,16 +236,19 @@ namespace sport_app_backend.Repository
 
         }
 
-        public async Task <ApiResponse> AddHightAndWeight(string phoneNumber, HightWeightQuestionDto hightWeightQuestionDto)
-        {
-            var athlete = await _context.Athletes.FirstOrDefaultAsync(x => x.PhoneNumber == phoneNumber);
+        public async Task<ApiResponse> AthleteFirstQuestions(string phoneNumber, AthleteFirstQuestionsDto athleteFirstQuestionsDto) {
+            var user = await _context.Users.Include(a=>a.Athlete).FirstOrDefaultAsync(x => x.PhoneNumber == phoneNumber);
+            if (user is null) return new ApiResponse() { Message = "User not found", Action = false };
+            var athlete=user.Athlete;
             if (athlete is null) return new ApiResponse() { Message = "User is not an athlete", Action = false };// Ensure the user is an athlete
-            athlete.Height = hightWeightQuestionDto.Height;
-            athlete.CurrentWeight = hightWeightQuestionDto.CurrentWeight;
+            athlete.Height = athleteFirstQuestionsDto.Height;
+            athlete.CurrentWeight = athleteFirstQuestionsDto.CurrentWeight;
+            user.LastName=athleteFirstQuestionsDto.LastName;
+            user.FirstName=athleteFirstQuestionsDto.FirstName;
             await _context.SaveChangesAsync();
             return new ApiResponse()
             {
-                Message = "Height and weight added successfully",
+                Message = "Athlete first questions submitted successfully",
                 Action = true
             };
         }
@@ -347,6 +350,48 @@ namespace sport_app_backend.Repository
         }
         
 
+        public async Task<ApiResponse> CompleteNewChallenge(string phoneNumber, string challenge)
+        {
+            var athlete = await _context.Athletes.FirstOrDefaultAsync(x => x.PhoneNumber == phoneNumber);
+            if (athlete is null)
+                return new ApiResponse() { Message = "User is not an athlete", Action = false };
+
+            var challengeExists = _context.Challenges.Any(x => x.AthleteId == athlete.Id && x.ChallengeType.ToString() == challenge);
+            if (challengeExists)
+                return new ApiResponse() { Message = "Challenge already completed", Action = false };
+
+            var chal = new Challenge
+            {
+                AthleteId = athlete.Id,
+                Athlete = athlete,
+                ChallengeType = Enum.Parse<ChallengeType>(challenge),
+                CompletedAt = DateTime.Now
+            };
+            await _context.SaveChangesAsync();
+            return new ApiResponse()
+            {
+                Message = "Challenge completed successfully",
+                Action = true
+            };
+        }
+
+        public async Task<ApiResponse> CompletedChallenge(string phoneNumber)
+        {
+            var athlete = await _context.Athletes.FirstOrDefaultAsync(x => x.PhoneNumber == phoneNumber);
+            if (athlete is null)
+                return new ApiResponse() { Message = "User is not an athlete", Action = false };
+
+            var challenges = await _context.Challenges
+                .Where(x => x.AthleteId == athlete.Id)
+                .ToListAsync();
+
+            return new ApiResponse()
+            {
+                Message = "Challenges found",
+                Action = true,
+                Result = challenges.Select(c => c.ChallengeType.ToString()).ToList()
+            };
+        }
 
 
     }

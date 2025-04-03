@@ -8,14 +8,15 @@ namespace sport_app_backend.Models.Question.A_Question
     {
         [Key]
         public int Id { get; set; }
-        public int AthleteId { get; set; }
-        public Athlete? Athlete { get; set; }
-        public bool none { get; set; }  // آسیبی ندیده‌ام
-        public List<SkeletalDiseases>? skeletal { get; set; } //اسکلتی
-        public List<SoftTissueAndLigamentInjuries>? softTissueAndLigament { get; set; }  // بافت نرم و رباطی
-        public List<InternalAndDigestiveDiseases>? internalAndDigestive { get; set; } //داخلی و گوارشی
-        public List<HormonalAndGlandularDiseases>? hormonalAndGlandular { get; set; }   // هورمونی و غده‌ای
-        public List<SpecificDiseases>? specific { get; set; } // خاص
-        public string? others { get; set; }
+        public AthleteQuestion?  AthleteQuestion { get; set; }
+        public int AthleteQuestionId { get; set; }
+        public bool None { get; set; }  // آسیبی ندیده‌ام
+        public List<SkeletalDiseases>? Skeletal { get; set; } //اسکلتی
+        public List<SoftTissueAndLigamentInjuries>? SoftTissueAndLigament { get; set; }  // بافت نرم و رباطی
+        public List<InternalAndDigestiveDiseases>? InternalAndDigestive { get; set; } //داخلی و گوارشی
+        public List<HormonalAndGlandularDiseases>? HormonalAndGlandular { get; set; }   // هورمونی و غده‌ای
+        public List<SpecificDiseases>? Specific { get; set; } // خاص
+        [MaxLength(500)]
+        public string? Others { get; set; }
     }
 }

@@ -19,7 +19,9 @@ public class CoachPlan
     public bool IsActive { get; set; }
     public bool HaveSupport{get; set;}
     public required string CommunicateType{get; set;}
-    public DateTime CreatedDate { get; set; }=DateTime.Now;
+    [DataType(DataType.Date)]
+    [Column(TypeName = "date")]
+    public DateTime CreatedDate { get; set; }=DateTime.Now.Date;
     public TypeOfCoachingPlan TypeOfCoachingPlan { get; set; }
     public bool IsDeleted { get; set; } = false;
 }

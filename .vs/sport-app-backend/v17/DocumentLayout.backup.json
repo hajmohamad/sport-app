@@ -1,81 +1,97 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "C:\\Users\\Dour-Andish\\Desktop\\New folder (2)\\sport-app\\",
+  "WorkspaceRootPath": "C:\\Users\\Dour-Andish\\Desktop\\charset\\sport-app\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{27B63680-A5B7-55C3-C88B-EBD5D7F12023}|sport-app-backend.csproj|c:\\users\\dour-andish\\desktop\\new folder (2)\\sport-app\\controller\\athletecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{27B63680-A5B7-55C3-C88B-EBD5D7F12023}|sport-app-backend.csproj|c:\\users\\dour-andish\\desktop\\charset\\sport-app\\controller\\athletecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{27B63680-A5B7-55C3-C88B-EBD5D7F12023}|sport-app-backend.csproj|solutionrelative:controller\\athletecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{27B63680-A5B7-55C3-C88B-EBD5D7F12023}|sport-app-backend.csproj|c:\\users\\dour-andish\\desktop\\new folder (2)\\sport-app\\repository\\athleterepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{27B63680-A5B7-55C3-C88B-EBD5D7F12023}|sport-app-backend.csproj|solutionrelative:repository\\athleterepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{27B63680-A5B7-55C3-C88B-EBD5D7F12023}|sport-app-backend.csproj|c:\\users\\dour-andish\\desktop\\new folder (2)\\sport-app\\interface\\iathleterepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{27B63680-A5B7-55C3-C88B-EBD5D7F12023}|sport-app-backend.csproj|c:\\users\\dour-andish\\desktop\\charset\\sport-app\\interface\\iathleterepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{27B63680-A5B7-55C3-C88B-EBD5D7F12023}|sport-app-backend.csproj|solutionrelative:interface\\iathleterepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{27B63680-A5B7-55C3-C88B-EBD5D7F12023}|sport-app-backend.csproj|c:\\users\\dour-andish\\desktop\\new folder (2)\\sport-app\\mappers\\athletemappers.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{27B63680-A5B7-55C3-C88B-EBD5D7F12023}|sport-app-backend.csproj|c:\\users\\dour-andish\\desktop\\charset\\sport-app\\repository\\athleterepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{27B63680-A5B7-55C3-C88B-EBD5D7F12023}|sport-app-backend.csproj|solutionrelative:repository\\athleterepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{27B63680-A5B7-55C3-C88B-EBD5D7F12023}|sport-app-backend.csproj|c:\\users\\dour-andish\\desktop\\charset\\sport-app\\data\\applicationdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{27B63680-A5B7-55C3-C88B-EBD5D7F12023}|sport-app-backend.csproj|solutionrelative:data\\applicationdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{27B63680-A5B7-55C3-C88B-EBD5D7F12023}|sport-app-backend.csproj|c:\\users\\dour-andish\\desktop\\charset\\sport-app\\models\\challenge_achievement\\achievement.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{27B63680-A5B7-55C3-C88B-EBD5D7F12023}|sport-app-backend.csproj|solutionrelative:models\\challenge_achievement\\achievement.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{27B63680-A5B7-55C3-C88B-EBD5D7F12023}|sport-app-backend.csproj|c:\\users\\dour-andish\\desktop\\charset\\sport-app\\models\\challenge_achievement\\achievementtype.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{27B63680-A5B7-55C3-C88B-EBD5D7F12023}|sport-app-backend.csproj|solutionrelative:models\\challenge_achievement\\achievementtype.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{27B63680-A5B7-55C3-C88B-EBD5D7F12023}|sport-app-backend.csproj|c:\\users\\dour-andish\\desktop\\charset\\sport-app\\models\\challenge_achievement\\challenge.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{27B63680-A5B7-55C3-C88B-EBD5D7F12023}|sport-app-backend.csproj|solutionrelative:models\\challenge_achievement\\challenge.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{27B63680-A5B7-55C3-C88B-EBD5D7F12023}|sport-app-backend.csproj|c:\\users\\dour-andish\\desktop\\charset\\sport-app\\models\\challenge_achievement\\challengetype.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{27B63680-A5B7-55C3-C88B-EBD5D7F12023}|sport-app-backend.csproj|solutionrelative:models\\challenge_achievement\\challengetype.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{27B63680-A5B7-55C3-C88B-EBD5D7F12023}|sport-app-backend.csproj|c:\\users\\dour-andish\\desktop\\charset\\sport-app\\mappers\\questionmapper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{27B63680-A5B7-55C3-C88B-EBD5D7F12023}|sport-app-backend.csproj|solutionrelative:mappers\\questionmapper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{27B63680-A5B7-55C3-C88B-EBD5D7F12023}|sport-app-backend.csproj|c:\\users\\dour-andish\\desktop\\charset\\sport-app\\mappers\\athletemappers.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{27B63680-A5B7-55C3-C88B-EBD5D7F12023}|sport-app-backend.csproj|solutionrelative:mappers\\athletemappers.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{27B63680-A5B7-55C3-C88B-EBD5D7F12023}|sport-app-backend.csproj|c:\\users\\dour-andish\\desktop\\new folder (2)\\sport-app\\models\\account\\athlete\\athlete.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{27B63680-A5B7-55C3-C88B-EBD5D7F12023}|sport-app-backend.csproj|solutionrelative:models\\account\\athlete\\athlete.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{27B63680-A5B7-55C3-C88B-EBD5D7F12023}|sport-app-backend.csproj|c:\\users\\dour-andish\\desktop\\new folder (2)\\sport-app\\dtos\\hightweightquestiondto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{27B63680-A5B7-55C3-C88B-EBD5D7F12023}|sport-app-backend.csproj|solutionrelative:dtos\\hightweightquestiondto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{27B63680-A5B7-55C3-C88B-EBD5D7F12023}|sport-app-backend.csproj|c:\\users\\dour-andish\\desktop\\new folder (2)\\sport-app\\dtos\\athletequestiondto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{27B63680-A5B7-55C3-C88B-EBD5D7F12023}|sport-app-backend.csproj|solutionrelative:dtos\\athletequestiondto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{27B63680-A5B7-55C3-C88B-EBD5D7F12023}|sport-app-backend.csproj|c:\\users\\dour-andish\\desktop\\new folder (2)\\sport-app\\models\\question\\a_question\\athletequestion.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{27B63680-A5B7-55C3-C88B-EBD5D7F12023}|sport-app-backend.csproj|solutionrelative:models\\question\\a_question\\athletequestion.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{27B63680-A5B7-55C3-C88B-EBD5D7F12023}|sport-app-backend.csproj|c:\\users\\dour-andish\\desktop\\new folder (2)\\sport-app\\mappers\\injuryareamapper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{27B63680-A5B7-55C3-C88B-EBD5D7F12023}|sport-app-backend.csproj|solutionrelative:mappers\\injuryareamapper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{27B63680-A5B7-55C3-C88B-EBD5D7F12023}|sport-app-backend.csproj|c:\\users\\dour-andish\\desktop\\new folder (2)\\sport-app\\dtos\\athleteprofileresponse.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{27B63680-A5B7-55C3-C88B-EBD5D7F12023}|sport-app-backend.csproj|solutionrelative:dtos\\athleteprofileresponse.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{27B63680-A5B7-55C3-C88B-EBD5D7F12023}|sport-app-backend.csproj|c:\\users\\dour-andish\\desktop\\new folder (2)\\sport-app\\dtos\\injuryareadto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{27B63680-A5B7-55C3-C88B-EBD5D7F12023}|sport-app-backend.csproj|solutionrelative:dtos\\injuryareadto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{27B63680-A5B7-55C3-C88B-EBD5D7F12023}|sport-app-backend.csproj|c:\\users\\dour-andish\\desktop\\new folder (2)\\sport-app\\models\\question\\a_question\\injuryarea.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{27B63680-A5B7-55C3-C88B-EBD5D7F12023}|sport-app-backend.csproj|c:\\users\\dour-andish\\desktop\\charset\\sport-app\\models\\question\\a_question\\injuryarea.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{27B63680-A5B7-55C3-C88B-EBD5D7F12023}|sport-app-backend.csproj|solutionrelative:models\\question\\a_question\\injuryarea.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{27B63680-A5B7-55C3-C88B-EBD5D7F12023}|sport-app-backend.csproj|c:\\users\\dour-andish\\desktop\\new folder (2)\\sport-app\\models\\question\\a_question\\specificdiseases.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{27B63680-A5B7-55C3-C88B-EBD5D7F12023}|sport-app-backend.csproj|c:\\users\\dour-andish\\desktop\\charset\\sport-app\\dtos\\athletequestiondto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{27B63680-A5B7-55C3-C88B-EBD5D7F12023}|sport-app-backend.csproj|solutionrelative:dtos\\athletequestiondto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{27B63680-A5B7-55C3-C88B-EBD5D7F12023}|sport-app-backend.csproj|c:\\users\\dour-andish\\desktop\\charset\\sport-app\\dtos\\athleteprofileresponse.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{27B63680-A5B7-55C3-C88B-EBD5D7F12023}|sport-app-backend.csproj|solutionrelative:dtos\\athleteprofileresponse.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{27B63680-A5B7-55C3-C88B-EBD5D7F12023}|sport-app-backend.csproj|c:\\users\\dour-andish\\desktop\\charset\\sport-app\\models\\question\\a_question\\athletequestion.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{27B63680-A5B7-55C3-C88B-EBD5D7F12023}|sport-app-backend.csproj|solutionrelative:models\\question\\a_question\\athletequestion.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{27B63680-A5B7-55C3-C88B-EBD5D7F12023}|sport-app-backend.csproj|c:\\users\\dour-andish\\desktop\\charset\\sport-app\\models\\account\\athlete\\athlete.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{27B63680-A5B7-55C3-C88B-EBD5D7F12023}|sport-app-backend.csproj|solutionrelative:models\\account\\athlete\\athlete.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{27B63680-A5B7-55C3-C88B-EBD5D7F12023}|sport-app-backend.csproj|c:\\users\\dour-andish\\desktop\\charset\\sport-app\\dtos\\injuryareadto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{27B63680-A5B7-55C3-C88B-EBD5D7F12023}|sport-app-backend.csproj|solutionrelative:dtos\\injuryareadto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{27B63680-A5B7-55C3-C88B-EBD5D7F12023}|sport-app-backend.csproj|c:\\users\\dour-andish\\desktop\\charset\\sport-app\\models\\question\\a_question\\specificdiseases.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{27B63680-A5B7-55C3-C88B-EBD5D7F12023}|sport-app-backend.csproj|solutionrelative:models\\question\\a_question\\specificdiseases.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{27B63680-A5B7-55C3-C88B-EBD5D7F12023}|sport-app-backend.csproj|c:\\users\\dour-andish\\desktop\\new folder (2)\\sport-app\\models\\question\\a_question\\softtissueandligamentinjuries.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{27B63680-A5B7-55C3-C88B-EBD5D7F12023}|sport-app-backend.csproj|c:\\users\\dour-andish\\desktop\\charset\\sport-app\\models\\question\\a_question\\softtissueandligamentinjuries.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{27B63680-A5B7-55C3-C88B-EBD5D7F12023}|sport-app-backend.csproj|solutionrelative:models\\question\\a_question\\softtissueandligamentinjuries.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{27B63680-A5B7-55C3-C88B-EBD5D7F12023}|sport-app-backend.csproj|c:\\users\\dour-andish\\desktop\\new folder (2)\\sport-app\\models\\question\\a_question\\skeletaldiseases.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{27B63680-A5B7-55C3-C88B-EBD5D7F12023}|sport-app-backend.csproj|c:\\users\\dour-andish\\desktop\\charset\\sport-app\\models\\question\\a_question\\skeletaldiseases.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{27B63680-A5B7-55C3-C88B-EBD5D7F12023}|sport-app-backend.csproj|solutionrelative:models\\question\\a_question\\skeletaldiseases.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{27B63680-A5B7-55C3-C88B-EBD5D7F12023}|sport-app-backend.csproj|c:\\users\\dour-andish\\desktop\\new folder (2)\\sport-app\\models\\question\\a_question\\internalanddigestivediseases.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{27B63680-A5B7-55C3-C88B-EBD5D7F12023}|sport-app-backend.csproj|c:\\users\\dour-andish\\desktop\\charset\\sport-app\\models\\question\\a_question\\internalanddigestivediseases.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{27B63680-A5B7-55C3-C88B-EBD5D7F12023}|sport-app-backend.csproj|solutionrelative:models\\question\\a_question\\internalanddigestivediseases.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{27B63680-A5B7-55C3-C88B-EBD5D7F12023}|sport-app-backend.csproj|c:\\users\\dour-andish\\desktop\\new folder (2)\\sport-app\\models\\question\\a_question\\hormonalandglandulardiseases.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{27B63680-A5B7-55C3-C88B-EBD5D7F12023}|sport-app-backend.csproj|c:\\users\\dour-andish\\desktop\\charset\\sport-app\\models\\question\\a_question\\hormonalandglandulardiseases.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{27B63680-A5B7-55C3-C88B-EBD5D7F12023}|sport-app-backend.csproj|solutionrelative:models\\question\\a_question\\hormonalandglandulardiseases.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{27B63680-A5B7-55C3-C88B-EBD5D7F12023}|sport-app-backend.csproj|c:\\users\\dour-andish\\desktop\\new folder (2)\\sport-app\\appsettings.development.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "AbsoluteMoniker": "D:0:0:{27B63680-A5B7-55C3-C88B-EBD5D7F12023}|sport-app-backend.csproj|c:\\users\\dour-andish\\desktop\\charset\\sport-app\\appsettings.development.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
       "RelativeMoniker": "D:0:0:{27B63680-A5B7-55C3-C88B-EBD5D7F12023}|sport-app-backend.csproj|solutionrelative:appsettings.development.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{27B63680-A5B7-55C3-C88B-EBD5D7F12023}|sport-app-backend.csproj|c:\\users\\dour-andish\\desktop\\new folder (2)\\sport-app\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{27B63680-A5B7-55C3-C88B-EBD5D7F12023}|sport-app-backend.csproj|c:\\users\\dour-andish\\desktop\\charset\\sport-app\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{27B63680-A5B7-55C3-C88B-EBD5D7F12023}|sport-app-backend.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
@@ -116,227 +132,19 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 11,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "AthleteController.cs",
-              "DocumentMoniker": "C:\\Users\\Dour-Andish\\Desktop\\New folder (2)\\sport-app\\Controller\\AthleteController.cs",
-              "RelativeDocumentMoniker": "Controller\\AthleteController.cs",
-              "ToolTip": "C:\\Users\\Dour-Andish\\Desktop\\New folder (2)\\sport-app\\Controller\\AthleteController.cs",
-              "RelativeToolTip": "Controller\\AthleteController.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAAnAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-29T10:28:30.722Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
               "DocumentIndex": 3,
-              "Title": "AthleteMappers.cs",
-              "DocumentMoniker": "C:\\Users\\Dour-Andish\\Desktop\\New folder (2)\\sport-app\\Mappers\\AthleteMappers.cs",
-              "RelativeDocumentMoniker": "Mappers\\AthleteMappers.cs",
-              "ToolTip": "C:\\Users\\Dour-Andish\\Desktop\\New folder (2)\\sport-app\\Mappers\\AthleteMappers.cs",
-              "RelativeToolTip": "Mappers\\AthleteMappers.cs",
-              "ViewState": "AgIAABEAAAAAAAAAAAAAABgAAAA1AAAAAAAAAA==",
+              "Title": "ApplicationDBContext.cs",
+              "DocumentMoniker": "C:\\Users\\Dour-Andish\\Desktop\\charset\\sport-app\\Data\\ApplicationDBContext.cs",
+              "RelativeDocumentMoniker": "Data\\ApplicationDBContext.cs",
+              "ToolTip": "C:\\Users\\Dour-Andish\\Desktop\\charset\\sport-app\\Data\\ApplicationDBContext.cs",
+              "RelativeToolTip": "Data\\ApplicationDBContext.cs",
+              "ViewState": "AgIAAC8AAAAAAAAAAAA4wDMAAAA4AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-29T10:26:03.208Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "AthleteRepository.cs",
-              "DocumentMoniker": "C:\\Users\\Dour-Andish\\Desktop\\New folder (2)\\sport-app\\Repository\\AthleteRepository.cs",
-              "RelativeDocumentMoniker": "Repository\\AthleteRepository.cs",
-              "ToolTip": "C:\\Users\\Dour-Andish\\Desktop\\New folder (2)\\sport-app\\Repository\\AthleteRepository.cs",
-              "RelativeToolTip": "Repository\\AthleteRepository.cs",
-              "ViewState": "AgIAANIAAAAAAAAAAAAuwPMAAABJAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-29T10:02:36.095Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 8,
-              "Title": "InjuryAreaMapper.cs",
-              "DocumentMoniker": "C:\\Users\\Dour-Andish\\Desktop\\New folder (2)\\sport-app\\Mappers\\InjuryAreaMapper.cs",
-              "RelativeDocumentMoniker": "Mappers\\InjuryAreaMapper.cs",
-              "ToolTip": "C:\\Users\\Dour-Andish\\Desktop\\New folder (2)\\sport-app\\Mappers\\InjuryAreaMapper.cs",
-              "RelativeToolTip": "Mappers\\InjuryAreaMapper.cs",
-              "ViewState": "AgIAABoAAAAAAAAAAAAAACUAAAAJAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-29T10:00:26.936Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "IAthleteRepository.cs",
-              "DocumentMoniker": "C:\\Users\\Dour-Andish\\Desktop\\New folder (2)\\sport-app\\Interface\\IAthleteRepository.cs",
-              "RelativeDocumentMoniker": "Interface\\IAthleteRepository.cs",
-              "ToolTip": "C:\\Users\\Dour-Andish\\Desktop\\New folder (2)\\sport-app\\Interface\\IAthleteRepository.cs",
-              "RelativeToolTip": "Interface\\IAthleteRepository.cs",
-              "ViewState": "AgIAAAsAAAAAAAAAAAAAAA0AAAB0AAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-29T09:57:36.36Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 6,
-              "Title": "AthleteQuestionDto.cs",
-              "DocumentMoniker": "C:\\Users\\Dour-Andish\\Desktop\\New folder (2)\\sport-app\\Dtos\\AthleteQuestionDto.cs",
-              "RelativeDocumentMoniker": "Dtos\\AthleteQuestionDto.cs",
-              "ToolTip": "C:\\Users\\Dour-Andish\\Desktop\\New folder (2)\\sport-app\\Dtos\\AthleteQuestionDto.cs",
-              "RelativeToolTip": "Dtos\\AthleteQuestionDto.cs",
-              "ViewState": "AgIAAAkAAAAAAAAAAAAAAAsAAAATAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-29T09:50:41.211Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 7,
-              "Title": "AthleteQuestion.cs",
-              "DocumentMoniker": "C:\\Users\\Dour-Andish\\Desktop\\New folder (2)\\sport-app\\Models\\Question\\A_Question\\AthleteQuestion.cs",
-              "RelativeDocumentMoniker": "Models\\Question\\A_Question\\AthleteQuestion.cs",
-              "ToolTip": "C:\\Users\\Dour-Andish\\Desktop\\New folder (2)\\sport-app\\Models\\Question\\A_Question\\AthleteQuestion.cs",
-              "RelativeToolTip": "Models\\Question\\A_Question\\AthleteQuestion.cs",
-              "ViewState": "AgIAAA4AAAAAAAAAAAAYwBMAAAA2AAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-29T09:33:25.953Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "Athlete.cs",
-              "DocumentMoniker": "C:\\Users\\Dour-Andish\\Desktop\\New folder (2)\\sport-app\\Models\\Account\\Athlete\\Athlete.cs",
-              "RelativeDocumentMoniker": "Models\\Account\\Athlete\\Athlete.cs",
-              "ToolTip": "C:\\Users\\Dour-Andish\\Desktop\\New folder (2)\\sport-app\\Models\\Account\\Athlete\\Athlete.cs",
-              "RelativeToolTip": "Models\\Account\\Athlete\\Athlete.cs",
-              "ViewState": "AgIAAAsAAAAAAAAAAAAAwBkAAAA7AAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-29T09:33:35.235Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "HightWeightQuestionDto.cs",
-              "DocumentMoniker": "C:\\Users\\Dour-Andish\\Desktop\\New folder (2)\\sport-app\\Dtos\\HightWeightQuestionDto.cs",
-              "RelativeDocumentMoniker": "Dtos\\HightWeightQuestionDto.cs",
-              "ToolTip": "C:\\Users\\Dour-Andish\\Desktop\\New folder (2)\\sport-app\\Dtos\\HightWeightQuestionDto.cs",
-              "RelativeToolTip": "Dtos\\HightWeightQuestionDto.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAAXAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-29T09:49:01.059Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 9,
-              "Title": "AthleteProfileResponse.cs",
-              "DocumentMoniker": "C:\\Users\\Dour-Andish\\Desktop\\New folder (2)\\sport-app\\Dtos\\AthleteProfileResponse.cs",
-              "RelativeDocumentMoniker": "Dtos\\AthleteProfileResponse.cs",
-              "ToolTip": "C:\\Users\\Dour-Andish\\Desktop\\New folder (2)\\sport-app\\Dtos\\AthleteProfileResponse.cs",
-              "RelativeToolTip": "Dtos\\AthleteProfileResponse.cs",
-              "ViewState": "AgIAAAcAAAAAAAAAAAAAABEAAAAqAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-29T09:55:10.11Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 10,
-              "Title": "InjuryAreaDto.cs",
-              "DocumentMoniker": "C:\\Users\\Dour-Andish\\Desktop\\New folder (2)\\sport-app\\Dtos\\InjuryAreaDto.cs",
-              "RelativeDocumentMoniker": "Dtos\\InjuryAreaDto.cs",
-              "ToolTip": "C:\\Users\\Dour-Andish\\Desktop\\New folder (2)\\sport-app\\Dtos\\InjuryAreaDto.cs",
-              "RelativeToolTip": "Dtos\\InjuryAreaDto.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAAmAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-29T09:54:43.999Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 12,
-              "Title": "SpecificDiseases.cs",
-              "DocumentMoniker": "C:\\Users\\Dour-Andish\\Desktop\\New folder (2)\\sport-app\\Models\\Question\\A_Question\\SpecificDiseases.cs",
-              "RelativeDocumentMoniker": "Models\\Question\\A_Question\\SpecificDiseases.cs",
-              "ToolTip": "C:\\Users\\Dour-Andish\\Desktop\\New folder (2)\\sport-app\\Models\\Question\\A_Question\\SpecificDiseases.cs",
-              "RelativeToolTip": "Models\\Question\\A_Question\\SpecificDiseases.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-29T09:29:04.253Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 13,
-              "Title": "SoftTissueAndLigamentInjuries.cs",
-              "DocumentMoniker": "C:\\Users\\Dour-Andish\\Desktop\\New folder (2)\\sport-app\\Models\\Question\\A_Question\\SoftTissueAndLigamentInjuries.cs",
-              "RelativeDocumentMoniker": "Models\\Question\\A_Question\\SoftTissueAndLigamentInjuries.cs",
-              "ToolTip": "C:\\Users\\Dour-Andish\\Desktop\\New folder (2)\\sport-app\\Models\\Question\\A_Question\\SoftTissueAndLigamentInjuries.cs",
-              "RelativeToolTip": "Models\\Question\\A_Question\\SoftTissueAndLigamentInjuries.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAFAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-29T09:28:25.229Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 14,
-              "Title": "SkeletalDiseases.cs",
-              "DocumentMoniker": "C:\\Users\\Dour-Andish\\Desktop\\New folder (2)\\sport-app\\Models\\Question\\A_Question\\SkeletalDiseases.cs",
-              "RelativeDocumentMoniker": "Models\\Question\\A_Question\\SkeletalDiseases.cs",
-              "ToolTip": "C:\\Users\\Dour-Andish\\Desktop\\New folder (2)\\sport-app\\Models\\Question\\A_Question\\SkeletalDiseases.cs",
-              "RelativeToolTip": "Models\\Question\\A_Question\\SkeletalDiseases.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAfAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-29T09:27:50.829Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 15,
-              "Title": "InternalAndDigestiveDiseases.cs",
-              "DocumentMoniker": "C:\\Users\\Dour-Andish\\Desktop\\New folder (2)\\sport-app\\Models\\Question\\A_Question\\InternalAndDigestiveDiseases.cs",
-              "RelativeDocumentMoniker": "Models\\Question\\A_Question\\InternalAndDigestiveDiseases.cs",
-              "ToolTip": "C:\\Users\\Dour-Andish\\Desktop\\New folder (2)\\sport-app\\Models\\Question\\A_Question\\InternalAndDigestiveDiseases.cs",
-              "RelativeToolTip": "Models\\Question\\A_Question\\InternalAndDigestiveDiseases.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAAgAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-29T09:27:15.305Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 11,
-              "Title": "InjuryArea.cs",
-              "DocumentMoniker": "C:\\Users\\Dour-Andish\\Desktop\\New folder (2)\\sport-app\\Models\\Question\\A_Question\\InjuryArea.cs",
-              "RelativeDocumentMoniker": "Models\\Question\\A_Question\\InjuryArea.cs",
-              "ToolTip": "C:\\Users\\Dour-Andish\\Desktop\\New folder (2)\\sport-app\\Models\\Question\\A_Question\\InjuryArea.cs",
-              "RelativeToolTip": "Models\\Question\\A_Question\\InjuryArea.cs",
-              "ViewState": "AgIAAAEAAAAAAAAAAAAAABEAAAA/AAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-29T09:25:17.654Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 16,
-              "Title": "HormonalAndGlandularDiseases.cs",
-              "DocumentMoniker": "C:\\Users\\Dour-Andish\\Desktop\\New folder (2)\\sport-app\\Models\\Question\\A_Question\\HormonalAndGlandularDiseases.cs",
-              "RelativeDocumentMoniker": "Models\\Question\\A_Question\\HormonalAndGlandularDiseases.cs",
-              "ToolTip": "C:\\Users\\Dour-Andish\\Desktop\\New folder (2)\\sport-app\\Models\\Question\\A_Question\\HormonalAndGlandularDiseases.cs",
-              "RelativeToolTip": "Models\\Question\\A_Question\\HormonalAndGlandularDiseases.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-29T09:26:11.861Z",
+              "WhenOpened": "2025-04-02T20:45:54.702Z",
               "EditorCaption": ""
             },
             {
@@ -361,33 +169,284 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 17,
-              "Title": "appsettings.Development.json",
-              "DocumentMoniker": "C:\\Users\\Dour-Andish\\Desktop\\New folder (2)\\sport-app\\appsettings.Development.json",
-              "RelativeDocumentMoniker": "appsettings.Development.json",
-              "ToolTip": "C:\\Users\\Dour-Andish\\Desktop\\New folder (2)\\sport-app\\appsettings.Development.json",
-              "RelativeToolTip": "appsettings.Development.json",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAFAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2025-03-29T08:53:41.703Z",
+              "DocumentIndex": 5,
+              "Title": "AchievementType.cs",
+              "DocumentMoniker": "C:\\Users\\Dour-Andish\\Desktop\\charset\\sport-app\\Models\\Challenge_Achievement\\AchievementType.cs",
+              "RelativeDocumentMoniker": "Models\\Challenge_Achievement\\AchievementType.cs",
+              "ToolTip": "C:\\Users\\Dour-Andish\\Desktop\\charset\\sport-app\\Models\\Challenge_Achievement\\AchievementType.cs",
+              "RelativeToolTip": "Models\\Challenge_Achievement\\AchievementType.cs",
+              "ViewState": "AgIAAAUAAAAAAAAAAAAAwA0AAAA5AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-02T20:34:27.342Z",
               "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "Achievement.cs",
+              "DocumentMoniker": "C:\\Users\\Dour-Andish\\Desktop\\charset\\sport-app\\Models\\Challenge_Achievement\\Achievement.cs",
+              "RelativeDocumentMoniker": "Models\\Challenge_Achievement\\Achievement.cs",
+              "ToolTip": "C:\\Users\\Dour-Andish\\Desktop\\charset\\sport-app\\Models\\Challenge_Achievement\\Achievement.cs",
+              "RelativeToolTip": "Models\\Challenge_Achievement\\Achievement.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-02T20:34:04.969Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "Challenge.cs",
+              "DocumentMoniker": "C:\\Users\\Dour-Andish\\Desktop\\charset\\sport-app\\Models\\Challenge_Achievement\\Challenge.cs",
+              "RelativeDocumentMoniker": "Models\\Challenge_Achievement\\Challenge.cs",
+              "ToolTip": "C:\\Users\\Dour-Andish\\Desktop\\charset\\sport-app\\Models\\Challenge_Achievement\\Challenge.cs",
+              "RelativeToolTip": "Models\\Challenge_Achievement\\Challenge.cs",
+              "ViewState": "AgIAAAYAAAAAAAAAAAAxwA0AAAA4AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-02T20:04:44.158Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "AthleteRepository.cs",
+              "DocumentMoniker": "C:\\Users\\Dour-Andish\\Desktop\\charset\\sport-app\\Repository\\AthleteRepository.cs",
+              "RelativeDocumentMoniker": "Repository\\AthleteRepository.cs",
+              "ToolTip": "C:\\Users\\Dour-Andish\\Desktop\\charset\\sport-app\\Repository\\AthleteRepository.cs",
+              "RelativeToolTip": "Repository\\AthleteRepository.cs",
+              "ViewState": "AgIAAHcBAAAAAAAAAAAiwHoBAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-29T10:02:36.095Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "IAthleteRepository.cs",
+              "DocumentMoniker": "C:\\Users\\Dour-Andish\\Desktop\\charset\\sport-app\\Interface\\IAthleteRepository.cs",
+              "RelativeDocumentMoniker": "Interface\\IAthleteRepository.cs",
+              "ToolTip": "C:\\Users\\Dour-Andish\\Desktop\\charset\\sport-app\\Interface\\IAthleteRepository.cs",
+              "RelativeToolTip": "Interface\\IAthleteRepository.cs",
+              "ViewState": "AgIAABUAAAAAAAAAAADwvxsAAABIAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-29T09:57:36.36Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "AthleteController.cs",
+              "DocumentMoniker": "C:\\Users\\Dour-Andish\\Desktop\\charset\\sport-app\\Controller\\AthleteController.cs",
+              "RelativeDocumentMoniker": "Controller\\AthleteController.cs",
+              "ToolTip": "C:\\Users\\Dour-Andish\\Desktop\\charset\\sport-app\\Controller\\AthleteController.cs",
+              "RelativeToolTip": "Controller\\AthleteController.cs",
+              "ViewState": "AgIAABwAAAAAAAAAAAAuwDIBAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-29T10:28:30.722Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "ChallengeType.cs",
+              "DocumentMoniker": "C:\\Users\\Dour-Andish\\Desktop\\charset\\sport-app\\Models\\Challenge_Achievement\\ChallengeType.cs",
+              "RelativeDocumentMoniker": "Models\\Challenge_Achievement\\ChallengeType.cs",
+              "ToolTip": "C:\\Users\\Dour-Andish\\Desktop\\charset\\sport-app\\Models\\Challenge_Achievement\\ChallengeType.cs",
+              "RelativeToolTip": "Models\\Challenge_Achievement\\ChallengeType.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABoAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-02T20:16:57.444Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "QuestionMapper.cs",
+              "DocumentMoniker": "C:\\Users\\Dour-Andish\\Desktop\\charset\\sport-app\\Mappers\\QuestionMapper.cs",
+              "RelativeDocumentMoniker": "Mappers\\QuestionMapper.cs",
+              "ToolTip": "C:\\Users\\Dour-Andish\\Desktop\\charset\\sport-app\\Mappers\\QuestionMapper.cs",
+              "RelativeToolTip": "Mappers\\QuestionMapper.cs",
+              "ViewState": "AgIAACQAAAAAAAAAAAAnwCsAAAAiAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-02T19:16:33.896Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "InjuryArea.cs",
+              "DocumentMoniker": "C:\\Users\\Dour-Andish\\Desktop\\charset\\sport-app\\Models\\Question\\A_Question\\InjuryArea.cs",
+              "RelativeDocumentMoniker": "Models\\Question\\A_Question\\InjuryArea.cs",
+              "ToolTip": "C:\\Users\\Dour-Andish\\Desktop\\charset\\sport-app\\Models\\Question\\A_Question\\InjuryArea.cs",
+              "RelativeToolTip": "Models\\Question\\A_Question\\InjuryArea.cs",
+              "ViewState": "AgIAAAkAAAAAAAAAAAAAwBMAAAArAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-29T09:25:17.654Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "AthleteProfileResponse.cs",
+              "DocumentMoniker": "C:\\Users\\Dour-Andish\\Desktop\\charset\\sport-app\\Dtos\\AthleteProfileResponse.cs",
+              "RelativeDocumentMoniker": "Dtos\\AthleteProfileResponse.cs",
+              "ToolTip": "C:\\Users\\Dour-Andish\\Desktop\\charset\\sport-app\\Dtos\\AthleteProfileResponse.cs",
+              "RelativeToolTip": "Dtos\\AthleteProfileResponse.cs",
+              "ViewState": "AgIAAA8AAAAAAAAAAAAqwBEAAAAqAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-29T09:55:10.11Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "AthleteQuestionDto.cs",
+              "DocumentMoniker": "C:\\Users\\Dour-Andish\\Desktop\\charset\\sport-app\\Dtos\\AthleteQuestionDto.cs",
+              "RelativeDocumentMoniker": "Dtos\\AthleteQuestionDto.cs",
+              "ToolTip": "C:\\Users\\Dour-Andish\\Desktop\\charset\\sport-app\\Dtos\\AthleteQuestionDto.cs",
+              "RelativeToolTip": "Dtos\\AthleteQuestionDto.cs",
+              "ViewState": "AgIAAAYAAAAAAAAAAAAAAA0AAAAxAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-29T09:50:41.211Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "AthleteMappers.cs",
+              "DocumentMoniker": "C:\\Users\\Dour-Andish\\Desktop\\charset\\sport-app\\Mappers\\AthleteMappers.cs",
+              "RelativeDocumentMoniker": "Mappers\\AthleteMappers.cs",
+              "ToolTip": "C:\\Users\\Dour-Andish\\Desktop\\charset\\sport-app\\Mappers\\AthleteMappers.cs",
+              "RelativeToolTip": "Mappers\\AthleteMappers.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABgAAAA1AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-29T10:26:03.208Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "AthleteQuestion.cs",
+              "DocumentMoniker": "C:\\Users\\Dour-Andish\\Desktop\\charset\\sport-app\\Models\\Question\\A_Question\\AthleteQuestion.cs",
+              "RelativeDocumentMoniker": "Models\\Question\\A_Question\\AthleteQuestion.cs",
+              "ToolTip": "C:\\Users\\Dour-Andish\\Desktop\\charset\\sport-app\\Models\\Question\\A_Question\\AthleteQuestion.cs",
+              "RelativeToolTip": "Models\\Question\\A_Question\\AthleteQuestion.cs",
+              "ViewState": "AgIAABQAAAAAAAAAAAAgwBgAAAAqAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-29T09:33:25.953Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 14,
+              "Title": "Athlete.cs",
+              "DocumentMoniker": "C:\\Users\\Dour-Andish\\Desktop\\charset\\sport-app\\Models\\Account\\Athlete\\Athlete.cs",
+              "RelativeDocumentMoniker": "Models\\Account\\Athlete\\Athlete.cs",
+              "ToolTip": "C:\\Users\\Dour-Andish\\Desktop\\charset\\sport-app\\Models\\Account\\Athlete\\Athlete.cs",
+              "RelativeToolTip": "Models\\Account\\Athlete\\Athlete.cs",
+              "ViewState": "AgIAAAsAAAAAAAAAAAAAwBkAAAA7AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-29T09:33:35.235Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 15,
+              "Title": "InjuryAreaDto.cs",
+              "DocumentMoniker": "C:\\Users\\Dour-Andish\\Desktop\\charset\\sport-app\\Dtos\\InjuryAreaDto.cs",
+              "RelativeDocumentMoniker": "Dtos\\InjuryAreaDto.cs",
+              "ToolTip": "C:\\Users\\Dour-Andish\\Desktop\\charset\\sport-app\\Dtos\\InjuryAreaDto.cs",
+              "RelativeToolTip": "Dtos\\InjuryAreaDto.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAAmAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-29T09:54:43.999Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 16,
+              "Title": "SpecificDiseases.cs",
+              "DocumentMoniker": "C:\\Users\\Dour-Andish\\Desktop\\charset\\sport-app\\Models\\Question\\A_Question\\SpecificDiseases.cs",
+              "RelativeDocumentMoniker": "Models\\Question\\A_Question\\SpecificDiseases.cs",
+              "ToolTip": "C:\\Users\\Dour-Andish\\Desktop\\charset\\sport-app\\Models\\Question\\A_Question\\SpecificDiseases.cs",
+              "RelativeToolTip": "Models\\Question\\A_Question\\SpecificDiseases.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-29T09:29:04.253Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 17,
+              "Title": "SoftTissueAndLigamentInjuries.cs",
+              "DocumentMoniker": "C:\\Users\\Dour-Andish\\Desktop\\charset\\sport-app\\Models\\Question\\A_Question\\SoftTissueAndLigamentInjuries.cs",
+              "RelativeDocumentMoniker": "Models\\Question\\A_Question\\SoftTissueAndLigamentInjuries.cs",
+              "ToolTip": "C:\\Users\\Dour-Andish\\Desktop\\charset\\sport-app\\Models\\Question\\A_Question\\SoftTissueAndLigamentInjuries.cs",
+              "RelativeToolTip": "Models\\Question\\A_Question\\SoftTissueAndLigamentInjuries.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-29T09:28:25.229Z"
             },
             {
               "$type": "Document",
               "DocumentIndex": 18,
-              "Title": "Program.cs",
-              "DocumentMoniker": "C:\\Users\\Dour-Andish\\Desktop\\New folder (2)\\sport-app\\Program.cs",
-              "RelativeDocumentMoniker": "Program.cs",
-              "ToolTip": "C:\\Users\\Dour-Andish\\Desktop\\New folder (2)\\sport-app\\Program.cs",
-              "RelativeToolTip": "Program.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Title": "SkeletalDiseases.cs",
+              "DocumentMoniker": "C:\\Users\\Dour-Andish\\Desktop\\charset\\sport-app\\Models\\Question\\A_Question\\SkeletalDiseases.cs",
+              "RelativeDocumentMoniker": "Models\\Question\\A_Question\\SkeletalDiseases.cs",
+              "ToolTip": "C:\\Users\\Dour-Andish\\Desktop\\charset\\sport-app\\Models\\Question\\A_Question\\SkeletalDiseases.cs",
+              "RelativeToolTip": "Models\\Question\\A_Question\\SkeletalDiseases.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAfAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-29T08:03:45.482Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-03-29T09:27:50.829Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 19,
+              "Title": "InternalAndDigestiveDiseases.cs",
+              "DocumentMoniker": "C:\\Users\\Dour-Andish\\Desktop\\charset\\sport-app\\Models\\Question\\A_Question\\InternalAndDigestiveDiseases.cs",
+              "RelativeDocumentMoniker": "Models\\Question\\A_Question\\InternalAndDigestiveDiseases.cs",
+              "ToolTip": "C:\\Users\\Dour-Andish\\Desktop\\charset\\sport-app\\Models\\Question\\A_Question\\InternalAndDigestiveDiseases.cs",
+              "RelativeToolTip": "Models\\Question\\A_Question\\InternalAndDigestiveDiseases.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAAgAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-29T09:27:15.305Z"
             },
             {
               "$type": "Document",
               "DocumentIndex": 20,
+              "Title": "HormonalAndGlandularDiseases.cs",
+              "DocumentMoniker": "C:\\Users\\Dour-Andish\\Desktop\\charset\\sport-app\\Models\\Question\\A_Question\\HormonalAndGlandularDiseases.cs",
+              "RelativeDocumentMoniker": "Models\\Question\\A_Question\\HormonalAndGlandularDiseases.cs",
+              "ToolTip": "C:\\Users\\Dour-Andish\\Desktop\\charset\\sport-app\\Models\\Question\\A_Question\\HormonalAndGlandularDiseases.cs",
+              "RelativeToolTip": "Models\\Question\\A_Question\\HormonalAndGlandularDiseases.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-29T09:26:11.861Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 21,
+              "Title": "appsettings.Development.json",
+              "DocumentMoniker": "C:\\Users\\Dour-Andish\\Desktop\\charset\\sport-app\\appsettings.Development.json",
+              "RelativeDocumentMoniker": "appsettings.Development.json",
+              "ToolTip": "C:\\Users\\Dour-Andish\\Desktop\\charset\\sport-app\\appsettings.Development.json",
+              "RelativeToolTip": "appsettings.Development.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2025-03-29T08:53:41.703Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 22,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\Dour-Andish\\Desktop\\charset\\sport-app\\Program.cs",
+              "RelativeDocumentMoniker": "Program.cs",
+              "ToolTip": "C:\\Users\\Dour-Andish\\Desktop\\charset\\sport-app\\Program.cs",
+              "RelativeToolTip": "Program.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-29T08:03:45.482Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 24,
               "Title": "JwtConfig.cs",
               "DocumentMoniker": "E:\\university\\\u062A\u0631\u0645 6\\\u0645\u0648 \u0646\u0631\u0645\\Project\\sport-app\\sport-app-backend\\Configuration\\JwtConfig.cs",
               "ToolTip": "E:\\university\\\u062A\u0631\u0645 6\\\u0645\u0648 \u0646\u0631\u0645\\Project\\sport-app\\sport-app-backend\\Configuration\\JwtConfig.cs",
@@ -396,7 +455,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 21,
+              "DocumentIndex": 25,
               "Title": "SecurityController.cs",
               "DocumentMoniker": "E:\\university\\\u062A\u0631\u0645 6\\\u0645\u0648 \u0646\u0631\u0645\\Project\\sport-app\\sport-app-backend\\Controllers\\SecurityController.cs",
               "ToolTip": "E:\\university\\\u062A\u0631\u0645 6\\\u0645\u0648 \u0646\u0631\u0645\\Project\\sport-app\\sport-app-backend\\Controllers\\SecurityController.cs",
@@ -405,7 +464,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 22,
+              "DocumentIndex": 26,
               "Title": "UserRegistrationDTO.cs",
               "DocumentMoniker": "E:\\university\\\u062A\u0631\u0645 6\\\u0645\u0648 \u0646\u0631\u0645\\Project\\sport-app\\sport-app-backend\\Models\\DTO\\Requests\\UserRegistrationDTO.cs",
               "ToolTip": "E:\\university\\\u062A\u0631\u0645 6\\\u0645\u0648 \u0646\u0631\u0645\\Project\\sport-app\\sport-app-backend\\Models\\DTO\\Requests\\UserRegistrationDTO.cs",
@@ -414,7 +473,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 23,
+              "DocumentIndex": 27,
               "Title": "RefreshTokenRequest.cs",
               "DocumentMoniker": "E:\\university\\\u062A\u0631\u0645 6\\\u0645\u0648 \u0646\u0631\u0645\\Project\\sport-app\\sport-app-backend\\Models\\DTO\\Requests\\RefreshTokenRequest.cs",
               "ToolTip": "E:\\university\\\u062A\u0631\u0645 6\\\u0645\u0648 \u0646\u0631\u0645\\Project\\sport-app\\sport-app-backend\\Models\\DTO\\Requests\\RefreshTokenRequest.cs",
@@ -423,7 +482,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 24,
+              "DocumentIndex": 28,
               "Title": "AuthResult.cs",
               "DocumentMoniker": "E:\\university\\\u062A\u0631\u0645 6\\\u0645\u0648 \u0646\u0631\u0645\\Project\\sport-app\\sport-app-backend\\Configuration\\AuthResult.cs",
               "ToolTip": "E:\\university\\\u062A\u0631\u0645 6\\\u0645\u0648 \u0646\u0631\u0645\\Project\\sport-app\\sport-app-backend\\Configuration\\AuthResult.cs",
@@ -432,7 +491,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 25,
+              "DocumentIndex": 29,
               "Title": "Program.cs",
               "DocumentMoniker": "E:\\university\\\u062A\u0631\u0645 6\\\u0645\u0648 \u0646\u0631\u0645\\Project\\sport-app\\sport-app-backend\\Program.cs",
               "ToolTip": "E:\\university\\\u062A\u0631\u0645 6\\\u0645\u0648 \u0646\u0631\u0645\\Project\\sport-app\\sport-app-backend\\Program.cs",
@@ -441,7 +500,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 19,
+              "DocumentIndex": 23,
               "Title": "sport-app-backend.csproj",
               "DocumentMoniker": "E:\\university\\\u062A\u0631\u0645 6\\\u0645\u0648 \u0646\u0631\u0645\\Project\\sport-app\\sport-app-backend\\sport-app-backend.csproj",
               "ToolTip": "E:\\university\\\u062A\u0631\u0645 6\\\u0645\u0648 \u0646\u0631\u0645\\Project\\sport-app\\sport-app-backend\\sport-app-backend.csproj",
@@ -450,7 +509,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 26,
+              "DocumentIndex": 30,
               "Title": "RefreshTokenModel.cs",
               "DocumentMoniker": "E:\\university\\\u062A\u0631\u0645 6\\\u0645\u0648 \u0646\u0631\u0645\\Project\\sport-app\\sport-app-backend\\Models\\Account\\RefreshTokenModel.cs",
               "ToolTip": "E:\\university\\\u062A\u0631\u0645 6\\\u0645\u0648 \u0646\u0631\u0645\\Project\\sport-app\\sport-app-backend\\Models\\Account\\RefreshTokenModel.cs",
@@ -459,7 +518,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 27,
+              "DocumentIndex": 31,
               "Title": "RegistrationResponse.cs",
               "DocumentMoniker": "E:\\university\\\u062A\u0631\u0645 6\\\u0645\u0648 \u0646\u0631\u0645\\Project\\sport-app\\sport-app-backend\\Models\\DTO\\Responses\\RegistrationResponse.cs",
               "ToolTip": "E:\\university\\\u062A\u0631\u0645 6\\\u0645\u0648 \u0646\u0631\u0645\\Project\\sport-app\\sport-app-backend\\Models\\DTO\\Responses\\RegistrationResponse.cs",
@@ -468,7 +527,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 28,
+              "DocumentIndex": 32,
               "Title": "appsettings.json",
               "DocumentMoniker": "E:\\university\\\u062A\u0631\u0645 6\\\u0645\u0648 \u0646\u0631\u0645\\Project\\sport-app\\sport-app-backend\\appsettings.json",
               "ToolTip": "E:\\university\\\u062A\u0631\u0645 6\\\u0645\u0648 \u0646\u0631\u0645\\Project\\sport-app\\sport-app-backend\\appsettings.json",

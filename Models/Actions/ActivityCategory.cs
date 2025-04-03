@@ -1,7 +1,8 @@
 namespace sport_app_backend.Models.Actions;
 
-public enum ActivitiesEnum
-{   RUNNING,
+public enum ActivityCategory
+{ 
+    RUNNING,
     WALKING,
     CYCLING,
     SWIMMING,

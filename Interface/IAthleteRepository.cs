@@ -11,7 +11,7 @@ namespace sport_app_backend.Interface
     public interface IAthleteRepository
     {
         public Task<ApiResponse> SubmitAthleteQuestions(string phoneNumber, AthleteQuestionDto AthleteQuestionDto);
-        public Task<ApiResponse> AddHightAndWeight(string phoneNumber, HightWeightQuestionDto hightWeightQuestionDto);
+        public Task<ApiResponse> AthleteFirstQuestions(string phoneNumber, AthleteFirstQuestionsDto athleteFirstQuestionsDto);
         public Task<ApiResponse> AddWaterIntake(string phoneNumber, WaterInTakeDto waterInTakeDto);
         public Task<ApiResponse> UpdateWaterInDay(string phoneNumber);
         public Task<ApiResponse> UpdateWeight(string phoneNumber, double weight);
@@ -23,8 +23,8 @@ namespace sport_app_backend.Interface
         public Task<ApiResponse> ActivityReport(string phoneNumber);
         public Task<ApiResponse> BuyCoachingPlan(string phoneNumber,int coachingPlanId);
         public Task<ApiResponse> SearchCoaches(CoachNameSearchDto coachNameSearchDto);
-
-
-        
+        public  Task<ApiResponse> GetLastQuestion(string phoneNumber);
+        public Task<ApiResponse> CompleteNewChallenge(string phoneNumber, string challenge);
+        public Task<ApiResponse> CompletedChallenge(string phoneNumber);
     }
 }

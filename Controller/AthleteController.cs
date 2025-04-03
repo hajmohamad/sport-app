@@ -15,7 +15,7 @@ using sport_app_backend.Models.Account;
 
 namespace sport_app_backend.Controller
 {
-    
+
     [Route("api/[controller]")]
     [ApiController]
     public class AthleteController(IAthleteRepository athleteRepository, ApplicationDbContext context)
@@ -31,16 +31,16 @@ namespace sport_app_backend.Controller
 
             var result = await athleteRepository.SubmitAthleteQuestions(phoneNumber, athleteQuestionDto);
             if (!result.Action) return BadRequest(result.Message);
-            return Ok();
+            return Ok(result);
         }
 
-        [HttpPost("add_hight_and_weight")]
+        [HttpPost("Add_FirstQuestions")]
         [Authorize(Roles = "Athlete")]
-        public async Task<IActionResult> AddHightAndWeight([FromBody] HightWeightQuestionDto hightWeightQuestionDto)
+        public async Task<IActionResult> AddFirstQuestions([FromBody] AthleteFirstQuestionsDto athleteFirstQuestions)
         {
             var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
             if (phoneNumber is null) return BadRequest("PhoneNumber is null");
-            var result = await athleteRepository.AddHightAndWeight(phoneNumber, hightWeightQuestionDto);
+            var result = await athleteRepository.AthleteFirstQuestions(phoneNumber, athleteFirstQuestions);
             if (!result.Action) return BadRequest(result);
             return Ok(result);
         }
@@ -101,7 +101,7 @@ namespace sport_app_backend.Controller
 
         [HttpGet("get_water_in_day")]
         [Authorize(Roles = "Athlete")]
-        
+
         public async Task<IActionResult> GetWaterInDayForLast7Days()
         {
             var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
@@ -113,7 +113,7 @@ namespace sport_app_backend.Controller
             var daysSinceSaturday = (int)today.DayOfWeek == 0 ? 6 : (int)today.DayOfWeek - 6;
             var lastSaturday = today.AddDays(daysSinceSaturday);
             if (athlete == null || athlete.Athlete == null) return NotFound("Athlete not found");
-            var ListOfWaterInDay = await context.WaterInDays.Where(w => w.AthleteId == athlete.Athlete.Id&& w.Date.Date >= lastSaturday.Date)
+            var ListOfWaterInDay = await context.WaterInDays.Where(w => w.AthleteId == athlete.Athlete.Id && w.Date.Date >= lastSaturday.Date)
                 .ToListAsync();
 
             return Ok(new ApiResponse()
@@ -166,7 +166,7 @@ namespace sport_app_backend.Controller
         [Authorize(Roles = "Athlete")]
         public async Task<IActionResult> GetCoachProfile([FromRoute] int coachId)
         {
-            var coach = await context.Coaches.Include(c => c.Coachplans).FirstOrDefaultAsync(c => c.Id == coachId);
+            var coach = await context.Coaches.Include(c => c.CoachingPlans).FirstOrDefaultAsync(c => c.Id == coachId);
             if (coach == null) return BadRequest(new ApiResponse() { Action = false, Message = "Coach not found" });
 
             return Ok(new ApiResponse() { Action = true, Message = "Coach found", Result = coach.ToCoachProfileForAthleteDto() });
@@ -226,20 +226,85 @@ namespace sport_app_backend.Controller
             if (!result.Action) return BadRequest(result);
             return Ok(result);
         }
-    
 
-        [HttpPost("buy_plan/{planId}")]//need to make it with id
+
+        [HttpPost("buy_plan/{planId}")]
         [Authorize(Roles = "Athlete")]
-        public async Task<IActionResult> BuyCoachingPlan([FromRoute] int planId){
+        public async Task<IActionResult> BuyCoachingPlan([FromRoute] int planId)
+        {
             var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
             if (phoneNumber is null) return BadRequest("PhoneNumber is null");
-            var result = await athleteRepository.BuyCoachingPlan(phoneNumber,planId);
+            var result = await athleteRepository.BuyCoachingPlan(phoneNumber, planId);
             if (!result.Action) return BadRequest(result);
             return Ok(result);
         }
-        
-        
-    }
 
-  
+        [HttpPut("Update_TimeBeforeWorkout")]
+        [Authorize(Roles = "Athlete")]
+        public async Task<IActionResult> UpdateTimeBeforeWorkout([FromRoute] int timeBeforeWorkoutDto)
+        {
+            var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
+            if (phoneNumber is null) return BadRequest("PhoneNumber is null");
+            var athlete = await context.Athletes.FirstOrDefaultAsync(u => u.PhoneNumber == phoneNumber);
+            if (athlete is null) return BadRequest("User not found");
+            athlete.TimeBeforeWorkout = timeBeforeWorkoutDto;
+            return Ok(new ApiResponse()
+            {
+
+                Action = true,
+                Message = "TimeBeforeWorkout updated"
+            });
+
+        }
+        [HttpPut("Update_RestTime")]
+        [Authorize(Roles = "Athlete")]
+        public async Task<IActionResult> UpdateRestTime([FromRoute] int restTimeDto)
+        {
+            var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
+            if (phoneNumber is null) return BadRequest("PhoneNumber is null");
+            var athlete = await context.Athletes.FirstOrDefaultAsync(u => u.PhoneNumber == phoneNumber);
+            if (athlete is null) return BadRequest("User not found");
+            athlete.RestTime = restTimeDto;
+            return Ok(new ApiResponse()
+            {
+
+                Action = true,
+                Message = "RestTime updated"
+            });
+
+        }
+        [HttpGet("get_lastQuestion")]
+        [Authorize(Roles = "Athlete")]
+        public async Task<IActionResult> GetLastQuestion()
+        {
+            var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
+            if (phoneNumber is null) return BadRequest("PhoneNumber is null");
+            var result = await athleteRepository.GetLastQuestion(phoneNumber);
+            if (!result.Action) return BadRequest(result);
+            return Ok(result);
+        }
+
+        [HttpPost("complete new challenge")]
+        [Authorize(Roles = "Athlete")]
+        public async Task<IActionResult> CompleteNewChallenge([FromBody] string challenge)
+        {
+            var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
+            if (phoneNumber is null) return BadRequest("PhoneNumber is null");
+            var result = await athleteRepository.CompleteNewChallenge(phoneNumber, challenge);
+            if (!result.Action) return BadRequest(result);
+            return Ok(result);
+        }
+
+        [HttpGet("completed_challenge")]
+        [Authorize(Roles = "Athlete")]
+        public async Task<IActionResult> CompletedChallenge()
+        {
+            var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
+            if (phoneNumber is null) return BadRequest("PhoneNumber is null");
+            var result = await athleteRepository.CompletedChallenge(phoneNumber);
+            if (!result.Action) return BadRequest(result);
+            return Ok(result);
+
+        }
+    }
 }
