@@ -15,24 +15,16 @@
       "RelativeMoniker": "D:0:0:{27B63680-A5B7-55C3-C88B-EBD5D7F12023}|sport-app-backend.csproj|solutionrelative:repository\\athleterepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{27B63680-A5B7-55C3-C88B-EBD5D7F12023}|sport-app-backend.csproj|c:\\users\\dour-andish\\desktop\\charset\\sport-app\\data\\applicationdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{27B63680-A5B7-55C3-C88B-EBD5D7F12023}|sport-app-backend.csproj|solutionrelative:data\\applicationdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{27B63680-A5B7-55C3-C88B-EBD5D7F12023}|sport-app-backend.csproj|c:\\users\\dour-andish\\desktop\\charset\\sport-app\\models\\challenge_achievement\\achievement.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{27B63680-A5B7-55C3-C88B-EBD5D7F12023}|sport-app-backend.csproj|solutionrelative:models\\challenge_achievement\\achievement.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{27B63680-A5B7-55C3-C88B-EBD5D7F12023}|sport-app-backend.csproj|c:\\users\\dour-andish\\desktop\\charset\\sport-app\\models\\challenge_achievement\\achievementtype.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{27B63680-A5B7-55C3-C88B-EBD5D7F12023}|sport-app-backend.csproj|solutionrelative:models\\challenge_achievement\\achievementtype.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{27B63680-A5B7-55C3-C88B-EBD5D7F12023}|sport-app-backend.csproj|c:\\users\\dour-andish\\desktop\\charset\\sport-app\\models\\challenge_achievement\\challenge.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{27B63680-A5B7-55C3-C88B-EBD5D7F12023}|sport-app-backend.csproj|solutionrelative:models\\challenge_achievement\\challenge.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{27B63680-A5B7-55C3-C88B-EBD5D7F12023}|sport-app-backend.csproj|c:\\users\\dour-andish\\desktop\\charset\\sport-app\\models\\actions\\activitie.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{27B63680-A5B7-55C3-C88B-EBD5D7F12023}|sport-app-backend.csproj|solutionrelative:models\\actions\\activitie.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{27B63680-A5B7-55C3-C88B-EBD5D7F12023}|sport-app-backend.csproj|c:\\users\\dour-andish\\desktop\\charset\\sport-app\\models\\challenge_achievement\\challengetype.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{27B63680-A5B7-55C3-C88B-EBD5D7F12023}|sport-app-backend.csproj|solutionrelative:models\\challenge_achievement\\challengetype.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{27B63680-A5B7-55C3-C88B-EBD5D7F12023}|sport-app-backend.csproj|c:\\users\\dour-andish\\desktop\\charset\\sport-app\\models\\challenge_achievement\\challenge.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{27B63680-A5B7-55C3-C88B-EBD5D7F12023}|sport-app-backend.csproj|solutionrelative:models\\challenge_achievement\\challenge.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{27B63680-A5B7-55C3-C88B-EBD5D7F12023}|sport-app-backend.csproj|c:\\users\\dour-andish\\desktop\\charset\\sport-app\\mappers\\questionmapper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -132,21 +124,8 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 11,
+          "SelectedChildIndex": 10,
           "Children": [
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "ApplicationDBContext.cs",
-              "DocumentMoniker": "C:\\Users\\Dour-Andish\\Desktop\\charset\\sport-app\\Data\\ApplicationDBContext.cs",
-              "RelativeDocumentMoniker": "Data\\ApplicationDBContext.cs",
-              "ToolTip": "C:\\Users\\Dour-Andish\\Desktop\\charset\\sport-app\\Data\\ApplicationDBContext.cs",
-              "RelativeToolTip": "Data\\ApplicationDBContext.cs",
-              "ViewState": "AgIAAC8AAAAAAAAAAAA4wDMAAAA4AAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-02T20:45:54.702Z",
-              "EditorCaption": ""
-            },
             {
               "$type": "Bookmark",
               "Name": "ST:129:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
@@ -169,39 +148,39 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 4,
+              "Title": "Activitie.cs",
+              "DocumentMoniker": "C:\\Users\\Dour-Andish\\Desktop\\charset\\sport-app\\Models\\Actions\\Activitie.cs",
+              "RelativeDocumentMoniker": "Models\\Actions\\Activitie.cs",
+              "ToolTip": "C:\\Users\\Dour-Andish\\Desktop\\charset\\sport-app\\Models\\Actions\\Activitie.cs",
+              "RelativeToolTip": "Models\\Actions\\Activitie.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAAWAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-03T07:10:32.284Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
               "Title": "AchievementType.cs",
               "DocumentMoniker": "C:\\Users\\Dour-Andish\\Desktop\\charset\\sport-app\\Models\\Challenge_Achievement\\AchievementType.cs",
               "RelativeDocumentMoniker": "Models\\Challenge_Achievement\\AchievementType.cs",
               "ToolTip": "C:\\Users\\Dour-Andish\\Desktop\\charset\\sport-app\\Models\\Challenge_Achievement\\AchievementType.cs",
               "RelativeToolTip": "Models\\Challenge_Achievement\\AchievementType.cs",
-              "ViewState": "AgIAAAUAAAAAAAAAAAAAwA0AAAA5AAAAAAAAAA==",
+              "ViewState": "AgIAAAIAAAAAAAAAAAA1wA8AAAAFAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-04-02T20:34:27.342Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "Achievement.cs",
-              "DocumentMoniker": "C:\\Users\\Dour-Andish\\Desktop\\charset\\sport-app\\Models\\Challenge_Achievement\\Achievement.cs",
-              "RelativeDocumentMoniker": "Models\\Challenge_Achievement\\Achievement.cs",
-              "ToolTip": "C:\\Users\\Dour-Andish\\Desktop\\charset\\sport-app\\Models\\Challenge_Achievement\\Achievement.cs",
-              "RelativeToolTip": "Models\\Challenge_Achievement\\Achievement.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAAFAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-02T20:34:04.969Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 5,
               "Title": "Challenge.cs",
               "DocumentMoniker": "C:\\Users\\Dour-Andish\\Desktop\\charset\\sport-app\\Models\\Challenge_Achievement\\Challenge.cs",
               "RelativeDocumentMoniker": "Models\\Challenge_Achievement\\Challenge.cs",
               "ToolTip": "C:\\Users\\Dour-Andish\\Desktop\\charset\\sport-app\\Models\\Challenge_Achievement\\Challenge.cs",
               "RelativeToolTip": "Models\\Challenge_Achievement\\Challenge.cs",
-              "ViewState": "AgIAAAYAAAAAAAAAAAAxwA0AAAA4AAAAAAAAAA==",
+              "ViewState": "AgIAAAcAAAAAAAAAAAAAAA8AAAAFAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-04-02T20:04:44.158Z",
               "EditorCaption": ""
@@ -214,7 +193,7 @@
               "RelativeDocumentMoniker": "Repository\\AthleteRepository.cs",
               "ToolTip": "C:\\Users\\Dour-Andish\\Desktop\\charset\\sport-app\\Repository\\AthleteRepository.cs",
               "RelativeToolTip": "Repository\\AthleteRepository.cs",
-              "ViewState": "AgIAAHcBAAAAAAAAAAAiwHoBAAAJAAAAAAAAAA==",
+              "ViewState": "AgIAAIMBAAAAAAAAAAAAAIwBAABKAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-03-29T10:02:36.095Z",
               "EditorCaption": ""
@@ -227,7 +206,7 @@
               "RelativeDocumentMoniker": "Interface\\IAthleteRepository.cs",
               "ToolTip": "C:\\Users\\Dour-Andish\\Desktop\\charset\\sport-app\\Interface\\IAthleteRepository.cs",
               "RelativeToolTip": "Interface\\IAthleteRepository.cs",
-              "ViewState": "AgIAABUAAAAAAAAAAADwvxsAAABIAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAgwBwAAABFAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-03-29T09:57:36.36Z",
               "EditorCaption": ""
@@ -240,27 +219,14 @@
               "RelativeDocumentMoniker": "Controller\\AthleteController.cs",
               "ToolTip": "C:\\Users\\Dour-Andish\\Desktop\\charset\\sport-app\\Controller\\AthleteController.cs",
               "RelativeToolTip": "Controller\\AthleteController.cs",
-              "ViewState": "AgIAABwAAAAAAAAAAAAuwDIBAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAC4BAAAAAAAAAAAuwDwBAAAxAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-03-29T10:28:30.722Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
-              "Title": "ChallengeType.cs",
-              "DocumentMoniker": "C:\\Users\\Dour-Andish\\Desktop\\charset\\sport-app\\Models\\Challenge_Achievement\\ChallengeType.cs",
-              "RelativeDocumentMoniker": "Models\\Challenge_Achievement\\ChallengeType.cs",
-              "ToolTip": "C:\\Users\\Dour-Andish\\Desktop\\charset\\sport-app\\Models\\Challenge_Achievement\\ChallengeType.cs",
-              "RelativeToolTip": "Models\\Challenge_Achievement\\ChallengeType.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABoAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-02T20:16:57.444Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 8,
+              "DocumentIndex": 6,
               "Title": "QuestionMapper.cs",
               "DocumentMoniker": "C:\\Users\\Dour-Andish\\Desktop\\charset\\sport-app\\Mappers\\QuestionMapper.cs",
               "RelativeDocumentMoniker": "Mappers\\QuestionMapper.cs",
@@ -268,12 +234,11 @@
               "RelativeToolTip": "Mappers\\QuestionMapper.cs",
               "ViewState": "AgIAACQAAAAAAAAAAAAnwCsAAAAiAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-02T19:16:33.896Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-04-02T19:16:33.896Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 10,
+              "DocumentIndex": 8,
               "Title": "InjuryArea.cs",
               "DocumentMoniker": "C:\\Users\\Dour-Andish\\Desktop\\charset\\sport-app\\Models\\Question\\A_Question\\InjuryArea.cs",
               "RelativeDocumentMoniker": "Models\\Question\\A_Question\\InjuryArea.cs",
@@ -281,12 +246,11 @@
               "RelativeToolTip": "Models\\Question\\A_Question\\InjuryArea.cs",
               "ViewState": "AgIAAAkAAAAAAAAAAAAAwBMAAAArAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-29T09:25:17.654Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-03-29T09:25:17.654Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 12,
+              "DocumentIndex": 10,
               "Title": "AthleteProfileResponse.cs",
               "DocumentMoniker": "C:\\Users\\Dour-Andish\\Desktop\\charset\\sport-app\\Dtos\\AthleteProfileResponse.cs",
               "RelativeDocumentMoniker": "Dtos\\AthleteProfileResponse.cs",
@@ -294,12 +258,11 @@
               "RelativeToolTip": "Dtos\\AthleteProfileResponse.cs",
               "ViewState": "AgIAAA8AAAAAAAAAAAAqwBEAAAAqAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-29T09:55:10.11Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-03-29T09:55:10.11Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 11,
+              "DocumentIndex": 9,
               "Title": "AthleteQuestionDto.cs",
               "DocumentMoniker": "C:\\Users\\Dour-Andish\\Desktop\\charset\\sport-app\\Dtos\\AthleteQuestionDto.cs",
               "RelativeDocumentMoniker": "Dtos\\AthleteQuestionDto.cs",
@@ -307,12 +270,11 @@
               "RelativeToolTip": "Dtos\\AthleteQuestionDto.cs",
               "ViewState": "AgIAAAYAAAAAAAAAAAAAAA0AAAAxAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-29T09:50:41.211Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-03-29T09:50:41.211Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 9,
+              "DocumentIndex": 7,
               "Title": "AthleteMappers.cs",
               "DocumentMoniker": "C:\\Users\\Dour-Andish\\Desktop\\charset\\sport-app\\Mappers\\AthleteMappers.cs",
               "RelativeDocumentMoniker": "Mappers\\AthleteMappers.cs",
@@ -320,12 +282,11 @@
               "RelativeToolTip": "Mappers\\AthleteMappers.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABgAAAA1AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-29T10:26:03.208Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-03-29T10:26:03.208Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 13,
+              "DocumentIndex": 11,
               "Title": "AthleteQuestion.cs",
               "DocumentMoniker": "C:\\Users\\Dour-Andish\\Desktop\\charset\\sport-app\\Models\\Question\\A_Question\\AthleteQuestion.cs",
               "RelativeDocumentMoniker": "Models\\Question\\A_Question\\AthleteQuestion.cs",
@@ -333,12 +294,11 @@
               "RelativeToolTip": "Models\\Question\\A_Question\\AthleteQuestion.cs",
               "ViewState": "AgIAABQAAAAAAAAAAAAgwBgAAAAqAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-29T09:33:25.953Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-03-29T09:33:25.953Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 14,
+              "DocumentIndex": 12,
               "Title": "Athlete.cs",
               "DocumentMoniker": "C:\\Users\\Dour-Andish\\Desktop\\charset\\sport-app\\Models\\Account\\Athlete\\Athlete.cs",
               "RelativeDocumentMoniker": "Models\\Account\\Athlete\\Athlete.cs",
@@ -350,7 +310,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 15,
+              "DocumentIndex": 13,
               "Title": "InjuryAreaDto.cs",
               "DocumentMoniker": "C:\\Users\\Dour-Andish\\Desktop\\charset\\sport-app\\Dtos\\InjuryAreaDto.cs",
               "RelativeDocumentMoniker": "Dtos\\InjuryAreaDto.cs",
@@ -362,7 +322,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 16,
+              "DocumentIndex": 14,
               "Title": "SpecificDiseases.cs",
               "DocumentMoniker": "C:\\Users\\Dour-Andish\\Desktop\\charset\\sport-app\\Models\\Question\\A_Question\\SpecificDiseases.cs",
               "RelativeDocumentMoniker": "Models\\Question\\A_Question\\SpecificDiseases.cs",
@@ -374,7 +334,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 17,
+              "DocumentIndex": 15,
               "Title": "SoftTissueAndLigamentInjuries.cs",
               "DocumentMoniker": "C:\\Users\\Dour-Andish\\Desktop\\charset\\sport-app\\Models\\Question\\A_Question\\SoftTissueAndLigamentInjuries.cs",
               "RelativeDocumentMoniker": "Models\\Question\\A_Question\\SoftTissueAndLigamentInjuries.cs",
@@ -386,7 +346,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 18,
+              "DocumentIndex": 16,
               "Title": "SkeletalDiseases.cs",
               "DocumentMoniker": "C:\\Users\\Dour-Andish\\Desktop\\charset\\sport-app\\Models\\Question\\A_Question\\SkeletalDiseases.cs",
               "RelativeDocumentMoniker": "Models\\Question\\A_Question\\SkeletalDiseases.cs",
@@ -398,7 +358,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 19,
+              "DocumentIndex": 17,
               "Title": "InternalAndDigestiveDiseases.cs",
               "DocumentMoniker": "C:\\Users\\Dour-Andish\\Desktop\\charset\\sport-app\\Models\\Question\\A_Question\\InternalAndDigestiveDiseases.cs",
               "RelativeDocumentMoniker": "Models\\Question\\A_Question\\InternalAndDigestiveDiseases.cs",
@@ -410,7 +370,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 20,
+              "DocumentIndex": 18,
               "Title": "HormonalAndGlandularDiseases.cs",
               "DocumentMoniker": "C:\\Users\\Dour-Andish\\Desktop\\charset\\sport-app\\Models\\Question\\A_Question\\HormonalAndGlandularDiseases.cs",
               "RelativeDocumentMoniker": "Models\\Question\\A_Question\\HormonalAndGlandularDiseases.cs",
@@ -422,7 +382,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 21,
+              "DocumentIndex": 19,
               "Title": "appsettings.Development.json",
               "DocumentMoniker": "C:\\Users\\Dour-Andish\\Desktop\\charset\\sport-app\\appsettings.Development.json",
               "RelativeDocumentMoniker": "appsettings.Development.json",
@@ -434,7 +394,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 22,
+              "DocumentIndex": 20,
               "Title": "Program.cs",
               "DocumentMoniker": "C:\\Users\\Dour-Andish\\Desktop\\charset\\sport-app\\Program.cs",
               "RelativeDocumentMoniker": "Program.cs",
@@ -446,7 +406,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 24,
+              "DocumentIndex": 22,
               "Title": "JwtConfig.cs",
               "DocumentMoniker": "E:\\university\\\u062A\u0631\u0645 6\\\u0645\u0648 \u0646\u0631\u0645\\Project\\sport-app\\sport-app-backend\\Configuration\\JwtConfig.cs",
               "ToolTip": "E:\\university\\\u062A\u0631\u0645 6\\\u0645\u0648 \u0646\u0631\u0645\\Project\\sport-app\\sport-app-backend\\Configuration\\JwtConfig.cs",
@@ -455,7 +415,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 25,
+              "DocumentIndex": 23,
               "Title": "SecurityController.cs",
               "DocumentMoniker": "E:\\university\\\u062A\u0631\u0645 6\\\u0645\u0648 \u0646\u0631\u0645\\Project\\sport-app\\sport-app-backend\\Controllers\\SecurityController.cs",
               "ToolTip": "E:\\university\\\u062A\u0631\u0645 6\\\u0645\u0648 \u0646\u0631\u0645\\Project\\sport-app\\sport-app-backend\\Controllers\\SecurityController.cs",
@@ -464,7 +424,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 26,
+              "DocumentIndex": 24,
               "Title": "UserRegistrationDTO.cs",
               "DocumentMoniker": "E:\\university\\\u062A\u0631\u0645 6\\\u0645\u0648 \u0646\u0631\u0645\\Project\\sport-app\\sport-app-backend\\Models\\DTO\\Requests\\UserRegistrationDTO.cs",
               "ToolTip": "E:\\university\\\u062A\u0631\u0645 6\\\u0645\u0648 \u0646\u0631\u0645\\Project\\sport-app\\sport-app-backend\\Models\\DTO\\Requests\\UserRegistrationDTO.cs",
@@ -473,7 +433,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 27,
+              "DocumentIndex": 25,
               "Title": "RefreshTokenRequest.cs",
               "DocumentMoniker": "E:\\university\\\u062A\u0631\u0645 6\\\u0645\u0648 \u0646\u0631\u0645\\Project\\sport-app\\sport-app-backend\\Models\\DTO\\Requests\\RefreshTokenRequest.cs",
               "ToolTip": "E:\\university\\\u062A\u0631\u0645 6\\\u0645\u0648 \u0646\u0631\u0645\\Project\\sport-app\\sport-app-backend\\Models\\DTO\\Requests\\RefreshTokenRequest.cs",
@@ -482,7 +442,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 28,
+              "DocumentIndex": 26,
               "Title": "AuthResult.cs",
               "DocumentMoniker": "E:\\university\\\u062A\u0631\u0645 6\\\u0645\u0648 \u0646\u0631\u0645\\Project\\sport-app\\sport-app-backend\\Configuration\\AuthResult.cs",
               "ToolTip": "E:\\university\\\u062A\u0631\u0645 6\\\u0645\u0648 \u0646\u0631\u0645\\Project\\sport-app\\sport-app-backend\\Configuration\\AuthResult.cs",
@@ -491,7 +451,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 29,
+              "DocumentIndex": 27,
               "Title": "Program.cs",
               "DocumentMoniker": "E:\\university\\\u062A\u0631\u0645 6\\\u0645\u0648 \u0646\u0631\u0645\\Project\\sport-app\\sport-app-backend\\Program.cs",
               "ToolTip": "E:\\university\\\u062A\u0631\u0645 6\\\u0645\u0648 \u0646\u0631\u0645\\Project\\sport-app\\sport-app-backend\\Program.cs",
@@ -500,7 +460,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 23,
+              "DocumentIndex": 21,
               "Title": "sport-app-backend.csproj",
               "DocumentMoniker": "E:\\university\\\u062A\u0631\u0645 6\\\u0645\u0648 \u0646\u0631\u0645\\Project\\sport-app\\sport-app-backend\\sport-app-backend.csproj",
               "ToolTip": "E:\\university\\\u062A\u0631\u0645 6\\\u0645\u0648 \u0646\u0631\u0645\\Project\\sport-app\\sport-app-backend\\sport-app-backend.csproj",
@@ -509,7 +469,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 30,
+              "DocumentIndex": 28,
               "Title": "RefreshTokenModel.cs",
               "DocumentMoniker": "E:\\university\\\u062A\u0631\u0645 6\\\u0645\u0648 \u0646\u0631\u0645\\Project\\sport-app\\sport-app-backend\\Models\\Account\\RefreshTokenModel.cs",
               "ToolTip": "E:\\university\\\u062A\u0631\u0645 6\\\u0645\u0648 \u0646\u0631\u0645\\Project\\sport-app\\sport-app-backend\\Models\\Account\\RefreshTokenModel.cs",
@@ -518,7 +478,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 31,
+              "DocumentIndex": 29,
               "Title": "RegistrationResponse.cs",
               "DocumentMoniker": "E:\\university\\\u062A\u0631\u0645 6\\\u0645\u0648 \u0646\u0631\u0645\\Project\\sport-app\\sport-app-backend\\Models\\DTO\\Responses\\RegistrationResponse.cs",
               "ToolTip": "E:\\university\\\u062A\u0631\u0645 6\\\u0645\u0648 \u0646\u0631\u0645\\Project\\sport-app\\sport-app-backend\\Models\\DTO\\Responses\\RegistrationResponse.cs",
@@ -527,7 +487,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 32,
+              "DocumentIndex": 30,
               "Title": "appsettings.json",
               "DocumentMoniker": "E:\\university\\\u062A\u0631\u0645 6\\\u0645\u0648 \u0646\u0631\u0645\\Project\\sport-app\\sport-app-backend\\appsettings.json",
               "ToolTip": "E:\\university\\\u062A\u0631\u0645 6\\\u0645\u0648 \u0646\u0631\u0645\\Project\\sport-app\\sport-app-backend\\appsettings.json",

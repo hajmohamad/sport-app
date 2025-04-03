@@ -49,7 +49,6 @@ public class ApplicationDbContext : DbContext
     public DbSet<ReportApp> ReportApps { get; set; }
     public DbSet<InjuryArea> InjuryAreas { get; set; }
     public DbSet<Challenge> Challenges { get; set; }
-    public DbSet<Achievement> Achievements { get; set; }
 
 
 
