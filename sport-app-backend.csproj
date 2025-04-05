@@ -21,4 +21,8 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
   </ItemGroup>
 
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="sport-app-backend\obj\project.packagespec.json" />
+  </ItemGroup>
+
 </Project>

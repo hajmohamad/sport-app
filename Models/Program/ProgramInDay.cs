@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace sport_app_backend.Models.Program;
 
-public class WorkoutProgramInDay
+public class ProgramInDay
 {   [Key]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int Id { get; set; }
@@ -12,7 +12,7 @@ public class WorkoutProgramInDay
 
     public int ForWhichDay { get; set; }
 
-    public List<ExerciseInDay> AllExerciseInDays { get; set; }= new List<ExerciseInDay>();
+    public List<SingelExercise> AllExerciseInDays { get; set; }= [];
 
 
     

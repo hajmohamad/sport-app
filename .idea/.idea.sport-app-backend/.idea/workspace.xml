@@ -5,12 +5,35 @@
     <projectFile profileName="IIS Express">sport-app-backend.csproj</projectFile>
     <projectFile profileName="http">sport-app-backend.csproj</projectFile>
     <projectFile profileName="https">sport-app-backend.csproj</projectFile>
+    <projectFile>sport-app-backend/sport-app-backend.csproj</projectFile>
   </component>
   <component name="AutoImportSettings">
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="28760247-65d0-48d0-a33f-5bff615c467b" name="Changes" comment="" />
+    <list default="true" id="28760247-65d0-48d0-a33f-5bff615c467b" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/Dtos/WorkoutProgramResponseDto.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Mappers/ProgramMappers.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Models/Program/NotUse/ExerciseInDay.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Models/Program/NotUse/SuperSetExercise.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Models/Program/ProgramPriority.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dtos/PaymentResponseDto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Dtos/PaymentResponseDto.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Mappers/PaymentMappers.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Mappers/PaymentMappers.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Migrations/20250403083158_Achievements.Designer.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Migrations/20250403083158_Achievements.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Models/Payments/Payment.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/Payments/Payment.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Models/Payments/PaymentStatus.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/Payments/PaymentStatus.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Models/Program/ExerciseInDay.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Models/Program/SingelExercise.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/Program/SingelExercise.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Models/Program/SuperSetExercise.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Models/Program/WorkoutProgram.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/Program/WorkoutProgram.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Models/Program/WorkoutProgramInDay.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/Program/ProgramInDay.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Models/Program/WorkoutProgramStatus.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/Program/WorkoutProgramStatus.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Repository/AdminRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Repository/AdminRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Repository/CoachRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Repository/CoachRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sport-app-backend.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/sport-app-backend.csproj" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -41,8 +64,14 @@
 }</component>
   <component name="HighlightingSettingsPerFile">
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/2832e8c2b81f4641b3863f406ce3a519c90938/4d/f6566c0d/ExceptionDispatchInfo.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="mock://D:/403-1/es-402/sport-app/Controller/AdminController.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock://D:/403-1/es-402/sport-app/Repository/AthleteRepository.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/403-1/es-402/sport-app/Controller/AthleteController.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/403-1/es-402/sport-app/Dtos/EditAthleteProfileDto.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/403-1/es-402/sport-app/Mappers/CoachMappers.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/403-1/es-402/sport-app/Migrations/ApplicationDbContextModelSnapshot.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/403-1/es-402/sport-app/Repository/UserRepository.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/obj/Debug/net8.0/.NETCoreApp,Version=v8.0.AssemblyAttributes.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/403-1/es-402/sport-app/sport-app-backend/obj/Debug/net8.0/sport-app-backend.AssemblyInfo.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/403-1/es-402/sport-app/sport-app-backend/obj/Debug/net8.0/sport-app-backend.AssemblyInfo.cs" root0="SKIP_HIGHLIGHTING" />
   </component>
   <component name="MetaFilesCheckinStateConfiguration" checkMetaFiles="true" />
   <component name="ProjectColorInfo">{
@@ -53,25 +82,26 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;.NET Launch Settings Profile.sport-app-backend: http.executor&quot;: &quot;Run&quot;,
-    &quot;.NET Project.sport-app-backend.executor&quot;: &quot;Run&quot;,
-    &quot;Docker.Dockerfile.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;com.codeium.enabled&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
-    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;editor.preferences.smartKeys_rider&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    ".NET Launch Settings Profile.sport-app-backend: http.executor": "Run",
+    ".NET Launch Settings Profile.sport-app-backend: https.executor": "Run",
+    ".NET Project.sport-app-backend.executor": "Run",
+    "Docker.Dockerfile.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "com.codeium.enabled": "true",
+    "git-widget-placeholder": "master",
+    "ignore.virus.scanning.warn.message": "true",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "preferences.keymap",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RunManager" selected=".NET Launch Settings Profile.sport-app-backend: http">
     <configuration name="sport-app-backend" type="DotNetProject" factoryName=".NET Project">
       <option name="EXE_PATH" value="" />
@@ -174,6 +204,8 @@
       <workItem from="1743257814905" duration="83000" />
       <workItem from="1743257906677" duration="26000" />
       <workItem from="1743554254397" duration="426000" />
+      <workItem from="1743766216142" duration="1735000" />
+      <workItem from="1743836864678" duration="2095000" />
     </task>
     <task id="LOCAL-00001" summary="add buy plan">
       <option name="closed" value="true" />

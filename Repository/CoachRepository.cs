@@ -126,7 +126,7 @@ namespace sport_app_backend.Repository
             {
                 Message = "Payments found",
                 Action = true,
-                Result = payments.Where(p=> p.PaymentStatus == PaymentStatus.success).Select(x=>x.ToAllPaymentResponseDto())
+                Result = payments.Where(p=> p.PaymentStatus == PaymentStatus.SUCCESS).Select(x=>x.ToAllPaymentResponseDto())
             };
         }
 

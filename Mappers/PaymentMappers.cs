@@ -1,6 +1,7 @@
 ﻿using System.Globalization;
 using sport_app_backend.Dtos;
 using sport_app_backend.Models.Payments;
+using sport_app_backend.Models.Program;
 
 namespace sport_app_backend.Mappers;
 
@@ -29,10 +30,8 @@ public static class PaymentMappers
             Amount = payment.Amount.ToString(CultureInfo.CurrentCulture),
             DateTime = payment.PaymentDate.ToString(CultureInfo.CurrentCulture),
             AthleteQuestion = payment.AthleteQuestion!.ToAthleteQuestionDto(),
-            Weight = payment.Athlete!.CurrentWeight,
-            Height = payment.Athlete.Height,
-            
-            
+            Height = payment.Athlete!.Height,
+            WorkoutProgram = payment.WorkoutProgram?.ToProgramResponseDto()??new WorkoutProgramResponseDto()
         };
         
     }

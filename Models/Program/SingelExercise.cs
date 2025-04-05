@@ -8,9 +8,8 @@ public class SingelExercise
 {   [Key]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int Id { get; set; }
-    public int ExerciseInDayId { get; set; }
-    public ExerciseInDay? ExerciseInDay { get; set; }
-    
+    public int ProgramInDayId { get; set; }
+    public ProgramInDay? ProgramInDay { get; set; }
     public int Set { get; set; }
     public int Rep { get; set; }
     public Exercise? Exercise { get; set; }

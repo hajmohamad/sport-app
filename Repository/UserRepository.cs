@@ -130,7 +130,6 @@ private async Task<ApiResponse> GenerateSuccessResponse(User user)
 
 private async Task<User> CreateNewUser(string phoneNumber)
 {
-    var username = GenerateUniqueUsername();
     var newUser = new User
     {
         UserName =await GenerateUniqueUsername(),

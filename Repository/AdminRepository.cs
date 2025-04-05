@@ -10,6 +10,7 @@ using sport_app_backend.Mappers;
 using sport_app_backend.Models;
 using sport_app_backend.Models.Actions;
 using sport_app_backend.Models.Payments;
+using sport_app_backend.Models.Program;
 
 namespace sport_app_backend.Repository
 {
@@ -38,9 +39,22 @@ namespace sport_app_backend.Repository
 
         public async Task<ApiResponse> ConfirmTransitionId(string transitionId)
         {
-            var payment = await _context.Payments.FirstOrDefaultAsync(x => x.TransitionId == transitionId);
+            var payment = await _context.Payments.Include(p => p.Coach)
+                .Include(p => p.Athlete).Include(payment => payment.WorkoutProgram).FirstOrDefaultAsync(x => x.TransitionId == transitionId);
             if (payment is null) return new ApiResponse() { Message = "Payment not found", Action = false };
-            payment.PaymentStatus = PaymentStatus.success;
+            var workoutProgram = new WorkoutProgram()
+            {
+                Coach = payment.Coach,
+                Athlete = payment.Athlete,
+                AthleteId = payment.Athlete!.Id,
+                CoachId = payment.Coach!.Id,
+                Payment = payment,
+                PaymentId = payment.Id
+
+            };
+            payment.WorkoutProgram = workoutProgram;
+            await _context.WorkoutPrograms.AddAsync(workoutProgram);
+            payment.PaymentStatus = PaymentStatus.SUCCESS;
             await _context.SaveChangesAsync();
             return new ApiResponse()
             {

@@ -20,7 +20,7 @@ public class Payment
     public CoachPlan? CoachPlan { get; set; }
     [MaxLength(30)]
     public string TransitionId { get; set; }="";
-    public PaymentStatus PaymentStatus { get; set; } = PaymentStatus.inprogress;
+    public PaymentStatus PaymentStatus { get; set; } = PaymentStatus.INPROGRESS;
     public DateTime PaymentDate { get; set; }=DateTime.Now;
     public AthleteQuestion? AthleteQuestion { get; set; }
     public int AthleteQuestionId { get; set; }
