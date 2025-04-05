@@ -40,7 +40,7 @@ namespace sport_app_backend.Mappers
         {
             return new AthleteQuestion
             {
-                AthleteId =athlete.Id,
+                AthleteId = athlete.Id,
                 Athlete = athlete,
                 CurrentBodyForm = dto.CurrentBodyForm,
                 DaysPerWeekToExercise = dto.DaysPerWeekToExercise,

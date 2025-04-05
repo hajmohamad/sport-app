@@ -13,6 +13,7 @@ using sport_app_backend.Mappers;
 using sport_app_backend.Models;
 using sport_app_backend.Models.Account;
 using sport_app_backend.Models.Actions;
+using sport_app_backend.Models.Challenge_Achievement;
 using sport_app_backend.Models.Payments;
 using sport_app_backend.Models.Program;
 using sport_app_backend.Models.Question.A_Question;
@@ -221,7 +222,7 @@ namespace sport_app_backend.Repository
             var athlete = await _context.Athletes.Include(x => x.User).FirstOrDefaultAsync(x => x.PhoneNumber == phoneNumber);
             if (athlete is null) return new ApiResponse() { Message = "User is not an athlete", Action = false };// Ensure the user is an athlete
             if (athlete.User is null) return new ApiResponse() { Message = "User not found", Action = false };
-            
+
             var athleteQuestion = athleteQuestionDto.ToAthleteQuestion(athlete);
             athlete.AthleteQuestions.Add(athleteQuestion);
            await _context.AthleteQuestions.AddAsync(athleteQuestion);
@@ -349,6 +350,121 @@ namespace sport_app_backend.Repository
         }
         
 
+        public async Task<ApiResponse> CompleteNewChallenge(string phoneNumber, string challenge)
+        {
+            var athlete = await _context.Athletes.FirstOrDefaultAsync(x => x.PhoneNumber == phoneNumber);
+            if (athlete is null)
+                return new ApiResponse() { Message = "User is not an athlete", Action = false };
+
+            var challengeExists = _context.Challenges.Any(x => x.AthleteId == athlete.Id && x.ChallengeType.ToString() == challenge);
+            if (challengeExists)
+                return new ApiResponse() { Message = "Challenge already completed", Action = false };
+
+            var chal = new Challenge
+            {
+                AthleteId = athlete.Id,
+                Athlete = athlete,
+                ChallengeType = Enum.Parse<ChallengeType>(challenge),
+                CompletedAt = DateTime.Now
+            };
+            await _context.Challenges.AddAsync(chal);
+            await _context.SaveChangesAsync();
+            return new ApiResponse()
+            {
+                Message = "Challenge completed successfully",
+                Action = true
+            };
+        }
+
+        public async Task<ApiResponse> CompletedChallenge(string phoneNumber)
+        {
+            var athlete = await _context.Athletes.FirstOrDefaultAsync(x => x.PhoneNumber == phoneNumber);
+            if (athlete is null)
+                return new ApiResponse() { Message = "User is not an athlete", Action = false };
+
+            var challenges = await _context.Challenges
+                .Where(x => x.AthleteId == athlete.Id)
+                .ToListAsync();
+
+            return new ApiResponse()
+            {
+                Message = "Challenges found",
+                Action = true,
+                Result = challenges.Select(c => c.ChallengeType.ToString()).ToList()
+            };
+        }
+
+        public async Task<ApiResponse> GetAchievements(string phoneNumber)
+        {
+            var athlete = await _context.Athletes.FirstOrDefaultAsync(x => x.PhoneNumber == phoneNumber);
+            if (athlete is null)
+                return new ApiResponse() { Message = "User is not an athlete", Action = false };
+            
+
+            var challenges = await _context.Challenges.Where(c => c.AthleteId == athlete.Id).ToListAsync();
+            bool firstChallenge = challenges.Any();
+            bool challengeSeeker = challenges.Count() >= 5;
+            bool challengeMaster = challenges.Count() >= 12;
+
+            var activities = await _context.Activities.Where(a => a.AthleteId == athlete.Id).ToListAsync();
+            bool firstWorkout = activities.Any();
+            var workoutDays = activities.Select(a => a.DateTime.Date).Distinct().OrderBy(d => d).ToList();
+            bool consistentAthlete = HasConsecutiveDays(workoutDays, 7);
+            bool oneMonthComplete = workoutDays.Count >= 30;
+            bool threeMonthsGolden = workoutDays.Count >= 90;
+            bool masterAthlete = workoutDays.Count >= 365;
+            bool firstProgramDone = athlete.WorkoutPrograms != null && athlete.WorkoutPrograms.Any(w => w.EndDate > DateTime.Now);
+
+            var achievements = new List<AchievementType>();
+            if (firstWorkout)
+                achievements.Add(AchievementType.FirstWorkout);
+            if (consistentAthlete)
+                achievements.Add(AchievementType.ConsistentAthlete);
+            if (firstProgramDone)
+                achievements.Add(AchievementType.FirstProgramDone);
+            if (oneMonthComplete)
+                achievements.Add(AchievementType.OneMonthComplete);
+            if (threeMonthsGolden)
+                achievements.Add(AchievementType.ThreeMonthsGolden);
+            if (masterAthlete)
+                achievements.Add(AchievementType.MasterAthlete);
+            if (firstChallenge)
+                achievements.Add(AchievementType.FirstChallenge);
+            if (challengeSeeker)
+                achievements.Add(AchievementType.ChallengeSeeker);
+            if (challengeMaster)
+                achievements.Add(AchievementType.ChallengeMaster);
+
+            return new ApiResponse()
+            {
+                Message = "Achievements found",
+                Action = true,
+                Result = achievements.Select(a => a.ToString()).ToList()
+            };
+
+        }
+
+        private bool HasConsecutiveDays(List<DateTime> dates, int requiredConsecutive)
+        {
+            if (dates == null || dates.Count == 0)
+                return false;
+
+            int consecutive = 1;
+            for (int i = 1; i < dates.Count; i++)
+            {
+                if ((dates[i] - dates[i - 1]).Days == 1)
+                {
+                    consecutive++;
+                    if (consecutive >= requiredConsecutive)
+                        return true;
+                }
+                else if ((dates[i] - dates[i - 1]).Days > 1)
+                {
+                    consecutive = 1;
+                }
+            }
+            return false;
+        }
 
 
     }
