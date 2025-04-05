@@ -19,7 +19,7 @@ namespace sport_app_backend.Dtos
         public string? Gender { get; set; }
         public byte[] ImageProfile { get; set; } = Array.Empty<byte>();
       
-        public string Bio { get; set; } = "";
+        public List<string> Bio { get; set; } = [];
          public List<string>? Domain { get; set; }
 
         public int StartCoachingYear { get; set; }

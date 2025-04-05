@@ -10,67 +10,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="28760247-65d0-48d0-a33f-5bff615c467b" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.config/dotnet-tools.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.sport-app-backend.dir/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.sport-app-backend.dir/.idea/indexLayout.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.sport-app-backend.dir/.idea/vcs.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/.name" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/encodings.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/indexLayout.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/vcs.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.vs/ProjectEvaluation/sport-app-backend.metadata.v9.bin" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.vs/ProjectEvaluation/sport-app-backend.projects.v9.bin" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.vs/ProjectEvaluation/sport-app-backend.strings.v9.bin" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.vs/sport-app-backend/CopilotIndices/17.13.433.20974/CodeChunks.db" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.vs/sport-app-backend/CopilotIndices/17.13.433.20974/SemanticSymbols.db" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.vs/sport-app-backend/CopilotIndices/17.13.441.19478/CodeChunks.db" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.vs/sport-app-backend/CopilotIndices/17.13.441.19478/SemanticSymbols.db" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.vs/sport-app-backend/DesignTimeBuild/.dtbcache.v2" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.vs/sport-app-backend/FileContentIndex/4a8ce8fa-5b9d-4d8c-bd85-144bffcd8236.vsidx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.vs/sport-app-backend/FileContentIndex/72213ec1-e01b-44dc-8e6a-140db0939963.vsidx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.vs/sport-app-backend/FileContentIndex/a49b6cfd-e96b-4ec4-af4e-f826dd2a1e62.vsidx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.vs/sport-app-backend/FileContentIndex/b781d00e-9844-4472-9602-899ffa0b94a3.vsidx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.vs/sport-app-backend/FileContentIndex/c9128bd6-82fe-4e1f-ab01-1275823f73e6.vsidx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.vs/sport-app-backend/config/applicationhost.config" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.vs/sport-app-backend/v17/.futdcache.v2" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.vs/sport-app-backend/v17/.suo" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.vs/sport-app-backend/v17/DocumentLayout.backup.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.vs/sport-app-backend/v17/DocumentLayout.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.vscode/settings.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Controller/AthleteController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Controller/AthleteController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Controller/CoachController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Controller/CoachController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Data/ApplicationDBContext.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Data/ApplicationDBContext.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dtos/AddActivityDto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Dtos/AddActivityDto.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dtos/AthleteProfileResponse.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Dtos/AthleteProfileResponse.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dtos/AthleteQuestionDto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Dtos/AthleteQuestionDto.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dtos/CoachQuestionDto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Dtos/CoachQuestionDto.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dtos/PaymentResponseDto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Dtos/PaymentResponseDto.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Interface/IAthleteRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Interface/IAthleteRepository.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Interface/ICoachRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Interface/ICoachRepository.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Mappers/AthleteMappers.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Mappers/AthleteMappers.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Mappers/CoachMappers.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Mappers/CoachMappers.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Models/Account/Athlete/Athlete.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/Account/Athlete/Athlete.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Models/Account/Athlete/WeightEntry.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/Account/Athlete/WeightEntry.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Models/Account/Coach/Coach.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/Account/Coach/Coach.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Models/Account/User.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/Account/User.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Models/Actions/Activitie.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/Actions/Activitie.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Models/Actions/ActivitiesEnum.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Models/Payments/Payment.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/Payments/Payment.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Models/Program/SuperSetExercise.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/Program/SuperSetExercise.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Models/Question/A_Question/AthleteQuestion.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/Question/A_Question/AthleteQuestion.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Models/Question/A_Question/InjuryArea.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/Question/A_Question/InjuryArea.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Models/TrainingPlan/Coachplan.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/TrainingPlan/Coachplan.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Models/WaterInDay.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/WaterInDay.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Repository/AthleteRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Repository/AthleteRepository.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Repository/CoachRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Repository/CoachRepository.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/appsettings.Development.json" beforeDir="false" afterPath="$PROJECT_DIR$/appsettings.Development.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sport-app-backend.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/sport-app-backend.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sport-app-backend/obj/Debug/net8.0/sport-app-backend.AssemblyInfo.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/sport-app-backend/obj/Debug/net8.0/sport-app-backend.AssemblyInfoInputs.cache" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/sport-app-backend/obj/Debug/net8.0/sport-app-backend.GeneratedMSBuildEditorConfig.editorconfig" beforeDir="false" />
-    </list>
+    <list default="true" id="28760247-65d0-48d0-a33f-5bff615c467b" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -113,25 +53,25 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    ".NET Launch Settings Profile.sport-app-backend: http.executor": "Debug",
-    ".NET Project.sport-app-backend.executor": "Run",
-    "Docker.Dockerfile.executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "com.codeium.enabled": "true",
-    "git-widget-placeholder": "master",
-    "ignore.virus.scanning.warn.message": "true",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "editor.preferences.smartKeys_rider",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;.NET Launch Settings Profile.sport-app-backend: http.executor&quot;: &quot;Run&quot;,
+    &quot;.NET Project.sport-app-backend.executor&quot;: &quot;Run&quot;,
+    &quot;Docker.Dockerfile.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;com.codeium.enabled&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;editor.preferences.smartKeys_rider&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RunManager" selected=".NET Launch Settings Profile.sport-app-backend: http">
     <configuration name="sport-app-backend" type="DotNetProject" factoryName=".NET Project">
       <option name="EXE_PATH" value="" />
@@ -233,7 +173,7 @@
       <workItem from="1743249591382" duration="220000" />
       <workItem from="1743257814905" duration="83000" />
       <workItem from="1743257906677" duration="26000" />
-      <workItem from="1743554254397" duration="154000" />
+      <workItem from="1743554254397" duration="426000" />
     </task>
     <task id="LOCAL-00001" summary="add buy plan">
       <option name="closed" value="true" />
@@ -259,7 +199,15 @@
       <option name="project" value="LOCAL" />
       <updated>1743211954383</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="add a lot of things">
+      <option name="closed" value="true" />
+      <created>1743554551122</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1743554551122</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -278,7 +226,7 @@
                   <entry key="branch">
                     <value>
                       <list>
-                        <option value="origin/Shahla" />
+                        <option value="origin/master" />
                       </list>
                     </value>
                   </entry>
@@ -295,6 +243,7 @@
     <MESSAGE value="add buy plan" />
     <MESSAGE value="profile method is add" />
     <MESSAGE value="fix some bug" />
-    <option name="LAST_COMMIT_MESSAGE" value="fix some bug" />
+    <MESSAGE value="add a lot of things" />
+    <option name="LAST_COMMIT_MESSAGE" value="add a lot of things" />
   </component>
 </project>

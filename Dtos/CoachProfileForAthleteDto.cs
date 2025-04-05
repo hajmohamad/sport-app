@@ -14,7 +14,7 @@ namespace sport_app_backend.Dtos
         public required string UserName { get; set; }
 
         public byte[] ImageProfile { get; set; } = Array.Empty<byte>();
-        public string Bio { get; set; } = string.Empty;
+        public List<string> Bio { get; set; } = [];
 
         public int CoachId { get; set; }
 

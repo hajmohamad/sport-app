@@ -25,6 +25,7 @@ public class Coach
     public List<CoachPlan> CoachingPlans { get; set; } = [];
     public List<Payment>? Payments { get; set; } = [];
     public List<WorkoutProgram> WorkoutPrograms { get; set; } = [];
+   
     public CoachQuestion? CoachQuestion { get; set; }
 
 

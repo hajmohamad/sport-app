@@ -89,6 +89,7 @@ public class UserController(IUserRepository userRepository) : ControllerBase
         if (!result.Action) return BadRequest(result);
         return Ok(result);
     }
+    
     //logout
     [HttpDelete("logout")]
     [Authorize(Roles = "Athlete,Coach")]
@@ -100,6 +101,7 @@ public class UserController(IUserRepository userRepository) : ControllerBase
         if (!result.Action) return NotFound(result);
         return Ok(result);
     }
+    
 
 
 

@@ -26,59 +26,57 @@ public class UserRepository(
         user.Gender = sportEnum;
         
 
-        if (roleGenderDto.Role.ToUpper().Equals("COACH"))
+        switch (roleGenderDto.Role.ToUpper())
         {
-            user.TypeOfUser = TypeOfUser.COACH;
-            var coach = new Coach()
+            case "COACH":
             {
-                User = user,
-                UserId = user.Id,
-                PhoneNumber = user.PhoneNumber
-            };
-            user.Coach = coach;
-            user.TypeOfUser = TypeOfUser.COACH;
-            await dbContext.Coaches.AddAsync(user.Coach);
-            await dbContext.SaveChangesAsync();
-            return new ApiResponse()
-            {
-                Message = "Coach added successfully",
-                Action = true,
-                Result = new AddRoleResponse()
+                user.TypeOfUser = TypeOfUser.COACH;
+                var coach = new Coach()
                 {
-                    RefreshToken = user.RefreshToken,
-                    AccessToken = tokenService.CreateToken(user),
-                    TypeOfUser = user.TypeOfUser.ToString()
-                }
-            };
-
-        }
-        else if (roleGenderDto.Role.ToUpper().Equals("ATHLETE"))
-        {
-            user.TypeOfUser = TypeOfUser.ATHLETE;
-            user.Athlete = new Athlete
-            {
-                User = user,
-                UserId = user.Id,
-                PhoneNumber = user.PhoneNumber
-            };
-            user.TypeOfUser = TypeOfUser.ATHLETE;
-            await dbContext.Athletes.AddAsync(user.Athlete);
-            await dbContext.SaveChangesAsync();
-            return new ApiResponse()
-            {
-                Message = "Athlete added successfully",
-                Action = true,
-                Result = new AddRoleResponse()
+                    User = user,
+                    UserId = user.Id,
+                    PhoneNumber = user.PhoneNumber
+                };
+                user.Coach = coach;
+                user.TypeOfUser = TypeOfUser.COACH;
+                await dbContext.Coaches.AddAsync(user.Coach);
+                await dbContext.SaveChangesAsync();
+                return new ApiResponse()
                 {
-                    RefreshToken = user.RefreshToken,
-                    AccessToken = tokenService.CreateToken(user),
-                    TypeOfUser = user.TypeOfUser.ToString()
-                }
-            };
-        }
-        else
-        {
-            return new ApiResponse() { Message = "Invalid role", Action = false };
+                    Message = "Coach added successfully",
+                    Action = true,
+                    Result = new AddRoleResponse()
+                    {
+                        RefreshToken = user.RefreshToken,
+                        AccessToken = tokenService.CreateToken(user),
+                        TypeOfUser = user.TypeOfUser.ToString()
+                    }
+                };
+            }
+            case "ATHLETE":
+                user.TypeOfUser = TypeOfUser.ATHLETE;
+                user.Athlete = new Athlete
+                {
+                    User = user,
+                    UserId = user.Id,
+                    PhoneNumber = user.PhoneNumber
+                };
+                user.TypeOfUser = TypeOfUser.ATHLETE;
+                await dbContext.Athletes.AddAsync(user.Athlete);
+                await dbContext.SaveChangesAsync();
+                return new ApiResponse()
+                {
+                    Message = "Athlete added successfully",
+                    Action = true,
+                    Result = new AddRoleResponse()
+                    {
+                        RefreshToken = user.RefreshToken,
+                        AccessToken = tokenService.CreateToken(user),
+                        TypeOfUser = user.TypeOfUser.ToString()
+                    }
+                };
+            default:
+                return new ApiResponse() { Message = "Invalid role", Action = false };
         }
     }
 
@@ -246,6 +244,7 @@ private async Task<string> GenerateUniqueUsername()
         user.UserName = editUserProfileDto.UserName; user.FirstName = editUserProfileDto.FirstName;
         user.LastName = editUserProfileDto.LastName;
         user.BirthDate = Convert.ToDateTime(editUserProfileDto.BirthDate);
+        user.Bio = editUserProfileDto.Bio;
         await dbContext.SaveChangesAsync();
         return new ApiResponse()
         {
@@ -267,7 +266,8 @@ private async Task<string> GenerateUniqueUsername()
                 user.UserName,
                 user.FirstName,
                 user.LastName,
-                user.BirthDate
+                user.BirthDate,
+                user.Bio
             }
         };
     }

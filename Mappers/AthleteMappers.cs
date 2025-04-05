@@ -26,7 +26,7 @@ namespace sport_app_backend.Mappers
                 Gender = user.Gender.ToString(),
 
                 ImageProfile = user.ImageProfile ?? Array.Empty<byte>(),
-                Bio = user.Bio ?? string.Empty,
+                Bio = user.Bio ?? [],
                 TimeBeforeWorkout = user.Athlete.TimeBeforeWorkout,
                 RestTime = user.Athlete.RestTime
             };
