@@ -25,7 +25,7 @@ namespace sport_app_backend.Repository
 
         public Task<ApiResponse> AddExercises(List<AddExercisesRequestDto> exercises)
         {
-            var exercisesList = exercises.Select(x => x.ToExercisesDto()).ToList();
+            var exercisesList = exercises.Select(x => x.ToExercises()).ToList();
             _context.Exercises.AddRange(exercisesList);
             _context.SaveChanges();
             return Task.FromResult(new ApiResponse()

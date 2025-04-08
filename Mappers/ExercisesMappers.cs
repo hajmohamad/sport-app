@@ -9,19 +9,29 @@ namespace sport_app_backend.Mappers
 {
     public static class ExercisesMappers
     {
-        public static Exercise ToExercisesDto(this AddExercisesRequestDto addExercisesRequestDto)
+        public static Exercise ToExercises(this AddExercisesRequestDto addExercisesRequestDto)
         {
             return new Exercise
             {
                 EnglishName = addExercisesRequestDto.EnglishName,
                 PersianName = addExercisesRequestDto.PersianName,
-                MainImage = addExercisesRequestDto.MainImage,
-                AnatomyImage = addExercisesRequestDto.AnatomyImage,
+                SourceLink = addExercisesRequestDto.SourceLink ?? string.Empty,
+                ForeignAppLink = addExercisesRequestDto.ForeignAppLink ?? string.Empty,
+                ImageLink = addExercisesRequestDto.ImageLink ?? string.Empty,
+                AnatomyImage = addExercisesRequestDto.AnatomyImage ?? string.Empty,
+                AllImages = addExercisesRequestDto.AllImages ?? new List<string>(),
+                VideoLink = addExercisesRequestDto.VideoLink ?? string.Empty,
                 Description = addExercisesRequestDto.Description,
-                Calories = addExercisesRequestDto.Calories,
-                Image = addExercisesRequestDto.Image,
+                ExerciseLevel = (ExerciseLevel)Enum.Parse(typeof(ExerciseLevel), addExercisesRequestDto.ExerciseLevel.ToUpper()),
+                TargetMuscles = addExercisesRequestDto.TargetMuscles.Select(x => (MuscleGroup)Enum.Parse(typeof(MuscleGroup), x.ToUpper())).ToList(),
                 BaseCategory = (MuscleGroup)Enum.Parse(typeof(MuscleGroup), addExercisesRequestDto.BaseCategory.ToUpper()),
-                ActionsTage = addExercisesRequestDto.ActionsTage.Select(x => (MuscleGroup)Enum.Parse(typeof(MuscleGroup), x.ToUpper())).ToList()};
+                ExerciseCategories = addExercisesRequestDto.ExerciseCategories.Select(x => (ExerciseCategory)Enum.Parse(typeof(ExerciseCategory), x.ToUpper())).ToList(),
+                Equipment = addExercisesRequestDto.Equipment.Select(x => (EquipmentType)Enum.Parse(typeof(EquipmentType), x.ToUpper())).ToList(),
+                InGym = addExercisesRequestDto.InGym,
+                InHome = addExercisesRequestDto.InHome,
+                Calories = addExercisesRequestDto.Calories,
+                Location = addExercisesRequestDto.Location ?? string.Empty
+            };
         }
     }
 }

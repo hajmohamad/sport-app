@@ -25,4 +25,8 @@
     <_ContentIncludedByDefault Remove="sport-app-backend\obj\project.packagespec.json" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Migrations\" />
+  </ItemGroup>
+
 </Project>
