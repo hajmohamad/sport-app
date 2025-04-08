@@ -32,7 +32,11 @@ namespace sport_app_backend.Controller
             var result = await _coachRepository.SubmitCoachQuestions(phoneNumber, coachQuestionDto);
             if (!result.Action) return BadRequest("Failed to submit coach questions.");
 
-            return Ok(new { Message = "Coach questions submitted successfully" });
+            return Ok(new
+            {
+                Message = "Coach questions submitted successfully",
+                Question = true
+            });
         }
 
 
@@ -126,6 +130,14 @@ namespace sport_app_backend.Controller
             
         }
 
+        [HttpGet("get_Exercises")]
+        public async Task<IActionResult> GetExercises()
+        {
+            var result = await _coachRepository.GetAllExercise();
+            if (result.Action != true) return BadRequest(result);
+            return Ok(result);
+            
+        }
 
     }
 }

@@ -11,27 +11,20 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="28760247-65d0-48d0-a33f-5bff615c467b" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Dtos/WorkoutProgramResponseDto.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Mappers/ProgramMappers.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Models/Program/NotUse/ExerciseInDay.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Models/Program/NotUse/SuperSetExercise.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Models/Program/ProgramPriority.cs" afterDir="false" />
+    <list default="true" id="595b416c-ddc9-4b4e-96cb-8d4a5fa14b1b" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/Dtos/AllExerciseResponseDto.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dtos/PaymentResponseDto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Dtos/PaymentResponseDto.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Mappers/PaymentMappers.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Mappers/PaymentMappers.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Migrations/20250403083158_Achievements.Designer.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Migrations/20250403083158_Achievements.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Models/Payments/Payment.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/Payments/Payment.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Models/Payments/PaymentStatus.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/Payments/PaymentStatus.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Models/Program/ExerciseInDay.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Models/Program/SingelExercise.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/Program/SingelExercise.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Models/Program/SuperSetExercise.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Models/Program/WorkoutProgram.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/Program/WorkoutProgram.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Models/Program/WorkoutProgramInDay.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/Program/ProgramInDay.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Models/Program/WorkoutProgramStatus.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/Program/WorkoutProgramStatus.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Repository/AdminRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Repository/AdminRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Controller/CoachController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Controller/CoachController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Controller/UserController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Controller/UserController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dtos/AddRoleResponse.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Dtos/AddRoleResponse.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dtos/CheckCodeResponseDto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Dtos/CheckCodeResponseDto.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Interface/ICoachRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Interface/ICoachRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Migrations/20250408083333_updateexe.Designer.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Migrations/20250408083333_updateexe.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Migrations/ApplicationDbContextModelSnapshot.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Repository/AthleteRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Repository/AthleteRepository.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Repository/CoachRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Repository/CoachRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Repository/UserRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Repository/UserRepository.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/sport-app-backend.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/sport-app-backend.csproj" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -39,15 +32,7 @@
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="DpaMonitoringSettings">
-    <option name="firstShow" value="false" />
-  </component>
   <component name="Git.Settings">
-    <option name="RECENT_BRANCH_BY_REPOSITORY">
-      <map>
-        <entry key="$PROJECT_DIR$" value="Shahla" />
-      </map>
-    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="GitHubPullRequestSearchHistory">{
@@ -63,219 +48,62 @@
   }
 }</component>
   <component name="HighlightingSettingsPerFile">
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/2832e8c2b81f4641b3863f406ce3a519c90938/4d/f6566c0d/ExceptionDispatchInfo.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="mock://D:/403-1/es-402/sport-app/Controller/AthleteController.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock://D:/403-1/es-402/sport-app/Dtos/EditAthleteProfileDto.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock://D:/403-1/es-402/sport-app/Mappers/CoachMappers.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock://D:/403-1/es-402/sport-app/Migrations/ApplicationDbContextModelSnapshot.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/403-1/es-402/sport-app/Repository/CoachRepository.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/403-1/es-402/sport-app/Repository/CoachRepository.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock://D:/403-1/es-402/sport-app/Repository/UserRepository.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/obj/Debug/net8.0/.NETCoreApp,Version=v8.0.AssemblyAttributes.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock://D:/403-1/es-402/sport-app/sport-app-backend/obj/Debug/net8.0/sport-app-backend.AssemblyInfo.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock://D:/403-1/es-402/sport-app/sport-app-backend/obj/Debug/net8.0/sport-app-backend.AssemblyInfo.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/403-1/es-402/sport-app/Repository/UserRepository.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/403-1/es-402/sport-app/Repository/UserRepository.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/403-1/es-402/sport-app/Repository/UserRepository.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/403-1/es-402/sport-app/Repository/UserRepository.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/403-1/es-402/sport-app/Repository/UserRepository.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/403-1/es-402/sport-app/Repository/UserRepository.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/403-1/es-402/sport-app/Repository/UserRepository.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/403-1/es-402/sport-app/Repository/UserRepository.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/403-1/es-402/sport-app/Repository/UserRepository.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/403-1/es-402/sport-app/Repository/UserRepository.cs" root0="SKIP_HIGHLIGHTING" />
   </component>
-  <component name="MetaFilesCheckinStateConfiguration" checkMetaFiles="true" />
+  <component name="MetaFilesCheckinStateConfiguration" checkMetaFiles="false" />
   <component name="ProjectColorInfo">{
-  &quot;associatedIndex&quot;: 4
+  &quot;associatedIndex&quot;: 7
 }</component>
-  <component name="ProjectId" id="2uwvGtlS8AbY22iMhl2sccgnO0i" />
+  <component name="ProjectId" id="2vRRvPqFaEdM7pusS1fXJ46rtdP" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    ".NET Launch Settings Profile.sport-app-backend: http.executor": "Run",
-    ".NET Launch Settings Profile.sport-app-backend: https.executor": "Run",
-    ".NET Project.sport-app-backend.executor": "Run",
-    "Docker.Dockerfile.executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "com.codeium.enabled": "true",
-    "git-widget-placeholder": "master",
-    "ignore.virus.scanning.warn.message": "true",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "preferences.keymap",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;com.codeium.enabled&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
-  <component name="RunManager" selected=".NET Launch Settings Profile.sport-app-backend: http">
-    <configuration name="sport-app-backend" type="DotNetProject" factoryName=".NET Project">
-      <option name="EXE_PATH" value="" />
-      <option name="PROGRAM_PARAMETERS" value="" />
-      <option name="WORKING_DIRECTORY" value="" />
-      <option name="PASS_PARENT_ENVS" value="1" />
-      <option name="USE_EXTERNAL_CONSOLE" value="0" />
-      <option name="USE_MONO" value="0" />
-      <option name="RUNTIME_ARGUMENTS" value="" />
-      <option name="PROJECT_PATH" value="$PROJECT_DIR$/sport-app-backend.csproj" />
-      <option name="PROJECT_EXE_PATH_TRACKING" value="1" />
-      <option name="PROJECT_ARGUMENTS_TRACKING" value="1" />
-      <option name="PROJECT_WORKING_DIRECTORY_TRACKING" value="1" />
-      <option name="PROJECT_KIND" value="DotNetCore" />
-      <option name="PROJECT_TFM" value="" />
-      <method v="2">
-        <option name="Build" />
-      </method>
-    </configuration>
-    <configuration name="sport-app-backend: IIS Express" type="LaunchSettings" factoryName=".NET Launch Settings Profile">
-      <option name="LAUNCH_PROFILE_PROJECT_FILE_PATH" value="$PROJECT_DIR$/sport-app-backend.csproj" />
-      <option name="LAUNCH_PROFILE_TFM" value="net8.0" />
-      <option name="LAUNCH_PROFILE_NAME" value="IIS Express" />
-      <option name="USE_EXTERNAL_CONSOLE" value="0" />
-      <option name="USE_MONO" value="0" />
-      <option name="RUNTIME_ARGUMENTS" value="" />
-      <option name="GENERATE_APPLICATIONHOST_CONFIG" value="1" />
-      <option name="SHOW_IIS_EXPRESS_OUTPUT" value="0" />
-      <option name="SEND_DEBUG_REQUEST" value="1" />
-      <option name="ADDITIONAL_IIS_EXPRESS_ARGUMENTS" value="" />
-      <method v="2">
-        <option name="Build" />
-      </method>
-    </configuration>
-    <configuration name="sport-app-backend: http" type="LaunchSettings" factoryName=".NET Launch Settings Profile">
-      <option name="LAUNCH_PROFILE_PROJECT_FILE_PATH" value="$PROJECT_DIR$/sport-app-backend.csproj" />
-      <option name="LAUNCH_PROFILE_TFM" value="net8.0" />
-      <option name="LAUNCH_PROFILE_NAME" value="http" />
-      <option name="USE_EXTERNAL_CONSOLE" value="0" />
-      <option name="USE_MONO" value="0" />
-      <option name="RUNTIME_ARGUMENTS" value="" />
-      <option name="GENERATE_APPLICATIONHOST_CONFIG" value="1" />
-      <option name="SHOW_IIS_EXPRESS_OUTPUT" value="0" />
-      <option name="SEND_DEBUG_REQUEST" value="1" />
-      <option name="ADDITIONAL_IIS_EXPRESS_ARGUMENTS" value="" />
-      <method v="2">
-        <option name="Build" />
-      </method>
-    </configuration>
-    <configuration name="sport-app-backend: https" type="LaunchSettings" factoryName=".NET Launch Settings Profile">
-      <option name="LAUNCH_PROFILE_PROJECT_FILE_PATH" value="$PROJECT_DIR$/sport-app-backend.csproj" />
-      <option name="LAUNCH_PROFILE_TFM" value="net8.0" />
-      <option name="LAUNCH_PROFILE_NAME" value="https" />
-      <option name="USE_EXTERNAL_CONSOLE" value="0" />
-      <option name="USE_MONO" value="0" />
-      <option name="RUNTIME_ARGUMENTS" value="" />
-      <option name="GENERATE_APPLICATIONHOST_CONFIG" value="1" />
-      <option name="SHOW_IIS_EXPRESS_OUTPUT" value="0" />
-      <option name="SEND_DEBUG_REQUEST" value="1" />
-      <option name="ADDITIONAL_IIS_EXPRESS_ARGUMENTS" value="" />
-      <method v="2">
-        <option name="Build" />
-      </method>
-    </configuration>
-    <configuration name="Dockerfile" type="docker-deploy" factoryName="dockerfile" server-name="Docker">
-      <deployment type="dockerfile">
-        <settings>
-          <option name="containerName" value="sport-app-backend" />
-          <option name="contextFolderPath" value="D:\403-1\es-402\sport-app" />
-          <option name="sourceFilePath" value="Dockerfile" />
-        </settings>
-      </deployment>
-      <EXTENSION ID="com.jetbrains.rider.docker.debug" isFastModeEnabled="true" isSslEnabled="false" />
-      <method v="2" />
-    </configuration>
-    <configuration default="true" type="docker-deploy" factoryName="dockerfile" temporary="true">
-      <deployment type="dockerfile">
-        <settings />
-      </deployment>
-      <EXTENSION ID="com.jetbrains.rider.docker.debug" isFastModeEnabled="true" isSslEnabled="false" />
-      <method v="2" />
-    </configuration>
-  </component>
+}</component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="28760247-65d0-48d0-a33f-5bff615c467b" name="Changes" comment="" />
-      <created>1743172361321</created>
+      <changelist id="595b416c-ddc9-4b4e-96cb-8d4a5fa14b1b" name="Changes" comment="" />
+      <created>1744106134118</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1743172361321</updated>
-      <workItem from="1743172365509" duration="988000" />
-      <workItem from="1743173422493" duration="2705000" />
-      <workItem from="1743178570512" duration="2745000" />
-      <workItem from="1743184196192" duration="1457000" />
-      <workItem from="1743191056825" duration="5992000" />
-      <workItem from="1743197312770" duration="8844000" />
-      <workItem from="1743208961927" duration="3076000" />
-      <workItem from="1743249591382" duration="220000" />
-      <workItem from="1743257814905" duration="83000" />
-      <workItem from="1743257906677" duration="26000" />
-      <workItem from="1743554254397" duration="426000" />
-      <workItem from="1743766216142" duration="1735000" />
-      <workItem from="1743836864678" duration="2095000" />
+      <updated>1744106134118</updated>
+      <workItem from="1744106138743" duration="2875000" />
+      <workItem from="1744142433700" duration="1986000" />
     </task>
-    <task id="LOCAL-00001" summary="add buy plan">
-      <option name="closed" value="true" />
-      <created>1743179374437</created>
-      <option name="number" value="00001" />
-      <option name="presentableId" value="LOCAL-00001" />
-      <option name="project" value="LOCAL" />
-      <updated>1743179374437</updated>
-    </task>
-    <task id="LOCAL-00002" summary="profile method is add">
-      <option name="closed" value="true" />
-      <created>1743203113605</created>
-      <option name="number" value="00002" />
-      <option name="presentableId" value="LOCAL-00002" />
-      <option name="project" value="LOCAL" />
-      <updated>1743203113605</updated>
-    </task>
-    <task id="LOCAL-00003" summary="fix some bug">
-      <option name="closed" value="true" />
-      <created>1743211954383</created>
-      <option name="number" value="00003" />
-      <option name="presentableId" value="LOCAL-00003" />
-      <option name="project" value="LOCAL" />
-      <updated>1743211954383</updated>
-    </task>
-    <task id="LOCAL-00004" summary="add a lot of things">
-      <option name="closed" value="true" />
-      <created>1743554551122</created>
-      <option name="number" value="00004" />
-      <option name="presentableId" value="LOCAL-00004" />
-      <option name="project" value="LOCAL" />
-      <updated>1743554551122</updated>
-    </task>
-    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
-  <component name="UnityCheckinConfiguration" checkUnsavedScenes="true" />
+  <component name="UnityCheckinConfiguration" checkUnsavedScenes="false" />
   <component name="UnityProjectConfiguration" hasMinimizedUI="false" />
-  <component name="Vcs.Log.Tabs.Properties">
-    <option name="TAB_STATES">
-      <map>
-        <entry key="MAIN">
-          <value>
-            <State>
-              <option name="FILTERS">
-                <map>
-                  <entry key="branch">
-                    <value>
-                      <list>
-                        <option value="origin/master" />
-                      </list>
-                    </value>
-                  </entry>
-                </map>
-              </option>
-            </State>
-          </value>
-        </entry>
-      </map>
-    </option>
-  </component>
   <component name="VcsManagerConfiguration">
-    <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
-    <MESSAGE value="add buy plan" />
-    <MESSAGE value="profile method is add" />
-    <MESSAGE value="fix some bug" />
-    <MESSAGE value="add a lot of things" />
-    <option name="LAST_COMMIT_MESSAGE" value="add a lot of things" />
+    <option name="LAST_COMMIT_MESSAGE" value="" />
   </component>
 </project>

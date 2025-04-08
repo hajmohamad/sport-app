@@ -30,6 +30,7 @@ namespace sport_app_backend.Repository
                 
             };
         }
+        
 
         public async Task<ApiResponse> SubmitCoachQuestions(string phoneNumber, CoachQuestionDto coachQuestionDto)
         {  
@@ -151,6 +152,18 @@ namespace sport_app_backend.Repository
             
             
 
+        }
+
+        public async Task<ApiResponse> GetAllExercise()
+        {
+            var exercise = await context.Exercises.ToListAsync();
+            
+            return new ApiResponse()
+            {
+                Message = "Exercises found",
+                Action = true,
+                Result = exercise
+            };
         }
     }
 }

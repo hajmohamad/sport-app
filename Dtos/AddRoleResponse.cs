@@ -9,5 +9,6 @@ public class AddRoleResponse
     public string? AccessToken { get; set; }
 
     public required string TypeOfUser { get; set; }
-    
+    public required string Gender { get; set; }
+    public required bool Questions { get; set; }
 }

@@ -249,7 +249,11 @@ namespace sport_app_backend.Repository
             return new ApiResponse()
             {
                 Message = "Athlete first questions submitted successfully",
-                Action = true
+                Action = true,
+                Result = new
+                {
+                    Questions = true
+                }
             };
         }
 

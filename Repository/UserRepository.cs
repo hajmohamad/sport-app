@@ -49,7 +49,9 @@ public class UserRepository(
                     {
                         RefreshToken = user.RefreshToken,
                         AccessToken = tokenService.CreateToken(user),
-                        TypeOfUser = user.TypeOfUser.ToString()
+                        TypeOfUser = user.TypeOfUser.ToString(),
+                        Gender = user.Gender.ToString(),
+                        Questions= false 
                     }
                 };
             }
@@ -72,8 +74,10 @@ public class UserRepository(
                     {
                         RefreshToken = user.RefreshToken,
                         AccessToken = tokenService.CreateToken(user),
-                        TypeOfUser = user.TypeOfUser.ToString()
-                    }
+                        TypeOfUser = user.TypeOfUser.ToString(),
+                        Gender = user.Gender.ToString(),
+                        Questions= false 
+                        }
                 };
             default:
                 return new ApiResponse() { Message = "Invalid role", Action = false };
@@ -105,15 +109,17 @@ public class UserRepository(
     var userEntity = await dbContext.Users.FirstOrDefaultAsync(x => x.PhoneNumber == checkCodeRequestDto.PhoneNumber);
     if (userEntity != null)
     {
+        var questions = userEntity.FirstName is not null;
+        
         userEntity.LastLogin = DateTime.Now;
-        return await GenerateSuccessResponse(userEntity);
+        return await GenerateSuccessResponse(userEntity,questions);
     }
     
     var newUser = await CreateNewUser(checkCodeRequestDto.PhoneNumber);
-    return await GenerateSuccessResponse(newUser);
+    return await GenerateSuccessResponse(newUser,false);
 }
 
-private async Task<ApiResponse> GenerateSuccessResponse(User user)
+private async Task<ApiResponse> GenerateSuccessResponse(User user,bool question)
 {
     return new ApiResponse
     {
@@ -123,7 +129,9 @@ private async Task<ApiResponse> GenerateSuccessResponse(User user)
         {
             RefreshToken = await tokenService.CreateRefreshToken(user),
             AccessToken = tokenService.CreateToken(user),
-            TypeOfUser = user.TypeOfUser.ToString()
+            TypeOfUser = user.TypeOfUser.ToString(),
+            Gender = user.Gender.ToString()?? "NONE" ,
+            Questions=question
         }
     };
 }

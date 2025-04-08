@@ -12,5 +12,6 @@ namespace sport_app_backend.Interface
         Task<ApiResponse> DeleteCoachingPlane(string phoneNumber,int id);
         Task<ApiResponse> GetAllPayment(string phoneNumber);
         Task<ApiResponse> GetPayment(string phoneNumber,int paymentId);
+        Task<ApiResponse> GetExercises();
     }
 }
