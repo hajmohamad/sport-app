@@ -1,0 +1,12 @@
+<changelist name="Uncommitted_changes_before_Update_at_4_5_2025_1_24_PM_[Changes]" date="1743846891065" recycled="false" toDelete="true">
+  <option name="PATH" value="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/shelf/Uncommitted_changes_before_Update_at_4_5_2025_1_24_PM_[Changes]/shelved.patch" />
+  <option name="DESCRIPTION" value="Uncommitted changes before Update at 4/5/2025 1:24 PM [Changes]" />
+  <binary>
+    <option name="BEFORE_PATH" value="sport-app-backend/obj/Debug/net8.0/sport-app-backend.csproj.AssemblyReference.cache" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="sport-app-backend/obj/Debug/net8.0/sport-app-backend.AssemblyInfoInputs.cache" />
+    <option name="AFTER_PATH" value="sport-app-backend/obj/Debug/net8.0/sport-app-backend.AssemblyInfoInputs.cache" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/shelf/Uncommitted_changes_before_Update_at_4_5_2025_1_24_PM_[Changes]/sport-app-backend.AssemblyInfoInputs.cache" />
+  </binary>
+</changelist>
