@@ -15,11 +15,11 @@ namespace sport_app_backend.Mappers
             {
                 EnglishName = addExercisesRequestDto.EnglishName,
                 PersianName = addExercisesRequestDto.PersianName,
-                SourceLink = addExercisesRequestDto.SourceLink ?? string.Empty,
-                ForeignAppLink = addExercisesRequestDto.ForeignAppLink ?? string.Empty,
+                // SourceLink = addExercisesRequestDto.SourceLink ?? string.Empty,
+                // ForeignAppLink = addExercisesRequestDto.ForeignAppLink ?? string.Empty,
                 ImageLink = addExercisesRequestDto.ImageLink ?? string.Empty,
-                AnatomyImage = addExercisesRequestDto.AnatomyImage ?? string.Empty,
-                AllImages = addExercisesRequestDto.AllImages ?? new List<string>(),
+                // AnatomyImage = addExercisesRequestDto.AnatomyImage ?? string.Empty,
+                // AllImages = addExercisesRequestDto.AllImages ?? new List<string>(),
                 VideoLink = addExercisesRequestDto.VideoLink ?? string.Empty,
                 Description = addExercisesRequestDto.Description,
                 ExerciseLevel = (ExerciseLevel)Enum.Parse(typeof(ExerciseLevel), addExercisesRequestDto.ExerciseLevel.ToUpper()),
@@ -27,11 +27,27 @@ namespace sport_app_backend.Mappers
                 BaseCategory = (MuscleGroup)Enum.Parse(typeof(MuscleGroup), addExercisesRequestDto.BaseCategory.ToUpper()),
                 ExerciseCategories = addExercisesRequestDto.ExerciseCategories.Select(x => (ExerciseCategory)Enum.Parse(typeof(ExerciseCategory), x.ToUpper())).ToList(),
                 Equipment = addExercisesRequestDto.Equipment.Select(x => (EquipmentType)Enum.Parse(typeof(EquipmentType), x.ToUpper())).ToList(),
-                InGym = addExercisesRequestDto.InGym,
-                InHome = addExercisesRequestDto.InHome,
-                Calories = addExercisesRequestDto.Calories,
-                Location = addExercisesRequestDto.Location ?? string.Empty
+                // InGym = addExercisesRequestDto.InGym,
+                // InHome = addExercisesRequestDto.InHome,
+                // Calories = addExercisesRequestDto.Calories,
+                Locations = addExercisesRequestDto.Location.Select(x => (Location)Enum.Parse(typeof(Location), x.ToUpper())).ToList()
             };
+        }
+
+        public static AllExerciseResponseDto ToAllExerciseResponseDto(this Exercise exercise)
+        {
+           return new AllExerciseResponseDto
+            {
+                Id = exercise.Id,
+                Name = exercise.PersianName,
+                ImageLink = exercise.ImageLink,
+                Locations = exercise.Locations.Select(x => x.ToString()).ToList(),
+                Muscles = exercise.ExerciseCategories.Select(x => x.ToString()).ToList(),
+                Equipment = exercise.Equipment.Select(x => x.ToString()).ToList(),
+                ExerciseCategories = exercise.ExerciseCategories.Select(x => x.ToString()).ToList(),
+                Level = exercise.ExerciseLevel.ToString()
+            };
+
         }
     }
 }

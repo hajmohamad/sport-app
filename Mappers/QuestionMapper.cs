@@ -1,5 +1,7 @@
 ﻿using sport_app_backend.Dtos;
+using sport_app_backend.Models;
 using sport_app_backend.Models.Account;
+using sport_app_backend.Models.C_Question;
 using sport_app_backend.Models.Question.A_Question;
 
 namespace sport_app_backend.Mappers
@@ -60,6 +62,26 @@ namespace sport_app_backend.Mappers
                 InjuryArea = question.InjuryArea?.ToInjuryAreaDto(),
                 ExerciseGoal = question.ExerciseGoal.ToString()??"",
                 CurrentWeight = question.Weight
+            };
+        }
+
+        public static CoachQuestion ToCoachQuestion(this CoachQuestionDto coachQuestionDto,User user)
+        {
+            return new CoachQuestion()
+            {
+                UserId = user.Id,
+                User = user,
+                Disciplines = coachQuestionDto.Disciplines
+                    .Select(x => (CoachDispline)Enum.Parse(typeof(CoachDispline), x.ToUpper())).ToList(),
+                Motivations = coachQuestionDto.Motivations
+                    .Select(x => (CoachingMotivation)Enum.Parse(typeof(CoachingMotivation), x.ToUpper())).ToList(),
+                WorkOnlineWithAthletes = coachQuestionDto.WorkOnlineWithAthletes,
+                PresentsPracticeProgram = coachQuestionDto.PresentsPracticeProgram.Select(x =>
+                    (PresentPracticeProgram)Enum.Parse(typeof(PresentPracticeProgram), x.ToUpper())).ToList(),
+                TrackAthlete = Enum.Parse<TrackAthlete>(coachQuestionDto.TrackAthlete),
+                ManagingRevenue = coachQuestionDto.ManagingRevenue,
+                DifficultTrackAthletes = coachQuestionDto.DifficultTrackAthletes,
+                HardCommunicationWithAthletes = coachQuestionDto.HardCommunicationWithAthletes
             };
         }
     }

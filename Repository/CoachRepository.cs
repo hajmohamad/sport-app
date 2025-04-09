@@ -40,19 +40,7 @@ namespace sport_app_backend.Repository
             if (coach == null) return new ApiResponse() { Message = "User is not a coach", Action = false };// Ensure the user is a coach
             user.FirstName=coachQuestionDto.FirstName;
             user.LastName=coachQuestionDto.LastName;
-            var coachQuestion = new CoachQuestion
-            {
-                UserId = user.Id,
-                User = user,
-                Disciplines = coachQuestionDto.Disciplines,
-                Motivations = coachQuestionDto.Motivations,
-                WorkOnlineWithAthletes = coachQuestionDto.WorkOnlineWithAthletes,
-                PresentsPracticeProgram = coachQuestionDto.PresentsPracticeProgram,
-                TrackAthlete = coachQuestionDto.TrackAthlete,
-                ManagingRevenue = coachQuestionDto.ManagingRevenue,
-                DifficultTrackAthletes = coachQuestionDto.DifficultTrackAthletes,
-                HardCommunicationWithAthletes = coachQuestionDto.HardCommunicationWithAthletes
-            };
+            var coachQuestion = coachQuestionDto.ToCoachQuestion(user);
             coach.CoachQuestion = coachQuestion;
             context.CoachQuestions.Add(coachQuestion);
             await context.SaveChangesAsync();
@@ -148,21 +136,19 @@ namespace sport_app_backend.Repository
                 Action = true,
                 Result = payment.ToPaymentResponseDto()
             };
-            
-            
-            
 
         }
 
-        public async Task<ApiResponse> GetAllExercise()
+
+
+        public async Task<ApiResponse> GetExercises()
         {
             var exercise = await context.Exercises.ToListAsync();
-            
             return new ApiResponse()
             {
                 Message = "Exercises found",
                 Action = true,
-                Result = exercise
+                Result = exercise.Select(x=>x.ToAllExerciseResponseDto())
             };
         }
     }

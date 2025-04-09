@@ -133,7 +133,7 @@ namespace sport_app_backend.Controller
         [HttpGet("get_Exercises")]
         public async Task<IActionResult> GetExercises()
         {
-            var result = await _coachRepository.GetAllExercise();
+            var result = await _coachRepository.GetExercises();
             if (result.Action != true) return BadRequest(result);
             return Ok(result);
             

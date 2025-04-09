@@ -11,21 +11,18 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="595b416c-ddc9-4b4e-96cb-8d4a5fa14b1b" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Dtos/AllExerciseResponseDto.cs" afterDir="false" />
+    <list default="true" id="595b416c-ddc9-4b4e-96cb-8d4a5fa14b1b" name="Changes" comment="add migrations">
+      <change afterPath="$PROJECT_DIR$/Models/Actions/Locations.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Controller/CoachController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Controller/CoachController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Controller/UserController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Controller/UserController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dtos/AddRoleResponse.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Dtos/AddRoleResponse.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dtos/CheckCodeResponseDto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Dtos/CheckCodeResponseDto.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Interface/ICoachRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Interface/ICoachRepository.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Migrations/20250408083333_updateexe.Designer.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Migrations/20250408083333_updateexe.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dtos/AddExercisesRequestDto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Dtos/AddExercisesRequestDto.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dtos/AllExerciseResponseDto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Dtos/AllExerciseResponseDto.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Mappers/ExercisesMappers.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Mappers/ExercisesMappers.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Migrations/20250408095930_ini.Designer.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Migrations/20250408095930_ini.cs" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/Migrations/ApplicationDbContextModelSnapshot.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Repository/AthleteRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Repository/AthleteRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Models/Actions/Exercise.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/Actions/Exercise.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Repository/CoachRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Repository/CoachRepository.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Repository/UserRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Repository/UserRepository.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sport-app-backend.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/sport-app-backend.csproj" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -71,20 +68,41 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;com.codeium.enabled&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    ".NET Project.Unnamed.executor": "Debug",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "com.codeium.enabled": "true",
+    "git-widget-placeholder": "master",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
+  <component name="RunManager">
+    <configuration name="Unnamed" type="DotNetProject" factoryName=".NET Project" nameIsGenerated="true">
+      <option name="EXE_PATH" value="$PROJECT_DIR$/bin/Debug/net8.0/sport-app-backend.exe" />
+      <option name="PROGRAM_PARAMETERS" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="PASS_PARENT_ENVS" value="1" />
+      <option name="USE_EXTERNAL_CONSOLE" value="0" />
+      <option name="USE_MONO" value="0" />
+      <option name="RUNTIME_ARGUMENTS" value="" />
+      <option name="PROJECT_PATH" value="$PROJECT_DIR$/sport-app-backend.csproj" />
+      <option name="PROJECT_EXE_PATH_TRACKING" value="1" />
+      <option name="PROJECT_ARGUMENTS_TRACKING" value="1" />
+      <option name="PROJECT_WORKING_DIRECTORY_TRACKING" value="1" />
+      <option name="PROJECT_KIND" value="DotNetCore" />
+      <option name="PROJECT_TFM" value="net8.0" />
+      <method v="2">
+        <option name="Build" />
+      </method>
+    </configuration>
+  </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
@@ -94,8 +112,26 @@
       <option name="presentableId" value="Default" />
       <updated>1744106134118</updated>
       <workItem from="1744106138743" duration="2875000" />
-      <workItem from="1744142433700" duration="1986000" />
+      <workItem from="1744142433700" duration="2178000" />
+      <workItem from="1744193159785" duration="4419000" />
     </task>
+    <task id="LOCAL-00001" summary="edit role method">
+      <option name="closed" value="true" />
+      <created>1744144604253</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1744144604253</updated>
+    </task>
+    <task id="LOCAL-00002" summary="add migrations">
+      <option name="closed" value="true" />
+      <created>1744144626675</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1744144626675</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -104,6 +140,8 @@
   <component name="UnityCheckinConfiguration" checkUnsavedScenes="false" />
   <component name="UnityProjectConfiguration" hasMinimizedUI="false" />
   <component name="VcsManagerConfiguration">
-    <option name="LAST_COMMIT_MESSAGE" value="" />
+    <MESSAGE value="edit role method" />
+    <MESSAGE value="add migrations" />
+    <option name="LAST_COMMIT_MESSAGE" value="add migrations" />
   </component>
 </project>
