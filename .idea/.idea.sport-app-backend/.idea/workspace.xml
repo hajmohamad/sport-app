@@ -12,17 +12,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="595b416c-ddc9-4b4e-96cb-8d4a5fa14b1b" name="Changes" comment="add migrations">
-      <change afterPath="$PROJECT_DIR$/Models/Actions/Locations.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Controller/CoachController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Controller/CoachController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dtos/AddExercisesRequestDto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Dtos/AddExercisesRequestDto.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dtos/AllExerciseResponseDto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Dtos/AllExerciseResponseDto.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Mappers/ExercisesMappers.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Mappers/ExercisesMappers.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Migrations/20250408095930_ini.Designer.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Migrations/20250408095930_ini.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Migrations/ApplicationDbContextModelSnapshot.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Models/Actions/Exercise.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/Actions/Exercise.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Repository/CoachRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Repository/CoachRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/Dockerfile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/appsettings.json" beforeDir="false" afterPath="$PROJECT_DIR$/appsettings.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -70,7 +62,7 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
-    ".NET Project.Unnamed.executor": "Debug",
+    ".NET Project.Unnamed.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
     "com.codeium.enabled": "true",
@@ -114,6 +106,7 @@
       <workItem from="1744106138743" duration="2875000" />
       <workItem from="1744142433700" duration="2178000" />
       <workItem from="1744193159785" duration="4419000" />
+      <workItem from="1744292826861" duration="538000" />
     </task>
     <task id="LOCAL-00001" summary="edit role method">
       <option name="closed" value="true" />
