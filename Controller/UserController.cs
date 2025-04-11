@@ -31,7 +31,7 @@ public class UserController(IUserRepository userRepository) : ControllerBase
         return await _userRepository.Login(userPhoneNumber);
     }
 
-    [HttpPut("add_role")]
+    [HttpPut("addRoleGender")]
     [Authorize(Roles = "None")]
     public async Task<IActionResult> AddRoleGender([FromBody] RoleGenderDto roleGenderDto)
     {
