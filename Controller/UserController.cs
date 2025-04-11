@@ -31,7 +31,7 @@ public class UserController(IUserRepository userRepository) : ControllerBase
         return await _userRepository.Login(userPhoneNumber);
     }
 
-    [HttpPut("add role")]
+    [HttpPut("add_role")]
     [Authorize(Roles = "None")]
     public async Task<IActionResult> AddRoleGender([FromBody] RoleGenderDto roleGenderDto)
     {
@@ -47,7 +47,7 @@ public class UserController(IUserRepository userRepository) : ControllerBase
     }
     
     //add username
-    [HttpPut("add username")]
+    [HttpPut("add_username")]
     [Authorize(Roles = "Athlete,Coach")]
     public async Task<IActionResult> AddUsername([FromBody] string username)
     {
