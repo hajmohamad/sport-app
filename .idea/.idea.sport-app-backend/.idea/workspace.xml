@@ -11,9 +11,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="595b416c-ddc9-4b4e-96cb-8d4a5fa14b1b" name="Changes" comment="add migrations">
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/workspace.xml" afterDir="false" />
-    </list>
+    <list default="true" id="595b416c-ddc9-4b4e-96cb-8d4a5fa14b1b" name="Changes" comment="change add role method name" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -31,26 +29,16 @@
     &quot;assignee&quot;: &quot;hajmohamad&quot;
   }
 }</component>
-  <component name="GithubPullRequestsUISettings">{
-  &quot;selectedUrlAndAccountId&quot;: {
-    &quot;url&quot;: &quot;https://github.com/charset-project/sport-app.git&quot;,
-    &quot;accountId&quot;: &quot;712a800a-bc64-4cd0-a0e6-9733590ccd29&quot;
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "https://github.com/charset-project/sport-app.git",
+    "accountId": "846913ca-618f-45d0-bb14-fe6c59bb4659"
   }
-}</component>
+}]]></component>
   <component name="HighlightingSettingsPerFile">
-    <setting file="mock://D:/403-1/es-402/sport-app/Repository/CoachRepository.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock://D:/403-1/es-402/sport-app/Repository/CoachRepository.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock://D:/403-1/es-402/sport-app/Repository/UserRepository.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock://D:/403-1/es-402/sport-app/Repository/UserRepository.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock://D:/403-1/es-402/sport-app/Repository/UserRepository.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock://D:/403-1/es-402/sport-app/Repository/UserRepository.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock://D:/403-1/es-402/sport-app/Repository/UserRepository.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock://D:/403-1/es-402/sport-app/Repository/UserRepository.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock://D:/403-1/es-402/sport-app/Repository/UserRepository.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock://D:/403-1/es-402/sport-app/Repository/UserRepository.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock://D:/403-1/es-402/sport-app/Repository/UserRepository.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock://D:/403-1/es-402/sport-app/Repository/UserRepository.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock://D:/403-1/es-402/sport-app/Repository/UserRepository.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$USER_HOME$/AppData/Local/Temp/Rar$DIa8648.12937.rartemp/UserController.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/403-1/es-402/sport-app/Controller/UserController.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/403-1/es-402/sport-app/Controller/UserController.cs" root0="SKIP_HIGHLIGHTING" />
   </component>
   <component name="MetaFilesCheckinStateConfiguration" checkMetaFiles="false" />
   <component name="ProjectColorInfo">{
@@ -61,21 +49,22 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;.NET Project.Unnamed.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;com.codeium.enabled&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    ".NET Project.Unnamed.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "com.codeium.enabled": "true",
+    "git-widget-placeholder": "master",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "org.jetbrains.plugins.github.ui.GithubSettingsConfigurable",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RunManager">
     <configuration name="Unnamed" type="DotNetProject" factoryName=".NET Project" nameIsGenerated="true">
       <option name="EXE_PATH" value="$PROJECT_DIR$/bin/Debug/net8.0/sport-app-backend.exe" />
@@ -110,6 +99,7 @@
       <workItem from="1744292826861" duration="538000" />
       <workItem from="1744388282621" duration="1324000" />
       <workItem from="1744398678291" duration="750000" />
+      <workItem from="1744403729090" duration="1098000" />
     </task>
     <task id="LOCAL-00001" summary="edit role method">
       <option name="closed" value="true" />
@@ -127,7 +117,23 @@
       <option name="project" value="LOCAL" />
       <updated>1744144626675</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="change add role method name">
+      <option name="closed" value="true" />
+      <created>1744404475536</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1744404475536</updated>
+    </task>
+    <task id="LOCAL-00004" summary="change add role method name">
+      <option name="closed" value="true" />
+      <created>1744404647650</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1744404647650</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -138,6 +144,7 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="edit role method" />
     <MESSAGE value="add migrations" />
-    <option name="LAST_COMMIT_MESSAGE" value="add migrations" />
+    <MESSAGE value="change add role method name" />
+    <option name="LAST_COMMIT_MESSAGE" value="change add role method name" />
   </component>
 </project>

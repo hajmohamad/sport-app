@@ -42,7 +42,7 @@ namespace sport_app_backend.Repository
             user.LastName=coachQuestionDto.LastName;
             var coachQuestion = coachQuestionDto.ToCoachQuestion(user);
             coach.CoachQuestion = coachQuestion;
-            context.CoachQuestions.Add(coachQuestion);
+            await context.CoachQuestions.AddAsync(coachQuestion);
             await context.SaveChangesAsync();
             return new ApiResponse()
             {

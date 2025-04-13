@@ -22,21 +22,17 @@ namespace sport_app_backend.Controller
         private readonly ICoachRepository _coachRepository = coachRepository;
 
 
-        [HttpPost("CoachQuastions")]
+        [HttpPost("CoachQuestions")]
         [Authorize(Roles = "Coach")]
-        public async Task<IActionResult> SubmitCoachQuastions([FromBody] CoachQuestionDto coachQuestionDto)
+        public async Task<IActionResult> SubmitCoachQuestions([FromBody] CoachQuestionDto coachQuestionDto)
         {
             var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
             if (phoneNumber is null) return BadRequest("PhoneNumber is null");
 
             var result = await _coachRepository.SubmitCoachQuestions(phoneNumber, coachQuestionDto);
-            if (!result.Action) return BadRequest("Failed to submit coach questions.");
+            if (!result.Action) return BadRequest(result);
 
-            return Ok(new
-            {
-                Message = "Coach questions submitted successfully",
-                Question = true
-            });
+            return Ok(result);
         }
 
 
@@ -50,7 +46,7 @@ namespace sport_app_backend.Controller
             var user = await _context.Users
                 .Include(u => u.Coach)
                 .FirstOrDefaultAsync(u => u.PhoneNumber == phoneNumber);
-            if (user == null || user.Coach == null) return NotFound(new ApiResponse { Action = false, Message = "Coach not found" });
+            if (user?.Coach == null) return NotFound(new ApiResponse { Action = false, Message = "Coach not found" });
 
             return Ok(new ApiResponse { Action = true, Message = "Coach found", Result = user.ToCoachProfileResponseDto() });
         }

@@ -21,7 +21,7 @@ namespace sport_app_backend.Controller
     public class AthleteController(IAthleteRepository athleteRepository, ApplicationDbContext context)
         : ControllerBase
     {
-        [HttpPost("add athlete question")]
+        [HttpPost("add_athlete_question")]
         [Authorize(Roles = "Athlete")]
 
         public async Task<IActionResult> AddAthleteQuestion([FromBody] AthleteQuestionDto athleteQuestionDto)

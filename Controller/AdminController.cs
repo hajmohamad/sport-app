@@ -24,7 +24,7 @@ namespace sport_app_backend.Controller
         {
             return Ok(await _adminRepository.AddExercises(exercises));
         }
-        [HttpPut("confirm transition id")]
+        [HttpPut("confirm_transition_id")]
         public async Task<IActionResult> ConfirmTransitionId([FromBody] string confirmTransitionIdDto)
         {
             var resualt = await _adminRepository.ConfirmTransitionId(confirmTransitionIdDto);
