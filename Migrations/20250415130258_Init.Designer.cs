@@ -11,7 +11,7 @@ using sport_app_backend.Data;
 namespace sport_app_backend.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250415113153_Init")]
+    [Migration("20250415130258_Init")]
     partial class Init
     {
         /// <inheritdoc />

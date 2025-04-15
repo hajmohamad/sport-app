@@ -13,36 +13,10 @@
   <component name="ChangeListManager">
     <list default="true" id="595b416c-ddc9-4b4e-96cb-8d4a5fa14b1b" name="Changes" comment="edit CoachQuestions">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Controller/AdminController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Controller/AdminController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Controller/AthleteController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Controller/AthleteController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Controller/CoachController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Controller/CoachController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Controller/UserController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Controller/UserController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Data/ApplicationDBContext.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Data/ApplicationDBContext.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dtos/AddCoachingPlaneDto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Dtos/AddCoachServiceDto.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dtos/AddRoleResponse.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Dtos/AddRoleResponse.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dtos/AllPaymentResponseDto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Dtos/AllPaymentResponseDto.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dtos/CoachProfileForAthleteDto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Dtos/CoachProfileForAthleteDto.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dtos/CoachingPlanResponse.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Dtos/CoachingServiceResponse.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Interface/IAthleteRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Interface/IAthleteRepository.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Interface/ICoachRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Interface/ICoachRepository.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Mappers/CoachMappers.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Mappers/CoachMappers.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Mappers/PaymentMappers.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Mappers/PaymentMappers.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Migrations/20250409110501_init.Designer.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Migrations/20250409110501_init.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/Dockerfile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Migrations/20250415113153_Init.Designer.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Migrations/20250415113153_Init.cs" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/Migrations/ApplicationDbContextModelSnapshot.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Models/Account/Coach/Coach.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/Account/Coach/Coach.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Models/Challenge_Achievement/ChallengeType.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/Challenge_Achievement/ChallengeType.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Models/Payments/Payment.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/Payments/Payment.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Models/Payments/PaymentStatus.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/Payments/PaymentStatus.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Models/Question/C_Question/PresentPracticeProgram .cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/Question/C_Question/PresentPracticeProgram .cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Models/TrainingPlan/Coachplan.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/TrainingPlan/CoachService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Models/TrainingPlan/TypeOfCoachingPlan.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/TrainingPlan/TypeOfCoachingServices.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Program.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Repository/AdminRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Repository/AdminRepository.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Repository/AthleteRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Repository/AthleteRepository.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Repository/CoachRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Repository/CoachRepository.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Repository/UserRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Repository/UserRepository.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/appsettings.Development.json" beforeDir="false" afterPath="$PROJECT_DIR$/appsettings.Development.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/appsettings.json" beforeDir="false" afterPath="$PROJECT_DIR$/appsettings.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -134,7 +108,7 @@
       <workItem from="1744398678291" duration="750000" />
       <workItem from="1744403729090" duration="1098000" />
       <workItem from="1744536463350" duration="3913000" />
-      <workItem from="1744715496870" duration="1167000" />
+      <workItem from="1744715496870" duration="6069000" />
     </task>
     <task id="LOCAL-00001" summary="edit role method">
       <option name="closed" value="true" />
