@@ -1,6 +1,6 @@
-namespace sport_app_backend.Models.TrainingPlan;
+namespace sport_app_backend.Models.TrainingService;
 
-public enum TypeOfCoachingPlan
+public enum TypeOfCoachingServices
 {
     Training,
     Analysis,  

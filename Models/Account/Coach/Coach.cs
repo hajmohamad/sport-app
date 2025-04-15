@@ -22,7 +22,7 @@ public class Coach
     public List<CoachingDomain>? Domain { get; set; }
 
     public int StartCoachingYear { get; set; }
-    public List<CoachPlan> CoachingPlans { get; set; } = [];
+    public List<CoachService> CoachingServices { get; set; } = [];
     public List<Payment>? Payments { get; set; } = [];
     public List<WorkoutProgram> WorkoutPrograms { get; set; } = [];
    

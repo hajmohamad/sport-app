@@ -1,37 +1,33 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using sport_app_backend.Data;
 using sport_app_backend.Dtos;
 using sport_app_backend.Interface;
 using sport_app_backend.Mappers;
 using sport_app_backend.Models;
-using sport_app_backend.Models.Account;
 using sport_app_backend.Models.Payments;
-using sport_app_backend.Models.TrainingPlan;
+
 
 namespace sport_app_backend.Repository
 {
     public class CoachRepository(ApplicationDbContext context) : ICoachRepository
     {
-        public async Task<ApiResponse> AddCoachingPlane(string phoneNumber, AddCoachingPlaneDto addCoachingPlaneDto)
+        public async Task<ApiResponse> AddCoachingServices(string phoneNumber, AddCoachServiceDto addCoachingServiceDto)
         {
          
-            var coach = await context.Coaches.Include(c => c.CoachingPlans).FirstOrDefaultAsync(c => c.PhoneNumber == phoneNumber);
+            var coach = await context.Coaches.Include(c => c.CoachingServices).FirstOrDefaultAsync(c => c.PhoneNumber == phoneNumber);
             if (coach is null) return new ApiResponse() { Message = "User is not a coach", Action = false };// Ensure the user is a coach
-            var coachingPlane = addCoachingPlaneDto.ToCoachPlane(coach);
-            coach.CoachingPlans ??= [];
-            coach.CoachingPlans.Add(coachingPlane);
-            context.CoachesPlan.Add(coachingPlane);
+            var coachingService = addCoachingServiceDto.ToCoachService(coach);
+            coach.CoachingServices ??= [];
+            coach.CoachingServices.Add(coachingService);
+            context.CoachServices.Add(coachingService);
             await context.SaveChangesAsync();
             return new ApiResponse()
             {
-                Message = "Coaching plane added successfully",
+                Message = "Coaching Service added successfully",
                 Action = true
                 
             };
         }
-        
-
         public async Task<ApiResponse> SubmitCoachQuestions(string phoneNumber, CoachQuestionDto coachQuestionDto)
         {  
             var user = await context.Users.FirstOrDefaultAsync(x => x.PhoneNumber == phoneNumber);
@@ -47,28 +43,33 @@ namespace sport_app_backend.Repository
             return new ApiResponse()
             {
                 Message = "Coach questions submitted successfully",
-                Action = true
+                Action = true,
+                Result=new
+                {
+                    Questions=true
+                }
+                
             };
         }
 
-        public async Task<ApiResponse> UpdateCoachingPlane(string phoneNumber,int id, AddCoachingPlaneDto addCoachingPlaneDto)
+        public async Task<ApiResponse> UpdateCoachingService(string phoneNumber,int id, AddCoachServiceDto addCoachingServices)
         {
 
-            var coach = await context.Coaches.Include(x=>x.CoachingPlans).FirstOrDefaultAsync(x=>x.PhoneNumber==phoneNumber);
+            var coach = await context.Coaches.Include(x=>x.CoachingServices).FirstOrDefaultAsync(x=>x.PhoneNumber==phoneNumber);
             if(coach is null) return new ApiResponse() { Message = "User is not a coach", Action = false };// Ensure the user is a coach
-            var coachingPlane = coach.CoachingPlans.FirstOrDefault(x => x.Id == id);
-            if (coachingPlane is null) return new ApiResponse() { Message = "Coaching plane not found", Action = false };
+            var coachingService = coach.CoachingServices.FirstOrDefault(x => x.Id == id);
+            if (coachingService is null) return new ApiResponse() { Message = "Coaching Service not found", Action = false };
 
-            var payments = context.Payments.Include(c=>c.CoachPlan).Where(c => c.Id == id).ToList();
+            var payments = context.Payments.Include(c=>c.CoachService).Where(c => c.Id == id).ToList();
             if(payments.Count != 0)
             {
-                coachingPlane.IsDeleted = true;
-                var newCoachPlan = addCoachingPlaneDto.ToCoachPlane(coach);
-                coach.CoachingPlans ??= [];
-                coach.CoachingPlans.Add(newCoachPlan);
-                context.CoachesPlan.Add(newCoachPlan);
+                coachingService.IsDeleted = true;
+                var newCoachService = addCoachingServices.ToCoachService(coach);
+                coach.CoachingServices ??= [];
+                coach.CoachingServices.Add(newCoachService);
+                context.CoachServices.Add(newCoachService);
             }else{
-                coachingPlane.UpdateCoachingPlane(addCoachingPlaneDto);
+                coachingService.UpdateCoachServices(addCoachingServices);
                 
                 
             }
@@ -76,26 +77,26 @@ namespace sport_app_backend.Repository
             await context.SaveChangesAsync();
             return new ApiResponse()
             {
-                Message = "Coaching plane updated successfully",
+                Message = "Coaching Service updated successfully",
                 Action = true,
-                Result = coachingPlane
+                Result = coachingService
             };
 
         }
 
-        public async Task<ApiResponse> DeleteCoachingPlane(string phoneNumber, int id)
+        public async Task<ApiResponse> DeleteCoachingService(string phoneNumber, int id)
         {
-            var coach = await context.Coaches.Include(x => x.CoachingPlans).FirstOrDefaultAsync(x => x.PhoneNumber == phoneNumber);
+            var coach = await context.Coaches.Include(x => x.CoachingServices).FirstOrDefaultAsync(x => x.PhoneNumber == phoneNumber);
             if (coach is null) return new ApiResponse() { Message = "User is not a coach", Action = false };// Ensure the user is a coach
-            var coachingPlane = coach.CoachingPlans.FirstOrDefault(x => x.Id == id);
-            if (coachingPlane is null) return new ApiResponse() { Message = "Coaching plane not found", Action = false };
-            coachingPlane.IsDeleted = true;
+            var coachingService = coach.CoachingServices.FirstOrDefault(x => x.Id == id);
+            if (coachingService is null) return new ApiResponse() { Message = "Coaching Service not found", Action = false };
+            coachingService.IsDeleted = true;
             await context.SaveChangesAsync();
             return new ApiResponse()
             {
-                Message = "Coaching plane deleted successfully",
+                Message = "Coaching Service deleted successfully",
                 Action = true,
-                Result = coachingPlane
+                Result = coachingService
             };
         }
 
@@ -105,7 +106,8 @@ namespace sport_app_backend.Repository
                 .Include(p => p.Coach)  
                 .ThenInclude(c => c!.User)  
                 .Include(p => p.Athlete)  
-                .ThenInclude(a => a!.User)  
+                .ThenInclude(a => a!.User)
+                .Include(p=>p.CoachService)
                 .Where(p => p.Coach != null && p.Coach.PhoneNumber == phoneNumber).ToListAsync();;
            
            

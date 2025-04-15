@@ -1,9 +1,5 @@
-using System;
-using System.Collections.Generic;
+
 using System.Globalization;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using sport_app_backend.Controller;
 using sport_app_backend.Data;
@@ -15,19 +11,15 @@ using sport_app_backend.Models.Account;
 using sport_app_backend.Models.Actions;
 using sport_app_backend.Models.Challenge_Achievement;
 using sport_app_backend.Models.Payments;
-using sport_app_backend.Models.Program;
-using sport_app_backend.Models.Question.A_Question;
 
 namespace sport_app_backend.Repository
 
 {
     public class AthleteRepository(ApplicationDbContext context) : IAthleteRepository
     {
-        private readonly ApplicationDbContext _context = context;
-
         public async Task<ApiResponse> ActivityReport(string phoneNumber)
         {
-            var athlete = await _context.Athletes.FirstOrDefaultAsync(x => x.PhoneNumber == phoneNumber);
+            var athlete = await context.Athletes.FirstOrDefaultAsync(x => x.PhoneNumber == phoneNumber);
             if (athlete is null)
                 return new ApiResponse() { Message = "User is not an athlete", Action = false };
 
@@ -35,7 +27,7 @@ namespace sport_app_backend.Repository
             var daysSinceSaturday = (int)today.DayOfWeek == 0 ? 6 : (int)today.DayOfWeek - 6;
             var lastSaturday = today.AddDays(daysSinceSaturday);
 
-            var activities = await _context.Activities
+            var activities = await context.Activities
                 .Where(x => x.AthleteId == athlete.Id && x.DateTime >= lastSaturday)
                 .ToListAsync();
 
@@ -58,10 +50,10 @@ namespace sport_app_backend.Repository
 
         public async Task<ApiResponse> AddActivity(string phoneNumber, AddActivityDto addSportDto)
         {
-            var athlete = await _context.Athletes.FirstOrDefaultAsync(x => x.PhoneNumber == phoneNumber);
+            var athlete = await context.Athletes.FirstOrDefaultAsync(x => x.PhoneNumber == phoneNumber);
             if (athlete is null) return new ApiResponse() { Message = "User is not an athlete", Action = false };// Ensure the user is an athlete
 
-            var sportEnum = Enum.Parse<ActivityCategory>(addSportDto.ActivityCategory);
+            var sportEnum = Enum.Parse<ActivityCategory>(addSportDto.ActivityCategory!);
 
             var sport = new Activitie()
             {
@@ -74,8 +66,8 @@ namespace sport_app_backend.Repository
                 DateTime = DateTime.Now
             };
 
-            await _context.Activities.AddAsync(sport);
-            await _context.SaveChangesAsync();
+            await context.Activities.AddAsync(sport);
+            await context.SaveChangesAsync();
 
             return new ApiResponse()
             {
@@ -97,7 +89,7 @@ namespace sport_app_backend.Repository
 
         public async Task<ApiResponse> AddWaterIntake(string phoneNumber, WaterInTakeDto waterInTakeDto)
         {
-            var athlete = await _context.Athletes.FirstOrDefaultAsync(x => x.PhoneNumber == phoneNumber);
+            var athlete = await context.Athletes.FirstOrDefaultAsync(x => x.PhoneNumber == phoneNumber);
             if (athlete is null) return new ApiResponse() { Message = "User is not an athlete", Action = false };// Ensure the user is an athlete
             var waterIntake = new WaterInTake
             {
@@ -108,22 +100,22 @@ namespace sport_app_backend.Repository
             };
             athlete.WaterInTake = waterIntake;
             //edit last water intake if it exists
-            var lastWaterIntake = await _context.WaterInTakes
+            var lastWaterIntake = await context.WaterInTakes
                 .Where(w => w.AthleteId == athlete.Id)
                 .FirstOrDefaultAsync();
             if (lastWaterIntake != null)
             {
                 lastWaterIntake.DailyCupOfWater = waterInTakeDto.DailyCupOfWater;
                 lastWaterIntake.Reminder = waterInTakeDto.Reminder;
-                _context.WaterInTakes.Update(lastWaterIntake);
+                context.WaterInTakes.Update(lastWaterIntake);
                 athlete.WaterInTake = lastWaterIntake; // Update the athlete's WaterInTake reference
             }
             else
             {
                 athlete.WaterInTake = waterIntake;
-                _context.WaterInTakes.Add(waterIntake);
+                context.WaterInTakes.Add(waterIntake);
             }
-            await _context.SaveChangesAsync();
+            await context.SaveChangesAsync();
             return new ApiResponse()
             {
                 Message = "WaterIntake added successfully",
@@ -131,30 +123,31 @@ namespace sport_app_backend.Repository
             };
         }
 
-        public async Task<ApiResponse> BuyCoachingPlan(string phoneNumber, int coachingPlanId)
+        public async Task<ApiResponse> BuyCoachingService(string phoneNumber, int coachingServiceId)
         {
-            var athlete = await _context.Athletes.Include(x=>x.AthleteQuestions).FirstOrDefaultAsync(x => x.PhoneNumber == phoneNumber);
+            var athlete = await context.Athletes.Include(x=>x.AthleteQuestions).FirstOrDefaultAsync(x => x.PhoneNumber == phoneNumber);
             if (athlete is null) return new ApiResponse() { Message = "User is not an athlete", Action = false };
             if(athlete.AthleteQuestions.Count==0 ) return new ApiResponse() { Message = "User has not completed the questions", Action = false };
-            var lastQuestion = athlete.AthleteQuestions?.LastOrDefault();
+            var lastQuestion = athlete.AthleteQuestions.LastOrDefault();
 
-            var coachPlan = await _context.CoachesPlan.Include(x=>x.Coach).FirstOrDefaultAsync(x => x.Id == coachingPlanId& x.IsActive==true);
-            if (coachPlan is null) return new ApiResponse() { Message = "CoachingPlan not found", Action = false };
-            if(coachPlan.IsDeleted==true) return new ApiResponse() { Message = "CoachingPlan is deleted", Action = false };
+            var coachService = await context.CoachServices.Include(x => x.Coach)
+                .FirstOrDefaultAsync(x => x.Id == coachingServiceId & x.IsActive == true);
+            if (coachService is null) return new ApiResponse() { Message = "CoachingService not found", Action = false };
+            if(coachService.IsDeleted) return new ApiResponse() { Message = "CoachingService is deleted", Action = false };
             var payment = new Payment()
             {
                 Athlete = athlete,
                 AthleteId = athlete.Id,
-                CoachPlan = coachPlan,
-                CoachPlanId = coachPlan.Id,
-                CoachId = coachPlan.CoachId,
-                Coach = coachPlan.Coach,
+                CoachService = coachService,
+                CoachServiceId = coachService.Id,
+                CoachId = coachService.CoachId,
+                Coach = coachService.Coach,
                 TransitionId = Guid.NewGuid().ToString(),
-                Amount = coachPlan.Price,
+                Amount = coachService.Price,
                 AthleteQuestion = lastQuestion
             };
-            await _context.Payments.AddAsync(payment);
-            await _context.SaveChangesAsync();
+            await context.Payments.AddAsync(payment);
+            await context.SaveChangesAsync();
             return new ApiResponse()
             {
                 Message = "Payment added successfully",
@@ -172,7 +165,7 @@ namespace sport_app_backend.Repository
 
         public async Task<ApiResponse> SearchCoaches(CoachNameSearchDto coachNameSearchDto)
         {
-            var coaches = await  _context.Users.Where(c=>(c.FirstName+" "+c.LastName).Contains(coachNameSearchDto.FullName)&&c.TypeOfUser==TypeOfUser.COACH).ToListAsync();
+            var coaches = await  context.Users.Where(c=>(c.FirstName+" "+c.LastName).Contains(coachNameSearchDto.FullName)&&c.TypeOfUser==TypeOfUser.COACH).ToListAsync();
             return new ApiResponse()
             {
                 Message = "Coaches found",
@@ -183,12 +176,12 @@ namespace sport_app_backend.Repository
 
         public async Task<ApiResponse> GetLastQuestion(string phoneNumber)
         {
-            var athlete = await _context.Athletes.FirstOrDefaultAsync(x => x.PhoneNumber == phoneNumber);
+            var athlete = await context.Athletes.FirstOrDefaultAsync(x => x.PhoneNumber == phoneNumber);
             if (athlete is null)
             {
                 return new ApiResponse() { Message = "User is not an athlete", Action = false };
             }
-            var lastQuestion = _context.AthleteQuestions
+            var lastQuestion = context.AthleteQuestions
                 .Where(q => q.AthleteId == athlete.Id).Include(i=>i.InjuryArea)
                 .OrderByDescending(q => q.CreatedAt)
                 .FirstOrDefault();
@@ -203,12 +196,12 @@ namespace sport_app_backend.Repository
         }
         public async Task<ApiResponse> DeleteActivity(string phoneNumber, int activityId)
         {
-            var athlete = await _context.Athletes.FirstOrDefaultAsync(x => x.PhoneNumber == phoneNumber);
+            var athlete = await context.Athletes.FirstOrDefaultAsync(x => x.PhoneNumber == phoneNumber);
             if (athlete is null) return new ApiResponse() { Message = "User is not an athlete", Action = false };// Ensure the user is an athlete
-            var activity = await _context.Activities.FirstOrDefaultAsync(x => x.Id == activityId && x.AthleteId == athlete.Id);
+            var activity = await context.Activities.FirstOrDefaultAsync(x => x.Id == activityId && x.AthleteId == athlete.Id);
             if (activity is null) return new ApiResponse() { Message = "Activity not found", Action = false };
-            _context.Activities.Remove(activity);
-            await _context.SaveChangesAsync();
+            context.Activities.Remove(activity);
+            await context.SaveChangesAsync();
             return new ApiResponse()
             {
                 Message = "Activity deleted successfully",
@@ -219,15 +212,15 @@ namespace sport_app_backend.Repository
 
         public async Task<ApiResponse> SubmitAthleteQuestions(string phoneNumber, AthleteQuestionDto athleteQuestionDto)
         {
-            var athlete = await _context.Athletes.Include(x => x.User).FirstOrDefaultAsync(x => x.PhoneNumber == phoneNumber);
+            var athlete = await context.Athletes.Include(x => x.User).FirstOrDefaultAsync(x => x.PhoneNumber == phoneNumber);
             if (athlete is null) return new ApiResponse() { Message = "User is not an athlete", Action = false };// Ensure the user is an athlete
             if (athlete.User is null) return new ApiResponse() { Message = "User not found", Action = false };
 
             var athleteQuestion = athleteQuestionDto.ToAthleteQuestion(athlete);
             athlete.AthleteQuestions.Add(athleteQuestion);
-           await _context.AthleteQuestions.AddAsync(athleteQuestion);
+           await context.AthleteQuestions.AddAsync(athleteQuestion);
 
-            await _context.SaveChangesAsync();
+            await context.SaveChangesAsync();
             return new ApiResponse()
             {
                 Message = "Athlete questions submitted successfully",
@@ -237,7 +230,7 @@ namespace sport_app_backend.Repository
         }
 
         public async Task<ApiResponse> AthleteFirstQuestions(string phoneNumber, AthleteFirstQuestionsDto athleteFirstQuestionsDto) {
-            var user = await _context.Users.Include(a=>a.Athlete).FirstOrDefaultAsync(x => x.PhoneNumber == phoneNumber);
+            var user = await context.Users.Include(a=>a.Athlete).FirstOrDefaultAsync(x => x.PhoneNumber == phoneNumber);
             if (user is null) return new ApiResponse() { Message = "User not found", Action = false };
             var athlete=user.Athlete;
             if (athlete is null) return new ApiResponse() { Message = "User is not an athlete", Action = false };// Ensure the user is an athlete
@@ -245,7 +238,7 @@ namespace sport_app_backend.Repository
             athlete.CurrentWeight = athleteFirstQuestionsDto.CurrentWeight;
             user.LastName=athleteFirstQuestionsDto.LastName;
             user.FirstName=athleteFirstQuestionsDto.FirstName;
-            await _context.SaveChangesAsync();
+            await context.SaveChangesAsync();
             return new ApiResponse()
             {
                 Message = "Athlete first questions submitted successfully",
@@ -259,14 +252,14 @@ namespace sport_app_backend.Repository
 
         public async Task<ApiResponse> UpdateWaterInDay(string phoneNumber)
         {
-            var athlete = _context.Athletes.FirstOrDefault(x => x.PhoneNumber == phoneNumber);
+            var athlete = context.Athletes.FirstOrDefault(x => x.PhoneNumber == phoneNumber);
             if (athlete is null) return new ApiResponse() { Message = "User is not athlete", Action = false };
-            var WaterInDay = await _context.WaterInDays
+            var waterInDay = await context.WaterInDays
                 .Where(w => w.AthleteId == athlete.Id && w.Date.Date == DateTime.Now.Date)
                 .FirstOrDefaultAsync();
-            if (WaterInDay is null)
+            if (waterInDay is null)
             {
-                var waterInDay = new WaterInDay
+                 waterInDay = new WaterInDay
                 {
                     AthleteId = athlete.Id,
                     Date = DateTime.Now.Date,
@@ -274,15 +267,15 @@ namespace sport_app_backend.Repository
                     NumberOfCupsDrinked = 1 // Initialize with 1 cup since it's the first entry for today
                 };
                 athlete.WaterInDays.Add(waterInDay); // Add the new WaterInDay to the athlete's collection
-                await _context.WaterInDays.AddAsync(waterInDay);
-                await _context.SaveChangesAsync();
+                await context.WaterInDays.AddAsync(waterInDay);
+                await context.SaveChangesAsync();
                 return new ApiResponse() { Message = "WaterInDay added successfully", Action = true };
             }
             else
             {
-                WaterInDay.NumberOfCupsDrinked += 1;
-                _context.WaterInDays.Update(WaterInDay);
-                await _context.SaveChangesAsync();
+                waterInDay.NumberOfCupsDrinked += 1;
+                context.WaterInDays.Update(waterInDay);
+                await context.SaveChangesAsync();
                 return new ApiResponse() { Message = "WaterInDay updated successfully", Action = true };
             }
         }
@@ -290,10 +283,10 @@ namespace sport_app_backend.Repository
         public async Task<ApiResponse> UpdateWeight(string phoneNumber, double weight)
         {
 
-            var athlete = _context.Athletes.FirstOrDefault(x => x.PhoneNumber == phoneNumber);
+            var athlete = context.Athletes.FirstOrDefault(x => x.PhoneNumber == phoneNumber);
             if (athlete is null) return new ApiResponse() { Message = "User is not an athlete", Action = false };// Ensure the user is an athlete
             athlete.CurrentWeight = weight;
-            var weightEntry = _context.WeightEntries.FirstOrDefault(x => x.AthleteId == athlete.Id && x.CurrentDate.Date == DateTime.Now.Date);
+            var weightEntry = context.WeightEntries.FirstOrDefault(x => x.AthleteId == athlete.Id && x.CurrentDate.Date == DateTime.Now.Date);
             if (weightEntry is null)
             {
                 weightEntry = new WeightEntry()
@@ -303,15 +296,15 @@ namespace sport_app_backend.Repository
                     CurrentDate = DateTime.Now,
                     Weight = weight
                 };
-                await _context.WeightEntries.AddAsync(weightEntry);
+                await context.WeightEntries.AddAsync(weightEntry);
                 athlete.WeightEntries.Add(weightEntry);
-                await _context.SaveChangesAsync();
+                await context.SaveChangesAsync();
             }
             else
             {
                 weightEntry.Weight = weight;
                 weightEntry.CurrentDate = DateTime.Now;
-                await _context.SaveChangesAsync();
+                await context.SaveChangesAsync();
 
             }
             return new ApiResponse()
@@ -324,7 +317,7 @@ namespace sport_app_backend.Repository
 
         public async Task<ApiResponse> WeightReport(string phoneNumber)
         {
-            var athlete = await _context.Athletes.FirstOrDefaultAsync(x => x.PhoneNumber == phoneNumber);
+            var athlete = await context.Athletes.FirstOrDefaultAsync(x => x.PhoneNumber == phoneNumber);
             if (athlete is null)
                 return new ApiResponse() { Message = "User is not an athlete", Action = false };
 
@@ -336,7 +329,7 @@ namespace sport_app_backend.Repository
             DateTime firstDayOfPersianMonth = pc.ToDateTime(persianYear, persianMonth, 1, 0, 0, 0, 0);
 
             // دریافت رکوردهای وزن از اول ماه شمسی تاکنون
-            var weightEntries = await _context.WeightEntries
+            var weightEntries = await context.WeightEntries
                 .Where(x => x.AthleteId == athlete.Id && x.CurrentDate >= firstDayOfPersianMonth)
                 .OrderByDescending(x => x.CurrentDate)
                 .ToListAsync();
@@ -356,11 +349,11 @@ namespace sport_app_backend.Repository
 
         public async Task<ApiResponse> CompleteNewChallenge(string phoneNumber, string challenge)
         {
-            var athlete = await _context.Athletes.FirstOrDefaultAsync(x => x.PhoneNumber == phoneNumber);
+            var athlete = await context.Athletes.FirstOrDefaultAsync(x => x.PhoneNumber == phoneNumber);
             if (athlete is null)
                 return new ApiResponse() { Message = "User is not an athlete", Action = false };
 
-            var challengeExists = _context.Challenges.Any(x => x.AthleteId == athlete.Id && x.ChallengeType.ToString() == challenge);
+            var challengeExists = context.Challenges.Any(x => x.AthleteId == athlete.Id && x.ChallengeType.ToString() == challenge);
             if (challengeExists)
                 return new ApiResponse() { Message = "Challenge already completed", Action = false };
 
@@ -371,8 +364,8 @@ namespace sport_app_backend.Repository
                 ChallengeType = Enum.Parse<ChallengeType>(challenge),
                 CompletedAt = DateTime.Now
             };
-            await _context.Challenges.AddAsync(chal);
-            await _context.SaveChangesAsync();
+            await context.Challenges.AddAsync(chal);
+            await context.SaveChangesAsync();
             return new ApiResponse()
             {
                 Message = "Challenge completed successfully",
@@ -382,11 +375,11 @@ namespace sport_app_backend.Repository
 
         public async Task<ApiResponse> CompletedChallenge(string phoneNumber)
         {
-            var athlete = await _context.Athletes.FirstOrDefaultAsync(x => x.PhoneNumber == phoneNumber);
+            var athlete = await context.Athletes.FirstOrDefaultAsync(x => x.PhoneNumber == phoneNumber);
             if (athlete is null)
                 return new ApiResponse() { Message = "User is not an athlete", Action = false };
 
-            var challenges = await _context.Challenges
+            var challenges = await context.Challenges
                 .Where(x => x.AthleteId == athlete.Id)
                 .ToListAsync();
 
@@ -400,24 +393,24 @@ namespace sport_app_backend.Repository
 
         public async Task<ApiResponse> GetAchievements(string phoneNumber)
         {
-            var athlete = await _context.Athletes.FirstOrDefaultAsync(x => x.PhoneNumber == phoneNumber);
+            var athlete = await context.Athletes.Include(athlete => athlete.WorkoutPrograms).FirstOrDefaultAsync(x => x.PhoneNumber == phoneNumber);
             if (athlete is null)
                 return new ApiResponse() { Message = "User is not an athlete", Action = false };
             
 
-            var challenges = await _context.Challenges.Where(c => c.AthleteId == athlete.Id).ToListAsync();
-            bool firstChallenge = challenges.Any();
-            bool challengeSeeker = challenges.Count() >= 5;
-            bool challengeMaster = challenges.Count() >= 12;
+            var challenges = await context.Challenges.Where(c => c.AthleteId == athlete.Id).ToListAsync();
+            var firstChallenge = challenges.Count != 0;
+            var challengeSeeker = challenges.Count >= 5;
+            var challengeMaster = challenges.Count >= 12;
 
-            var activities = await _context.Activities.Where(a => a.AthleteId == athlete.Id).ToListAsync();
-            bool firstWorkout = activities.Any();
+            var activities = await context.Activities.Where(a => a.AthleteId == athlete.Id).ToListAsync();
+            var firstWorkout = activities.Count != 0;
             var workoutDays = activities.Select(a => a.DateTime.Date).Distinct().OrderBy(d => d).ToList();
-            bool consistentAthlete = HasConsecutiveDays(workoutDays, 7);
-            bool oneMonthComplete = workoutDays.Count >= 30;
-            bool threeMonthsGolden = workoutDays.Count >= 90;
-            bool masterAthlete = workoutDays.Count >= 365;
-            bool firstProgramDone = athlete.WorkoutPrograms != null && athlete.WorkoutPrograms.Any(w => w.EndDate > DateTime.Now);
+            var consistentAthlete = HasConsecutiveDays(workoutDays, 7);
+            var oneMonthComplete = workoutDays.Count >= 30;
+            var threeMonthsGolden = workoutDays.Count >= 90;
+            var masterAthlete = workoutDays.Count >= 365;
+            var firstProgramDone = athlete.WorkoutPrograms.Any(w => w.EndDate > DateTime.Now);
 
             var achievements = new List<AchievementType>();
             if (firstWorkout)
@@ -448,13 +441,13 @@ namespace sport_app_backend.Repository
 
         }
 
-        private bool HasConsecutiveDays(List<DateTime> dates, int requiredConsecutive)
+        private static bool HasConsecutiveDays(List<DateTime> dates, int requiredConsecutive)
         {
-            if (dates == null || dates.Count == 0)
+            if (dates.Count == 0)
                 return false;
 
-            int consecutive = 1;
-            for (int i = 1; i < dates.Count; i++)
+            var consecutive = 1;
+            for (var i = 1; i < dates.Count; i++)
             {
                 if ((dates[i] - dates[i - 1]).Days == 1)
                 {

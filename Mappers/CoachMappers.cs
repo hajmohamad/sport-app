@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Identity;
 using sport_app_backend.Dtos;
 using sport_app_backend.Models.Account;
 using sport_app_backend.Models.Payments;
-using sport_app_backend.Models.TrainingPlan;
+using sport_app_backend.Models.TrainingService;
 
 namespace sport_app_backend.Mappers
 {
@@ -34,32 +34,32 @@ namespace sport_app_backend.Mappers
 
 
         }
-        public static CoachPlan ToCoachPlane(this AddCoachingPlaneDto coachPlaneDto,Coach coach)
+        public static CoachService ToCoachService(this AddCoachServiceDto coachServiceDto,Coach coach)
         {
-            return new CoachPlan{
+            return new CoachService{
                 Coach = coach,
                 CoachId = coach.Id,
-                Title = coachPlaneDto.Title,
-                Description = coachPlaneDto.Description,
-                Price = coachPlaneDto.Price,
-                IsActive = coachPlaneDto.IsActive,
-                HaveSupport = coachPlaneDto.HaveSupport,
-                CommunicateType = coachPlaneDto.CommunicateType,
-                TypeOfCoachingPlan = (TypeOfCoachingPlan)Enum.Parse(typeof(TypeOfCoachingPlan), coachPlaneDto.TypeOfCoachingPlan)
+                Title = coachServiceDto.Title,
+                Description = coachServiceDto.Description,
+                Price = coachServiceDto.Price,
+                IsActive = coachServiceDto.IsActive,
+                HaveSupport = coachServiceDto.HaveSupport,
+                CommunicateType = coachServiceDto.CommunicateType,
+                TypeOfCoachingServices = (TypeOfCoachingServices)Enum.Parse(typeof(TypeOfCoachingServices), coachServiceDto.TypeOfCoachingServices)
             };
         }
 
-        public static CoachPlan UpdateCoachingPlane(this CoachPlan coachingPlane,AddCoachingPlaneDto coachPlaneDto)
+        public static CoachService UpdateCoachServices(this CoachService coachService,AddCoachServiceDto coachServiceDto)
         {
-            coachingPlane.Title = coachPlaneDto.Title;
-            coachingPlane.Description = coachPlaneDto.Description;
-            coachingPlane.Price = coachPlaneDto.Price;
-            coachingPlane.IsActive = coachPlaneDto.IsActive;
-            coachingPlane.HaveSupport = coachPlaneDto.HaveSupport;
-            coachingPlane.CommunicateType = coachPlaneDto.CommunicateType;
-            coachingPlane.TypeOfCoachingPlan =
-                (TypeOfCoachingPlan)Enum.Parse(typeof(TypeOfCoachingPlan), coachPlaneDto.TypeOfCoachingPlan);
-            return coachingPlane;
+            coachService.Title = coachServiceDto.Title;
+            coachService.Description = coachServiceDto.Description;
+            coachService.Price = coachServiceDto.Price;
+            coachService.IsActive = coachServiceDto.IsActive;
+            coachService.HaveSupport = coachServiceDto.HaveSupport;
+            coachService.CommunicateType = coachServiceDto.CommunicateType;
+            coachService.TypeOfCoachingServices =
+                (TypeOfCoachingServices)Enum.Parse(typeof(TypeOfCoachingServices), coachServiceDto.TypeOfCoachingServices);
+            return coachService;
 
         }
         public static CoachForSearch ToCoachForSearch(this User user)
@@ -93,25 +93,25 @@ namespace sport_app_backend.Mappers
                 Bio = coach.User?.Bio ?? [],
                 Domain = coach.Domain?.Select(x => x.ToString()).ToList() ?? new List<string>(), // Ensure it's not null
                 StartCoachingYear = coach.StartCoachingYear,
-                Coachplans = coach.CoachingPlans.Where(x=>!x.IsDeleted)?.Select(x => x.ToCoachingPlanResponse()).ToList() ?? new List<CoachingPlanResponse>()
+                CoachServices = coach.CoachingServices.Where(x=>!x.IsDeleted)?.Select(x => x.ToCoachingServiceResponse()).ToList() ?? new List<CoachingServiceResponse>()
             };
         }
 
 
 
 
-        public static CoachingPlanResponse ToCoachingPlanResponse(this CoachPlan coachPlan)
+        public static CoachingServiceResponse ToCoachingServiceResponse(this CoachService coachService)
         {
-            return new CoachingPlanResponse
+            return new CoachingServiceResponse
             {
-                Id = coachPlan.Id,
-                Title = coachPlan.Title,
-                Description = coachPlan.Description,
-                Price = coachPlan.Price,
-                IsActive = coachPlan.IsActive,
-                HaveSupport = coachPlan.HaveSupport,
-                CommunicateType = coachPlan.CommunicateType,
-                TypeOfCoachingPlan = coachPlan.TypeOfCoachingPlan.ToString()
+                Id = coachService.Id,
+                Title = coachService.Title,
+                Description = coachService.Description,
+                Price = coachService.Price,
+                IsActive = coachService.IsActive,
+                HaveSupport = coachService.HaveSupport,
+                CommunicateType = coachService.CommunicateType,
+                
             };
         }
 

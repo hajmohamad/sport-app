@@ -11,7 +11,40 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="595b416c-ddc9-4b4e-96cb-8d4a5fa14b1b" name="Changes" comment="change add role method name" />
+    <list default="true" id="595b416c-ddc9-4b4e-96cb-8d4a5fa14b1b" name="Changes" comment="edit CoachQuestions">
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Controller/AdminController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Controller/AdminController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Controller/AthleteController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Controller/AthleteController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Controller/CoachController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Controller/CoachController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Controller/UserController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Controller/UserController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Data/ApplicationDBContext.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Data/ApplicationDBContext.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dtos/AddCoachingPlaneDto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Dtos/AddCoachServiceDto.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dtos/AddRoleResponse.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Dtos/AddRoleResponse.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dtos/AllPaymentResponseDto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Dtos/AllPaymentResponseDto.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dtos/CoachProfileForAthleteDto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Dtos/CoachProfileForAthleteDto.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dtos/CoachingPlanResponse.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Dtos/CoachingServiceResponse.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Interface/IAthleteRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Interface/IAthleteRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Interface/ICoachRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Interface/ICoachRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Mappers/CoachMappers.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Mappers/CoachMappers.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Mappers/PaymentMappers.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Mappers/PaymentMappers.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Migrations/20250409110501_init.Designer.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Migrations/20250409110501_init.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Migrations/ApplicationDbContextModelSnapshot.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Models/Account/Coach/Coach.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/Account/Coach/Coach.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Models/Challenge_Achievement/ChallengeType.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/Challenge_Achievement/ChallengeType.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Models/Payments/Payment.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/Payments/Payment.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Models/Payments/PaymentStatus.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/Payments/PaymentStatus.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Models/Question/C_Question/PresentPracticeProgram .cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/Question/C_Question/PresentPracticeProgram .cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Models/TrainingPlan/Coachplan.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/TrainingPlan/CoachService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Models/TrainingPlan/TypeOfCoachingPlan.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/TrainingPlan/TypeOfCoachingServices.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Program.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Repository/AdminRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Repository/AdminRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Repository/AthleteRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Repository/AthleteRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Repository/CoachRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Repository/CoachRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Repository/UserRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Repository/UserRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/appsettings.Development.json" beforeDir="false" afterPath="$PROJECT_DIR$/appsettings.Development.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/appsettings.json" beforeDir="false" afterPath="$PROJECT_DIR$/appsettings.json" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -29,12 +62,12 @@
     &quot;assignee&quot;: &quot;hajmohamad&quot;
   }
 }</component>
-  <component name="GithubPullRequestsUISettings"><![CDATA[{
-  "selectedUrlAndAccountId": {
-    "url": "https://github.com/charset-project/sport-app.git",
-    "accountId": "846913ca-618f-45d0-bb14-fe6c59bb4659"
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/charset-project/sport-app.git&quot;,
+    &quot;accountId&quot;: &quot;846913ca-618f-45d0-bb14-fe6c59bb4659&quot;
   }
-}]]></component>
+}</component>
   <component name="HighlightingSettingsPerFile">
     <setting file="file://$USER_HOME$/AppData/Local/Temp/Rar$DIa8648.12937.rartemp/UserController.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock://D:/403-1/es-402/sport-app/Controller/UserController.cs" root0="SKIP_HIGHLIGHTING" />
@@ -49,22 +82,22 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    ".NET Project.Unnamed.executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "com.codeium.enabled": "true",
-    "git-widget-placeholder": "master",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "org.jetbrains.plugins.github.ui.GithubSettingsConfigurable",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;.NET Project.Unnamed.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;com.codeium.enabled&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;org.jetbrains.plugins.github.ui.GithubSettingsConfigurable&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RunManager">
     <configuration name="Unnamed" type="DotNetProject" factoryName=".NET Project" nameIsGenerated="true">
       <option name="EXE_PATH" value="$PROJECT_DIR$/bin/Debug/net8.0/sport-app-backend.exe" />
@@ -100,6 +133,8 @@
       <workItem from="1744388282621" duration="1324000" />
       <workItem from="1744398678291" duration="750000" />
       <workItem from="1744403729090" duration="1098000" />
+      <workItem from="1744536463350" duration="3913000" />
+      <workItem from="1744715496870" duration="1167000" />
     </task>
     <task id="LOCAL-00001" summary="edit role method">
       <option name="closed" value="true" />
@@ -133,7 +168,15 @@
       <option name="project" value="LOCAL" />
       <updated>1744404647650</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="edit CoachQuestions">
+      <option name="closed" value="true" />
+      <created>1744542568451</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1744542568451</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -141,10 +184,22 @@
   </component>
   <component name="UnityCheckinConfiguration" checkUnsavedScenes="false" />
   <component name="UnityProjectConfiguration" hasMinimizedUI="false" />
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="edit role method" />
     <MESSAGE value="add migrations" />
     <MESSAGE value="change add role method name" />
-    <option name="LAST_COMMIT_MESSAGE" value="change add role method name" />
+    <MESSAGE value="edit CoachQuestions" />
+    <option name="LAST_COMMIT_MESSAGE" value="edit CoachQuestions" />
   </component>
 </project>

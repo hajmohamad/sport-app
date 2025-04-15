@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace sport_app_backend.Migrations
 {
     /// <inheritdoc />
-    public partial class init : Migration
+    public partial class Init : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -390,7 +390,7 @@ namespace sport_app_backend.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "CoachesPlan",
+                name: "CoachServices",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -403,17 +403,17 @@ namespace sport_app_backend.Migrations
                     Price = table.Column<double>(type: "double", nullable: false),
                     IsActive = table.Column<bool>(type: "tinyint(1)", nullable: false),
                     HaveSupport = table.Column<bool>(type: "tinyint(1)", nullable: false),
-                    CommunicateType = table.Column<string>(type: "longtext", nullable: false)
+                    CommunicateType = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     CreatedDate = table.Column<DateTime>(type: "date", nullable: false),
-                    TypeOfCoachingPlan = table.Column<int>(type: "int", nullable: false),
+                    TypeOfCoachingServices = table.Column<int>(type: "int", nullable: false),
                     IsDeleted = table.Column<bool>(type: "tinyint(1)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_CoachesPlan", x => x.Id);
+                    table.PrimaryKey("PK_CoachServices", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_CoachesPlan_Coaches_CoachId",
+                        name: "FK_CoachServices_Coaches_CoachId",
                         column: x => x.CoachId,
                         principalTable: "Coaches",
                         principalColumn: "Id",
@@ -430,7 +430,7 @@ namespace sport_app_backend.Migrations
                     AthleteId = table.Column<int>(type: "int", nullable: false),
                     CoachId = table.Column<int>(type: "int", nullable: false),
                     Amount = table.Column<double>(type: "double", nullable: false),
-                    CoachPlanId = table.Column<int>(type: "int", nullable: false),
+                    CoachServiceId = table.Column<int>(type: "int", nullable: false),
                     TransitionId = table.Column<string>(type: "varchar(30)", maxLength: 30, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     PaymentStatus = table.Column<int>(type: "int", nullable: false),
@@ -453,9 +453,9 @@ namespace sport_app_backend.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Payments_CoachesPlan_CoachPlanId",
-                        column: x => x.CoachPlanId,
-                        principalTable: "CoachesPlan",
+                        name: "FK_Payments_CoachServices_CoachServiceId",
+                        column: x => x.CoachServiceId,
+                        principalTable: "CoachServices",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
@@ -601,14 +601,14 @@ namespace sport_app_backend.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_CoachesPlan_CoachId",
-                table: "CoachesPlan",
-                column: "CoachId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_CoachQuestions_UserId",
                 table: "CoachQuestions",
                 column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CoachServices_CoachId",
+                table: "CoachServices",
+                column: "CoachId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_InjuryAreas_AthleteQuestionId",
@@ -632,9 +632,9 @@ namespace sport_app_backend.Migrations
                 column: "CoachId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Payments_CoachPlanId",
+                name: "IX_Payments_CoachServiceId",
                 table: "Payments",
-                column: "CoachPlanId");
+                column: "CoachServiceId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ProgramInDay_WorkoutProgramId",
@@ -735,7 +735,7 @@ namespace sport_app_backend.Migrations
                 name: "AthleteQuestions");
 
             migrationBuilder.DropTable(
-                name: "CoachesPlan");
+                name: "CoachServices");
 
             migrationBuilder.DropTable(
                 name: "Athletes");

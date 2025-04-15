@@ -23,7 +23,7 @@ namespace sport_app_backend.Dtos
 
         public int StartCoachingYear { get; set; }
 
-        public List<CoachingPlanResponse> Coachplans { get; set; } = [];
+        public List<CoachingServiceResponse> CoachServices { get; set; } = [];
 
     }
 }

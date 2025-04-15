@@ -21,9 +21,9 @@ namespace sport_app_backend.Interface
         public Task<ApiResponse> DeleteActivity(string phoneNumber,int activityId);
 
         public Task<ApiResponse> ActivityReport(string phoneNumber);
-        public Task<ApiResponse> BuyCoachingPlan(string phoneNumber,int coachingPlanId);
+        public Task<ApiResponse> BuyCoachingService(string phoneNumber,int coachingServiceId);
         public Task<ApiResponse> SearchCoaches(CoachNameSearchDto coachNameSearchDto);
-        public  Task<ApiResponse> GetLastQuestion(string phoneNumber);
+        public Task<ApiResponse> GetLastQuestion(string phoneNumber);
         public Task<ApiResponse> CompleteNewChallenge(string phoneNumber, string challenge);
         public Task<ApiResponse> CompletedChallenge(string phoneNumber);
         public Task<ApiResponse> GetAchievements(string phoneNumber);

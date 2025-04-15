@@ -1,34 +1,27 @@
-using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using sport_app_backend.Dtos;
 using sport_app_backend.Interface;
 using sport_app_backend.Models;
-using sport_app_backend.Models.Account;
 
 namespace sport_app_backend.Controller;
 [Route("api/[controller]")]
 [ApiController]
 public class UserController(IUserRepository userRepository) : ControllerBase
 
-{   
-    private readonly IUserRepository _userRepository = userRepository;
-   
-
-
+{
     [HttpPost("CheckCode")]
     public async Task<ApiResponse> CheckCode([FromBody] CheckCodeRequestDto checkCodeRequestDto)
     {
-        return await _userRepository.CheckCode(checkCodeRequestDto);
+        return await userRepository.CheckCode(checkCodeRequestDto);
     }
 
     ///Send code
     [HttpPost("SendCode")]
     public async Task<ApiResponse> SendCode([FromBody]string userPhoneNumber)
     {
-        return await _userRepository.Login(userPhoneNumber);
+        return await userRepository.Login(userPhoneNumber);
     }
 
     [HttpPut("addRoleGender")]
@@ -37,13 +30,13 @@ public class UserController(IUserRepository userRepository) : ControllerBase
     {
         var phoneNumber =  User.FindFirst(ClaimTypes.Name)?.Value;
         if (phoneNumber is null) return BadRequest("PhoneNumber is null");
-        return Ok(await _userRepository.AddRoleGender(phoneNumber, roleGenderDto));
+        return Ok(await userRepository.AddRoleGender(phoneNumber, roleGenderDto));
     }
 
     [HttpPost("AccessToken")]
     public async Task<IActionResult> AccessToken([FromBody] string refreshToken)
     {
-        return Ok(await _userRepository.GenerateAccessToken(refreshToken));
+        return Ok(await userRepository.GenerateAccessToken(refreshToken));
     }
     
     //add username
@@ -53,7 +46,7 @@ public class UserController(IUserRepository userRepository) : ControllerBase
     {
         var phoneNumber =  User.FindFirst(ClaimTypes.Name)?.Value;
         if (phoneNumber is null) return BadRequest("PhoneNumber is null");
-        var result = await _userRepository.AddUsername(phoneNumber, username);
+        var result = await userRepository.AddUsername(phoneNumber, username);
         if (!result.Action) return BadRequest(result);
         return Ok(result);
     }
@@ -64,7 +57,7 @@ public class UserController(IUserRepository userRepository) : ControllerBase
     {
         var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
         if (phoneNumber is null) return BadRequest("PhoneNumber is null");
-        var result = await _userRepository.EditUserProfile(phoneNumber, userProfileDto);
+        var result = await userRepository.EditUserProfile(phoneNumber, userProfileDto);
         if (!result.Action) return BadRequest(result);
         return Ok(result);
     }
@@ -75,7 +68,7 @@ public class UserController(IUserRepository userRepository) : ControllerBase
     {
         var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
         if (phoneNumber is null) return BadRequest("PhoneNumber is null");
-        var result = await _userRepository.GetUserProfileForEdit(phoneNumber);
+        var result = await userRepository.GetUserProfileForEdit(phoneNumber);
         if (!result.Action) return NotFound(result);
         return Ok(result);
     }
@@ -85,7 +78,7 @@ public class UserController(IUserRepository userRepository) : ControllerBase
     {
         var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
         if (phoneNumber is null) return BadRequest("PhoneNumber is null");
-        var result = await _userRepository.ReportApp(phoneNumber, reportAppDto);
+        var result = await userRepository.ReportApp(phoneNumber, reportAppDto);
         if (!result.Action) return BadRequest(result);
         return Ok(result);
     }
@@ -97,7 +90,7 @@ public class UserController(IUserRepository userRepository) : ControllerBase
     {
         var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
         if (phoneNumber is null) return BadRequest("PhoneNumber is null");
-        var result = await _userRepository.Logout(phoneNumber);
+        var result = await userRepository.Logout(phoneNumber);
         if (!result.Action) return NotFound(result);
         return Ok(result);
     }

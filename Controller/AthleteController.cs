@@ -1,8 +1,5 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
+
 using System.Security.Claims;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -113,14 +110,14 @@ namespace sport_app_backend.Controller
             var daysSinceSaturday = (int)today.DayOfWeek == 0 ? 6 : (int)today.DayOfWeek - 6;
             var lastSaturday = today.AddDays(daysSinceSaturday);
             if (athlete == null || athlete.Athlete == null) return NotFound("Athlete not found");
-            var ListOfWaterInDay = await context.WaterInDays.Where(w => w.AthleteId == athlete.Athlete.Id && w.Date.Date >= lastSaturday.Date)
+            var listOfWaterInDay = await context.WaterInDays.Where(w => w.AthleteId == athlete.Athlete.Id && w.Date.Date >= lastSaturday.Date)
                 .ToListAsync();
 
             return Ok(new ApiResponse()
             {
                 Action = true,
                 Message = "Water inday found",
-                Result = ListOfWaterInDay.Select(w => new WaterInDayDto()
+                Result = listOfWaterInDay.Select(w => new WaterInDayDto()
                 {
 
                     NumberOfCupsDrinked = w.NumberOfCupsDrinked,
@@ -166,7 +163,7 @@ namespace sport_app_backend.Controller
         [Authorize(Roles = "Athlete")]
         public async Task<IActionResult> GetCoachProfile([FromRoute] int coachId)
         {
-            var coach = await context.Coaches.Include(c => c.CoachingPlans).FirstOrDefaultAsync(c => c.Id == coachId);
+            var coach = await context.Coaches.Include(c => c.CoachingServices).FirstOrDefaultAsync(c => c.Id == coachId);
             if (coach == null) return BadRequest(new ApiResponse() { Action = false, Message = "Coach not found" });
 
             return Ok(new ApiResponse() { Action = true, Message = "Coach found", Result = coach.ToCoachProfileForAthleteDto() });
@@ -196,11 +193,11 @@ namespace sport_app_backend.Controller
 
         [HttpPost("add_Activity")]
         [Authorize(Roles = "Athlete")]
-        public async Task<IActionResult> AddActivity([FromBody] AddActivityDto AddActivityDto)
+        public async Task<IActionResult> AddActivity([FromBody] AddActivityDto addActivityDto)
         {
             var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
             if (phoneNumber is null) return BadRequest("PhoneNumber is null");
-            var result = await athleteRepository.AddActivity(phoneNumber, AddActivityDto);
+            var result = await athleteRepository.AddActivity(phoneNumber, addActivityDto);
             if (!result.Action) return BadRequest(result);
             return Ok(result);
         }
@@ -228,13 +225,13 @@ namespace sport_app_backend.Controller
         }
 
 
-        [HttpPost("buy_plan/{planId}")]
+        [HttpPost("buy_Service/{serviceId:int}")]
         [Authorize(Roles = "Athlete")]
-        public async Task<IActionResult> BuyCoachingPlan([FromRoute] int planId)
+        public async Task<IActionResult> BuyCoachingService([FromRoute] int serviceId)
         {
             var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
             if (phoneNumber is null) return BadRequest("PhoneNumber is null");
-            var result = await athleteRepository.BuyCoachingPlan(phoneNumber, planId);
+            var result = await athleteRepository.BuyCoachingService(phoneNumber, serviceId);
             if (!result.Action) return BadRequest(result);
             return Ok(result);
         }

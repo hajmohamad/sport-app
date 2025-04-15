@@ -2,7 +2,7 @@ namespace sport_app_backend.Models.Payments;
 
 public enum PaymentStatus
 {
-    SUCCESS,
+        SUCCESS,
     FAILED,
     INPROGRESS
 }

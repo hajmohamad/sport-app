@@ -12,12 +12,12 @@
         PullUp_10,              // 10 بارفیکس
 
 
-        Plank_30s,              // 30 ثانیه پلانک
-        Plank_1min,             // 1 دقیقه پلانک
-        Plank_2min,             // 2 دقیقه پلانک
-        Plank_3min,             // 3 دقیقه پلانک
-        Plank_4min,             // 4 دقیقه پلانک
-        Plank_5min,             // 5 دقیقه پلانک
+        Servicek_30s,              // 30 ثانیه پلانک
+        Servicek_1min,             // 1 دقیقه پلانک
+        Servicek_2min,             // 2 دقیقه پلانک
+        Servicek_3min,             // 3 دقیقه پلانک
+        Servicek_4min,             // 4 دقیقه پلانک
+        Servicek_5min,             // 5 دقیقه پلانک
 
 
         JumpRope_5min,          // 5 دقیقه طناب زدن بدون وقفه

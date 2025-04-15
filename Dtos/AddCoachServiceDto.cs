@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace sport_app_backend.Dtos
 {
-    public class AddCoachingPlaneDto
+    public class AddCoachServiceDto
     {
      public required string Title { get; set; }
     [MaxLength(500)]
@@ -15,6 +15,6 @@ namespace sport_app_backend.Dtos
     public bool IsActive { get; set; }
     public bool HaveSupport{get; set;}
     public string? CommunicateType{get; set;}
-    public required string TypeOfCoachingPlan { get; set; } 
+    public required string TypeOfCoachingServices { get; set; } 
     }
 }

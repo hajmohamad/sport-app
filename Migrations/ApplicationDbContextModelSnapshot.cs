@@ -92,7 +92,7 @@ namespace sport_app_backend.Migrations
                     b.ToTable("Coaches");
                 });
 
-            modelBuilder.Entity("sport_app_backend.Models.Account.CoachPlan", b =>
+            modelBuilder.Entity("sport_app_backend.Models.Account.CoachService", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -103,7 +103,8 @@ namespace sport_app_backend.Migrations
 
                     b.Property<string>("CommunicateType")
                         .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)");
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("date");
@@ -130,14 +131,14 @@ namespace sport_app_backend.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("varchar(50)");
 
-                    b.Property<int>("TypeOfCoachingPlan")
+                    b.Property<int>("TypeOfCoachingServices")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("CoachId");
 
-                    b.ToTable("CoachesPlan");
+                    b.ToTable("CoachServices");
                 });
 
             modelBuilder.Entity("sport_app_backend.Models.Account.User", b =>
@@ -414,7 +415,7 @@ namespace sport_app_backend.Migrations
                     b.Property<int>("CoachId")
                         .HasColumnType("int");
 
-                    b.Property<int>("CoachPlanId")
+                    b.Property<int>("CoachServiceId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("PaymentDate")
@@ -436,7 +437,7 @@ namespace sport_app_backend.Migrations
 
                     b.HasIndex("CoachId");
 
-                    b.HasIndex("CoachPlanId");
+                    b.HasIndex("CoachServiceId");
 
                     b.ToTable("Payments");
                 });
@@ -734,10 +735,10 @@ namespace sport_app_backend.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("sport_app_backend.Models.Account.CoachPlan", b =>
+            modelBuilder.Entity("sport_app_backend.Models.Account.CoachService", b =>
                 {
                     b.HasOne("sport_app_backend.Models.Account.Coach", "Coach")
-                        .WithMany("CoachingPlans")
+                        .WithMany("CoachingServices")
                         .HasForeignKey("CoachId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -809,9 +810,9 @@ namespace sport_app_backend.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("sport_app_backend.Models.Account.CoachPlan", "CoachPlan")
+                    b.HasOne("sport_app_backend.Models.Account.CoachService", "CoachService")
                         .WithMany()
-                        .HasForeignKey("CoachPlanId")
+                        .HasForeignKey("CoachServiceId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -821,7 +822,7 @@ namespace sport_app_backend.Migrations
 
                     b.Navigation("Coach");
 
-                    b.Navigation("CoachPlan");
+                    b.Navigation("CoachService");
                 });
 
             modelBuilder.Entity("sport_app_backend.Models.Program.ProgramInDay", b =>
@@ -953,7 +954,7 @@ namespace sport_app_backend.Migrations
 
             modelBuilder.Entity("sport_app_backend.Models.Account.Coach", b =>
                 {
-                    b.Navigation("CoachingPlans");
+                    b.Navigation("CoachingServices");
 
                     b.Navigation("Payments");
 

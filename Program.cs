@@ -46,10 +46,10 @@ builder.Services.AddSwaggerGen(option =>
     });
 });
 
-var ConnectionStrings = builder.Configuration.GetConnectionString("DefaultConnection");
+var connectionStrings = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
- options.UseMySql(ConnectionStrings,
-        ServerVersion.AutoDetect(ConnectionStrings)));
+ options.UseMySql(connectionStrings,
+        ServerVersion.AutoDetect(connectionStrings)));
 
 
 
@@ -77,7 +77,7 @@ options.TokenValidationParameters = new TokenValidationParameters
     ValidAudience = builder.Configuration["JWT:Audience"],
     ValidateIssuerSigningKey = true,
     IssuerSigningKey = new SymmetricSecurityKey(
-        System.Text.Encoding.UTF8.GetBytes(builder.Configuration["JWT:Signinkey"])
+        System.Text.Encoding.UTF8.GetBytes(builder.Configuration["JWT:SigningKey"] ?? string.Empty)
     )
 };
 });

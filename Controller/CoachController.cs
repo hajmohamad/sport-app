@@ -1,6 +1,4 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using sport_app_backend.Data;
@@ -8,8 +6,7 @@ using sport_app_backend.Dtos;
 using sport_app_backend.Interface;
 using sport_app_backend.Mappers;
 using sport_app_backend.Models;
-using sport_app_backend.Models.Account;
-using sport_app_backend.Repository;
+
 using System.Security.Claims;
 
 namespace sport_app_backend.Controller
@@ -51,55 +48,55 @@ namespace sport_app_backend.Controller
             return Ok(new ApiResponse { Action = true, Message = "Coach found", Result = user.ToCoachProfileResponseDto() });
         }
 
-        [HttpPost("add_coaching_plane")]
+        [HttpPost("add_coaching_Service")]
         [Authorize(Roles = "Coach")]
-        public async Task<IActionResult> AddCoachingPlane(AddCoachingPlaneDto coachingPlaneDto)
+        public async Task<IActionResult> AddCoachingService(AddCoachServiceDto coachingServiceDto)
         {
             var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
             if (phoneNumber is null) return BadRequest(new ApiResponse { Action = false, Message = "PhoneNumber is null" });
-            var result = await _coachRepository.AddCoachingPlane(phoneNumber, coachingPlaneDto);
+            var result = await _coachRepository.AddCoachingServices(phoneNumber, coachingServiceDto);
 
             if (result.Action) return Ok(result);
             else return BadRequest(result);
         }
 
-        ///edit coaching plane
-        [HttpPut("edit_coaching_plane/{id}")]
+        ///edit coaching Service
+        [HttpPut("edit_coaching_Service/{id}")]
         [Authorize(Roles = "Coach")]
 
-        public async Task<IActionResult> EditCoachingPlane([FromRoute] int id, AddCoachingPlaneDto coachingPlaneDto)
+        public async Task<IActionResult> EditCoachingService([FromRoute] int id, AddCoachServiceDto coachingServiceDto)
         {
             var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
             if (phoneNumber is null) return BadRequest(new ApiResponse { Action = false, Message = "PhoneNumber is null" });
-            var result = await _coachRepository.UpdateCoachingPlane(phoneNumber, id, coachingPlaneDto);
+            var result = await _coachRepository.UpdateCoachingService(phoneNumber, id, coachingServiceDto);
             if (result.Action != true) return BadRequest(result);
             return Ok(result);
         }
         
-        //delete coaching plane
-        [HttpDelete("delete_coaching_plane/{id}")]
+        //delete coaching Service
+        [HttpDelete("delete_coaching_Service/{id}")]
         [Authorize(Roles = "Coach")]
-        public async Task<IActionResult> DeleteCoachingPlane([FromRoute] int id)
+        public async Task<IActionResult> DeleteCoachingService([FromRoute] int id)
         {
             var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
             if (phoneNumber is null) return BadRequest(new ApiResponse { Action = false, Message = "PhoneNumber is null" });
-            var result = await _coachRepository.DeleteCoachingPlane(phoneNumber, id);
+            var result = await _coachRepository.DeleteCoachingService(phoneNumber, id);
             if (result.Action != true) return BadRequest(result);
             return Ok(result);
         }
 
-        /// get coaching plane
-        [HttpGet("get_coaching_plane")]
+        /// get coaching Service
+        [HttpGet("get_coaching_Service")]
         [Authorize(Roles = "Coach")]
-        public async Task<IActionResult> GetCoachingPlane()
+        public async Task<IActionResult> GetCoachingService()
         {
             var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
             if (phoneNumber is null) return BadRequest(new ApiResponse { Action = false, Message = "PhoneNumber is null" });
-            var coach = await _context.Coaches.Include(c => c.CoachingPlans).FirstOrDefaultAsync(c => c.PhoneNumber == phoneNumber);
+            var coach = await _context.Coaches.Include(c => c.CoachingServices).FirstOrDefaultAsync(c => c.PhoneNumber == phoneNumber);
             if (coach == null) return NotFound(new ApiResponse { Action = false, Message = "Coach not found" });
-            var coachingPlane = coach.CoachingPlans.Where(x=>x.IsDeleted==false).ToList();
-            var coachingPlaneDto = coachingPlane.Select(x => x.ToCoachingPlanResponse()).ToList();
-            return Ok(new ApiResponse { Action = true, Message = "Coaching plane found", Result = coachingPlaneDto });
+            var coachingService = coach.CoachingServices.Where(x=>x.IsDeleted==false).ToList();
+            var coachingServiceDto = coachingService.Select(x => x.ToCoachingServiceResponse()).ToList();
+            return Ok(new ApiResponse { Action = true, Message = "Coaching Service found", Result = coachingServiceDto });
 
         }
         

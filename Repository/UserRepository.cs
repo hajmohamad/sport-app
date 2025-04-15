@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using sport_app_backend.Data;
 using sport_app_backend.Dtos;
@@ -130,7 +129,7 @@ private async Task<ApiResponse> GenerateSuccessResponse(User user,bool question)
             RefreshToken = await tokenService.CreateRefreshToken(user),
             AccessToken = tokenService.CreateToken(user),
             TypeOfUser = user.TypeOfUser.ToString(),
-            Gender = user.Gender.ToString()?? "NONE" ,
+            Gender = user.Gender.ToString() ,
             Questions=question
         }
     };
@@ -166,15 +165,15 @@ private async Task<string> GenerateUniqueUsername()
 
 
 
-    public async Task<ApiResponse> Login(string UserPhoneNumber)
+    public async Task<ApiResponse> Login(string userPhoneNumber)
     {
-        var user = await dbContext.CodeVerifies.FirstOrDefaultAsync(x => x.PhoneNumber == UserPhoneNumber);
+        var user = await dbContext.CodeVerifies.FirstOrDefaultAsync(x => x.PhoneNumber == userPhoneNumber);
         if (user is null)
         {
             await dbContext.CodeVerifies.AddAsync(new CodeVerify()
             {
-                PhoneNumber = UserPhoneNumber,
-                Code = await sendVerifyCode.SendCode(UserPhoneNumber),
+                PhoneNumber = userPhoneNumber,
+                Code = await sendVerifyCode.SendCode(userPhoneNumber),
                 TimeCodeSend = DateTime.Now
             });
             await dbContext.SaveChangesAsync();
@@ -194,8 +193,8 @@ private async Task<string> GenerateUniqueUsername()
                 await dbContext.SaveChangesAsync();
                 await dbContext.CodeVerifies.AddAsync(new CodeVerify()
                 {
-                    PhoneNumber = UserPhoneNumber,
-                    Code = await sendVerifyCode.SendCode(UserPhoneNumber),
+                    PhoneNumber = userPhoneNumber,
+                    Code = await sendVerifyCode.SendCode(userPhoneNumber),
                     TimeCodeSend = DateTime.Now
                 });
                 await dbContext.SaveChangesAsync();

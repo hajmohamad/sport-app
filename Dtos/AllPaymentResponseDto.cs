@@ -9,4 +9,5 @@ public class AllPaymentResponseDto
     public required string DateTime { get; set; }
     public byte[] ImageProfile { get; set; }=[];
     public int PaymentId { get; set; }
+    public required string CoachServiceTitle { get; set; }
 }
