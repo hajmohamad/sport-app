@@ -8,6 +8,8 @@ using sport_app_backend.Mappers;
 using sport_app_backend.Models;
 
 using System.Security.Claims;
+using Microsoft.AspNetCore.Http.HttpResults;
+using sport_app_backend.Models.Program;
 
 namespace sport_app_backend.Controller
 {
@@ -15,10 +17,6 @@ namespace sport_app_backend.Controller
     [ApiController]
     public class CoachController(ICoachRepository coachRepository, ApplicationDbContext dbContext) : ControllerBase
     {
-        private readonly ApplicationDbContext _context = dbContext;
-        private readonly ICoachRepository _coachRepository = coachRepository;
-
-
         [HttpPost("CoachQuestions")]
         [Authorize(Roles = "Coach")]
         public async Task<IActionResult> SubmitCoachQuestions([FromBody] CoachQuestionDto coachQuestionDto)
@@ -26,7 +24,7 @@ namespace sport_app_backend.Controller
             var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
             if (phoneNumber is null) return BadRequest("PhoneNumber is null");
 
-            var result = await _coachRepository.SubmitCoachQuestions(phoneNumber, coachQuestionDto);
+            var result = await coachRepository.SubmitCoachQuestions(phoneNumber, coachQuestionDto);
             if (!result.Action) return BadRequest(result);
 
             return Ok(result);
@@ -39,13 +37,9 @@ namespace sport_app_backend.Controller
         {
             var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
             if (phoneNumber is null) return BadRequest(new ApiResponse { Action = false, Message = "PhoneNumber is null" });
-
-            var user = await _context.Users
-                .Include(u => u.Coach)
-                .FirstOrDefaultAsync(u => u.PhoneNumber == phoneNumber);
-            if (user?.Coach == null) return NotFound(new ApiResponse { Action = false, Message = "Coach not found" });
-
-            return Ok(new ApiResponse { Action = true, Message = "Coach found", Result = user.ToCoachProfileResponseDto() });
+            var result = await coachRepository.GetProfile(phoneNumber);
+            if (!result.Action) return BadRequest(result);
+            return Ok(result);
         }
 
         [HttpPost("add_coaching_Service")]
@@ -54,7 +48,7 @@ namespace sport_app_backend.Controller
         {
             var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
             if (phoneNumber is null) return BadRequest(new ApiResponse { Action = false, Message = "PhoneNumber is null" });
-            var result = await _coachRepository.AddCoachingServices(phoneNumber, coachingServiceDto);
+            var result = await coachRepository.AddCoachingServices(phoneNumber, coachingServiceDto);
 
             if (result.Action) return Ok(result);
             else return BadRequest(result);
@@ -68,7 +62,7 @@ namespace sport_app_backend.Controller
         {
             var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
             if (phoneNumber is null) return BadRequest(new ApiResponse { Action = false, Message = "PhoneNumber is null" });
-            var result = await _coachRepository.UpdateCoachingService(phoneNumber, id, coachingServiceDto);
+            var result = await coachRepository.UpdateCoachingService(phoneNumber, id, coachingServiceDto);
             if (result.Action != true) return BadRequest(result);
             return Ok(result);
         }
@@ -80,7 +74,7 @@ namespace sport_app_backend.Controller
         {
             var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
             if (phoneNumber is null) return BadRequest(new ApiResponse { Action = false, Message = "PhoneNumber is null" });
-            var result = await _coachRepository.DeleteCoachingService(phoneNumber, id);
+            var result = await coachRepository.DeleteCoachingService(phoneNumber, id);
             if (result.Action != true) return BadRequest(result);
             return Ok(result);
         }
@@ -92,7 +86,7 @@ namespace sport_app_backend.Controller
         {
             var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
             if (phoneNumber is null) return BadRequest(new ApiResponse { Action = false, Message = "PhoneNumber is null" });
-            var coach = await _context.Coaches.Include(c => c.CoachingServices).FirstOrDefaultAsync(c => c.PhoneNumber == phoneNumber);
+            var coach = await dbContext.Coaches.Include(c => c.CoachingServices).FirstOrDefaultAsync(c => c.PhoneNumber == phoneNumber);
             if (coach == null) return NotFound(new ApiResponse { Action = false, Message = "Coach not found" });
             var coachingService = coach.CoachingServices.Where(x=>x.IsDeleted==false).ToList();
             var coachingServiceDto = coachingService.Select(x => x.ToCoachingServiceResponse()).ToList();
@@ -107,7 +101,7 @@ namespace sport_app_backend.Controller
         {
             var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
             if (phoneNumber is null) return BadRequest(new ApiResponse { Action = false, Message = "PhoneNumber is null" });
-            var result = await _coachRepository.GetAllPayment(phoneNumber);
+            var result = await coachRepository.GetAllPayment(phoneNumber);
             if (result.Action != true) return BadRequest(result);
             return Ok(result);
         }
@@ -117,7 +111,7 @@ namespace sport_app_backend.Controller
         public async Task<IActionResult> GetPayment([FromRoute] int paymentId){
             var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
             if (phoneNumber is null) return BadRequest(new ApiResponse { Action = false, Message = "PhoneNumber is null" });
-            var result = await _coachRepository.GetPayment(phoneNumber, paymentId);
+            var result = await coachRepository.GetPayment(phoneNumber, paymentId);
             if (result.Action != true) return BadRequest(result);
             return Ok(result);
             
@@ -126,11 +120,13 @@ namespace sport_app_backend.Controller
         [HttpGet("get_Exercises")]
         public async Task<IActionResult> GetExercises()
         {
-            var result = await _coachRepository.GetExercises();
+            var result = await coachRepository.GetExercises();
             if (result.Action != true) return BadRequest(result);
             return Ok(result);
             
         }
+        
+        
 
     }
 }

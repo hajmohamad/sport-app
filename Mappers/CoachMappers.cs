@@ -13,27 +13,34 @@ namespace sport_app_backend.Mappers
 {
     public static class CoachMappers
     {
-        public static CoachProfileResponse ToCoachProfileResponseDto(this User user)
+        public static CoachProfileResponse ToCoachProfileResponseDto(this User user,List<CoachingServiceResponse> coachingServicesResponse,List<Payment> payments)
         {   
             
-            return new Dtos.CoachProfileResponse
+            return new CoachProfileResponse
             {
                 FirstName = user.FirstName ?? string.Empty,
                 LastName = user.LastName ?? string.Empty,
                 BirthDate = user.BirthDate.ToString("yyyy-MM-dd"),
                 PhoneNumber = user.PhoneNumber,
-                UserName= user.UserName ?? string.Empty,
+                UserName = user.UserName ?? string.Empty,
                 Id = user.Id,
                 Gender = user.Gender.ToString(),
                 ImageProfile = user.ImageProfile ?? Array.Empty<byte>(),
                 Bio = user.Bio ?? [],
-                Domain = user.Coach?.Domain?.Select(x => x.ToString()).ToList() ?? [], // Ensure it's not null
-                StartCoachingYear = user.Coach?.StartCoachingYear ?? default
+                Domain = user.Coach?.Domain?.Select(x => x.ToString())
+                             .ToList() ??
+                         [], // Ensure it's not null
+                StartCoachingYear = user.Coach?.StartCoachingYear ?? default,
+                CoachingServices = coachingServicesResponse,
+                Payments = payments.Select(p=>p.ToAllPaymentResponseDto()).ToList()
+                
             };
 
 
 
         }
+
+      
         public static CoachService ToCoachService(this AddCoachServiceDto coachServiceDto,Coach coach)
         {
             return new CoachService{
@@ -45,7 +52,7 @@ namespace sport_app_backend.Mappers
                 IsActive = coachServiceDto.IsActive,
                 HaveSupport = coachServiceDto.HaveSupport,
                 CommunicateType = coachServiceDto.CommunicateType,
-                TypeOfCoachingServices = (TypeOfCoachingServices)Enum.Parse(typeof(TypeOfCoachingServices), coachServiceDto.TypeOfCoachingServices)
+                // TypeOfCoachingServices = (TypeOfCoachingServices)Enum.Parse(typeof(TypeOfCoachingServices), coachServiceDto.TypeOfCoachingServices)
             };
         }
 
@@ -57,8 +64,8 @@ namespace sport_app_backend.Mappers
             coachService.IsActive = coachServiceDto.IsActive;
             coachService.HaveSupport = coachServiceDto.HaveSupport;
             coachService.CommunicateType = coachServiceDto.CommunicateType;
-            coachService.TypeOfCoachingServices =
-                (TypeOfCoachingServices)Enum.Parse(typeof(TypeOfCoachingServices), coachServiceDto.TypeOfCoachingServices);
+            //coachService.TypeOfCoachingServices =
+           //(TypeOfCoachingServices)Enum.Parse(typeof(TypeOfCoachingServices), coachServiceDto.TypeOfCoachingServices);
             return coachService;
 
         }

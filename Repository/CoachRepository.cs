@@ -5,6 +5,7 @@ using sport_app_backend.Interface;
 using sport_app_backend.Mappers;
 using sport_app_backend.Models;
 using sport_app_backend.Models.Payments;
+using sport_app_backend.Models.Program;
 
 
 namespace sport_app_backend.Repository
@@ -79,7 +80,7 @@ namespace sport_app_backend.Repository
             {
                 Message = "Coaching Service updated successfully",
                 Action = true,
-                Result = coachingService
+                Result = coachingService.ToCoachingServiceResponse()
             };
 
         }
@@ -96,7 +97,7 @@ namespace sport_app_backend.Repository
             {
                 Message = "Coaching Service deleted successfully",
                 Action = true,
-                Result = coachingService
+                Result = coachingService.ToCoachingServiceResponse()
             };
         }
 
@@ -108,6 +109,7 @@ namespace sport_app_backend.Repository
                 .Include(p => p.Athlete)  
                 .ThenInclude(a => a!.User)
                 .Include(p=>p.CoachService)
+                .Include(p=>p.WorkoutProgram)
                 .Where(p => p.Coach != null && p.Coach.PhoneNumber == phoneNumber).ToListAsync();;
            
            
@@ -152,6 +154,25 @@ namespace sport_app_backend.Repository
                 Action = true,
                 Result = exercise.Select(x=>x.ToAllExerciseResponseDto())
             };
+        }
+
+        public async Task<ApiResponse> GetProfile(string phoneNumber)
+        {
+            var user = await context.Users
+                .Include(u => u.Coach)
+                .ThenInclude(c=>c.CoachingServices)
+                .FirstOrDefaultAsync(u => u.PhoneNumber == phoneNumber);
+            if (user?.Coach == null) return new ApiResponse { Action = false, Message = "Coach not found" };
+            var coachingService = user.Coach.CoachingServices.Where(x=>x.IsDeleted==false).ToList();
+            var coachingServiceDto = coachingService.Select(x => x.ToCoachingServiceResponse()).ToList();
+            var payments  = await context.Payments.Include(p=>p.WorkoutProgram).
+                Where(p => p.CoachId == user.Coach.Id && p.WorkoutProgram != null && p.WorkoutProgram.Status!=WorkoutProgramStatus.WRITING).ToListAsync();
+            return new ApiResponse
+            {
+                Action = true, Message = "Coach found",
+                Result = user.ToCoachProfileResponseDto(coachingServiceDto, payments)
+            };
+
         }
     }
 }

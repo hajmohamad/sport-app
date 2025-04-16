@@ -23,6 +23,6 @@ public class CoachService
     [DataType(DataType.Date)]
     [Column(TypeName = "date")]
     public DateTime CreatedDate { get; set; }=DateTime.Now.Date;
-    public TypeOfCoachingServices TypeOfCoachingServices { get; set; }
+    // public TypeOfCoachingServices TypeOfCoachingServices { get; set; }
     public bool IsDeleted { get; set; } = false;
 }

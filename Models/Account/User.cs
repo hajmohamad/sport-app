@@ -35,12 +35,11 @@ public class User
     public DateTime LastLogin { get; set; } 
     public Gender Gender { get; set; }
     public byte[] ImageProfile { get; set; } = Array.Empty<byte>();
-    [MaxLength(50)]
+
     public List<string> Bio = [];
     public Athlete? Athlete { get; set; }
     public Coach? Coach { get; set; }
     public TypeOfUser TypeOfUser { get; set; }
-    
     public string? RefreshToken { get; set; }
     public DateTime RefreshTokeNExpire { get; set; }
 

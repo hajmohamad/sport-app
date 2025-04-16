@@ -12,12 +12,12 @@ public static class PaymentMappers
         return new AllPaymentResponseDto
         {
             PaymentId = payment.Id,
-            TransactionId = payment.TransitionId,
             PaymentStatus = payment.PaymentStatus.ToString(),
             Name = payment.Athlete?.User?.FirstName + " " + payment.Athlete?.User?.LastName,
             Amount = payment.Amount.ToString(CultureInfo.CurrentCulture),
             DateTime = payment.PaymentDate.ToString(CultureInfo.CurrentCulture),
-            CoachServiceTitle = payment.CoachService!.Title
+            CoachServiceTitle = payment.CoachService!.Title,
+            WorkoutProgramStatus = payment.WorkoutProgram!.Status.ToString()
         };
     }
 

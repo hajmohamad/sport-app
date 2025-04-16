@@ -23,6 +23,8 @@ namespace sport_app_backend.Dtos
          public List<string>? Domain { get; set; }
 
         public int StartCoachingYear { get; set; }
+        public required List<CoachingServiceResponse> CoachingServices{ get; set; }
+        public required List<AllPaymentResponseDto> Payments { get; set; }
 
     }
 }

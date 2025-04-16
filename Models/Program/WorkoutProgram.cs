@@ -27,7 +27,7 @@ public class WorkoutProgram
     [MaxLength(30)]
     public  string DedicatedWarmUp { get; set; } = string.Empty;
     public DateTime EndDate { get; set; }
-    public WorkoutProgramStatus Status { get; set; }
+    public WorkoutProgramStatus Status { get; set; } = WorkoutProgramStatus.WRITING;
     public int Duration { get; set; }
     [MaxLength(120)]
     public string Description { get; set; } = "";
