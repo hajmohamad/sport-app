@@ -26,7 +26,7 @@ namespace sport_app_backend.Mappers
                 UserName = user.UserName ?? string.Empty,
                 Id = user.Id,
                 Gender = user.Gender.ToString(),
-                ImageProfile = user.ImageProfile ?? Array.Empty<byte>(),
+                ImageProfile = user.ImageProfile ??"",
                 Bio = user.Bio ?? "",
                 HeadLine = user.Coach?.HeadLine?? string.Empty,
                 Domain = user.Coach?.Domain?.Select(x => x.ToString())
@@ -86,7 +86,7 @@ namespace sport_app_backend.Mappers
                 UserName = user.UserName,
                 FirstName = user.FirstName ?? string.Empty,
                 LastName = user.LastName ?? string.Empty,
-                ImageProfile = user.ImageProfile ?? Array.Empty<byte>(),
+                ImageProfile = user.ImageProfile ??"",
                 Bio = user.Bio ?? "",
                 HeadLine = user.Coach?.HeadLine?? string.Empty,
 
@@ -103,7 +103,7 @@ namespace sport_app_backend.Mappers
                 LastName = coach.User?.LastName ?? string.Empty,
                 UserName = coach.User?.UserName ?? string.Empty,
                 Id = coach.Id,
-                ImageProfile = coach.User?.ImageProfile ?? Array.Empty<byte>(),
+                ImageProfile = coach.User?.ImageProfile ?? "",
                 Bio = coach.User?.Bio ?? "",
                 HeadLine = coach.HeadLine?? string.Empty,
                 Domain = coach.Domain?.Select(x => x.ToString())

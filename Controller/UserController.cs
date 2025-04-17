@@ -94,6 +94,18 @@ public class UserController(IUserRepository userRepository) : ControllerBase
         if (!result.Action) return NotFound(result);
         return Ok(result);
     }
+    [HttpPost("upload")]
+    [Authorize(Roles = "Athlete,Coach")]
+    public async Task<IActionResult> UploadImage(IFormFile file)
+    {
+        var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
+        if (phoneNumber is null) return BadRequest("PhoneNumber is null");
+        
+        var result = await userRepository.SaveImageAsync(phoneNumber,file);
+
+        if (!result.Action) return NotFound(result);
+        return Ok(result);
+    }
     
 
 

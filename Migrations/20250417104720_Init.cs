@@ -431,7 +431,7 @@ namespace sport_app_backend.Migrations
                     CoachId = table.Column<int>(type: "int", nullable: false),
                     Amount = table.Column<double>(type: "double", nullable: false),
                     CoachServiceId = table.Column<int>(type: "int", nullable: false),
-                    TransitionId = table.Column<string>(type: "varchar(30)", maxLength: 30, nullable: false)
+                    TransactionId = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     PaymentStatus = table.Column<int>(type: "int", nullable: false),
                     PaymentDate = table.Column<DateTime>(type: "datetime(6)", nullable: false),

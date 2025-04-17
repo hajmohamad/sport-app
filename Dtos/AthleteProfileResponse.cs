@@ -17,7 +17,7 @@ namespace sport_app_backend.Dtos
     public double CurrentWeight { get; set; }
     public double WeightGoal { get; set; }
     public string? Gender { get; set; }
-    public byte[] ImageProfile { get; set; } = Array.Empty<byte>();
+    public string ImageProfile { get; set; }="";
     public required int TimeBeforeWorkout { get; set; }=10;
     public required int RestTime { get; set; } = 30;
 

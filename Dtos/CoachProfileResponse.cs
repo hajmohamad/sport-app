@@ -17,7 +17,7 @@ namespace sport_app_backend.Dtos
         public required string PhoneNumber { get; set; }
 
         public string? Gender { get; set; }
-        public byte[] ImageProfile { get; set; } = Array.Empty<byte>();
+        public string ImageProfile { get; set; }="";
       
         public string Bio { get; set; } = "";
         public string HeadLine { get; set; } = "";

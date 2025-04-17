@@ -25,10 +25,10 @@ namespace sport_app_backend.Repository
       
         }
 
-        public async Task<ApiResponse> ConfirmTransitionId(string transitionId)
+        public async Task<ApiResponse> ConfirmTransactionId(string TransactionId)
         {
             var payment = await context.Payments.Include(p => p.Coach)
-                .Include(p => p.Athlete).Include(payment => payment.WorkoutProgram).FirstOrDefaultAsync(x => x.TransitionId == transitionId);
+                .Include(p => p.Athlete).Include(payment => payment.WorkoutProgram).FirstOrDefaultAsync(x => x.TransactionId == TransactionId);
             if (payment is null) return new ApiResponse() { Message = "Payment not found", Action = false };
             var workoutProgram = new WorkoutProgram()
             {

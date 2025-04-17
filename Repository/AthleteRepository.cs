@@ -142,7 +142,7 @@ namespace sport_app_backend.Repository
                 CoachServiceId = coachService.Id,
                 CoachId = coachService.CoachId,
                 Coach = coachService.Coach,
-                TransitionId = Guid.NewGuid().ToString(),
+                TransactionId = Guid.NewGuid().ToString(),
                 Amount = coachService.Price,
                 AthleteQuestion = lastQuestion
             };
@@ -155,7 +155,7 @@ namespace sport_app_backend.Repository
                 Result = new
                 {
                     payment.Amount,
-                    payment.TransitionId
+                    payment.TransactionId
                 }
             };
             

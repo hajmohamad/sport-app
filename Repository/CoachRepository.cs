@@ -106,14 +106,23 @@ namespace sport_app_backend.Repository
         public async Task<ApiResponse> GetAllPayment(string phoneNumber)
         {
             var payments = await context.Payments
-                .Include(p => p.Coach)  
-                .ThenInclude(c => c!.User)  
-                .Include(p => p.Athlete)  
+                .Include(p => p.Coach)
+                .ThenInclude(c => c!.User)
+                .Include(p => p.Athlete)
                 .ThenInclude(a => a!.User)
-                .Include(p=>p.CoachService)
-                .Include(p=>p.WorkoutProgram)
-                .Where(p => p.Coach != null && p.Coach.PhoneNumber == phoneNumber).ToListAsync();;
-           
+                .Include(p => p.CoachService)
+                .Include(p => p.WorkoutProgram)
+                .Where(p => 
+                    p.Coach != null &&
+                    p.Coach.PhoneNumber == phoneNumber &&
+                    p.PaymentStatus == PaymentStatus.SUCCESS &&
+                    p.WorkoutProgram != null &&
+                    (
+                        p.WorkoutProgram.Status == WorkoutProgramStatus.NOTSTARTED ||
+                        p.WorkoutProgram.Status == WorkoutProgramStatus.WRITING
+                    )
+                )
+                .ToListAsync();
            
             
            
@@ -121,7 +130,7 @@ namespace sport_app_backend.Repository
             {
                 Message = "Payments found",
                 Action = true,
-                Result = payments.Where(p=> p.PaymentStatus == PaymentStatus.SUCCESS).Select(x=>x.ToAllPaymentResponseDto())
+                Result = payments.Select(x=>x.ToAllPaymentResponseDto())
             };
         }
 

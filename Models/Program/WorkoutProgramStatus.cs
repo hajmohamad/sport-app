@@ -5,5 +5,8 @@ public enum WorkoutProgramStatus
     NOTACTIVE,
     ACTIVE,
     FINISHED,
+    STOPPED,
+    NOTSTARTED
+    
     
 }

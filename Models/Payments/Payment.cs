@@ -18,8 +18,8 @@ public class Payment
     public double Amount {get; set;}
     public int CoachServiceId { get; set; }
     public CoachService? CoachService { get; set; }
-    [MaxLength(30)]
-    public string TransitionId { get; set; }="";
+    [MaxLength(50)]
+    public string TransactionId { get; set; }="";
     public PaymentStatus PaymentStatus { get; set; } = PaymentStatus.INPROGRESS;
     public DateTime PaymentDate { get; set; }=DateTime.Now;
     public AthleteQuestion? AthleteQuestion { get; set; }

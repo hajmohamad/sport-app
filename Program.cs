@@ -101,6 +101,8 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<ICoachRepository, CoachRepository>();
 builder.Services.AddScoped<IAthleteRepository, AthleteRepository>();
 builder.Services.AddScoped<IAdminRepository, AdminRepository>();
+builder.Services.AddCoreAdmin("Admins");
+
 var app = builder.Build();
 
 
@@ -109,7 +111,8 @@ app.UseSwaggerUI();
 
 
 app.UseHttpsRedirection();
-
+app.UseStaticFiles();
+app.MapDefaultControllerRoute();
 
 app.UseAuthentication();
 app.UseAuthorization();

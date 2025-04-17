@@ -13,10 +13,10 @@ namespace sport_app_backend.Controller
         {
             return Ok(await adminRepository.AddExercises(exercises));
         }
-        [HttpPut("confirm_transition_id")]
-        public async Task<IActionResult> ConfirmTransitionId([FromBody] string confirmTransitionIdDto)
+        [HttpPut("confirm_Transaction_id")]
+        public async Task<IActionResult> ConfirmTransactionId([FromBody] string confirmTransactionIdDto)
         {
-            var resualt = await adminRepository.ConfirmTransitionId(confirmTransitionIdDto);
+            var resualt = await adminRepository.ConfirmTransactionId(confirmTransactionIdDto);
             if(resualt.Action == false) return BadRequest(resualt);
             return Ok(resualt);
         

@@ -6,7 +6,7 @@ public class AllPaymentResponseDto
     public required string Name { get; set; }
     public required string Amount { get; set; }
     public required string DateTime { get; set; }
-    public byte[] ImageProfile { get; set; }=[];
+    public string ImageProfile { get; set; }="";
     public int PaymentId { get; set; }
     public required string CoachServiceTitle { get; set; }
     public required string WorkoutProgramStatus { get; set; }

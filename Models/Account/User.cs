@@ -34,7 +34,8 @@ public class User
     [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd HH:mm:ss}")]
     public DateTime LastLogin { get; set; } 
     public Gender Gender { get; set; }
-    public byte[] ImageProfile { get; set; } = Array.Empty<byte>();
+
+    public string ImageProfile { get; set; } = "";
     [MaxLength(3)]
     public string Bio { get; set; } = "";
     public Athlete? Athlete { get; set; }

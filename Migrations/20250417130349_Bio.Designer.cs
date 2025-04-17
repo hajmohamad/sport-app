@@ -11,15 +11,15 @@ using sport_app_backend.Data;
 namespace sport_app_backend.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250417091025_Init")]
-    partial class Init
+    [Migration("20250417130349_Bio")]
+    partial class Bio
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.0")
+                .HasAnnotation("ProductVersion", "8.0.2")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
             modelBuilder.Entity("sport_app_backend.Models.Account.Athlete", b =>
@@ -173,9 +173,10 @@ namespace sport_app_backend.Migrations
                     b.Property<int>("Gender")
                         .HasColumnType("int");
 
-                    b.Property<byte[]>("ImageProfile")
+                    b.Property<string>("ImageProfile")
                         .IsRequired()
-                        .HasColumnType("longblob");
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)");
 
                     b.Property<DateTime>("LastLogin")
                         .HasColumnType("datetime(6)");
@@ -437,10 +438,10 @@ namespace sport_app_backend.Migrations
                     b.Property<int>("PaymentStatus")
                         .HasColumnType("int");
 
-                    b.Property<string>("TransitionId")
+                    b.Property<string>("TransactionId")
                         .IsRequired()
-                        .HasMaxLength(30)
-                        .HasColumnType("varchar(30)");
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)");
 
                     b.HasKey("Id");
 

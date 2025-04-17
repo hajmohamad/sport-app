@@ -10,7 +10,7 @@ namespace sport_app_backend.Interface
     public interface IAdminRepository
     {
         Task<ApiResponse> AddExercises(List<AddExercisesRequestDto> exercises);
-        Task<ApiResponse> ConfirmTransitionId(string transitionId);
+        Task<ApiResponse> ConfirmTransactionId(string TransactionId);
         
     }
 }

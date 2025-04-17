@@ -26,7 +26,7 @@ public static class PaymentMappers
     {
         return new PaymentResponseDto
         {
-            TransactionId = payment.TransitionId,
+            TransactionId = payment.TransactionId,
             PaymentStatus = payment.PaymentStatus.ToString(),
             Name = payment.Athlete?.User?.FirstName + " " + payment.Athlete?.User?.LastName,
             Amount = payment.Amount.ToString(CultureInfo.CurrentCulture),

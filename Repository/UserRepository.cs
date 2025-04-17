@@ -5,6 +5,8 @@ using sport_app_backend.Interface;
 using sport_app_backend.Models;
 using sport_app_backend.Models.Account;
 using sport_app_backend.Models.Login_Sinup;
+using Amazon.S3;
+using Amazon.S3.Model;
 
 namespace sport_app_backend.Repository;
 
@@ -185,35 +187,28 @@ private async Task<string> GenerateUniqueUsername()
                 Message = "CodeIsSuccessFullySend"
             };
         }
-        else
-        {
-            if (user.TimeCodeSend.AddMinutes(2) < DateTime.Now)
-            {
-                dbContext.CodeVerifies.Remove(user);
-                await dbContext.SaveChangesAsync();
-                await dbContext.CodeVerifies.AddAsync(new CodeVerify()
-                {
-                    PhoneNumber = userPhoneNumber,
-                    Code = await sendVerifyCode.SendCode(userPhoneNumber),
-                    TimeCodeSend = DateTime.Now
-                });
-                await dbContext.SaveChangesAsync();
-                return new ApiResponse()
-                {
-                    Action = true,
-                    Message = "CodeIsSuccessFullySend"
-                };
-            }
-            else
-            {
-                return new ApiResponse()
-                {
-                    Action = false,
-                    Message = "you should wait 2 minutes"
-                };
 
-            }
-        }
+        if (user.TimeCodeSend.AddMinutes(2) >= DateTime.Now)
+            return new ApiResponse()
+            {
+                Action = false,
+                Message = "you should wait 2 minutes"
+            };
+        dbContext.CodeVerifies.Remove(user);
+        await dbContext.SaveChangesAsync();
+        await dbContext.CodeVerifies.AddAsync(new CodeVerify()
+        {
+            PhoneNumber = userPhoneNumber,
+            Code = await sendVerifyCode.SendCode(userPhoneNumber),
+            TimeCodeSend = DateTime.Now
+        });
+        await dbContext.SaveChangesAsync();
+        return new ApiResponse()
+        {
+            Action = true,
+            Message = "CodeIsSuccessFullySend"
+        };
+
     }
 
     public async Task<ApiResponse> GenerateAccessToken(string refreshToken)
@@ -302,4 +297,108 @@ private async Task<string> GenerateUniqueUsername()
         return new ApiResponse() { Message = "Success", Action = true };
         
     }
+
+    public async Task<ApiResponse> SaveImageAsync(string phoneNumber, IFormFile image)
+    {
+        
+        var user = await dbContext.Users.FirstOrDefaultAsync(x => x.PhoneNumber == phoneNumber);
+        if (user is null) return new ApiResponse() { Message = "User not found", Action = false };
+        const string accessKey = "kn8vqc4tvn5d36ol";
+        const string secretKey = "6a05ec26-f42a-4c26-84a1-ad5d93236b63";
+        const string bucketName = "charset7";
+        const string endpoint = "https://storage.c2.liara.space";
+        if (image.Length <= 0) return new ApiResponse() { Message = "image not receive", Action = false }; ;
+        var config = new AmazonS3Config
+        {
+            ServiceURL = endpoint,
+            ForcePathStyle = true,
+            SignatureVersion = "4"
+        };
+
+        var credentials = new Amazon.Runtime.BasicAWSCredentials(
+            accessKey,
+            secretKey
+        );
+
+        using var client = new AmazonS3Client(credentials, config);
+
+        var extension = Path.GetExtension(image.FileName);
+        var objectKey = $"{Guid.NewGuid()}{extension}";
+
+        try
+        {
+            using var memoryStream = new MemoryStream();
+            await image.CopyToAsync(memoryStream).ConfigureAwait(false);
+            memoryStream.Position = 0;
+
+            var request = new PutObjectRequest
+            {
+                BucketName = bucketName,
+                Key = objectKey,
+                InputStream = memoryStream,
+                ContentType = image.ContentType // اضافه برای بهتر بودن متادیتا
+            };
+
+            await client.PutObjectAsync(request);
+
+            var fileUrl = $"{endpoint}/{bucketName}/{objectKey}";
+            if (user.ImageProfile.Length > 10)
+            {
+                await DeleteObjectAsync(client, user.ImageProfile);
+            }
+
+            user.ImageProfile = fileUrl;
+            await dbContext.SaveChangesAsync(); 
+
+        }
+        catch (AmazonS3Exception e)
+        {
+
+            return new ApiResponse()
+            {
+                Action = false,
+                Message = $"Error uploading to S3: {e.Message}",
+                
+            };
+        }
+
+       
+        return new ApiResponse()
+        {
+            Action = true,
+            Message = "image upload successfully",
+            Result = new
+            {
+                ImageUrl = user.ImageProfile
+            }
+        };
+    }
+
+    private static async Task DeleteObjectAsync(IAmazonS3 client, string url)
+    {
+       var uri = new Uri(url);
+        var segments = uri.AbsolutePath.TrimStart('/').Split('/', 2);
+
+        if (segments.Length < 2)
+            throw new ArgumentException("URL does not contain a valid bucket and object key");
+        var bucketName = segments[0];
+        var objectKey = segments[1];
+
+        try
+        {
+            var deleteRequest = new DeleteObjectRequest
+            {
+                BucketName = bucketName,
+                Key = objectKey
+            };
+
+            await client.DeleteObjectAsync(deleteRequest);
+            Console.WriteLine($"File '{objectKey}' deleted successfully.");
+        }
+        catch (AmazonS3Exception e)
+        {
+            Console.WriteLine($"Error: {e.Message}");
+        }
+    }
+
 }
