@@ -1,13 +1,6 @@
-using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Identity;
 using sport_app_backend.Dtos;
 using sport_app_backend.Models.Account;
 using sport_app_backend.Models.Payments;
-using sport_app_backend.Models.TrainingService;
 
 namespace sport_app_backend.Mappers
 {
@@ -26,13 +19,13 @@ namespace sport_app_backend.Mappers
                 UserName = user.UserName ?? string.Empty,
                 Id = user.Id,
                 Gender = user.Gender.ToString(),
-                ImageProfile = user.ImageProfile ??"",
-                Bio = user.Bio ?? "",
+                ImageProfile = user.ImageProfile,
+                Bio = user.Bio,
                 HeadLine = user.Coach?.HeadLine?? string.Empty,
                 Domain = user.Coach?.Domain?.Select(x => x.ToString())
                              .ToList() ??
                          [], // Ensure it's not null
-                StartCoachingYear = user.Coach?.StartCoachingYear ?? default,
+                StartCoachingYear = user.Coach?.StartCoachingYear ?? 0,
                 CoachingServices = coachingServicesResponse,
                 Payments = payments.Select(p => p.ToAllPaymentResponseDto())
                     .ToList(),
@@ -55,23 +48,23 @@ namespace sport_app_backend.Mappers
                 Price = coachServiceDto.Price,
                 IsActive = coachServiceDto.IsActive,
                 HaveSupport = coachServiceDto.HaveSupport,
-                CommunicateType = coachServiceDto.CommunicateType,
+                CommunicateType = coachServiceDto.CommunicateType??"",
                 NumberOfSell = 0
                 // TypeOfCoachingServices = (TypeOfCoachingServices)Enum.Parse(typeof(TypeOfCoachingServices), coachServiceDto.TypeOfCoachingServices)
             };
         }
 
-        public static CoachService UpdateCoachServices(this CoachService coachService,AddCoachServiceDto coachServiceDto)
+        public static void UpdateCoachServices(this CoachService coachService,AddCoachServiceDto coachServiceDto)
         {
             coachService.Title = coachServiceDto.Title;
             coachService.Description = coachServiceDto.Description;
             coachService.Price = coachServiceDto.Price;
             coachService.IsActive = coachServiceDto.IsActive;
             coachService.HaveSupport = coachServiceDto.HaveSupport;
-            coachService.CommunicateType = coachServiceDto.CommunicateType;
+            coachService.CommunicateType = coachServiceDto.CommunicateType??"";
             //coachService.TypeOfCoachingServices =
            //(TypeOfCoachingServices)Enum.Parse(typeof(TypeOfCoachingServices), coachServiceDto.TypeOfCoachingServices);
-            return coachService;
+       
 
         }
         public static CoachForSearch ToCoachForSearch(this User user)
@@ -83,11 +76,11 @@ namespace sport_app_backend.Mappers
             return new CoachForSearch
             {
                 Id = user.Coach.Id,
-                UserName = user.UserName,
+                UserName = user.UserName ?? string.Empty,
                 FirstName = user.FirstName ?? string.Empty,
                 LastName = user.LastName ?? string.Empty,
-                ImageProfile = user.ImageProfile ??"",
-                Bio = user.Bio ?? "",
+                ImageProfile = user.ImageProfile,
+                Bio = user.Bio,
                 HeadLine = user.Coach?.HeadLine?? string.Empty,
 
             };
@@ -105,15 +98,14 @@ namespace sport_app_backend.Mappers
                 Id = coach.Id,
                 ImageProfile = coach.User?.ImageProfile ?? "",
                 Bio = coach.User?.Bio ?? "",
-                HeadLine = coach.HeadLine?? string.Empty,
+                HeadLine = coach.HeadLine,
                 Domain = coach.Domain?.Select(x => x.ToString())
                              .ToList() ??
                          new List<string>(), // Ensure it's not null
                 StartCoachingYear = coach.StartCoachingYear,
                 CoachServices = coach.CoachingServices.Where(x => !x.IsDeleted)
-                                    ?.Select(x => x.ToCoachingServiceResponse())
-                                    .ToList() ??
-                                new List<CoachingServiceResponse>(),
+                                    .Select(x => x.ToCoachingServiceResponse())
+                                    .ToList() ,
                 NumberOfAthletes = numberOfAthlete,
                 NumberOfProgram = numberOfProgram
             };

@@ -128,7 +128,7 @@ namespace sport_app_backend.Controller
             
         }
 
-        [HttpPost("Save_workoutProgram/{paymentId}")]
+        [HttpPost("Save_workoutProgram/{paymentId:int}")]
         [Authorize(Roles = "Coach")]
         public async Task<IActionResult> SaveWorkoutProgram([FromRoute] int paymentId,[FromBody]WorkoutProgramDto  saveWorkoutProgramDto)
         {
@@ -138,6 +138,16 @@ namespace sport_app_backend.Controller
             if (result.Action != true) return BadRequest(result);
             return Ok(result);
             
+        }
+        [HttpGet("Get_workoutProgram/{paymentId:int}")]
+        [Authorize(Roles = "Coach")]
+        public async Task<IActionResult> GetWorkoutProgram([FromRoute] int paymentId)
+        {
+            var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
+            if (phoneNumber is null) return BadRequest(new ApiResponse { Action = false, Message = "PhoneNumber is null" });
+            var result = await coachRepository.GetWorkoutProgram(phoneNumber,paymentId);
+            if (result.Action != true) return BadRequest(result);
+            return Ok(result);
         }
         
         

@@ -8,12 +8,12 @@ namespace sport_app_backend.Mappers
 {
     public static class QuestionMapper
     {
-        public static InjuryArea? ToInjuryArea(this InjuryAreaDto? dto)
+        private static InjuryArea ToInjuryArea(this InjuryAreaDto dto)
         {
 
             return new InjuryArea
             {
-                None = dto!.None,
+                None = dto.None,
                 Skeletal = dto.Skeletal?.Select(Enum.Parse<SkeletalDiseases>).ToList()??[],
                 SoftTissueAndLigament = dto.SoftTissueAndLigament?.Select(Enum.Parse<SoftTissueAndLigamentInjuries>).ToList() ??[],
                 InternalAndDigestive = dto.InternalAndDigestive?.Select(Enum.Parse<InternalAndDigestiveDiseases>).ToList()??[],
@@ -23,13 +23,11 @@ namespace sport_app_backend.Mappers
             };
         }
 
-        public static InjuryAreaDto? ToInjuryAreaDto(this InjuryArea? model)
+        private static InjuryAreaDto ToInjuryAreaDto(this InjuryArea model)
         {
-          
-
             return new InjuryAreaDto
             {
-                None = model!.None,
+                None = model.None,
                 Skeletal = model.Skeletal?.Select(e => e.ToString()).ToList()??[],
                 SoftTissueAndLigament = model.SoftTissueAndLigament?.Select(e => e.ToString()).ToList()??[],
                 InternalAndDigestive = model.InternalAndDigestive?.Select(e => e.ToString()).ToList()??[],
@@ -46,9 +44,9 @@ namespace sport_app_backend.Mappers
                 Athlete = athlete,
                 CurrentBodyForm = dto.CurrentBodyForm,
                 DaysPerWeekToExercise = dto.DaysPerWeekToExercise,
-                FitnessLevel = Enum.Parse<FitnessLevel>(dto.FitnessLevel!),
+                FitnessLevel = Enum.Parse<FitnessLevel>(dto.FitnessLevel ?? string.Empty),
                 InjuryArea = dto.InjuryArea?.ToInjuryArea(),
-                ExerciseGoal = Enum.Parse<ExerciseGoal>(dto.ExerciseGoal!),
+                ExerciseGoal = Enum.Parse<ExerciseGoal>(dto.ExerciseGoal ?? string.Empty),
                 Weight = dto.CurrentWeight
             };
         }
@@ -58,10 +56,11 @@ namespace sport_app_backend.Mappers
             {
                 CurrentBodyForm = question.CurrentBodyForm,
                 DaysPerWeekToExercise = question.DaysPerWeekToExercise,
-                FitnessLevel = question.FitnessLevel.ToString()??"",
+                FitnessLevel = question.FitnessLevel.ToString() ?? "",
                 InjuryArea = question.InjuryArea?.ToInjuryAreaDto(),
-                ExerciseGoal = question.ExerciseGoal.ToString()??"",
-                CurrentWeight = question.Weight
+                ExerciseGoal = question.ExerciseGoal.ToString() ?? "",
+                CurrentWeight = question.Weight,
+                BirthDay = question.Athlete?.User?.BirthDate.ToString("yyyy-MM-dd")
             };
         }
 

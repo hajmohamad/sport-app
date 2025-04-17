@@ -27,11 +27,14 @@ namespace sport_app_backend.Repository
 
         public async Task<ApiResponse> ConfirmTransactionId(string TransactionId)
         {
-            var payment = await context.Payments.Include(p => p.Coach)
+            var payment = await context.Payments.Include(p => p.Coach).Include(z=>z
+                    .CoachService)
                 .Include(p => p.Athlete).Include(payment => payment.WorkoutProgram).FirstOrDefaultAsync(x => x.TransactionId == TransactionId);
             if (payment is null) return new ApiResponse() { Message = "Payment not found", Action = false };
+            payment.CoachService.NumberOfSell += 1;
             var workoutProgram = new WorkoutProgram()
             {
+                Title = payment.CoachService.Title,
                 Coach = payment.Coach,
                 Athlete = payment.Athlete,
                 AthleteId = payment.Athlete!.Id,

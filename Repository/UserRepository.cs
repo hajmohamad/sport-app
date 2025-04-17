@@ -215,8 +215,7 @@ private async Task<string> GenerateUniqueUsername()
     {
         var user = await dbContext.Users.FirstOrDefaultAsync(x => x.RefreshToken == refreshToken);
         if (user is null) return new ApiResponse() { Message = "Invalid refresh token", Action = false };
-        if (user.RefreshTokeNExpire < DateTime.Now) return new ApiResponse() { Message = "Refresh token expired", Action = false };
-        return new ApiResponse() { Message = "Success", Action = true, Result = new { AccessToken = tokenService.CreateToken(user) } };
+        return user.RefreshTokeNExpire < DateTime.Now ? new ApiResponse() { Message = "Refresh token expired", Action = false } : new ApiResponse() { Message = "Success", Action = true, Result = new { AccessToken = tokenService.CreateToken(user) } };
     }
 
     public async Task<ApiResponse> AddUsername(string phoneNumber, string username)

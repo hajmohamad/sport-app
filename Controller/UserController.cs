@@ -94,6 +94,7 @@ public class UserController(IUserRepository userRepository) : ControllerBase
         if (!result.Action) return NotFound(result);
         return Ok(result);
     }
+    
     [HttpPost("upload")]
     [Authorize(Roles = "Athlete,Coach")]
     public async Task<IActionResult> UploadImage(IFormFile file)

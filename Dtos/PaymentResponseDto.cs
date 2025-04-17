@@ -6,6 +6,7 @@ public class PaymentResponseDto
 {
     public string TransactionId { get; set; } = string.Empty;
     public string Name { get; set; } = string.Empty;
+    public required string ImageProfile { get; set; }= string.Empty;
     public string Amount { get; set; }= string.Empty;
     public string DateTime { get; set; }= string.Empty;
     public string PaymentStatus { get; set; }= string.Empty;

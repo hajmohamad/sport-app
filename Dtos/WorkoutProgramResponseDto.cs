@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using sport_app_backend.Dtos.ProgramDto;
 using sport_app_backend.Models.Program;
 
 namespace sport_app_backend.Dtos;
@@ -18,5 +19,5 @@ public class WorkoutProgramResponseDto
     public string Status { get; set; }= "";
     public int Duration { get; set; }
     public string Description { get; set; } = "";
-    public List<ProgramInDay>? ProgramInDays { get; set; } = [];
+    public List<ProgramInDayDto>? ProgramInDays { get; set; } = [];
 }

@@ -19,7 +19,7 @@ public class User
     public string? UserName { get; set; } 
     [DataType(DataType.Date)]
     [Column(TypeName = "date")]
-    public DateTime BirthDate { get; set; }
+    public DateTime   BirthDate { get; set; }
     [Required]
     [StringLength(11)]
     [RegularExpression(@"^09\d{11}$")]

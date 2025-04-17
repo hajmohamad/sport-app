@@ -15,9 +15,12 @@ public static class PaymentMappers
             PaymentStatus = payment.PaymentStatus.ToString(),
             Name = payment.Athlete?.User?.FirstName + " " + payment.Athlete?.User?.LastName,
             Amount = payment.Amount.ToString(CultureInfo.CurrentCulture),
-            DateTime = payment.PaymentDate.ToString(CultureInfo.CurrentCulture),
+            DateTime = payment.PaymentDate.ToString("yyyy-MM-dd",
+                CultureInfo.InvariantCulture),
             CoachServiceTitle = payment.CoachService!.Title,
-            WorkoutProgramStatus = payment.WorkoutProgram!.Status.ToString()
+            WorkoutProgramStatus = payment.WorkoutProgram!.Status.ToString(),
+            ImageProfile = payment.Athlete?.User?.ImageProfile ??""
+
         };
     }
 
@@ -30,9 +33,10 @@ public static class PaymentMappers
             PaymentStatus = payment.PaymentStatus.ToString(),
             Name = payment.Athlete?.User?.FirstName + " " + payment.Athlete?.User?.LastName,
             Amount = payment.Amount.ToString(CultureInfo.CurrentCulture),
-            DateTime = payment.PaymentDate.ToString(CultureInfo.CurrentCulture),
+            DateTime = payment.PaymentDate.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture),
             AthleteQuestion = payment.AthleteQuestion!.ToAthleteQuestionDto(),
             Height = payment.Athlete!.Height,
+            ImageProfile = payment.Athlete?.User?.ImageProfile ??"",
             WorkoutProgram = payment.WorkoutProgram?.ToProgramResponseDto()??new WorkoutProgramResponseDto()
         };
         

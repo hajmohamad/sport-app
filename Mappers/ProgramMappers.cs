@@ -15,15 +15,18 @@ public static class ProgramMappers
             PaymentId = workoutProgram.PaymentId,
             StartDate = workoutProgram.StartDate,
             ProgramDuration = workoutProgram.ProgramDuration,
-            ProgramLevel = workoutProgram.ProgramLevel,
+            ProgramLevel = workoutProgram.ProgramLevel ,
             ProgramPriorities = workoutProgram.ProgramPriorities.Select(x => x.ToString()).ToList(),
             GeneralWarmUp = workoutProgram.GeneralWarmUp,
-            DedicatedWarmUp = workoutProgram.DedicatedWarmUp,
+            #pragma warning disable CS8601 // Possible null reference assignment.
+            DedicatedWarmUp = workoutProgram.DedicatedWarmUp == "" ? null : workoutProgram.DedicatedWarmUp,      
+            #pragma warning restore CS8601 // Possible null reference assignment.
             EndDate = workoutProgram.EndDate,
             Status = workoutProgram.Status.ToString(),
             Duration = workoutProgram.Duration,
             Description = workoutProgram.Description,
-            ProgramInDays = workoutProgram.ProgramInDays ?? [],
+            ProgramInDays = workoutProgram.ProgramInDays.ToProgramInDayDto()
+
         };
     }
 
@@ -33,7 +36,8 @@ public static class ProgramMappers
         
         
     }
-    public static ProgramInDay ToProgramInDay(this ProgramInDayDto programInDayDto)
+
+    private static ProgramInDay ToProgramInDay(this ProgramInDayDto programInDayDto)
     {
         return new ProgramInDay
         {
@@ -43,7 +47,7 @@ public static class ProgramMappers
         };
     }
 
-    public static SingleExercise ToSingleExercise(this SingleExerciseDto singleExerciseDto)
+    private static SingleExercise ToSingleExercise(this SingleExerciseDto singleExerciseDto)
     {
         return new SingleExercise
         {
@@ -53,4 +57,28 @@ public static class ProgramMappers
             ExerciseId = singleExerciseDto.ExerciseId
         };
     }   
+    
+    public static List<ProgramInDayDto> ToProgramInDayDto(this List<ProgramInDay> programInDays){
+        return programInDays.Select(x => x.ToProgramInDayDto()).ToList();
+    }
+    
+    private static ProgramInDayDto ToProgramInDayDto(this ProgramInDay programInDay){
+        return new ProgramInDayDto
+        {
+            Id = programInDay.Id,
+            ForWhichDay = programInDay.ForWhichDay,
+            AllExerciseInDays = programInDay.AllExerciseInDays.Select(x=>x.ToSingleExerciseDto()).ToList()
+        };
+    }
+    
+    private static SingleExerciseDto ToSingleExerciseDto(this SingleExercise singleExercise){
+        return new SingleExerciseDto
+        {
+            Id = singleExercise.Id,
+            Set = singleExercise.Set,
+            Rep = singleExercise.Rep,
+            ExerciseId = singleExercise.ExerciseId
+        };
+    }
+    
 }

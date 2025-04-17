@@ -5,6 +5,7 @@ using sport_app_backend.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Extensions.FileProviders;
 using sport_app_backend.Models.Account;
 using sport_app_backend.Models;
 using sport_app_backend.Interface;
@@ -55,8 +56,6 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 
 
 
-
-
 builder.Services.AddAuthentication(options =>
 {
 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -101,8 +100,7 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<ICoachRepository, CoachRepository>();
 builder.Services.AddScoped<IAthleteRepository, AthleteRepository>();
 builder.Services.AddScoped<IAdminRepository, AdminRepository>();
-builder.Services.AddCoreAdmin("Admins");
-
+builder.Services.AddCoreAdmin();
 var app = builder.Build();
 
 

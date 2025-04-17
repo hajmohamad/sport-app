@@ -68,7 +68,6 @@ namespace sport_app_backend.Repository
                 coachingService.IsDeleted = true;
                 var newCoachService = addCoachingServices.ToCoachService(coach);
                 newCoachService.NumberOfSell = coachingService.NumberOfSell;
-                coach.CoachingServices ??= [];
                 coach.CoachingServices.Add(newCoachService);
                 context.CoachServices.Add(newCoachService);
             }else{
@@ -142,14 +141,25 @@ namespace sport_app_backend.Repository
                 .ThenInclude(a => a!.User)
                 .Include(a=>a.AthleteQuestion)// بارگذاری User داخل Athlete
                 .ThenInclude(I=> I!.InjuryArea)
+                .Include(w=>w.WorkoutProgram)
                 .FirstOrDefaultAsync(p => p.Coach != null && p.Coach.PhoneNumber == phoneNumber&& p.Id==paymentId);
             if(payment is null) return new ApiResponse() { Message = "Payment not found", Action = false };
-            
+            var result = payment.ToPaymentResponseDto();
+            if (result.WorkoutProgram!.ProgramInDays.Count == 0)
+            {
+             result.WorkoutProgram.ProgramInDays.Add(new ProgramInDayDto()
+             {
+                 
+                ForWhichDay = 1,
+                 AllExerciseInDays = []
+
+             });   
+            }
             return new ApiResponse()
             {
                 Message = "Payment found",
                 Action = true,
-                Result = payment.ToPaymentResponseDto()
+                Result = result
             };
 
         }
@@ -202,7 +212,7 @@ namespace sport_app_backend.Repository
             return new ApiResponse()
             {
                 Action = true,
-                Message = "GOOD"
+                Message = "workout program saved"
             };
 
 
@@ -210,6 +220,22 @@ namespace sport_app_backend.Repository
 
         }
 
-     
+        public async Task<ApiResponse> GetWorkoutProgram(string phoneNumber, int paymentId)
+        {
+            var coach = await context.Coaches.FirstOrDefaultAsync(c => c.PhoneNumber == phoneNumber);
+            if (coach == null) return new ApiResponse { Action = false, Message = "Coach not found" };
+            var workoutProgram = await context.WorkoutPrograms.Include(x=>x.ProgramInDays)
+                .ThenInclude(z=>z.AllExerciseInDays)
+                .FirstOrDefaultAsync(p => p.Id == paymentId);
+            if(workoutProgram is null) return new ApiResponse{ Action = false, Message = "Payment not found" };
+
+            return new ApiResponse()
+            {
+                Action = true,
+                Message = "workout program found",
+                Result = workoutProgram.ProgramInDays.ToProgramInDayDto()
+            };
+            
+        }
     }
 }

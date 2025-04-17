@@ -18,16 +18,16 @@ public class WorkoutProgram
     public required int PaymentId { get; set; }
     public required Payment? Payment { get; set; }
     public DateTime StartDate { get; set; }
-    public int ProgramDuration { get; set; }
-    
-    [MaxLength(20)]
-    public string ProgramLevel { get; set; }=string.Empty;
+    public int ProgramDuration { get; set; } = 3;
+    [MaxLength(20)] 
+    public string ProgramLevel { get; set; } = "Beginner";
     [MaxLength(10)]
     public List<ProgramPriority> ProgramPriorities { get; set; } = [];
     [MaxLength(30)]
     public List<string> GeneralWarmUp { get; set; } = [];
-    [MaxLength(30)]
-    public  string DedicatedWarmUp { get; set; } = string.Empty;
+
+    [MaxLength(30)] 
+    public string? DedicatedWarmUp { get; set; } = "";
     public DateTime EndDate { get; set; }
     public WorkoutProgramStatus Status { get; set; } = WorkoutProgramStatus.NOTSTARTED;
     public int Duration { get; set; }
