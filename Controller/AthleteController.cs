@@ -9,6 +9,7 @@ using sport_app_backend.Interface;
 using sport_app_backend.Mappers;
 using sport_app_backend.Models;
 using sport_app_backend.Models.Account;
+using sport_app_backend.Models.Program;
 
 namespace sport_app_backend.Controller
 {
@@ -163,10 +164,15 @@ namespace sport_app_backend.Controller
         [Authorize(Roles = "Athlete")]
         public async Task<IActionResult> GetCoachProfile([FromRoute] int coachId)
         {
-            var coach = await context.Coaches.Include(c => c.CoachingServices).FirstOrDefaultAsync(c => c.Id == coachId);
+            var coach = await context.Coaches.Include(c=>c.User).
+                Include(c => c.CoachingServices).FirstOrDefaultAsync(c => c.Id == coachId);
             if (coach == null) return BadRequest(new ApiResponse() { Action = false, Message = "Coach not found" });
+            var payments  = await context.Payments.Include(p=>p.Athlete).Include(p=>p.WorkoutProgram).
+                Where(p => p.CoachId == coach.Id && p.WorkoutProgram != null && p.WorkoutProgram.Status!=WorkoutProgramStatus.WRITING).ToListAsync();
+            var numberOfProgram = payments.Count(p => p.WorkoutProgram != null);
+            var numberOfAthlete = payments.Select(x=>x.AthleteId).Distinct().Count();
 
-            return Ok(new ApiResponse() { Action = true, Message = "Coach found", Result = coach.ToCoachProfileForAthleteDto() });
+            return Ok(new ApiResponse() { Action = true, Message = "Coach found", Result = coach.ToCoachProfileForAthleteDto( numberOfProgram,numberOfAthlete) });
         }
         [HttpPut("update_weight")]
         [Authorize(Roles = "Athlete")]

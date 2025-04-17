@@ -19,12 +19,16 @@ namespace sport_app_backend.Dtos
         public string? Gender { get; set; }
         public byte[] ImageProfile { get; set; } = Array.Empty<byte>();
       
-        public List<string> Bio { get; set; } = [];
-         public List<string>? Domain { get; set; }
+        public string Bio { get; set; } = "";
+        public string HeadLine { get; set; } = "";
+
+        public List<string>? Domain { get; set; }
 
         public int StartCoachingYear { get; set; }
         public required List<CoachingServiceResponse> CoachingServices{ get; set; }
         public required List<AllPaymentResponseDto> Payments { get; set; }
+        public required int NumberOfAthlete { get; set; }
+        public required int NumberOfProgram { get; set; }
 
     }
 }

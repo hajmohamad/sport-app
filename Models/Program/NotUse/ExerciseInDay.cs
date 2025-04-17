@@ -15,7 +15,7 @@ namespace sport_app_backend.Models.Program;
 //
 //     public SuperSetExercise? SuperSetExercise { get; set; }
 //
-//     public SingelExercise? SingelExercise { get; set; }
+//     public singleExercise? singleExercise { get; set; }
 //
 //
 //     

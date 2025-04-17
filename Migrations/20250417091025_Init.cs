@@ -85,6 +85,8 @@ namespace sport_app_backend.Migrations
                     LastLogin = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     Gender = table.Column<int>(type: "int", nullable: false),
                     ImageProfile = table.Column<byte[]>(type: "longblob", nullable: false),
+                    Bio = table.Column<string>(type: "varchar(3)", maxLength: 3, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     TypeOfUser = table.Column<int>(type: "int", nullable: false),
                     RefreshToken = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
@@ -217,11 +219,7 @@ namespace sport_app_backend.Migrations
                     CurrentBodyForm = table.Column<int>(type: "int", nullable: false),
                     DaysPerWeekToExercise = table.Column<int>(type: "int", nullable: false),
                     Weight = table.Column<double>(type: "double", nullable: false),
-                    ExerciseGoal = table.Column<int>(type: "int", nullable: true),
-                    ExerciseMotivation = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    CommonIssues = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4")
+                    ExerciseGoal = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -337,7 +335,9 @@ namespace sport_app_backend.Migrations
                     Domain = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     StartCoachingYear = table.Column<int>(type: "int", nullable: false),
-                    CoachQuestionId = table.Column<int>(type: "int", nullable: true)
+                    CoachQuestionId = table.Column<int>(type: "int", nullable: true),
+                    HeadLine = table.Column<string>(type: "varchar(124)", maxLength: 124, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4")
                 },
                 constraints: table =>
                 {
@@ -406,8 +406,8 @@ namespace sport_app_backend.Migrations
                     CommunicateType = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     CreatedDate = table.Column<DateTime>(type: "date", nullable: false),
-                    TypeOfCoachingServices = table.Column<int>(type: "int", nullable: false),
-                    IsDeleted = table.Column<bool>(type: "tinyint(1)", nullable: false)
+                    IsDeleted = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    NumberOfSell = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -482,7 +482,7 @@ namespace sport_app_backend.Migrations
                     ProgramDuration = table.Column<int>(type: "int", nullable: false),
                     ProgramLevel = table.Column<string>(type: "varchar(20)", maxLength: 20, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    ProgramPriorities = table.Column<string>(type: "longtext", nullable: false)
+                    ProgramPriorities = table.Column<string>(type: "varchar(10)", maxLength: 10, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     GeneralWarmUp = table.Column<string>(type: "varchar(30)", maxLength: 30, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
@@ -519,7 +519,7 @@ namespace sport_app_backend.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "ProgramInDay",
+                name: "ProgramInDays",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -529,9 +529,9 @@ namespace sport_app_backend.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ProgramInDay", x => x.Id);
+                    table.PrimaryKey("PK_ProgramInDays", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ProgramInDay_WorkoutPrograms_WorkoutProgramId",
+                        name: "FK_ProgramInDays_WorkoutPrograms_WorkoutProgramId",
                         column: x => x.WorkoutProgramId,
                         principalTable: "WorkoutPrograms",
                         principalColumn: "Id",
@@ -540,7 +540,7 @@ namespace sport_app_backend.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "SingelExercise",
+                name: "SingleExercises",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -552,17 +552,17 @@ namespace sport_app_backend.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_SingelExercise", x => x.Id);
+                    table.PrimaryKey("PK_SingleExercises", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_SingelExercise_Exercises_ExerciseId",
+                        name: "FK_SingleExercises_Exercises_ExerciseId",
                         column: x => x.ExerciseId,
                         principalTable: "Exercises",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_SingelExercise_ProgramInDay_ProgramInDayId",
+                        name: "FK_SingleExercises_ProgramInDays_ProgramInDayId",
                         column: x => x.ProgramInDayId,
-                        principalTable: "ProgramInDay",
+                        principalTable: "ProgramInDays",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 })
@@ -637,8 +637,8 @@ namespace sport_app_backend.Migrations
                 column: "CoachServiceId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ProgramInDay_WorkoutProgramId",
-                table: "ProgramInDay",
+                name: "IX_ProgramInDays_WorkoutProgramId",
+                table: "ProgramInDays",
                 column: "WorkoutProgramId");
 
             migrationBuilder.CreateIndex(
@@ -647,13 +647,13 @@ namespace sport_app_backend.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_SingelExercise_ExerciseId",
-                table: "SingelExercise",
+                name: "IX_SingleExercises_ExerciseId",
+                table: "SingleExercises",
                 column: "ExerciseId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_SingelExercise_ProgramInDayId",
-                table: "SingelExercise",
+                name: "IX_SingleExercises_ProgramInDayId",
+                table: "SingleExercises",
                 column: "ProgramInDayId");
 
             migrationBuilder.CreateIndex(
@@ -708,7 +708,7 @@ namespace sport_app_backend.Migrations
                 name: "ReportApps");
 
             migrationBuilder.DropTable(
-                name: "SingelExercise");
+                name: "SingleExercises");
 
             migrationBuilder.DropTable(
                 name: "WaterInDays");
@@ -723,7 +723,7 @@ namespace sport_app_backend.Migrations
                 name: "Exercises");
 
             migrationBuilder.DropTable(
-                name: "ProgramInDay");
+                name: "ProgramInDays");
 
             migrationBuilder.DropTable(
                 name: "WorkoutPrograms");

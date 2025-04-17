@@ -25,4 +25,5 @@ public class CoachService
     public DateTime CreatedDate { get; set; }=DateTime.Now.Date;
     // public TypeOfCoachingServices TypeOfCoachingServices { get; set; }
     public bool IsDeleted { get; set; } = false;
+    public  int NumberOfSell { get; set; } = 0;
 }

@@ -243,7 +243,7 @@ private async Task<string> GenerateUniqueUsername()
     }
     public async Task<ApiResponse> EditUserProfile(string phoneNumber, EditUserProfileDto editUserProfileDto)
     {
-        var user= await dbContext.Users.FirstOrDefaultAsync(x => x.PhoneNumber == phoneNumber);
+        var user= await dbContext.Users.Include(q=>q.Coach).FirstOrDefaultAsync(x => x.PhoneNumber == phoneNumber);
         if (user is null) return new ApiResponse() { Message = "User not found", Action = false };
         var findUserName= await dbContext.Users.FirstOrDefaultAsync(x => x.UserName == editUserProfileDto.UserName);
         if(findUserName is not null&& findUserName!=user) return new ApiResponse() { Message = "Username already exists", Action = false };// Ensure the user is an athlete
@@ -251,6 +251,7 @@ private async Task<string> GenerateUniqueUsername()
         user.LastName = editUserProfileDto.LastName;
         user.BirthDate = Convert.ToDateTime(editUserProfileDto.BirthDate);
         user.Bio = editUserProfileDto.Bio;
+        if(user.Coach is not null) user.Coach.HeadLine = editUserProfileDto.HeadLine;
         await dbContext.SaveChangesAsync();
         return new ApiResponse()
         {
@@ -261,7 +262,7 @@ private async Task<string> GenerateUniqueUsername()
 
     public async  Task<ApiResponse> GetUserProfileForEdit(string phoneNumber)
     {
-        var user= await dbContext.Users.FirstOrDefaultAsync(x => x.PhoneNumber == phoneNumber);
+        var user= await dbContext.Users.Include(q=>q.Coach).FirstOrDefaultAsync(x => x.PhoneNumber == phoneNumber);
         if (user is null) return new ApiResponse() { Message = "User not found", Action = false };
         return new ApiResponse()
         {
@@ -273,7 +274,8 @@ private async Task<string> GenerateUniqueUsername()
                 user.FirstName,
                 user.LastName,
                 user.BirthDate,
-                user.Bio
+                user.Bio,
+                user.Coach?.HeadLine
             }
         };
     }

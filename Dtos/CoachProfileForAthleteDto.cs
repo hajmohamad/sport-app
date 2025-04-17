@@ -14,7 +14,9 @@ namespace sport_app_backend.Dtos
         public required string UserName { get; set; }
 
         public byte[] ImageProfile { get; set; } = Array.Empty<byte>();
-        public List<string> Bio { get; set; } = [];
+        public string Bio { get; set; } = "";
+        public string HeadLine { get; set; } = "";
+
 
         public int CoachId { get; set; }
 
@@ -24,6 +26,8 @@ namespace sport_app_backend.Dtos
         public int StartCoachingYear { get; set; }
 
         public List<CoachingServiceResponse> CoachServices { get; set; } = [];
+        public required int NumberOfAthletes { get; set; }
+        public required int NumberOfProgram { get; set; }
 
     }
 }

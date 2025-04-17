@@ -13,7 +13,8 @@ namespace sport_app_backend.Mappers
 {
     public static class CoachMappers
     {
-        public static CoachProfileResponse ToCoachProfileResponseDto(this User user,List<CoachingServiceResponse> coachingServicesResponse,List<Payment> payments)
+        public static CoachProfileResponse ToCoachProfileResponseDto(this User user,List<CoachingServiceResponse> coachingServicesResponse
+            ,List<Payment> payments,int numberOfProgram,int numberOfAthlete)
         {   
             
             return new CoachProfileResponse
@@ -26,14 +27,17 @@ namespace sport_app_backend.Mappers
                 Id = user.Id,
                 Gender = user.Gender.ToString(),
                 ImageProfile = user.ImageProfile ?? Array.Empty<byte>(),
-                Bio = user.Bio ?? [],
+                Bio = user.Bio ?? "",
+                HeadLine = user.Coach?.HeadLine?? string.Empty,
                 Domain = user.Coach?.Domain?.Select(x => x.ToString())
                              .ToList() ??
                          [], // Ensure it's not null
                 StartCoachingYear = user.Coach?.StartCoachingYear ?? default,
                 CoachingServices = coachingServicesResponse,
-                Payments = payments.Select(p=>p.ToAllPaymentResponseDto()).ToList()
-                
+                Payments = payments.Select(p => p.ToAllPaymentResponseDto())
+                    .ToList(),
+                NumberOfAthlete = numberOfAthlete,
+                NumberOfProgram = numberOfProgram
             };
 
 
@@ -52,6 +56,7 @@ namespace sport_app_backend.Mappers
                 IsActive = coachServiceDto.IsActive,
                 HaveSupport = coachServiceDto.HaveSupport,
                 CommunicateType = coachServiceDto.CommunicateType,
+                NumberOfSell = 0
                 // TypeOfCoachingServices = (TypeOfCoachingServices)Enum.Parse(typeof(TypeOfCoachingServices), coachServiceDto.TypeOfCoachingServices)
             };
         }
@@ -82,13 +87,15 @@ namespace sport_app_backend.Mappers
                 FirstName = user.FirstName ?? string.Empty,
                 LastName = user.LastName ?? string.Empty,
                 ImageProfile = user.ImageProfile ?? Array.Empty<byte>(),
-                Bio = user.Bio ?? []
+                Bio = user.Bio ?? "",
+                HeadLine = user.Coach?.HeadLine?? string.Empty,
+
             };
 
         }
 
  
-        public static CoachProfileForAthleteDto ToCoachProfileForAthleteDto(this Coach coach)
+        public static CoachProfileForAthleteDto ToCoachProfileForAthleteDto(this Coach coach,int numberOfProgram,int numberOfAthlete)
         {
             return new CoachProfileForAthleteDto
             {
@@ -97,10 +104,18 @@ namespace sport_app_backend.Mappers
                 UserName = coach.User?.UserName ?? string.Empty,
                 Id = coach.Id,
                 ImageProfile = coach.User?.ImageProfile ?? Array.Empty<byte>(),
-                Bio = coach.User?.Bio ?? [],
-                Domain = coach.Domain?.Select(x => x.ToString()).ToList() ?? new List<string>(), // Ensure it's not null
+                Bio = coach.User?.Bio ?? "",
+                HeadLine = coach.HeadLine?? string.Empty,
+                Domain = coach.Domain?.Select(x => x.ToString())
+                             .ToList() ??
+                         new List<string>(), // Ensure it's not null
                 StartCoachingYear = coach.StartCoachingYear,
-                CoachServices = coach.CoachingServices.Where(x=>!x.IsDeleted)?.Select(x => x.ToCoachingServiceResponse()).ToList() ?? new List<CoachingServiceResponse>()
+                CoachServices = coach.CoachingServices.Where(x => !x.IsDeleted)
+                                    ?.Select(x => x.ToCoachingServiceResponse())
+                                    .ToList() ??
+                                new List<CoachingServiceResponse>(),
+                NumberOfAthletes = numberOfAthlete,
+                NumberOfProgram = numberOfProgram
             };
         }
 
@@ -118,6 +133,8 @@ namespace sport_app_backend.Mappers
                 IsActive = coachService.IsActive,
                 HaveSupport = coachService.HaveSupport,
                 CommunicateType = coachService.CommunicateType,
+                NumberOfSell = coachService.NumberOfSell
+                
                 
             };
         }

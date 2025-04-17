@@ -72,6 +72,11 @@ namespace sport_app_backend.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("varchar(50)");
 
+                    b.Property<string>("HeadLine")
+                        .IsRequired()
+                        .HasMaxLength(124)
+                        .HasColumnType("varchar(124)");
+
                     b.Property<string>("PhoneNumber")
                         .IsRequired()
                         .HasColumnType("longtext");
@@ -123,6 +128,9 @@ namespace sport_app_backend.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("tinyint(1)");
 
+                    b.Property<int>("NumberOfSell")
+                        .HasColumnType("int");
+
                     b.Property<double>("Price")
                         .HasColumnType("double");
 
@@ -130,9 +138,6 @@ namespace sport_app_backend.Migrations
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("varchar(50)");
-
-                    b.Property<int>("TypeOfCoachingServices")
-                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -146,6 +151,11 @@ namespace sport_app_backend.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    b.Property<string>("Bio")
+                        .IsRequired()
+                        .HasMaxLength(3)
+                        .HasColumnType("varchar(3)");
 
                     b.Property<DateTime>("BirthDate")
                         .HasColumnType("date");
@@ -458,10 +468,10 @@ namespace sport_app_backend.Migrations
 
                     b.HasIndex("WorkoutProgramId");
 
-                    b.ToTable("ProgramInDay");
+                    b.ToTable("ProgramInDays");
                 });
 
-            modelBuilder.Entity("sport_app_backend.Models.Program.SingelExercise", b =>
+            modelBuilder.Entity("sport_app_backend.Models.Program.SingleExercise", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -485,7 +495,7 @@ namespace sport_app_backend.Migrations
 
                     b.HasIndex("ProgramInDayId");
 
-                    b.ToTable("SingelExercise");
+                    b.ToTable("SingleExercises");
                 });
 
             modelBuilder.Entity("sport_app_backend.Models.Program.WorkoutProgram", b =>
@@ -534,7 +544,8 @@ namespace sport_app_backend.Migrations
 
                     b.Property<string>("ProgramPriorities")
                         .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasMaxLength(10)
+                        .HasColumnType("varchar(10)");
 
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("datetime(6)");
@@ -568,9 +579,6 @@ namespace sport_app_backend.Migrations
                     b.Property<int>("AthleteId")
                         .HasColumnType("int");
 
-                    b.Property<string>("CommonIssues")
-                        .HasColumnType("longtext");
-
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("date");
 
@@ -582,9 +590,6 @@ namespace sport_app_backend.Migrations
 
                     b.Property<int?>("ExerciseGoal")
                         .HasColumnType("int");
-
-                    b.Property<string>("ExerciseMotivation")
-                        .HasColumnType("longtext");
 
                     b.Property<int?>("FitnessLevel")
                         .HasColumnType("int");
@@ -836,7 +841,7 @@ namespace sport_app_backend.Migrations
                     b.Navigation("WorkoutProgram");
                 });
 
-            modelBuilder.Entity("sport_app_backend.Models.Program.SingelExercise", b =>
+            modelBuilder.Entity("sport_app_backend.Models.Program.SingleExercise", b =>
                 {
                     b.HasOne("sport_app_backend.Models.Actions.Exercise", "Exercise")
                         .WithMany()

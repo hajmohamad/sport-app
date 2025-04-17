@@ -12,11 +12,36 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="595b416c-ddc9-4b4e-96cb-8d4a5fa14b1b" name="Changes" comment="edit CoachQuestions">
+      <change afterPath="$PROJECT_DIR$/Dtos/ProgramDto/ProgramInDayDto.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Dtos/ProgramDto/SingelExerciseDto.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Dtos/ProgramDto/WorkoutProgramDto.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Controller/AthleteController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Controller/AthleteController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Controller/CoachController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Controller/CoachController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Data/ApplicationDBContext.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Data/ApplicationDBContext.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/Dockerfile" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Migrations/20250415113153_Init.Designer.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Migrations/20250415113153_Init.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dtos/AddCoachServiceDto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Dtos/AddCoachServiceDto.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dtos/AthleteQuestionDto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Dtos/AthleteQuestionDto.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dtos/CoachProfileForAthleteDto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Dtos/CoachProfileForAthleteDto.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dtos/CoachProfileResponse.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Dtos/CoachProfileResponse.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dtos/CoachingServiceResponse.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Dtos/CoachingServiceResponse.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Interface/ICoachRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Interface/ICoachRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Mappers/CoachMappers.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Mappers/CoachMappers.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Mappers/ProgramMappers.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Mappers/ProgramMappers.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Migrations/20250415130258_Init.Designer.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Migrations/20250415130258_Init.cs" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/Migrations/ApplicationDbContextModelSnapshot.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Models/Account/Coach/Coach.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/Account/Coach/Coach.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Models/Account/User.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/Account/User.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Models/Program/NotUse/ExerciseInDay.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/Program/NotUse/ExerciseInDay.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Models/Program/ProgramInDay.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/Program/ProgramInDay.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Models/Program/SingelExercise.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/Program/SingleExercise.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Models/Program/WorkoutProgram.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/Program/WorkoutProgram.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Models/Question/A_Question/AthleteQuestion.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/Question/A_Question/AthleteQuestion.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Models/Question/C_Question/PresentPracticeProgram .cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/Question/C_Question/PresentPracticeProgram .cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Models/TrainingPlan/CoachService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/TrainingPlan/CoachService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Repository/AthleteRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Repository/AthleteRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Repository/CoachRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Repository/CoachRepository.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/appsettings.json" beforeDir="false" afterPath="$PROJECT_DIR$/appsettings.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -109,6 +134,9 @@
       <workItem from="1744403729090" duration="1098000" />
       <workItem from="1744536463350" duration="3913000" />
       <workItem from="1744715496870" duration="6069000" />
+      <workItem from="1744803029525" duration="1211000" />
+      <workItem from="1744804696461" duration="2155000" />
+      <workItem from="1744879867892" duration="289000" />
     </task>
     <task id="LOCAL-00001" summary="edit role method">
       <option name="closed" value="true" />
@@ -175,5 +203,24 @@
     <MESSAGE value="change add role method name" />
     <MESSAGE value="edit CoachQuestions" />
     <option name="LAST_COMMIT_MESSAGE" value="edit CoachQuestions" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Controller/CoachController.cs</url>
+          <line>86</line>
+          <properties documentPath="D:\403-1\a\sport-app\Controller\CoachController.cs" containingFunctionPresentation="Method 'GetCoachingService'">
+            <startOffsets>
+              <option value="3749" />
+            </startOffsets>
+            <endOffsets>
+              <option value="3750" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>

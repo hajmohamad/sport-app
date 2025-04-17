@@ -19,9 +19,11 @@ public class WorkoutProgram
     public required Payment? Payment { get; set; }
     public DateTime StartDate { get; set; }
     public int ProgramDuration { get; set; }
+    
     [MaxLength(20)]
     public string ProgramLevel { get; set; }=string.Empty;
-    public  List<ProgramPriority> ProgramPriorities { get; set; } = [];
+    [MaxLength(10)]
+    public List<ProgramPriority> ProgramPriorities { get; set; } = [];
     [MaxLength(30)]
     public List<string> GeneralWarmUp { get; set; } = [];
     [MaxLength(30)]
@@ -31,5 +33,5 @@ public class WorkoutProgram
     public int Duration { get; set; }
     [MaxLength(120)]
     public string Description { get; set; } = "";
-    public List<ProgramInDay>? ProgramInDays { get; set; } = [];
+    public List<ProgramInDay> ProgramInDays { get; set; } = [];
 }

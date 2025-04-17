@@ -12,7 +12,7 @@ public class ProgramInDay
 
     public int ForWhichDay { get; set; }
 
-    public List<SingelExercise> AllExerciseInDays { get; set; }= [];
+    public List<SingleExercise> AllExerciseInDays { get; set; }= [];
 
 
     

@@ -38,6 +38,8 @@ public class ApplicationDbContext : DbContext
     public DbSet<Payment> Payments { get; set; }
     public DbSet<Exercise> Exercises { get; set; }
     public DbSet<WorkoutProgram> WorkoutPrograms { get; set; }
+    public DbSet<ProgramInDay> ProgramInDays { get; set; }
+    public DbSet<SingleExercise> SingleExercises { get; set; }
     public DbSet<CodeVerify> CodeVerifies { get; set; }
     public DbSet<CoachQuestion> CoachQuestions { get; set; }
     public DbSet<AthleteQuestion> AthleteQuestions { get; set; }

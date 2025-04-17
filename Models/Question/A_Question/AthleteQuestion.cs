@@ -8,7 +8,7 @@ using sport_app_backend.Models.Account;
 
 namespace sport_app_backend.Models.Question.A_Question
 {
-    public class  AthleteQuestion
+    public class AthleteQuestion
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -24,8 +24,8 @@ namespace sport_app_backend.Models.Question.A_Question
         public int DaysPerWeekToExercise { get; set; }
         public double Weight { get; set; }
         public ExerciseGoal? ExerciseGoal { get; set; }
-        public List<ExerciseMotivation>? ExerciseMotivation { get; set; }
-        public List<CommonIssues>? CommonIssues { get; set; }
+        // public List<ExerciseMotivation>? ExerciseMotivation { get; set; }
+        // public List<CommonIssues>? CommonIssues { get; set; }
         
     }
 }

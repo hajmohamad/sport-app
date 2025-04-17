@@ -15,6 +15,7 @@ namespace sport_app_backend.Dtos
     public bool IsActive { get; set; }
     public bool HaveSupport{get; set;}
     public string? CommunicateType{get; set;}
-   // public required string TypeOfCoachingServices { get; set; } 
+
+    // public required string TypeOfCoachingServices { get; set; } 
     }
 }

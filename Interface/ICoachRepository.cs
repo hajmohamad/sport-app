@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using sport_app_backend.Dtos;
+using sport_app_backend.Dtos.ProgramDto;
 using sport_app_backend.Models;
 
 namespace sport_app_backend.Interface
@@ -14,5 +15,6 @@ namespace sport_app_backend.Interface
         Task<ApiResponse> GetPayment(string phoneNumber,int paymentId);
         Task<ApiResponse> GetExercises();
         Task<ApiResponse> GetProfile(string phoneNumber);
+        Task<ApiResponse> SaveWorkoutProgram(string phoneNumber,int paymentId, WorkoutProgramDto saveWorkoutProgramDto);
     }
 }

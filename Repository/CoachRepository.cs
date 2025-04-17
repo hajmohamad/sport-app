@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using sport_app_backend.Data;
 using sport_app_backend.Dtos;
+using sport_app_backend.Dtos.ProgramDto;
 using sport_app_backend.Interface;
 using sport_app_backend.Mappers;
 using sport_app_backend.Models;
@@ -66,6 +67,7 @@ namespace sport_app_backend.Repository
             {
                 coachingService.IsDeleted = true;
                 var newCoachService = addCoachingServices.ToCoachService(coach);
+                newCoachService.NumberOfSell = coachingService.NumberOfSell;
                 coach.CoachingServices ??= [];
                 coach.CoachingServices.Add(newCoachService);
                 context.CoachServices.Add(newCoachService);
@@ -165,14 +167,40 @@ namespace sport_app_backend.Repository
             if (user?.Coach == null) return new ApiResponse { Action = false, Message = "Coach not found" };
             var coachingService = user.Coach.CoachingServices.Where(x=>x.IsDeleted==false).ToList();
             var coachingServiceDto = coachingService.Select(x => x.ToCoachingServiceResponse()).ToList();
-            var payments  = await context.Payments.Include(p=>p.WorkoutProgram).
+            var payments  = await context.Payments.Include(p=>p.Athlete).Include(p=>p.WorkoutProgram).
                 Where(p => p.CoachId == user.Coach.Id && p.WorkoutProgram != null && p.WorkoutProgram.Status!=WorkoutProgramStatus.WRITING).ToListAsync();
+            var numberOfProgram = payments.Count(p => p.WorkoutProgram != null);
+            var numberOfAthlete = payments.Select(x=>x.AthleteId).Distinct().Count();
             return new ApiResponse
             {
                 Action = true, Message = "Coach found",
-                Result = user.ToCoachProfileResponseDto(coachingServiceDto, payments)
+                Result = user.ToCoachProfileResponseDto(coachingServiceDto, payments,numberOfAthlete,numberOfProgram)
             };
 
         }
+
+        public async Task<ApiResponse> SaveWorkoutProgram(string phoneNumber, int paymentId, WorkoutProgramDto workoutProgramDto)
+        {
+            var coach = await context.Coaches.FirstOrDefaultAsync(c => c.PhoneNumber == phoneNumber);
+            if (coach == null) return new ApiResponse { Action = false, Message = "Coach not found" };
+            var workoutProgram = await context.WorkoutPrograms.Include(x=>x.ProgramInDays)
+                .ThenInclude(z=>z.AllExerciseInDays)
+              .FirstOrDefaultAsync(p => p.Id == paymentId);
+            if(workoutProgram is null) return new ApiResponse{ Action = false, Message = "Payment not found" };
+            workoutProgram.ProgramInDays = workoutProgramDto.Days.ToListOfProgramInDays();
+
+            await context.SaveChangesAsync();
+            return new ApiResponse()
+            {
+                Action = true,
+                Message = "GOOD"
+            };
+
+
+
+
+        }
+
+     
     }
 }

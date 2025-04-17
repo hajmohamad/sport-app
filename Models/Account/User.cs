@@ -35,8 +35,8 @@ public class User
     public DateTime LastLogin { get; set; } 
     public Gender Gender { get; set; }
     public byte[] ImageProfile { get; set; } = Array.Empty<byte>();
-
-    public List<string> Bio = [];
+    [MaxLength(3)]
+    public string Bio { get; set; } = "";
     public Athlete? Athlete { get; set; }
     public Coach? Coach { get; set; }
     public TypeOfUser TypeOfUser { get; set; }

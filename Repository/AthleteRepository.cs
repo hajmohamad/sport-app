@@ -215,7 +215,7 @@ namespace sport_app_backend.Repository
             var athlete = await context.Athletes.Include(x => x.User).FirstOrDefaultAsync(x => x.PhoneNumber == phoneNumber);
             if (athlete is null) return new ApiResponse() { Message = "User is not an athlete", Action = false };// Ensure the user is an athlete
             if (athlete.User is null) return new ApiResponse() { Message = "User not found", Action = false };
-
+            athlete.User.BirthDate = Convert.ToDateTime(athleteQuestionDto.BirthDay);
             var athleteQuestion = athleteQuestionDto.ToAthleteQuestion(athlete);
             athlete.AthleteQuestions.Add(athleteQuestion);
            await context.AthleteQuestions.AddAsync(athleteQuestion);

@@ -9,6 +9,7 @@ using sport_app_backend.Models;
 
 using System.Security.Claims;
 using Microsoft.AspNetCore.Http.HttpResults;
+using sport_app_backend.Dtos.ProgramDto;
 using sport_app_backend.Models.Program;
 
 namespace sport_app_backend.Controller
@@ -118,9 +119,22 @@ namespace sport_app_backend.Controller
         }
 
         [HttpGet("get_Exercises")]
+        [Authorize(Roles = "Coach")]
         public async Task<IActionResult> GetExercises()
         {
             var result = await coachRepository.GetExercises();
+            if (result.Action != true) return BadRequest(result);
+            return Ok(result);
+            
+        }
+
+        [HttpPost("Save_workoutProgram/{paymentId}")]
+        [Authorize(Roles = "Coach")]
+        public async Task<IActionResult> SaveWorkoutProgram([FromRoute] int paymentId,[FromBody]WorkoutProgramDto  saveWorkoutProgramDto)
+        {
+            var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
+            if (phoneNumber is null) return BadRequest(new ApiResponse { Action = false, Message = "PhoneNumber is null" });
+            var result = await coachRepository.SaveWorkoutProgram(phoneNumber,paymentId, saveWorkoutProgramDto);
             if (result.Action != true) return BadRequest(result);
             return Ok(result);
             
@@ -129,4 +143,6 @@ namespace sport_app_backend.Controller
         
 
     }
+
+    
 }

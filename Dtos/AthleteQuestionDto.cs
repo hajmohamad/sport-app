@@ -15,6 +15,7 @@ namespace sport_app_backend.Dtos
         public string? ExerciseGoal { get; set; }
         public InjuryAreaDto? InjuryArea { get; set; }
         public string? FitnessLevel { get; set; }
+        public  string BirthDay { get; set; }
 
     }
 }

@@ -21,7 +21,8 @@ namespace sport_app_backend.Dtos
     public required int TimeBeforeWorkout { get; set; }=10;
     public required int RestTime { get; set; } = 30;
 
-    public List<string> Bio { get; set; } = [];
+    public string Bio { get; set; } = "";
+    
 
     }
 }
