@@ -28,7 +28,7 @@ public static class PaymentMappers
     public static PaymentResponseDto ToPaymentResponseDto(this Payment payment)
     {
         return new PaymentResponseDto
-        {
+        {   PaymentId = payment.Id,
             TransactionId = payment.TransactionId,
             PaymentStatus = payment.PaymentStatus.ToString(),
             Name = payment.Athlete?.User?.FirstName + " " + payment.Athlete?.User?.LastName,

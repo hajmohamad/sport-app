@@ -3,7 +3,7 @@
 namespace sport_app_backend.Dtos;
 
 public class PaymentResponseDto
-{
+{   public required int PaymentId { get; set; }
     public string TransactionId { get; set; } = string.Empty;
     public string Name { get; set; } = string.Empty;
     public required string ImageProfile { get; set; }= string.Empty;

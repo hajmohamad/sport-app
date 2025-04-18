@@ -142,6 +142,9 @@ namespace sport_app_backend.Repository
                 .Include(a=>a.AthleteQuestion)// بارگذاری User داخل Athlete
                 .ThenInclude(I=> I!.InjuryArea)
                 .Include(w=>w.WorkoutProgram)
+                .ThenInclude(z=>z.ProgramInDays)
+                .ThenInclude(z=>z.AllExerciseInDays)
+                .ThenInclude(e=>e.Exercise)
                 .FirstOrDefaultAsync(p => p.Coach != null && p.Coach.PhoneNumber == phoneNumber&& p.Id==paymentId);
             if(payment is null) return new ApiResponse() { Message = "Payment not found", Action = false };
             var result = payment.ToPaymentResponseDto();
@@ -207,7 +210,11 @@ namespace sport_app_backend.Repository
               .FirstOrDefaultAsync(p => p.Id == paymentId);
             if(workoutProgram is null) return new ApiResponse{ Action = false, Message = "Payment not found" };
             workoutProgram.ProgramInDays = workoutProgramDto.Days.ToListOfProgramInDays();
-
+            workoutProgram.ProgramDuration = workoutProgramDto.Week;
+            workoutProgram.GeneralWarmUp = workoutProgramDto.GeneralWarmUp;
+            workoutProgram.ProgramLevel = workoutProgramDto.ProgramLevel;
+            workoutProgram.DedicatedWarmUp = workoutProgramDto.DedicatedWarmUp ?? "";
+            workoutProgram.ProgramPriorities = workoutProgramDto.ProgramPriority.Select(x => (ProgramPriority)Enum.Parse(typeof(ProgramPriority), x.ToUpper())).ToList();
             await context.SaveChangesAsync();
             return new ApiResponse()
             {

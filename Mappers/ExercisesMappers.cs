@@ -42,7 +42,7 @@ namespace sport_app_backend.Mappers
                 Name = exercise.PersianName,
                 ImageLink = exercise.ImageLink,
                 Locations = exercise.Locations.Select(x => x.ToString()).ToList(),
-                Muscles = exercise.ExerciseCategories.Select(x => x.ToString()).ToList(),
+                Muscles = exercise.TargetMuscles.Select(x => x.ToString()).ToList(),
                 Equipment = exercise.Equipment.Select(x => x.ToString()).ToList(),
                 ExerciseCategories = exercise.ExerciseCategories.Select(x => x.ToString()).ToList(),
                 Level = exercise.ExerciseLevel.ToString()
