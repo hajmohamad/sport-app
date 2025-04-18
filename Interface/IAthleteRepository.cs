@@ -27,5 +27,7 @@ namespace sport_app_backend.Interface
         public Task<ApiResponse> CompleteNewChallenge(string phoneNumber, string challenge);
         public Task<ApiResponse> CompletedChallenge(string phoneNumber);
         public Task<ApiResponse> GetAchievements(string phoneNumber);
+        public Task<ApiResponse> GetAllPrograms(string phoneNumber);
+        public Task<ApiResponse> GetProgram(string phoneNumber,int paymentId);
     }
 }

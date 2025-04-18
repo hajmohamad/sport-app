@@ -1,3 +1,4 @@
+using System.Globalization;
 using sport_app_backend.Dtos;
 using sport_app_backend.Dtos.ProgramDto;
 using sport_app_backend.Models.Program;
@@ -35,6 +36,21 @@ public static class ProgramMappers
         return programInDays.Select(x => x.ToProgramInDay()).ToList();
         
         
+    }
+
+    public static AllPaymentResponseDto ToAllWorkoutProgramResponseDto(this WorkoutProgram workoutProgram)
+    {
+        return new AllPaymentResponseDto
+        {   PaymentId = workoutProgram.PaymentId,
+            PaymentStatus = workoutProgram.Payment.PaymentStatus.ToString(),
+            Name = workoutProgram.Coach.User.FirstName + " " + workoutProgram.Coach.User.LastName,
+            Amount = workoutProgram.Payment.Amount.ToString(CultureInfo.CurrentCulture),
+            DateTime = workoutProgram.Payment.PaymentDate.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture),
+            ImageProfile = workoutProgram.Coach.User.ImageProfile,
+            CoachServiceTitle = workoutProgram.Payment.CoachService.Title,
+            WorkoutProgramStatus = workoutProgram.Status.ToString()
+        };
+
     }
 
     private static ProgramInDay ToProgramInDay(this ProgramInDayDto programInDayDto)

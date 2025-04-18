@@ -13,10 +13,17 @@
   <component name="ChangeListManager">
     <list default="true" id="595b416c-ddc9-4b4e-96cb-8d4a5fa14b1b" name="Changes" comment="fix some bug">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dtos/PaymentResponseDto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Dtos/PaymentResponseDto.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Controller/AthleteController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Controller/AthleteController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Controller/CoachController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Controller/CoachController.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Dtos/ProgramDto/WorkoutProgramDto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Dtos/ProgramDto/WorkoutProgramDto.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Mappers/ExercisesMappers.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Mappers/ExercisesMappers.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Interface/IAthleteRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Interface/IAthleteRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Mappers/CoachMappers.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Mappers/CoachMappers.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Mappers/PaymentMappers.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Mappers/PaymentMappers.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Mappers/ProgramMappers.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Mappers/ProgramMappers.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Models/Account/Coach/Coach.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/Account/Coach/Coach.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Models/Payments/Payment.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/Payments/Payment.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Models/Program/WorkoutProgram.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/Program/WorkoutProgram.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Repository/AthleteRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Repository/AthleteRepository.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Repository/CoachRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Repository/CoachRepository.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -118,6 +125,10 @@
       <workItem from="1744992267362" duration="253000" />
       <workItem from="1744992710291" duration="66000" />
       <workItem from="1744992963501" duration="54000" />
+      <workItem from="1744993461916" duration="400000" />
+      <workItem from="1744993974378" duration="3878000" />
+      <workItem from="1745002879512" duration="499000" />
+      <workItem from="1745003428873" duration="2164000" />
     </task>
     <task id="LOCAL-00001" summary="edit role method">
       <option name="closed" value="true" />
@@ -203,37 +214,5 @@
     <MESSAGE value="add image uploader" />
     <MESSAGE value="fix some bug" />
     <option name="LAST_COMMIT_MESSAGE" value="fix some bug" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/Controller/CoachController.cs</url>
-          <line>86</line>
-          <properties documentPath="D:\403-1\a\sport-app\Controller\CoachController.cs" containingFunctionPresentation="Method 'GetCoachingService'">
-            <startOffsets>
-              <option value="3749" />
-            </startOffsets>
-            <endOffsets>
-              <option value="3750" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="1" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/Repository/CoachRepository.cs</url>
-          <line>59</line>
-          <properties documentPath="D:\403-1\a\sport-app\Repository\CoachRepository.cs" containingFunctionPresentation="Method 'UpdateCoachingService'">
-            <startOffsets>
-              <option value="2619" />
-            </startOffsets>
-            <endOffsets>
-              <option value="2735" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="2" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
   </component>
 </project>

@@ -27,7 +27,7 @@ namespace sport_app_backend.Mappers
                          [], // Ensure it's not null
                 StartCoachingYear = user.Coach?.StartCoachingYear ?? 0,
                 CoachingServices = coachingServicesResponse,
-                Payments = payments.Select(p => p.ToAllPaymentResponseDto())
+                Payments = payments.Select(p => p.ToCoachAllPaymentResponseDto())
                     .ToList(),
                 NumberOfAthlete = numberOfAthlete,
                 NumberOfProgram = numberOfProgram

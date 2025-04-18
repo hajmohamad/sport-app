@@ -10,7 +10,7 @@ public class CoachService
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int Id { get; set; }
     public int CoachId { get; set; }
-    public Coach? Coach {get; set;} 
+    public required Coach Coach {get; set;} 
     [MaxLength(50)]
     public required string Title { get; set; }
     [MaxLength(500)]

@@ -52,7 +52,7 @@ namespace sport_app_backend.Migrations
                     b.HasIndex("UserId")
                         .IsUnique();
 
-                    b.ToTable("Athletes");
+                    b.ToTable("Athletes", (string)null);
                 });
 
             modelBuilder.Entity("sport_app_backend.Models.Account.Coach", b =>
@@ -94,7 +94,7 @@ namespace sport_app_backend.Migrations
                     b.HasIndex("UserId")
                         .IsUnique();
 
-                    b.ToTable("Coaches");
+                    b.ToTable("Coaches", (string)null);
                 });
 
             modelBuilder.Entity("sport_app_backend.Models.Account.CoachService", b =>
@@ -143,7 +143,7 @@ namespace sport_app_backend.Migrations
 
                     b.HasIndex("CoachId");
 
-                    b.ToTable("CoachServices");
+                    b.ToTable("CoachServices", (string)null);
                 });
 
             modelBuilder.Entity("sport_app_backend.Models.Account.User", b =>
@@ -201,7 +201,7 @@ namespace sport_app_backend.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users");
+                    b.ToTable("Users", (string)null);
                 });
 
             modelBuilder.Entity("sport_app_backend.Models.Account.WeightEntry", b =>
@@ -223,7 +223,7 @@ namespace sport_app_backend.Migrations
 
                     b.HasIndex("AthleteId");
 
-                    b.ToTable("WeightEntries");
+                    b.ToTable("WeightEntries", (string)null);
                 });
 
             modelBuilder.Entity("sport_app_backend.Models.Actions.Activitie", b =>
@@ -257,7 +257,7 @@ namespace sport_app_backend.Migrations
 
                     b.HasIndex("AthleteId");
 
-                    b.ToTable("Activities");
+                    b.ToTable("Activities", (string)null);
                 });
 
             modelBuilder.Entity("sport_app_backend.Models.Actions.Exercise", b =>
@@ -316,7 +316,7 @@ namespace sport_app_backend.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Exercises");
+                    b.ToTable("Exercises", (string)null);
                 });
 
             modelBuilder.Entity("sport_app_backend.Models.Challenge_Achievement.Challenge", b =>
@@ -338,7 +338,7 @@ namespace sport_app_backend.Migrations
 
                     b.HasIndex("AthleteId");
 
-                    b.ToTable("Challenges");
+                    b.ToTable("Challenges", (string)null);
                 });
 
             modelBuilder.Entity("sport_app_backend.Models.CoachQuestion", b =>
@@ -381,7 +381,7 @@ namespace sport_app_backend.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("CoachQuestions");
+                    b.ToTable("CoachQuestions", (string)null);
                 });
 
             modelBuilder.Entity("sport_app_backend.Models.Login_Sinup.CodeVerify", b =>
@@ -404,7 +404,7 @@ namespace sport_app_backend.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("CodeVerifies");
+                    b.ToTable("CodeVerifies", (string)null);
                 });
 
             modelBuilder.Entity("sport_app_backend.Models.Payments.Payment", b =>
@@ -449,7 +449,7 @@ namespace sport_app_backend.Migrations
 
                     b.HasIndex("CoachServiceId");
 
-                    b.ToTable("Payments");
+                    b.ToTable("Payments", (string)null);
                 });
 
             modelBuilder.Entity("sport_app_backend.Models.Program.ProgramInDay", b =>
@@ -468,7 +468,7 @@ namespace sport_app_backend.Migrations
 
                     b.HasIndex("WorkoutProgramId");
 
-                    b.ToTable("ProgramInDays");
+                    b.ToTable("ProgramInDays", (string)null);
                 });
 
             modelBuilder.Entity("sport_app_backend.Models.Program.SingleExercise", b =>
@@ -495,7 +495,7 @@ namespace sport_app_backend.Migrations
 
                     b.HasIndex("ProgramInDayId");
 
-                    b.ToTable("SingleExercises");
+                    b.ToTable("SingleExercises", (string)null);
                 });
 
             modelBuilder.Entity("sport_app_backend.Models.Program.WorkoutProgram", b =>
@@ -566,7 +566,7 @@ namespace sport_app_backend.Migrations
                     b.HasIndex("PaymentId")
                         .IsUnique();
 
-                    b.ToTable("WorkoutPrograms");
+                    b.ToTable("WorkoutPrograms", (string)null);
                 });
 
             modelBuilder.Entity("sport_app_backend.Models.Question.A_Question.AthleteQuestion", b =>
@@ -600,7 +600,7 @@ namespace sport_app_backend.Migrations
 
                     b.HasIndex("AthleteId");
 
-                    b.ToTable("AthleteQuestions");
+                    b.ToTable("AthleteQuestions", (string)null);
                 });
 
             modelBuilder.Entity("sport_app_backend.Models.Question.A_Question.InjuryArea", b =>
@@ -639,7 +639,7 @@ namespace sport_app_backend.Migrations
                     b.HasIndex("AthleteQuestionId")
                         .IsUnique();
 
-                    b.ToTable("InjuryAreas");
+                    b.ToTable("InjuryAreas", (string)null);
                 });
 
             modelBuilder.Entity("sport_app_backend.Models.ReportApp", b =>
@@ -663,7 +663,7 @@ namespace sport_app_backend.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("ReportApps");
+                    b.ToTable("ReportApps", (string)null);
                 });
 
             modelBuilder.Entity("sport_app_backend.Models.WaterInDay", b =>
@@ -685,7 +685,7 @@ namespace sport_app_backend.Migrations
 
                     b.HasIndex("AthleteId");
 
-                    b.ToTable("WaterInDays");
+                    b.ToTable("WaterInDays", (string)null);
                 });
 
             modelBuilder.Entity("sport_app_backend.Models.WaterInTake", b =>
@@ -708,7 +708,7 @@ namespace sport_app_backend.Migrations
                     b.HasIndex("AthleteId")
                         .IsUnique();
 
-                    b.ToTable("WaterInTakes");
+                    b.ToTable("WaterInTakes", (string)null);
                 });
 
             modelBuilder.Entity("sport_app_backend.Models.Account.Athlete", b =>

@@ -129,7 +129,7 @@ namespace sport_app_backend.Repository
             if (athlete is null) return new ApiResponse() { Message = "User is not an athlete", Action = false };
             if(athlete.AthleteQuestions.Count==0 ) return new ApiResponse() { Message = "User has not completed the questions", Action = false };
             var lastQuestion = athlete.AthleteQuestions.LastOrDefault();
-
+            if(lastQuestion is null ) return new ApiResponse() { Message = "User has not completed the questions", Action = false };
             var coachService = await context.CoachServices.Include(x => x.Coach)
                 .FirstOrDefaultAsync(x => x.Id == coachingServiceId & x.IsActive == true);
             if (coachService is null) return new ApiResponse() { Message = "CoachingService not found", Action = false };
@@ -441,6 +441,50 @@ namespace sport_app_backend.Repository
 
         }
 
+        public async Task<ApiResponse> GetAllPrograms(string phoneNumber)
+        {
+            var athlete = await context.Athletes.Include(a => a.WorkoutPrograms)
+                .ThenInclude(p=>p.Payment)
+                .ThenInclude(s=>s.CoachService)
+                .ThenInclude(x=>x.Coach)
+                .ThenInclude(u=>u.User)
+                .FirstOrDefaultAsync(z => z.PhoneNumber == phoneNumber);
+            if(athlete is null)
+                return new ApiResponse()
+                    { Action = false, Message = "Athlete not found" };
+            
+            
+            return new ApiResponse()
+            {
+                Action = true,
+                Message = "Programs found",
+                Result = athlete.WorkoutPrograms.Select(x => x.ToAllWorkoutProgramResponseDto()).ToList()
+            };
+            
+        }
+
+        public async Task<ApiResponse> GetProgram(string phoneNumber, int paymentId)
+        {
+            var payment = await context.Payments
+                .Include(p => p.Coach)  // بارگذاری Coach
+                .Include(p => p.Athlete)  // بارگذاری Athlete
+                .ThenInclude(a => a!.User)
+                .Include(a=>a.AthleteQuestion)// بارگذاری User داخل Athlete
+                .ThenInclude(I=> I!.InjuryArea)
+                .Include(w=>w.WorkoutProgram)
+                .ThenInclude(z=>z.ProgramInDays)
+                .ThenInclude(z=>z.AllExerciseInDays)
+                .ThenInclude(e=>e.Exercise)
+                .FirstOrDefaultAsync(p => p.Athlete.PhoneNumber == phoneNumber&& p.Id==paymentId);
+            if(payment is null) return new ApiResponse() { Message = "Payment not found", Action = false };
+            return new ApiResponse()
+            {
+                Message = "Payment found",
+                Action = true,
+                Result = payment.ToCoachPaymentResponseDto()
+            };
+        }
+
         private static bool HasConsecutiveDays(List<DateTime> dates, int requiredConsecutive)
         {
             if (dates.Count == 0)
@@ -462,6 +506,7 @@ namespace sport_app_backend.Repository
             }
             return false;
         }
+        
 
 
     }

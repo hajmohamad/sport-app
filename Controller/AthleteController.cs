@@ -320,5 +320,27 @@ namespace sport_app_backend.Controller
             if (!result.Action) return BadRequest(result);
             return Ok(result);
         }
+        
+        [HttpGet("get_AllPrograms")]
+        [Authorize(Roles = "Athlete")]
+        public async Task<IActionResult> GetAllPrograms()
+        {
+            var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
+            if (phoneNumber is null) return BadRequest("PhoneNumber is null");
+            var result = await athleteRepository.GetAllPrograms(phoneNumber);
+            if (!result.Action) return BadRequest(result);
+            return Ok(result);
+        }
+        [HttpGet("get_Program")]
+        [Authorize(Roles = "Athlete")]
+        public async Task<IActionResult> GetProgram([FromRoute] int PaymentId)
+        {
+            var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
+            if (phoneNumber is null) return BadRequest("PhoneNumber is null");
+            var result = await athleteRepository.GetProgram(phoneNumber,PaymentId);
+            if (!result.Action) return BadRequest(result);
+            return Ok(result);
+        }
+
     }
 }

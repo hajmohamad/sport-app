@@ -129,7 +129,7 @@ namespace sport_app_backend.Repository
             {
                 Message = "Payments found",
                 Action = true,
-                Result = payments.Select(x=>x.ToAllPaymentResponseDto())
+                Result = payments.Select(x=>x.ToCoachAllPaymentResponseDto())
             };
         }
 
@@ -145,9 +145,10 @@ namespace sport_app_backend.Repository
                 .ThenInclude(z=>z.ProgramInDays)
                 .ThenInclude(z=>z.AllExerciseInDays)
                 .ThenInclude(e=>e.Exercise)
-                .FirstOrDefaultAsync(p => p.Coach != null && p.Coach.PhoneNumber == phoneNumber&& p.Id==paymentId);
+                .FirstOrDefaultAsync(p => p.Coach.PhoneNumber == phoneNumber&& p.Id==paymentId);
             if(payment is null) return new ApiResponse() { Message = "Payment not found", Action = false };
-            var result = payment.ToPaymentResponseDto();
+           
+            var result = payment.ToCoachPaymentResponseDto();
             if (result.WorkoutProgram!.ProgramInDays.Count == 0)
             {
              result.WorkoutProgram.ProgramInDays.Add(new ProgramInDayDto()
@@ -215,6 +216,14 @@ namespace sport_app_backend.Repository
             workoutProgram.ProgramLevel = workoutProgramDto.ProgramLevel;
             workoutProgram.DedicatedWarmUp = workoutProgramDto.DedicatedWarmUp ?? "";
             workoutProgram.ProgramPriorities = workoutProgramDto.ProgramPriority.Select(x => (ProgramPriority)Enum.Parse(typeof(ProgramPriority), x.ToUpper())).ToList();
+            if (workoutProgram.Status == WorkoutProgramStatus.NOTSTARTED)
+            {
+                workoutProgram.Status = WorkoutProgramStatus.WRITING;
+            }
+            if (workoutProgramDto.Publish)
+            {
+                workoutProgram.Status = WorkoutProgramStatus.NOTACTIVE;
+            }
             await context.SaveChangesAsync();
             return new ApiResponse()
             {
