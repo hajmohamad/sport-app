@@ -16,4 +16,8 @@ public interface IUserRepository
     public Task<ApiResponse> Logout(string phoneNumber);
     public Task<ApiResponse> ReportApp(string phoneNumber, ReportAppDto reportAppDto);
     public Task<ApiResponse> SaveImageAsync(string phoneNumber,IFormFile file);
+    public Task<ApiResponse> GetAllExercise();
+
+    public Task<ApiResponse> GetExercise(int exerciseId);
+    
 }

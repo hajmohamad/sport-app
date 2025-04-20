@@ -15,7 +15,7 @@ public class Athlete
 
     public required string PhoneNumber { get; set; }
     public int UserId { get; set; }
-    public User? User { get; set; }
+    public required User User { get; set; }
     [Range(1, 300)] public int Height { get; set; }
     [Range(1, 300)] public double CurrentWeight { get; set; }
 

@@ -170,16 +170,7 @@ namespace sport_app_backend.Repository
 
 
 
-        public async Task<ApiResponse> GetExercises()
-        {
-            var exercise = await context.Exercises.ToListAsync();
-            return new ApiResponse()
-            {
-                Message = "Exercises found",
-                Action = true,
-                Result = exercise.Select(x=>x.ToAllExerciseResponseDto())
-            };
-        }
+   
 
         public async Task<ApiResponse> GetProfile(string phoneNumber)
         {
@@ -191,7 +182,7 @@ namespace sport_app_backend.Repository
             var coachingService = user.Coach.CoachingServices.Where(x=>x.IsDeleted==false).ToList();
             var coachingServiceDto = coachingService.Select(x => x.ToCoachingServiceResponse()).ToList();
             var payments  = await context.Payments.Include(p=>p.Athlete).Include(p=>p.WorkoutProgram).
-                Where(p => p.CoachId == user.Coach.Id && p.WorkoutProgram != null && p.WorkoutProgram.Status!=WorkoutProgramStatus.WRITING).ToListAsync();
+                Where(p => p.CoachId == user.Coach.Id && p.WorkoutProgram != null && p.WorkoutProgram.Status!=WorkoutProgramStatus.WRITING&&p.WorkoutProgram.Status!=WorkoutProgramStatus.NOTSTARTED).ToListAsync();
             var numberOfProgram = payments.Count(p => p.WorkoutProgram != null);
             var numberOfAthlete = payments.Select(x=>x.AthleteId).Distinct().Count();
             return new ApiResponse

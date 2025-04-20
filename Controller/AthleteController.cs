@@ -331,13 +331,13 @@ namespace sport_app_backend.Controller
             if (!result.Action) return BadRequest(result);
             return Ok(result);
         }
-        [HttpGet("get_Program")]
+        [HttpGet("get_Program/{paymentId}")]
         [Authorize(Roles = "Athlete")]
-        public async Task<IActionResult> GetProgram([FromRoute] int PaymentId)
+        public async Task<IActionResult> GetProgram([FromRoute] int paymentId)
         {
             var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
             if (phoneNumber is null) return BadRequest("PhoneNumber is null");
-            var result = await athleteRepository.GetProgram(phoneNumber,PaymentId);
+            var result = await athleteRepository.GetProgram(phoneNumber,paymentId);
             if (!result.Action) return BadRequest(result);
             return Ok(result);
         }

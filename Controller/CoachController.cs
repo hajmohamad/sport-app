@@ -118,15 +118,7 @@ namespace sport_app_backend.Controller
             
         }
 
-        [HttpGet("get_Exercises")]
-        [Authorize(Roles = "Coach")]
-        public async Task<IActionResult> GetExercises()
-        {
-            var result = await coachRepository.GetExercises();
-            if (result.Action != true) return BadRequest(result);
-            return Ok(result);
-            
-        }
+      
 
         [HttpPost("Save_workoutProgram/{paymentId}")]
         [Authorize(Roles = "Coach")]

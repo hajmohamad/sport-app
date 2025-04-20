@@ -7,6 +7,7 @@ using sport_app_backend.Models.Account;
 using sport_app_backend.Models.Login_Sinup;
 using Amazon.S3;
 using Amazon.S3.Model;
+using sport_app_backend.Mappers;
 
 namespace sport_app_backend.Repository;
 
@@ -295,6 +296,38 @@ private async Task<string> GenerateUniqueUsername()
         await dbContext.SaveChangesAsync();
         return new ApiResponse() { Message = "Success", Action = true };
         
+    }
+    public async Task<ApiResponse> GetAllExercise()
+    {
+        var exercise = await dbContext.Exercises.ToListAsync();
+        return new ApiResponse()
+        {
+            Message = "Exercises found",
+            Action = true,
+            Result = exercise.Select(x=>x.ToAllExerciseResponseDto())
+        };
+    }
+
+    public Task<ApiResponse> GetExercise(int exerciseId)
+    {
+        var exercise = dbContext.Exercises.FirstOrDefault(x => x.Id == exerciseId);
+        if (exercise is null) return Task.FromResult(new ApiResponse() { Message = "Exercise not found", Action = false });
+        return Task.FromResult(new ApiResponse() { Message = "Success", Action = true, Result = new
+        {
+            exercise.Id,
+            exercise.Description,
+            ExerciseCategories = exercise.ExerciseCategories.Select(x=>x.ToString()).ToList(),
+            Equipment = exercise.Equipment.Select(x=>x.ToString()).ToList(),
+            Locations = exercise.Locations.Select(x=>x.ToString()).ToList(),
+            Muscles = exercise.TargetMuscles.Select(x=>x.ToString()).ToList(),
+            exercise.EnglishName,
+            exercise.PersianName,
+            exercise.ImageLink,
+            exercise.VideoLink,
+            exercise.BaseCategory,
+            ExerciseLevel = exercise.ExerciseLevel.ToString()
+            
+        } });
     }
 
     public async Task<ApiResponse> SaveImageAsync(string phoneNumber, IFormFile image)

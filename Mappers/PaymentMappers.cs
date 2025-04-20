@@ -36,7 +36,9 @@ public static class PaymentMappers
             AthleteQuestion = payment.AthleteQuestion.ToAthleteQuestionDto(),
             Height = payment.Athlete!.Height,
             ImageProfile = payment.Athlete?.User?.ImageProfile ??"",
-            WorkoutProgram = payment.WorkoutProgram?.ToProgramResponseDto()??new WorkoutProgramResponseDto()
+            WorkoutProgram = payment.WorkoutProgram?.ToProgramResponseDto()??new WorkoutProgramResponseDto(),
+            Gender = payment.Athlete.User.Gender.ToString(),
+            BirthDate = payment.Athlete.User.BirthDate.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture)
         };
         
     }
@@ -52,7 +54,10 @@ public static class PaymentMappers
             AthleteQuestion = payment.AthleteQuestion.ToAthleteQuestionDto(),
             Height = payment.Athlete.Height,
             ImageProfile = payment.Athlete.User?.ImageProfile ??"",
-            WorkoutProgram = payment.WorkoutProgram?.ToProgramResponseDto()??new WorkoutProgramResponseDto()
+            WorkoutProgram = payment.WorkoutProgram?.ToProgramResponseDto()??new WorkoutProgramResponseDto(),
+            Gender =   payment.Athlete.User?.Gender.ToString() ??"Female",
+            BirthDate = payment.Athlete.User?.BirthDate.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture)??"2001-01-01"
+
         };
         
     }

@@ -465,10 +465,11 @@ namespace sport_app_backend.Repository
 
         public async Task<ApiResponse> GetProgram(string phoneNumber, int paymentId)
         {
-            var payment = await context.Payments
-                .Include(p => p.Coach)  // بارگذاری Coach
-                .Include(p => p.Athlete)  // بارگذاری Athlete
-                .ThenInclude(a => a!.User)
+            var payment = await context.Payments 
+                .Include(p => p.Athlete)
+                .ThenInclude(a => a.User)
+                .Include(x => x.Coach)  // بارگذاری Coac
+                .ThenInclude(a => a.User)
                 .Include(a=>a.AthleteQuestion)// بارگذاری User داخل Athlete
                 .ThenInclude(I=> I!.InjuryArea)
                 .Include(w=>w.WorkoutProgram)
@@ -481,7 +482,7 @@ namespace sport_app_backend.Repository
             {
                 Message = "Payment found",
                 Action = true,
-                Result = payment.ToCoachPaymentResponseDto()
+                Result = payment.ToAthletePaymentResponseDto()
             };
         }
 

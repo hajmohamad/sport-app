@@ -13,7 +13,6 @@ namespace sport_app_backend.Interface
         Task<ApiResponse> DeleteCoachingService(string phoneNumber,int id);
         Task<ApiResponse> GetAllPayment(string phoneNumber);
         Task<ApiResponse> GetPayment(string phoneNumber,int paymentId);
-        Task<ApiResponse> GetExercises();
         Task<ApiResponse> GetProfile(string phoneNumber);
         Task<ApiResponse> SaveWorkoutProgram(string phoneNumber,int paymentId, WorkoutProgramDto saveWorkoutProgramDto);
         Task<ApiResponse> GetWorkoutProgram(string phoneNumber, int paymentId);
