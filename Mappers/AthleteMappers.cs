@@ -24,7 +24,6 @@ namespace sport_app_backend.Mappers
                 CurrentWeight = user.Athlete.CurrentWeight,
                 WeightGoal = user.Athlete.WeightGoal,
                 Gender = user.Gender.ToString(),
-
                 ImageProfile = user.ImageProfile ??"",
                 Bio = user.Bio ?? "",
                 TimeBeforeWorkout = user.Athlete.TimeBeforeWorkout,

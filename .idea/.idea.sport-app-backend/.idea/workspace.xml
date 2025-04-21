@@ -13,12 +13,6 @@
   <component name="ChangeListManager">
     <list default="true" id="595b416c-ddc9-4b4e-96cb-8d4a5fa14b1b" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Controller/AthleteController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Controller/AthleteController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dtos/PaymentResponseDto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Dtos/PaymentResponseDto.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Mappers/PaymentMappers.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Mappers/PaymentMappers.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Models/Account/Athlete/Athlete.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/Account/Athlete/Athlete.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Repository/AthleteRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Repository/AthleteRepository.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Repository/CoachRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Repository/CoachRepository.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -44,7 +38,8 @@
   }
 }</component>
   <component name="HighlightingSettingsPerFile">
-    <setting file="mock://D:/403-1/es-402/Migrations/ApplicationDbContextModelSnapshot.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/403-1/es-402/Controller/UserController.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/403-1/es-402/Interface/IUserRepository.cs" root0="SKIP_HIGHLIGHTING" />
   </component>
   <component name="MetaFilesCheckinStateConfiguration" checkMetaFiles="false" />
   <component name="ProjectColorInfo">{
@@ -122,6 +117,8 @@
       <workItem from="1745002879512" duration="499000" />
       <workItem from="1745003428873" duration="2520000" />
       <workItem from="1745006617002" duration="3208000" />
+      <workItem from="1745164178875" duration="1100000" />
+      <workItem from="1745165861840" duration="24000" />
     </task>
     <task id="LOCAL-00001" summary="edit role method">
       <option name="closed" value="true" />
@@ -187,7 +184,15 @@
       <option name="project" value="LOCAL" />
       <updated>1745005923431</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="add GetExercise method">
+      <option name="closed" value="true" />
+      <created>1745165300016</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1745165300016</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -215,6 +220,7 @@
     <MESSAGE value="add image uploader" />
     <MESSAGE value="fix some bug" />
     <MESSAGE value="get program for athlete" />
-    <option name="LAST_COMMIT_MESSAGE" value="get program for athlete" />
+    <MESSAGE value="add GetExercise method" />
+    <option name="LAST_COMMIT_MESSAGE" value="add GetExercise method" />
   </component>
 </project>

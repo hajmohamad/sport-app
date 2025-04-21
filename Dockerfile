@@ -16,5 +16,5 @@ RUN dotnet publish "sport-app-backend.csproj" -c Release -o /app/publish
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENV ConnectionString__DefaultConnection="server=charsetdb,3306;database=intelligent_zhukovsky;User=root;password=s11HQ2ma2V6BCftWVVD1Itzf"
+ENV ConnectionString__DefaultConnection="server=charsetdb,3306;database=nostalgic_roentgen;User=root;password=eRlzJwbns8A6zbxzQtsktaH6"
 ENTRYPOINT ["dotnet", "sport-app-backend.dll"]

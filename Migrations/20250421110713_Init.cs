@@ -84,7 +84,8 @@ namespace sport_app_backend.Migrations
                     CreateDate = table.Column<DateTime>(type: "date", nullable: false),
                     LastLogin = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     Gender = table.Column<int>(type: "int", nullable: false),
-                    ImageProfile = table.Column<byte[]>(type: "longblob", nullable: false),
+                    ImageProfile = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     Bio = table.Column<string>(type: "varchar(3)", maxLength: 3, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     TypeOfUser = table.Column<int>(type: "int", nullable: false),
@@ -486,7 +487,7 @@ namespace sport_app_backend.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     GeneralWarmUp = table.Column<string>(type: "varchar(30)", maxLength: 30, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    DedicatedWarmUp = table.Column<string>(type: "varchar(30)", maxLength: 30, nullable: false)
+                    DedicatedWarmUp = table.Column<string>(type: "varchar(30)", maxLength: 30, nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     EndDate = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     Status = table.Column<int>(type: "int", nullable: false),

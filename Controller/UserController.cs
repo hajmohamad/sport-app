@@ -40,16 +40,16 @@ public class UserController(IUserRepository userRepository) : ControllerBase
     }
     
     //add username
-    [HttpPut("add_username")]
-    [Authorize(Roles = "Athlete,Coach")]
-    public async Task<IActionResult> AddUsername([FromBody] string username)
-    {
-        var phoneNumber =  User.FindFirst(ClaimTypes.Name)?.Value;
-        if (phoneNumber is null) return BadRequest("PhoneNumber is null");
-        var result = await userRepository.AddUsername(phoneNumber, username);
-        if (!result.Action) return BadRequest(result);
-        return Ok(result);
-    }
+    // [HttpPut("add_username")]
+    // [Authorize(Roles = "Athlete,Coach")]
+    // public async Task<IActionResult> AddUsername([FromBody] string username)
+    // {
+    //     var phoneNumber =  User.FindFirst(ClaimTypes.Name)?.Value;
+    //     if (phoneNumber is null) return BadRequest("PhoneNumber is null");
+    //     var result = await userRepository.AddUsername(phoneNumber, username);
+    //     if (!result.Action) return BadRequest(result);
+    //     return Ok(result);
+    // }
 
     [HttpPut("edit_user_profile")]
     [Authorize(Roles = "Athlete,Coach")]
@@ -95,9 +95,9 @@ public class UserController(IUserRepository userRepository) : ControllerBase
         return Ok(result);
     }
     
-    [HttpPost("upload")]
+    [HttpPost("uploadProfilePhoto")]
     [Authorize(Roles = "Athlete,Coach")]
-    public async Task<IActionResult> UploadImage(IFormFile file)
+    public async Task<IActionResult> uploadProfilePhoto(IFormFile file)
     {
         var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
         if (phoneNumber is null) return BadRequest("PhoneNumber is null");
@@ -126,6 +126,19 @@ public class UserController(IUserRepository userRepository) : ControllerBase
         return Ok(result);
             
     }
+    
+    [HttpDelete("removeProfilePhoto")]
+    [Authorize(Roles = "Athlete,Coach")]
+    public async Task<IActionResult> RemoveProfilePhoto()
+    {
+        var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
+        if (phoneNumber is null) return BadRequest("PhoneNumber is null");
+        var result = await userRepository.RemoveProfilePhoto(phoneNumber);
+        if (result.Action != true) return BadRequest(result);
+        return Ok(result);
+            
+    }
+
 
 
 }

@@ -10,7 +10,7 @@ public interface IUserRepository
     public Task<ApiResponse> CheckCode(CheckCodeRequestDto checkCodeRequestDto);
     public Task<ApiResponse> AddRoleGender(string phoneNumber, RoleGenderDto roleGenderDto);
     public  Task<ApiResponse> GenerateAccessToken(string refreshToken);
-    public Task<ApiResponse> AddUsername(string phoneNumber,string username);
+   
     public Task<ApiResponse> EditUserProfile(string phoneNumber, EditUserProfileDto editUserProfileDto);
     public Task<ApiResponse> GetUserProfileForEdit(string phoneNumber);
     public Task<ApiResponse> Logout(string phoneNumber);
@@ -19,5 +19,6 @@ public interface IUserRepository
     public Task<ApiResponse> GetAllExercise();
 
     public Task<ApiResponse> GetExercise(int exerciseId);
-    
+
+    public Task<ApiResponse> RemoveProfilePhoto(string phoneNumber);
 }

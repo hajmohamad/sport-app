@@ -270,7 +270,8 @@ private async Task<string> GenerateUniqueUsername()
                 user.LastName,
                 user.BirthDate,
                 user.Bio,
-                user.Coach?.HeadLine
+                user.Coach?.HeadLine,
+                user.ImageProfile
             }
         };
     }
@@ -328,6 +329,61 @@ private async Task<string> GenerateUniqueUsername()
             ExerciseLevel = exercise.ExerciseLevel.ToString()
             
         } });
+    }
+
+    public async Task<ApiResponse> RemoveProfilePhoto(string phoneNumber)
+    {
+        var user = await dbContext.Users.FirstOrDefaultAsync(x => x.PhoneNumber == phoneNumber);
+        if (user is null) return new ApiResponse() { Message = "User not found", Action = false };
+        var img = user.ImageProfile;
+        if (img=="") return new ApiResponse() { Message = "now img found", Action = false };
+        
+        const string accessKey = "kn8vqc4tvn5d36ol";
+        const string secretKey = "6a05ec26-f42a-4c26-84a1-ad5d93236b63";
+        const string bucketName = "charset7";
+        const string endpoint = "https://storage.c2.liara.space";
+        var config = new AmazonS3Config
+        {
+            ServiceURL = endpoint,
+            ForcePathStyle = true,
+            SignatureVersion = "4"
+        };
+
+        var credentials = new Amazon.Runtime.BasicAWSCredentials(
+            accessKey,
+            secretKey
+        );
+
+        using var client = new AmazonS3Client(credentials, config);
+
+        
+        try
+        { 
+            if (user.ImageProfile.Length > 10)
+            {
+                await DeleteObjectAsync(client, user.ImageProfile);
+                user.ImageProfile = "";
+                await dbContext.SaveChangesAsync();
+            }
+
+        }
+        catch (AmazonS3Exception e)
+        {
+
+            return new ApiResponse()
+            {
+                Action = false,
+                Message = $"Error uploading to S3: {e.Message}",
+                
+            };
+        }
+        return new ApiResponse()
+        {
+            Action = true,
+            Message = "img remove successfully",
+                
+        };
+        
     }
 
     public async Task<ApiResponse> SaveImageAsync(string phoneNumber, IFormFile image)

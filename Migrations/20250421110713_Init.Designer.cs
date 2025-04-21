@@ -11,8 +11,8 @@ using sport_app_backend.Data;
 namespace sport_app_backend.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250417130349_Bio")]
-    partial class Bio
+    [Migration("20250421110713_Init")]
+    partial class Init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -175,8 +175,7 @@ namespace sport_app_backend.Migrations
 
                     b.Property<string>("ImageProfile")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("varchar(50)");
+                        .HasColumnType("longtext");
 
                     b.Property<DateTime>("LastLogin")
                         .HasColumnType("datetime(6)");
@@ -515,7 +514,6 @@ namespace sport_app_backend.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("DedicatedWarmUp")
-                        .IsRequired()
                         .HasMaxLength(30)
                         .HasColumnType("varchar(30)");
 
