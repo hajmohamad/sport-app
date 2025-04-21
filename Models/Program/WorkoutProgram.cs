@@ -24,10 +24,8 @@ public class WorkoutProgram
     [MaxLength(10)]
     public List<ProgramPriority> ProgramPriorities { get; set; } = [];
     [MaxLength(30)]
-    public List<string> GeneralWarmUp { get; set; } = [];
-
-    [MaxLength(30)] 
-    public string? DedicatedWarmUp { get; set; } = "";
+    public List<GeneralWarmUp>? GeneralWarmUp { get; set; } = [];
+    public DedicatedWarmUp? DedicatedWarmUp { get; set; } 
     public DateTime EndDate { get; set; }
     public WorkoutProgramStatus Status { get; set; } = WorkoutProgramStatus.NOTSTARTED;
     public int Duration { get; set; }

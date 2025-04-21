@@ -203,10 +203,15 @@ namespace sport_app_backend.Repository
             if(workoutProgram is null) return new ApiResponse{ Action = false, Message = "Payment not found" };
             workoutProgram.ProgramInDays = workoutProgramDto.Days.ToListOfProgramInDays();
             workoutProgram.ProgramDuration = workoutProgramDto.Week;
-            workoutProgram.GeneralWarmUp = workoutProgramDto.GeneralWarmUp;
+            workoutProgram.GeneralWarmUp = workoutProgramDto.GeneralWarmUp?.Select(x => (GeneralWarmUp)Enum.Parse(typeof(GeneralWarmUp), x)).ToList()??[];
             workoutProgram.ProgramLevel = workoutProgramDto.ProgramLevel;
-            workoutProgram.DedicatedWarmUp = workoutProgramDto.DedicatedWarmUp ?? "";
-            workoutProgram.ProgramPriorities = workoutProgramDto.ProgramPriority.Select(x => (ProgramPriority)Enum.Parse(typeof(ProgramPriority), x.ToUpper())).ToList();
+            if (workoutProgramDto.DedicatedWarmUp is not null)
+            {
+                workoutProgram.DedicatedWarmUp =
+                    (DedicatedWarmUp)Enum.Parse(typeof(DedicatedWarmUp), workoutProgramDto.DedicatedWarmUp);
+            }
+
+            workoutProgram.ProgramPriorities = workoutProgramDto.ProgramPriority.Select(x => (ProgramPriority)Enum.Parse(typeof(ProgramPriority), x.ToUpper())).ToList() ??[];
             if (workoutProgram.Status == WorkoutProgramStatus.NOTSTARTED)
             {
                 workoutProgram.Status = WorkoutProgramStatus.WRITING;

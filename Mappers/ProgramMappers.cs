@@ -18,9 +18,9 @@ public static class ProgramMappers
             ProgramDuration = workoutProgram.ProgramDuration,
             ProgramLevel = workoutProgram.ProgramLevel ,
             ProgramPriorities = workoutProgram.ProgramPriorities.Select(x => x.ToString()).ToList(),
-            GeneralWarmUp = workoutProgram.GeneralWarmUp,
+            GeneralWarmUp = workoutProgram.GeneralWarmUp.Select(c=>c.ToString()).ToList(),
             #pragma warning disable CS8601 // Possible null reference assignment.
-            DedicatedWarmUp = workoutProgram.DedicatedWarmUp == "" ? null : workoutProgram.DedicatedWarmUp,      
+            DedicatedWarmUp = workoutProgram.DedicatedWarmUp.ToString()??"",      
             #pragma warning restore CS8601 // Possible null reference assignment.
             EndDate = workoutProgram.EndDate,
             Status = workoutProgram.Status.ToString(),
