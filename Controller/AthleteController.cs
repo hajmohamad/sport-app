@@ -64,11 +64,7 @@ namespace sport_app_backend.Controller
             if (phoneNumber is null) return BadRequest("PhoneNumber is null");
             var athlete = await context.Athletes.Include(a => a.WaterInTake)
                 .FirstOrDefaultAsync(u => u.PhoneNumber == phoneNumber);
-            if (athlete == null || athlete.WaterInTake == null)
-            {
-                return NotFound("Water intake not found");
-            }
-            else
+            if (athlete?.WaterInTake == null)
             {
                 return Ok(new ApiResponse()
                 {
@@ -76,11 +72,22 @@ namespace sport_app_backend.Controller
                     Message = "Water intake found",
                     Result = new WaterInTakeDto()
                     {
-                        DailyCupOfWater = athlete.WaterInTake.DailyCupOfWater,
-                        Reminder = athlete.WaterInTake.Reminder
+                        DailyCupOfWater = 0,
+                        Reminder = 0
                     }
                 });
             }
+
+            return Ok(new ApiResponse()
+            {
+                Action = true,
+                Message = "Water intake found",
+                Result = new WaterInTakeDto()
+                {
+                    DailyCupOfWater = athlete.WaterInTake.DailyCupOfWater,
+                    Reminder = athlete.WaterInTake.Reminder
+                }
+            });
         }
 
 

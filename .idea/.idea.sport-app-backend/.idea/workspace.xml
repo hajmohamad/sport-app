@@ -13,9 +13,10 @@
   <component name="ChangeListManager">
     <list default="true" id="595b416c-ddc9-4b4e-96cb-8d4a5fa14b1b" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Migrations/20250421110713_Init.Designer.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Migrations/20250421110713_Init.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Migrations/ApplicationDbContextModelSnapshot.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Controller/AthleteController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Controller/AthleteController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Migrations/ApplicationDbContextModelSnapshot.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Migrations/ApplicationDbContextModelSnapshot.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Models/Program/WorkoutProgram.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/Program/WorkoutProgram.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Repository/CoachRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Repository/CoachRepository.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -41,8 +42,7 @@
   }
 }</component>
   <component name="HighlightingSettingsPerFile">
-    <setting file="mock://D:/403-1/es-402/Controller/UserController.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock://D:/403-1/es-402/Interface/IUserRepository.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/403-1/es-402/Program.cs" root0="SKIP_HIGHLIGHTING" />
   </component>
   <component name="MetaFilesCheckinStateConfiguration" checkMetaFiles="false" />
   <component name="ProjectColorInfo">{
@@ -124,6 +124,8 @@
       <workItem from="1745165861840" duration="24000" />
       <workItem from="1745233482290" duration="7283000" />
       <workItem from="1745251857070" duration="713000" />
+      <workItem from="1745308925105" duration="6480000" />
+      <workItem from="1745332785068" duration="1485000" />
     </task>
     <task id="LOCAL-00001" summary="edit role method">
       <option name="closed" value="true" />
@@ -213,7 +215,23 @@
       <option name="project" value="LOCAL" />
       <updated>1745242757084</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="add ReportAppCategory">
+      <option name="closed" value="true" />
+      <created>1745312659885</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1745312659885</updated>
+    </task>
+    <task id="LOCAL-00013" summary="add EnableRetryOnFailure">
+      <option name="closed" value="true" />
+      <created>1745316267611</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1745316267611</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -244,6 +262,8 @@
     <MESSAGE value="add GetExercise method" />
     <MESSAGE value="add remove photo method" />
     <MESSAGE value="add DedicatedWarmUp.cs enum" />
-    <option name="LAST_COMMIT_MESSAGE" value="add DedicatedWarmUp.cs enum" />
+    <MESSAGE value="add ReportAppCategory" />
+    <MESSAGE value="add EnableRetryOnFailure" />
+    <option name="LAST_COMMIT_MESSAGE" value="add EnableRetryOnFailure" />
   </component>
 </project>

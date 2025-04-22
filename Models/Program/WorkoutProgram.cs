@@ -21,9 +21,7 @@ public class WorkoutProgram
     public int ProgramDuration { get; set; } = 3;
     [MaxLength(20)] 
     public string ProgramLevel { get; set; } = "Beginner";
-    [MaxLength(10)]
     public List<ProgramPriority> ProgramPriorities { get; set; } = [];
-    [MaxLength(30)]
     public List<GeneralWarmUp>? GeneralWarmUp { get; set; } = [];
     public DedicatedWarmUp? DedicatedWarmUp { get; set; } 
     public DateTime EndDate { get; set; }

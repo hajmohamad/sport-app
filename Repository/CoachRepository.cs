@@ -181,7 +181,7 @@ namespace sport_app_backend.Repository
             if (user?.Coach == null) return new ApiResponse { Action = false, Message = "Coach not found" };
             var coachingService = user.Coach.CoachingServices.Where(x=>x.IsDeleted==false).ToList();
             var coachingServiceDto = coachingService.Select(x => x.ToCoachingServiceResponse()).ToList();
-            var payments  = await context.Payments.Include(p=>p.Athlete).Include(p=>p.WorkoutProgram).
+            var payments  = await context.Payments.Include(p=>p.Athlete).ThenInclude(u=>u.User).Include(p=>p.WorkoutProgram).
                 Where(p => p.CoachId == user.Coach.Id && p.WorkoutProgram != null && p.WorkoutProgram.Status!=WorkoutProgramStatus.WRITING&&p.WorkoutProgram.Status!=WorkoutProgramStatus.NOTSTARTED).ToListAsync();
             var numberOfProgram = payments.Count(p => p.WorkoutProgram != null);
             var numberOfAthlete = payments.Select(x=>x.AthleteId).Distinct().Count();
