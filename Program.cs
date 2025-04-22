@@ -47,13 +47,11 @@ builder.Services.AddSwaggerGen(option =>
     });
 });
 
-var connectionStrings = builder.Configuration.GetConnectionString("DefaultConnection");
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
- options.UseMySql(connectionStrings,
-        ServerVersion.AutoDetect(connectionStrings)));
-
-
-
+    options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString),
+        mySqlOptions => mySqlOptions.EnableRetryOnFailure())
+);
 
 
 builder.Services.AddAuthentication(options =>

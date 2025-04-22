@@ -27,6 +27,7 @@ public class ApplicationDbContext : DbContext
          modelBuilder.Entity<User>()
         .Navigation(u => u.Coach)
         .AutoInclude(); 
+         
 
          modelBuilder.Entity<User>()
         .Navigation(u => u.Athlete)
