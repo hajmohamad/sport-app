@@ -10,7 +10,8 @@ public class ReportApp
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int Id {get; set;}
     public int UserId {get; set;}
-    public User? User{get; set;}
-    public string Category{get; set;}=string.Empty;
-    public string Description{get; set;}=string.Empty;
+    public required User User{get; set;}
+    public required List<ReportAppCategory> Category{get; set;}
+    [MaxLength(300)]
+    public required string Description{get; set;}=string.Empty;
 }

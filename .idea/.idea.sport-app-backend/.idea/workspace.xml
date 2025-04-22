@@ -13,6 +13,9 @@
   <component name="ChangeListManager">
     <list default="true" id="595b416c-ddc9-4b4e-96cb-8d4a5fa14b1b" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Migrations/20250421110713_Init.Designer.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Migrations/20250421110713_Init.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Migrations/ApplicationDbContextModelSnapshot.cs" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -119,6 +122,8 @@
       <workItem from="1745006617002" duration="3208000" />
       <workItem from="1745164178875" duration="1100000" />
       <workItem from="1745165861840" duration="24000" />
+      <workItem from="1745233482290" duration="7283000" />
+      <workItem from="1745251857070" duration="713000" />
     </task>
     <task id="LOCAL-00001" summary="edit role method">
       <option name="closed" value="true" />
@@ -192,7 +197,23 @@
       <option name="project" value="LOCAL" />
       <updated>1745165300016</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="add remove photo method">
+      <option name="closed" value="true" />
+      <created>1745239411726</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1745239411726</updated>
+    </task>
+    <task id="LOCAL-00011" summary="add DedicatedWarmUp.cs enum">
+      <option name="closed" value="true" />
+      <created>1745242757084</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1745242757084</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -221,6 +242,8 @@
     <MESSAGE value="fix some bug" />
     <MESSAGE value="get program for athlete" />
     <MESSAGE value="add GetExercise method" />
-    <option name="LAST_COMMIT_MESSAGE" value="add GetExercise method" />
+    <MESSAGE value="add remove photo method" />
+    <MESSAGE value="add DedicatedWarmUp.cs enum" />
+    <option name="LAST_COMMIT_MESSAGE" value="add DedicatedWarmUp.cs enum" />
   </component>
 </project>

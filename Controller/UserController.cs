@@ -1,5 +1,6 @@
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using sport_app_backend.Dtos;
 using sport_app_backend.Interface;
@@ -19,9 +20,28 @@ public class UserController(IUserRepository userRepository) : ControllerBase
 
     ///Send code
     [HttpPost("SendCode")]
-    public async Task<ApiResponse> SendCode([FromBody]string userPhoneNumber)
+    public async Task<IActionResult>SendCode([FromBody]string userPhoneNumber)
     {
-        return await userRepository.Login(userPhoneNumber);
+        try
+        {
+            var result = await userRepository.Login(userPhoneNumber);
+
+            if (!result.Action)
+            {
+                return BadRequest(result);
+            }
+
+            return Ok(result);
+        }
+        catch (Exception e)
+        {
+
+            return BadRequest(new ApiResponse()
+            {
+                Action = false,
+                Message = e.Message
+            });
+        }
     }
 
     [HttpPut("addRoleGender")]
@@ -36,7 +56,13 @@ public class UserController(IUserRepository userRepository) : ControllerBase
     [HttpPost("AccessToken")]
     public async Task<IActionResult> AccessToken([FromBody] string refreshToken)
     {
-        return Ok(await userRepository.GenerateAccessToken(refreshToken));
+        var result = await userRepository.GenerateAccessToken(refreshToken);
+        if (!result.Action)
+        {
+            return Unauthorized(result);
+        }
+        
+        return Ok(result);
     }
     
     //add username

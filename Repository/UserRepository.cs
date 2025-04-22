@@ -291,7 +291,7 @@ private async Task<string> GenerateUniqueUsername()
         await dbContext.ReportApps.AddAsync(new ReportApp()
         {   User = user,
             UserId = user.Id,
-            Category = reportAppDto.Category,
+            Category =    reportAppDto.Category.Select(Enum.Parse<ReportAppCategory>).ToList()??[],
             Description = reportAppDto.Description
         });
         await dbContext.SaveChangesAsync();

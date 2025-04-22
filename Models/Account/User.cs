@@ -36,7 +36,7 @@ public class User
     public Gender Gender { get; set; }
 
     public string ImageProfile { get; set; } = "";
-    [MaxLength(3)]
+    [MaxLength(150)]
     public string Bio { get; set; } = "";
     public Athlete? Athlete { get; set; }
     public Coach? Coach { get; set; }

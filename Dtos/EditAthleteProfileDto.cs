@@ -7,5 +7,5 @@ public class EditUserProfileDto
     public string LastName { get; set; } = string.Empty;
     public string BirthDate { get; set; } = string.Empty;
     public string Bio { get; set; } = "";
-    public required string HeadLine{ get; set; } = "";
+    public  string HeadLine{ get; set; } = "";
 }

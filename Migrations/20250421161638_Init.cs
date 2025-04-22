@@ -485,10 +485,9 @@ namespace sport_app_backend.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     ProgramPriorities = table.Column<string>(type: "varchar(10)", maxLength: 10, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    GeneralWarmUp = table.Column<string>(type: "varchar(30)", maxLength: 30, nullable: false)
+                    GeneralWarmUp = table.Column<string>(type: "varchar(30)", maxLength: 30, nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    DedicatedWarmUp = table.Column<string>(type: "varchar(30)", maxLength: 30, nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    DedicatedWarmUp = table.Column<int>(type: "int", nullable: true),
                     EndDate = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     Status = table.Column<int>(type: "int", nullable: false),
                     Duration = table.Column<int>(type: "int", nullable: false),

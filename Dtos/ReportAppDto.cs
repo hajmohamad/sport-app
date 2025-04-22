@@ -2,6 +2,6 @@
 
 public class ReportAppDto
 {
-    public string Category{get; set;}=string.Empty;
+    public List<string> Category{get; set;}
     public string Description{get; set;}=string.Empty;
 }

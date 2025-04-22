@@ -11,7 +11,7 @@ using sport_app_backend.Data;
 namespace sport_app_backend.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250421110713_Init")]
+    [Migration("20250421161638_Init")]
     partial class Init
     {
         /// <inheritdoc />
@@ -513,9 +513,8 @@ namespace sport_app_backend.Migrations
                     b.Property<int>("CoachId")
                         .HasColumnType("int");
 
-                    b.Property<string>("DedicatedWarmUp")
-                        .HasMaxLength(30)
-                        .HasColumnType("varchar(30)");
+                    b.Property<int?>("DedicatedWarmUp")
+                        .HasColumnType("int");
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -529,7 +528,6 @@ namespace sport_app_backend.Migrations
                         .HasColumnType("datetime(6)");
 
                     b.Property<string>("GeneralWarmUp")
-                        .IsRequired()
                         .HasMaxLength(30)
                         .HasColumnType("varchar(30)");
 
