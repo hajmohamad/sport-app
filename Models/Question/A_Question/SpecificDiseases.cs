@@ -5,7 +5,7 @@
         Stroke, // سکته مغزی
         HeartAttack, // سکته قلبی
         Type1Diabetes, // دیابت نوع ۱
-        CornaryArteryDisease, // گرفتن عروق قلبی
-        Ampuation // نقص عضو
+        CoronaryArteryDisease, // گرفتن عروق قلبی
+        Amputation // نقص عضو
     }
 }

@@ -47,7 +47,8 @@ builder.Services.AddSwaggerGen(option =>
     });
 });
 
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+var connectionString =
+    "server=charsetdb,3306;database=nostalgic_roentgen;User=root;password=eRlzJwbns8A6zbxzQtsktaH6;Connection Timeout=30";
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString),
         mySqlOptions => mySqlOptions.EnableRetryOnFailure())

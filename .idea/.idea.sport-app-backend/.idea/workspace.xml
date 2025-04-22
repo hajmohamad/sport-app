@@ -13,10 +13,9 @@
   <component name="ChangeListManager">
     <list default="true" id="595b416c-ddc9-4b4e-96cb-8d4a5fa14b1b" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Controller/AthleteController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Controller/AthleteController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Migrations/ApplicationDbContextModelSnapshot.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Migrations/ApplicationDbContextModelSnapshot.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Models/Program/WorkoutProgram.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/Program/WorkoutProgram.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Repository/CoachRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Repository/CoachRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Data/ApplicationDBContext.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Data/ApplicationDBContext.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Models/Question/A_Question/SpecificDiseases.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/Question/A_Question/SpecificDiseases.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Program.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -42,7 +41,7 @@
   }
 }</component>
   <component name="HighlightingSettingsPerFile">
-    <setting file="mock://D:/403-1/es-402/Program.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/403-1/es-402/Controller/AthleteController.cs" root0="SKIP_HIGHLIGHTING" />
   </component>
   <component name="MetaFilesCheckinStateConfiguration" checkMetaFiles="false" />
   <component name="ProjectColorInfo">{
@@ -125,7 +124,10 @@
       <workItem from="1745233482290" duration="7283000" />
       <workItem from="1745251857070" duration="713000" />
       <workItem from="1745308925105" duration="6480000" />
-      <workItem from="1745332785068" duration="1485000" />
+      <workItem from="1745332785068" duration="1670000" />
+      <workItem from="1745335476957" duration="627000" />
+      <workItem from="1745345276045" duration="2741000" />
+      <workItem from="1745349286239" duration="1126000" />
     </task>
     <task id="LOCAL-00001" summary="edit role method">
       <option name="closed" value="true" />
@@ -231,7 +233,15 @@
       <option name="project" value="LOCAL" />
       <updated>1745316267611</updated>
     </task>
-    <option name="localTasksCounter" value="14" />
+    <task id="LOCAL-00014" summary="edit water in take">
+      <option name="closed" value="true" />
+      <created>1745334419243</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1745334419243</updated>
+    </task>
+    <option name="localTasksCounter" value="15" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -264,6 +274,7 @@
     <MESSAGE value="add DedicatedWarmUp.cs enum" />
     <MESSAGE value="add ReportAppCategory" />
     <MESSAGE value="add EnableRetryOnFailure" />
-    <option name="LAST_COMMIT_MESSAGE" value="add EnableRetryOnFailure" />
+    <MESSAGE value="edit water in take" />
+    <option name="LAST_COMMIT_MESSAGE" value="edit water in take" />
   </component>
 </project>
