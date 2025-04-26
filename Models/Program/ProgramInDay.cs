@@ -9,9 +9,7 @@ public class ProgramInDay
     public int Id { get; set; }
     public int WorkoutProgramId { get; set; }
     public WorkoutProgram? WorkoutProgram { get; set; }
-
     public int ForWhichDay { get; set; }
-
     public List<SingleExercise> AllExerciseInDays { get; set; }= [];
 
 

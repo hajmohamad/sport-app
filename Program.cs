@@ -47,11 +47,26 @@ builder.Services.AddSwaggerGen(option =>
     });
 });
 
-var connectionString =
-    "server=charsetdb,3306;database=nostalgic_roentgen;User=root;password=eRlzJwbns8A6zbxzQtsktaH6;Connection Timeout=30";
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+var serverVersion = new MySqlServerVersion(new Version(9, 0, 1));
+
+var databaseSettings = builder.Configuration.GetSection("DatabaseSettings");
+
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString),
-        mySqlOptions => mySqlOptions.EnableRetryOnFailure())
+    options.UseMySql(connectionString,serverVersion,
+        mySqlOptions => {
+            if (databaseSettings.GetValue<bool>("EnableRetryOnFailure"))
+            {
+                mySqlOptions.EnableRetryOnFailure(
+                    maxRetryCount: databaseSettings.GetValue<int>("MaxRetryCount"),
+                    maxRetryDelay: TimeSpan.FromSeconds(databaseSettings.GetValue<int>("MaxRetryDelaySeconds")),
+                    errorNumbersToAdd: null
+                );
+            }
+        })
+        .LogTo(Console.WriteLine,LogLevel.Information)
+        .EnableDetailedErrors()
+        .EnableSensitiveDataLogging()
 );
 
 

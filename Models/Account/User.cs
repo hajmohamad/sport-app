@@ -23,7 +23,6 @@ public class User
     [Required]
     [StringLength(11)]
     [RegularExpression(@"^09\d{11}$")]
-
     public required string PhoneNumber { get; set; }
 
     [DataType(DataType.Date)]

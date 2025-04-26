@@ -13,9 +13,10 @@
   <component name="ChangeListManager">
     <list default="true" id="595b416c-ddc9-4b4e-96cb-8d4a5fa14b1b" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Data/ApplicationDBContext.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Data/ApplicationDBContext.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Models/Question/A_Question/SpecificDiseases.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/Question/A_Question/SpecificDiseases.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Models/Account/User.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/Account/User.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Models/Program/ProgramInDay.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/Program/ProgramInDay.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Program.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/appsettings.json" beforeDir="false" afterPath="$PROJECT_DIR$/appsettings.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -41,7 +42,8 @@
   }
 }</component>
   <component name="HighlightingSettingsPerFile">
-    <setting file="mock://D:/403-1/es-402/Controller/AthleteController.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/403-1/es-402/Program.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/403-1/es-402/Program.cs" root0="SKIP_HIGHLIGHTING" />
   </component>
   <component name="MetaFilesCheckinStateConfiguration" checkMetaFiles="false" />
   <component name="ProjectColorInfo">{
@@ -128,6 +130,9 @@
       <workItem from="1745335476957" duration="627000" />
       <workItem from="1745345276045" duration="2741000" />
       <workItem from="1745349286239" duration="1126000" />
+      <workItem from="1745397852148" duration="2835000" />
+      <workItem from="1745658039427" duration="1319000" />
+      <workItem from="1745693786311" duration="1963000" />
     </task>
     <task id="LOCAL-00001" summary="edit role method">
       <option name="closed" value="true" />
