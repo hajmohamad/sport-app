@@ -219,6 +219,9 @@ namespace sport_app_backend.Repository
             if (workoutProgramDto.Publish)
             {
                 workoutProgram.Status = WorkoutProgramStatus.NOTACTIVE;
+                await context.SaveChangesAsync();
+                await AddTrainingSession(paymentId);
+
             }
             await context.SaveChangesAsync();
             return new ApiResponse()
@@ -230,6 +233,47 @@ namespace sport_app_backend.Repository
 
 
 
+        }
+
+        private async Task<ApiResponse> AddTrainingSession(int paymentId)
+        {
+            var workoutProgram = await context.WorkoutPrograms
+                .Include(p => p.Payment)
+                .ThenInclude(p => p.AthleteQuestion)
+                .Include(p => p.ProgramInDays)
+                .ThenInclude(d => d.AllExerciseInDays)
+                .FirstAsync(p => p.PaymentId == paymentId);
+
+            var numberOfDay = workoutProgram.ProgramDuration *
+                              workoutProgram.Payment.AthleteQuestion.DaysPerWeekToExercise;
+            var programInDayList = workoutProgram.ProgramInDays;
+            var programInDayCount = programInDayList.Count;
+
+            var sessions = new List<TrainingSession>();
+
+            for (var day = 1; day <= numberOfDay; day++)
+            {
+                var index = day % programInDayCount;
+                sessions.Add(new TrainingSession
+                {
+                    ProgramInDayId = programInDayList[index].Id,
+                    ProgramInDay = programInDayList[index],
+                    ExerciseCompletionBitmap = new byte[programInDayList[index].AllExerciseInDays.Count],
+                    TrainingSessionStatus = TrainingSessionStatus.NOTSTARTED,
+                    DayNumber = day,
+                    WorkoutProgram = workoutProgram,
+                    WorkoutProgramId = workoutProgram.Id
+                });
+            }
+
+            await context.TrainingSessions.AddRangeAsync(sessions);
+            await context.SaveChangesAsync();
+
+            return new ApiResponse
+            {
+                Action = true,
+                Message = "Added everything successfully"
+            };
         }
 
         public async Task<ApiResponse> GetWorkoutProgram(string phoneNumber, int paymentId)
