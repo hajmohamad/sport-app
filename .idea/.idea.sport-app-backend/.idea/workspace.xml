@@ -5,26 +5,30 @@
     <projectFile profileName="IIS Express">sport-app-backend.csproj</projectFile>
     <projectFile profileName="http">sport-app-backend.csproj</projectFile>
     <projectFile profileName="https">sport-app-backend.csproj</projectFile>
-    <projectFile>sport-app-backend/sport-app-backend.csproj</projectFile>
   </component>
   <component name="AutoImportSettings">
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="595b416c-ddc9-4b4e-96cb-8d4a5fa14b1b" name="Changes" comment="">
+    <list default="true" id="a649c46f-1f67-411d-b6f8-953917c22aa0" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/Models/Program/TrainingSession.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Models/Program/TrainingSessionStatus.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Models/Account/User.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/Account/User.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Models/Program/ProgramInDay.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/Program/ProgramInDay.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Program.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Controller/AthleteController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Controller/AthleteController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Data/ApplicationDBContext.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Data/ApplicationDBContext.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Interface/IAthleteRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Interface/IAthleteRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Mappers/ProgramMappers.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Mappers/ProgramMappers.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Migrations/ApplicationDbContextModelSnapshot.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Migrations/ApplicationDbContextModelSnapshot.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Repository/AthleteRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Repository/AthleteRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Repository/CoachRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Repository/CoachRepository.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/appsettings.json" beforeDir="false" afterPath="$PROJECT_DIR$/appsettings.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sport-app-backend.sln.DotSettings.user" beforeDir="false" afterPath="$PROJECT_DIR$/sport-app-backend.sln.DotSettings.user" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
-  </component>
-  <component name="DpaMonitoringSettings">
-    <option name="firstShow" value="false" />
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -42,22 +46,20 @@
   }
 }</component>
   <component name="HighlightingSettingsPerFile">
-    <setting file="mock://D:/403-1/es-402/Program.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock://D:/403-1/es-402/Program.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/b89424f0a68b49e6a282e7b9f0d415951de908/a5/32bdbf9d/ControllerBase.cs" root0="SKIP_HIGHLIGHTING" />
   </component>
-  <component name="MetaFilesCheckinStateConfiguration" checkMetaFiles="false" />
+  <component name="MetaFilesCheckinStateConfiguration" checkMetaFiles="true" />
   <component name="ProjectColorInfo">{
+  &quot;customColor&quot;: &quot;&quot;,
   &quot;associatedIndex&quot;: 7
 }</component>
-  <component name="ProjectId" id="2vRRvPqFaEdM7pusS1fXJ46rtdP" />
+  <component name="ProjectId" id="2wK9lCAYEC5xo78GujlYemIBhjs" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
-    &quot;.NET Launch Settings Profile.Unnamed.executor&quot;: &quot;Run&quot;,
-    &quot;.NET Project.Unnamed.executor&quot;: &quot;Run&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
     &quot;com.codeium.enabled&quot;: &quot;true&quot;,
@@ -67,12 +69,41 @@
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
     &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
     &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;org.jetbrains.plugins.github.ui.GithubSettingsConfigurable&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
 }</component>
-  <component name="RunManager">
-    <configuration name="Unnamed" type="LaunchSettings" factoryName=".NET Launch Settings Profile" nameIsGenerated="true">
+  <component name="RunManager" selected="Docker.Dockerfile">
+    <configuration name="sport-app-backend: IIS Express" type="LaunchSettings" factoryName=".NET Launch Settings Profile">
+      <option name="LAUNCH_PROFILE_PROJECT_FILE_PATH" value="$PROJECT_DIR$/sport-app-backend.csproj" />
+      <option name="LAUNCH_PROFILE_TFM" value="net8.0" />
+      <option name="LAUNCH_PROFILE_NAME" value="IIS Express" />
+      <option name="USE_EXTERNAL_CONSOLE" value="0" />
+      <option name="USE_MONO" value="0" />
+      <option name="RUNTIME_ARGUMENTS" value="" />
+      <option name="GENERATE_APPLICATIONHOST_CONFIG" value="1" />
+      <option name="SHOW_IIS_EXPRESS_OUTPUT" value="0" />
+      <option name="SEND_DEBUG_REQUEST" value="1" />
+      <option name="ADDITIONAL_IIS_EXPRESS_ARGUMENTS" value="" />
+      <method v="2">
+        <option name="Build" />
+      </method>
+    </configuration>
+    <configuration name="sport-app-backend: http" type="LaunchSettings" factoryName=".NET Launch Settings Profile">
+      <option name="LAUNCH_PROFILE_PROJECT_FILE_PATH" value="$PROJECT_DIR$/sport-app-backend.csproj" />
+      <option name="LAUNCH_PROFILE_TFM" value="net8.0" />
+      <option name="LAUNCH_PROFILE_NAME" value="http" />
+      <option name="USE_EXTERNAL_CONSOLE" value="0" />
+      <option name="USE_MONO" value="0" />
+      <option name="RUNTIME_ARGUMENTS" value="" />
+      <option name="GENERATE_APPLICATIONHOST_CONFIG" value="1" />
+      <option name="SHOW_IIS_EXPRESS_OUTPUT" value="0" />
+      <option name="SEND_DEBUG_REQUEST" value="1" />
+      <option name="ADDITIONAL_IIS_EXPRESS_ARGUMENTS" value="" />
+      <method v="2">
+        <option name="Build" />
+      </method>
+    </configuration>
+    <configuration name="sport-app-backend: https" type="LaunchSettings" factoryName=".NET Launch Settings Profile">
       <option name="LAUNCH_PROFILE_PROJECT_FILE_PATH" value="$PROJECT_DIR$/sport-app-backend.csproj" />
       <option name="LAUNCH_PROFILE_TFM" value="net8.0" />
       <option name="LAUNCH_PROFILE_NAME" value="https" />
@@ -87,199 +118,45 @@
         <option name="Build" />
       </method>
     </configuration>
+    <configuration name="Dockerfile" type="docker-deploy" factoryName="dockerfile" server-name="Docker">
+      <deployment type="dockerfile">
+        <settings>
+          <option name="containerName" value="sport-app-backend" />
+          <option name="contextFolderPath" value="D:\403-1\es-402" />
+          <option name="sourceFilePath" value="Dockerfile" />
+        </settings>
+      </deployment>
+      <EXTENSION ID="com.jetbrains.rider.docker.debug" isFastModeEnabled="true" isSslEnabled="false" />
+      <method v="2" />
+    </configuration>
+    <configuration default="true" type="docker-deploy" factoryName="dockerfile" temporary="true">
+      <deployment type="dockerfile">
+        <settings />
+      </deployment>
+      <EXTENSION ID="com.jetbrains.rider.docker.debug" isFastModeEnabled="true" isSslEnabled="false" />
+      <method v="2" />
+    </configuration>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="595b416c-ddc9-4b4e-96cb-8d4a5fa14b1b" name="Changes" comment="" />
-      <created>1744106134118</created>
+      <changelist id="a649c46f-1f67-411d-b6f8-953917c22aa0" name="Changes" comment="" />
+      <created>1745779551404</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1744106134118</updated>
-      <workItem from="1744106138743" duration="2875000" />
-      <workItem from="1744142433700" duration="2178000" />
-      <workItem from="1744193159785" duration="4419000" />
-      <workItem from="1744292826861" duration="538000" />
-      <workItem from="1744388282621" duration="1324000" />
-      <workItem from="1744398678291" duration="750000" />
-      <workItem from="1744403729090" duration="1098000" />
-      <workItem from="1744536463350" duration="3913000" />
-      <workItem from="1744715496870" duration="6069000" />
-      <workItem from="1744803029525" duration="1211000" />
-      <workItem from="1744804696461" duration="2155000" />
-      <workItem from="1744879867892" duration="289000" />
-      <workItem from="1744891558839" duration="6870000" />
-      <workItem from="1744909903715" duration="8708000" />
-      <workItem from="1744931232353" duration="583000" />
-      <workItem from="1744991345454" duration="654000" />
-      <workItem from="1744992147943" duration="66000" />
-      <workItem from="1744992267362" duration="253000" />
-      <workItem from="1744992710291" duration="66000" />
-      <workItem from="1744992963501" duration="54000" />
-      <workItem from="1744993461916" duration="400000" />
-      <workItem from="1744993974378" duration="3878000" />
-      <workItem from="1745002879512" duration="499000" />
-      <workItem from="1745003428873" duration="2520000" />
-      <workItem from="1745006617002" duration="3208000" />
-      <workItem from="1745164178875" duration="1100000" />
-      <workItem from="1745165861840" duration="24000" />
-      <workItem from="1745233482290" duration="7283000" />
-      <workItem from="1745251857070" duration="713000" />
-      <workItem from="1745308925105" duration="6480000" />
-      <workItem from="1745332785068" duration="1670000" />
-      <workItem from="1745335476957" duration="627000" />
-      <workItem from="1745345276045" duration="2741000" />
-      <workItem from="1745349286239" duration="1126000" />
-      <workItem from="1745397852148" duration="2835000" />
-      <workItem from="1745658039427" duration="1319000" />
-      <workItem from="1745693786311" duration="1963000" />
+      <updated>1745779551404</updated>
+      <workItem from="1745779561305" duration="5773000" />
+      <workItem from="1745786160036" duration="255000" />
+      <workItem from="1745786477920" duration="2627000" />
     </task>
-    <task id="LOCAL-00001" summary="edit role method">
-      <option name="closed" value="true" />
-      <created>1744144604253</created>
-      <option name="number" value="00001" />
-      <option name="presentableId" value="LOCAL-00001" />
-      <option name="project" value="LOCAL" />
-      <updated>1744144604253</updated>
-    </task>
-    <task id="LOCAL-00002" summary="add migrations">
-      <option name="closed" value="true" />
-      <created>1744144626675</created>
-      <option name="number" value="00002" />
-      <option name="presentableId" value="LOCAL-00002" />
-      <option name="project" value="LOCAL" />
-      <updated>1744144626675</updated>
-    </task>
-    <task id="LOCAL-00003" summary="change add role method name">
-      <option name="closed" value="true" />
-      <created>1744404475536</created>
-      <option name="number" value="00003" />
-      <option name="presentableId" value="LOCAL-00003" />
-      <option name="project" value="LOCAL" />
-      <updated>1744404475536</updated>
-    </task>
-    <task id="LOCAL-00004" summary="change add role method name">
-      <option name="closed" value="true" />
-      <created>1744404647650</created>
-      <option name="number" value="00004" />
-      <option name="presentableId" value="LOCAL-00004" />
-      <option name="project" value="LOCAL" />
-      <updated>1744404647650</updated>
-    </task>
-    <task id="LOCAL-00005" summary="edit CoachQuestions">
-      <option name="closed" value="true" />
-      <created>1744542568451</created>
-      <option name="number" value="00005" />
-      <option name="presentableId" value="LOCAL-00005" />
-      <option name="project" value="LOCAL" />
-      <updated>1744542568451</updated>
-    </task>
-    <task id="LOCAL-00006" summary="add image uploader">
-      <option name="closed" value="true" />
-      <created>1744898431908</created>
-      <option name="number" value="00006" />
-      <option name="presentableId" value="LOCAL-00006" />
-      <option name="project" value="LOCAL" />
-      <updated>1744898431908</updated>
-    </task>
-    <task id="LOCAL-00007" summary="fix some bug">
-      <option name="closed" value="true" />
-      <created>1744931726545</created>
-      <option name="number" value="00007" />
-      <option name="presentableId" value="LOCAL-00007" />
-      <option name="project" value="LOCAL" />
-      <updated>1744931726545</updated>
-    </task>
-    <task id="LOCAL-00008" summary="get program for athlete">
-      <option name="closed" value="true" />
-      <created>1745005923431</created>
-      <option name="number" value="00008" />
-      <option name="presentableId" value="LOCAL-00008" />
-      <option name="project" value="LOCAL" />
-      <updated>1745005923431</updated>
-    </task>
-    <task id="LOCAL-00009" summary="add GetExercise method">
-      <option name="closed" value="true" />
-      <created>1745165300016</created>
-      <option name="number" value="00009" />
-      <option name="presentableId" value="LOCAL-00009" />
-      <option name="project" value="LOCAL" />
-      <updated>1745165300016</updated>
-    </task>
-    <task id="LOCAL-00010" summary="add remove photo method">
-      <option name="closed" value="true" />
-      <created>1745239411726</created>
-      <option name="number" value="00010" />
-      <option name="presentableId" value="LOCAL-00010" />
-      <option name="project" value="LOCAL" />
-      <updated>1745239411726</updated>
-    </task>
-    <task id="LOCAL-00011" summary="add DedicatedWarmUp.cs enum">
-      <option name="closed" value="true" />
-      <created>1745242757084</created>
-      <option name="number" value="00011" />
-      <option name="presentableId" value="LOCAL-00011" />
-      <option name="project" value="LOCAL" />
-      <updated>1745242757084</updated>
-    </task>
-    <task id="LOCAL-00012" summary="add ReportAppCategory">
-      <option name="closed" value="true" />
-      <created>1745312659885</created>
-      <option name="number" value="00012" />
-      <option name="presentableId" value="LOCAL-00012" />
-      <option name="project" value="LOCAL" />
-      <updated>1745312659885</updated>
-    </task>
-    <task id="LOCAL-00013" summary="add EnableRetryOnFailure">
-      <option name="closed" value="true" />
-      <created>1745316267611</created>
-      <option name="number" value="00013" />
-      <option name="presentableId" value="LOCAL-00013" />
-      <option name="project" value="LOCAL" />
-      <updated>1745316267611</updated>
-    </task>
-    <task id="LOCAL-00014" summary="edit water in take">
-      <option name="closed" value="true" />
-      <created>1745334419243</created>
-      <option name="number" value="00014" />
-      <option name="presentableId" value="LOCAL-00014" />
-      <option name="project" value="LOCAL" />
-      <updated>1745334419243</updated>
-    </task>
-    <option name="localTasksCounter" value="15" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
-  <component name="UnityCheckinConfiguration" checkUnsavedScenes="false" />
+  <component name="UnityCheckinConfiguration" checkUnsavedScenes="true" />
   <component name="UnityProjectConfiguration" hasMinimizedUI="false" />
-  <component name="Vcs.Log.Tabs.Properties">
-    <option name="TAB_STATES">
-      <map>
-        <entry key="MAIN">
-          <value>
-            <State />
-          </value>
-        </entry>
-      </map>
-    </option>
-  </component>
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
-    <MESSAGE value="edit role method" />
-    <MESSAGE value="add migrations" />
-    <MESSAGE value="change add role method name" />
-    <MESSAGE value="edit CoachQuestions" />
-    <MESSAGE value="add image uploader" />
-    <MESSAGE value="fix some bug" />
-    <MESSAGE value="get program for athlete" />
-    <MESSAGE value="add GetExercise method" />
-    <MESSAGE value="add remove photo method" />
-    <MESSAGE value="add DedicatedWarmUp.cs enum" />
-    <MESSAGE value="add ReportAppCategory" />
-    <MESSAGE value="add EnableRetryOnFailure" />
-    <MESSAGE value="edit water in take" />
-    <option name="LAST_COMMIT_MESSAGE" value="edit water in take" />
   </component>
 </project>

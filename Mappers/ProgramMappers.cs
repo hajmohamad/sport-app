@@ -41,7 +41,7 @@ public static class ProgramMappers
     public static AllPaymentResponseDto ToAllWorkoutProgramResponseDto(this WorkoutProgram workoutProgram)
     {
         return new AllPaymentResponseDto
-        {   PaymentId = workoutProgram.PaymentId,
+        {   PaymentId = workoutProgram.Id,
             PaymentStatus = workoutProgram.Payment.PaymentStatus.ToString(),
             Name = workoutProgram.Coach.User.FirstName + " " + workoutProgram.Coach.User.LastName,
             Amount = workoutProgram.Payment.Amount.ToString(CultureInfo.CurrentCulture),

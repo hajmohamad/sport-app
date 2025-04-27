@@ -498,6 +498,37 @@ namespace sport_app_backend.Migrations
                     b.ToTable("SingleExercises");
                 });
 
+            modelBuilder.Entity("sport_app_backend.Models.Program.TrainingSession", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<int>("DayNumber")
+                        .HasColumnType("int");
+
+                    b.Property<byte[]>("ExerciseCompletionBitmap")
+                        .IsRequired()
+                        .HasColumnType("longblob");
+
+                    b.Property<int>("ProgramInDayId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TrainingSessionStatus")
+                        .HasColumnType("int");
+
+                    b.Property<int>("WorkoutProgramId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProgramInDayId");
+
+                    b.HasIndex("WorkoutProgramId");
+
+                    b.ToTable("TrainingSessions");
+                });
+
             modelBuilder.Entity("sport_app_backend.Models.Program.WorkoutProgram", b =>
                 {
                     b.Property<int>("Id")
@@ -854,6 +885,25 @@ namespace sport_app_backend.Migrations
                     b.Navigation("Exercise");
 
                     b.Navigation("ProgramInDay");
+                });
+
+            modelBuilder.Entity("sport_app_backend.Models.Program.TrainingSession", b =>
+                {
+                    b.HasOne("sport_app_backend.Models.Program.ProgramInDay", "ProgramInDay")
+                        .WithMany()
+                        .HasForeignKey("ProgramInDayId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("sport_app_backend.Models.Program.WorkoutProgram", "WorkoutProgram")
+                        .WithMany()
+                        .HasForeignKey("WorkoutProgramId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ProgramInDay");
+
+                    b.Navigation("WorkoutProgram");
                 });
 
             modelBuilder.Entity("sport_app_backend.Models.Program.WorkoutProgram", b =>

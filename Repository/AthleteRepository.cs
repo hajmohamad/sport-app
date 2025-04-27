@@ -11,6 +11,7 @@ using sport_app_backend.Models.Account;
 using sport_app_backend.Models.Actions;
 using sport_app_backend.Models.Challenge_Achievement;
 using sport_app_backend.Models.Payments;
+using sport_app_backend.Models.Program;
 
 namespace sport_app_backend.Repository
 
@@ -441,7 +442,7 @@ namespace sport_app_backend.Repository
 
         }
 
-        public async Task<ApiResponse> GetAllPrograms(string phoneNumber)
+        public async Task<ApiResponse> GetAllPayments(string phoneNumber)
         {
             var athlete = await context.Athletes.Include(a => a.WorkoutPrograms)
                 .ThenInclude(p=>p.Payment)
@@ -463,7 +464,7 @@ namespace sport_app_backend.Repository
             
         }
 
-        public async Task<ApiResponse> GetProgram(string phoneNumber, int paymentId)
+        public async Task<ApiResponse> GetPayment(string phoneNumber, int paymentId)
         {
             var payment = await context.Payments 
                 .Include(p => p.Athlete)
@@ -485,6 +486,47 @@ namespace sport_app_backend.Repository
                 Result = payment.ToAthletePaymentResponseDto()
             };
         }
+
+        public Task<ApiResponse> GetAllPrograms(string phoneNumber)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<ApiResponse> GetProgram(string phoneNumber, int programId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<ApiResponse> ActiveProgram(string phoneNumber, int programId)
+        {
+            var athlete = await context.Athletes.Include(a => a.WorkoutPrograms)
+                .FirstOrDefaultAsync(a => a.PhoneNumber == phoneNumber);
+            if(athlete is null)
+                return new ApiResponse()
+                    { Action = false, Message = "Athlete not found" };
+
+
+            foreach (var program in athlete.WorkoutPrograms.Where(x => x.Status == WorkoutProgramStatus.ACTIVE))
+            {
+                program.Status = WorkoutProgramStatus.STOPPED;
+            }
+
+            var workoutProgram = athlete.WorkoutPrograms.Find(w => w.Id == programId);
+            if (workoutProgram is null)
+            {
+                return new ApiResponse()
+                    { Action = false, Message = "workout program not found" };
+
+            }
+            workoutProgram.Status = WorkoutProgramStatus.ACTIVE;
+            await context.SaveChangesAsync();
+            return new ApiResponse()
+            {
+                Action = true,
+                Message = "Program found",
+            };
+        }
+            
 
         private static bool HasConsecutiveDays(List<DateTime> dates, int requiredConsecutive)
         {

@@ -328,26 +328,58 @@ namespace sport_app_backend.Controller
             return Ok(result);
         }
         
-        [HttpGet("get_AllPrograms")]
+        [HttpGet("get_AllPayments")]
         [Authorize(Roles = "Athlete")]
-        public async Task<IActionResult> GetAllPrograms()
+        public async Task<IActionResult> GetAllPayments()
         {
             var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
             if (phoneNumber is null) return BadRequest("PhoneNumber is null");
-            var result = await athleteRepository.GetAllPrograms(phoneNumber);
+            var result = await athleteRepository.GetAllPayments(phoneNumber);
             if (!result.Action) return BadRequest(result);
             return Ok(result);
         }
-        [HttpGet("get_Program/{paymentId}")]
+        [HttpGet("getPayment/{paymentId}")]
         [Authorize(Roles = "Athlete")]
-        public async Task<IActionResult> GetProgram([FromRoute] int paymentId)
+        public async Task<IActionResult> GetPayment([FromRoute] int paymentId)
         {
             var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
             if (phoneNumber is null) return BadRequest("PhoneNumber is null");
-            var result = await athleteRepository.GetProgram(phoneNumber,paymentId);
+            var result = await athleteRepository.GetPayment(phoneNumber,paymentId);
             if (!result.Action) return BadRequest(result);
             return Ok(result);
         }
+        // [HttpGet("get_AllProgram")]
+        // [Authorize(Roles = "Athlete")]
+        // public async Task<IActionResult> GetAllPrograms()
+        // {
+        //     var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
+        //     if (phoneNumber is null) return BadRequest("PhoneNumber is null");
+        //     var result = await athleteRepository.GetAllPrograms(phoneNumber);
+        //     if (!result.Action) return BadRequest(result);
+        //     return Ok(result);
+        // }
+        [HttpGet("getProgram/{programId}")]
+        [Authorize(Roles = "Athlete")]
+        public async Task<IActionResult> GetProgram([FromRoute] int programId)
+        {
+            var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
+            if (phoneNumber is null) return BadRequest("PhoneNumber is null");
+            var result = await athleteRepository.GetProgram(phoneNumber,programId);
+            if (!result.Action) return BadRequest(result);
+            return Ok(result);
+        }
+        [HttpGet("ActiveProgram/{programId}")]
+        [Authorize(Roles = "Athlete")]
+        public async Task<IActionResult> ActiveProgram([FromRoute] int programId)
+        {
+            var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
+            if (phoneNumber is null) return BadRequest("PhoneNumber is null");
+            var result = await athleteRepository.ActiveProgram(phoneNumber,programId);
+            if (!result.Action) return BadRequest(result);
+            return Ok(result);
+        }
+
+        
 
     }
 }
