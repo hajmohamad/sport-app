@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using sport_app_backend.Data;
 using sport_app_backend.Dtos;
+using sport_app_backend.Dtos.ProgramDto;
 using sport_app_backend.Interface;
 using sport_app_backend.Mappers;
 using sport_app_backend.Models;
@@ -379,7 +380,27 @@ namespace sport_app_backend.Controller
             return Ok(result);
         }
 
-        
+        [HttpPost("feedback_exercise")]
+        [Authorize(Roles = "Athlete")]
+        public async Task<IActionResult> FeedbackExercise([FromBody] ExerciseFeedbackDto feedbackExerciseDto)
+        {
+            var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
+            if (phoneNumber is null) return BadRequest("PhoneNumber is null");
+            var result = await athleteRepository.ExerciseFeedBack(phoneNumber, feedbackExerciseDto);
+            if (!result.Action) return BadRequest(result);
+            return Ok(result);
+        }
 
+
+        [HttpPost("change_exercise_request")]
+        [Authorize(Roles = "Athlete")]
+        public async Task<IActionResult> ChangeExerciseRequest([FromBody] ExerciseChangeDto exerciseChangeDto)
+        {
+            var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
+            if (phoneNumber is null) return BadRequest("PhoneNumber is null");
+            var result = await athleteRepository.ChangeExercise(phoneNumber, exerciseChangeDto);
+            if (!result.Action) return BadRequest(result);
+            return Ok(result);
+        }
     }
 }

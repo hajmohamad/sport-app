@@ -1,7 +1,9 @@
 using System.Globalization;
+using Humanizer;
 using sport_app_backend.Dtos;
 using sport_app_backend.Dtos.ProgramDto;
 using sport_app_backend.Models.Program;
+using sport_app_backend.Models.Question.A_Question;
 
 namespace sport_app_backend.Mappers;
 
@@ -96,5 +98,32 @@ public static class ProgramMappers
             ExerciseId = singleExercise.ExerciseId
         };
     }
-    
+
+
+
+    public static ExerciseFeedback ToExerciseFeedback(this ExerciseFeedbackDto feedbackDto)
+    {
+        return new ExerciseFeedback
+        {
+            SingleExerciseId = feedbackDto.SingleExerciseId,
+            IsPositive = feedbackDto.IsPositive,
+            NegativeReason = Enum.Parse<NegativeFeedbackReason>(feedbackDto.NegativeReason ?? string.Empty),
+            CoachId = feedbackDto.CoachId,
+            TrainingSessionId = feedbackDto.TrainingSessionId
+        };
+    }
+
+
+    public static ExerciseChangeRequest ToExerciseChangeRequest(this ExerciseChangeDto requestDto)
+    {
+        return new ExerciseChangeRequest
+        {
+            SingleExerciseId = requestDto.SingleExerciseId,
+            CoachId = requestDto.CoachId,
+            TrainingSessionId = requestDto.TrainingSessionId,
+            Reason = Enum.Parse<ExerciseChangeReason>(requestDto.Reason ?? string.Empty)
+        };
+    }
+
+
 }

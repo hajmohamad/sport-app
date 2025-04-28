@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using sport_app_backend.Controller;
 using sport_app_backend.Dtos;
+using sport_app_backend.Dtos.ProgramDto;
 using sport_app_backend.Models;
 
 namespace sport_app_backend.Interface
@@ -33,5 +34,7 @@ namespace sport_app_backend.Interface
 
         public Task<ApiResponse> GetProgram(string phoneNumber, int programId);
         public Task<ApiResponse> ActiveProgram(string phoneNumber, int programId);
+        public Task<ApiResponse> ExerciseFeedBack(string phoneNumber, ExerciseFeedbackDto exerciseFeedbackDto);
+        public Task<ApiResponse> ChangeExercise(string phoneNumber, ExerciseChangeDto changeExerciseDto);
     }
 }

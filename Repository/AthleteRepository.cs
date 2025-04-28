@@ -1,9 +1,11 @@
 
+using System;
 using System.Globalization;
 using Microsoft.EntityFrameworkCore;
 using sport_app_backend.Controller;
 using sport_app_backend.Data;
 using sport_app_backend.Dtos;
+using sport_app_backend.Dtos.ProgramDto;
 using sport_app_backend.Interface;
 using sport_app_backend.Mappers;
 using sport_app_backend.Models;
@@ -550,6 +552,55 @@ namespace sport_app_backend.Repository
             return false;
         }
         
+
+        public async Task<ApiResponse> ExerciseFeedBack(string phoneNumber, ExerciseFeedbackDto feedbackDto)
+        {
+            var athlete = await context.Athletes.FirstOrDefaultAsync(x => x.PhoneNumber == phoneNumber);
+            if (athlete is null) return new ApiResponse() { Message = "Athlete not found! ", Action = false };
+
+            ExerciseFeedback feedback = feedbackDto.ToExerciseFeedback();
+            feedback.AthleteId = athlete.Id;
+            feedback.Athlete = athlete;
+
+            feedback.SingleExercise = await context.SingleExercises.FirstOrDefaultAsync(x => x.Id == feedbackDto.SingleExerciseId);
+            feedback.TrainingSession = await context.TrainingSessions.FirstOrDefaultAsync(x => x.Id == feedbackDto.TrainingSessionId);
+            feedback.Coach = await context.Coaches.FirstOrDefaultAsync(x => x.Id == feedbackDto.CoachId);
+
+            await context.ExerciseFeedbacks.AddAsync(feedback);
+            await context.SaveChangesAsync();
+
+            return new ApiResponse
+            {
+                Action = true,
+                Message = "feedback saved.",
+                Result = feedback
+            };
+        }
+
+
+        public async Task<ApiResponse> ChangeExercise(string phoneNumber, ExerciseChangeDto dto)
+        {
+            var athlete = await context.Athletes.FirstOrDefaultAsync(x => x.PhoneNumber == phoneNumber);
+            if (athlete is null) return new ApiResponse() { Message = "Athlete not found", Action = false };
+
+            ExerciseChangeRequest exercisereq = dto.ToExerciseChangeRequest();
+            exercisereq.AthleteId = athlete.Id;
+            exercisereq.Athlete = athlete;
+            exercisereq.SingleExercise = await context.SingleExercises.FirstOrDefaultAsync(x => x.Id == dto.SingleExerciseId);
+            exercisereq.TrainingSession = await context.TrainingSessions.FirstOrDefaultAsync(x => x.Id == dto.TrainingSessionId);
+            exercisereq.Coach = await context.Coaches.FirstOrDefaultAsync(x => x.Id == dto.CoachId);
+
+            await context.ExerciseChangeRequests.AddAsync(exercisereq);
+            await context.SaveChangesAsync();
+
+            return new ApiResponse
+            {
+                Action = true,
+                Message = "Exercise change request saved.",
+                Result = exercisereq
+            };
+
+        }
 
 
     }
