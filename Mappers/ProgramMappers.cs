@@ -124,6 +124,48 @@ public static class ProgramMappers
             Reason = Enum.Parse<ExerciseChangeReason>(requestDto.Reason ?? string.Empty)
         };
     }
+    public static AllTrainingSessionDto ToAllTrainingSessionDto(this TrainingSession trainingSession)
+    {
+        return new AllTrainingSessionDto()
+        {
+            Id = trainingSession.Id,
+            DayNumber = trainingSession.DayNumber,
+            TrainingSessionStatus = trainingSession.TrainingSessionStatus.ToString(),
+            ExerciseCompletionBitmap = trainingSession.ExerciseCompletionBitmap
+        };
+    }
+    public static TrainingSessionDto ToTrainingSessionDto(this TrainingSession trainingSession)
+    {
+        return new TrainingSessionDto
+        {
+
+            Id = trainingSession.Id,
+            DayNumber = trainingSession.DayNumber,
+            TrainingSessionStatus = trainingSession.TrainingSessionStatus.ToString(),
+            ExerciseCompletionBitmap = trainingSession.ExerciseCompletionBitmap,
+            ProgramInDayId = trainingSession.ProgramInDayId,
+            ProgramInDay = trainingSession.ProgramInDay.ToTrainingSessionProgramInDayDto()
+        };
+    }
+    private static TrainingSessionProgramInDayDto ToTrainingSessionProgramInDayDto(this ProgramInDay programInDay){
+        return new TrainingSessionProgramInDayDto
+        {
+            Id = programInDay.Id,
+            ForWhichDay = programInDay.ForWhichDay,
+            AllExerciseInDays = programInDay.AllExerciseInDays.Select(x=>x.ToTrainingSessionSingleExerciseDto()).ToList()
+        };
+    }
+    
+    private static TrainingSessionSingleExerciseDto ToTrainingSessionSingleExerciseDto(this SingleExercise singleExercise){
+        return new TrainingSessionSingleExerciseDto
+        {
+            Id = singleExercise.Id,
+            Set = singleExercise.Set,
+            Rep = singleExercise.Rep,
+            ExerciseId = singleExercise.ExerciseId,
+            Exercise = singleExercise.Exercise
+        };
+    }
 
 
 }

@@ -402,5 +402,26 @@ namespace sport_app_backend.Controller
             if (!result.Action) return BadRequest(result);
             return Ok(result);
         }
+        [HttpGet("Get_AllTrainingSession")]
+        [Authorize(Roles = "Athlete")]
+        public async Task<IActionResult> GetAllTrainingSession()
+        {
+            var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
+            if (phoneNumber is null) return BadRequest("PhoneNumber is null");
+            var result = await athleteRepository.GetAllTrainingSession(phoneNumber);
+            if (!result.Action) return BadRequest(result);
+            return Ok(result);
+        }
+        [HttpGet("TrainingSession/{TrainingSessionId}")]
+        [Authorize(Roles = "Athlete")]
+        public async Task<IActionResult> GetTrainingSession([FromRoute] int trainingSessionId)
+        {
+            var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
+            if (phoneNumber is null) return BadRequest("PhoneNumber is null");
+            var result = await athleteRepository.GetTrainingSession(phoneNumber,trainingSessionId);
+            if (!result.Action) return BadRequest(result);
+            return Ok(result);
+        }
+
     }
 }

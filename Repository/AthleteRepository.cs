@@ -603,5 +603,50 @@ namespace sport_app_backend.Repository
         }
 
 
+        public async Task<ApiResponse> GetAllTrainingSession(string phoneNumber)
+        {
+            var athlete = await context.Athletes.Include(a=>a.WorkoutPrograms).FirstOrDefaultAsync(a => a.PhoneNumber == phoneNumber);
+            if (athlete is null) return new ApiResponse() { Message = "Athlete not found", Action = false };
+            var workoutProgram = athlete.WorkoutPrograms.FirstOrDefault(x =>
+                x.Status == WorkoutProgramStatus.ACTIVE );
+            if (workoutProgram is null) return new ApiResponse() { Message = "workoutProgram not found", Action = false };
+
+            var trainingSessions =
+                await context.TrainingSessions.Include(T=>T.ProgramInDay)
+                    .ThenInclude(p=>p.AllExerciseInDays)
+                    .ThenInclude(z=>z.Exercise)
+                    .Where(t => t.WorkoutProgram.Id == workoutProgram.Id).ToListAsync();
+
+            return new ApiResponse()
+            {
+                Action = true,
+                Message = "get TrainingSession",
+                Result = trainingSessions.Select(y => y.ToAllTrainingSessionDto())
+            };
+
+
+
+        }
+
+        public async Task<ApiResponse> GetTrainingSession(string phoneNumber, int trainingSessionId)
+        {
+            var trainingSession = await context.TrainingSessions.Include(p => p.ProgramInDay)
+                .ThenInclude(a => a.AllExerciseInDays).ThenInclude(e => e.Exercise)
+                .FirstOrDefaultAsync(z => z.Id == trainingSessionId);
+            if(trainingSession is null )
+                return new ApiResponse() { Message = "trainingSession not found", Action = false };
+            
+            
+          
+            return new ApiResponse()
+            {
+                Action = true,
+                Message = "get TrainingSession",
+                Result = trainingSession.ToTrainingSessionDto()
+            };
+
+
+        }
     }
+    
 }

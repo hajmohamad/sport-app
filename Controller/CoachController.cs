@@ -6,11 +6,9 @@ using sport_app_backend.Dtos;
 using sport_app_backend.Interface;
 using sport_app_backend.Mappers;
 using sport_app_backend.Models;
-
 using System.Security.Claims;
-using Microsoft.AspNetCore.Http.HttpResults;
 using sport_app_backend.Dtos.ProgramDto;
-using sport_app_backend.Models.Program;
+
 
 namespace sport_app_backend.Controller
 {
