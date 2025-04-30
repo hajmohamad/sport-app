@@ -647,6 +647,38 @@ namespace sport_app_backend.Repository
 
 
         }
+
+        public async Task<ApiResponse> DoTrainingSession(string phoneNumber, int trainingSessionId, int exerciseNumber)
+        {
+            var trainingSession = await context.TrainingSessions
+                .FirstOrDefaultAsync(z => z.Id == trainingSessionId);
+            if(trainingSession is null )
+                return new ApiResponse() { Message = "trainingSession not found", Action = false };
+    
+            trainingSession.TrainingSessionStatus = TrainingSessionStatus.INPROGRESS;
+            
+            trainingSession.ExerciseCompletionBitmap[exerciseNumber] = 0xFF;
+            bool allCompleted = trainingSession.ExerciseCompletionBitmap.All(b => b == 0xFF);
+            if (allCompleted)
+            {
+                trainingSession.TrainingSessionStatus = TrainingSessionStatus.COMPLETED;
+
+            }
+            else
+            {
+                trainingSession.TrainingSessionStatus = TrainingSessionStatus.INPROGRESS;
+            }
+
+            await context.SaveChangesAsync();
+          
+            return new ApiResponse()
+            {
+                Action = true,
+                Message = "Do Training session",
+                Result = trainingSession.ToAllTrainingSessionDto()
+            };
+        }
+    
     }
     
 }

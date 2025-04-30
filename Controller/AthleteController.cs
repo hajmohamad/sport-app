@@ -422,6 +422,17 @@ namespace sport_app_backend.Controller
             if (!result.Action) return BadRequest(result);
             return Ok(result);
         }
+        [HttpPut("DoTrainingSession/{trainingSessionId}/{exerciseNumber}")]
+        [Authorize(Roles = "Athlete")]
+        public async Task<IActionResult> DoTrainingSession([FromRoute] int trainingSessionId,[FromRoute] int exerciseNumber)
+        {
+            var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
+            if (phoneNumber is null) return BadRequest("PhoneNumber is null");
+            var result = await athleteRepository.DoTrainingSession(phoneNumber,trainingSessionId,exerciseNumber);
+            if (!result.Action) return BadRequest(result);
+            return Ok(result);
+        }
+        
 
     }
 }
