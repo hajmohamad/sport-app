@@ -412,7 +412,7 @@ namespace sport_app_backend.Controller
             if (!result.Action) return BadRequest(result);
             return Ok(result);
         }
-        [HttpGet("TrainingSession/{TrainingSessionId}")]
+        [HttpGet("TrainingSession/{trainingSessionId}")]
         [Authorize(Roles = "Athlete")]
         public async Task<IActionResult> GetTrainingSession([FromRoute] int trainingSessionId)
         {
