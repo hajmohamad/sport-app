@@ -5,12 +5,11 @@ using sport_app_backend.Models.Account;
 
 namespace sport_app_backend.Models.Actions;
 
-public class Activitie
+public class Activity
 {   [Key]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int Id { get; set; }
     public string? Name{get; set;}
-    
     public ActivityCategory ActivityCategory {get; set;}
     public double CaloriesLost { get; set; }
     public double Duration { get; set; }

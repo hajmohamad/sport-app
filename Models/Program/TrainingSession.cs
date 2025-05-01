@@ -14,5 +14,6 @@ public class TrainingSession
     public required ProgramInDay ProgramInDay { get; set; }
     public int DayNumber { get; set; }
     public TrainingSessionStatus TrainingSessionStatus { get; set; } = TrainingSessionStatus.NOTSTARTED;
+    public ExerciseFeeling ExerciseFeeling { get; set; } = ExerciseFeeling.Good;
     public required byte[] ExerciseCompletionBitmap { get; set; } 
 }

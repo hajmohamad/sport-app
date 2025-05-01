@@ -58,7 +58,7 @@ namespace sport_app_backend.Repository
 
             var sportEnum = Enum.Parse<ActivityCategory>(addSportDto.ActivityCategory!);
 
-            var sport = new Activitie()
+            var sport = new Activity()
             {
                 AthleteId = athlete.Id,
                 Athlete = athlete,
@@ -520,6 +520,15 @@ namespace sport_app_backend.Repository
                     { Action = false, Message = "workout program not found" };
 
             }
+
+            if (workoutProgram.Status is WorkoutProgramStatus.WRITING or WorkoutProgramStatus.NOTSTARTED)
+            {
+                return new ApiResponse()
+                {
+                    Action = false,
+                    Message = "workout program status is not accept"
+                };
+            }
             workoutProgram.Status = WorkoutProgramStatus.ACTIVE;
             await context.SaveChangesAsync();
             return new ApiResponse()
@@ -557,14 +566,16 @@ namespace sport_app_backend.Repository
         {
             var athlete = await context.Athletes.FirstOrDefaultAsync(x => x.PhoneNumber == phoneNumber);
             if (athlete is null) return new ApiResponse() { Message = "Athlete not found! ", Action = false };
-
-            ExerciseFeedback feedback = feedbackDto.ToExerciseFeedback();
+            var singleExercise = await context.SingleExercises.Include(p => p.ProgramInDay)
+                .ThenInclude(w => w!.WorkoutProgram)
+                .FirstOrDefaultAsync(s => s.Id == feedbackDto.SingleExerciseId);
+          
+            var feedback = feedbackDto.ToExerciseFeedback();
             feedback.AthleteId = athlete.Id;
-            feedback.Athlete = athlete;
-
+            if (singleExercise?.ProgramInDay?.WorkoutProgram != null)
+                feedback.CoachId = singleExercise.ProgramInDay.WorkoutProgram.CoachId;
             feedback.SingleExercise = await context.SingleExercises.FirstOrDefaultAsync(x => x.Id == feedbackDto.SingleExerciseId);
             feedback.TrainingSession = await context.TrainingSessions.FirstOrDefaultAsync(x => x.Id == feedbackDto.TrainingSessionId);
-            feedback.Coach = await context.Coaches.FirstOrDefaultAsync(x => x.Id == feedbackDto.CoachId);
 
             await context.ExerciseFeedbacks.AddAsync(feedback);
             await context.SaveChangesAsync();
@@ -582,22 +593,24 @@ namespace sport_app_backend.Repository
         {
             var athlete = await context.Athletes.FirstOrDefaultAsync(x => x.PhoneNumber == phoneNumber);
             if (athlete is null) return new ApiResponse() { Message = "Athlete not found", Action = false };
-
-            ExerciseChangeRequest exercisereq = dto.ToExerciseChangeRequest();
-            exercisereq.AthleteId = athlete.Id;
-            exercisereq.Athlete = athlete;
-            exercisereq.SingleExercise = await context.SingleExercises.FirstOrDefaultAsync(x => x.Id == dto.SingleExerciseId);
-            exercisereq.TrainingSession = await context.TrainingSessions.FirstOrDefaultAsync(x => x.Id == dto.TrainingSessionId);
-            exercisereq.Coach = await context.Coaches.FirstOrDefaultAsync(x => x.Id == dto.CoachId);
-
-            await context.ExerciseChangeRequests.AddAsync(exercisereq);
+            var singleExercise = await context.SingleExercises.Include(p => p.ProgramInDay)
+                .ThenInclude(w => w.WorkoutProgram)
+                .FirstOrDefaultAsync(s => s.Id == dto.SingleExerciseId);
+            var exerciseChangeRequest = dto.ToExerciseChangeRequest();
+            exerciseChangeRequest.AthleteId = athlete.Id;
+            exerciseChangeRequest.SingleExerciseId = dto.SingleExerciseId;
+            exerciseChangeRequest.TrainingSessionId = dto.TrainingSessionId;
+            if (singleExercise?.ProgramInDay?.WorkoutProgram != null)
+                exerciseChangeRequest.CoachId = singleExercise.ProgramInDay.WorkoutProgram.CoachId;
+            
+            await context.ExerciseChangeRequests.AddAsync(exerciseChangeRequest);
             await context.SaveChangesAsync();
 
             return new ApiResponse
             {
                 Action = true,
                 Message = "Exercise change request saved.",
-                Result = exercisereq
+                Result = exerciseChangeRequest
             };
 
         }
@@ -672,7 +685,38 @@ namespace sport_app_backend.Repository
                 Result = trainingSession.ToAllTrainingSessionDto()
             };
         }
-    
+
+        public async Task<ApiResponse> FinishTrainingSession(string phoneNumber, FinishTrainingSessionDto finishTrainingSessionDto)
+        {
+            var athlete = await context.Athletes.FirstOrDefaultAsync(x => x.PhoneNumber == phoneNumber);
+            if (athlete is null) return new ApiResponse() { Message = "Athlete not found", Action = false };
+            var trainingSession = await context.TrainingSessions
+                .FirstOrDefaultAsync(z => z.Id == finishTrainingSessionDto.TrainingSessionId);
+            if(trainingSession is null )  
+                return new ApiResponse() { Message = "trainingSession not found", Action = false }; 
+            trainingSession.TrainingSessionStatus = TrainingSessionStatus.COMPLETED;
+            trainingSession.ExerciseFeeling =
+                Enum.Parse<ExerciseFeeling>(finishTrainingSessionDto.ExerciseFeeling ?? string.Empty);
+            var activity = new Activity()
+            {
+                Athlete = athlete,
+                Duration = finishTrainingSessionDto.Duration,
+                CaloriesLost = finishTrainingSessionDto.CaloriesLost,
+                ActivityCategory = ActivityCategory.EXERCISE,
+                Name = finishTrainingSessionDto.TrainingSessionName
+            };
+
+            await context.Activities.AddAsync(activity);
+            await context.SaveChangesAsync();
+            return new ApiResponse()
+            {
+                Action = true,
+                Message = "Finish Training session",
+                Result = activity
+            };
+
+
+        }
     }
     
 }

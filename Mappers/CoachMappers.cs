@@ -7,8 +7,10 @@ namespace sport_app_backend.Mappers
     public static class CoachMappers
     {
         public static CoachProfileResponse ToCoachProfileResponseDto(this User user,List<CoachingServiceResponse> coachingServicesResponse
-            ,List<Payment> payments,int numberOfProgram,int numberOfAthlete)
+            ,List<Payment> payments)
         {   
+             var numberOfProgram = payments.Count(p => p.WorkoutProgram != null);
+              var numberOfAthlete = payments.Select(x=>x.AthleteId).Distinct().Count();
             
             return new CoachProfileResponse
             {

@@ -108,7 +108,6 @@ public static class ProgramMappers
             SingleExerciseId = feedbackDto.SingleExerciseId,
             IsPositive = feedbackDto.IsPositive,
             NegativeReason = Enum.Parse<NegativeFeedbackReason>(feedbackDto.NegativeReason ?? string.Empty),
-            CoachId = feedbackDto.CoachId,
             TrainingSessionId = feedbackDto.TrainingSessionId
         };
     }
@@ -119,7 +118,6 @@ public static class ProgramMappers
         return new ExerciseChangeRequest
         {
             SingleExerciseId = requestDto.SingleExerciseId,
-            CoachId = requestDto.CoachId,
             TrainingSessionId = requestDto.TrainingSessionId,
             Reason = Enum.Parse<ExerciseChangeReason>(requestDto.Reason ?? string.Empty)
         };

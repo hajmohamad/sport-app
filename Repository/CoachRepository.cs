@@ -187,12 +187,10 @@ namespace sport_app_backend.Repository
             var coachingServiceDto = coachingService.Select(x => x.ToCoachingServiceResponse()).ToList();
             var payments  = await context.Payments.Include(p=>p.Athlete).ThenInclude(u=>u.User).Include(p=>p.WorkoutProgram).
                 Where(p => p.CoachId == user.Coach.Id && p.WorkoutProgram != null && p.WorkoutProgram.Status!=WorkoutProgramStatus.WRITING&&p.WorkoutProgram.Status!=WorkoutProgramStatus.NOTSTARTED).ToListAsync();
-            var numberOfProgram = payments.Count(p => p.WorkoutProgram != null);
-            var numberOfAthlete = payments.Select(x=>x.AthleteId).Distinct().Count();
             return new ApiResponse
             {
                 Action = true, Message = "Coach found",
-                Result = user.ToCoachProfileResponseDto(coachingServiceDto, payments,numberOfAthlete,numberOfProgram)
+                Result = user.ToCoachProfileResponseDto(coachingServiceDto, payments)
             };
 
         }
