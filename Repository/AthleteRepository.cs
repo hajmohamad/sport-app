@@ -657,17 +657,11 @@ namespace sport_app_backend.Repository
     
             trainingSession.TrainingSessionStatus = TrainingSessionStatus.INPROGRESS;
             
-            trainingSession.ExerciseCompletionBitmap[exerciseNumber] = 0xFF;
-            bool allCompleted = trainingSession.ExerciseCompletionBitmap.All(b => b == 0xFF);
-            if (allCompleted)
-            {
-                trainingSession.TrainingSessionStatus = TrainingSessionStatus.COMPLETED;
-
-            }
-            else
-            {
-                trainingSession.TrainingSessionStatus = TrainingSessionStatus.INPROGRESS;
-            }
+            var bitmap = trainingSession.ExerciseCompletionBitmap.ToArray();
+            bitmap[exerciseNumber] = 0xFF;
+            trainingSession.ExerciseCompletionBitmap = bitmap;          
+            var allCompleted = trainingSession.ExerciseCompletionBitmap.All(b => b == 0xFF);
+            trainingSession.TrainingSessionStatus = allCompleted ? TrainingSessionStatus.COMPLETED : TrainingSessionStatus.INPROGRESS;
 
             await context.SaveChangesAsync();
           

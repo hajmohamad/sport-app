@@ -271,7 +271,8 @@ private async Task<string> GenerateUniqueUsername()
                 user.BirthDate,
                 user.Bio,
                 user.Coach?.HeadLine,
-                user.ImageProfile
+                user.ImageProfile,
+                user.PhoneNumber
             }
         };
     }
