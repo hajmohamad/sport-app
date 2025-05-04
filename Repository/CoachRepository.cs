@@ -201,7 +201,7 @@ namespace sport_app_backend.Repository
             if (coach == null) return new ApiResponse { Action = false, Message = "Coach not found" };
             var workoutProgram = await context.WorkoutPrograms.Include(x=>x.ProgramInDays)
                 .ThenInclude(z=>z.AllExerciseInDays)
-              .FirstOrDefaultAsync(p => p.Id == paymentId);
+              .FirstOrDefaultAsync(p => p.PaymentId == paymentId);
             if(workoutProgram is null) return new ApiResponse{ Action = false, Message = "Payment not found" };
             workoutProgram.ProgramInDays = workoutProgramDto.Days.ToListOfProgramInDays();
             workoutProgram.ProgramDuration = workoutProgramDto.Week;
