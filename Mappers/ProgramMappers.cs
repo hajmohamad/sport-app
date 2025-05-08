@@ -43,7 +43,7 @@ public static class ProgramMappers
     public static AllPaymentResponseDto ToAllWorkoutProgramResponseDto(this WorkoutProgram workoutProgram)
     {
         return new AllPaymentResponseDto
-        {   PaymentId = workoutProgram.Id,
+        {   PaymentId = workoutProgram.PaymentId,
             PaymentStatus = workoutProgram.Payment.PaymentStatus.ToString(),
             Name = workoutProgram.Coach.User.FirstName + " " + workoutProgram.Coach.User.LastName,
             Amount = workoutProgram.Payment.Amount.ToString(CultureInfo.CurrentCulture),
@@ -161,7 +161,7 @@ public static class ProgramMappers
             Set = singleExercise.Set,
             Rep = singleExercise.Rep,
             ExerciseId = singleExercise.ExerciseId,
-            Exercise = singleExercise.Exercise
+            Exercise = singleExercise.Exercise.ToExerciseDto()
         };
     }
     private static int[] GetExerciseStatusArray(this byte[] bitmap)

@@ -460,7 +460,7 @@ namespace sport_app_backend.Repository
             return new ApiResponse()
             {
                 Action = true,
-                Message = "Programs found",
+                Message = "Payments found",
                 Result = athlete.WorkoutPrograms.Select(x => x.ToAllWorkoutProgramResponseDto()).ToList()
             };
             

@@ -8,6 +8,6 @@ public class TrainingSessionSingleExerciseDto
     public int Set { get; set; }
     public int Rep { get; set; }
     public int ExerciseId { get; set; }  
-    public  Exercise? Exercise { get; set; }  
+    public  ExerciseDto? Exercise { get; set; }  
     
 }

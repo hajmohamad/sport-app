@@ -326,7 +326,7 @@ private async Task<string> GenerateUniqueUsername()
             exercise.PersianName,
             exercise.ImageLink,
             exercise.VideoLink,
-            exercise.BaseCategory,
+            BaseCategory = exercise.BaseCategory.ToString(),
             ExerciseLevel = exercise.ExerciseLevel.ToString()
             
         } });
