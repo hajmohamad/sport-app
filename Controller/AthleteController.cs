@@ -468,6 +468,20 @@ namespace sport_app_backend.Controller
         }
 
 
+        [HttpPost("FeedbackTrainingSession")]
+        [Authorize(Roles = "Athlete")]
+        public async Task<IActionResult> FeedbackTrainingSession(
+            [FromBody] FeedbackTrainingSessionDto feedbackTrainingSessionDto)
+        {
+            var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
+            if (phoneNumber is null) return BadRequest("PhoneNumber is null");
+            var result = await athleteRepository.FeedbackTrainingSession(phoneNumber, feedbackTrainingSessionDto);
+            if (!result.Action) return BadRequest(result);
+            return Ok(result);
+
+        }
+
+
         [HttpPut("ResetTrainingSession/{trainingSessionId}")]
         [Authorize(Roles = "Athlete")]
         public async Task<IActionResult> ResetTrainingSession([FromRoute] int trainingSessionId)

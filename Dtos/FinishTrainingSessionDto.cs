@@ -7,5 +7,4 @@ public class FinishTrainingSessionDto
     public required string TrainingSessionName { get; set; }
     public double Duration { get; set; }
     public double CaloriesLost{get;set;}
-    public required string ExerciseFeeling { get; set; } = "Good";
 }

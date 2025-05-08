@@ -695,8 +695,6 @@ namespace sport_app_backend.Repository
             if(trainingSession is null )  
                 return new ApiResponse() { Message = "trainingSession not found", Action = false }; 
             trainingSession.TrainingSessionStatus = TrainingSessionStatus.COMPLETED;
-            trainingSession.ExerciseFeeling =
-                Enum.Parse<ExerciseFeeling>(finishTrainingSessionDto.ExerciseFeeling ?? string.Empty);
             var activity = new Activity()
             {
                 Athlete = athlete,
@@ -716,6 +714,28 @@ namespace sport_app_backend.Repository
             };
 
 
+        }
+
+
+        public async Task<ApiResponse> FeedbackTrainingSession(string phoneNumber , FeedbackTrainingSessionDto feedbackTrainingSessionDto)
+        {
+            var athlete = await context.Athletes.FirstOrDefaultAsync(x => x.PhoneNumber == phoneNumber);
+            if (athlete is null) return new ApiResponse() { Message = "Athlete not found", Action = false };
+            var trainingSession = await context.TrainingSessions
+                .FirstOrDefaultAsync(z => z.Id == feedbackTrainingSessionDto.TrainingSessionId);
+            if (trainingSession is null)
+                return new ApiResponse() { Message = "trainingSession not found", Action = false };
+            if (trainingSession.TrainingSessionStatus != TrainingSessionStatus.COMPLETED)
+                return new ApiResponse() { Message = "trainingSession not completed", Action = false };
+            trainingSession.ExerciseFeeling =
+                Enum.Parse<ExerciseFeeling>(feedbackTrainingSessionDto.ExerciseFeeling ?? string.Empty);
+            await context.SaveChangesAsync();
+            return new ApiResponse()
+            {
+                Action = true,
+                Message = "Feedback Training session",
+                Result = trainingSession
+            };
         }
 
 

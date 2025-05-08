@@ -3,6 +3,14 @@
   "WorkspaceRootPath": "C:\\Users\\Dour-Andish\\Desktop\\charset\\sport-app\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{27B63680-A5B7-55C3-C88B-EBD5D7F12023}|sport-app-backend.csproj|c:\\users\\dour-andish\\desktop\\charset\\sport-app\\repository\\athleterepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{27B63680-A5B7-55C3-C88B-EBD5D7F12023}|sport-app-backend.csproj|solutionrelative:repository\\athleterepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{27B63680-A5B7-55C3-C88B-EBD5D7F12023}|sport-app-backend.csproj|c:\\users\\dour-andish\\desktop\\charset\\sport-app\\dtos\\feedbacktrainingsessiondto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{27B63680-A5B7-55C3-C88B-EBD5D7F12023}|sport-app-backend.csproj|solutionrelative:dtos\\feedbacktrainingsessiondto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{27B63680-A5B7-55C3-C88B-EBD5D7F12023}|sport-app-backend.csproj|c:\\users\\dour-andish\\desktop\\charset\\sport-app\\controller\\athletecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{27B63680-A5B7-55C3-C88B-EBD5D7F12023}|sport-app-backend.csproj|solutionrelative:controller\\athletecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
@@ -14,19 +22,45 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 1,
           "Children": [
             {
               "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "FeedbackTrainingSessionDto.cs",
+              "DocumentMoniker": "C:\\Users\\Dour-Andish\\Desktop\\charset\\sport-app\\Dtos\\FeedbackTrainingSessionDto.cs",
+              "RelativeDocumentMoniker": "Dtos\\FeedbackTrainingSessionDto.cs",
+              "ToolTip": "C:\\Users\\Dour-Andish\\Desktop\\charset\\sport-app\\Dtos\\FeedbackTrainingSessionDto.cs",
+              "RelativeToolTip": "Dtos\\FeedbackTrainingSessionDto.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAAyAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-08T18:48:23.031Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
               "DocumentIndex": 0,
+              "Title": "AthleteRepository.cs",
+              "DocumentMoniker": "C:\\Users\\Dour-Andish\\Desktop\\charset\\sport-app\\Repository\\AthleteRepository.cs",
+              "RelativeDocumentMoniker": "Repository\\AthleteRepository.cs",
+              "ToolTip": "C:\\Users\\Dour-Andish\\Desktop\\charset\\sport-app\\Repository\\AthleteRepository.cs",
+              "RelativeToolTip": "Repository\\AthleteRepository.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAOMCAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-08T18:34:43.194Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
               "Title": "AthleteController.cs",
               "DocumentMoniker": "C:\\Users\\Dour-Andish\\Desktop\\charset\\sport-app\\Controller\\AthleteController.cs",
               "RelativeDocumentMoniker": "Controller\\AthleteController.cs",
               "ToolTip": "C:\\Users\\Dour-Andish\\Desktop\\charset\\sport-app\\Controller\\AthleteController.cs",
               "RelativeToolTip": "Controller\\AthleteController.cs",
-              "ViewState": "AgIAANcBAAAAAAAAAAAwwNkBAAAJAAAAAAAAAA==",
+              "ViewState": "AgIAANYBAAAAAAAAAAAcwN8BAAAeAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-08T16:01:37.922Z",
+              "WhenOpened": "2025-05-08T18:23:07.835Z",
               "EditorCaption": ""
             },
             {
