@@ -409,7 +409,7 @@ namespace sport_app_backend.Repository
             var activities = await context.Activities.Where(a => a.AthleteId == athlete.Id).ToListAsync();
             var firstWorkout = activities.Count != 0;
             var workoutDays = activities.Select(a => a.DateTime.Date).Distinct().OrderBy(d => d).ToList();
-            var consistentAthlete = HasConsecutiveDays(workoutDays, 7);
+            var consistentAthlete = await HasConsecutiveDaysAsync(workoutDays, 7);
             var oneMonthComplete = workoutDays.Count >= 30;
             var threeMonthsGolden = workoutDays.Count >= 90;
             var masterAthlete = workoutDays.Count >= 365;
@@ -506,13 +506,6 @@ namespace sport_app_backend.Repository
             if(athlete is null)
                 return new ApiResponse()
                     { Action = false, Message = "Athlete not found" };
-
-
-            foreach (var program in athlete.WorkoutPrograms.Where(x => x.Status == WorkoutProgramStatus.ACTIVE))
-            {
-                program.Status = WorkoutProgramStatus.STOPPED;
-            }
-
             var workoutProgram = athlete.WorkoutPrograms.Find(w => w.Id == programId);
             if (workoutProgram is null)
             {
@@ -520,6 +513,36 @@ namespace sport_app_backend.Repository
                     { Action = false, Message = "workout program not found" };
 
             }
+
+            if (
+                workoutProgram.Status == WorkoutProgramStatus.ACTIVE)
+            {
+                var allTrainingSessions =
+                    await context.TrainingSessions
+                        .Where(t => t.WorkoutProgramId == programId)
+                        .ToListAsync();
+
+                foreach (var trainingSession in allTrainingSessions)
+                {
+                    trainingSession.TrainingSessionStatus = TrainingSessionStatus.NOTSTARTED;
+                    Array.Clear(trainingSession.ExerciseCompletionBitmap, 0, trainingSession.ExerciseCompletionBitmap.Length);
+                }
+                await context.SaveChangesAsync();
+                return new ApiResponse()
+                {
+                    Action = true,
+                    Message = "Program clear",
+                };
+                
+            }
+
+            foreach (var program in athlete.WorkoutPrograms.Where(x => x.Status == WorkoutProgramStatus.ACTIVE))
+            {
+                program.Status = WorkoutProgramStatus.STOPPED;
+            }
+            
+
+         
 
             if (workoutProgram.Status is WorkoutProgramStatus.WRITING or WorkoutProgramStatus.NOTSTARTED)
             {
@@ -538,28 +561,31 @@ namespace sport_app_backend.Repository
             };
         }
             
-
-        private static bool HasConsecutiveDays(List<DateTime> dates, int requiredConsecutive)
+        private static async Task<bool> HasConsecutiveDaysAsync(List<DateTime> dates, int requiredConsecutive)
         {
-            if (dates.Count == 0)
-                return false;
-
-            var consecutive = 1;
-            for (var i = 1; i < dates.Count; i++)
+            return await Task.Run(() =>
             {
-                if ((dates[i] - dates[i - 1]).Days == 1)
+                if (dates.Count == 0)
+                    return false;
+
+                var consecutive = 1;
+                for (var i = 1; i < dates.Count; i++)
                 {
-                    consecutive++;
-                    if (consecutive >= requiredConsecutive)
-                        return true;
+                    if ((dates[i] - dates[i - 1]).Days == 1)
+                    {
+                        consecutive++;
+                        if (consecutive >= requiredConsecutive)
+                            return true;
+                    }
+                    else if ((dates[i] - dates[i - 1]).Days > 1)
+                    {
+                        consecutive = 1;
+                    }
                 }
-                else if ((dates[i] - dates[i - 1]).Days > 1)
-                {
-                    consecutive = 1;
-                }
-            }
-            return false;
+                return false;
+            });
         }
+
         
 
         public async Task<ApiResponse> ExerciseFeedBack(string phoneNumber, ExerciseFeedbackDto feedbackDto)
