@@ -40,5 +40,6 @@ namespace sport_app_backend.Interface
         public Task<ApiResponse> GetTrainingSession(string phoneNumber, int trainingSessionId);
         public Task<ApiResponse> DoTrainingSession(string phoneNumber, int trainingSessionId, int exerciseNumber);
         public Task<ApiResponse> FinishTrainingSession(string phoneNumber, FinishTrainingSessionDto finishTrainingSessionDto);
+        public Task<ApiResponse> ResetTrainingSession(string phoneNumber, int trainingSessionId);
     }
 }

@@ -466,5 +466,17 @@ namespace sport_app_backend.Controller
             return Ok(result);
 
         }
+
+
+        [HttpPut("ResetTrainingSession/{trainingSessionId}")]
+        [Authorize(Roles = "Athlete")]
+        public async Task<IActionResult> ResetTrainingSession([FromRoute] int trainingSessionId)
+        {
+            var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
+            if (phoneNumber is null) return BadRequest("PhoneNumber is null");
+            var result = await athleteRepository.ResetTrainingSession(phoneNumber, trainingSessionId);
+            if (!result.Action) return BadRequest(result);
+            return Ok(result);
+        }
     }
 }

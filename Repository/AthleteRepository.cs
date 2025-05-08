@@ -717,6 +717,30 @@ namespace sport_app_backend.Repository
 
 
         }
+
+
+        public async Task<ApiResponse> ResetTrainingSession(string phoneNumber, int trainingSessionId)
+        {
+            var trainingSession = await context.TrainingSessions
+                .FirstOrDefaultAsync(z => z.Id == trainingSessionId);
+            if (trainingSession is null)
+                return new ApiResponse() { Message = "trainingSession not found", Action = false };
+
+            trainingSession.TrainingSessionStatus = TrainingSessionStatus.NOTSTARTED;
+
+            var bitmap = trainingSession.ExerciseCompletionBitmap.ToArray();
+            foreach( var ex in bitmap)
+                bitmap[ex] = 0x00;
+            trainingSession.ExerciseCompletionBitmap = bitmap;
+            await context.SaveChangesAsync();
+
+            return new ApiResponse()
+            {
+                Action = true,
+                Message = "Training session Resetted",
+                Result = trainingSession.ToAllTrainingSessionDto()
+            };
+        }
     }
     
 }
