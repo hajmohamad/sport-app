@@ -525,7 +525,9 @@ namespace sport_app_backend.Repository
                 foreach (var trainingSession in allTrainingSessions)
                 {
                     trainingSession.TrainingSessionStatus = TrainingSessionStatus.NOTSTARTED;
-                    Array.Clear(trainingSession.ExerciseCompletionBitmap, 0, trainingSession.ExerciseCompletionBitmap.Length);
+                    var arrayBitMap = trainingSession.ExerciseCompletionBitmap.ToArray();
+                    Array.Clear(arrayBitMap, 0, arrayBitMap.Length);
+                    trainingSession.ExerciseCompletionBitmap = arrayBitMap;
                 }
                 await context.SaveChangesAsync();
                 return new ApiResponse()
@@ -773,17 +775,16 @@ namespace sport_app_backend.Repository
                 return new ApiResponse() { Message = "trainingSession not found", Action = false };
 
             trainingSession.TrainingSessionStatus = TrainingSessionStatus.NOTSTARTED;
-
-            var bitmap = trainingSession.ExerciseCompletionBitmap.ToArray();
-            foreach( var ex in bitmap)
-                bitmap[ex] = 0x00;
-            trainingSession.ExerciseCompletionBitmap = bitmap;
+            
+            var arrayBitMap = trainingSession.ExerciseCompletionBitmap.ToArray();
+            Array.Clear(arrayBitMap, 0, arrayBitMap.Length);
+            trainingSession.ExerciseCompletionBitmap = arrayBitMap;
             await context.SaveChangesAsync();
 
             return new ApiResponse()
             {
                 Action = true,
-                Message = "Training session Resetted",
+                Message = "Training session Retested",
                 Result = trainingSession.ToAllTrainingSessionDto()
             };
         }
