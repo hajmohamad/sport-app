@@ -16,6 +16,9 @@ namespace sport_app_backend.Interface
         public Task<ApiResponse> AddWaterIntake(string phoneNumber, WaterInTakeDto waterInTakeDto);
         public Task<ApiResponse> UpdateWaterInDay(string phoneNumber);
         public Task<ApiResponse> UpdateWeight(string phoneNumber, double weight);
+        public Task<ApiResponse> UpdateHightWeight(string phoneNumber, double weight, int hight);
+
+
         public Task<ApiResponse> WeightReport(string phoneNumber);
 
         public Task<ApiResponse> AddActivity(string phoneNumber, AddActivityDto addSportDto);

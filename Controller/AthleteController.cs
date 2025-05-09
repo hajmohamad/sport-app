@@ -197,11 +197,22 @@ namespace sport_app_backend.Controller
 
         [HttpPut("update_weight")]
         [Authorize(Roles = "Athlete")]
-        public async Task<IActionResult> UpdateWeight(int weight)
+        public async Task<IActionResult> UpdateWeight(double weight)
         {
             var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
             if (phoneNumber is null) return BadRequest("PhoneNumber is null");
             var result = await athleteRepository.UpdateWeight(phoneNumber, weight);
+            if (!result.Action) return BadRequest(result);
+            return Ok(result);
+        }
+
+        [HttpPut("update_hight_weight")]
+        [Authorize(Roles = "Athlete")]
+        public async Task<IActionResult> UpdateHightWeight(double weight, int hight)
+        {
+            var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
+            if (phoneNumber is null) return BadRequest("PhoneNumber is null");
+            var result = await athleteRepository.UpdateHightWeight(phoneNumber, weight, hight);
             if (!result.Action) return BadRequest(result);
             return Ok(result);
         }

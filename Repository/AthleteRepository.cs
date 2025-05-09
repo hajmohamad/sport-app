@@ -318,6 +318,41 @@ namespace sport_app_backend.Repository
         }
 
 
+        public async Task<ApiResponse> UpdateHightWeight(string phoneNumber, double weight, int hight)
+        {
+            var athlete = context.Athletes.FirstOrDefault(x => x.PhoneNumber == phoneNumber);
+            if (athlete is null) return new ApiResponse() { Message = "User is not an athlete", Action = false };// Ensure the user is an athlete
+            athlete.CurrentWeight = weight;
+            athlete.Height = hight;
+            var weightEntry = context.WeightEntries.FirstOrDefault(x => x.AthleteId == athlete.Id && x.CurrentDate.Date == DateTime.Now.Date);
+            if (weightEntry is null)
+            {
+                weightEntry = new WeightEntry()
+                {
+                    AthleteId = athlete.Id,
+                    Athlete = athlete,
+                    CurrentDate = DateTime.Now,
+                    Weight = weight
+                };
+                await context.WeightEntries.AddAsync(weightEntry);
+                athlete.WeightEntries.Add(weightEntry);
+                await context.SaveChangesAsync();
+            }
+            else
+            {
+                weightEntry.Weight = weight;
+                weightEntry.CurrentDate = DateTime.Now;
+                await context.SaveChangesAsync();
+
+            }
+            return new ApiResponse()
+            {
+                Message = "Weight and hight updated successfully",
+                Action = true
+            };
+        }
+
+
         public async Task<ApiResponse> WeightReport(string phoneNumber)
         {
             var athlete = await context.Athletes.FirstOrDefaultAsync(x => x.PhoneNumber == phoneNumber);
