@@ -422,6 +422,11 @@ namespace sport_app_backend.Migrations
                     b.Property<int>("AthleteQuestionId")
                         .HasColumnType("int");
 
+                    b.Property<string>("Authority")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)");
+
                     b.Property<int>("CoachId")
                         .HasColumnType("int");
 
@@ -433,11 +438,6 @@ namespace sport_app_backend.Migrations
 
                     b.Property<int>("PaymentStatus")
                         .HasColumnType("int");
-
-                    b.Property<string>("TransactionId")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("varchar(50)");
 
                     b.HasKey("Id");
 

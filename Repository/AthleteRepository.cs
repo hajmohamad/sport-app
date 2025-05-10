@@ -1,6 +1,7 @@
 
 using System;
 using System.Globalization;
+using System.Text;
 using Microsoft.EntityFrameworkCore;
 using sport_app_backend.Controller;
 using sport_app_backend.Data;
@@ -15,11 +16,236 @@ using sport_app_backend.Models.Challenge_Achievement;
 using sport_app_backend.Models.Payments;
 using sport_app_backend.Models.Program;
 
+using Newtonsoft.Json;
+using sport_app_backend.Dtos.ZarinPal;
+using sport_app_backend.Dtos.ZarinPal.Verify;
+
+
 namespace sport_app_backend.Repository
 
 {
     public class AthleteRepository(ApplicationDbContext context) : IAthleteRepository
     {
+        private static readonly HttpClient Client = new HttpClient();
+
+        private async Task<ApiResponse> ConfirmTransactionId(Payment payment)
+{
+    try
+    {
+        payment.CoachService.NumberOfSell += 1;
+
+        var workoutProgram = new WorkoutProgram
+        {
+            Title = payment.CoachService.Title,
+            Coach = payment.Coach,
+            CoachId = payment.Coach.Id,
+            Athlete = payment.Athlete,
+            AthleteId = payment.Athlete.Id,
+            Payment = payment,
+            PaymentId = payment.Id
+        };
+
+        payment.WorkoutProgram = workoutProgram;
+        payment.PaymentStatus = PaymentStatus.SUCCESS;
+
+        await context.WorkoutPrograms.AddAsync(workoutProgram);
+        await context.SaveChangesAsync();
+
+        return new ApiResponse
+        {
+            Message = "Payment confirmed successfully",
+            Action = true
+        };
+    }
+    catch (Exception ex)
+    {
+        return new ApiResponse
+        {
+            Message = $"Error confirming transaction: {ex.Message}",
+            Action = false
+        };
+    }
+}
+
+        public async Task<ApiResponse> VerifyPaymentAsync(ZarinPalVerifyRequestDto request)
+        {
+            var payment = await context.Payments
+                .Include(p => p.Coach)
+                .Include(p => p.CoachService)
+                .Include(p => p.Athlete)
+                .Include(p => p.WorkoutProgram)
+                .FirstOrDefaultAsync(x => x.Authority == request.Authority);
+
+            if (payment == null)
+            {
+                return new ApiResponse
+                {
+                    Message = "Payment not found",
+                    Action = false
+                };
+            }
+
+            var data = new
+            {
+                merchant_id = request.MerchantId,
+                authority = request.Authority,
+                amount = payment.Amount
+            };
+
+            var jsonData = JsonConvert.SerializeObject(data);
+            var content = new StringContent(jsonData, Encoding.UTF8, "application/json");
+
+            try
+            {
+                var response = await Client.PostAsync("https://sandbox.zarinpal.com/pg/v4/payment/verify.json", content);
+                var responseContent = await response.Content.ReadAsStringAsync();
+                dynamic result = JsonConvert.DeserializeObject(responseContent);
+
+                if (result?.data != null && result.data.code == 100)
+                {
+                    var confirmResult = await ConfirmTransactionId(payment);
+                    if (!confirmResult.Action)
+                    {
+                        return confirmResult;
+                    }
+
+                    return new ApiResponse
+                    {
+                        Action = true,
+                        Message = result.data.ref_id
+                    };
+                }
+                else
+                {
+                    string error = result?.errors?.message ?? "Unknown error from payment gateway.";
+                    return new ApiResponse
+                    {
+                        Action = false,
+                        Message = error
+                    };
+                }
+            }
+            catch (Exception ex)
+            {
+                return new ApiResponse
+                {
+                    Action = false,
+                    Message = $"Error verifying payment: {ex.Message}"
+                };
+            }
+        }
+
+        private static async Task<ZarinPalPaymentResponseDto> _requestPaymentAsync(ZarinPalPaymentRequestDto request)
+        {
+            var data = new
+            {
+                merchant_id = request.merchant_id,
+                amount = request.amount,
+                callback_url = request.callback_url,
+                description = request.description
+            };
+
+            var jsonData = JsonConvert.SerializeObject(data);
+            var content = new StringContent(jsonData, Encoding.UTF8, "application/json");
+
+            try
+            {
+                var response = await Client.PostAsync("https://sandbox.zarinpal.com/pg/v4/payment/request.json", content);
+                var responseContent = await response.Content.ReadAsStringAsync();
+                dynamic result = JsonConvert.DeserializeObject(responseContent);
+
+                if (result?.data != null && result.data.code == 100)
+                {
+                    var authority = result.data.authority;
+                    var paymentUrl = $"https://sandbox.zarinpal.com/pg/StartPay/{authority}";
+
+                    return new ZarinPalPaymentResponseDto
+                    {
+                        PaymentUrl = paymentUrl,
+                        Authority = authority,
+                        IsSuccessful = true
+                    };
+                }
+
+                return new ZarinPalPaymentResponseDto
+                {
+                    IsSuccessful = false,
+                    ErrorMessage = result?.errors?.message ?? "Unknown error"
+                };
+            }
+            catch (Exception ex)
+            {
+                return new ZarinPalPaymentResponseDto
+                {
+                    IsSuccessful = false,
+                    ErrorMessage = $"Error sending payment request: {ex.Message}"
+                };
+            }
+        }
+
+        public async Task<ApiResponse> BuyCoachingService(string phoneNumber, int coachingServiceId)
+        {
+            var athlete = await context.Athletes
+                .Include(x => x.AthleteQuestions)
+                .FirstOrDefaultAsync(x => x.PhoneNumber == phoneNumber);
+
+            if (athlete == null)
+                return new ApiResponse { Message = "User is not an athlete", Action = false };
+
+            var lastQuestion = athlete.AthleteQuestions.LastOrDefault();
+            if (lastQuestion == null)
+                return new ApiResponse { Message = "User has not completed the questions", Action = false };
+
+            var coachService = await context.CoachServices
+                .Include(x => x.Coach)
+                .FirstOrDefaultAsync(x => x.Id == coachingServiceId && x.IsActive);
+
+            if (coachService == null)
+                return new ApiResponse { Message = "CoachingService not found", Action = false };
+
+            if (coachService.IsDeleted)
+                return new ApiResponse { Message = "CoachingService is deleted", Action = false };
+
+            var zarinPalResponse = await _requestPaymentAsync(new ZarinPalPaymentRequestDto
+            {
+                amount = (long)coachService.Price,
+                callback_url = "https://charset7.liara.run/api/Athlete/VerifyPayment",
+                description = "خرید",
+                Mobile = athlete.PhoneNumber
+            });
+
+            if (!zarinPalResponse.IsSuccessful)
+            {
+                return new ApiResponse
+                {
+                    Action = false,
+                    Message = zarinPalResponse.ErrorMessage
+                };
+            }
+
+            var payment = new Payment
+            {
+                Athlete = athlete,
+                AthleteId = athlete.Id,
+                CoachService = coachService,
+                CoachServiceId = coachService.Id,
+                CoachId = coachService.CoachId,
+                Coach = coachService.Coach,
+                Authority = zarinPalResponse.Authority,
+                Amount = coachService.Price,
+                AthleteQuestion = lastQuestion
+            };
+
+            await context.Payments.AddAsync(payment);
+            await context.SaveChangesAsync();
+
+            return new ApiResponse
+            {
+                Action = true,
+                Message = "get url successfully",
+                Result = zarinPalResponse
+            };
+        }
         public async Task<ApiResponse> ActivityReport(string phoneNumber)
         {
             var athlete = await context.Athletes.FirstOrDefaultAsync(x => x.PhoneNumber == phoneNumber);
@@ -49,12 +275,12 @@ namespace sport_app_backend.Repository
                 }).ToList()
             };
         }
-
-
         public async Task<ApiResponse> AddActivity(string phoneNumber, AddActivityDto addSportDto)
         {
             var athlete = await context.Athletes.FirstOrDefaultAsync(x => x.PhoneNumber == phoneNumber);
-            if (athlete is null) return new ApiResponse() { Message = "User is not an athlete", Action = false };// Ensure the user is an athlete
+            if (athlete is null)
+                return new ApiResponse()
+                    { Message = "User is not an athlete", Action = false }; // Ensure the user is an athlete
 
             var sportEnum = Enum.Parse<ActivityCategory>(addSportDto.ActivityCategory!);
 
@@ -93,7 +319,9 @@ namespace sport_app_backend.Repository
         public async Task<ApiResponse> AddWaterIntake(string phoneNumber, WaterInTakeDto waterInTakeDto)
         {
             var athlete = await context.Athletes.FirstOrDefaultAsync(x => x.PhoneNumber == phoneNumber);
-            if (athlete is null) return new ApiResponse() { Message = "User is not an athlete", Action = false };// Ensure the user is an athlete
+            if (athlete is null)
+                return new ApiResponse()
+                    { Message = "User is not an athlete", Action = false }; // Ensure the user is an athlete
             var waterIntake = new WaterInTake
             {
                 AthleteId = athlete.Id,
@@ -118,6 +346,7 @@ namespace sport_app_backend.Repository
                 athlete.WaterInTake = waterIntake;
                 context.WaterInTakes.Add(waterIntake);
             }
+
             await context.SaveChangesAsync();
             return new ApiResponse()
             {
@@ -125,47 +354,6 @@ namespace sport_app_backend.Repository
                 Action = true
             };
         }
-
-        public async Task<ApiResponse> BuyCoachingService(string phoneNumber, int coachingServiceId)
-        {
-            var athlete = await context.Athletes.Include(x=>x.AthleteQuestions).FirstOrDefaultAsync(x => x.PhoneNumber == phoneNumber);
-            if (athlete is null) return new ApiResponse() { Message = "User is not an athlete", Action = false };
-            if(athlete.AthleteQuestions.Count==0 ) return new ApiResponse() { Message = "User has not completed the questions", Action = false };
-            var lastQuestion = athlete.AthleteQuestions.LastOrDefault();
-            if(lastQuestion is null ) return new ApiResponse() { Message = "User has not completed the questions", Action = false };
-            var coachService = await context.CoachServices.Include(x => x.Coach)
-                .FirstOrDefaultAsync(x => x.Id == coachingServiceId & x.IsActive == true);
-            if (coachService is null) return new ApiResponse() { Message = "CoachingService not found", Action = false };
-            if(coachService.IsDeleted) return new ApiResponse() { Message = "CoachingService is deleted", Action = false };
-            var payment = new Payment()
-            {
-                Athlete = athlete,
-                AthleteId = athlete.Id,
-                CoachService = coachService,
-                CoachServiceId = coachService.Id,
-                CoachId = coachService.CoachId,
-                Coach = coachService.Coach,
-                TransactionId = Guid.NewGuid().ToString(),
-                Amount = coachService.Price,
-                AthleteQuestion = lastQuestion
-            };
-            await context.Payments.AddAsync(payment);
-            await context.SaveChangesAsync();
-            return new ApiResponse()
-            {
-                Message = "Payment added successfully",
-                Action = true,
-                Result = new
-                {
-                    payment.Amount,
-                    payment.TransactionId
-                }
-            };
-            
-
-
-        }
-
         public async Task<ApiResponse> SearchCoaches(CoachNameSearchDto coachNameSearchDto)
         {
             var coaches = await  context.Users.Where(c=>(c.FirstName+" "+c.LastName).Contains(coachNameSearchDto.FullName)&&c.TypeOfUser==TypeOfUser.COACH).ToListAsync();

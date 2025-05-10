@@ -6,11 +6,13 @@ using Microsoft.EntityFrameworkCore;
 using sport_app_backend.Data;
 using sport_app_backend.Dtos;
 using sport_app_backend.Dtos.ProgramDto;
+using sport_app_backend.Dtos.ZarinPal.Verify;
 using sport_app_backend.Interface;
 using sport_app_backend.Mappers;
 using sport_app_backend.Models;
 using sport_app_backend.Models.Account;
 using sport_app_backend.Models.Program;
+
 
 namespace sport_app_backend.Controller
 {
@@ -503,5 +505,28 @@ namespace sport_app_backend.Controller
             if (!result.Action) return BadRequest(result);
             return Ok(result);
         }
+        [HttpGet("VerifyPayment")]
+        public async Task<IActionResult> VerifyPayment([FromQuery] string Authority, [FromQuery] string Status)
+        {
+            if (Status != "OK")
+                return BadRequest("پرداخت توسط کاربر لغو شد.");
+
+            var verifyRequest = new ZarinPalVerifyRequestDto
+            {
+                Authority = Authority,
+            };
+
+            var result = await athleteRepository.VerifyPaymentAsync(verifyRequest);
+
+            if (result.Action)
+            {
+                return Ok($"پرداخت با موفقیت انجام شد. شماره پیگیری: {result.Result}");
+            }
+            else
+            {
+                return BadRequest($"خطا در تایید پرداخت: {result.Message}");
+            }
+        }
+
     }
 }

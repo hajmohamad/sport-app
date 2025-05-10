@@ -28,7 +28,7 @@ public static class PaymentMappers
     {
         return new PaymentResponseDto
         {   PaymentId = payment.Id,
-            TransactionId = payment.TransactionId,
+            TransactionId = payment.Authority,
             PaymentStatus = payment.PaymentStatus.ToString(),
             Name = payment.Athlete.User?.FirstName + " " + payment.Athlete?.User?.LastName,
             Amount = payment.Amount.ToString(CultureInfo.CurrentCulture),
@@ -46,7 +46,7 @@ public static class PaymentMappers
     {
         return new PaymentResponseDto
         {   PaymentId = payment.Id,
-            TransactionId = payment.TransactionId,
+            TransactionId = payment.Authority,
             PaymentStatus = payment.PaymentStatus.ToString(),
             Name = payment.Coach.User.FirstName + " " + payment.Coach.User.LastName,
             Amount = payment.Amount.ToString(CultureInfo.CurrentCulture),

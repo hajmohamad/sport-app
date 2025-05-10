@@ -16,9 +16,9 @@ namespace sport_app_backend.Controller
         [HttpPut("confirm_Transaction_id")]
         public async Task<IActionResult> ConfirmTransactionId([FromBody] string confirmTransactionIdDto)
         {
-            var resualt = await adminRepository.ConfirmTransactionId(confirmTransactionIdDto);
-            if(resualt.Action == false) return BadRequest(resualt);
-            return Ok(resualt);
+            var result = await adminRepository.ConfirmTransactionId(confirmTransactionIdDto);
+            if(result.Action == false) return BadRequest(result);
+            return Ok(result);
         
         }
        

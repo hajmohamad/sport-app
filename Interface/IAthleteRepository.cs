@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using sport_app_backend.Controller;
 using sport_app_backend.Dtos;
 using sport_app_backend.Dtos.ProgramDto;
+using sport_app_backend.Dtos.ZarinPal.Verify;
 using sport_app_backend.Models;
 
 namespace sport_app_backend.Interface
@@ -45,5 +46,6 @@ namespace sport_app_backend.Interface
         public Task<ApiResponse> FinishTrainingSession(string phoneNumber, FinishTrainingSessionDto finishTrainingSessionDto);
         public Task<ApiResponse> FeedbackTrainingSession(string phoneNumber, FeedbackTrainingSessionDto feedbackTrainingSessionDto);
         public Task<ApiResponse> ResetTrainingSession(string phoneNumber, int trainingSessionId);
+        public Task<ApiResponse> VerifyPaymentAsync(ZarinPalVerifyRequestDto request);
     }
 }

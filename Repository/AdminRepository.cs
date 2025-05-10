@@ -29,7 +29,7 @@ namespace sport_app_backend.Repository
         {
             var payment = await context.Payments.Include(p => p.Coach).Include(z=>z
                     .CoachService)
-                .Include(p => p.Athlete).Include(payment => payment.WorkoutProgram).FirstOrDefaultAsync(x => x.TransactionId == TransactionId);
+                .Include(p => p.Athlete).Include(payment => payment.WorkoutProgram).FirstOrDefaultAsync(x => x.Authority == TransactionId);
             if (payment is null) return new ApiResponse() { Message = "Payment not found", Action = false };
             payment.CoachService.NumberOfSell += 1;
             var workoutProgram = new WorkoutProgram()
