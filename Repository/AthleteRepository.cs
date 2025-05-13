@@ -471,6 +471,19 @@ namespace sport_app_backend.Repository
             }
         }
 
+        public async Task<ApiResponse> UpdateGoalWeight(string phoneNumber, double goalWeight)
+        {
+            var athlete = context.Athletes.FirstOrDefault(x => x.PhoneNumber == phoneNumber);
+            if (athlete == null) return new ApiResponse() { Action = false, Message = "User is not an athlete" };
+            athlete.WeightGoal = goalWeight;
+            await context.SaveChangesAsync();
+            return new ApiResponse()
+            {
+                Message = "Goal weight updated successfully",
+                Action = true
+            };
+        }
+
         public async Task<ApiResponse> UpdateWeight(string phoneNumber, double weight)
         {
 
