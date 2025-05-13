@@ -46,7 +46,7 @@ namespace sport_app_backend.Controller
             return Ok(result);
         }
 
-        [HttpPost("set_daily_water_goal")]
+        [HttpPut("set_daily_water_goal")]
         [Authorize(Roles = "Athlete")]
         public async Task<IActionResult> AddWaterIntake([FromBody] WaterInTakeDto waterInTakeDto)
         {
@@ -95,7 +95,7 @@ namespace sport_app_backend.Controller
 
 
 
-        [HttpPut("add_water_drinking")]
+        [HttpPost("add_water_drinking")]
         [Authorize(Roles = "Athlete")]
         public async Task<IActionResult> UpdateWaterInDay()
         {
@@ -105,12 +105,54 @@ namespace sport_app_backend.Controller
             if (!result.Action) return BadRequest(result);
             return Ok(result);
         }
+        [HttpGet("GetThisDayWaterDrunk")]
+        [Authorize(Roles = "Athlete")]
+        public async Task<IActionResult> GetThisDayWaterDrunk()
+        {
+            var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
+            if (phoneNumber is null) return BadRequest("PhoneNumber is null");
 
+            var athlete = await context.Users
+                .Include(u => u.Athlete)
+                .FirstOrDefaultAsync(u => u.PhoneNumber == phoneNumber);
 
-        [HttpGet("get_water_drinking_count")]
+            if (athlete == null || athlete.Athlete == null)
+                return NotFound("Athlete not found");
+
+            var today = DateTime.Now.Date;
+
+            var listOfWaterInDay = await context.WaterInDays
+                .Where(w => w.AthleteId == athlete.Athlete.Id && w.Date.Date == today)
+                .ToListAsync();
+
+            return Ok(new ApiResponse()
+            {
+                Action = true,
+                Message = "Water in day found",
+                Result = listOfWaterInDay.Select(w => new WaterInDayDto()
+                {
+                    NumberOfCupsDrinked = w.NumberOfCupsDrinked,
+                    Date = w.Date.ToString("yyyy-MM-dd")
+                })
+            });
+        }
+        
+        [HttpGet("GetMonthlyActivity/{year}/{month}")]
         [Authorize(Roles = "Athlete")]
 
-        public async Task<IActionResult> GetWaterInDayForLast7Days()
+        public async Task<IActionResult> GetMonthlyActivity([FromRoute] int year,[FromRoute] int month)
+        {
+            var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
+            if (phoneNumber is null) return BadRequest("PhoneNumber is null");
+            var result = await athleteRepository.GetMonthlyActivity(phoneNumber,year,month);
+            if (!result.Action) return BadRequest(result);
+            return Ok(result);
+
+        }
+        [HttpGet("GetLast4WeekWaterDrunk")]
+        [Authorize(Roles = "Athlete")]
+
+        public async Task<IActionResult> GetLast4WeekWaterDrunk()
         {
             var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
             if (phoneNumber is null) return BadRequest("PhoneNumber is null");
@@ -119,7 +161,7 @@ namespace sport_app_backend.Controller
                 .FirstOrDefaultAsync(u => u.PhoneNumber == phoneNumber);
             var today = DateTime.Now.Date;
             var daysSinceSaturday = (int)today.DayOfWeek == 0 ? 6 : (int)today.DayOfWeek - 6;
-            var lastSaturday = today.AddDays(daysSinceSaturday);
+            var lastSaturday = today.AddDays(daysSinceSaturday+21);
             if (athlete == null || athlete.Athlete == null) return NotFound("Athlete not found");
             var listOfWaterInDay = await context.WaterInDays
                 .Where(w => w.AthleteId == athlete.Athlete.Id && w.Date.Date >= lastSaturday.Date)
@@ -128,7 +170,7 @@ namespace sport_app_backend.Controller
             return Ok(new ApiResponse()
             {
                 Action = true,
-                Message = "Water inday found",
+                Message = "Water in day found",
                 Result = listOfWaterInDay.Select(w => new WaterInDayDto()
                 {
 
@@ -230,13 +272,13 @@ namespace sport_app_backend.Controller
             return Ok(result);
         }
 
-        [HttpGet("get_weight_report")]
+        [HttpGet("GetThisMonthWeightReport")]
         [Authorize(Roles = "Athlete")]
-        public async Task<IActionResult> GetWeightReport()
+        public async Task<IActionResult> GetLastMonthWeightReport()
         {
             var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
             if (phoneNumber is null) return BadRequest("PhoneNumber is null");
-            var result = await athleteRepository.WeightReport(phoneNumber);
+            var result = await athleteRepository.GetLastMonthWeightReport(phoneNumber);
             if (!result.Action) return BadRequest(result);
             return Ok(result);
         }
@@ -253,13 +295,13 @@ namespace sport_app_backend.Controller
             return Ok(result);
         }
 
-        [HttpGet("get_activity_report")]
+        [HttpGet("getLastWeekActivity")]
         [Authorize(Roles = "Athlete")]
-        public async Task<IActionResult> GetActivityReport()
+        public async Task<IActionResult> GetLastWeekActivity()
         {
             var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
             if (phoneNumber is null) return BadRequest("PhoneNumber is null");
-            var result = await athleteRepository.ActivityReport(phoneNumber);
+            var result = await athleteRepository.GetLastWeekActivity(phoneNumber);
             if (!result.Action) return BadRequest(result);
             return Ok(result);
         }
@@ -464,6 +506,7 @@ namespace sport_app_backend.Controller
             if (phoneNumber is null) return BadRequest("PhoneNumber is null");
             var result = await athleteRepository.GetAllTrainingSession(phoneNumber);
             if (!result.Action) return BadRequest(result);
+            
             return Ok(result);
         }
 

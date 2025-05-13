@@ -89,7 +89,9 @@ namespace sport_app_backend.Repository
             {
                 merchant_id = request.MerchantId,
                 authority = request.Authority,
-                amount = payment.Amount
+                amount = payment.Amount,
+                currency="IRT"
+
             };
 
             var jsonData = JsonConvert.SerializeObject(data);
@@ -142,7 +144,8 @@ namespace sport_app_backend.Repository
                 merchant_id = request.merchant_id,
                 amount = request.amount,
                 callback_url = request.callback_url,
-                description = request.description
+                description = request.description,
+                currency="IRT"
             };
 
             var jsonData = JsonConvert.SerializeObject(data);
@@ -246,7 +249,52 @@ namespace sport_app_backend.Repository
                 Result = zarinPalResponse
             };
         }
-        public async Task<ApiResponse> ActivityReport(string phoneNumber)
+        public async Task<ApiResponse> GetMonthlyActivity(string phoneNumber, int year, int month)
+        {
+            ArgumentOutOfRangeException.ThrowIfNegative(month);
+            var athlete = await context.Athletes.FirstOrDefaultAsync(x => x.PhoneNumber == phoneNumber);
+            if (athlete is null)
+                return new ApiResponse() { Message = "User is not an athlete", Action = false };
+
+            var persianCalendar = new System.Globalization.PersianCalendar();
+
+            try
+            {
+                var startDate = persianCalendar.ToDateTime(year, month, 1, 0, 0, 0, 0);
+                var endDate = month == 12
+                    ? persianCalendar.ToDateTime(year + 1, 1, 1, 0, 0, 0, 0)
+                    : persianCalendar.ToDateTime(year, month + 1, 1, 0, 0, 0, 0);
+
+                var activities = await context.Activities
+                    .Where(x => x.AthleteId == athlete.Id && x.DateTime >= startDate && x.DateTime < endDate)
+                    .ToListAsync();
+
+                return new ApiResponse()
+                {
+                    Message = "Activities found",
+                    Action = true,
+                    Result = activities.Select(x => new
+                    {
+                        x.Id,
+                        Date = x.DateTime.ToString("yyyy-MM-dd"),
+                        x.CaloriesLost,
+                        x.Duration,
+                        SportEnum = x.ActivityCategory.ToString(),
+                        x.Name
+                    }).ToList()
+                };
+            }
+            catch (Exception ex)
+            {
+                return new ApiResponse()
+                {
+                    Message = $"Error converting date: {ex.Message}",
+                    Action = false
+                };
+            }
+        }
+
+        public async Task<ApiResponse> GetLastWeekActivity(string phoneNumber)
         {
             var athlete = await context.Athletes.FirstOrDefaultAsync(x => x.PhoneNumber == phoneNumber);
             if (athlete is null)
@@ -320,7 +368,7 @@ namespace sport_app_backend.Repository
                 CaloriesLost = addSportDto.CaloriesLost,
                 Distance = addSportDto.Distance,
                 Duration = addSportDto.Duration,
-                DateTime = DateTime.Now
+                DateTime =  Convert.ToDateTime(addSportDto.DateTime)
             };
 
             await context.Activities.AddAsync(sport);
@@ -582,17 +630,17 @@ namespace sport_app_backend.Repository
         }
 
 
-        public async Task<ApiResponse> WeightReport(string phoneNumber)
+        public async Task<ApiResponse> GetLastMonthWeightReport(string phoneNumber)
         {
             var athlete = await context.Athletes.FirstOrDefaultAsync(x => x.PhoneNumber == phoneNumber);
             if (athlete is null)
                 return new ApiResponse() { Message = "User is not an athlete", Action = false };
 
            
-            PersianCalendar pc = new PersianCalendar();
-            DateTime today = DateTime.Now;
-            int persianYear = pc.GetYear(today);
-            int persianMonth = pc.GetMonth(today);
+            var pc = new PersianCalendar();
+            var today = DateTime.Now;
+            var persianYear = pc.GetYear(today);
+            var persianMonth = pc.GetMonth(today);
             DateTime firstDayOfPersianMonth = pc.ToDateTime(persianYear, persianMonth, 1, 0, 0, 0, 0);
 
             // دریافت رکوردهای وزن از اول ماه شمسی تاکنون
@@ -914,7 +962,7 @@ namespace sport_app_backend.Repository
             if (athlete is null) return new ApiResponse() { Message = "Athlete not found", Action = false };
             var workoutProgram = athlete.WorkoutPrograms.FirstOrDefault(x =>
                 x.Status == WorkoutProgramStatus.ACTIVE );
-            if (workoutProgram is null) return new ApiResponse() { Message = "workoutProgram not found", Action = false };
+            if (workoutProgram is null) return new ApiResponse() { Message = "workoutProgram not found", Action = true };
 
             var trainingSessions =
                 await context.TrainingSessions.Include(T=>T.ProgramInDay)

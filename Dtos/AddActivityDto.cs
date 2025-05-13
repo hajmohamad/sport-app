@@ -7,6 +7,7 @@ namespace sport_app_backend.Controller
         public double Duration { get; set; }
         public double CaloriesLost{get;set;}
         public double Distance{get;set;}
+        public required string DateTime { get; set; }
       
     }
 }

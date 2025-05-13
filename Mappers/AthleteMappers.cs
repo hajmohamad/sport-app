@@ -27,7 +27,10 @@ namespace sport_app_backend.Mappers
                 ImageProfile = user.ImageProfile ??"",
                 Bio = user.Bio ?? "",
                 TimeBeforeWorkout = user.Athlete.TimeBeforeWorkout,
-                RestTime = user.Athlete.RestTime
+                RestTime = user.Athlete.RestTime,
+                //water in take 
+                
+                
             };
                 }
         

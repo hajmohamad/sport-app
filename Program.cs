@@ -131,7 +131,7 @@ app.MapDefaultControllerRoute();
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
-///if on development mode
+
 if(!app.Environment.IsDevelopment())
 {
     using (var scope = app.Services.CreateScope())
