@@ -275,6 +275,34 @@ namespace sport_app_backend.Repository
                 }).ToList()
             };
         }
+
+        public async Task<ApiResponse> TodayActivityReport(string phoneNumber)
+        {
+            var athlete = await context.Athletes.FirstOrDefaultAsync(x => x.PhoneNumber == phoneNumber);
+            if (athlete is null)
+                return new ApiResponse() { Message = "User is not an athlete", Action = false };
+
+            var today = DateTime.Now.Date;
+            var activities = await context.Activities
+                .Where(x => x.AthleteId == athlete.Id && x.DateTime == today)
+                .ToListAsync();
+
+            return new ApiResponse()
+            {
+                Message = "Activities found",
+                Action = true,
+                Result = activities.Select(x => new
+                {
+                    x.Id,
+                    Date = x.DateTime.ToString("yyyy-MM-dd"),
+                    x.CaloriesLost,
+                    x.Duration,
+                    SportEnum = x.ActivityCategory.ToString(),
+                    x.Name
+                }).ToList()
+            };
+        }
+
         public async Task<ApiResponse> AddActivity(string phoneNumber, AddActivityDto addSportDto)
         {
             var athlete = await context.Athletes.FirstOrDefaultAsync(x => x.PhoneNumber == phoneNumber);

@@ -264,6 +264,18 @@ namespace sport_app_backend.Controller
             return Ok(result);
         }
 
+
+        [HttpGet("get_today_activity_report")]
+        [Authorize(Roles = "Athlete")]
+        public async Task<IActionResult> GetTodayActivityReport()
+        {
+            var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
+            if (phoneNumber is null) return BadRequest("PhoneNumber is null");
+            var result = await athleteRepository.TodayActivityReport(phoneNumber);
+            if (!result.Action) return BadRequest(result);
+            return Ok(result);
+        }
+
         [HttpDelete("delete_activity")]
         [Authorize(Roles = "Athlete")]
         public async Task<IActionResult> DeleteActivity(int activityId)
