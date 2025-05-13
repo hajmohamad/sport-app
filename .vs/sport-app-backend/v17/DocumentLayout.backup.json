@@ -1,12 +1,7 @@
 {
   "Version": 1,
   "WorkspaceRootPath": "C:\\Users\\Dour-Andish\\Desktop\\charset\\sport-app\\",
-  "Documents": [
-    {
-      "AbsoluteMoniker": "D:0:0:{27B63680-A5B7-55C3-C88B-EBD5D7F12023}|sport-app-backend.csproj|c:\\users\\dour-andish\\desktop\\charset\\sport-app\\controller\\athletecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{27B63680-A5B7-55C3-C88B-EBD5D7F12023}|sport-app-backend.csproj|solutionrelative:controller\\athletecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    }
-  ],
+  "Documents": [],
   "DocumentGroupContainers": [
     {
       "Orientation": 0,
@@ -14,7 +9,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 5,
+          "SelectedChildIndex": -1,
           "Children": [
             {
               "$type": "Bookmark",
@@ -35,19 +30,6 @@
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "AthleteController.cs",
-              "DocumentMoniker": "C:\\Users\\Dour-Andish\\Desktop\\charset\\sport-app\\Controller\\AthleteController.cs",
-              "RelativeDocumentMoniker": "Controller\\AthleteController.cs",
-              "ToolTip": "C:\\Users\\Dour-Andish\\Desktop\\charset\\sport-app\\Controller\\AthleteController.cs",
-              "RelativeToolTip": "Controller\\AthleteController.cs",
-              "ViewState": "AgIAAGQAAAAAAAAAAAAawG0AAAAtAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-13T18:34:09.058Z",
-              "EditorCaption": ""
             }
           ]
         }
