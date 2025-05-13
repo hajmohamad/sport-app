@@ -46,7 +46,7 @@ namespace sport_app_backend.Controller
             return Ok(result);
         }
 
-        [HttpPost("add_water_intake")]
+        [HttpPost("set_daily_water_goal")]
         [Authorize(Roles = "Athlete")]
         public async Task<IActionResult> AddWaterIntake([FromBody] WaterInTakeDto waterInTakeDto)
         {
@@ -59,7 +59,7 @@ namespace sport_app_backend.Controller
         }
 
 
-        [HttpGet("get_water_intake")]
+        [HttpGet("get_daily_water_goal")]
         [Authorize(Roles = "Athlete")]
         public async Task<IActionResult> GetWaterIntake()
         {
@@ -95,7 +95,7 @@ namespace sport_app_backend.Controller
 
 
 
-        [HttpPut("update_water_inDay")]
+        [HttpPut("add_water_drinking")]
         [Authorize(Roles = "Athlete")]
         public async Task<IActionResult> UpdateWaterInDay()
         {
@@ -107,7 +107,7 @@ namespace sport_app_backend.Controller
         }
 
 
-        [HttpGet("get_water_in_day")]
+        [HttpGet("get_water_drinking_count")]
         [Authorize(Roles = "Athlete")]
 
         public async Task<IActionResult> GetWaterInDayForLast7Days()
