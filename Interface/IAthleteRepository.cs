@@ -50,5 +50,7 @@ namespace sport_app_backend.Interface
         public Task<ApiResponse> FeedbackTrainingSession(string phoneNumber, FeedbackTrainingSessionDto feedbackTrainingSessionDto);
         public Task<ApiResponse> ResetTrainingSession(string phoneNumber, int trainingSessionId);
         public Task<ApiResponse> VerifyPaymentAsync(ZarinPalVerifyRequestDto request);
+        public Task<ApiResponse> GetActivityPage(string phoneNumber);
+
     }
 }

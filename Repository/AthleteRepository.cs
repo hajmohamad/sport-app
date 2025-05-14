@@ -29,43 +29,43 @@ namespace sport_app_backend.Repository
         private static readonly HttpClient Client = new HttpClient();
 
         private async Task<ApiResponse> ConfirmTransactionId(Payment payment)
-{
-    try
-    {
-        payment.CoachService.NumberOfSell += 1;
-
-        var workoutProgram = new WorkoutProgram
         {
-            Title = payment.CoachService.Title,
-            Coach = payment.Coach,
-            CoachId = payment.Coach.Id,
-            Athlete = payment.Athlete,
-            AthleteId = payment.Athlete.Id,
-            Payment = payment,
-            PaymentId = payment.Id
-        };
+            try
+            {
+                payment.CoachService.NumberOfSell += 1;
 
-        payment.WorkoutProgram = workoutProgram;
-        payment.PaymentStatus = PaymentStatus.SUCCESS;
+                var workoutProgram = new WorkoutProgram
+                {
+                    Title = payment.CoachService.Title,
+                    Coach = payment.Coach,
+                    CoachId = payment.Coach.Id,
+                    Athlete = payment.Athlete,
+                    AthleteId = payment.Athlete.Id,
+                    Payment = payment,
+                    PaymentId = payment.Id
+                };
 
-        await context.WorkoutPrograms.AddAsync(workoutProgram);
-        await context.SaveChangesAsync();
+                payment.WorkoutProgram = workoutProgram;
+                payment.PaymentStatus = PaymentStatus.SUCCESS;
 
-        return new ApiResponse
-        {
-            Message = "Payment confirmed successfully",
-            Action = true
-        };
-    }
-    catch (Exception ex)
-    {
-        return new ApiResponse
-        {
-            Message = $"Error confirming transaction: {ex.Message}",
-            Action = false
-        };
-    }
-}
+                await context.WorkoutPrograms.AddAsync(workoutProgram);
+                await context.SaveChangesAsync();
+
+                return new ApiResponse
+                {
+                    Message = "Payment confirmed successfully",
+                    Action = true
+                };
+            }
+            catch (Exception ex)
+            {
+                return new ApiResponse
+                {
+                    Message = $"Error confirming transaction: {ex.Message}",
+                    Action = false
+                };
+            }
+        }
 
         public async Task<ApiResponse> VerifyPaymentAsync(ZarinPalVerifyRequestDto request)
         {
@@ -90,7 +90,7 @@ namespace sport_app_backend.Repository
                 merchant_id = request.MerchantId,
                 authority = request.Authority,
                 amount = payment.Amount,
-                currency="IRT"
+                currency = "IRT"
 
             };
 
@@ -99,7 +99,8 @@ namespace sport_app_backend.Repository
 
             try
             {
-                var response = await Client.PostAsync("https://sandbox.zarinpal.com/pg/v4/payment/verify.json", content);
+                var response =
+                    await Client.PostAsync("https://sandbox.zarinpal.com/pg/v4/payment/verify.json", content);
                 var responseContent = await response.Content.ReadAsStringAsync();
                 dynamic result = JsonConvert.DeserializeObject(responseContent);
 
@@ -145,7 +146,7 @@ namespace sport_app_backend.Repository
                 amount = request.amount,
                 callback_url = request.callback_url,
                 description = request.description,
-                currency="IRT"
+                currency = "IRT"
             };
 
             var jsonData = JsonConvert.SerializeObject(data);
@@ -153,7 +154,8 @@ namespace sport_app_backend.Repository
 
             try
             {
-                var response = await Client.PostAsync("https://sandbox.zarinpal.com/pg/v4/payment/request.json", content);
+                var response =
+                    await Client.PostAsync("https://sandbox.zarinpal.com/pg/v4/payment/request.json", content);
                 var responseContent = await response.Content.ReadAsStringAsync();
                 dynamic result = JsonConvert.DeserializeObject(responseContent);
 
@@ -249,6 +251,7 @@ namespace sport_app_backend.Repository
                 Result = zarinPalResponse
             };
         }
+
         public async Task<ApiResponse> GetMonthlyActivity(string phoneNumber, int year, int month)
         {
             ArgumentOutOfRangeException.ThrowIfNegative(month);
@@ -368,7 +371,7 @@ namespace sport_app_backend.Repository
                 CaloriesLost = addSportDto.CaloriesLost,
                 Distance = addSportDto.Distance,
                 Duration = addSportDto.Duration,
-                DateTime =  Convert.ToDateTime(addSportDto.DateTime)
+                DateTime = Convert.ToDateTime(addSportDto.DateTime)
             };
 
             await context.Activities.AddAsync(sport);
@@ -430,9 +433,12 @@ namespace sport_app_backend.Repository
                 Action = true
             };
         }
+
         public async Task<ApiResponse> SearchCoaches(CoachNameSearchDto coachNameSearchDto)
         {
-            var coaches = await  context.Users.Where(c=>(c.FirstName+" "+c.LastName).Contains(coachNameSearchDto.FullName)&&c.TypeOfUser==TypeOfUser.COACH).ToListAsync();
+            var coaches = await context.Users.Where(c =>
+                (c.FirstName + " " + c.LastName).Contains(coachNameSearchDto.FullName) &&
+                c.TypeOfUser == TypeOfUser.COACH).ToListAsync();
             return new ApiResponse()
             {
                 Message = "Coaches found",
@@ -448,12 +454,13 @@ namespace sport_app_backend.Repository
             {
                 return new ApiResponse() { Message = "User is not an athlete", Action = false };
             }
+
             var lastQuestion = context.AthleteQuestions
-                .Where(q => q.AthleteId == athlete.Id).Include(i=>i.InjuryArea)
+                .Where(q => q.AthleteId == athlete.Id).Include(i => i.InjuryArea)
                 .OrderByDescending(q => q.CreatedAt)
                 .FirstOrDefault();
             if (lastQuestion is null) return new ApiResponse() { Message = "Question not found", Action = false };
-            
+
             return new ApiResponse()
             {
                 Message = "Question found",
@@ -461,11 +468,15 @@ namespace sport_app_backend.Repository
                 Result = lastQuestion.ToAthleteQuestionDto()
             };
         }
+
         public async Task<ApiResponse> DeleteActivity(string phoneNumber, int activityId)
         {
             var athlete = await context.Athletes.FirstOrDefaultAsync(x => x.PhoneNumber == phoneNumber);
-            if (athlete is null) return new ApiResponse() { Message = "User is not an athlete", Action = false };// Ensure the user is an athlete
-            var activity = await context.Activities.FirstOrDefaultAsync(x => x.Id == activityId && x.AthleteId == athlete.Id);
+            if (athlete is null)
+                return new ApiResponse()
+                    { Message = "User is not an athlete", Action = false }; // Ensure the user is an athlete
+            var activity =
+                await context.Activities.FirstOrDefaultAsync(x => x.Id == activityId && x.AthleteId == athlete.Id);
             if (activity is null) return new ApiResponse() { Message = "Activity not found", Action = false };
             context.Activities.Remove(activity);
             await context.SaveChangesAsync();
@@ -479,13 +490,16 @@ namespace sport_app_backend.Repository
 
         public async Task<ApiResponse> SubmitAthleteQuestions(string phoneNumber, AthleteQuestionDto athleteQuestionDto)
         {
-            var athlete = await context.Athletes.Include(x => x.User).FirstOrDefaultAsync(x => x.PhoneNumber == phoneNumber);
-            if (athlete is null) return new ApiResponse() { Message = "User is not an athlete", Action = false };// Ensure the user is an athlete
+            var athlete = await context.Athletes.Include(x => x.User)
+                .FirstOrDefaultAsync(x => x.PhoneNumber == phoneNumber);
+            if (athlete is null)
+                return new ApiResponse()
+                    { Message = "User is not an athlete", Action = false }; // Ensure the user is an athlete
             if (athlete.User is null) return new ApiResponse() { Message = "User not found", Action = false };
             athlete.User.BirthDate = Convert.ToDateTime(athleteQuestionDto.BirthDay);
             var athleteQuestion = athleteQuestionDto.ToAthleteQuestion(athlete);
             athlete.AthleteQuestions.Add(athleteQuestion);
-           await context.AthleteQuestions.AddAsync(athleteQuestion);
+            await context.AthleteQuestions.AddAsync(athleteQuestion);
 
             await context.SaveChangesAsync();
             return new ApiResponse()
@@ -496,15 +510,20 @@ namespace sport_app_backend.Repository
 
         }
 
-        public async Task<ApiResponse> AthleteFirstQuestions(string phoneNumber, AthleteFirstQuestionsDto athleteFirstQuestionsDto) {
-            var user = await context.Users.Include(a=>a.Athlete).FirstOrDefaultAsync(x => x.PhoneNumber == phoneNumber);
+        public async Task<ApiResponse> AthleteFirstQuestions(string phoneNumber,
+            AthleteFirstQuestionsDto athleteFirstQuestionsDto)
+        {
+            var user = await context.Users.Include(a => a.Athlete)
+                .FirstOrDefaultAsync(x => x.PhoneNumber == phoneNumber);
             if (user is null) return new ApiResponse() { Message = "User not found", Action = false };
-            var athlete=user.Athlete;
-            if (athlete is null) return new ApiResponse() { Message = "User is not an athlete", Action = false };// Ensure the user is an athlete
+            var athlete = user.Athlete;
+            if (athlete is null)
+                return new ApiResponse()
+                    { Message = "User is not an athlete", Action = false }; // Ensure the user is an athlete
             athlete.Height = athleteFirstQuestionsDto.Height;
             athlete.CurrentWeight = athleteFirstQuestionsDto.CurrentWeight;
-            user.LastName=athleteFirstQuestionsDto.LastName;
-            user.FirstName=athleteFirstQuestionsDto.FirstName;
+            user.LastName = athleteFirstQuestionsDto.LastName;
+            user.FirstName = athleteFirstQuestionsDto.FirstName;
             await context.SaveChangesAsync();
             return new ApiResponse()
             {
@@ -526,7 +545,7 @@ namespace sport_app_backend.Repository
                 .FirstOrDefaultAsync();
             if (waterInDay is null)
             {
-                 waterInDay = new WaterInDay
+                waterInDay = new WaterInDay
                 {
                     AthleteId = athlete.Id,
                     Date = DateTime.Now.Date,
@@ -564,9 +583,12 @@ namespace sport_app_backend.Repository
         {
 
             var athlete = context.Athletes.FirstOrDefault(x => x.PhoneNumber == phoneNumber);
-            if (athlete is null) return new ApiResponse() { Message = "User is not an athlete", Action = false };// Ensure the user is an athlete
+            if (athlete is null)
+                return new ApiResponse()
+                    { Message = "User is not an athlete", Action = false }; // Ensure the user is an athlete
             athlete.CurrentWeight = weight;
-            var weightEntry = context.WeightEntries.FirstOrDefault(x => x.AthleteId == athlete.Id && x.CurrentDate.Date == DateTime.Now.Date);
+            var weightEntry = context.WeightEntries.FirstOrDefault(x =>
+                x.AthleteId == athlete.Id && x.CurrentDate.Date == DateTime.Now.Date);
             if (weightEntry is null)
             {
                 weightEntry = new WeightEntry()
@@ -587,6 +609,7 @@ namespace sport_app_backend.Repository
                 await context.SaveChangesAsync();
 
             }
+
             return new ApiResponse()
             {
                 Message = "Weight updated successfully",
@@ -598,10 +621,13 @@ namespace sport_app_backend.Repository
         public async Task<ApiResponse> UpdateHightWeight(string phoneNumber, double weight, int hight)
         {
             var athlete = context.Athletes.FirstOrDefault(x => x.PhoneNumber == phoneNumber);
-            if (athlete is null) return new ApiResponse() { Message = "User is not an athlete", Action = false };// Ensure the user is an athlete
+            if (athlete is null)
+                return new ApiResponse()
+                    { Message = "User is not an athlete", Action = false }; // Ensure the user is an athlete
             athlete.CurrentWeight = weight;
             athlete.Height = hight;
-            var weightEntry = context.WeightEntries.FirstOrDefault(x => x.AthleteId == athlete.Id && x.CurrentDate.Date == DateTime.Now.Date);
+            var weightEntry = context.WeightEntries.FirstOrDefault(x =>
+                x.AthleteId == athlete.Id && x.CurrentDate.Date == DateTime.Now.Date);
             if (weightEntry is null)
             {
                 weightEntry = new WeightEntry()
@@ -622,6 +648,7 @@ namespace sport_app_backend.Repository
                 await context.SaveChangesAsync();
 
             }
+
             return new ApiResponse()
             {
                 Message = "Weight and hight updated successfully",
@@ -636,7 +663,7 @@ namespace sport_app_backend.Repository
             if (athlete is null)
                 return new ApiResponse() { Message = "User is not an athlete", Action = false };
 
-           
+
             var pc = new PersianCalendar();
             var today = DateTime.Now;
             var persianYear = pc.GetYear(today);
@@ -660,7 +687,7 @@ namespace sport_app_backend.Repository
                 }).ToList()
             };
         }
-        
+
 
         public async Task<ApiResponse> CompleteNewChallenge(string phoneNumber, string challenge)
         {
@@ -668,7 +695,8 @@ namespace sport_app_backend.Repository
             if (athlete is null)
                 return new ApiResponse() { Message = "User is not an athlete", Action = false };
 
-            var challengeExists = context.Challenges.Any(x => x.AthleteId == athlete.Id && x.ChallengeType.ToString() == challenge);
+            var challengeExists =
+                context.Challenges.Any(x => x.AthleteId == athlete.Id && x.ChallengeType.ToString() == challenge);
             if (challengeExists)
                 return new ApiResponse() { Message = "Challenge already completed", Action = false };
 
@@ -708,10 +736,11 @@ namespace sport_app_backend.Repository
 
         public async Task<ApiResponse> GetAchievements(string phoneNumber)
         {
-            var athlete = await context.Athletes.Include(athlete => athlete.WorkoutPrograms).FirstOrDefaultAsync(x => x.PhoneNumber == phoneNumber);
+            var athlete = await context.Athletes.Include(athlete => athlete.WorkoutPrograms)
+                .FirstOrDefaultAsync(x => x.PhoneNumber == phoneNumber);
             if (athlete is null)
                 return new ApiResponse() { Message = "User is not an athlete", Action = false };
-            
+
 
             var challenges = await context.Challenges.Where(c => c.AthleteId == athlete.Id).ToListAsync();
             var firstChallenge = challenges.Count != 0;
@@ -759,40 +788,40 @@ namespace sport_app_backend.Repository
         public async Task<ApiResponse> GetAllPayments(string phoneNumber)
         {
             var athlete = await context.Athletes.Include(a => a.WorkoutPrograms)
-                .ThenInclude(p=>p.Payment)
-                .ThenInclude(s=>s.CoachService)
-                .ThenInclude(x=>x.Coach)
-                .ThenInclude(u=>u.User)
+                .ThenInclude(p => p.Payment)
+                .ThenInclude(s => s.CoachService)
+                .ThenInclude(x => x.Coach)
+                .ThenInclude(u => u.User)
                 .FirstOrDefaultAsync(z => z.PhoneNumber == phoneNumber);
-            if(athlete is null)
+            if (athlete is null)
                 return new ApiResponse()
                     { Action = false, Message = "Athlete not found" };
-            
-            
+
+
             return new ApiResponse()
             {
                 Action = true,
                 Message = "Payments found",
                 Result = athlete.WorkoutPrograms.Select(x => x.ToAllWorkoutProgramResponseDto()).ToList()
             };
-            
+
         }
 
         public async Task<ApiResponse> GetPayment(string phoneNumber, int paymentId)
         {
-            var payment = await context.Payments 
+            var payment = await context.Payments
                 .Include(p => p.Athlete)
                 .ThenInclude(a => a.User)
-                .Include(x => x.Coach)  // بارگذاری Coac
+                .Include(x => x.Coach) // بارگذاری Coac
                 .ThenInclude(a => a.User)
-                .Include(a=>a.AthleteQuestion)// بارگذاری User داخل Athlete
-                .ThenInclude(I=> I!.InjuryArea)
-                .Include(w=>w.WorkoutProgram)
-                .ThenInclude(z=>z.ProgramInDays)
-                .ThenInclude(z=>z.AllExerciseInDays)
-                .ThenInclude(e=>e.Exercise)
-                .FirstOrDefaultAsync(p => p.Athlete.PhoneNumber == phoneNumber&& p.Id==paymentId);
-            if(payment is null) return new ApiResponse() { Message = "Payment not found", Action = false };
+                .Include(a => a.AthleteQuestion) // بارگذاری User داخل Athlete
+                .ThenInclude(I => I!.InjuryArea)
+                .Include(w => w.WorkoutProgram)
+                .ThenInclude(z => z.ProgramInDays)
+                .ThenInclude(z => z.AllExerciseInDays)
+                .ThenInclude(e => e.Exercise)
+                .FirstOrDefaultAsync(p => p.Athlete.PhoneNumber == phoneNumber && p.Id == paymentId);
+            if (payment is null) return new ApiResponse() { Message = "Payment not found", Action = false };
             return new ApiResponse()
             {
                 Message = "Payment found",
@@ -815,7 +844,7 @@ namespace sport_app_backend.Repository
         {
             var athlete = await context.Athletes.Include(a => a.WorkoutPrograms)
                 .FirstOrDefaultAsync(a => a.PhoneNumber == phoneNumber);
-            if(athlete is null)
+            if (athlete is null)
                 return new ApiResponse()
                     { Action = false, Message = "Athlete not found" };
             var workoutProgram = athlete.WorkoutPrograms.Find(w => w.Id == programId);
@@ -841,22 +870,23 @@ namespace sport_app_backend.Repository
                     Array.Clear(arrayBitMap, 0, arrayBitMap.Length);
                     trainingSession.ExerciseCompletionBitmap = arrayBitMap;
                 }
+
                 await context.SaveChangesAsync();
                 return new ApiResponse()
                 {
                     Action = true,
                     Message = "Program clear",
                 };
-                
+
             }
 
             foreach (var program in athlete.WorkoutPrograms.Where(x => x.Status == WorkoutProgramStatus.ACTIVE))
             {
                 program.Status = WorkoutProgramStatus.STOPPED;
             }
-            
 
-         
+
+
 
             if (workoutProgram.Status is WorkoutProgramStatus.WRITING or WorkoutProgramStatus.NOTSTARTED)
             {
@@ -866,6 +896,7 @@ namespace sport_app_backend.Repository
                     Message = "workout program status is not accept"
                 };
             }
+
             workoutProgram.Status = WorkoutProgramStatus.ACTIVE;
             await context.SaveChangesAsync();
             return new ApiResponse()
@@ -874,7 +905,7 @@ namespace sport_app_backend.Repository
                 Message = "Program found",
             };
         }
-            
+
         private static async Task<bool> HasConsecutiveDaysAsync(List<DateTime> dates, int requiredConsecutive)
         {
             return await Task.Run(() =>
@@ -896,11 +927,12 @@ namespace sport_app_backend.Repository
                         consecutive = 1;
                     }
                 }
+
                 return false;
             });
         }
 
-        
+
 
         public async Task<ApiResponse> ExerciseFeedBack(string phoneNumber, ExerciseFeedbackDto feedbackDto)
         {
@@ -909,13 +941,15 @@ namespace sport_app_backend.Repository
             var singleExercise = await context.SingleExercises.Include(p => p.ProgramInDay)
                 .ThenInclude(w => w!.WorkoutProgram)
                 .FirstOrDefaultAsync(s => s.Id == feedbackDto.SingleExerciseId);
-          
+
             var feedback = feedbackDto.ToExerciseFeedback();
             feedback.AthleteId = athlete.Id;
             if (singleExercise?.ProgramInDay?.WorkoutProgram != null)
                 feedback.CoachId = singleExercise.ProgramInDay.WorkoutProgram.CoachId;
-            feedback.SingleExercise = await context.SingleExercises.FirstOrDefaultAsync(x => x.Id == feedbackDto.SingleExerciseId);
-            feedback.TrainingSession = await context.TrainingSessions.FirstOrDefaultAsync(x => x.Id == feedbackDto.TrainingSessionId);
+            feedback.SingleExercise =
+                await context.SingleExercises.FirstOrDefaultAsync(x => x.Id == feedbackDto.SingleExerciseId);
+            feedback.TrainingSession =
+                await context.TrainingSessions.FirstOrDefaultAsync(x => x.Id == feedbackDto.TrainingSessionId);
 
             await context.ExerciseFeedbacks.AddAsync(feedback);
             await context.SaveChangesAsync();
@@ -942,7 +976,7 @@ namespace sport_app_backend.Repository
             exerciseChangeRequest.TrainingSessionId = dto.TrainingSessionId;
             if (singleExercise?.ProgramInDay?.WorkoutProgram != null)
                 exerciseChangeRequest.CoachId = singleExercise.ProgramInDay.WorkoutProgram.CoachId;
-            
+
             await context.ExerciseChangeRequests.AddAsync(exerciseChangeRequest);
             await context.SaveChangesAsync();
 
@@ -958,16 +992,18 @@ namespace sport_app_backend.Repository
 
         public async Task<ApiResponse> GetAllTrainingSession(string phoneNumber)
         {
-            var athlete = await context.Athletes.Include(a=>a.WorkoutPrograms).FirstOrDefaultAsync(a => a.PhoneNumber == phoneNumber);
+            var athlete = await context.Athletes.Include(a => a.WorkoutPrograms)
+                .FirstOrDefaultAsync(a => a.PhoneNumber == phoneNumber);
             if (athlete is null) return new ApiResponse() { Message = "Athlete not found", Action = false };
             var workoutProgram = athlete.WorkoutPrograms.FirstOrDefault(x =>
-                x.Status == WorkoutProgramStatus.ACTIVE );
-            if (workoutProgram is null) return new ApiResponse() { Message = "workoutProgram not found", Action = true };
+                x.Status == WorkoutProgramStatus.ACTIVE);
+            if (workoutProgram is null)
+                return new ApiResponse() { Message = "workoutProgram not found", Action = true };
 
             var trainingSessions =
-                await context.TrainingSessions.Include(T=>T.ProgramInDay)
-                    .ThenInclude(p=>p.AllExerciseInDays)
-                    .ThenInclude(z=>z.Exercise)
+                await context.TrainingSessions.Include(T => T.ProgramInDay)
+                    .ThenInclude(p => p.AllExerciseInDays)
+                    .ThenInclude(z => z.Exercise)
                     .Where(t => t.WorkoutProgram.Id == workoutProgram.Id).ToListAsync();
 
             return new ApiResponse()
@@ -986,11 +1022,11 @@ namespace sport_app_backend.Repository
             var trainingSession = await context.TrainingSessions.Include(p => p.ProgramInDay)
                 .ThenInclude(a => a.AllExerciseInDays).ThenInclude(e => e.Exercise)
                 .FirstOrDefaultAsync(z => z.Id == trainingSessionId);
-            if(trainingSession is null )
+            if (trainingSession is null)
                 return new ApiResponse() { Message = "trainingSession not found", Action = false };
-            
-            
-          
+
+
+
             return new ApiResponse()
             {
                 Action = true,
@@ -1005,19 +1041,20 @@ namespace sport_app_backend.Repository
         {
             var trainingSession = await context.TrainingSessions
                 .FirstOrDefaultAsync(z => z.Id == trainingSessionId);
-            if(trainingSession is null )
+            if (trainingSession is null)
                 return new ApiResponse() { Message = "trainingSession not found", Action = false };
-    
+
             trainingSession.TrainingSessionStatus = TrainingSessionStatus.INPROGRESS;
-            
+
             var bitmap = trainingSession.ExerciseCompletionBitmap.ToArray();
             bitmap[exerciseNumber] = 0xFF;
-            trainingSession.ExerciseCompletionBitmap = bitmap;          
+            trainingSession.ExerciseCompletionBitmap = bitmap;
             var allCompleted = trainingSession.ExerciseCompletionBitmap.All(b => b == 0xFF);
-            trainingSession.TrainingSessionStatus = allCompleted ? TrainingSessionStatus.COMPLETED : TrainingSessionStatus.INPROGRESS;
+            trainingSession.TrainingSessionStatus =
+                allCompleted ? TrainingSessionStatus.COMPLETED : TrainingSessionStatus.INPROGRESS;
 
             await context.SaveChangesAsync();
-          
+
             return new ApiResponse()
             {
                 Action = true,
@@ -1026,14 +1063,15 @@ namespace sport_app_backend.Repository
             };
         }
 
-        public async Task<ApiResponse> FinishTrainingSession(string phoneNumber, FinishTrainingSessionDto finishTrainingSessionDto)
+        public async Task<ApiResponse> FinishTrainingSession(string phoneNumber,
+            FinishTrainingSessionDto finishTrainingSessionDto)
         {
             var athlete = await context.Athletes.FirstOrDefaultAsync(x => x.PhoneNumber == phoneNumber);
             if (athlete is null) return new ApiResponse() { Message = "Athlete not found", Action = false };
             var trainingSession = await context.TrainingSessions
                 .FirstOrDefaultAsync(z => z.Id == finishTrainingSessionDto.TrainingSessionId);
-            if(trainingSession is null )  
-                return new ApiResponse() { Message = "trainingSession not found", Action = false }; 
+            if (trainingSession is null)
+                return new ApiResponse() { Message = "trainingSession not found", Action = false };
             trainingSession.TrainingSessionStatus = TrainingSessionStatus.COMPLETED;
             var activity = new Activity()
             {
@@ -1057,7 +1095,8 @@ namespace sport_app_backend.Repository
         }
 
 
-        public async Task<ApiResponse> FeedbackTrainingSession(string phoneNumber , FeedbackTrainingSessionDto feedbackTrainingSessionDto)
+        public async Task<ApiResponse> FeedbackTrainingSession(string phoneNumber,
+            FeedbackTrainingSessionDto feedbackTrainingSessionDto)
         {
             var athlete = await context.Athletes.FirstOrDefaultAsync(x => x.PhoneNumber == phoneNumber);
             if (athlete is null) return new ApiResponse() { Message = "Athlete not found", Action = false };
@@ -1087,7 +1126,7 @@ namespace sport_app_backend.Repository
                 return new ApiResponse() { Message = "trainingSession not found", Action = false };
 
             trainingSession.TrainingSessionStatus = TrainingSessionStatus.NOTSTARTED;
-            
+
             var arrayBitMap = trainingSession.ExerciseCompletionBitmap.ToArray();
             Array.Clear(arrayBitMap, 0, arrayBitMap.Length);
             trainingSession.ExerciseCompletionBitmap = arrayBitMap;
@@ -1100,6 +1139,96 @@ namespace sport_app_backend.Repository
                 Result = trainingSession.ToAllTrainingSessionDto()
             };
         }
+
+        public async Task<ApiResponse> GetActivityPage(string phoneNumber){
+                var athlete = await context.Athletes
+                    .Include(a => a.WeightEntries)
+                    .Include(a => a.WaterInDays)
+                    .Include(a => a.Activities)
+                    .FirstOrDefaultAsync(a => a.PhoneNumber == phoneNumber);
+
+                if (athlete is null)
+                    return new ApiResponse { Message = "Athlete not found", Action = false };
+
+                var today = DateTime.Today;
+                var lastSaturday = GetLastSaturday(today);
+                var firstDayOfPersianMonth = GetFirstDayOfPersianMonth(today);
+
+                var recentActivities = athlete.Activities
+                    .Where(a => a.DateTime >= lastSaturday)
+                    .ToList();
+
+                var totalActivities = recentActivities.Count;
+                var totalTime = recentActivities.Select(a => a.Duration).DefaultIfEmpty(0).Sum();
+                var totalCalories = recentActivities.Select(a => a.CaloriesLost).DefaultIfEmpty(0).Sum();
+
+                var lastWeekActivities = recentActivities.Select(a => new
+                {
+                    a.Id,
+                    Date = a.DateTime.ToString("yyyy-MM-dd")
+                }).ToList();
+
+                var todayWater = athlete.WaterInDays.FirstOrDefault(w => w.Date == today);
+
+                var todayActivities = athlete.Activities
+                    .Where(a => a.DateTime.Date == today)
+                    .Select(a => new
+                    {
+                        a.Id,
+                        Date = a.DateTime.ToString("yyyy-MM-dd"),
+                        a.CaloriesLost,
+                        a.Duration,
+                        SportEnum = a.ActivityCategory.ToString(),
+                        a.Name
+                    })
+                    .ToList();
+
+                var currentWeight = athlete.CurrentWeight;
+                var goalWeight = athlete.WeightGoal;
+
+                var lastMonthWeights = athlete.WeightEntries
+                    .Where(w => w.CurrentDate >= firstDayOfPersianMonth)
+                    .OrderByDescending(w => w.CurrentDate)
+                    .Select(w => new
+                    {
+                        Date = w.CurrentDate.ToString("yyyy-MM-dd"),
+                        w.Weight
+                    })
+                    .ToList();
+
+                return new ApiResponse
+                {
+                    Message = "Activities found",
+                    Action = true,
+                    Result = new
+                    {
+                        totalActivities,
+                        totalTime,
+                        totalCalories,
+                        lastWeekActivities,
+                        waterDrunkThisDay = todayWater,
+                        activityThisDay = todayActivities,
+                        currentWeight,
+                        goalWeight,
+                        lastMonthWeight = lastMonthWeights
+                    }
+                };
+            }
+
+            private static DateTime GetLastSaturday(DateTime today)
+            {
+                var daysSinceSaturday = (int)today.DayOfWeek == 0 ? 6 : (int)today.DayOfWeek - 6;
+                return today.AddDays(-daysSinceSaturday);
+            }
+
+            private static DateTime GetFirstDayOfPersianMonth(DateTime date)
+            {
+                var pc = new PersianCalendar();
+                var year = pc.GetYear(date);
+                var month = pc.GetMonth(date);
+                return pc.ToDateTime(year, month, 1, 0, 0, 0, 0);
+            }
+
+
     }
-    
 }

@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using sport_app_backend.Models.Actions;
 using sport_app_backend.Models.Payments;
 using sport_app_backend.Models.Program;
 using sport_app_backend.Models.Question.A_Question;
@@ -28,6 +29,7 @@ public class Athlete
     public List<WaterInDay> WaterInDays { get; set; } = [];
     public List<Payment> Payments { get; set; } = [];
     public List<WorkoutProgram> WorkoutPrograms { get; set; } = [];
+    public List<Activity> Activities{ get; set; } = [];
     public List<AthleteQuestion> AthleteQuestions { get; set; } = [];
 
 }
