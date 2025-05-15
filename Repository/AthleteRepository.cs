@@ -1150,7 +1150,7 @@ namespace sport_app_backend.Repository
                 if (athlete is null)
                     return new ApiResponse { Message = "Athlete not found", Action = false };
 
-                var today = DateTime.Today;
+                var today = DateTime.Today.Date;
                 var lastSaturday = GetLastSaturday(today);
                 var firstDayOfPersianMonth = GetFirstDayOfPersianMonth(today);
 
@@ -1169,6 +1169,7 @@ namespace sport_app_backend.Repository
                 }).ToList();
 
                 var todayWater = athlete.WaterInDays.FirstOrDefault(w => w.Date == today);
+              
 
                 var todayActivities = athlete.Activities
                     .Where(a => a.DateTime.Date == today)
@@ -1206,11 +1207,16 @@ namespace sport_app_backend.Repository
                         totalTime,
                         totalCalories,
                         lastWeekActivities,
-                        waterDrunkThisDay = todayWater,
+                        waterDrunkThisDay = new
+                        {
+                            date= todayWater?.Date.ToString("yyyy-MM-dd"),
+                            todayWater?.NumberOfCupsDrinked
+                        },
                         activityThisDay = todayActivities,
                         currentWeight,
                         goalWeight,
-                        lastMonthWeight = lastMonthWeights
+                        lastMonthWeight = lastMonthWeights,
+                        date= DateTime.Now
                     }
                 };
             }
@@ -1218,7 +1224,7 @@ namespace sport_app_backend.Repository
             private static DateTime GetLastSaturday(DateTime today)
             {
                 var daysSinceSaturday = (int)today.DayOfWeek == 0 ? 6 : (int)today.DayOfWeek - 6;
-                return today.AddDays(-daysSinceSaturday);
+                return today.AddDays(daysSinceSaturday);
             }
 
             private static DateTime GetFirstDayOfPersianMonth(DateTime date)

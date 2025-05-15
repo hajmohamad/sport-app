@@ -86,7 +86,7 @@ namespace sport_app_backend.Migrations
                     Gender = table.Column<int>(type: "int", nullable: false),
                     ImageProfile = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    Bio = table.Column<string>(type: "varchar(3)", maxLength: 3, nullable: false)
+                    Bio = table.Column<string>(type: "varchar(150)", maxLength: 150, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     TypeOfUser = table.Column<int>(type: "int", nullable: false),
                     RefreshToken = table.Column<string>(type: "longtext", nullable: true)
@@ -166,7 +166,7 @@ namespace sport_app_backend.Migrations
                     UserId = table.Column<int>(type: "int", nullable: false),
                     Category = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    Description = table.Column<string>(type: "longtext", nullable: false)
+                    Description = table.Column<string>(type: "varchar(300)", maxLength: 300, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4")
                 },
                 constraints: table =>
@@ -193,7 +193,7 @@ namespace sport_app_backend.Migrations
                     CaloriesLost = table.Column<double>(type: "double", nullable: false),
                     Duration = table.Column<double>(type: "double", nullable: false),
                     Distance = table.Column<double>(type: "double", nullable: false),
-                    DateTime = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    DateTime = table.Column<DateTime>(type: "date", nullable: false),
                     AthleteId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -432,7 +432,7 @@ namespace sport_app_backend.Migrations
                     CoachId = table.Column<int>(type: "int", nullable: false),
                     Amount = table.Column<double>(type: "double", nullable: false),
                     CoachServiceId = table.Column<int>(type: "int", nullable: false),
-                    TransactionId = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false)
+                    Authority = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     PaymentStatus = table.Column<int>(type: "int", nullable: false),
                     PaymentDate = table.Column<DateTime>(type: "datetime(6)", nullable: false),
@@ -483,9 +483,9 @@ namespace sport_app_backend.Migrations
                     ProgramDuration = table.Column<int>(type: "int", nullable: false),
                     ProgramLevel = table.Column<string>(type: "varchar(20)", maxLength: 20, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    ProgramPriorities = table.Column<string>(type: "varchar(10)", maxLength: 10, nullable: false)
+                    ProgramPriorities = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    GeneralWarmUp = table.Column<string>(type: "varchar(30)", maxLength: 30, nullable: true)
+                    GeneralWarmUp = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     DedicatedWarmUp = table.Column<int>(type: "int", nullable: true),
                     EndDate = table.Column<DateTime>(type: "datetime(6)", nullable: false),
@@ -568,6 +568,122 @@ namespace sport_app_backend.Migrations
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
+            migrationBuilder.CreateTable(
+                name: "TrainingSessions",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    WorkoutProgramId = table.Column<int>(type: "int", nullable: false),
+                    ProgramInDayId = table.Column<int>(type: "int", nullable: false),
+                    DayNumber = table.Column<int>(type: "int", nullable: false),
+                    TrainingSessionStatus = table.Column<int>(type: "int", nullable: false),
+                    ExerciseFeeling = table.Column<int>(type: "int", nullable: false),
+                    ExerciseCompletionBitmap = table.Column<byte[]>(type: "longblob", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TrainingSessions", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_TrainingSessions_ProgramInDays_ProgramInDayId",
+                        column: x => x.ProgramInDayId,
+                        principalTable: "ProgramInDays",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_TrainingSessions_WorkoutPrograms_WorkoutProgramId",
+                        column: x => x.WorkoutProgramId,
+                        principalTable: "WorkoutPrograms",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "ExerciseChangeRequests",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    SingleExerciseId = table.Column<int>(type: "int", nullable: false),
+                    Reason = table.Column<int>(type: "int", nullable: false),
+                    AthleteId = table.Column<int>(type: "int", nullable: false),
+                    CoachId = table.Column<int>(type: "int", nullable: false),
+                    TrainingSessionId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ExerciseChangeRequests", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ExerciseChangeRequests_Athletes_AthleteId",
+                        column: x => x.AthleteId,
+                        principalTable: "Athletes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ExerciseChangeRequests_Coaches_CoachId",
+                        column: x => x.CoachId,
+                        principalTable: "Coaches",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ExerciseChangeRequests_SingleExercises_SingleExerciseId",
+                        column: x => x.SingleExerciseId,
+                        principalTable: "SingleExercises",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ExerciseChangeRequests_TrainingSessions_TrainingSessionId",
+                        column: x => x.TrainingSessionId,
+                        principalTable: "TrainingSessions",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "ExerciseFeedbacks",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    SingleExerciseId = table.Column<int>(type: "int", nullable: false),
+                    IsPositive = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    NegativeReason = table.Column<int>(type: "int", nullable: true),
+                    AthleteId = table.Column<int>(type: "int", nullable: false),
+                    CoachId = table.Column<int>(type: "int", nullable: false),
+                    TrainingSessionId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ExerciseFeedbacks", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ExerciseFeedbacks_Athletes_AthleteId",
+                        column: x => x.AthleteId,
+                        principalTable: "Athletes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ExerciseFeedbacks_Coaches_CoachId",
+                        column: x => x.CoachId,
+                        principalTable: "Coaches",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ExerciseFeedbacks_SingleExercises_SingleExerciseId",
+                        column: x => x.SingleExerciseId,
+                        principalTable: "SingleExercises",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ExerciseFeedbacks_TrainingSessions_TrainingSessionId",
+                        column: x => x.TrainingSessionId,
+                        principalTable: "TrainingSessions",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
             migrationBuilder.CreateIndex(
                 name: "IX_Activities_AthleteId",
                 table: "Activities",
@@ -609,6 +725,46 @@ namespace sport_app_backend.Migrations
                 name: "IX_CoachServices_CoachId",
                 table: "CoachServices",
                 column: "CoachId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ExerciseChangeRequests_AthleteId",
+                table: "ExerciseChangeRequests",
+                column: "AthleteId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ExerciseChangeRequests_CoachId",
+                table: "ExerciseChangeRequests",
+                column: "CoachId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ExerciseChangeRequests_SingleExerciseId",
+                table: "ExerciseChangeRequests",
+                column: "SingleExerciseId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ExerciseChangeRequests_TrainingSessionId",
+                table: "ExerciseChangeRequests",
+                column: "TrainingSessionId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ExerciseFeedbacks_AthleteId",
+                table: "ExerciseFeedbacks",
+                column: "AthleteId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ExerciseFeedbacks_CoachId",
+                table: "ExerciseFeedbacks",
+                column: "CoachId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ExerciseFeedbacks_SingleExerciseId",
+                table: "ExerciseFeedbacks",
+                column: "SingleExerciseId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ExerciseFeedbacks_TrainingSessionId",
+                table: "ExerciseFeedbacks",
+                column: "TrainingSessionId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_InjuryAreas_AthleteQuestionId",
@@ -657,6 +813,16 @@ namespace sport_app_backend.Migrations
                 column: "ProgramInDayId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_TrainingSessions_ProgramInDayId",
+                table: "TrainingSessions",
+                column: "ProgramInDayId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TrainingSessions_WorkoutProgramId",
+                table: "TrainingSessions",
+                column: "WorkoutProgramId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_WaterInDays_AthleteId",
                 table: "WaterInDays",
                 column: "AthleteId");
@@ -702,13 +868,16 @@ namespace sport_app_backend.Migrations
                 name: "CodeVerifies");
 
             migrationBuilder.DropTable(
+                name: "ExerciseChangeRequests");
+
+            migrationBuilder.DropTable(
+                name: "ExerciseFeedbacks");
+
+            migrationBuilder.DropTable(
                 name: "InjuryAreas");
 
             migrationBuilder.DropTable(
                 name: "ReportApps");
-
-            migrationBuilder.DropTable(
-                name: "SingleExercises");
 
             migrationBuilder.DropTable(
                 name: "WaterInDays");
@@ -718,6 +887,12 @@ namespace sport_app_backend.Migrations
 
             migrationBuilder.DropTable(
                 name: "WeightEntries");
+
+            migrationBuilder.DropTable(
+                name: "SingleExercises");
+
+            migrationBuilder.DropTable(
+                name: "TrainingSessions");
 
             migrationBuilder.DropTable(
                 name: "Exercises");

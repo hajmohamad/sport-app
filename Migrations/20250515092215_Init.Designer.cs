@@ -11,8 +11,8 @@ using sport_app_backend.Data;
 namespace sport_app_backend.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250501200235_add_ExerciseFeeling")]
-    partial class add_ExerciseFeeling
+    [Migration("20250515092215_Init")]
+    partial class Init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -245,7 +245,7 @@ namespace sport_app_backend.Migrations
                         .HasColumnType("double");
 
                     b.Property<DateTime>("DateTime")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("date");
 
                     b.Property<double>("Distance")
                         .HasColumnType("double");
@@ -425,6 +425,11 @@ namespace sport_app_backend.Migrations
                     b.Property<int>("AthleteQuestionId")
                         .HasColumnType("int");
 
+                    b.Property<string>("Authority")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)");
+
                     b.Property<int>("CoachId")
                         .HasColumnType("int");
 
@@ -436,11 +441,6 @@ namespace sport_app_backend.Migrations
 
                     b.Property<int>("PaymentStatus")
                         .HasColumnType("int");
-
-                    b.Property<string>("TransactionId")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("varchar(50)");
 
                     b.HasKey("Id");
 
@@ -869,7 +869,7 @@ namespace sport_app_backend.Migrations
             modelBuilder.Entity("sport_app_backend.Models.Actions.Activity", b =>
                 {
                     b.HasOne("sport_app_backend.Models.Account.Athlete", "Athlete")
-                        .WithMany()
+                        .WithMany("Activities")
                         .HasForeignKey("AthleteId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -1137,6 +1137,8 @@ namespace sport_app_backend.Migrations
 
             modelBuilder.Entity("sport_app_backend.Models.Account.Athlete", b =>
                 {
+                    b.Navigation("Activities");
+
                     b.Navigation("AthleteQuestions");
 
                     b.Navigation("Payments");
