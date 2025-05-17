@@ -1144,11 +1144,16 @@ namespace sport_app_backend.Repository
                 var athlete = await context.Athletes
                     .Include(a => a.WeightEntries)
                     .Include(a => a.WaterInDays)
-                    .Include(a => a.Activities)
+                    .Include(a => a.Activities).Include(athlete => athlete.WaterInTake)
                     .FirstOrDefaultAsync(a => a.PhoneNumber == phoneNumber);
 
                 if (athlete is null)
                     return new ApiResponse { Message = "Athlete not found", Action = false };
+                var waterInTake = athlete.WaterInTake ?? new WaterInTake()
+                {
+                    DailyCupOfWater = 0,
+                    Reminder = 0
+                };
 
                 var today = DateTime.Today.Date;
                 var lastSaturday = GetLastSaturday(today);
@@ -1162,11 +1167,13 @@ namespace sport_app_backend.Repository
                 var totalTime = recentActivities.Select(a => a.Duration).DefaultIfEmpty(0).Sum();
                 var totalCalories = recentActivities.Select(a => a.CaloriesLost).DefaultIfEmpty(0).Sum();
 
-                var lastWeekActivities = recentActivities.Select(a => new
-                {
-                    a.Id,
-                    Date = a.DateTime.ToString("yyyy-MM-dd")
-                }).ToList();
+                var lastWeekActivities = Enumerable.Range(0, 7)
+                    .Select(offset =>
+                    {
+                        var date = lastSaturday.AddDays(offset).Date;
+                        return athlete.Activities.Any(a => a.DateTime.Date == date) ? 1 : 0;
+                    })
+                    .ToList();
 
                 var todayWater = athlete.WaterInDays.FirstOrDefault(w => w.Date == today);
               
@@ -1206,12 +1213,10 @@ namespace sport_app_backend.Repository
                         totalActivities,
                         totalTime,
                         totalCalories,
-                        lastWeekActivities,
-                        waterDrunkThisDay = new
-                        {
-                            date= todayWater?.Date.ToString("yyyy-MM-dd"),
-                            todayWater?.NumberOfCupsDrinked
-                        },
+                        lastWeekActivities ,
+                        todayWater?.NumberOfCupsDrinked,
+                        waterInTake.DailyCupOfWater,
+                        waterInTake.Reminder,
                         activityThisDay = todayActivities,
                         currentWeight,
                         goalWeight,
