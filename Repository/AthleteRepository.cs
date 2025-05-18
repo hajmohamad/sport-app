@@ -1159,13 +1159,11 @@ namespace sport_app_backend.Repository
                 var lastSaturday = GetLastSaturday(today);
                 var firstDayOfPersianMonth = GetFirstDayOfPersianMonth(today);
 
-                var recentActivities = athlete.Activities
-                    .Where(a => a.DateTime >= lastSaturday)
-                    .ToList();
+                var allActivities = athlete.Activities.ToList();
 
-                var totalActivities = recentActivities.Count;
-                var totalTime = recentActivities.Select(a => a.Duration).DefaultIfEmpty(0).Sum();
-                var totalCalories = recentActivities.Select(a => a.CaloriesLost).DefaultIfEmpty(0).Sum();
+                var totalActivities = allActivities.Count;
+                var totalTime = allActivities.Select(a => a.Duration).DefaultIfEmpty(0).Sum();
+                var totalCalories = allActivities.Select(a => a.CaloriesLost).DefaultIfEmpty(0).Sum();
 
                 var lastWeekActivities = Enumerable.Range(0, 7)
                     .Select(offset =>
@@ -1214,7 +1212,7 @@ namespace sport_app_backend.Repository
                         totalTime,
                         totalCalories,
                         lastWeekActivities ,
-                        todayWater?.NumberOfCupsDrinked,
+                        NumberOfCupsDrinked=   todayWater?.NumberOfCupsDrinked ?? 0,
                         waterInTake.DailyCupOfWater,
                         waterInTake.Reminder,
                         activityThisDay = todayActivities,
@@ -1226,11 +1224,12 @@ namespace sport_app_backend.Repository
                 };
             }
 
-            private static DateTime GetLastSaturday(DateTime today)
-            {
-                var daysSinceSaturday = (int)today.DayOfWeek == 0 ? 6 : (int)today.DayOfWeek - 6;
-                return today.AddDays(daysSinceSaturday);
-            }
+        private static DateTime GetLastSaturday(DateTime today)
+        {
+            int diff = (7 + (int)today.DayOfWeek - 6) % 7;
+            return today.AddDays(-diff);
+        }
+
 
             private static DateTime GetFirstDayOfPersianMonth(DateTime date)
             {
