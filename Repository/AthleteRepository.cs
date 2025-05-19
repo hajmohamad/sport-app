@@ -269,7 +269,7 @@ namespace sport_app_backend.Repository
                     : persianCalendar.ToDateTime(year, month + 1, 1, 0, 0, 0, 0);
 
                 var activities = await context.Activities
-                    .Where(x => x.AthleteId == athlete.Id && x.DateTime >= startDate && x.DateTime < endDate)
+                    .Where(x => x.AthleteId == athlete.Id && x.Date >= startDate && x.Date < endDate)
                     .ToListAsync();
 
                 return new ApiResponse()
@@ -279,10 +279,10 @@ namespace sport_app_backend.Repository
                     Result = activities.Select(x => new
                     {
                         x.Id,
-                        Date = x.DateTime.ToString("yyyy-MM-dd"),
+                        Date = x.Date.ToString("yyyy-MM-dd"),
                         x.CaloriesLost,
                         x.Duration,
-                        SportEnum = x.ActivityCategory.ToString(),
+                        ActivityCategory = x.ActivityCategory.ToString(),
                         x.Name
                     }).ToList()
                 };
@@ -308,7 +308,7 @@ namespace sport_app_backend.Repository
             var lastSaturday = today.AddDays(daysSinceSaturday);
 
             var activities = await context.Activities
-                .Where(x => x.AthleteId == athlete.Id && x.DateTime >= lastSaturday)
+                .Where(x => x.AthleteId == athlete.Id && x.Date >= lastSaturday)
                 .ToListAsync();
 
             return new ApiResponse()
@@ -318,10 +318,10 @@ namespace sport_app_backend.Repository
                 Result = activities.Select(x => new
                 {
                     x.Id,
-                    Date = x.DateTime.ToString("yyyy-MM-dd"),
+                    Date = x.Date.ToString("yyyy-MM-dd"),
                     x.CaloriesLost,
                     x.Duration,
-                    SportEnum = x.ActivityCategory.ToString(),
+                    ActivityCategory = x.ActivityCategory.ToString(),
                     x.Name
                 }).ToList()
             };
@@ -335,7 +335,7 @@ namespace sport_app_backend.Repository
 
             var today = DateTime.Now.Date;
             var activities = await context.Activities
-                .Where(x => x.AthleteId == athlete.Id && x.DateTime == today)
+                .Where(x => x.AthleteId == athlete.Id && x.Date == today)
                 .ToListAsync();
 
             return new ApiResponse()
@@ -345,10 +345,10 @@ namespace sport_app_backend.Repository
                 Result = activities.Select(x => new
                 {
                     x.Id,
-                    Date = x.DateTime.ToString("yyyy-MM-dd"),
+                    Date = x.Date.ToString("yyyy-MM-dd"),
                     x.CaloriesLost,
                     x.Duration,
-                    SportEnum = x.ActivityCategory.ToString(),
+                    ActivityCategory = x.ActivityCategory.ToString(),
                     x.Name
                 }).ToList()
             };
@@ -361,17 +361,17 @@ namespace sport_app_backend.Repository
                 return new ApiResponse()
                     { Message = "User is not an athlete", Action = false }; // Ensure the user is an athlete
 
-            var sportEnum = Enum.Parse<ActivityCategory>(addSportDto.ActivityCategory!);
+            var activityCategory = Enum.Parse<ActivityCategory>(addSportDto.ActivityCategory!);
 
             var sport = new Activity()
             {
                 AthleteId = athlete.Id,
                 Athlete = athlete,
-                ActivityCategory = sportEnum,
+                ActivityCategory = activityCategory,
                 CaloriesLost = addSportDto.CaloriesLost,
                 Distance = addSportDto.Distance,
                 Duration = addSportDto.Duration,
-                DateTime = Convert.ToDateTime(addSportDto.DateTime)
+                Date = Convert.ToDateTime(addSportDto.Date)
             };
 
             await context.Activities.AddAsync(sport);
@@ -749,7 +749,7 @@ namespace sport_app_backend.Repository
 
             var activities = await context.Activities.Where(a => a.AthleteId == athlete.Id).ToListAsync();
             var firstWorkout = activities.Count != 0;
-            var workoutDays = activities.Select(a => a.DateTime.Date).Distinct().OrderBy(d => d).ToList();
+            var workoutDays = activities.Select(a => a.Date.Date).Distinct().OrderBy(d => d).ToList();
             var consistentAthlete = await HasConsecutiveDaysAsync(workoutDays, 7);
             var oneMonthComplete = workoutDays.Count >= 30;
             var threeMonthsGolden = workoutDays.Count >= 90;
@@ -1169,7 +1169,7 @@ namespace sport_app_backend.Repository
                     .Select(offset =>
                     {
                         var date = lastSaturday.AddDays(offset).Date;
-                        return athlete.Activities.Any(a => a.DateTime.Date == date) ? 1 : 0;
+                        return athlete.Activities.Any(a => a.Date.Date == date) ? 1 : 0;
                     })
                     .ToList();
 
@@ -1177,14 +1177,14 @@ namespace sport_app_backend.Repository
               
 
                 var todayActivities = athlete.Activities
-                    .Where(a => a.DateTime.Date == today)
+                    .Where(a => a.Date.Date == today)
                     .Select(a => new
                     {
                         a.Id,
-                        Date = a.DateTime.ToString("yyyy-MM-dd"),
+                        Date = a.Date.ToString("yyyy-MM-dd"),
                         a.CaloriesLost,
                         a.Duration,
-                        SportEnum = a.ActivityCategory.ToString(),
+                        ActivityCategory = a.ActivityCategory.ToString(),
                         a.Name
                     })
                     .ToList();

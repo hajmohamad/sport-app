@@ -17,7 +17,7 @@ public class Activity
     public double Distance { get; set; }
     [DataType(DataType.Date)]
     [Column(TypeName = "date")]
-    public DateTime DateTime { get; set; }=DateTime.Now.Date;
+    public DateTime Date { get; set; }=DateTime.Now.Date;
     public int AthleteId { get; set; }
     public required Athlete Athlete { get; set; }
 

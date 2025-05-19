@@ -18,9 +18,11 @@ public class Athlete
     public int UserId { get; set; }
     public required User User { get; set; }
     [Range(1, 300)] public int Height { get; set; }
-    [Range(1, 300)] public double CurrentWeight { get; set; }
+    [Range(1, 300)] 
+    public double CurrentWeight { get; set; }
 
-    [Range(1, 300)] public double WeightGoal { get; set; }
+    [Range(1, 300)] 
+    public double WeightGoal { get; set; }
 
     public int TimeBeforeWorkout { get; set; } = 10;
     public int RestTime { get; set; } = 30;

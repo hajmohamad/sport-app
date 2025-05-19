@@ -241,7 +241,7 @@ namespace sport_app_backend.Migrations
                     b.Property<double>("CaloriesLost")
                         .HasColumnType("double");
 
-                    b.Property<DateTime>("DateTime")
+                    b.Property<DateTime>("Date")
                         .HasColumnType("date");
 
                     b.Property<double>("Distance")

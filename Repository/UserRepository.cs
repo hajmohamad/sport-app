@@ -24,8 +24,8 @@ public class UserRepository(
         if(roleGenderDto.Role is null) return new ApiResponse() { Message = "Role is null", Action = false };
         if(roleGenderDto.Gender is null) return new ApiResponse() { Message = "Gender is null", Action = false };
 
-        var sportEnum = Enum.Parse<Gender>(roleGenderDto.Gender.ToUpper());
-        user.Gender = sportEnum;
+        var gender = Enum.Parse<Gender>(roleGenderDto.Gender.ToUpper());
+        user.Gender = gender;
         
 
         switch (roleGenderDto.Role.ToUpper())

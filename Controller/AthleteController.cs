@@ -201,8 +201,14 @@ namespace sport_app_backend.Controller
             if (phoneNumber is null)
                 return BadRequest(new ApiResponse() { Action = false, Message = "PhoneNumber is null" });
             var user = await context.Users
-                .Include(u => u.Athlete).FirstOrDefaultAsync(u => u.PhoneNumber == phoneNumber);
+                .Include(u => u.Athlete).ThenInclude(w=>w.WaterInTake).FirstOrDefaultAsync(u => u.PhoneNumber == phoneNumber);
             if (user is null) return BadRequest(new ApiResponse() { Action = false, Message = "User not found" });
+            if (user.Athlete != null)
+                user.Athlete.WaterInTake ??= new WaterInTake()
+                {
+                    DailyCupOfWater = 0,
+                    Reminder = 0
+                };
 
             return Ok(new ApiResponse()
                 { Action = true, Message = "User found", Result = user.ToAthleteProfileResponseDto() });
@@ -362,6 +368,7 @@ namespace sport_app_backend.Controller
             var athlete = await context.Athletes.FirstOrDefaultAsync(u => u.PhoneNumber == phoneNumber);
             if (athlete is null) return BadRequest("User not found");
             athlete.TimeBeforeWorkout = timeBeforeWorkoutDto;
+            await context.SaveChangesAsync();
             return Ok(new ApiResponse()
             {
 
@@ -380,6 +387,7 @@ namespace sport_app_backend.Controller
             var athlete = await context.Athletes.FirstOrDefaultAsync(u => u.PhoneNumber == phoneNumber);
             if (athlete is null) return BadRequest("User not found");
             athlete.RestTime = restTimeDto;
+            await context.SaveChangesAsync();
             return Ok(new ApiResponse()
             {
 
