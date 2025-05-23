@@ -12,11 +12,13 @@ namespace sport_app_backend.Models.Actions
         ADDUCTORS,      // نزدیک‌کننده‌های ران
         UPPER_BACK,     // بالای کمر
         LOWER_BACK,     // پایین کمر
+        MIDDLE_BACK,
         ABDUCTORS,      // دورکننده‌های ران
         SHOULDERS,      // سرشانه
         TRAPS,          // کول
         QUADRICEPS,     // چهارسر ران
         HAMSTRINGS,     // پشت ران و همسترینگ
-        GLUTES          // باسن - سرینی
+        GLUTES,          // باسن - سرینی
+        HIP_FLEXORS
     }
 }

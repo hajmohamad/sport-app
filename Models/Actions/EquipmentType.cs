@@ -16,6 +16,7 @@
         LANDMINE,            // لندماین
         JUMP_ROPE,           // طناب پرش
         CHAINS,              // زنجیر وزنه
+        BANDS,
         OTHER
     }
 }
