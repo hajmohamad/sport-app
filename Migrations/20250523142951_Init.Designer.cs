@@ -11,7 +11,7 @@ using sport_app_backend.Data;
 namespace sport_app_backend.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250515092215_Init")]
+    [Migration("20250523142951_Init")]
     partial class Init
     {
         /// <inheritdoc />
@@ -244,7 +244,7 @@ namespace sport_app_backend.Migrations
                     b.Property<double>("CaloriesLost")
                         .HasColumnType("double");
 
-                    b.Property<DateTime>("DateTime")
+                    b.Property<DateTime>("Date")
                         .HasColumnType("date");
 
                     b.Property<double>("Distance")
@@ -293,6 +293,9 @@ namespace sport_app_backend.Migrations
                     b.Property<int>("ExerciseLevel")
                         .HasColumnType("int");
 
+                    b.Property<int>("ForceType")
+                        .HasColumnType("int");
+
                     b.Property<string>("ImageLink")
                         .IsRequired()
                         .HasMaxLength(150)
@@ -301,6 +304,9 @@ namespace sport_app_backend.Migrations
                     b.Property<string>("Locations")
                         .IsRequired()
                         .HasColumnType("longtext");
+
+                    b.Property<int>("Mechanics")
+                        .HasColumnType("int");
 
                     b.Property<string>("PersianName")
                         .IsRequired()
@@ -316,6 +322,9 @@ namespace sport_app_backend.Migrations
                         .IsRequired()
                         .HasMaxLength(150)
                         .HasColumnType("varchar(150)");
+
+                    b.Property<int>("Views")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 

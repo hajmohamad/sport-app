@@ -14,7 +14,7 @@ namespace sport_app_backend.Dtos
         public string ImageLink { get; set; } = string.Empty;
         public string VideoLink { get; set; } = string.Empty;
 
-        [MaxLength(1500)]
+        [MaxLength(3000)]
         public string Description { get; set; } = string.Empty;
         public string ExerciseLevel { get; set; } = string.Empty; // Beginner, Intermediate, Advanced
         public  List<string> TargetMuscles { get; set; } = new();

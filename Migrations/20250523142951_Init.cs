@@ -53,6 +53,9 @@ namespace sport_app_backend.Migrations
                     TargetMuscles = table.Column<string>(type: "varchar(150)", maxLength: 150, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     BaseCategory = table.Column<int>(type: "int", nullable: false),
+                    Mechanics = table.Column<int>(type: "int", nullable: false),
+                    ForceType = table.Column<int>(type: "int", nullable: false),
+                    Views = table.Column<int>(type: "int", nullable: false),
                     ExerciseCategories = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Equipment = table.Column<string>(type: "longtext", nullable: false)
@@ -193,7 +196,7 @@ namespace sport_app_backend.Migrations
                     CaloriesLost = table.Column<double>(type: "double", nullable: false),
                     Duration = table.Column<double>(type: "double", nullable: false),
                     Distance = table.Column<double>(type: "double", nullable: false),
-                    DateTime = table.Column<DateTime>(type: "date", nullable: false),
+                    Date = table.Column<DateTime>(type: "date", nullable: false),
                     AthleteId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
