@@ -14,4 +14,6 @@ public class ExerciseDto
     public string VideoLink { get; set; }
     public string BaseCategory { get; set; }
     public string ExerciseLevel { get; set; }
+    public string Mechanics { get; set; }
+    public string ForceType { get; set; }
 }

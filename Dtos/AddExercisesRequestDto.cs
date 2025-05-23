@@ -22,5 +22,8 @@ namespace sport_app_backend.Dtos
         public  List<string> ExerciseCategories { get; set; } = [];
         public  List<string> Equipment { get; set; } = [];
         public List<string> Location { get; set; } = [];
+        public string Mechanics { get; set; } = string.Empty;
+        public string ForceType { get; set; } = string.Empty;
+        public int Views { get; set; }
     }
 }

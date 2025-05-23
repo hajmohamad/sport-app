@@ -301,7 +301,7 @@ private async Task<string> GenerateUniqueUsername()
     }
     public async Task<ApiResponse> GetAllExercise()
     {
-        var exercise = await dbContext.Exercises.ToListAsync();
+        var exercise = await dbContext.Exercises.OrderByDescending(x => x.Views).ToListAsync();
         return new ApiResponse()
         {
             Message = "Exercises found",

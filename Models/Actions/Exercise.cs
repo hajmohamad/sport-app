@@ -23,7 +23,10 @@ public class Exercise
     [MaxLength(150)]
     public List<MuscleGroup> TargetMuscles { get; set; } = [];
     public MuscleGroup BaseCategory { get; set; }
+    public MechanicType Mechanics { get; set; }
+    public ForceType ForceType { get; set; }
+    public int Views { get; set; } = 0;
     public List<ExerciseCategory> ExerciseCategories { get; set; } = [];
     public List<EquipmentType> Equipment { get; set; } = [];
-    public List<Location> Locations { get; set; }
+    public List<Location> Locations { get; set; } = [];
 }

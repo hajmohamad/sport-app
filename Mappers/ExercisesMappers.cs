@@ -36,7 +36,10 @@ namespace sport_app_backend.Mappers
                 // InHome = addExercisesRequestDto.InHome,
                 // Calories = addExercisesRequestDto.Calories,
                 Locations = addExercisesRequestDto.Location
-                    .Select(x => (Location)Enum.Parse(typeof(Location), x.ToUpper())).ToList()
+                    .Select(x => (Location)Enum.Parse(typeof(Location), x.ToUpper())).ToList(),
+                Mechanics = (MechanicType)Enum.Parse(typeof(MechanicType), addExercisesRequestDto.Mechanics),
+                ForceType = (ForceType)Enum.Parse(typeof(ForceType), addExercisesRequestDto.ForceType),
+                Views = addExercisesRequestDto.Views
             };
         }
 
@@ -71,7 +74,9 @@ namespace sport_app_backend.Mappers
                 ImageLink = exercise.ImageLink,
                 VideoLink = exercise.VideoLink,
                 BaseCategory = exercise.BaseCategory.ToString(),
-                ExerciseLevel = exercise.ExerciseLevel.ToString()
+                ExerciseLevel = exercise.ExerciseLevel.ToString(),
+                ForceType = exercise.ForceType.ToString(),
+                Mechanics = exercise.Mechanics.ToString()
             };
         }
     }
