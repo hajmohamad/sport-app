@@ -1,16 +1,7 @@
 {
   "Version": 1,
   "WorkspaceRootPath": "C:\\Users\\Dour-Andish\\Desktop\\charset\\sport-app\\",
-  "Documents": [
-    {
-      "AbsoluteMoniker": "D:0:0:{27B63680-A5B7-55C3-C88B-EBD5D7F12023}|sport-app-backend.csproj|c:\\users\\dour-andish\\desktop\\charset\\sport-app\\models\\actions\\musclegroup.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{27B63680-A5B7-55C3-C88B-EBD5D7F12023}|sport-app-backend.csproj|solutionrelative:models\\actions\\musclegroup.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{27B63680-A5B7-55C3-C88B-EBD5D7F12023}|sport-app-backend.csproj|c:\\users\\dour-andish\\desktop\\charset\\sport-app\\models\\actions\\equipmenttype.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{27B63680-A5B7-55C3-C88B-EBD5D7F12023}|sport-app-backend.csproj|solutionrelative:models\\actions\\equipmenttype.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    }
-  ],
+  "Documents": [],
   "DocumentGroupContainers": [
     {
       "Orientation": 0,
@@ -18,34 +9,8 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 1,
+          "SelectedChildIndex": -1,
           "Children": [
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "EquipmentType.cs",
-              "DocumentMoniker": "C:\\Users\\Dour-Andish\\Desktop\\charset\\sport-app\\Models\\Actions\\EquipmentType.cs",
-              "RelativeDocumentMoniker": "Models\\Actions\\EquipmentType.cs",
-              "ToolTip": "C:\\Users\\Dour-Andish\\Desktop\\charset\\sport-app\\Models\\Actions\\EquipmentType.cs",
-              "RelativeToolTip": "Models\\Actions\\EquipmentType.cs",
-              "ViewState": "AgIAAAkAAAAAAAAAAAAAAA8AAAAlAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-23T17:47:53.23Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "MuscleGroup.cs",
-              "DocumentMoniker": "C:\\Users\\Dour-Andish\\Desktop\\charset\\sport-app\\Models\\Actions\\MuscleGroup.cs",
-              "RelativeDocumentMoniker": "Models\\Actions\\MuscleGroup.cs",
-              "ToolTip": "C:\\Users\\Dour-Andish\\Desktop\\charset\\sport-app\\Models\\Actions\\MuscleGroup.cs",
-              "RelativeToolTip": "Models\\Actions\\MuscleGroup.cs",
-              "ViewState": "AgIAAAUAAAAAAAAAAAAAwAwAAAAkAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-23T17:26:48.829Z",
-              "EditorCaption": ""
-            },
             {
               "$type": "Bookmark",
               "Name": "ST:129:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
