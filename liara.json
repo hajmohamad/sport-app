@@ -1,7 +1,0 @@
-{
-  "app": "charset7",
-  "port": 80,
-  "build": {
-    "location": "germany"
-  }
-}

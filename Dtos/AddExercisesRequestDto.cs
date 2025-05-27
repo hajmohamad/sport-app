@@ -18,10 +18,9 @@ namespace sport_app_backend.Dtos
         public string Description { get; set; } = string.Empty;
         public string ExerciseLevel { get; set; } = string.Empty; // Beginner, Intermediate, Advanced
         public  List<string> TargetMuscles { get; set; } = new();
-        public string BaseCategory { get; set; } = string.Empty;
-        public  List<string> ExerciseCategories { get; set; } = [];
-        public  List<string> Equipment { get; set; } = [];
-        public List<string> Location { get; set; } = [];
+        public string BaseMuscle { get; set; } = string.Empty;
+        public  string ExerciseType { get; set; } = string.Empty;
+        public  string Equipment { get; set; } = string.Empty;
         public string Mechanics { get; set; } = string.Empty;
         public string ForceType { get; set; } = string.Empty;
         public int Views { get; set; }

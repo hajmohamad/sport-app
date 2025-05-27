@@ -318,15 +318,14 @@ private async Task<string> GenerateUniqueUsername()
         {
             exercise.Id,
             exercise.Description,
-            ExerciseCategories = exercise.ExerciseCategories.Select(x=>x.ToString()).ToList(),
-            Equipment = exercise.Equipment.Select(x=>x.ToString()).ToList(),
-            Locations = exercise.Locations.Select(x=>x.ToString()).ToList(),
+            ExerciseCategories = exercise.ExerciseType.ToString(),
+            Equipment = exercise.Equipment.ToString(),
             Muscles = exercise.TargetMuscles.Select(x=>x.ToString()).ToList(),
             exercise.EnglishName,
             exercise.PersianName,
             exercise.ImageLink,
             exercise.VideoLink,
-            BaseCategory = exercise.BaseCategory.ToString(),
+            BaseCategory = exercise.BaseMuscle.ToString(),
             ExerciseLevel = exercise.ExerciseLevel.ToString()
             
         } });
