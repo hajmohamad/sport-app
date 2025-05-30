@@ -1,6 +1,6 @@
-namespace sport_app_backend.Models.Actions
+﻿namespace sport_app_backend.Models.Actions
 {
-    public enum MuscleGroup
+    public enum BaseCategory
     {
         BICEPS,         // جلو بازو
         TRICEPS,        // پشت بازو
@@ -12,13 +12,8 @@ namespace sport_app_backend.Models.Actions
         HAMSTRINGS,     // پشت ران و همسترینگ
         SHOULDERS,      // سرشانه
         GLUTES,         // باسن - سرینی
-        ABS,            // شکم
-        LOWER_BACK,     // فیله
-        ADDUCTORS,      // داخل ران
-        ABDUCTORS,      // خارج ران
-        LATS,           // زیر بغل
-        UPPER_BACK,     // بالای کمر
-        MIDDLE_BACK,    // کمر 
-        HIP_FLEXORS     // خم‌کننده ران
+        ABSLOWERBACK,   // شکم و فیله
+        ABDDUCTORS,     // داخل و خارج ران
+        LATSUPPERBACK   // زیربغل و بالای کمر
     }
 }

@@ -5,10 +5,9 @@ public class AllExerciseResponseDto
     public required int Id { get; set; }
     public required string Name { get; set; }
     public required string ImageLink { get; set; }
-    public required List<string> Locations { get; set; }
-    public required List<string> Muscles { get; set; }
-    public required List<string> Equipment { get; set; }
-    public required List<string> ExerciseCategories { get; set; }
+    public required string BaseCategory { get; set; }
+    public required string Equipment { get; set; }
+    public required string ExerciseType { get; set; }
     public required string Level { get; set; }
-    
+    public required string Mechanics { get; set; }
 }

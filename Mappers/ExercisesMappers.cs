@@ -11,14 +11,11 @@ namespace sport_app_backend.Mappers
     {
         public static Exercise ToExercises(this AddExercisesRequestDto addExercisesRequestDto)
         {
-            return new Exercise
+            Exercise exercise = new Exercise
             {
                 EnglishName = addExercisesRequestDto.EnglishName,
                 PersianName = addExercisesRequestDto.PersianName,
-                // SourceLink = addExercisesRequestDto.SourceLink ?? string.Empty,
-                // ForeignAppLink = addExercisesRequestDto.ForeignAppLink ?? string.Empty,
                 ImageLink = addExercisesRequestDto.ImageLink ?? string.Empty,
-                // AnatomyImage = addExercisesRequestDto.AnatomyImage ?? string.Empty,
                 // AllImages = addExercisesRequestDto.AllImages ?? new List<string>(),
                 VideoLink = addExercisesRequestDto.VideoLink ?? string.Empty,
                 Description = addExercisesRequestDto.Description,
@@ -26,21 +23,54 @@ namespace sport_app_backend.Mappers
                     addExercisesRequestDto.ExerciseLevel.ToUpper()),
                 TargetMuscles = addExercisesRequestDto.TargetMuscles
                     .Select(x => (MuscleGroup)Enum.Parse(typeof(MuscleGroup), x.ToUpper())).ToList(),
-                BaseCategory =
-                    (MuscleGroup)Enum.Parse(typeof(MuscleGroup), addExercisesRequestDto.BaseCategory.ToUpper()),
-                ExerciseCategories = addExercisesRequestDto.ExerciseCategories
-                    .Select(x => (ExerciseCategory)Enum.Parse(typeof(ExerciseCategory), x.ToUpper())).ToList(),
-                Equipment = addExercisesRequestDto.Equipment
-                    .Select(x => (EquipmentType)Enum.Parse(typeof(EquipmentType), x.ToUpper())).ToList(),
-                // InGym = addExercisesRequestDto.InGym,
-                // InHome = addExercisesRequestDto.InHome,
-                // Calories = addExercisesRequestDto.Calories,
-                Locations = addExercisesRequestDto.Location
-                    .Select(x => (Location)Enum.Parse(typeof(Location), x.ToUpper())).ToList(),
+                BaseMuscle = (MuscleGroup)Enum.Parse(typeof(MuscleGroup), addExercisesRequestDto.BaseMuscle.ToUpper()),
+                ExerciseType = (ExerciseType)Enum.Parse(typeof(ExerciseType), addExercisesRequestDto.ExerciseType.ToUpper()),
+                Equipment = (EquipmentType)Enum.Parse(typeof(EquipmentType), addExercisesRequestDto.Equipment.ToUpper()),
                 Mechanics = (MechanicType)Enum.Parse(typeof(MechanicType), addExercisesRequestDto.Mechanics),
                 ForceType = (ForceType)Enum.Parse(typeof(ForceType), addExercisesRequestDto.ForceType),
                 Views = addExercisesRequestDto.Views
             };
+            BaseCategory baseCategory;
+            switch (exercise.BaseMuscle)
+            {
+                case MuscleGroup.ABS:
+                    {
+                        baseCategory = BaseCategory.ABSLOWERBACK;
+                        break;
+                    }
+                case MuscleGroup.LOWER_BACK:
+                    {
+                        baseCategory = BaseCategory.ABSLOWERBACK;
+                        break;
+                    }
+                case MuscleGroup.ADDUCTORS:
+                    {
+                        baseCategory = BaseCategory.ABDDUCTORS;
+                        break;
+                    }
+                case MuscleGroup.ABDUCTORS:
+                    {
+                        baseCategory = BaseCategory.ABDDUCTORS;
+                        break;
+                    }
+                case MuscleGroup.LATS:
+                    {
+                        baseCategory = BaseCategory.LATSUPPERBACK;
+                        break;
+                    }
+                case MuscleGroup.UPPER_BACK:
+                    {
+                        baseCategory = BaseCategory.LATSUPPERBACK;
+                        break;
+                    }
+                default:
+                    {
+                        baseCategory = (BaseCategory)Enum.Parse(typeof(BaseCategory), exercise.BaseMuscle.ToString());
+                        break;
+                    }
+            }
+            exercise.BaseCategory = baseCategory;
+            return exercise;
         }
 
         public static AllExerciseResponseDto ToAllExerciseResponseDto(this Exercise exercise)
@@ -50,10 +80,10 @@ namespace sport_app_backend.Mappers
                 Id = exercise.Id,
                 Name = exercise.PersianName,
                 ImageLink = exercise.ImageLink,
-                Locations = exercise.Locations.Select(x => x.ToString()).ToList(),
-                Muscles = exercise.TargetMuscles.Select(x => x.ToString()).ToList(),
-                Equipment = exercise.Equipment.Select(x => x.ToString()).ToList(),
-                ExerciseCategories = exercise.ExerciseCategories.Select(x => x.ToString()).ToList(),
+                Mechanics = exercise.Mechanics.ToString(),
+                BaseCategory = exercise.BaseCategory.ToString(),
+                Equipment = exercise.Equipment.ToString(),
+                ExerciseType = exercise.ExerciseType.ToString(),
                 Level = exercise.ExerciseLevel.ToString()
             };
 
@@ -65,18 +95,16 @@ namespace sport_app_backend.Mappers
             {
                 Id = exercise.Id,
                 Description = exercise.Description,
-                ExerciseCategories = exercise.ExerciseCategories.Select(x => x.ToString()).ToList(),
-                Equipment = exercise.Equipment.Select(x => x.ToString()).ToList(),
-                Locations = exercise.Locations.Select(x => x.ToString()).ToList(),
+                ExerciseType = exercise.ExerciseType.ToString(),
+                Equipment = exercise.Equipment.ToString(),
                 Muscles = exercise.TargetMuscles.Select(x => x.ToString()).ToList(),
+                Mechanics = exercise.Mechanics.ToString(),
                 EnglishName = exercise.EnglishName,
                 PersianName = exercise.PersianName,
                 ImageLink = exercise.ImageLink,
                 VideoLink = exercise.VideoLink,
-                BaseCategory = exercise.BaseCategory.ToString(),
+                BaseMuscle = exercise.BaseMuscle.ToString(),
                 ExerciseLevel = exercise.ExerciseLevel.ToString(),
-                ForceType = exercise.ForceType.ToString(),
-                Mechanics = exercise.Mechanics.ToString()
             };
         }
     }

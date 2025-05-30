@@ -12,7 +12,7 @@
         DYNAMIC_STRETCHING,  // کشش پویا
         STATIC,              // کشش ایستا
         PUSH,                // فشار دادن
-        PULL,// کشیدن
-        OTHER
+        PULL,                 // کشیدن
+        NONE
     }
 }

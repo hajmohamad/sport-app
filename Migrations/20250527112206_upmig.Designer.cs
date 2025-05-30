@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using sport_app_backend.Data;
 
@@ -10,9 +11,11 @@ using sport_app_backend.Data;
 namespace sport_app_backend.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250527112206_upmig")]
+    partial class upmig
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -269,9 +272,6 @@ namespace sport_app_backend.Migrations
                     b.Property<int>("BaseCategory")
                         .HasColumnType("int");
 
-                    b.Property<int>("BaseMuscle")
-                        .HasColumnType("int");
-
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasMaxLength(3000)
@@ -282,13 +282,15 @@ namespace sport_app_backend.Migrations
                         .HasMaxLength(30)
                         .HasColumnType("varchar(30)");
 
-                    b.Property<int>("Equipment")
-                        .HasColumnType("int");
+                    b.Property<string>("Equipment")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("ExerciseCategories")
+                        .IsRequired()
+                        .HasColumnType("longtext");
 
                     b.Property<int>("ExerciseLevel")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ExerciseType")
                         .HasColumnType("int");
 
                     b.Property<int>("ForceType")
@@ -298,6 +300,10 @@ namespace sport_app_backend.Migrations
                         .IsRequired()
                         .HasMaxLength(150)
                         .HasColumnType("varchar(150)");
+
+                    b.Property<string>("Locations")
+                        .IsRequired()
+                        .HasColumnType("longtext");
 
                     b.Property<int>("Mechanics")
                         .HasColumnType("int");
