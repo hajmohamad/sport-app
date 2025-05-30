@@ -119,7 +119,17 @@ builder.Services.AddScoped<IAdminRepository, AdminRepository>();
 builder.Services.AddCoreAdmin();
 var app = builder.Build();
 
-
+try
+{
+    using var scope = app.Services.CreateScope();
+    var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+    dbContext.Database.OpenConnection();
+    dbContext.Database.CloseConnection();
+}
+catch (Exception ex)
+{
+    Console.WriteLine($"Warm-up failed: {ex.Message}");
+}
 app.UseSwagger();
 app.UseSwaggerUI();
 

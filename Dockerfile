@@ -24,6 +24,6 @@ WORKDIR /app
 COPY --from=publish /app/publish .
 
 # تنظیم کانکشن‌استرینگ
-ENV ConnectionString__DefaultConnection="server=charsetdb,3306;database=jolly_jepsen;user=root;password=clJAkjn3tjKqClnnmsn3dAi6;Connection Lifetime=300;Max Pool Size=100;Connection Timeout=30;"
+ENV ConnectionString__DefaultConnection="server=charsetdb,3306;database=xenodochial_elgamal;user=root;password=8cKkzs6Wk1MloP3GZO7ruDwk;Connection Lifetime=7200;Max Pool Size=100;"
 
 ENTRYPOINT ["dotnet", "sport-app-backend.dll"]
