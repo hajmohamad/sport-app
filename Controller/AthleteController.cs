@@ -109,11 +109,21 @@ namespace sport_app_backend.Controller
 
         [HttpPost("add_water_drinking")]
         [Authorize(Roles = "Athlete")]
-        public async Task<IActionResult> UpdateWaterInDay()
+        public async Task<IActionResult> AddWaterInDay()
         {
             var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
             if (phoneNumber is null) return BadRequest("PhoneNumber is null");
-            var result = await athleteRepository.UpdateWaterInDay(phoneNumber);
+            var result = await athleteRepository.UpdateWaterInDay(phoneNumber,+1);
+            if (!result.Action) return BadRequest(result);
+            return Ok(result);
+        }
+        [HttpPost("remove_water_drinking")]
+        [Authorize(Roles = "Athlete")]
+        public async Task<IActionResult> RemoveWaterInDay()
+        {
+            var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
+            if (phoneNumber is null) return BadRequest("PhoneNumber is null");
+            var result = await athleteRepository.UpdateWaterInDay(phoneNumber,-1);
             if (!result.Action) return BadRequest(result);
             return Ok(result);
         }
@@ -168,15 +178,22 @@ namespace sport_app_backend.Controller
         {
             var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
             if (phoneNumber is null) return BadRequest("PhoneNumber is null");
+
             var athlete = await context.Users
                 .Include(u => u.Athlete)
                 .FirstOrDefaultAsync(u => u.PhoneNumber == phoneNumber);
+
+            if (athlete?.Athlete == null)
+                return NotFound("Athlete not found");
+
             var today = DateTime.Now.Date;
-            var daysSinceSaturday = (int)today.DayOfWeek == 0 ? 6 : (int)today.DayOfWeek - 6;
-            var lastSaturday = today.AddDays(daysSinceSaturday+21);
-            if (athlete == null || athlete.Athlete == null) return NotFound("Athlete not found");
+            var diffToSaturday = ((int)today.DayOfWeek + 1) % 7;
+            var thisSaturday = today.AddDays(-diffToSaturday);
+            var last4WeeksSaturday = thisSaturday.AddDays(-21);
+
             var listOfWaterInDay = await context.WaterInDays
-                .Where(w => w.AthleteId == athlete.Athlete.Id && w.Date.Date >= lastSaturday.Date)
+                .Where(w => w.AthleteId == athlete.Athlete.Id &&
+                            w.Date >= last4WeeksSaturday)
                 .ToListAsync();
 
             return Ok(new ApiResponse()
@@ -185,12 +202,10 @@ namespace sport_app_backend.Controller
                 Message = "Water in day found",
                 Result = listOfWaterInDay.Select(w => new WaterInDayDto()
                 {
-
                     NumberOfCupsDrinked = w.NumberOfCupsDrinked,
-                    Date = w.Date.ToString("yyyy-MM-dd") // Format the date as needed
+                    Date = w.Date.ToString("yyyy-MM-dd")
                 })
             });
-
         }
 
         [HttpGet("get_Athlete_profile")]

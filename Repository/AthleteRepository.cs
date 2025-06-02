@@ -536,14 +536,23 @@ namespace sport_app_backend.Repository
             };
         }
 
-        public async Task<ApiResponse> UpdateWaterInDay(string phoneNumber)
+        public async Task<ApiResponse> UpdateWaterInDay(string phoneNumber, int numberOfCup)
         {
             var athlete = context.Athletes.FirstOrDefault(x => x.PhoneNumber == phoneNumber);
             if (athlete is null) return new ApiResponse() { Message = "User is not athlete", Action = false };
             var waterInDay = await context.WaterInDays
                 .Where(w => w.AthleteId == athlete.Id && w.Date.Date == DateTime.Now.Date)
                 .FirstOrDefaultAsync();
-            if (waterInDay is null)
+
+            if (waterInDay is not null)
+            {
+                waterInDay.NumberOfCupsDrinked += numberOfCup;
+                context.WaterInDays.Update(waterInDay);
+                await context.SaveChangesAsync();
+                return new ApiResponse() { Message = "WaterInDay updated successfully", Action = true };
+            }
+
+            if (numberOfCup > 0)
             {
                 waterInDay = new WaterInDay
                 {
@@ -557,14 +566,11 @@ namespace sport_app_backend.Repository
                 await context.SaveChangesAsync();
                 return new ApiResponse() { Message = "WaterInDay added successfully", Action = true };
             }
-            else
-            {
-                waterInDay.NumberOfCupsDrinked += 1;
-                context.WaterInDays.Update(waterInDay);
-                await context.SaveChangesAsync();
-                return new ApiResponse() { Message = "WaterInDay updated successfully", Action = true };
-            }
+            return new ApiResponse() { Message = "WaterInDay is zero", Action = false };
+
         }
+          
+        
 
         public async Task<ApiResponse> UpdateGoalWeight(string phoneNumber, double goalWeight)
         {
@@ -1141,88 +1147,88 @@ namespace sport_app_backend.Repository
         }
 
         public async Task<ApiResponse> GetActivityPage(string phoneNumber){
-                var athlete = await context.Athletes
-                    .Include(a => a.WeightEntries)
-                    .Include(a => a.WaterInDays)
-                    .Include(a => a.Activities).Include(athlete => athlete.WaterInTake)
-                    .FirstOrDefaultAsync(a => a.PhoneNumber == phoneNumber);
+            var athlete = await context.Athletes
+                .Include(a => a.WeightEntries)
+                .Include(a => a.WaterInDays)
+                .Include(a => a.Activities).Include(athlete => athlete.WaterInTake)
+                .FirstOrDefaultAsync(a => a.PhoneNumber == phoneNumber);
 
-                if (athlete is null)
-                    return new ApiResponse { Message = "Athlete not found", Action = false };
-                var waterInTake = athlete.WaterInTake ?? new WaterInTake()
+            if (athlete is null)
+                return new ApiResponse { Message = "Athlete not found", Action = false };
+            var waterInTake = athlete.WaterInTake ?? new WaterInTake()
+            {
+                DailyCupOfWater = 0,
+                Reminder = 0
+            };
+
+            var today = DateTime.Today.Date;
+            var lastSaturday = GetLastSaturday(today);
+            var firstDayOfPersianMonth = GetFirstDayOfPersianMonth(today);
+
+            var allActivities = athlete.Activities.ToList();
+
+            var totalActivities = allActivities.Count;
+            var totalTime = allActivities.Select(a => a.Duration).DefaultIfEmpty(0).Sum();
+            var totalCalories = allActivities.Select(a => a.CaloriesLost).DefaultIfEmpty(0).Sum();
+
+            var lastWeekActivities = Enumerable.Range(0, 7)
+                .Select(offset =>
                 {
-                    DailyCupOfWater = 0,
-                    Reminder = 0
-                };
+                    var date = lastSaturday.AddDays(offset).Date;
+                    return athlete.Activities.Any(a => a.Date.Date == date) ? 1 : 0;
+                })
+                .ToList();
 
-                var today = DateTime.Today.Date;
-                var lastSaturday = GetLastSaturday(today);
-                var firstDayOfPersianMonth = GetFirstDayOfPersianMonth(today);
-
-                var allActivities = athlete.Activities.ToList();
-
-                var totalActivities = allActivities.Count;
-                var totalTime = allActivities.Select(a => a.Duration).DefaultIfEmpty(0).Sum();
-                var totalCalories = allActivities.Select(a => a.CaloriesLost).DefaultIfEmpty(0).Sum();
-
-                var lastWeekActivities = Enumerable.Range(0, 7)
-                    .Select(offset =>
-                    {
-                        var date = lastSaturday.AddDays(offset).Date;
-                        return athlete.Activities.Any(a => a.Date.Date == date) ? 1 : 0;
-                    })
-                    .ToList();
-
-                var todayWater = athlete.WaterInDays.FirstOrDefault(w => w.Date == today);
+            var todayWater = athlete.WaterInDays.FirstOrDefault(w => w.Date == today);
               
 
-                var todayActivities = athlete.Activities
-                    .Where(a => a.Date.Date == today)
-                    .Select(a => new
-                    {
-                        a.Id,
-                        Date = a.Date.ToString("yyyy-MM-dd"),
-                        a.CaloriesLost,
-                        a.Duration,
-                        ActivityCategory = a.ActivityCategory.ToString(),
-                        a.Name
-                    })
-                    .ToList();
-
-                var currentWeight = athlete.CurrentWeight;
-                var goalWeight = athlete.WeightGoal;
-
-                var lastMonthWeights = athlete.WeightEntries
-                    .Where(w => w.CurrentDate >= firstDayOfPersianMonth)
-                    .OrderByDescending(w => w.CurrentDate)
-                    .Select(w => new
-                    {
-                        Date = w.CurrentDate.ToString("yyyy-MM-dd"),
-                        w.Weight
-                    })
-                    .ToList();
-
-                return new ApiResponse
+            var todayActivities = athlete.Activities
+                .Where(a => a.Date.Date == today)
+                .Select(a => new
                 {
-                    Message = "Activities found",
-                    Action = true,
-                    Result = new
-                    {
-                        totalActivities,
-                        totalTime,
-                        totalCalories,
-                        lastWeekActivities ,
-                        NumberOfCupsDrinked=   todayWater?.NumberOfCupsDrinked ?? 0,
-                        waterInTake.DailyCupOfWater,
-                        waterInTake.Reminder,
-                        activityThisDay = todayActivities,
-                        currentWeight,
-                        goalWeight,
-                        lastMonthWeight = lastMonthWeights,
-                        date= DateTime.Now
-                    }
-                };
-            }
+                    a.Id,
+                    Date = a.Date.ToString("yyyy-MM-dd"),
+                    a.CaloriesLost,
+                    a.Duration,
+                    ActivityCategory = a.ActivityCategory.ToString(),
+                    a.Name
+                })
+                .ToList();
+
+            var currentWeight = athlete.CurrentWeight;
+            var goalWeight = athlete.WeightGoal;
+
+            var lastMonthWeights = athlete.WeightEntries
+                .Where(w => w.CurrentDate >= firstDayOfPersianMonth)
+                .OrderByDescending(w => w.CurrentDate)
+                .Select(w => new
+                {
+                    Date = w.CurrentDate.ToString("yyyy-MM-dd"),
+                    w.Weight
+                })
+                .ToList();
+
+            return new ApiResponse
+            {
+                Message = "Activities found",
+                Action = true,
+                Result = new
+                {
+                    totalActivities,
+                    totalTime,
+                    totalCalories,
+                    lastWeekActivities ,
+                    NumberOfCupsDrinked=   todayWater?.NumberOfCupsDrinked ?? 0,
+                    waterInTake.DailyCupOfWater,
+                    waterInTake.Reminder,
+                    activityThisDay = todayActivities,
+                    currentWeight,
+                    goalWeight,
+                    lastMonthWeight = lastMonthWeights,
+                    date= DateTime.Now
+                }
+            };
+        }
 
         private static DateTime GetLastSaturday(DateTime today)
         {
@@ -1231,13 +1237,13 @@ namespace sport_app_backend.Repository
         }
 
 
-            private static DateTime GetFirstDayOfPersianMonth(DateTime date)
-            {
-                var pc = new PersianCalendar();
-                var year = pc.GetYear(date);
-                var month = pc.GetMonth(date);
-                return pc.ToDateTime(year, month, 1, 0, 0, 0, 0);
-            }
+        private static DateTime GetFirstDayOfPersianMonth(DateTime date)
+        {
+            var pc = new PersianCalendar();
+            var year = pc.GetYear(date);
+            var month = pc.GetMonth(date);
+            return pc.ToDateTime(year, month, 1, 0, 0, 0, 0);
+        }
 
 
     }

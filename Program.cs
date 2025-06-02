@@ -44,10 +44,11 @@ builder.Services.AddSwaggerGen(option =>
                     Id="Bearer"
                 }
             },
-            new string[]{}
+            []
         }
     });
 });
+
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 var serverVersion = new MySqlServerVersion(new Version(9, 0, 1));
@@ -119,17 +120,7 @@ builder.Services.AddScoped<IAdminRepository, AdminRepository>();
 builder.Services.AddCoreAdmin();
 var app = builder.Build();
 
-try
-{
-    using var scope = app.Services.CreateScope();
-    var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-    dbContext.Database.OpenConnection();
-    dbContext.Database.CloseConnection();
-}
-catch (Exception ex)
-{
-    Console.WriteLine($"Warm-up failed: {ex.Message}");
-}
+
 app.UseSwagger();
 app.UseSwaggerUI();
 
