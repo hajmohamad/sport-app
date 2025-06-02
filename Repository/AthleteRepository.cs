@@ -276,14 +276,14 @@ namespace sport_app_backend.Repository
                 {
                     Message = "Activities found",
                     Action = true,
-                    Result = activities.Select(x => new
+                    Result = activities.Select(x => new ActivityDto()
                     {
-                        x.Id,
+                        Id = x.Id,
                         Date = x.Date.ToString("yyyy-MM-dd"),
-                        x.CaloriesLost,
-                        x.Duration,
+                        CaloriesLost = x.CaloriesLost,
+                        Duration   = x.Duration,
                         ActivityCategory = x.ActivityCategory.ToString(),
-                        x.Name
+                        Name= x.Name ?? ""
                     }).ToList()
                 };
             }
@@ -315,14 +315,14 @@ namespace sport_app_backend.Repository
             {
                 Message = "Activities found",
                 Action = true,
-                Result = activities.Select(x => new
+                Result = activities.Select(x => new ActivityDto()
                 {
-                    x.Id,
+                    Id = x.Id,
                     Date = x.Date.ToString("yyyy-MM-dd"),
-                    x.CaloriesLost,
-                    x.Duration,
+                    CaloriesLost = x.CaloriesLost,
+                    Duration   = x.Duration,
                     ActivityCategory = x.ActivityCategory.ToString(),
-                    x.Name
+                    Name= x.Name ?? ""
                 }).ToList()
             };
         }
@@ -342,14 +342,14 @@ namespace sport_app_backend.Repository
             {
                 Message = "Activities found",
                 Action = true,
-                Result = activities.Select(x => new
+                Result = activities.Select(x => new ActivityDto()
                 {
-                    x.Id,
+                    Id = x.Id,
                     Date = x.Date.ToString("yyyy-MM-dd"),
-                    x.CaloriesLost,
-                    x.Duration,
+                    CaloriesLost = x.CaloriesLost,
+                    Duration   = x.Duration,
                     ActivityCategory = x.ActivityCategory.ToString(),
-                    x.Name
+                    Name= x.Name ?? ""
                 }).ToList()
             };
         }
@@ -1230,14 +1230,14 @@ namespace sport_app_backend.Repository
             };
         }
 
-        private static DateTime GetLastSaturday(DateTime today)
+        public  DateTime GetLastSaturday(DateTime today)
         {
             int diff = (7 + (int)today.DayOfWeek - 6) % 7;
             return today.AddDays(-diff);
         }
 
 
-        private static DateTime GetFirstDayOfPersianMonth(DateTime date)
+        public  DateTime GetFirstDayOfPersianMonth(DateTime date)
         {
             var pc = new PersianCalendar();
             var year = pc.GetYear(date);
