@@ -10,4 +10,5 @@ public class AllExerciseResponseDto
     public required string ExerciseType { get; set; }
     public required string Level { get; set; }
     public required string Mechanics { get; set; }
+    public required int View {get; set; }
 }

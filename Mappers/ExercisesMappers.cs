@@ -84,7 +84,9 @@ namespace sport_app_backend.Mappers
                 BaseCategory = exercise.BaseCategory.ToString(),
                 Equipment = exercise.Equipment.ToString(),
                 ExerciseType = exercise.ExerciseType.ToString(),
-                Level = exercise.ExerciseLevel.ToString()
+                Level = exercise.ExerciseLevel.ToString(),
+                View = exercise.Views
+                
             };
 
         }
@@ -95,7 +97,7 @@ namespace sport_app_backend.Mappers
             {
                 Id = exercise.Id,
                 Description = exercise.Description,
-                ExerciseType = exercise.ExerciseType.ToString(),
+                ExerciseCategories = exercise.ExerciseType.ToString(),
                 Equipment = exercise.Equipment.ToString(),
                 Muscles = exercise.TargetMuscles.Select(x => x.ToString()).ToList(),
                 Mechanics = exercise.Mechanics.ToString(),
@@ -103,7 +105,7 @@ namespace sport_app_backend.Mappers
                 PersianName = exercise.PersianName,
                 ImageLink = exercise.ImageLink,
                 VideoLink = exercise.VideoLink,
-                BaseMuscle = exercise.BaseMuscle.ToString(),
+                BaseCategory = exercise.BaseMuscle.ToString(),
                 ExerciseLevel = exercise.ExerciseLevel.ToString(),
             };
         }

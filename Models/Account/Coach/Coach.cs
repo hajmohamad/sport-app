@@ -27,9 +27,4 @@ public class Coach
     [MaxLength(124)]
     public string HeadLine { get; set; } = "";
 
-
-
-
-
-
 }

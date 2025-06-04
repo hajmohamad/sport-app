@@ -845,45 +845,40 @@ namespace sport_app_backend.Repository
         {
             throw new NotImplementedException();
         }
-
-        public async Task<ApiResponse> ActiveProgram(string phoneNumber, int programId)
-        {
+       public async Task<ApiResponse> ActiveProgram(string phoneNumber, int programId) {
             var athlete = await context.Athletes.Include(a => a.WorkoutPrograms)
                 .FirstOrDefaultAsync(a => a.PhoneNumber == phoneNumber);
-            if (athlete is null)
-                return new ApiResponse()
-                    { Action = false, Message = "Athlete not found" };
-            var workoutProgram = athlete.WorkoutPrograms.Find(w => w.Id == programId);
-            if (workoutProgram is null)
-            {
-                return new ApiResponse()
-                    { Action = false, Message = "workout program not found" };
 
+            if (athlete == null)
+            {
+                return new ApiResponse { Action = false, Message = "Athlete not found" };
             }
 
-            if (
-                workoutProgram.Status == WorkoutProgramStatus.ACTIVE)
+            var targetProgram = athlete.WorkoutPrograms.FirstOrDefault(w => w.Id == programId);
+
+            if (targetProgram == null)
             {
-                var allTrainingSessions =
-                    await context.TrainingSessions
-                        .Where(t => t.WorkoutProgramId == programId)
-                        .ToListAsync();
+                return new ApiResponse { Action = false, Message = "Workout program not found" };
+            }
 
-                foreach (var trainingSession in allTrainingSessions)
-                {
-                    trainingSession.TrainingSessionStatus = TrainingSessionStatus.NOTSTARTED;
-                    var arrayBitMap = trainingSession.ExerciseCompletionBitmap.ToArray();
-                    Array.Clear(arrayBitMap, 0, arrayBitMap.Length);
-                    trainingSession.ExerciseCompletionBitmap = arrayBitMap;
-                }
+            var allTrainingSessions = await context.TrainingSessions
+                .Where(t => t.WorkoutProgramId == programId)
+                .ToListAsync();
 
+            Action<TrainingSession> resetTrainingSession = ts =>
+            {
+                ts.TrainingSessionStatus = TrainingSessionStatus.NOTSTARTED;
+                var arrayBitMap = ts.ExerciseCompletionBitmap.ToArray();
+                Array.Clear(arrayBitMap, 0, arrayBitMap.Length);
+                ts.ExerciseCompletionBitmap = arrayBitMap;
+            };
+            
+            if (targetProgram.Status == WorkoutProgramStatus.ACTIVE)
+            {
+                athlete.ActiveWorkoutProgramId = programId;
+                allTrainingSessions.ForEach(resetTrainingSession);
                 await context.SaveChangesAsync();
-                return new ApiResponse()
-                {
-                    Action = true,
-                    Message = "Program clear",
-                };
-
+                return new ApiResponse { Action = true, Message = "Program already active and reset." };
             }
 
             foreach (var program in athlete.WorkoutPrograms.Where(x => x.Status == WorkoutProgramStatus.ACTIVE))
@@ -891,25 +886,63 @@ namespace sport_app_backend.Repository
                 program.Status = WorkoutProgramStatus.STOPPED;
             }
 
-
-
-
-            if (workoutProgram.Status is WorkoutProgramStatus.WRITING or WorkoutProgramStatus.NOTSTARTED)
+            switch (targetProgram.Status)
             {
-                return new ApiResponse()
-                {
-                    Action = false,
-                    Message = "workout program status is not accept"
-                };
+                case WorkoutProgramStatus.WRITING:
+                case WorkoutProgramStatus.NOTSTARTED:
+                    return new ApiResponse { Action = false, Message = "Workout program status is not acceptable for activation." };
+                
+                case WorkoutProgramStatus.STOPPED:
+                case WorkoutProgramStatus.FINISHED:
+                    allTrainingSessions.ForEach(resetTrainingSession);
+                    break;
+                
+                case WorkoutProgramStatus.NOTACTIVE:
+                    await AddTrainingSession(targetProgram.PaymentId);
+                    break;
             }
 
-            workoutProgram.Status = WorkoutProgramStatus.ACTIVE;
+            targetProgram.Status = WorkoutProgramStatus.ACTIVE;
+            athlete.ActiveWorkoutProgramId = programId;
+
             await context.SaveChangesAsync();
-            return new ApiResponse()
+            return new ApiResponse { Action = true, Message = "Program activated successfully." };
+        }
+                
+        private async Task AddTrainingSession(int paymentId)
+        {
+            var workoutProgram = await context.WorkoutPrograms
+                .Include(p => p.Payment)
+                .ThenInclude(p => p.AthleteQuestion)
+                .Include(p => p.ProgramInDays)
+                .ThenInclude(d => d.AllExerciseInDays)
+                .FirstAsync(p => p.PaymentId == paymentId);
+
+            var numberOfDay = workoutProgram.ProgramDuration *
+                              workoutProgram.Payment.AthleteQuestion.DaysPerWeekToExercise;
+            var programInDayList = workoutProgram.ProgramInDays;
+            var programInDayCount = programInDayList.Count;
+
+            var sessions = new List<TrainingSession>();
+
+            for (var day = 1; day <= numberOfDay; day++)
             {
-                Action = true,
-                Message = "Program found",
-            };
+                var index = day % programInDayCount;
+                sessions.Add(new TrainingSession
+                {
+                    ProgramInDayId = programInDayList[index].Id,
+                    ProgramInDay = programInDayList[index],
+                    ExerciseCompletionBitmap = new byte[programInDayList[index].AllExerciseInDays.Count],
+                    TrainingSessionStatus = TrainingSessionStatus.NOTSTARTED,
+                    DayNumber = day,
+                    WorkoutProgram = workoutProgram,
+                    WorkoutProgramId = workoutProgram.Id
+                });
+            }
+
+            await context.TrainingSessions.AddRangeAsync(sessions);
+            await context.SaveChangesAsync();
+
         }
 
         private static async Task<bool> HasConsecutiveDaysAsync(List<DateTime> dates, int requiredConsecutive)

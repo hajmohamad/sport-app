@@ -63,17 +63,23 @@ namespace sport_app_backend.Repository
 
             var coach = await context.Coaches.Include(x=>x.CoachingServices).FirstOrDefaultAsync(x=>x.PhoneNumber==phoneNumber);
             if(coach is null) return new ApiResponse() { Message = "User is not a coach", Action = false };// Ensure the user is a coach
-            var coachingService = coach.CoachingServices.FirstOrDefault(x => x.Id == id);
-            if (coachingService is null) return new ApiResponse() { Message = "Coaching Service not found", Action = false };
+            var coachingService = coach.CoachingServices
+                .FirstOrDefault(x => x.Id == id && !x.IsDeleted);
 
-            var payments = context.Payments.Include(c=>c.CoachService).Where(c => c.Id == id).ToList();
-            if(payments.Count != 0)
+            if (coachingService is null)
+            {
+                return new ApiResponse() { Message = "سرویس کوچینگ یافت نشد یا قبلاً حذف شده است.", Action = false };
+            }
+            var hasActivePayments = await context.Payments
+                .AnyAsync(p => p.CoachServiceId == coachingService.Id) ;
+
+            if (hasActivePayments)
             {
                 coachingService.IsDeleted = true;
                 var newCoachService = addCoachingServices.ToCoachService(coach);
                 newCoachService.NumberOfSell = coachingService.NumberOfSell;
                 coach.CoachingServices.Add(newCoachService);
-                context.CoachServices.Add(newCoachService);
+                 await context.CoachServices.AddAsync(newCoachService);
             }else{
                 coachingService.UpdateCoachServices(addCoachingServices);
                 
@@ -220,9 +226,28 @@ namespace sport_app_backend.Repository
             }
             if (workoutProgramDto.Publish)
             {
+                
+                
                 workoutProgram.Status = WorkoutProgramStatus.NOTACTIVE;
-                await context.SaveChangesAsync();
-                await AddTrainingSession(paymentId);
+                var athlete = await context.Athletes.FirstOrDefaultAsync(a => a.Id == workoutProgram.AthleteId);
+                if (athlete is null)
+                {
+                    return new ApiResponse()
+                    {
+                        Action = false,
+                        Message = "athlete not found"
+                    };
+                }
+
+              
+                if (athlete.ActiveWorkoutProgramId == 0)
+                {
+                    await AddTrainingSession(paymentId);
+                    workoutProgram.Status = WorkoutProgramStatus.ACTIVE;
+                    athlete.ActiveWorkoutProgramId = workoutProgram.Id;
+
+
+                }
 
             }
             await context.SaveChangesAsync();
@@ -237,7 +262,7 @@ namespace sport_app_backend.Repository
 
         }
 
-        private async Task<ApiResponse> AddTrainingSession(int paymentId)
+        private async Task AddTrainingSession(int paymentId)
         {
             var workoutProgram = await context.WorkoutPrograms
                 .Include(p => p.Payment)
@@ -271,11 +296,7 @@ namespace sport_app_backend.Repository
             await context.TrainingSessions.AddRangeAsync(sessions);
             await context.SaveChangesAsync();
 
-            return new ApiResponse
-            {
-                Action = true,
-                Message = "Added everything successfully"
-            };
+         
         }
 
         public async Task<ApiResponse> GetWorkoutProgram(string phoneNumber, int paymentId)

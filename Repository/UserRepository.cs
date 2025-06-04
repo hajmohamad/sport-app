@@ -95,18 +95,22 @@ public class UserRepository(
         return new ApiResponse { Action = false, Message = "CodeIsNotCorrect" };
     }
     
-    dbContext.CodeVerifies.Remove(user);
-    await dbContext.SaveChangesAsync();
+
     
     if (user.TimeCodeSend.AddMinutes(15) < DateTime.Now)
     {
+        dbContext.CodeVerifies.Remove(user);
+        await dbContext.SaveChangesAsync();
         return new ApiResponse { Action = false, Message = "Code Expired" };
+        
     }
     
     if (user.Code != checkCodeRequestDto.Code)
     {
         return new ApiResponse { Action = false, Message = "CodeIsNotCorrect" };
     }
+    dbContext.CodeVerifies.Remove(user);
+    await dbContext.SaveChangesAsync();
     
     var userEntity = await dbContext.Users.FirstOrDefaultAsync(x => x.PhoneNumber == checkCodeRequestDto.PhoneNumber);
     if (userEntity != null)
@@ -314,21 +318,8 @@ private async Task<string> GenerateUniqueUsername()
     {
         var exercise = dbContext.Exercises.FirstOrDefault(x => x.Id == exerciseId);
         if (exercise is null) return Task.FromResult(new ApiResponse() { Message = "Exercise not found", Action = false });
-        return Task.FromResult(new ApiResponse() { Message = "Success", Action = true, Result = new
-        {
-            exercise.Id,
-            exercise.Description,
-            ExerciseCategories = exercise.ExerciseType.ToString(),
-            Equipment = exercise.Equipment.ToString(),
-            Muscles = exercise.TargetMuscles.Select(x=>x.ToString()).ToList(),
-            exercise.EnglishName,
-            exercise.PersianName,
-            exercise.ImageLink,
-            exercise.VideoLink,
-            BaseCategory = exercise.BaseMuscle.ToString(),
-            ExerciseLevel = exercise.ExerciseLevel.ToString()
-            
-        } });
+        return Task.FromResult(new ApiResponse()
+            { Message = "Success", Action = true, Result = exercise.ToExerciseDto() });
     }
 
     public async Task<ApiResponse> RemoveProfilePhoto(string phoneNumber)

@@ -33,5 +33,6 @@ public class Athlete
     public List<WorkoutProgram> WorkoutPrograms { get; set; } = [];
     public List<Activity> Activities{ get; set; } = [];
     public List<AthleteQuestion> AthleteQuestions { get; set; } = [];
+    public int ActiveWorkoutProgramId { get; set; } = 0;
 
 }
