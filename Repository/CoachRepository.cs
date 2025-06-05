@@ -203,60 +203,72 @@ namespace sport_app_backend.Repository
 
         public async Task<ApiResponse> SaveWorkoutProgram(string phoneNumber, int paymentId, WorkoutProgramDto workoutProgramDto)
         {
-            var coach = await context.Coaches.FirstOrDefaultAsync(c => c.PhoneNumber == phoneNumber);
-            if (coach == null) return new ApiResponse { Action = false, Message = "Coach not found" };
-            var workoutProgram = await context.WorkoutPrograms.Include(x=>x.ProgramInDays)
-                .ThenInclude(z=>z.AllExerciseInDays)
-              .FirstOrDefaultAsync(p => p.PaymentId == paymentId);
-            if(workoutProgram is null) return new ApiResponse{ Action = false, Message = "Payment not found" };
-            workoutProgram.ProgramInDays = workoutProgramDto.Days.ToListOfProgramInDays();
-            workoutProgram.ProgramDuration = workoutProgramDto.Week;
-            workoutProgram.GeneralWarmUp = workoutProgramDto.GeneralWarmUp?.Select(x => (GeneralWarmUp)Enum.Parse(typeof(GeneralWarmUp), x)).ToList()??[];
-            workoutProgram.ProgramLevel = workoutProgramDto.ProgramLevel;
-            if (workoutProgramDto.DedicatedWarmUp is not null)
+            try
             {
-                workoutProgram.DedicatedWarmUp =
-                    (DedicatedWarmUp)Enum.Parse(typeof(DedicatedWarmUp), workoutProgramDto.DedicatedWarmUp);
-            }
-
-            workoutProgram.ProgramPriorities = workoutProgramDto.ProgramPriority.Select(x => (ProgramPriority)Enum.Parse(typeof(ProgramPriority), x.ToUpper())).ToList() ??[];
-            if (workoutProgram.Status == WorkoutProgramStatus.NOTSTARTED)
-            {
-                workoutProgram.Status = WorkoutProgramStatus.WRITING;
-            }
-            if (workoutProgramDto.Publish)
-            {
-                
-                
-                workoutProgram.Status = WorkoutProgramStatus.NOTACTIVE;
-                var athlete = await context.Athletes.FirstOrDefaultAsync(a => a.Id == workoutProgram.AthleteId);
-                if (athlete is null)
+                var coach = await context.Coaches.FirstOrDefaultAsync(c => c.PhoneNumber == phoneNumber);
+                if (coach == null) return new ApiResponse { Action = false, Message = "Coach not found" };
+                var workoutProgram = await context.WorkoutPrograms.Include(x=>x.ProgramInDays)
+                    .ThenInclude(z=>z.AllExerciseInDays)
+                    .FirstOrDefaultAsync(p => p.PaymentId == paymentId);
+                if(workoutProgram is null) return new ApiResponse{ Action = false, Message = "Payment not found" };
+                workoutProgram.ProgramInDays = workoutProgramDto.Days.ToListOfProgramInDays();
+                workoutProgram.ProgramDuration = workoutProgramDto.Week;
+                workoutProgram.GeneralWarmUp = workoutProgramDto.GeneralWarmUp?.Select(x => (GeneralWarmUp)Enum.Parse(typeof(GeneralWarmUp), x)).ToList()??[];
+                workoutProgram.ProgramLevel = workoutProgramDto.ProgramLevel;
+                if (workoutProgramDto.DedicatedWarmUp is not null)
                 {
-                    return new ApiResponse()
-                    {
-                        Action = false,
-                        Message = "athlete not found"
-                    };
+                    workoutProgram.DedicatedWarmUp =
+                        (DedicatedWarmUp)Enum.Parse(typeof(DedicatedWarmUp), workoutProgramDto.DedicatedWarmUp);
                 }
+
+                workoutProgram.ProgramPriorities = workoutProgramDto.ProgramPriority.Select(x => (ProgramPriority)Enum.Parse(typeof(ProgramPriority), x.ToUpper())).ToList() ??[];
+                if (workoutProgram.Status == WorkoutProgramStatus.NOTSTARTED)
+                {
+                    workoutProgram.Status = WorkoutProgramStatus.WRITING;
+                }
+                if (workoutProgramDto.Publish)
+                {
+                
+                
+                    workoutProgram.Status = WorkoutProgramStatus.NOTACTIVE;
+                    var athlete = await context.Athletes.FirstOrDefaultAsync(a => a.Id == workoutProgram.AthleteId);
+                    if (athlete is null)
+                    {
+                        return new ApiResponse()
+                        {
+                            Action = false,
+                            Message = "athlete not found"
+                        };
+                    }
 
               
-                if (athlete.ActiveWorkoutProgramId == 0)
-                {
-                    await AddTrainingSession(paymentId);
-                    workoutProgram.Status = WorkoutProgramStatus.ACTIVE;
-                    athlete.ActiveWorkoutProgramId = workoutProgram.Id;
+                    if (athlete.ActiveWorkoutProgramId == 0)
+                    {                
+                        await context.SaveChangesAsync();
+                        await AddTrainingSession(paymentId);
+                        workoutProgram.Status = WorkoutProgramStatus.ACTIVE;
+                        athlete.ActiveWorkoutProgramId = workoutProgram.Id;
 
+
+                    }
 
                 }
-
+                await context.SaveChangesAsync();
+                return new ApiResponse()
+                {
+                    Action = true,
+                    Message = "workout program saved"
+                };
             }
-            await context.SaveChangesAsync();
-            return new ApiResponse()
+            catch (Exception e)
             {
-                Action = true,
-                Message = "workout program saved"
-            };
-
+                Console.WriteLine("*+*"+e);
+                return new ApiResponse()
+                {
+                    Action = false,
+                    Message = e.Message
+                };
+            }
 
 
 
@@ -276,12 +288,11 @@ namespace sport_app_backend.Repository
             var programInDayList = workoutProgram.ProgramInDays;
             var programInDayCount = programInDayList.Count;
 
-            var sessions = new List<TrainingSession>();
 
             for (var day = 1; day <= numberOfDay; day++)
             {
                 var index = day % programInDayCount;
-                sessions.Add(new TrainingSession
+                await context.TrainingSessions.AddAsync(new TrainingSession
                 {
                     ProgramInDayId = programInDayList[index].Id,
                     ProgramInDay = programInDayList[index],
@@ -293,8 +304,6 @@ namespace sport_app_backend.Repository
                 });
             }
 
-            await context.TrainingSessions.AddRangeAsync(sessions);
-            await context.SaveChangesAsync();
 
          
         }

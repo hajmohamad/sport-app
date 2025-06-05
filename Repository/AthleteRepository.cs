@@ -304,8 +304,7 @@ namespace sport_app_backend.Repository
                 return new ApiResponse() { Message = "User is not an athlete", Action = false };
 
             var today = DateTime.Now.Date;
-            var daysSinceSaturday = (int)today.DayOfWeek == 0 ? 6 : (int)today.DayOfWeek - 6;
-            var lastSaturday = today.AddDays(daysSinceSaturday);
+            var lastSaturday = GetLastSaturday(today);
 
             var activities = await context.Activities
                 .Where(x => x.AthleteId == athlete.Id && x.Date >= lastSaturday)
@@ -1036,20 +1035,24 @@ namespace sport_app_backend.Repository
             if (athlete is null) return new ApiResponse() { Message = "Athlete not found", Action = false };
             var workoutProgram = athlete.WorkoutPrograms.FirstOrDefault(x =>
                 x.Status == WorkoutProgramStatus.ACTIVE);
-            if (workoutProgram is null)
+            if (athlete.ActiveWorkoutProgramId ==0|| workoutProgram is null)
                 return new ApiResponse() { Message = "workoutProgram not found", Action = true };
 
             var trainingSessions =
                 await context.TrainingSessions.Include(T => T.ProgramInDay)
                     .ThenInclude(p => p.AllExerciseInDays)
                     .ThenInclude(z => z.Exercise)
-                    .Where(t => t.WorkoutProgram.Id == workoutProgram.Id).ToListAsync();
+                    .Where(t => t.WorkoutProgram.Id == athlete.ActiveWorkoutProgramId).ToListAsync();
 
             return new ApiResponse()
             {
                 Action = true,
                 Message = "get TrainingSession",
-                Result = trainingSessions.Select(y => y.ToAllTrainingSessionDto())
+                Result = new
+                {
+                    ToAllTrainingSession = trainingSessions.Select(y => y.ToAllTrainingSessionDto()),
+                    ProgramName = workoutProgram.Title
+                }
             };
 
 
@@ -1265,7 +1268,7 @@ namespace sport_app_backend.Repository
 
         public  DateTime GetLastSaturday(DateTime today)
         {
-            int diff = (7 + (int)today.DayOfWeek - 6) % 7;
+            var diff = ((int)today.DayOfWeek - (int)DayOfWeek.Saturday + 7) % 7;
             return today.AddDays(-diff);
         }
 

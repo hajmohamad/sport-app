@@ -10,39 +10,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="5687a4a9-3eda-4338-b6b2-29a217508823" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/.name" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/encodings.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/indexLayout.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/vcs.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.vs/ProjectEvaluation/sport-app-backend.metadata.v9.bin" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.vs/ProjectEvaluation/sport-app-backend.projects.v9.bin" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.vs/ProjectEvaluation/sport-app-backend.strings.v9.bin" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.vs/sport-app-backend/CopilotIndices/17.13.441.19478/CodeChunks.db" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.vs/sport-app-backend/CopilotIndices/17.13.441.19478/SemanticSymbols.db" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.vs/sport-app-backend/DesignTimeBuild/.dtbcache.v2" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.vs/sport-app-backend/FileContentIndex/1d26dbb5-7c95-4eb0-bd6c-9be78c26f332.vsidx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.vs/sport-app-backend/FileContentIndex/5997db10-4fd1-4b4f-b077-6bf8a1d92a1a.vsidx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.vs/sport-app-backend/FileContentIndex/6bbf3b8f-e0e2-4edb-a530-e9404bfa0787.vsidx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.vs/sport-app-backend/FileContentIndex/b0200c95-c0b1-492b-a1fa-760b39b63048.vsidx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.vs/sport-app-backend/FileContentIndex/d2834478-5dbc-4589-b20f-ed4b91dddb57.vsidx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.vs/sport-app-backend/config/applicationhost.config" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.vs/sport-app-backend/v17/.futdcache.v2" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.vs/sport-app-backend/v17/.suo" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.vs/sport-app-backend/v17/DocumentLayout.backup.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.vs/sport-app-backend/v17/DocumentLayout.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dtos/AllExerciseResponseDto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Dtos/AllExerciseResponseDto.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dtos/ExerciseDto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Dtos/ExerciseDto.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Mappers/ExercisesMappers.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Mappers/ExercisesMappers.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Migrations/ApplicationDbContextModelSnapshot.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Migrations/ApplicationDbContextModelSnapshot.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Models/Account/Athlete/Athlete.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/Account/Athlete/Athlete.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Models/Account/Coach/Coach.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/Account/Coach/Coach.cs" afterDir="false" />
+    <list default="true" id="5687a4a9-3eda-4338-b6b2-29a217508823" name="Changes" comment="fix bugs and edit publish active program method">
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Repository/AthleteRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Repository/AthleteRepository.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Repository/CoachRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Repository/CoachRepository.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Repository/UserRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Repository/UserRepository.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TestProject/GetActivityTest.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/TestProject/TestProject.csproj" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/sport-app-backend.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/sport-app-backend.csproj" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/sport-app-backend.sln" beforeDir="false" afterPath="$PROJECT_DIR$/sport-app-backend.sln" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/sport-app-backend.sln.DotSettings.user" beforeDir="false" afterPath="$PROJECT_DIR$/sport-app-backend.sln.DotSettings.user" afterDir="false" />
@@ -80,6 +51,7 @@
     <setting file="file://$PROJECT_DIR$/Program.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Repository/AthleteRepository.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Repository/UserRepository.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/obj/Debug/net8.0/.NETCoreApp,Version=v8.0.AssemblyAttributes.cs" root0="SKIP_HIGHLIGHTING" />
   </component>
   <component name="MetaFilesCheckinStateConfiguration" checkMetaFiles="true" />
   <component name="ProblemsViewState">
@@ -193,7 +165,7 @@
       <workItem from="1748808432752" duration="1019000" />
       <workItem from="1748871506077" duration="1827000" />
       <workItem from="1748874434732" duration="3085000" />
-      <workItem from="1749039737192" duration="13245000" />
+      <workItem from="1749039737192" duration="18713000" />
     </task>
     <task id="LOCAL-00001" summary="add migration">
       <option name="closed" value="true" />
@@ -219,7 +191,15 @@
       <option name="project" value="LOCAL" />
       <updated>1748877523434</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="fix bugs and edit publish active program method">
+      <option name="closed" value="true" />
+      <created>1749054753396</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1749054753396</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -243,33 +223,21 @@
     <MESSAGE value="add migration" />
     <MESSAGE value="edit connection pull" />
     <MESSAGE value="test for Activity" />
-    <option name="LAST_COMMIT_MESSAGE" value="test for Activity" />
+    <MESSAGE value="fix bugs and edit publish active program method" />
+    <option name="LAST_COMMIT_MESSAGE" value="fix bugs and edit publish active program method" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Repository/CoachRepository.cs</url>
-          <line>205</line>
-          <properties documentPath="D:\403-1\sport-app1\Repository\CoachRepository.cs" containingFunctionPresentation="Method 'SaveWorkoutProgram'">
-            <startOffsets>
-              <option value="9027" />
-            </startOffsets>
-            <endOffsets>
-              <option value="9116" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="1" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/Repository/CoachRepository.cs</url>
-          <line>267</line>
+          <line>280</line>
           <properties documentPath="D:\403-1\sport-app1\Repository\CoachRepository.cs" containingFunctionPresentation="Lambda expression inside Method 'AddTrainingSession'">
             <startOffsets>
-              <option value="11762" />
+              <option value="12075" />
             </startOffsets>
             <endOffsets>
-              <option value="11771" />
+              <option value="12084" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="2" />
