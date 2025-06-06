@@ -1,4 +1,3 @@
-
 using System;
 using System.Globalization;
 using System.Text;
@@ -15,7 +14,6 @@ using sport_app_backend.Models.Actions;
 using sport_app_backend.Models.Challenge_Achievement;
 using sport_app_backend.Models.Payments;
 using sport_app_backend.Models.Program;
-
 using Newtonsoft.Json;
 using sport_app_backend.Dtos.ZarinPal;
 using sport_app_backend.Dtos.ZarinPal.Verify;
@@ -91,7 +89,6 @@ namespace sport_app_backend.Repository
                 authority = request.Authority,
                 amount = payment.Amount,
                 currency = "IRT"
-
             };
 
             var jsonData = JsonConvert.SerializeObject(data);
@@ -281,9 +278,9 @@ namespace sport_app_backend.Repository
                         Id = x.Id,
                         Date = x.Date.ToString("yyyy-MM-dd"),
                         CaloriesLost = x.CaloriesLost,
-                        Duration   = x.Duration,
+                        Duration = x.Duration,
                         ActivityCategory = x.ActivityCategory.ToString(),
-                        Name= x.Name ?? ""
+                        Name = x.Name ?? ""
                     }).ToList()
                 };
             }
@@ -319,9 +316,9 @@ namespace sport_app_backend.Repository
                     Id = x.Id,
                     Date = x.Date.ToString("yyyy-MM-dd"),
                     CaloriesLost = x.CaloriesLost,
-                    Duration   = x.Duration,
+                    Duration = x.Duration,
                     ActivityCategory = x.ActivityCategory.ToString(),
-                    Name= x.Name ?? ""
+                    Name = x.Name ?? ""
                 }).ToList()
             };
         }
@@ -346,9 +343,9 @@ namespace sport_app_backend.Repository
                     Id = x.Id,
                     Date = x.Date.ToString("yyyy-MM-dd"),
                     CaloriesLost = x.CaloriesLost,
-                    Duration   = x.Duration,
+                    Duration = x.Duration,
                     ActivityCategory = x.ActivityCategory.ToString(),
-                    Name= x.Name ?? ""
+                    Name = x.Name ?? ""
                 }).ToList()
             };
         }
@@ -386,12 +383,8 @@ namespace sport_app_backend.Repository
                     sport.Duration,
                     sport.Distance,
                     ActivityCategory = sport.ActivityCategory.ToString()
-
                 }
             };
-
-
-
         }
 
         public async Task<ApiResponse> AddWaterIntake(string phoneNumber, WaterInTakeDto waterInTakeDto)
@@ -483,7 +476,6 @@ namespace sport_app_backend.Repository
             {
                 Message = "Activity deleted successfully",
                 Action = true
-
             };
         }
 
@@ -506,7 +498,6 @@ namespace sport_app_backend.Repository
                 Message = "Athlete questions submitted successfully",
                 Action = true
             };
-
         }
 
         public async Task<ApiResponse> AthleteFirstQuestions(string phoneNumber,
@@ -521,6 +512,13 @@ namespace sport_app_backend.Repository
                     { Message = "User is not an athlete", Action = false }; // Ensure the user is an athlete
             athlete.Height = athleteFirstQuestionsDto.Height;
             athlete.CurrentWeight = athleteFirstQuestionsDto.CurrentWeight;
+            var weightEntry = new WeightEntry()
+            {
+                Athlete = athlete,
+                AthleteId = athlete.Id,
+                CurrentDate = DateTime.Now
+            };
+            await context.WeightEntries.AddAsync(weightEntry);
             user.LastName = athleteFirstQuestionsDto.LastName;
             user.FirstName = athleteFirstQuestionsDto.FirstName;
             await context.SaveChangesAsync();
@@ -558,18 +556,17 @@ namespace sport_app_backend.Repository
                     AthleteId = athlete.Id,
                     Date = DateTime.Now.Date,
                     Athlete = athlete,
-                    NumberOfCupsDrinked = 1 // Initialize with 1 cup since it's the first entry for today
+                    NumberOfCupsDrinked = numberOfCup // Initialize with 1 cup since it's the first entry for today
                 };
                 athlete.WaterInDays.Add(waterInDay); // Add the new WaterInDay to the athlete's collection
                 await context.WaterInDays.AddAsync(waterInDay);
                 await context.SaveChangesAsync();
                 return new ApiResponse() { Message = "WaterInDay added successfully", Action = true };
             }
-            return new ApiResponse() { Message = "WaterInDay is zero", Action = false };
 
+            return new ApiResponse() { Message = "WaterInDay is zero", Action = false };
         }
-          
-        
+
 
         public async Task<ApiResponse> UpdateGoalWeight(string phoneNumber, double goalWeight)
         {
@@ -586,7 +583,6 @@ namespace sport_app_backend.Repository
 
         public async Task<ApiResponse> UpdateWeight(string phoneNumber, double weight)
         {
-
             var athlete = context.Athletes.FirstOrDefault(x => x.PhoneNumber == phoneNumber);
             if (athlete is null)
                 return new ApiResponse()
@@ -605,15 +601,14 @@ namespace sport_app_backend.Repository
                 };
                 await context.WeightEntries.AddAsync(weightEntry);
                 athlete.WeightEntries.Add(weightEntry);
-                await context.SaveChangesAsync();
             }
             else
             {
                 weightEntry.Weight = weight;
                 weightEntry.CurrentDate = DateTime.Now;
-                await context.SaveChangesAsync();
-
             }
+
+            await context.SaveChangesAsync();
 
             return new ApiResponse()
             {
@@ -651,7 +646,6 @@ namespace sport_app_backend.Repository
                 weightEntry.Weight = weight;
                 weightEntry.CurrentDate = DateTime.Now;
                 await context.SaveChangesAsync();
-
             }
 
             return new ApiResponse()
@@ -685,10 +679,10 @@ namespace sport_app_backend.Repository
             {
                 Message = "Weight report fetched successfully",
                 Action = true,
-                Result = weightEntries.Select(x => new
+                Result = weightEntries.Select(x => new WeightReportDto()
                 {
                     Date = x.CurrentDate.ToString("yyyy-MM-dd"),
-                    x.Weight
+                    Weight = x.Weight
                 }).ToList()
             };
         }
@@ -787,7 +781,6 @@ namespace sport_app_backend.Repository
                 Action = true,
                 Result = achievements.Select(a => a.ToString()).ToList()
             };
-
         }
 
         public async Task<ApiResponse> GetAllPayments(string phoneNumber)
@@ -809,7 +802,6 @@ namespace sport_app_backend.Repository
                 Message = "Payments found",
                 Result = athlete.WorkoutPrograms.Select(x => x.ToAllWorkoutProgramResponseDto()).ToList()
             };
-
         }
 
         public async Task<ApiResponse> GetPayment(string phoneNumber, int paymentId)
@@ -844,7 +836,9 @@ namespace sport_app_backend.Repository
         {
             throw new NotImplementedException();
         }
-       public async Task<ApiResponse> ActiveProgram(string phoneNumber, int programId) {
+
+        public async Task<ApiResponse> ActiveProgram(string phoneNumber, int programId)
+        {
             var athlete = await context.Athletes.Include(a => a.WorkoutPrograms)
                 .FirstOrDefaultAsync(a => a.PhoneNumber == phoneNumber);
 
@@ -871,7 +865,7 @@ namespace sport_app_backend.Repository
                 Array.Clear(arrayBitMap, 0, arrayBitMap.Length);
                 ts.ExerciseCompletionBitmap = arrayBitMap;
             };
-            
+
             if (targetProgram.Status == WorkoutProgramStatus.ACTIVE)
             {
                 athlete.ActiveWorkoutProgramId = programId;
@@ -889,13 +883,14 @@ namespace sport_app_backend.Repository
             {
                 case WorkoutProgramStatus.WRITING:
                 case WorkoutProgramStatus.NOTSTARTED:
-                    return new ApiResponse { Action = false, Message = "Workout program status is not acceptable for activation." };
-                
+                    return new ApiResponse
+                        { Action = false, Message = "Workout program status is not acceptable for activation." };
+
                 case WorkoutProgramStatus.STOPPED:
                 case WorkoutProgramStatus.FINISHED:
                     allTrainingSessions.ForEach(resetTrainingSession);
                     break;
-                
+
                 case WorkoutProgramStatus.NOTACTIVE:
                     await AddTrainingSession(targetProgram.PaymentId);
                     break;
@@ -907,7 +902,7 @@ namespace sport_app_backend.Repository
             await context.SaveChangesAsync();
             return new ApiResponse { Action = true, Message = "Program activated successfully." };
         }
-                
+
         private async Task AddTrainingSession(int paymentId)
         {
             var workoutProgram = await context.WorkoutPrograms
@@ -941,7 +936,6 @@ namespace sport_app_backend.Repository
 
             await context.TrainingSessions.AddRangeAsync(sessions);
             await context.SaveChangesAsync();
-
         }
 
         private static async Task<bool> HasConsecutiveDaysAsync(List<DateTime> dates, int requiredConsecutive)
@@ -969,7 +963,6 @@ namespace sport_app_backend.Repository
                 return false;
             });
         }
-
 
 
         public async Task<ApiResponse> ExerciseFeedBack(string phoneNumber, ExerciseFeedbackDto feedbackDto)
@@ -1024,7 +1017,6 @@ namespace sport_app_backend.Repository
                 Message = "Exercise change request saved.",
                 Result = exerciseChangeRequest
             };
-
         }
 
 
@@ -1035,7 +1027,7 @@ namespace sport_app_backend.Repository
             if (athlete is null) return new ApiResponse() { Message = "Athlete not found", Action = false };
             var workoutProgram = athlete.WorkoutPrograms.FirstOrDefault(x =>
                 x.Status == WorkoutProgramStatus.ACTIVE);
-            if (athlete.ActiveWorkoutProgramId ==0|| workoutProgram is null)
+            if (athlete.ActiveWorkoutProgramId == 0 || workoutProgram is null)
                 return new ApiResponse() { Message = "workoutProgram not found", Action = true };
 
             var trainingSessions =
@@ -1054,9 +1046,6 @@ namespace sport_app_backend.Repository
                     ProgramName = workoutProgram.Title
                 }
             };
-
-
-
         }
 
         public async Task<ApiResponse> GetTrainingSession(string phoneNumber, int trainingSessionId)
@@ -1068,15 +1057,12 @@ namespace sport_app_backend.Repository
                 return new ApiResponse() { Message = "trainingSession not found", Action = false };
 
 
-
             return new ApiResponse()
             {
                 Action = true,
                 Message = "get TrainingSession",
                 Result = trainingSession.ToTrainingSessionDto()
             };
-
-
         }
 
         public async Task<ApiResponse> DoTrainingSession(string phoneNumber, int trainingSessionId, int exerciseNumber)
@@ -1132,8 +1118,6 @@ namespace sport_app_backend.Repository
                 Message = "Finish Training session",
                 Result = activity
             };
-
-
         }
 
 
@@ -1182,7 +1166,8 @@ namespace sport_app_backend.Repository
             };
         }
 
-        public async Task<ApiResponse> GetActivityPage(string phoneNumber){
+        public async Task<ApiResponse> GetActivityPage(string phoneNumber)
+        {
             var athlete = await context.Athletes
                 .Include(a => a.WeightEntries)
                 .Include(a => a.WaterInDays)
@@ -1216,18 +1201,18 @@ namespace sport_app_backend.Repository
                 .ToList();
 
             var todayWater = athlete.WaterInDays.FirstOrDefault(w => w.Date == today);
-              
+
 
             var todayActivities = athlete.Activities
                 .Where(a => a.Date.Date == today)
-                .Select(a => new
+                .Select(a => new ActivityDto
                 {
-                    a.Id,
+                    Id = a.Id,
                     Date = a.Date.ToString("yyyy-MM-dd"),
-                    a.CaloriesLost,
-                    a.Duration,
+                    CaloriesLost = a.CaloriesLost,
+                    Duration = a.Duration,
                     ActivityCategory = a.ActivityCategory.ToString(),
-                    a.Name
+                    Name = a.Name ?? ""
                 })
                 .ToList();
 
@@ -1237,10 +1222,10 @@ namespace sport_app_backend.Repository
             var lastMonthWeights = athlete.WeightEntries
                 .Where(w => w.CurrentDate >= firstDayOfPersianMonth)
                 .OrderByDescending(w => w.CurrentDate)
-                .Select(w => new
+                .Select(w => new WeightReportDto
                 {
                     Date = w.CurrentDate.ToString("yyyy-MM-dd"),
-                    w.Weight
+                    Weight = w.Weight
                 })
                 .ToList();
 
@@ -1248,39 +1233,36 @@ namespace sport_app_backend.Repository
             {
                 Message = "Activities found",
                 Action = true,
-                Result = new
+                Result = new ActivityPageDto()
                 {
-                    totalActivities,
-                    totalTime,
-                    totalCalories,
-                    lastWeekActivities ,
-                    NumberOfCupsDrinked=   todayWater?.NumberOfCupsDrinked ?? 0,
-                    waterInTake.DailyCupOfWater,
-                    waterInTake.Reminder,
-                    activityThisDay = todayActivities,
-                    currentWeight,
-                    goalWeight,
-                    lastMonthWeight = lastMonthWeights,
-                    date= DateTime.Now
+                    TotalActivities = totalActivities,
+                    TotalTime = totalTime,
+                    TotalCalories = totalCalories,
+                    LastWeekActivities = lastWeekActivities,
+                    NumberOfCupsDrinked = todayWater?.NumberOfCupsDrinked ?? 0,
+                    DailyCupOfWater = waterInTake.DailyCupOfWater,
+                    Reminder = waterInTake.Reminder,
+                    TodayActivities = todayActivities,
+                    CurrentWeight = currentWeight,
+                    GoalWeight = goalWeight,
+                    LastMonthWeights = lastMonthWeights,
                 }
             };
         }
 
-        public  DateTime GetLastSaturday(DateTime today)
+        public DateTime GetLastSaturday(DateTime today)
         {
             var diff = ((int)today.DayOfWeek - (int)DayOfWeek.Saturday + 7) % 7;
             return today.AddDays(-diff);
         }
 
 
-        public  DateTime GetFirstDayOfPersianMonth(DateTime date)
+        public DateTime GetFirstDayOfPersianMonth(DateTime date)
         {
             var pc = new PersianCalendar();
             var year = pc.GetYear(date);
             var month = pc.GetMonth(date);
             return pc.ToDateTime(year, month, 1, 0, 0, 0, 0);
         }
-
-
     }
 }
