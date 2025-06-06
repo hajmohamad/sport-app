@@ -161,13 +161,13 @@ namespace sport_app_backend.Repository
             var result = payment.ToCoachPaymentResponseDto();
             if (result.WorkoutProgram!.ProgramInDays.Count == 0)
             {
-             result.WorkoutProgram.ProgramInDays.Add(new ProgramInDayDto()
-             {
+                result.WorkoutProgram.ProgramInDays.Add(new ProgramInDayDto()
+                {
                  
-                ForWhichDay = 1,
-                 AllExerciseInDays = []
+                    ForWhichDay = 1,
+                    AllExerciseInDays = []
 
-             });   
+                });   
             }
             return new ApiResponse()
             {
@@ -176,7 +176,7 @@ namespace sport_app_backend.Repository
                 Result = result
             };
 
-        }
+        }   
 
 
 
