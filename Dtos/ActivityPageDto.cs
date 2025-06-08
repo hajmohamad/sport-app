@@ -9,8 +9,8 @@ public class ActivityPageDto
     public int NumberOfCupsDrinked { get; set; }
     public int DailyCupOfWater { get; set; }
     public int Reminder { get; set; }
-    public List<ActivityDto> TodayActivities { get; set; }
+    public List<ActivityDto> TodayActivities { get; set; } = [];
     public double CurrentWeight { get; set; }
     public double GoalWeight { get; set; }
-    public List<WeightReportDto> LastMonthWeights { get; set; }
+    public List<WeightReportDto> LastMonthWeights { get; set; }= [];
 }

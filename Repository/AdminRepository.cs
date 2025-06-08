@@ -4,6 +4,7 @@ using sport_app_backend.Dtos;
 using sport_app_backend.Interface;
 using sport_app_backend.Mappers;
 using sport_app_backend.Models;
+using sport_app_backend.Models.Actions;
 using sport_app_backend.Models.Payments;
 using sport_app_backend.Models.Program;
 
@@ -55,5 +56,43 @@ namespace sport_app_backend.Repository
 
           
         }
+        public async Task<ApiResponse> BackfillWorkoutProgramStats()
+        {
+            var allPrograms = await context.WorkoutPrograms
+                .Include(p => p.TrainingSessions)
+                .ToListAsync();
+
+            int updatedProgramsCount = 0;
+
+            foreach (var program in allPrograms)
+            {
+                program.TotalSessionCount = program.TrainingSessions.Count;
+
+                program.CompletedSessionCount = program.TrainingSessions
+                    .Count(ts => ts.TrainingSessionStatus == TrainingSessionStatus.COMPLETED);
+
+              
+                var lastExerciseActivity = await context.Activities
+                    .Where(a => a.AthleteId == program.AthleteId && a.ActivityCategory == ActivityCategory.EXERCISE)
+                    .OrderByDescending(a => a.Date)
+                    .FirstOrDefaultAsync();
+                
+                if (lastExerciseActivity != null)
+                {
+                    program.LastExerciseDate = lastExerciseActivity.Date;
+                }
+                
+                updatedProgramsCount++;
+            }
+
+            await context.SaveChangesAsync();
+
+            return new ApiResponse
+            {
+                Action = true,
+                Message = $"{updatedProgramsCount} برنامه تمرینی با موفقیت به‌روزرسانی و پر شد."
+            };
+        }
     }
+    
 }

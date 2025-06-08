@@ -30,4 +30,10 @@ public class WorkoutProgram
     [MaxLength(120)]
     public string Description { get; set; } = "";
     public List<ProgramInDay> ProgramInDays { get; set; } = [];
+    public List<TrainingSession> TrainingSessions { get; set; } = [];
+    [DataType(DataType.Date)]
+    [Column(TypeName = "date")]
+    public DateTime? LastExerciseDate { get; set; }     
+    public int TotalSessionCount { get; set; } = 0;
+    public int CompletedSessionCount { get; set; } = 0;
 }

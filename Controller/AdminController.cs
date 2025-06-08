@@ -21,7 +21,16 @@ namespace sport_app_backend.Controller
             return Ok(result);
         
         }
-       
+        [HttpPost("backfill-program-stats")]
+        public async Task<IActionResult> BackfillStats()
+        {
+            var result = await adminRepository.BackfillWorkoutProgramStats();
+            if (!result.Action)
+            {
+                return StatusCode(500, result);
+            }
+            return Ok(result);
+        }
     }
 
 }

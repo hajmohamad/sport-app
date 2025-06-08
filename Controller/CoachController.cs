@@ -130,6 +130,38 @@ namespace sport_app_backend.Controller
             return Ok(result);
             
         }
+        [HttpGet("dashboard")]
+        [Authorize(Roles = "Coach")]
+        public async Task<IActionResult> GetDashboard()
+        {
+            var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
+            if (phoneNumber is null) 
+                return Unauthorized(new ApiResponse { Action = false, Message = "خطای احراز هویت." });
+
+            var result = await coachRepository.GetCoachDashboard(phoneNumber);
+
+            if (!result.Action) 
+                return BadRequest(result);
+
+            return Ok(result);
+        }
+
+        [HttpGet("dashboard/monthly-chart/{year}/{month}")]
+        [Authorize(Roles = "Coach")]
+        public async Task<IActionResult> GetMonthlyChart([FromRoute] int year, [FromRoute] int month)
+        {
+            var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
+            if (phoneNumber is null) 
+                return Unauthorized(new ApiResponse { Action = false, Message = "خطای احراز هویت." });
+
+            var result = await coachRepository.GetMonthlyIncomeChart(phoneNumber, year, month);
+
+            if (!result.Action) 
+                return BadRequest(result);
+
+            return Ok(result);
+        }
+
       
     }
 

@@ -11,6 +11,7 @@ namespace sport_app_backend.Interface
     {
         Task<ApiResponse> AddExercises(List<AddExercisesRequestDto> exercises);
         Task<ApiResponse> ConfirmTransactionId(string TransactionId);
-        
+        Task<ApiResponse> BackfillWorkoutProgramStats();
+
     }
 }

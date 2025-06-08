@@ -10,7 +10,7 @@ namespace sport_app_backend.Dtos
         public required int ProgramInDayId { get; set; }
         public required TrainingSessionProgramInDayDto ProgramInDay { get; set; }
         public int DayNumber { get; set; }
-        public string TrainingSessionStatus { get; set; } 
+        public string TrainingSessionStatus { get; set; } = string.Empty;
         public required int[] ExerciseCompletionBitmap { get; set; } 
     
     }

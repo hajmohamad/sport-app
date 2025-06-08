@@ -1096,22 +1096,32 @@ namespace sport_app_backend.Repository
         {
             var athlete = await context.Athletes.FirstOrDefaultAsync(x => x.PhoneNumber == phoneNumber);
             if (athlete is null) return new ApiResponse() { Message = "Athlete not found", Action = false };
+
             var trainingSession = await context.TrainingSessions
+                .Include(ts => ts.WorkoutProgram) 
                 .FirstOrDefaultAsync(z => z.Id == finishTrainingSessionDto.TrainingSessionId);
+
             if (trainingSession is null)
                 return new ApiResponse() { Message = "trainingSession not found", Action = false };
+    
+        
             trainingSession.TrainingSessionStatus = TrainingSessionStatus.COMPLETED;
+            trainingSession.WorkoutProgram.LastExerciseDate = DateTime.Now.Date;
+            trainingSession.WorkoutProgram.CompletedSessionCount++; 
+
             var activity = new Activity()
             {
                 Athlete = athlete,
                 Duration = finishTrainingSessionDto.Duration,
                 CaloriesLost = finishTrainingSessionDto.CaloriesLost,
                 ActivityCategory = ActivityCategory.EXERCISE,
-                Name = finishTrainingSessionDto.TrainingSessionName
+                Name = finishTrainingSessionDto.TrainingSessionName,
+                Date = DateTime.Now.Date
             };
 
             await context.Activities.AddAsync(activity);
             await context.SaveChangesAsync();
+    
             return new ApiResponse()
             {
                 Action = true,

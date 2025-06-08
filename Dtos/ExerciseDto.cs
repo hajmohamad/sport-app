@@ -3,17 +3,17 @@
 public class ExerciseDto
 {
     public int Id { get; set; }
-    public string Description { get; set; }
-    public string ExerciseCategories { get; set; }
-    public string Equipment { get; set; }
-    public List<string> Muscles { get; set; }
-    public string EnglishName { get; set; }
-    public string PersianName { get; set; }
-    public string ImageLink { get; set; }
-    public string VideoLink { get; set; }
-    public string BaseCategory { get; set; }
-    public string ExerciseLevel { get; set; }
-    public string Mechanics { get; set; }
+    public string Description { get; set; } = string.Empty;
+    public string ExerciseCategories { get; set; }= string.Empty;
+    public string Equipment { get; set; }= string.Empty;
+    public List<string> Muscles { get; set; } = [];
+    public string EnglishName { get; set; }= string.Empty;
+    public string PersianName { get; set; }= string.Empty;
+    public string ImageLink { get; set; }= string.Empty;
+    public string VideoLink { get; set; }= string.Empty;
+    public string BaseCategory { get; set; }= string.Empty;
+    public string ExerciseLevel { get; set; }= string.Empty;
+    public string Mechanics { get; set; }= string.Empty;
    
 
 

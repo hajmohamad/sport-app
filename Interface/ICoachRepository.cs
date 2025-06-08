@@ -16,5 +16,7 @@ namespace sport_app_backend.Interface
         Task<ApiResponse> GetProfile(string phoneNumber);
         Task<ApiResponse> SaveWorkoutProgram(string phoneNumber,int paymentId, WorkoutProgramDto saveWorkoutProgramDto);
         Task<ApiResponse> GetWorkoutProgram(string phoneNumber, int paymentId);
+        Task<ApiResponse> GetCoachDashboard(string phoneNumber);
+        Task<ApiResponse> GetMonthlyIncomeChart(string phoneNumber, int year, int month);
     }
 }
