@@ -54,14 +54,18 @@ public class UserController(IUserRepository userRepository) : ControllerBase
     }
 
     [HttpPost("AccessToken")]
-    public async Task<IActionResult> AccessToken([FromBody] string refreshToken)
+    public async Task<IActionResult> AccessToken([FromHeader(Name = "Refresh-Token")] string refreshToken) 
     {
+        if (string.IsNullOrEmpty(refreshToken))
+        {
+            return BadRequest("Refresh token is missing from the header.");
+        }
         var result = await userRepository.GenerateAccessToken(refreshToken);
         if (!result.Action)
         {
             return Unauthorized(result);
         }
-        
+    
         return Ok(result);
     }
     
