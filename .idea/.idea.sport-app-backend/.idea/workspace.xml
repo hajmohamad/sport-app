@@ -10,12 +10,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="5687a4a9-3eda-4338-b6b2-29a217508823" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/Controller/UserController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Controller/UserController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Program.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/appsettings.json" beforeDir="false" afterPath="$PROJECT_DIR$/appsettings.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sport-app-backend.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/sport-app-backend.csproj" afterDir="false" />
-    </list>
+    <list default="true" id="5687a4a9-3eda-4338-b6b2-29a217508823" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -170,6 +165,7 @@
       <workItem from="1749206495965" duration="2674000" />
       <workItem from="1749239105605" duration="2426000" />
       <workItem from="1749400073874" duration="8275000" />
+      <workItem from="1749418260263" duration="1103000" />
     </task>
     <task id="LOCAL-00001" summary="add migration">
       <option name="closed" value="true" />
@@ -227,7 +223,15 @@
       <option name="project" value="LOCAL" />
       <updated>1749405103689</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="remove back fill methode">
+      <option name="closed" value="true" />
+      <created>1749418717316</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1749418717316</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -255,7 +259,8 @@
     <MESSAGE value="add test and fix bugs" />
     <MESSAGE value="add test" />
     <MESSAGE value="add CoachDashboard" />
-    <option name="LAST_COMMIT_MESSAGE" value="add CoachDashboard" />
+    <MESSAGE value="remove back fill methode" />
+    <option name="LAST_COMMIT_MESSAGE" value="remove back fill methode" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
