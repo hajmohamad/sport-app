@@ -447,10 +447,10 @@ namespace sport_app_backend.Repository
                 return new ApiResponse() { Message = "User is not an athlete", Action = false };
             }
 
-            var lastQuestion = context.AthleteQuestions
+            var lastQuestion = await context.AthleteQuestions
                 .Where(q => q.AthleteId == athlete.Id).Include(i => i.InjuryArea)
                 .OrderByDescending(q => q.CreatedAt)
-                .FirstOrDefault();
+                .FirstOrDefaultAsync();
             if (lastQuestion is null) return new ApiResponse() { Message = "Question not found", Action = false };
 
             return new ApiResponse()
@@ -516,7 +516,8 @@ namespace sport_app_backend.Repository
             {
                 Athlete = athlete,
                 AthleteId = athlete.Id,
-                CurrentDate = DateTime.Now
+                CurrentDate = DateTime.Now,
+                Weight = athleteFirstQuestionsDto.CurrentWeight
             };
             await context.WeightEntries.AddAsync(weightEntry);
             user.LastName = athleteFirstQuestionsDto.LastName;
@@ -535,7 +536,7 @@ namespace sport_app_backend.Repository
 
         public async Task<ApiResponse> UpdateWaterInDay(string phoneNumber, int numberOfCup)
         {
-            var athlete = context.Athletes.FirstOrDefault(x => x.PhoneNumber == phoneNumber);
+            var athlete =await context.Athletes.FirstOrDefaultAsync(x => x.PhoneNumber == phoneNumber);
             if (athlete is null) return new ApiResponse() { Message = "User is not athlete", Action = false };
             var waterInDay = await context.WaterInDays
                 .Where(w => w.AthleteId == athlete.Id && w.Date.Date == DateTime.Now.Date)
@@ -570,7 +571,7 @@ namespace sport_app_backend.Repository
 
         public async Task<ApiResponse> UpdateGoalWeight(string phoneNumber, double goalWeight)
         {
-            var athlete = context.Athletes.FirstOrDefault(x => x.PhoneNumber == phoneNumber);
+            var athlete = await context.Athletes.FirstOrDefaultAsync(x => x.PhoneNumber == phoneNumber);
             if (athlete == null) return new ApiResponse() { Action = false, Message = "User is not an athlete" };
             athlete.WeightGoal = goalWeight;
             await context.SaveChangesAsync();
@@ -583,29 +584,34 @@ namespace sport_app_backend.Repository
 
         public async Task<ApiResponse> UpdateWeight(string phoneNumber, double weight)
         {
-            var athlete = context.Athletes.FirstOrDefault(x => x.PhoneNumber == phoneNumber);
+            var athlete = await context.Athletes
+                .Include(a => a.WeightEntries) // برای اطمینان از بارگذاری لیست وزن‌ها
+                .FirstOrDefaultAsync(x => x.PhoneNumber == phoneNumber);
+
             if (athlete is null)
-                return new ApiResponse()
-                    { Message = "User is not an athlete", Action = false }; // Ensure the user is an athlete
+                return new ApiResponse() { Message = "User is not an athlete", Action = false };
+
+            var today = DateTime.Today; 
+
             athlete.CurrentWeight = weight;
-            var weightEntry = context.WeightEntries.FirstOrDefault(x =>
-                x.AthleteId == athlete.Id && x.CurrentDate.Date == DateTime.Now.Date);
+
+            var weightEntry = athlete.WeightEntries
+                .FirstOrDefault(x => x.CurrentDate.Date == today);
+
             if (weightEntry is null)
             {
                 weightEntry = new WeightEntry()
                 {
-                    AthleteId = athlete.Id,
+                    AthleteId = athlete.Id, 
                     Athlete = athlete,
-                    CurrentDate = DateTime.Now,
+                    CurrentDate = today, 
                     Weight = weight
                 };
                 await context.WeightEntries.AddAsync(weightEntry);
-                athlete.WeightEntries.Add(weightEntry);
             }
             else
             {
                 weightEntry.Weight = weight;
-                weightEntry.CurrentDate = DateTime.Now;
             }
 
             await context.SaveChangesAsync();
@@ -617,36 +623,41 @@ namespace sport_app_backend.Repository
             };
         }
 
-
         public async Task<ApiResponse> UpdateHightWeight(string phoneNumber, double weight, int hight)
         {
-            var athlete = context.Athletes.FirstOrDefault(x => x.PhoneNumber == phoneNumber);
+            var athlete = await context.Athletes
+                .Include(a => a.WeightEntries) // برای اطمینان از بارگذاری لیست وزن‌ها
+                .FirstOrDefaultAsync(x => x.PhoneNumber == phoneNumber);
+
             if (athlete is null)
-                return new ApiResponse()
-                    { Message = "User is not an athlete", Action = false }; // Ensure the user is an athlete
+                return new ApiResponse() { Message = "User is not an athlete", Action = false };
+
             athlete.CurrentWeight = weight;
             athlete.Height = hight;
-            var weightEntry = context.WeightEntries.FirstOrDefault(x =>
-                x.AthleteId == athlete.Id && x.CurrentDate.Date == DateTime.Now.Date);
+
+            var today = DateTime.Today;
+
+            var weightEntry = athlete.WeightEntries
+                .FirstOrDefault(x => x.CurrentDate.Date == today);
+
             if (weightEntry is null)
             {
+                Console.WriteLine("**null");
                 weightEntry = new WeightEntry()
                 {
                     AthleteId = athlete.Id,
                     Athlete = athlete,
-                    CurrentDate = DateTime.Now,
+                    CurrentDate = today, // استفاده از متغیر today
                     Weight = weight
                 };
                 await context.WeightEntries.AddAsync(weightEntry);
-                athlete.WeightEntries.Add(weightEntry);
-                await context.SaveChangesAsync();
             }
             else
             {
                 weightEntry.Weight = weight;
-                weightEntry.CurrentDate = DateTime.Now;
-                await context.SaveChangesAsync();
             }
+
+            await context.SaveChangesAsync();
 
             return new ApiResponse()
             {
@@ -654,8 +665,6 @@ namespace sport_app_backend.Repository
                 Action = true
             };
         }
-
-
         public async Task<ApiResponse> GetLastMonthWeightReport(string phoneNumber)
         {
             var athlete = await context.Athletes.FirstOrDefaultAsync(x => x.PhoneNumber == phoneNumber);
