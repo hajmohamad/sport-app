@@ -26,11 +26,12 @@ namespace sport_app_backend.Repository
     {
         private static readonly HttpClient Client = new HttpClient();
 
-        private async Task<ApiResponse> ConfirmTransactionId(Payment payment)
+        private async Task<ApiResponse> ConfirmTransactionId(Payment payment,long refId)
         {
             try
             {
                 payment.CoachService.NumberOfSell += 1;
+                payment.RefId = refId;
 
                 var workoutProgram = new WorkoutProgram
                 {
@@ -78,8 +79,8 @@ namespace sport_app_backend.Repository
             {
                 return new ApiResponse
                 {
-                    Message = "Payment not found",
-                    Action = false
+                    Action = false,
+                    Message = "تراکنشی یافت نشد",
                 };
             }
 
@@ -99,34 +100,58 @@ namespace sport_app_backend.Repository
                 var response =
                     await Client.PostAsync("https://sandbox.zarinpal.com/pg/v4/payment/verify.json", content);
                 var responseContent = await response.Content.ReadAsStringAsync();
-                dynamic result = JsonConvert.DeserializeObject(responseContent);
+                var result = JsonConvert.DeserializeObject<ZarinpalVerifyApiResponseDto>(responseContent);
 
-                if (result?.data != null && result.data.code == 100)
+                switch (result?.Data)
                 {
-                    var confirmResult = await ConfirmTransactionId(payment);
-                    if (!confirmResult.Action)
+                    case { Code: 100 }:
                     {
-                        return confirmResult;
+                        var confirmResult = await ConfirmTransactionId(payment, result.Data.Ref_id);
+                        if (!confirmResult.Action)
+                        {
+                            return confirmResult;
+                        }
+
+                        return new ApiResponse
+                        {
+                            Action = true,
+                            Message = "پرداخت با موفقیت انجام شد ",
+                            Result = result.Data.Ref_id
+                        };
                     }
-
-                    return new ApiResponse
-                    {
-                        Action = true,
-                        Message = result.data.ref_id
-                    };
+                    case { Code: 101 }:
+                        return new ApiResponse
+                        {
+                            Action = true,
+                            Message = "پرداخت با موفقیت انجام شد و قبلا تایید شده است  ",
+                            Result = result.Data.Ref_id
+                        };
                 }
-                else
+
+                if (result?.Errors is not null)
                 {
-                    string error = result?.errors?.message ?? "Unknown error from payment gateway.";
+
+                    payment.PaymentStatus = PaymentStatus.FAILED;
+                    await context.SaveChangesAsync();
+
+                    var error = result?.Errors?.Select(e=>e.Message).ToString() ??
+                                "Unknown error from payment gateway.";
                     return new ApiResponse
                     {
                         Action = false,
-                        Message = error
+                        Message = "پرداخت ناموفق",
+                        Result = error
                     };
                 }
+                return new ApiResponse
+                {
+                    Action = false,
+                    Message = "خطا ناشناخته",
+                };
             }
             catch (Exception ex)
             {
+                Console.WriteLine($"Error verifying payment: {ex.Message}");
                 return new ApiResponse
                 {
                     Action = false,
@@ -135,18 +160,13 @@ namespace sport_app_backend.Repository
             }
         }
 
+
+
         private static async Task<ZarinPalPaymentResponseDto> _requestPaymentAsync(ZarinPalPaymentRequestDto request)
         {
-            var data = new
-            {
-                merchant_id = request.merchant_id,
-                amount = request.amount,
-                callback_url = request.callback_url,
-                description = request.description,
-                currency = "IRT"
-            };
+          
 
-            var jsonData = JsonConvert.SerializeObject(data);
+            var jsonData = JsonConvert.SerializeObject(request);
             var content = new StringContent(jsonData, Encoding.UTF8, "application/json");
 
             try
@@ -211,7 +231,7 @@ namespace sport_app_backend.Repository
             var zarinPalResponse = await _requestPaymentAsync(new ZarinPalPaymentRequestDto
             {
                 amount = (long)coachService.Price,
-                callback_url = "https://charset7.liara.run/api/Athlete/VerifyPayment",
+                callback_url = "https://chaarset.ir/payment/verify",
                 description = "خرید",
                 Mobile = athlete.PhoneNumber
             });
@@ -1103,40 +1123,51 @@ namespace sport_app_backend.Repository
         public async Task<ApiResponse> FinishTrainingSession(string phoneNumber,
             FinishTrainingSessionDto finishTrainingSessionDto)
         {
-            var athlete = await context.Athletes.FirstOrDefaultAsync(x => x.PhoneNumber == phoneNumber);
-            if (athlete is null) return new ApiResponse() { Message = "Athlete not found", Action = false };
-
-            var trainingSession = await context.TrainingSessions
-                .Include(ts => ts.WorkoutProgram) 
-                .FirstOrDefaultAsync(z => z.Id == finishTrainingSessionDto.TrainingSessionId);
-
-            if (trainingSession is null)
-                return new ApiResponse() { Message = "trainingSession not found", Action = false };
-    
-        
-            trainingSession.TrainingSessionStatus = TrainingSessionStatus.COMPLETED;
-            trainingSession.WorkoutProgram.LastExerciseDate = DateTime.Now.Date;
-            trainingSession.WorkoutProgram.CompletedSessionCount++; 
-
-            var activity = new Activity()
+            try
             {
-                Athlete = athlete,
-                Duration = finishTrainingSessionDto.Duration,
-                CaloriesLost = finishTrainingSessionDto.CaloriesLost,
-                ActivityCategory = ActivityCategory.EXERCISE,
-                Name = finishTrainingSessionDto.TrainingSessionName,
-                Date = DateTime.Now.Date
-            };
+                var athlete = await context.Athletes.FirstOrDefaultAsync(x => x.PhoneNumber == phoneNumber);
+                if (athlete is null) return new ApiResponse() { Message = "Athlete not found", Action = false };
 
-            await context.Activities.AddAsync(activity);
-            await context.SaveChangesAsync();
-    
-            return new ApiResponse()
+                var trainingSession = await context.TrainingSessions
+                    .Include(ts => ts.WorkoutProgram)
+                    .FirstOrDefaultAsync(z => z.Id == finishTrainingSessionDto.TrainingSessionId);
+
+                if (trainingSession is null)
+                    return new ApiResponse() { Message = "trainingSession not found", Action = false };
+
+
+                trainingSession.TrainingSessionStatus = TrainingSessionStatus.COMPLETED;
+                trainingSession.WorkoutProgram.LastExerciseDate = DateTime.Now.Date;
+                trainingSession.WorkoutProgram.CompletedSessionCount++;
+
+                var activity = new Activity()
+                {
+                    Athlete = athlete,
+                    Duration = finishTrainingSessionDto.Duration,
+                    CaloriesLost = finishTrainingSessionDto.CaloriesLost,
+                    ActivityCategory = ActivityCategory.EXERCISE,
+                    Name = finishTrainingSessionDto.TrainingSessionName,
+                    Date = DateTime.Now.Date
+                };
+
+                await context.Activities.AddAsync(activity);
+                await context.SaveChangesAsync();
+
+                return new ApiResponse()
+                {
+                    Action = true,
+                    Message = "Finish Training session",
+                    Result = activity
+                };
+            }
+            catch (Exception ex)
             {
-                Action = true,
-                Message = "Finish Training session",
-                Result = activity
-            };
+                return new ApiResponse
+                {
+                    Action = false,
+                    Message = $"Error finishing: {ex.Message}"
+                };
+            } 
         }
 
 

@@ -25,4 +25,5 @@ public class Payment
     public required AthleteQuestion AthleteQuestion { get; set; }
     public int AthleteQuestionId { get; set; }
     public  WorkoutProgram? WorkoutProgram { get; set; }
+    public long RefId { get; set; }
 }

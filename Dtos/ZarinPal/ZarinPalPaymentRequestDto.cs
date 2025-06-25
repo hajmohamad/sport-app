@@ -7,5 +7,7 @@ public class ZarinPalPaymentRequestDto
     public string? description { get; set; }
     public long amount { get; set; }
     public string? Mobile { get; set; }
+    public string currency { get; set; } = "IRT";
+
 
 }

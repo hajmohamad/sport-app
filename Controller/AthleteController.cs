@@ -245,10 +245,11 @@ namespace sport_app_backend.Controller
         [Authorize(Roles = "Athlete")]
         public async Task<IActionResult> GetCoaches()
         {
-            var resualt = await context.Users.Where(c => c.TypeOfUser == TypeOfUser.COACH).ToListAsync();
+            var result  = await context.Users.Where(c => c.TypeOfUser == TypeOfUser.COACH&&
+                                                         !string.IsNullOrEmpty(c.FirstName)).ToListAsync();
             return Ok(new ApiResponse()
             {
-                Action = true, Message = "Coaches found", Result = resualt.Select(c => c.ToCoachForSearch()).ToList()
+                Action = true, Message = "Coaches found", Result = result .Select(c => c.ToCoachForSearch()).ToList()
             });
         }
 
@@ -607,9 +608,10 @@ namespace sport_app_backend.Controller
             return Ok(result);
         }
         [HttpGet("VerifyPayment")]
+        
         public async Task<IActionResult> VerifyPayment([FromQuery] string Authority, [FromQuery] string Status)
         {
-            if (Status != "OK")
+            if (Authority != "OK")
                 return BadRequest("پرداخت توسط کاربر لغو شد.");
 
             var verifyRequest = new ZarinPalVerifyRequestDto
@@ -621,13 +623,10 @@ namespace sport_app_backend.Controller
 
             if (result.Action)
             {
-                return Ok($"پرداخت با موفقیت انجام شد. شماره پیگیری: {result.Result}");
+                return Ok(result);
             }
-            else
-            {
-                return BadRequest($"خطا در تایید پرداخت: {result.Message}");
-            }
-        }
 
+            return BadRequest(result);
+        }
     }
 }
