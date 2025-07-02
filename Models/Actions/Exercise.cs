@@ -8,20 +8,20 @@ public class Exercise
     [Key]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int Id { get; set; }
-    [MaxLength(30)]
+    [MaxLength(60)]
     public required string EnglishName { get; set; }
-    [MaxLength(30)]
+    [MaxLength(60)]
     public required string PersianName { get; set; }
-    [MaxLength(150)]
+    [MaxLength(170)]
     public string ImageLink { get; set; } = string.Empty;
-    [MaxLength(150)]
+    [MaxLength(170)]
     public string VideoLink { get; set; } = string.Empty;
     [MaxLength(3000)]
     public required string Description { get; set; }
     public double Met { get; set; }
 
     public ExerciseLevel ExerciseLevel { get; set; } = ExerciseLevel.BEGINNER;
-    [MaxLength(150)]
+    [MaxLength(100)]
     public List<MuscleGroup> TargetMuscles { get; set; } = [];
     public MuscleGroup BaseMuscle { get; set; }
     public BaseCategory BaseCategory { get; set; }
