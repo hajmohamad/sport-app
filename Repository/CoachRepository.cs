@@ -27,6 +27,14 @@ namespace sport_app_backend.Repository
             if (coach is null)
                 return new ApiResponse()
                     { Message = "User is not a coach", Action = false }; // Ensure the user is a coach
+            if (addCoachingServiceDto.Price < 50000)
+            {
+                return new ApiResponse()
+                {
+                    Action = false,
+                    Message = "مبلغ وارد شده نمیتواند کمتر از 50 هزار تومان باشد"
+                };
+            }
             var coachingService = addCoachingServiceDto.ToCoachService(coach);
             coach.CoachingServices ??= [];
             coach.CoachingServices.Add(coachingService);
@@ -75,6 +83,14 @@ namespace sport_app_backend.Repository
             if (coach is null)
                 return new ApiResponse()
                     { Message = "User is not a coach", Action = false }; // Ensure the user is a coach
+            if (addCoachingServices.Price < 50000)
+            {
+                return new ApiResponse()
+                {
+                    Action = false,
+                    Message = "مبلغ وارد شده نمیتواند کمتر از 50 هزار تومان باشد"
+                };
+            }
             var coachingService = coach.CoachingServices
                 .FirstOrDefault(x => x.Id == id && !x.IsDeleted);
 

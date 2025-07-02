@@ -18,6 +18,7 @@ public class Exercise
     public string VideoLink { get; set; } = string.Empty;
     [MaxLength(3000)]
     public required string Description { get; set; }
+    public double Met { get; set; }
 
     public ExerciseLevel ExerciseLevel { get; set; } = ExerciseLevel.BEGINNER;
     [MaxLength(150)]

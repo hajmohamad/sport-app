@@ -85,7 +85,8 @@ namespace sport_app_backend.Mappers
                 Equipment = exercise.Equipment.ToString(),
                 ExerciseType = exercise.ExerciseType.ToString(),
                 Level = exercise.ExerciseLevel.ToString(),
-                View = exercise.Views
+                View = exercise.Views,
+                Met = exercise.Met 
                 
             };
 
@@ -107,6 +108,7 @@ namespace sport_app_backend.Mappers
                 VideoLink = exercise.VideoLink,
                 BaseCategory = exercise.BaseMuscle.ToString(),
                 ExerciseLevel = exercise.ExerciseLevel.ToString(),
+                Met = exercise.Met
             };
         }
     }

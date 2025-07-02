@@ -14,7 +14,7 @@ public class ExerciseDto
     public string BaseCategory { get; set; }= string.Empty;
     public string ExerciseLevel { get; set; }= string.Empty;
     public string Mechanics { get; set; }= string.Empty;
-   
+    public required double Met { get; set; }
 
 
 }

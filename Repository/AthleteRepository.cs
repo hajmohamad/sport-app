@@ -174,26 +174,24 @@ namespace sport_app_backend.Repository
                 var response =
                     await Client.PostAsync("https://sandbox.zarinpal.com/pg/v4/payment/request.json", content);
                 var responseContent = await response.Content.ReadAsStringAsync();
-                dynamic result = JsonConvert.DeserializeObject(responseContent);
+                dynamic result = JsonConvert.DeserializeObject(responseContent) ;
 
-                if (result?.data != null && result.data.code == 100)
-                {
-                    var authority = result.data.authority;
-                    var paymentUrl = $"https://sandbox.zarinpal.com/pg/StartPay/{authority}";
-
+                if (result?.data == null || result?.data.code != 100)
                     return new ZarinPalPaymentResponseDto
                     {
-                        PaymentUrl = paymentUrl,
-                        Authority = authority,
-                        IsSuccessful = true
+                        IsSuccessful = false,
+                        ErrorMessage = result?.errors?.message ?? "Unknown error"
                     };
-                }
+                var authority = result?.data.authority;
+                var paymentUrl = $"https://sandbox.zarinpal.com/pg/StartPay/{authority}";
 
                 return new ZarinPalPaymentResponseDto
                 {
-                    IsSuccessful = false,
-                    ErrorMessage = result?.errors?.message ?? "Unknown error"
+                    PaymentUrl = paymentUrl,
+                    Authority = authority,
+                    IsSuccessful = true
                 };
+
             }
             catch (Exception ex)
             {
@@ -413,6 +411,11 @@ namespace sport_app_backend.Repository
             if (athlete is null)
                 return new ApiResponse()
                     { Message = "User is not an athlete", Action = false }; // Ensure the user is an athlete
+            if (waterInTakeDto.DailyCupOfWater < 0 || waterInTakeDto.Reminder < 0)
+            {
+                return new ApiResponse()
+                    { Message = "your data input is negative", Action = false };
+            }
             var waterIntake = new WaterInTake
             {
                 AthleteId = athlete.Id,

@@ -11,13 +11,20 @@
 	<s:String x:Key="/Default/Environment/AssemblyExplorer/XmlDocument/@EntryValue">&lt;AssemblyExplorer&gt;&#xD;
   &lt;Assembly Path="C:\Users\Mohamad\.nuget\packages\coreadmin\3.0.0\lib\net8.0\DotNetEd.CoreAdmin.dll" /&gt;&#xD;
 &lt;/AssemblyExplorer&gt;</s:String>
-	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=b0162d81_002Db084_002D4338_002Dbbad_002Da320c9d6237b/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="All tests from Solution" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=a96ffe3b_002Dfc64_002D412f_002D8c18_002D740928fa63a3/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="AthleteRepositoryTests" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+  &lt;TestAncestor&gt;&#xD;
+    &lt;TestId&gt;xUnit::27B63680-A5B7-55C3-C88B-EBD5D7F12023::net8.0::TestProject.AthleteRepositoryTests&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::18D7450E-B72A-4E2E-A26B-320A9FB870E0::net8.0::TestProject.CoachRepositoryTests&lt;/TestId&gt;&#xD;
+  &lt;/TestAncestor&gt;&#xD;
+&lt;/SessionState&gt;</s:String>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=b0162d81_002Db084_002D4338_002Dbbad_002Da320c9d6237b/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="All tests from Solution" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
   &lt;Or&gt;&#xD;
     &lt;Not&gt;&#xD;
       &lt;Project Location="D:\403-1\sport-app1" Presentation="&amp;lt;sport-app-backend&amp;gt;" /&gt;&#xD;
     &lt;/Not&gt;&#xD;
     &lt;TestAncestor&gt;&#xD;
       &lt;TestId&gt;xUnit::27B63680-A5B7-55C3-C88B-EBD5D7F12023::net8.0::TestProject.GetActivityTest&lt;/TestId&gt;&#xD;
+      &lt;TestId&gt;xUnit::27B63680-A5B7-55C3-C88B-EBD5D7F12023::net8.0::TestProject.AthleteRepositoryTests&lt;/TestId&gt;&#xD;
     &lt;/TestAncestor&gt;&#xD;
   &lt;/Or&gt;&#xD;
 &lt;/SessionState&gt;</s:String>
