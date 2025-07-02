@@ -28,6 +28,9 @@ namespace sport_app_backend.Dtos
         public List<CoachingServiceResponse> CoachServices { get; set; } = [];
         public required int NumberOfAthletes { get; set; }
         public required int NumberOfProgram { get; set; }
+        public string InstagramLink { get; set; } = "";
+        public string TelegramLink { get; set; } = "";
+        public string WhatsApp { get; set; } = "";
 
     }
 }

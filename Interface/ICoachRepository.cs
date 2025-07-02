@@ -18,5 +18,11 @@ namespace sport_app_backend.Interface
         Task<ApiResponse> GetWorkoutProgram(string phoneNumber, int paymentId);
         Task<ApiResponse> GetCoachDashboard(string phoneNumber);
         Task<ApiResponse> GetMonthlyIncomeChart(string phoneNumber, int year, int month);
+        Task<ApiResponse> UpdateSocialMediaLink(string phoneNumber, SocialMediaLinkDto socialMediaLinkDto);
+        Task<ApiResponse> GetSocialMediaLink(string phoneNumber);
+        Task<ApiResponse> GetAthletesWithStatus(string coachPhoneNumber);
+        Task<ApiResponse> GetTransactions(string coachPhoneNumber);
+
+
     }
 }

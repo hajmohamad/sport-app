@@ -13,5 +13,6 @@ namespace sport_app_backend.Interface
         Task<ApiResponse> ConfirmTransactionId(string TransactionId);
         Task<ApiResponse> BackfillWorkoutProgramStats();
 
+        Task<ApiResponse> VerifiedCoach(string coachPhoneNumber);
     }
 }

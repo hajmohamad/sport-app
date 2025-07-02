@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
+using Humanizer;
 using Microsoft.EntityFrameworkCore;
 using sport_app_backend.Data;
 using sport_app_backend.Dtos;
@@ -21,7 +22,6 @@ namespace sport_app_backend.Repository
     {
         public async Task<ApiResponse> AddCoachingServices(string phoneNumber, AddCoachServiceDto addCoachingServiceDto)
         {
-
             var coach = await context.Coaches.Include(c => c.CoachingServices)
                 .FirstOrDefaultAsync(c => c.PhoneNumber == phoneNumber);
             if (coach is null)
@@ -35,6 +35,7 @@ namespace sport_app_backend.Repository
                     Message = "مبلغ وارد شده نمیتواند کمتر از 50 هزار تومان باشد"
                 };
             }
+
             var coachingService = addCoachingServiceDto.ToCoachService(coach);
             coach.CoachingServices ??= [];
             coach.CoachingServices.Add(coachingService);
@@ -44,7 +45,6 @@ namespace sport_app_backend.Repository
             {
                 Message = "Coaching Service added successfully",
                 Action = true
-
             };
         }
 
@@ -70,14 +70,12 @@ namespace sport_app_backend.Repository
                 {
                     Questions = true
                 }
-
             };
         }
 
         public async Task<ApiResponse> UpdateCoachingService(string phoneNumber, int id,
             AddCoachServiceDto addCoachingServices)
         {
-
             var coach = await context.Coaches.Include(x => x.CoachingServices)
                 .FirstOrDefaultAsync(x => x.PhoneNumber == phoneNumber);
             if (coach is null)
@@ -91,6 +89,7 @@ namespace sport_app_backend.Repository
                     Message = "مبلغ وارد شده نمیتواند کمتر از 50 هزار تومان باشد"
                 };
             }
+
             var coachingService = coach.CoachingServices
                 .FirstOrDefault(x => x.Id == id && !x.IsDeleted);
 
@@ -113,8 +112,6 @@ namespace sport_app_backend.Repository
             else
             {
                 coachingService.UpdateCoachServices(addCoachingServices);
-
-
             }
 
             await context.SaveChangesAsync();
@@ -124,7 +121,6 @@ namespace sport_app_backend.Repository
                 Action = true,
                 Result = coachingService.ToCoachingServiceResponse()
             };
-
         }
 
         public async Task<ApiResponse> DeleteCoachingService(string phoneNumber, int id)
@@ -169,7 +165,6 @@ namespace sport_app_backend.Repository
                 .ToListAsync();
 
 
-
             return new ApiResponse()
             {
                 Message = "Payments found",
@@ -198,10 +193,8 @@ namespace sport_app_backend.Repository
             {
                 result.WorkoutProgram.ProgramInDays.Add(new ProgramInDayDto()
                 {
-
                     ForWhichDay = 1,
                     AllExerciseInDays = []
-
                 });
             }
 
@@ -211,11 +204,7 @@ namespace sport_app_backend.Repository
                 Action = true,
                 Result = result
             };
-
         }
-
-
-
 
 
         public async Task<ApiResponse> GetProfile(string phoneNumber)
@@ -237,7 +226,6 @@ namespace sport_app_backend.Repository
                 Action = true, Message = "Coach found",
                 Result = user.ToCoachProfileResponseDto(coachingServiceDto, payments)
             };
-
         }
 
         public async Task<ApiResponse> SaveWorkoutProgram(string phoneNumber, int paymentId,
@@ -271,8 +259,6 @@ namespace sport_app_backend.Repository
 
                 if (workoutProgramDto.Publish)
                 {
-
-
                     workoutProgram.Status = WorkoutProgramStatus.NOTACTIVE;
                     var athlete = await context.Athletes.FirstOrDefaultAsync(a => a.Id == workoutProgram.AthleteId);
                     if (athlete is null)
@@ -291,10 +277,7 @@ namespace sport_app_backend.Repository
                         await AddTrainingSession(paymentId);
                         workoutProgram.Status = WorkoutProgramStatus.ACTIVE;
                         athlete.ActiveWorkoutProgramId = workoutProgram.Id;
-
-
                     }
-
                 }
 
                 await context.SaveChangesAsync();
@@ -313,9 +296,6 @@ namespace sport_app_backend.Repository
                     Message = e.Message
                 };
             }
-
-
-
         }
 
         private async Task AddTrainingSession(int paymentId)
@@ -348,8 +328,6 @@ namespace sport_app_backend.Repository
                     WorkoutProgramId = workoutProgram.Id
                 });
             }
-
-
         }
 
         public async Task<ApiResponse> GetWorkoutProgram(string phoneNumber, int paymentId)
@@ -367,7 +345,6 @@ namespace sport_app_backend.Repository
                 Message = "workout program found",
                 Result = workoutProgram.ProgramInDays.ToProgramInDayDto()
             };
-
         }
 
         public async Task<ApiResponse> GetCoachDashboard(string phoneNumber)
@@ -529,5 +506,163 @@ namespace sport_app_backend.Repository
             return new ApiResponse
                 { Action = true, Message = "نمودار درآمد ماهانه با موفقیت دریافت شد.", Result = monthlyIncome };
         }
+
+        public async Task<ApiResponse> UpdateSocialMediaLink(string phoneNumber, SocialMediaLinkDto socialMediaLinkDto)
+        {
+            var coach = await context.Coaches.FirstOrDefaultAsync(c => c.PhoneNumber == phoneNumber);
+            if (coach == null)
+            {
+                return new ApiResponse { Action = false, Message = "مربی یافت نشد." };
+            }
+
+            coach.WhatsApp = socialMediaLinkDto.WhatsApp;
+            coach.TelegramLink = socialMediaLinkDto.TelegramLink;
+            coach.InstagramLink = socialMediaLinkDto.InstagramLink;
+            await context.SaveChangesAsync();
+
+            return new ApiResponse { Action = true, Message = "لینک ها تغییر پیدا کرد" };
+        }
+
+        public async Task<ApiResponse> GetSocialMediaLink(string phoneNumber)
+        {
+            var coach = await context.Coaches.FirstOrDefaultAsync(c => c.PhoneNumber == phoneNumber);
+            if (coach == null)
+            {
+                return new ApiResponse { Action = false, Message = "مربی یافت نشد." };
+            }
+
+            return new ApiResponse
+            {
+                Action = true, Message = "دریافت لینک ها",
+                Result = new
+                {
+                    coach.WhatsApp,
+                    coach.TelegramLink,
+                    coach.InstagramLink
+                }
+            };
+        }
+
+
+        public async Task<ApiResponse> GetAthletesWithStatus(string coachPhoneNumber)
+        {
+            var coach = await context.Coaches.FirstOrDefaultAsync(c => c.PhoneNumber == coachPhoneNumber);
+            if (coach == null)
+            {
+                return new ApiResponse { Action = false, Message = "مربی یافت نشد." };
+            }
+
+            // واکشی تمام پرداخت‌های موفق که به این مربی و یک برنامه تمرینی متصل هستند
+            var payments = await context.Payments
+                .Where(p => p.CoachId == coach.Id && p.PaymentStatus == PaymentStatus.SUCCESS &&
+                            p.WorkoutProgram != null)
+                .Include(p => p.Athlete).ThenInclude(a => a.User)
+                .Include(p => p.WorkoutProgram)
+                .ToListAsync();
+
+            // گروه‌بندی بر اساس ورزشکار برای جلوگیری از نمایش تکراری
+            var athletes = payments
+                .GroupBy(p => p.Athlete)
+                .Select(g => g.Key)
+                .ToList();
+
+            var athleteDtos = new List<AthleteStatusDto>();
+
+            foreach (var athlete in athletes)
+            {
+                var user = athlete.User;
+
+
+                var relevantProgram = payments
+                    .Where(p => p.AthleteId == athlete.Id)
+                    .Select(p => p.WorkoutProgram)
+                    .OrderByDescending(wp => wp.Status == WorkoutProgramStatus.ACTIVE) // اولویت با فعال
+                    .ThenByDescending(wp => wp.StartDate) // سپس جدیدترین
+                    .FirstOrDefault();
+
+                if (relevantProgram == null) continue;
+
+                var statusInfo = GetStatus(relevantProgram);
+
+                athleteDtos.Add(new AthleteStatusDto
+                {
+                    AthleteId = athlete.Id,
+                    FullName = $"{user.FirstName} {user.LastName}",
+                    PhoneNumber = user.PhoneNumber,
+                    ProfileImageUrl = user.ImageProfile,
+                    Status = statusInfo,
+                    Service = relevantProgram.Title,
+                    LastWorkout = relevantProgram.LastExerciseDate.ToString()??""
+                });
+            }
+
+            return new ApiResponse
+                { Action = true, Message = "لیست شاگردان با موفقیت دریافت شد.", Result = athleteDtos };
+        }
+        public async Task<ApiResponse> GetTransactions(string coachPhoneNumber)
+        {
+            var coach = await context.Coaches.FirstOrDefaultAsync(c => c.PhoneNumber == coachPhoneNumber);
+            if (coach == null)
+            {
+                return new ApiResponse { Action = false, Message = "مربی یافت نشد." };
+            }
+
+            var payments = await context.Payments
+                .Where(p => p.CoachId == coach.Id && p.PaymentStatus == PaymentStatus.SUCCESS)
+                .Include(p => p.Athlete.User)
+                .Include(p => p.WorkoutProgram)
+                .Include(p => p.CoachService)
+                .OrderByDescending(p => p.PaymentDate) // جدیدترین‌ها اول نمایش داده می‌شوند
+                .ToListAsync();
+
+            var transactionDtos = payments.Select(p =>
+            {
+                var programStatus = (p.WorkoutProgram != null && 
+                                     p.WorkoutProgram.Status != WorkoutProgramStatus.WRITING && 
+                                     p.WorkoutProgram.Status != WorkoutProgramStatus.NOTSTARTED)
+                    ? "طراحی شده"
+                    : "طراحی نشده";
+
+                return new TransactionDto
+                {
+                    Amount = $"{p.Amount:N0} ریال", // فرمت‌بندی عدد به همراه جداکننده هزارگان
+                    Type = "افزایش",
+                    Date = p.PaymentDate.ToString(CultureInfo.CurrentCulture),
+                    Description = $"خرید سرویس {p.CoachService.Title}",
+                    BuyerName = p.Athlete?.User != null ? $"{p.Athlete.User.FirstName} {p.Athlete.User.LastName}" : "نامشخص",
+                    ReferenceId = p.RefId.ToString(), // شناسه خرید یا همان RefId
+                    ProgramStatus = programStatus
+                };
+            }).ToList();
+
+            return new ApiResponse { Action = true, Message = "لیست تراکنش‌ها با موفقیت دریافت شد.", Result = transactionDtos };
+        }
+
+   
+        private static string  GetStatus(WorkoutProgram program)
+        {
+            if (program.Status != WorkoutProgramStatus.ACTIVE)
+            {
+                return ("Inactive");
+            }
+
+          
+            if (program.LastExerciseDate == null || program.LastExerciseDate < DateTime.Now.Date.AddDays(-4))
+            {
+                return ("NeedsFollowUp");
+            }
+
+      
+            if ((program.TotalSessionCount > 0) && (program.TotalSessionCount - program.CompletedSessionCount) <= 5)
+            {
+                return ("NearingCompletion");
+            }
+
+        
+            return ("Active");
+        }
+   
+      
+  
     }
 }

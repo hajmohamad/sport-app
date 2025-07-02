@@ -11,14 +11,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="5687a4a9-3eda-4338-b6b2-29a217508823" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/workspace.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Dtos/SocialMediaLinkDto.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Models/TrainingPlan/TrainingParameters.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Controller/AthleteController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Controller/AthleteController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Program.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Controller/CoachController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Controller/CoachController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Interface/IAthleteRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Interface/IAthleteRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Interface/ICoachRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Interface/ICoachRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Models/Account/Coach/Coach.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/Account/Coach/Coach.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Repository/AthleteRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Repository/AthleteRepository.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Repository/CoachRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Repository/CoachRepository.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TestProject/TestProject.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/TestProject/TestProject.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sport-app-backend.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/sport-app-backend.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sport-app-backend.sln.DotSettings.user" beforeDir="false" afterPath="$PROJECT_DIR$/sport-app-backend.sln.DotSettings.user" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -47,11 +48,28 @@
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/294078ecfce6fdb942ecfee089f09717de7a6fcfe5efd9fdb6f4f93c0fb4813/ActionMethodExecutor.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/3b92f859131bde25d0f7a63de08963e995d1e1426e584dfd4b8e833d2d3dba/ExecutionTimer.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/fb367341658aaedd7de424d4c9189db33c4387e268dcc4011918569442ab12/AsyncTaskMethodBuilderT.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="mock://D:/403-1/sport-app1/Dtos/AllExerciseResponseDto.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Dtos/ExerciseDto.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Mappers/ExercisesMappers.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Mappers/ProgramMappers.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="mock://D:/403-1/sport-app1/Migrations/ApplicationDbContextModelSnapshot.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/403-1/sport-app1/Migrations/ApplicationDbContextModelSnapshot.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/403-1/sport-app1/Migrations/ApplicationDbContextModelSnapshot.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/403-1/sport-app1/Migrations/ApplicationDbContextModelSnapshot.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/403-1/sport-app1/Migrations/ApplicationDbContextModelSnapshot.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Models/Actions/Exercise.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="mock://D:/403-1/sport-app1/Models/Actions/Exercise.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/403-1/sport-app1/Models/Actions/Exercise.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/403-1/sport-app1/Models/Actions/Exercise.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/403-1/sport-app1/Models/Actions/Exercise.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/403-1/sport-app1/Models/Actions/Exercise.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/403-1/sport-app1/Models/Actions/Exercise.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/403-1/sport-app1/Models/Actions/Exercise.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/403-1/sport-app1/Models/Actions/Exercise.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/403-1/sport-app1/Models/Actions/Exercise.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/403-1/sport-app1/Models/Actions/Exercise.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/403-1/sport-app1/Models/Actions/Exercise.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/403-1/sport-app1/Models/Actions/Exercise.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Program.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Repository/AthleteRepository.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Repository/UserRepository.cs" root0="FORCE_HIGHLIGHTING" />
@@ -69,23 +87,30 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;.NET Launch Settings Profile.sport-app-backend: https.executor&quot;: &quot;Debug&quot;,
-    &quot;Docker.Dockerfile.executor&quot;: &quot;Debug&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;com.codeium.enabled&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.keymap&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    ".NET Launch Settings Profile.sport-app-backend: https.executor": "Debug",
+    "Docker.Dockerfile.executor": "Debug",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "com.codeium.enabled": "true",
+    "database.data.extractors.current.export.id": "Comma-separated (CSV)_id",
+    "git-widget-placeholder": "master",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "preferences.keymap",
+    "vue.rearranger.settings.migration": "true"
+  },
+  "keyToStringList": {
+    "DatabaseDriversLRU": [
+      "sqlserver",
+      "mysql"
+    ]
   }
-}</component>
+}]]></component>
   <component name="RunManager" selected=".NET Launch Settings Profile.sport-app-backend: https">
     <configuration name="sport-app-backend: IIS Express" type="LaunchSettings" factoryName=".NET Launch Settings Profile">
       <option name="LAUNCH_PROFILE_PROJECT_FILE_PATH" value="$PROJECT_DIR$/sport-app-backend.csproj" />
@@ -187,6 +212,7 @@
       <workItem from="1751033882083" duration="4608000" />
       <workItem from="1751191332728" duration="566000" />
       <workItem from="1751292995816" duration="1786000" />
+      <workItem from="1751460519052" duration="7856000" />
     </task>
     <task id="LOCAL-00001" summary="add migration">
       <option name="closed" value="true" />
@@ -268,7 +294,15 @@
       <option name="project" value="LOCAL" />
       <updated>1750887981098</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="add met to Exercise.cs">
+      <option name="closed" value="true" />
+      <created>1751461061351</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1751461061351</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -299,7 +333,8 @@
     <MESSAGE value="remove back fill methode" />
     <MESSAGE value="fix weight bug" />
     <MESSAGE value="fix bugs" />
-    <option name="LAST_COMMIT_MESSAGE" value="fix bugs" />
+    <MESSAGE value="add met to Exercise.cs" />
+    <option name="LAST_COMMIT_MESSAGE" value="add met to Exercise.cs" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

@@ -161,9 +161,76 @@ namespace sport_app_backend.Controller
 
             return Ok(result);
         }
+        [HttpPut("UpdateSocialMediaLink")]
+        [Authorize(Roles = "Coach")]
+        public async Task<IActionResult> UpdateSocialMediaLink([FromBody] SocialMediaLinkDto socialMediaLinkDto)
+        {
+            var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
+            if (phoneNumber is null) 
+                return Unauthorized(new ApiResponse { Action = false, Message = "خطای احراز هویت." });
 
+            var result = await coachRepository.UpdateSocialMediaLink(phoneNumber,socialMediaLinkDto);
+
+            if (!result.Action) 
+                return BadRequest(result);
+
+            return Ok(result);
+        }
+        [HttpPut("GetSocialMediaLink")]
+        [Authorize(Roles = "Coach")]
+        public async Task<IActionResult> GetSocialMediaLink()
+        {
+            var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
+            if (phoneNumber is null) 
+                return Unauthorized(new ApiResponse { Action = false, Message = "خطای احراز هویت." });
+
+            var result = await coachRepository.GetSocialMediaLink(phoneNumber);
+
+            if (!result.Action) 
+                return BadRequest(result);
+
+            return Ok(result);
+        }
+        [HttpGet("GetStudentList")]
+        [Authorize(Roles = "Coach")]
+        public async Task<IActionResult> GetStudentList()
+        {
+            var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
+            if (string.IsNullOrEmpty(phoneNumber))
+            {
+                return Unauthorized(new ApiResponse { Action = false, Message = "خطای احراز هویت." });
+            }
+
+            var result = await coachRepository.GetAthletesWithStatus(phoneNumber);
+
+            if (!result.Action)
+            {
+                return BadRequest(result);
+            }
+
+            return Ok(result);
+        }
+        [HttpGet("GetTransactionList")]
+        [Authorize(Roles = "Coach")]
+        public async Task<IActionResult> GetTransactionList()
+        {
+            var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
+            if (string.IsNullOrEmpty(phoneNumber))
+            {
+                return Unauthorized(new ApiResponse { Action = false, Message = "خطای احراز هویت." });
+            }
+
+            var result = await coachRepository.GetTransactions(phoneNumber);
+
+            if (!result.Action)
+            {
+                return BadRequest(result);
+            }
+
+            return Ok(result);
+        }
       
     }
 
-    
+   
 }

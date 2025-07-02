@@ -52,5 +52,6 @@ namespace sport_app_backend.Interface
         public Task<ApiResponse> VerifyPaymentAsync(ZarinPalVerifyRequestDto request);
         public Task<ApiResponse> GetActivityPage(string phoneNumber);
 
+        public Task<ApiResponse>  CalculateCalories(string phoneNumber, int trainingSessionId);
     }
 }

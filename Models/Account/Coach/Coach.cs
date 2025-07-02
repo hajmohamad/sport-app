@@ -24,6 +24,16 @@ public class Coach
     public List<WorkoutProgram> WorkoutPrograms { get; set; } = [];
    
     public CoachQuestion? CoachQuestion { get; set; }
+    [StringLength(50)]
+    public string InstagramLink { get; set; } = "";
+    [StringLength(50)]
+    public string TelegramLink { get; set; } = "";
+    [StringLength(50)]
+    public string WhatsApp { get; set; } = "";
+
+    public bool Verified { get; set; } = false;
+
+
     [MaxLength(124)]
     public string HeadLine { get; set; } = "";
 

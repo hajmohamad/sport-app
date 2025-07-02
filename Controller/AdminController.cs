@@ -21,6 +21,14 @@ namespace sport_app_backend.Controller
             return Ok(result);
         
         }
+        [HttpPut("Verified_coach/{coachPhoneNumber}")]
+        public async Task<IActionResult> Verified_coach([FromRoute] string coachPhoneNumber)
+        {
+            var result = await adminRepository.VerifiedCoach(coachPhoneNumber);
+            if(result.Action == false) return BadRequest(result);
+            return Ok(result);
+        
+        }
        
     }
 

@@ -93,6 +93,20 @@ namespace sport_app_backend.Repository
                 Message = $"{updatedProgramsCount} برنامه تمرینی با موفقیت به‌روزرسانی و پر شد."
             };
         }
+
+        public async Task<ApiResponse> VerifiedCoach(string coachPhoneNumber)
+        {
+            var coach = await context.Coaches.FirstOrDefaultAsync(c => c.PhoneNumber == coachPhoneNumber);
+            if (coach is null) return new ApiResponse() { Message = "coach not found", Action = false };
+            coach.Verified = true;
+            await context.SaveChangesAsync();
+            return new ApiResponse()
+            {
+                Message = "coach Verified successfully",
+                Action = true
+            }; 
+
+        }
     }
     
 }

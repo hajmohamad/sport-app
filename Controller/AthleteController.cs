@@ -245,7 +245,8 @@ namespace sport_app_backend.Controller
         [Authorize(Roles = "Athlete")]
         public async Task<IActionResult> GetCoaches()
         {
-            var result  = await context.Users.Where(c => c.TypeOfUser == TypeOfUser.COACH&&
+            var result  = await context.Users.
+                Where(c => c.TypeOfUser == TypeOfUser.COACH&& c.Coach.Verified&&
                                                          !string.IsNullOrEmpty(c.FirstName)).ToListAsync();
             return Ok(new ApiResponse()
             {
@@ -595,6 +596,16 @@ namespace sport_app_backend.Controller
             return Ok(result);
 
         }
+        [HttpGet("CalculateCalories/{trainingSessionId}")]
+        [Authorize(Roles = "Athlete")]
+        public async Task<IActionResult> CalculateCalories([FromRoute] int trainingSessionId)
+        {
+            var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
+            if (phoneNumber is null) return BadRequest("PhoneNumber is null");
+            var result = await athleteRepository.CalculateCalories(phoneNumber, trainingSessionId);
+            if (!result.Action) return BadRequest(result);
+            return Ok(result);
+        }
 
 
         [HttpPut("ResetTrainingSession/{trainingSessionId}")]
@@ -628,5 +639,6 @@ namespace sport_app_backend.Controller
 
             return BadRequest(result);
         }
+        
     }
 }

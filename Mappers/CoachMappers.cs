@@ -109,7 +109,10 @@ namespace sport_app_backend.Mappers
                                     .Select(x => x.ToCoachingServiceResponse())
                                     .ToList() ,
                 NumberOfAthletes = numberOfAthlete,
-                NumberOfProgram = numberOfProgram
+                NumberOfProgram = numberOfProgram,
+                InstagramLink = coach.InstagramLink,
+                TelegramLink = coach.TelegramLink,
+                WhatsApp = coach.WhatsApp
             };
         }
 
