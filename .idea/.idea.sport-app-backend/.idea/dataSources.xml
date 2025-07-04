@@ -6,6 +6,16 @@
       <synchronize>true</synchronize>
       <jdbc-driver>com.mysql.cj.jdbc.Driver</jdbc-driver>
       <jdbc-url>jdbc:mysql://kamet.liara.cloud	 :32952/reverent_wu</jdbc-url>
+      <jdbc-additional-properties>
+        <property name="EXTERNAL_DATA_PATH" value="C:\Users\Mohamad\Desktop\external-data-mysql.xml" />
+      </jdbc-additional-properties>
+      <working-dir>$ProjectFileDir$</working-dir>
+    </data-source>
+    <data-source source="LOCAL" name="@localhost" uuid="857ae735-1ac7-478d-93ef-643e1ca02ef3">
+      <driver-ref>mysql.8</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>com.mysql.cj.jdbc.Driver</jdbc-driver>
+      <jdbc-url>jdbc:mysql://localhost:3306</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
   </component>

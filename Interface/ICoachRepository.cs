@@ -22,6 +22,7 @@ namespace sport_app_backend.Interface
         Task<ApiResponse> GetSocialMediaLink(string phoneNumber);
         Task<ApiResponse> GetAthletesWithStatus(string coachPhoneNumber);
         Task<ApiResponse> GetTransactions(string coachPhoneNumber);
+        Task<ApiResponse> CreatePayoutRequest(string coachPhoneNumber);
 
 
     }

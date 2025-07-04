@@ -37,4 +37,8 @@ public class Coach
     [MaxLength(124)]
     public string HeadLine { get; set; } = "";
 
+    public double Amount { get; set; } = 0;
+
+    public double ServiceFee { get; set; } = 0;
+
 }

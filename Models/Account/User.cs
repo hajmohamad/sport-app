@@ -41,6 +41,6 @@ public class User
     public Coach? Coach { get; set; }
     public TypeOfUser TypeOfUser { get; set; }
     public string? RefreshToken { get; set; }
-    public DateTime RefreshTokeNExpire { get; set; }
+    // public DateTime RefreshTokeNExpire { get; set; }
 
 }

@@ -44,6 +44,7 @@ namespace sport_app_backend.Repository
                     Payment = payment,
                     PaymentId = payment.Id
                 };
+                payment.Coach.Amount += (payment.Amount - payment.Coach.ServiceFee);
 
                 payment.WorkoutProgram = workoutProgram;
                 payment.PaymentStatus = PaymentStatus.SUCCESS;
@@ -99,7 +100,7 @@ namespace sport_app_backend.Repository
             try
             {
                 var response =
-                    await Client.PostAsync("https://sandbox.zarinpal.com/pg/v4/payment/verify.json", content);
+                    await Client.PostAsync("https://payment.zarinpal.com/pg/v4/payment/verify.json", content);
                 var responseContent = await response.Content.ReadAsStringAsync();
                 var result = JsonConvert.DeserializeObject<ZarinpalVerifyApiResponseDto>(responseContent);
 
@@ -170,7 +171,7 @@ namespace sport_app_backend.Repository
             try
             {
                 var response =
-                    await Client.PostAsync("https://sandbox.zarinpal.com/pg/v4/payment/request.json", content);
+                    await Client.PostAsync("https://payment.zarinpal.com/pg/v4/payment/request.json", content);
                 var responseContent = await response.Content.ReadAsStringAsync();
                 dynamic result = JsonConvert.DeserializeObject(responseContent);
 
@@ -181,7 +182,7 @@ namespace sport_app_backend.Repository
                         ErrorMessage = result?.errors?.message ?? "Unknown error"
                     };
                 var authority = result?.data.authority;
-                var paymentUrl = $"https://sandbox.zarinpal.com/pg/StartPay/{authority}";
+                var paymentUrl = $"https://payment.zarinpal.com/pg/StartPay/{authority}";
 
                 return new ZarinPalPaymentResponseDto
                 {
@@ -998,29 +999,55 @@ namespace sport_app_backend.Repository
 
         public async Task<ApiResponse> ExerciseFeedBack(string phoneNumber, ExerciseFeedbackDto feedbackDto)
         {
-            var athlete = await context.Athletes.FirstOrDefaultAsync(x => x.PhoneNumber == phoneNumber);
-            if (athlete is null) return new ApiResponse() { Message = "Athlete not found! ", Action = false };
-            var singleExercise = await context.SingleExercises.Include(p => p.ProgramInDay)
-                .ThenInclude(w => w!.WorkoutProgram)
-                .FirstOrDefaultAsync(s => s.Id == feedbackDto.SingleExerciseId);
 
+            var athlete = await context.Athletes
+                .AsNoTracking()
+                .FirstOrDefaultAsync(x => x.PhoneNumber == phoneNumber);
+
+            if (athlete is null)
+            {
+                return new ApiResponse() { Message = "ورزشکار یافت نشد!", Action = false };
+            }
+
+ 
+            var trainingSession = await context.TrainingSessions
+                .AsNoTracking()
+                .Include(ts => ts.WorkoutProgram) 
+                .Include(ts => ts.ProgramInDay)
+                .ThenInclude(pid => pid.AllExerciseInDays) 
+                .FirstOrDefaultAsync(ts => ts.Id == feedbackDto.TrainingSessionId);
+
+          
+            if (trainingSession is null)
+            {
+                return new ApiResponse() { Message = "جلسه تمرینی یافت نشد!", Action = false };
+            }
+
+            if (trainingSession.WorkoutProgram?.AthleteId != athlete.Id)
+            {
+       
+                return new ApiResponse() { Message = "شما به این جلسه تمرینی دسترسی ندارید.", Action = false };
+            }
+
+            if (trainingSession.ProgramInDay.AllExerciseInDays.All(se => se.Id != feedbackDto.SingleExerciseId))
+            {
+            
+                return new ApiResponse() { Message = "تمرین مشخص شده در این جلسه وجود ندارد.", Action = false };
+            }
+
+      
             var feedback = feedbackDto.ToExerciseFeedback();
             feedback.AthleteId = athlete.Id;
-            if (singleExercise?.ProgramInDay?.WorkoutProgram != null)
-                feedback.CoachId = singleExercise.ProgramInDay.WorkoutProgram.CoachId;
-            feedback.SingleExercise =
-                await context.SingleExercises.FirstOrDefaultAsync(x => x.Id == feedbackDto.SingleExerciseId);
-            feedback.TrainingSession =
-                await context.TrainingSessions.FirstOrDefaultAsync(x => x.Id == feedbackDto.TrainingSessionId);
-
+            feedback.CoachId = trainingSession.WorkoutProgram.CoachId;
+        
             await context.ExerciseFeedbacks.AddAsync(feedback);
             await context.SaveChangesAsync();
 
             return new ApiResponse
             {
                 Action = true,
-                Message = "feedback saved.",
-                Result = feedback
+                Message = "فیدبک شما با موفقیت ثبت شد.",
+                Result = feedback 
             };
         }
 

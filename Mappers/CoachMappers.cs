@@ -1,3 +1,4 @@
+using System.Globalization;
 using sport_app_backend.Dtos;
 using sport_app_backend.Models.Account;
 using sport_app_backend.Models.Payments;
@@ -133,6 +134,18 @@ namespace sport_app_backend.Mappers
                 NumberOfSell = coachService.NumberOfSell
                 
                 
+            };
+        }
+
+        public static CoachPayoutDto ToCoachPayoutDto(this CoachPayout coachPayout)
+        {
+            return new CoachPayoutDto()
+            {
+                Amount = coachPayout.Amount,
+                RequestDate = coachPayout.RequestDate.ToString(CultureInfo.InvariantCulture),
+                Status = coachPayout.Status.ToString(),
+                PaidDate = coachPayout.PaidDate.ToString() ?? "",
+                TransactionReference = coachPayout.TransactionReference??""
             };
         }
 

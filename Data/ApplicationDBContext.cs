@@ -56,4 +56,6 @@ public class ApplicationDbContext : DbContext
     public DbSet<TrainingSession> TrainingSessions  { get; set; }
     public DbSet<ExerciseFeedback> ExerciseFeedbacks { get; set; }
     public DbSet<ExerciseChangeRequest> ExerciseChangeRequests { get; set; }
+    public DbSet<CoachPayout> CoachPayouts { get; set; }
+
 }
