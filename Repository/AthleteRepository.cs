@@ -182,7 +182,7 @@ namespace sport_app_backend.Repository
                         ErrorMessage = result?.errors?.message ?? "Unknown error"
                     };
                 var authority = result?.data.authority;
-                var paymentUrl = $"https://payment.zarinpal.com/pg/StartPay/{authority}";
+                var paymentUrl = $"https://payment.zarinpal.com /pg/StartPay/{authority}";
 
                 return new ZarinPalPaymentResponseDto
                 {
@@ -999,7 +999,6 @@ namespace sport_app_backend.Repository
 
         public async Task<ApiResponse> ExerciseFeedBack(string phoneNumber, ExerciseFeedbackDto feedbackDto)
         {
-
             var athlete = await context.Athletes
                 .AsNoTracking()
                 .FirstOrDefaultAsync(x => x.PhoneNumber == phoneNumber);
@@ -1009,15 +1008,15 @@ namespace sport_app_backend.Repository
                 return new ApiResponse() { Message = "ورزشکار یافت نشد!", Action = false };
             }
 
- 
+
             var trainingSession = await context.TrainingSessions
                 .AsNoTracking()
-                .Include(ts => ts.WorkoutProgram) 
+                .Include(ts => ts.WorkoutProgram)
                 .Include(ts => ts.ProgramInDay)
-                .ThenInclude(pid => pid.AllExerciseInDays) 
+                .ThenInclude(pid => pid.AllExerciseInDays)
                 .FirstOrDefaultAsync(ts => ts.Id == feedbackDto.TrainingSessionId);
 
-          
+
             if (trainingSession is null)
             {
                 return new ApiResponse() { Message = "جلسه تمرینی یافت نشد!", Action = false };
@@ -1025,21 +1024,19 @@ namespace sport_app_backend.Repository
 
             if (trainingSession.WorkoutProgram?.AthleteId != athlete.Id)
             {
-       
                 return new ApiResponse() { Message = "شما به این جلسه تمرینی دسترسی ندارید.", Action = false };
             }
 
             if (trainingSession.ProgramInDay.AllExerciseInDays.All(se => se.Id != feedbackDto.SingleExerciseId))
             {
-            
                 return new ApiResponse() { Message = "تمرین مشخص شده در این جلسه وجود ندارد.", Action = false };
             }
 
-      
+
             var feedback = feedbackDto.ToExerciseFeedback();
             feedback.AthleteId = athlete.Id;
             feedback.CoachId = trainingSession.WorkoutProgram.CoachId;
-        
+
             await context.ExerciseFeedbacks.AddAsync(feedback);
             await context.SaveChangesAsync();
 
@@ -1047,7 +1044,7 @@ namespace sport_app_backend.Repository
             {
                 Action = true,
                 Message = "فیدبک شما با موفقیت ثبت شد.",
-                Result = feedback 
+                Result = feedback
             };
         }
 
@@ -1107,19 +1104,28 @@ namespace sport_app_backend.Repository
         }
 
         public async Task<ApiResponse> GetTrainingSession(string phoneNumber, int trainingSessionId)
-        {
-            var trainingSession = await context.TrainingSessions.Include(p => p.ProgramInDay)
-                .ThenInclude(a => a.AllExerciseInDays).ThenInclude(e => e.Exercise)
+        {  
+            var athlete = await context.Athletes.FirstOrDefaultAsync(a => a.PhoneNumber == phoneNumber);
+            if (athlete is null) return new ApiResponse() { Message = "Athlete not found", Action = false };
+
+            var trainingSession = await context.TrainingSessions
+                .Include(ts => ts.WorkoutProgram)
+                .Include(p => p.ProgramInDay)
+                .ThenInclude(a => a.AllExerciseInDays).
+                ThenInclude(e => e.Exercise)
                 .FirstOrDefaultAsync(z => z.Id == trainingSessionId);
+            
             if (trainingSession is null)
                 return new ApiResponse() { Message = "trainingSession not found", Action = false };
+            
+            var finalCalories = _CalculateCaloriesInternal(trainingSession, athlete.CurrentWeight, false);
 
-
+            
             return new ApiResponse()
             {
                 Action = true,
                 Message = "get TrainingSession",
-                Result = trainingSession.ToTrainingSessionDto()
+                Result = trainingSession.ToTrainingSessionDto(finalCalories)
             };
         }
 
@@ -1129,7 +1135,7 @@ namespace sport_app_backend.Repository
                 .FirstOrDefaultAsync(z => z.Id == trainingSessionId);
             if (trainingSession is null)
                 return new ApiResponse() { Message = "trainingSession not found", Action = false };
-
+            
             trainingSession.TrainingSessionStatus = TrainingSessionStatus.INPROGRESS;
 
             var bitmap = trainingSession.ExerciseCompletionBitmap.ToArray();
@@ -1159,7 +1165,6 @@ namespace sport_app_backend.Repository
 
                 var trainingSession = await context.TrainingSessions
                     .Include(ts => ts.WorkoutProgram)
-                    .ThenInclude(wp => wp.ProgramPriorities) // اطمینان از بارگذاری اهداف
                     .Include(ts => ts.ProgramInDay)
                     .ThenInclude(pid => pid.AllExerciseInDays)
                     .ThenInclude(se => se.Exercise) // اطمینان از بارگذاری اطلاعات هر حرکت
@@ -1168,58 +1173,8 @@ namespace sport_app_backend.Repository
                 if (trainingSession is null)
                     return new ApiResponse() { Message = "trainingSession not found", Action = false };
                 var athleteWeight = athlete.CurrentWeight;
-                const double restMet = 1.3;
-
-
-                // 1. میانگین‌گیری از پارامترها بر اساس اهداف برنامه
-                var priorities = trainingSession.WorkoutProgram.ProgramPriorities;
-                var avgParams = new TrainingGoalParameter
-                {
-                    RestBetweenSetsSec =
-                        priorities.Average(p => TrainingGoalParameters.Parameters[p].RestBetweenSetsSec),
-                    RestBetweenMovesSec =
-                        priorities.Average(p => TrainingGoalParameters.Parameters[p].RestBetweenMovesSec),
-                    TimePerRepSec = priorities.Average(p => TrainingGoalParameters.Parameters[p].TimePerRepSec),
-                    EpocPercentage = priorities.Average(p => TrainingGoalParameters.Parameters[p].EpocPercentage)
-                };
-
-                double totalCaloriesActiveAndRestSets = 0;
-
-                // 2. محاسبه کالری برای هر حرکت (فعالیت + استراحت بین ست‌ها)
-                foreach (var exercise in trainingSession.ProgramInDay.AllExerciseInDays)
-                {
-                    if (exercise.Exercise == null) continue; // اگر اطلاعات حرکت موجود نبود، از آن رد شو
-
-                    // زمان فعالیت برای هر حرکت 
-                    var workTimeSec = exercise.Set * exercise.Rep * avgParams.TimePerRepSec;
-
-                    // زمان استراحت بین ست‌ها برای هر حرکت 
-                    var restBetweenSetsSec = (exercise.Set > 1) ? (exercise.Set - 1) * avgParams.RestBetweenSetsSec : 0;
-
-                    // کالری زمان فعالیت 
-                    var caloriesActive =
-                        ((exercise.Exercise.Met == 0) ? 3 : exercise.Exercise.Met * athleteWeight * workTimeSec) /
-                        3600.0;
-
-                    // کالری زمان استراحت بین ست‌ها 
-                    var caloriesRestSets = (restMet * athleteWeight * restBetweenSetsSec) / 3600.0;
-
-                    totalCaloriesActiveAndRestSets += caloriesActive + caloriesRestSets;
-                }
-
-                // 3. محاسبه کالری برای استراحت بین حرکات (Rest time between moves)
-                var numberOfExercises = trainingSession.ProgramInDay.AllExerciseInDays.Count;
-                var totalRestBetweenMovesSec =
-                    (numberOfExercises > 1) ? (numberOfExercises - 1) * avgParams.RestBetweenMovesSec : 0;
-                var caloriesRestMoves = (restMet * athleteWeight * totalRestBetweenMovesSec) / 3600.0;
-
-                // 4. جمع کل کالری قبل از EPOC
-                var totalCaloriesBeforeEpoc = totalCaloriesActiveAndRestSets + caloriesRestMoves;
-
-                // 5. اعمال ضریب EPOC
-                var finalCalories = totalCaloriesBeforeEpoc * (1 + avgParams.EpocPercentage);
-
-                finalCalories = Math.Round(finalCalories, 2); // گرد کردن نتیجه نهایی
+                
+                var finalCalories = _CalculateCaloriesInternal(trainingSession, athleteWeight, true);
 
 
                 trainingSession.TrainingSessionStatus = TrainingSessionStatus.COMPLETED;
@@ -1391,18 +1346,45 @@ namespace sport_app_backend.Repository
             var athlete = await context.Athletes.FirstOrDefaultAsync(x => x.PhoneNumber == phoneNumber);
             if (athlete is null) return new ApiResponse() { Message = "Athlete not found", Action = false };
 
-            // لود کردن اطلاعات کامل جلسه تمرینی برای محاسبه
+    
             var trainingSession = await context.TrainingSessions
                 .Include(ts => ts.WorkoutProgram)
-                .ThenInclude(wp => wp.ProgramPriorities) // اطمینان از بارگذاری اهداف
                 .Include(ts => ts.ProgramInDay)
                 .ThenInclude(pid => pid.AllExerciseInDays)
-                .ThenInclude(se => se.Exercise) // اطمینان از بارگذاری اطلاعات هر حرکت
+                .ThenInclude(se => se.Exercise)
                 .FirstOrDefaultAsync(z => z.Id == trainingSessionId);
-
+            
             if (trainingSession is null)
                 return new ApiResponse() { Message = "trainingSession not found", Action = false };
+            
             var athleteWeight = athlete.CurrentWeight;
+            
+            var finalCalories = _CalculateCaloriesInternal(trainingSession, athleteWeight, true);
+            return new ApiResponse()
+            {
+                Action = true,
+                Message = "Calories calculated successfully for completed exercises.",
+                Result = finalCalories
+            };
+        }
+        private DateTime GetLastSaturday(DateTime today)
+        {
+            var diff = ((int)today.DayOfWeek - (int)DayOfWeek.Saturday + 7) % 7;
+            return today.AddDays(-diff);
+        }
+        
+        private DateTime GetFirstDayOfPersianMonth(DateTime date)
+        {
+            var pc = new PersianCalendar();
+            var year = pc.GetYear(date);
+            var month = pc.GetMonth(date);
+            return pc.ToDateTime(year, month, 1, 0, 0, 0, 0);
+        }
+
+        private static double _CalculateCaloriesInternal(
+            TrainingSession trainingSession ,double athleteWeight, bool completedExercisesOnly)
+        {
+            
             const double restMet = 1.3;
 
 
@@ -1417,64 +1399,56 @@ namespace sport_app_backend.Repository
             };
 
             double totalCaloriesActiveAndRestSets = 0;
+            var exercisesCountInCalculation = 0;
+            var allExercises = trainingSession.ProgramInDay.AllExerciseInDays;
 
-            // 2. محاسبه کالری برای هر حرکت (فعالیت + استراحت بین ست‌ها)
-            foreach (var exercise in trainingSession.ProgramInDay.AllExerciseInDays)
+            // ۲. محاسبه کالری
+            for (var i = 0; i < allExercises.Count; i++)
             {
-                if (exercise.Exercise == null) continue; // اگر اطلاعات حرکت موجود نبود، از آن رد شو
+                // اگر فقط حرکات انجام شده مد نظر است، بیت‌مپ را چک کن
+                if (completedExercisesOnly)
+                {
+                    if (i >= trainingSession.ExerciseCompletionBitmap.Length ||
+                        trainingSession.ExerciseCompletionBitmap[i] != 0xFF)
+                    {
+                        continue; // اگر حرکت انجام نشده، از آن بگذر
+                    }
+                }
 
-                // زمان فعالیت برای هر حرکت 
+                var exercise = allExercises[i];
+                if (exercise.Exercise == null) continue;
+
+                exercisesCountInCalculation++;
+
                 var workTimeSec = exercise.Set * exercise.Rep * avgParams.TimePerRepSec;
-
-                // زمان استراحت بین ست‌ها برای هر حرکت 
                 var restBetweenSetsSec = (exercise.Set > 1) ? (exercise.Set - 1) * avgParams.RestBetweenSetsSec : 0;
 
-                // کالری زمان فعالیت 
-                var caloriesActive =
-                    ((exercise.Exercise.Met == 0) ? 3 : exercise.Exercise.Met * athleteWeight * workTimeSec) / 3600.0;
-
-                // کالری زمان استراحت بین ست‌ها 
+                // اگر MET صفر بود، یک مقدار پیش‌فرض در نظر می‌گیریم
+                var exerciseMet = (exercise.Exercise.Met == 0) ? 3.0 : exercise.Exercise.Met;
+                var caloriesActive = (exerciseMet * athleteWeight * workTimeSec) / 3600.0;
                 var caloriesRestSets = (restMet * athleteWeight * restBetweenSetsSec) / 3600.0;
 
                 totalCaloriesActiveAndRestSets += caloriesActive + caloriesRestSets;
             }
 
-            // 3. محاسبه کالری برای استراحت بین حرکات (Rest time between moves)
-            var numberOfExercises = trainingSession.ProgramInDay.AllExerciseInDays.Count;
-            var totalRestBetweenMovesSec =
-                (numberOfExercises > 1) ? (numberOfExercises - 1) * avgParams.RestBetweenMovesSec : 0;
+            if (exercisesCountInCalculation == 0 && completedExercisesOnly)
+            {
+                return 0.0;
+            }
+
+
+            var totalRestBetweenMovesSec = (exercisesCountInCalculation > 1)
+                ? (exercisesCountInCalculation - 1) * avgParams.RestBetweenMovesSec
+                : 0;
             var caloriesRestMoves = (restMet * athleteWeight * totalRestBetweenMovesSec) / 3600.0;
 
-            // 4. جمع کل کالری قبل از EPOC
+
             var totalCaloriesBeforeEpoc = totalCaloriesActiveAndRestSets + caloriesRestMoves;
 
-            // 5. اعمال ضریب EPOC
+
             var finalCalories = totalCaloriesBeforeEpoc * (1 + avgParams.EpocPercentage);
 
-            finalCalories = Math.Round(finalCalories, 2); // گرد کردن نتیجه نهایی
-
-
-            return new ApiResponse()
-            {
-                Action = true,
-                Message = "CalculateCalories",
-                Result = finalCalories
-            };
-        }
-
-        public DateTime GetLastSaturday(DateTime today)
-        {
-            var diff = ((int)today.DayOfWeek - (int)DayOfWeek.Saturday + 7) % 7;
-            return today.AddDays(-diff);
-        }
-
-
-        public DateTime GetFirstDayOfPersianMonth(DateTime date)
-        {
-            var pc = new PersianCalendar();
-            var year = pc.GetYear(date);
-            var month = pc.GetMonth(date);
-            return pc.ToDateTime(year, month, 1, 0, 0, 0, 0);
+            return Math.Round(finalCalories, 2);
         }
     }
 }

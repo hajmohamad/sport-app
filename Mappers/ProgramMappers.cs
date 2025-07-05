@@ -132,7 +132,7 @@ public static class ProgramMappers
             ExerciseCompletionBitmap = trainingSession.ExerciseCompletionBitmap.GetExerciseStatusArray()
         };
     }
-    public static TrainingSessionDto ToTrainingSessionDto(this TrainingSession trainingSession)
+    public static TrainingSessionDto ToTrainingSessionDto(this TrainingSession trainingSession,double finalCalories)
     {
         return new TrainingSessionDto
         {
@@ -142,7 +142,8 @@ public static class ProgramMappers
             TrainingSessionStatus = trainingSession.TrainingSessionStatus.ToString(),
             ExerciseCompletionBitmap = trainingSession.ExerciseCompletionBitmap.GetExerciseStatusArray(),
             ProgramInDayId = trainingSession.ProgramInDayId,
-            ProgramInDay = trainingSession.ProgramInDay.ToTrainingSessionProgramInDayDto()
+            ProgramInDay = trainingSession.ProgramInDay.ToTrainingSessionProgramInDayDto(),
+            CaloriesLost = finalCalories
         };
     }
     private static TrainingSessionProgramInDayDto ToTrainingSessionProgramInDayDto(this ProgramInDay programInDay){
