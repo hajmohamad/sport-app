@@ -25,7 +25,7 @@ public class TokenService: ITokenService
             _context = dbContext;
             _userManager = dbContext.Users;
             _config = config;
-            _key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["JWT:Signingkey"]));
+            _key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["JWT:SigningKey"] ?? "string.Empty"));
         }
 
     public async Task<string> CreateRefreshToken(User user)

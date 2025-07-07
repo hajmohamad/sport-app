@@ -3,6 +3,6 @@
 public class ZarinPalVerifyResponseDto
 {
     public bool IsSuccessful { get; set; }
-    public string RefId { get; set; }
     public string ErrorMessage { get; set; }
+    public long RefId { get; set; } 
 }

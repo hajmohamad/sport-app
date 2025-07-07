@@ -2,6 +2,7 @@ using System.Globalization;
 using Humanizer;
 using sport_app_backend.Dtos;
 using sport_app_backend.Dtos.ProgramDto;
+using sport_app_backend.Models.Actions;
 using sport_app_backend.Models.Program;
 using sport_app_backend.Models.Question.A_Question;
 
@@ -9,6 +10,20 @@ namespace sport_app_backend.Mappers;
 
 public static class ProgramMappers
 {
+    public static ActivityDto ToActivityDto(this Activity activity)
+    {
+        return new ActivityDto()
+        {
+            ActivityCategory = activity.ActivityCategory.ToString(),
+            CaloriesLost = activity.CaloriesLost,
+            Date = activity.Date.ToString(CultureInfo.InvariantCulture),
+            Duration = activity.Duration,
+            Distance = activity.Distance,
+            Name = activity.Name
+
+        };
+    }
+    
     public static WorkoutProgramResponseDto ToProgramResponseDto(this WorkoutProgram workoutProgram)
     {
         return new WorkoutProgramResponseDto

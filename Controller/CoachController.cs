@@ -186,7 +186,7 @@ namespace sport_app_backend.Controller
 
             return Ok(result);
         }
-        [HttpPut("GetSocialMediaLink")]
+        [HttpGet("GetSocialMediaLink")]
         [Authorize(Roles = "Coach")]
         public async Task<IActionResult> GetSocialMediaLink()
         {

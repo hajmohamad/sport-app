@@ -85,24 +85,11 @@ namespace sport_app_backend.Repository
                 };
             }
 
-            var data = new
-            {
-                merchant_id = request.MerchantId,
-                authority = request.Authority,
-                amount = payment.Amount,
-                currency = "IRT"
-            };
-
-            var jsonData = JsonConvert.SerializeObject(data);
-            var content = new StringContent(jsonData, Encoding.UTF8, "application/json");
-
+            request.Amount = payment.Amount;
+         
             try
             {
-                var response =
-                    await Client.PostAsync("https://payment.zarinpal.com/pg/v4/payment/verify.json", content);
-                var responseContent = await response.Content.ReadAsStringAsync();
-                var result = JsonConvert.DeserializeObject<ZarinpalVerifyApiResponseDto>(responseContent);
-
+                var result = await zarinPal.VerifyPaymentAsync(request);
                 switch (result?.Data)
                 {
                     case { Code: 100 }:
@@ -129,26 +116,24 @@ namespace sport_app_backend.Repository
                         };
                 }
 
-                if (result?.Errors is not null)
-                {
-                    payment.PaymentStatus = PaymentStatus.FAILED;
-                    await context.SaveChangesAsync();
-
-                    var error = result?.Errors?.Select(e => e.Message).ToString() ??
-                                "Unknown error from payment gateway.";
+                if (result?.Errors is null)
                     return new ApiResponse
                     {
                         Action = false,
-                        Message = "پرداخت ناموفق",
-                        Result = error
+                        Message = "خطا ناشناخته",
                     };
-                }
+                payment.PaymentStatus = PaymentStatus.FAILED;
+                await context.SaveChangesAsync();
 
+                var error = result?.Errors?.Select(e => e.Message).ToString() ??
+                            "Unknown error from payment gateway.";
                 return new ApiResponse
                 {
                     Action = false,
-                    Message = "خطا ناشناخته",
+                    Message = "پرداخت ناموفق",
+                    Result = error
                 };
+
             }
             catch (Exception ex)
             {
@@ -1158,7 +1143,7 @@ namespace sport_app_backend.Repository
                 {
                     Action = true,
                     Message = "Finish Training session",
-                    Result = activity
+                    Result = activity.ToActivityDto()
                 };
             }
             catch (Exception ex)
@@ -1189,8 +1174,8 @@ namespace sport_app_backend.Repository
             return new ApiResponse()
             {
                 Action = true,
-                Message = "Feedback Training session",
-                Result = trainingSession
+                Message = "Feedback Training session"
+                
             };
         }
 

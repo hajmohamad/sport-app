@@ -13,7 +13,21 @@
     <list default="true" id="5687a4a9-3eda-4338-b6b2-29a217508823" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/dataSources.local.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Controller/CoachController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Controller/CoachController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dtos/ActivityDto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Dtos/ActivityDto.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dtos/ZarinPal/Verify/ZarinPalVerifyRequestDto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Dtos/ZarinPal/Verify/ZarinPalVerifyRequestDto.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dtos/ZarinPal/Verify/ZarinPalVerifyResponseDto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Dtos/ZarinPal/Verify/ZarinPalVerifyResponseDto.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dtos/ZarinPal/ZarinPalPaymentRequestDto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Dtos/ZarinPal/ZarinPalPaymentRequestDto.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Interface/ILiaraStorage.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Interface/ILiaraStorage.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Interface/IZarinPal.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Interface/IZarinPal.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Mappers/ProgramMappers.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Mappers/ProgramMappers.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Repository/AthleteRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Repository/AthleteRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Repository/UserRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Repository/UserRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Services/LiaraStorage.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Services/LiaraStorage.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Services/TokenService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Services/TokenService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Services/ZarinPal.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Services/ZarinPal.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/appsettings.Development.json" beforeDir="false" afterPath="$PROJECT_DIR$/appsettings.Development.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/appsettings.json" beforeDir="false" afterPath="$PROJECT_DIR$/appsettings.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -39,15 +53,16 @@
   }
 }</component>
   <component name="HighlightingSettingsPerFile">
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/f8dbf677037c4363bdec07364295385f16908/2e/dce0ff94/ConfigurationManager.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/294078ecfce6fdb942ecfee089f09717de7a6fcfe5efd9fdb6f4f93c0fb4813/ActionMethodExecutor.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/3b92f859131bde25d0f7a63de08963e995d1e1426e584dfd4b8e833d2d3dba/ExecutionTimer.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/b8c1c57742337e59591581af3eb2c647e9ed52d2951655fd74b1facf3ff520/ConfigurationExtensions.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/fb367341658aaedd7de424d4c9189db33c4387e268dcc4011918569442ab12/AsyncTaskMethodBuilderT.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Dtos/ExerciseDto.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Mappers/ExercisesMappers.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Mappers/ProgramMappers.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Models/Actions/Exercise.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Program.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="mock://D:/403-1/sport-app1/Repository/AthleteRepository.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Repository/AthleteRepository.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Repository/UserRepository.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/obj/Debug/net8.0/.NETCoreApp,Version=v8.0.AssemblyAttributes.cs" root0="SKIP_HIGHLIGHTING" />
@@ -198,6 +213,8 @@
       <workItem from="1751651151041" duration="5408000" />
       <workItem from="1751710888018" duration="919000" />
       <workItem from="1751894899655" duration="594000" />
+      <workItem from="1751900744643" duration="7100000" />
+      <workItem from="1751912227123" duration="5524000" />
     </task>
     <task id="LOCAL-00001" summary="add migration">
       <option name="closed" value="true" />
@@ -311,7 +328,15 @@
       <option name="project" value="LOCAL" />
       <updated>1751711624725</updated>
     </task>
-    <option name="localTasksCounter" value="15" />
+    <task id="LOCAL-00015" summary="add New Interface">
+      <option name="closed" value="true" />
+      <created>1751901433517</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1751901433517</updated>
+    </task>
+    <option name="localTasksCounter" value="16" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -346,7 +371,8 @@
     <MESSAGE value="add GetTransactionList&#10;GetStudentList" />
     <MESSAGE value="add payout" />
     <MESSAGE value="write method for CalculateCalories" />
-    <option name="LAST_COMMIT_MESSAGE" value="write method for CalculateCalories" />
+    <MESSAGE value="add New Interface" />
+    <option name="LAST_COMMIT_MESSAGE" value="add New Interface" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -366,29 +392,29 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Repository/AthleteRepository.cs</url>
-          <line>212</line>
+          <line>157</line>
           <properties documentPath="D:\403-1\sport-app1\Repository\AthleteRepository.cs" containingFunctionPresentation="Method 'BuyCoachingService'">
             <startOffsets>
-              <option value="7814" />
+              <option value="5605" />
             </startOffsets>
             <endOffsets>
-              <option value="7874" />
+              <option value="5665" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="2" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Repository/AthleteRepository.cs</url>
-          <line>167</line>
-          <properties documentPath="D:\403-1\sport-app1\Repository\AthleteRepository.cs" containingFunctionPresentation="Method '_requestPaymentAsync'">
+          <line>79</line>
+          <properties documentPath="D:\403-1\sport-app1\Repository\AthleteRepository.cs" containingFunctionPresentation="Method 'VerifyPaymentAsync'">
             <startOffsets>
-              <option value="5940" />
+              <option value="2801" />
             </startOffsets>
             <endOffsets>
-              <option value="5992" />
+              <option value="2802" />
             </endOffsets>
           </properties>
-          <option name="timeStamp" value="3" />
+          <option name="timeStamp" value="6" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

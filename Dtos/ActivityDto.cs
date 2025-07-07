@@ -8,7 +8,7 @@ public class ActivityDto
     public double Duration { get; set; }
     public double Distance { get; set; }
     public string? ActivityCategory {get; set;}
-    public string Name {get; set;}
+    public string? Name {get; set;}
 
 
 }

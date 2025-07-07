@@ -1,24 +1,32 @@
 using System.Text;
 using Newtonsoft.Json;
+using sport_app_backend.Dtos;
 using sport_app_backend.Dtos.ZarinPal;
+using sport_app_backend.Dtos.ZarinPal.Verify;
 using sport_app_backend.Interface;
+using sport_app_backend.Models;
+using sport_app_backend.Models.Payments;
 
 namespace sport_app_backend.Services;
 
-public class ZarinPal :IZarinPal
+public class ZarinPal(IConfiguration config) : IZarinPal
 
 {
+    private readonly string _merchantId = config["Zarinpal:MerchantId"] ?? "string.Empty";
+
+
     private static readonly HttpClient Client = new HttpClient();
 
     public  async Task<ZarinPalPaymentResponseDto> RequestPaymentAsync(ZarinPalPaymentRequestDto request)
     {
+        request.merchant_id = _merchantId;
         var jsonData = JsonConvert.SerializeObject(request);
         var content = new StringContent(jsonData, Encoding.UTF8, "application/json");
 
         try
         {
             var response =
-                await Client.PostAsync("https://payment.zarinpal.com/pg/v4/payment/request.json", content);
+                await Client.PostAsync("https://sandbox.zarinpal.com/pg/v4/payment/request.json", content);
             var responseContent = await response.Content.ReadAsStringAsync();
             dynamic result = JsonConvert.DeserializeObject(responseContent);
 
@@ -29,7 +37,7 @@ public class ZarinPal :IZarinPal
                     ErrorMessage = result?.errors?.message ?? "Unknown error"
                 };
             var authority = result?.data.authority;
-            var paymentUrl = $"https://payment.zarinpal.com/pg/StartPay/{authority}";
+            var paymentUrl = $"https://sandbox.zarinpal.com/pg/StartPay/{authority}";
 
             return new ZarinPalPaymentResponseDto
             {
@@ -46,6 +54,29 @@ public class ZarinPal :IZarinPal
                 ErrorMessage = $"Error sending payment request: {ex.Message}"
             };
         }
+        
+    }
+
+    public async Task<ZarinpalVerifyApiResponseDto> VerifyPaymentAsync(ZarinPalVerifyRequestDto request)
+    {
+        var data = new
+        {
+            merchant_id = _merchantId,
+            authority = request.Authority,
+            amount =  request.Amount,
+            currency = "IRT"
+        };
+
+        var jsonData = JsonConvert.SerializeObject(data);
+        var content = new StringContent(jsonData, Encoding.UTF8, "application/json");
+
+      
+        var response =
+                await Client.PostAsync("https://sandbox.zarinpal.com/pg/v4/payment/verify.json", content);
+        var responseContent = await response.Content.ReadAsStringAsync();
+        var result = JsonConvert.DeserializeObject<ZarinpalVerifyApiResponseDto>(responseContent);
+        return result;
+      
     }
 
 }
