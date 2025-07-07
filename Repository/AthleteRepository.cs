@@ -23,10 +23,9 @@ using sport_app_backend.Models.TrainingPlan;
 namespace sport_app_backend.Repository
 
 {
-    public class AthleteRepository(ApplicationDbContext context) : IAthleteRepository
+    public class AthleteRepository(ApplicationDbContext context,IZarinPal zarinPal) : IAthleteRepository
     {
         private static readonly HttpClient Client = new HttpClient();
-
         private async Task<ApiResponse> ConfirmTransactionId(Payment payment, long refId)
         {
             try
@@ -161,46 +160,7 @@ namespace sport_app_backend.Repository
                 };
             }
         }
-
-
-        private static async Task<ZarinPalPaymentResponseDto> _requestPaymentAsync(ZarinPalPaymentRequestDto request)
-        {
-            var jsonData = JsonConvert.SerializeObject(request);
-            var content = new StringContent(jsonData, Encoding.UTF8, "application/json");
-
-            try
-            {
-                var response =
-                    await Client.PostAsync("https://payment.zarinpal.com/pg/v4/payment/request.json", content);
-                var responseContent = await response.Content.ReadAsStringAsync();
-                dynamic result = JsonConvert.DeserializeObject(responseContent);
-
-                if (result?.data == null || result?.data.code != 100)
-                    return new ZarinPalPaymentResponseDto
-                    {
-                        IsSuccessful = false,
-                        ErrorMessage = result?.errors?.message ?? "Unknown error"
-                    };
-                var authority = result?.data.authority;
-                var paymentUrl = $"https://payment.zarinpal.com /pg/StartPay/{authority}";
-
-                return new ZarinPalPaymentResponseDto
-                {
-                    PaymentUrl = paymentUrl,
-                    Authority = authority,
-                    IsSuccessful = true
-                };
-            }
-            catch (Exception ex)
-            {
-                return new ZarinPalPaymentResponseDto
-                {
-                    IsSuccessful = false,
-                    ErrorMessage = $"Error sending payment request: {ex.Message}"
-                };
-            }
-        }
-
+        
         public async Task<ApiResponse> BuyCoachingService(string phoneNumber, int coachingServiceId)
         {
             var athlete = await context.Athletes
@@ -224,7 +184,7 @@ namespace sport_app_backend.Repository
             if (coachService.IsDeleted)
                 return new ApiResponse { Message = "CoachingService is deleted", Action = false };
 
-            var zarinPalResponse = await _requestPaymentAsync(new ZarinPalPaymentRequestDto
+            var zarinPalResponse = await zarinPal.RequestPaymentAsync(new ZarinPalPaymentRequestDto
             {
                 amount = (long)coachService.Price,
                 callback_url = "https://chaarset.ir/payment/verify",

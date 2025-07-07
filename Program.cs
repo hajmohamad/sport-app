@@ -110,7 +110,8 @@ builder.Services.AddAuthorization(options =>
     options.AddPolicy("Coach", policy => policy.RequireRole("Coach"));
     options.AddPolicy("None", policy => policy.RequireRole("None"));
 });
-
+builder.Services.AddScoped<IZarinPal, ZarinPal>();
+builder.Services.AddScoped<ILiaraStorage, LiaraStorage>();
 builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped<ISendVerifyCodeService, SendVerifyCodeService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
