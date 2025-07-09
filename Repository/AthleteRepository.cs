@@ -31,7 +31,7 @@ namespace sport_app_backend.Repository
             return new ApiResponse()
             {
                 Action = true,
-                Message = "get Faq",
+                Message = "get CoachFaq",
                 Result = getFaq
             };
 

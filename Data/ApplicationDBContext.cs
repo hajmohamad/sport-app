@@ -57,8 +57,8 @@ public class ApplicationDbContext : DbContext
     public DbSet<ExerciseFeedback> ExerciseFeedbacks { get; set; }
     public DbSet<ExerciseChangeRequest> ExerciseChangeRequests { get; set; }
     public DbSet<CoachPayout> CoachPayouts { get; set; }
-    public DbSet<Faq> CoachFaq { get; set; }
-    public DbSet<Faq> AthleteFaq { get; set; }
+    public DbSet<CoachFaq> CoachFaq { get; set; }
+    public DbSet<AthleteFaq> AthleteFaq { get; set; }
  
 
 }

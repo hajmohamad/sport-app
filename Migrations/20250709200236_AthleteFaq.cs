@@ -6,13 +6,13 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace sport_app_backend.Migrations
 {
     /// <inheritdoc />
-    public partial class Faq : Migration
+    public partial class AthleteFaq : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "CoachFaq",
+                name: "AthleteFaq",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -24,7 +24,7 @@ namespace sport_app_backend.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Faq", x => x.Id);
+                    table.PrimaryKey("PK_AthleteFaq", x => x.Id);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
         }
@@ -33,7 +33,7 @@ namespace sport_app_backend.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "CoachFaq");
+                name: "AthleteFaq");
         }
     }
 }
