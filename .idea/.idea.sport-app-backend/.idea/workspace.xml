@@ -11,21 +11,19 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="5687a4a9-3eda-4338-b6b2-29a217508823" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/Models/Faq.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/dataSources.local.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Controller/AthleteController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Controller/AthleteController.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Controller/CoachController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Controller/CoachController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dtos/ActivityDto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Dtos/ActivityDto.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dtos/ZarinPal/Verify/ZarinPalVerifyRequestDto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Dtos/ZarinPal/Verify/ZarinPalVerifyRequestDto.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dtos/ZarinPal/Verify/ZarinPalVerifyResponseDto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Dtos/ZarinPal/Verify/ZarinPalVerifyResponseDto.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dtos/ZarinPal/ZarinPalPaymentRequestDto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Dtos/ZarinPal/ZarinPalPaymentRequestDto.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Interface/ILiaraStorage.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Interface/ILiaraStorage.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Interface/IZarinPal.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Interface/IZarinPal.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Controller/UserController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Controller/UserController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Data/ApplicationDBContext.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Data/ApplicationDBContext.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Interface/IAthleteRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Interface/IAthleteRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Interface/ICoachRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Interface/ICoachRepository.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Mappers/ProgramMappers.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Mappers/ProgramMappers.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Repository/AthleteRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Repository/AthleteRepository.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Repository/UserRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Repository/UserRepository.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Services/LiaraStorage.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Services/LiaraStorage.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Services/TokenService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Services/TokenService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Services/ZarinPal.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Services/ZarinPal.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Repository/CoachRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Repository/CoachRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Services/SendVerifyCodeService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Services/SendVerifyCodeService.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/appsettings.Development.json" beforeDir="false" afterPath="$PROJECT_DIR$/appsettings.Development.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/appsettings.json" beforeDir="false" afterPath="$PROJECT_DIR$/appsettings.json" afterDir="false" />
     </list>
@@ -215,6 +213,9 @@
       <workItem from="1751894899655" duration="594000" />
       <workItem from="1751900744643" duration="7100000" />
       <workItem from="1751912227123" duration="5524000" />
+      <workItem from="1751928545738" duration="1007000" />
+      <workItem from="1751992308497" duration="507000" />
+      <workItem from="1752078393488" duration="7824000" />
     </task>
     <task id="LOCAL-00001" summary="add migration">
       <option name="closed" value="true" />
@@ -392,29 +393,42 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Repository/AthleteRepository.cs</url>
-          <line>157</line>
+          <line>167</line>
           <properties documentPath="D:\403-1\sport-app1\Repository\AthleteRepository.cs" containingFunctionPresentation="Method 'BuyCoachingService'">
             <startOffsets>
-              <option value="5605" />
+              <option value="5835" />
             </startOffsets>
             <endOffsets>
-              <option value="5665" />
+              <option value="5895" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="2" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Repository/AthleteRepository.cs</url>
-          <line>79</line>
+          <line>89</line>
           <properties documentPath="D:\403-1\sport-app1\Repository\AthleteRepository.cs" containingFunctionPresentation="Method 'VerifyPaymentAsync'">
             <startOffsets>
-              <option value="2801" />
+              <option value="3031" />
             </startOffsets>
             <endOffsets>
-              <option value="2802" />
+              <option value="3032" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="6" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Controller/UserController.cs</url>
+          <line>188</line>
+          <properties documentPath="D:\403-1\sport-app1\Controller\UserController.cs" containingFunctionPresentation="Method 'AppUpdate'">
+            <startOffsets>
+              <option value="6494" />
+            </startOffsets>
+            <endOffsets>
+              <option value="6544" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="9" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

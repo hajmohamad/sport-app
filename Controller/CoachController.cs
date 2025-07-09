@@ -239,6 +239,25 @@ namespace sport_app_backend.Controller
 
             return Ok(result);
         }
+        [HttpGet("GetFaq")]
+        [Authorize(Roles = "Coach")]
+        public async Task<IActionResult> GetFaq()
+        {
+            var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
+            if (string.IsNullOrEmpty(phoneNumber))
+            {
+                return Unauthorized(new ApiResponse { Action = false, Message = "خطای احراز هویت." });
+            }
+
+            var result = await coachRepository.GetFaq();
+
+            if (!result.Action)
+            {
+                return BadRequest(result);
+            }
+
+            return Ok(result);
+        }
       
     }
 

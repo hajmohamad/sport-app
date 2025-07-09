@@ -173,10 +173,10 @@ namespace sport_app_backend.Repository
             };
         }
 
-        public async Task<ApiResponse> GetPayment(string phoneNumber, int paymentId)
+        public async Task<ApiResponse>  GetPayment(string phoneNumber, int paymentId)
         {
             var payment = await context.Payments
-                .Include(p => p.Coach) // بارگذاری Coach
+                .Include(p => p.Coach) 
                 .Include(p => p.Athlete) // بارگذاری Athlete
                 .ThenInclude(a => a!.User)
                 .Include(a => a.AthleteQuestion) // بارگذاری User داخل Athlete
@@ -721,6 +721,18 @@ namespace sport_app_backend.Repository
             await context.SaveChangesAsync();
 
             return new ApiResponse { Action = true, Message = "درخواست شما با موفقیت ثبت شد و در حال بررسی است." };
+        }
+
+        public async Task<ApiResponse> GetFaq()
+        {
+            var getFaq = await context.CoachFaq.ToListAsync();
+            return new ApiResponse()
+            {
+                Action = true,
+                Message = "get faq",
+                Result = getFaq
+            };
+
         }
     }
 }

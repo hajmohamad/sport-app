@@ -118,24 +118,37 @@ public static class ProgramMappers
 
     public static ExerciseFeedback ToExerciseFeedback(this ExerciseFeedbackDto feedbackDto)
     {
-        return new ExerciseFeedback
+        var exerciseFeedback = new ExerciseFeedback
         {
             SingleExerciseId = feedbackDto.SingleExerciseId,
             IsPositive = feedbackDto.IsPositive,
-            NegativeReason = Enum.Parse<NegativeFeedbackReason>(feedbackDto.NegativeReason ?? string.Empty),
             TrainingSessionId = feedbackDto.TrainingSessionId
         };
+
+        if (!string.IsNullOrEmpty(feedbackDto.NegativeReason))
+        {
+            exerciseFeedback.NegativeReason = Enum.Parse<NegativeFeedbackReason>(feedbackDto.NegativeReason);
+        }
+
+        return exerciseFeedback;
     }
 
 
     public static ExerciseChangeRequest ToExerciseChangeRequest(this ExerciseChangeDto requestDto)
     {
-        return new ExerciseChangeRequest
+        var exerciseChangeRequest =  new ExerciseChangeRequest
         {
             SingleExerciseId = requestDto.SingleExerciseId,
             TrainingSessionId = requestDto.TrainingSessionId,
-            Reason = Enum.Parse<ExerciseChangeReason>(requestDto.Reason ?? string.Empty)
         };
+        if (!string.IsNullOrEmpty(requestDto.Reason))
+        {
+            exerciseChangeRequest.Reason = Enum.Parse<ExerciseChangeReason>(requestDto.Reason );
+
+        }
+
+        return exerciseChangeRequest;
+
     }
     public static AllTrainingSessionDto ToAllTrainingSessionDto(this TrainingSession trainingSession)
     {

@@ -53,5 +53,7 @@ namespace sport_app_backend.Interface
         public Task<ApiResponse> GetActivityPage(string phoneNumber);
 
         public Task<ApiResponse>  CalculateCalories(string phoneNumber, int trainingSessionId);
+        Task<ApiResponse> GetFaq();
+
     }
 }

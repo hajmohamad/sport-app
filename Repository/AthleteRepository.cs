@@ -25,7 +25,17 @@ namespace sport_app_backend.Repository
 {
     public class AthleteRepository(ApplicationDbContext context,IZarinPal zarinPal) : IAthleteRepository
     {
-        private static readonly HttpClient Client = new HttpClient();
+        public async Task<ApiResponse> GetFaq()
+        {
+            var getFaq = await context.AthleteFaq.ToListAsync();
+            return new ApiResponse()
+            {
+                Action = true,
+                Message = "get Faq",
+                Result = getFaq
+            };
+
+        }
         private async Task<ApiResponse> ConfirmTransactionId(Payment payment, long refId)
         {
             try
@@ -988,9 +998,7 @@ namespace sport_app_backend.Repository
             return new ApiResponse
             {
                 Action = true,
-                Message = "فیدبک شما با موفقیت ثبت شد.",
-                Result = feedback
-            };
+                Message = "فیدبک شما با موفقیت ثبت شد.",};
         }
 
 
@@ -1014,9 +1022,7 @@ namespace sport_app_backend.Repository
             return new ApiResponse
             {
                 Action = true,
-                Message = "Exercise change request saved.",
-                Result = exerciseChangeRequest
-            };
+                Message = "Exercise change request saved.", };
         }
 
 

@@ -376,7 +376,7 @@ namespace sport_app_backend.Controller
             return Ok(result);
         }
 
-        [HttpPut("Update_TimeBeforeWorkout")]
+        [HttpPut("Update_TimeBeforeWorkout/{timeBeforeWorkoutDto:int}")]
         [Authorize(Roles = "Athlete")]
         public async Task<IActionResult> UpdateTimeBeforeWorkout([FromRoute] int timeBeforeWorkoutDto)
         {
@@ -395,7 +395,7 @@ namespace sport_app_backend.Controller
 
         }
 
-        [HttpPut("Update_RestTime")]
+        [HttpPut("Update_RestTime/{restTimeDto:int}")]
         [Authorize(Roles = "Athlete")]
         public async Task<IActionResult> UpdateRestTime([FromRoute] int restTimeDto)
         {
@@ -638,6 +638,25 @@ namespace sport_app_backend.Controller
             }
 
             return BadRequest(result);
+        }
+        [HttpGet("GetFaq")]
+        [Authorize(Roles = "Athlete")]
+        public async Task<IActionResult> GetFaq()
+        {
+            var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
+            if (string.IsNullOrEmpty(phoneNumber))
+            {
+                return Unauthorized(new ApiResponse { Action = false, Message = "خطای احراز هویت." });
+            }
+
+            var result = await athleteRepository.GetFaq();
+
+            if (!result.Action)
+            {
+                return BadRequest(result);
+            }
+
+            return Ok(result);
         }
         
     }

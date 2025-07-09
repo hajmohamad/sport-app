@@ -2,6 +2,7 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using sport_app_backend.Dtos;
 using sport_app_backend.Interface;
 using sport_app_backend.Models;
@@ -167,6 +168,26 @@ public class UserController(IUserRepository userRepository) : ControllerBase
         if (result.Action != true) return BadRequest(result);
         return Ok(result);
             
+    }
+
+    [HttpGet("AppUpdate")]
+    public Task<IActionResult> AppUpdate()
+    {
+        var result = new ApiResponse()
+        {
+            Action = true,
+            Message = "update app link",
+            Result = new
+            {
+                lastUpdateVersion = "1.0",
+                lastUpdateLink = "",
+                requiredUpdateVersion = "1.0",
+                requieredUpdateLink = ""
+            }
+
+        };
+        return Task.FromResult<IActionResult>(Ok(result));
+
     }
 
 
