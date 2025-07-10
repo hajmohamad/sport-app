@@ -179,8 +179,8 @@ public class UserController(IUserRepository userRepository) : ControllerBase
             Message = "update app link",
             Result = new
             {
-               version = "",
-               requiredUpdate= true
+               version = "1.0",
+               requiredUpdate=false
             }
 
         };

@@ -34,7 +34,7 @@ namespace sport_app_backend.Controller
             if (!result.Action) return BadRequest(result.Message);
             return Ok(result);
         }
-        [HttpPost("GetActivityPage")]
+        [HttpGet("GetActivityPage")]
         [Authorize(Roles = "Athlete")]
 
         public async Task<IActionResult> GetActivityPage()
