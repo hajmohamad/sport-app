@@ -23,7 +23,8 @@ namespace sport_app_backend.Interface
         Task<ApiResponse> GetAthletesWithStatus(string coachPhoneNumber);
         Task<ApiResponse> GetTransactions(string coachPhoneNumber);
         Task<ApiResponse> CreatePayoutRequest(string coachPhoneNumber);
-        
+        Task<ApiResponse> AthleteReportForCoach(int athleteId);
+        Task<ApiResponse> AthleteMonthlyActivityForCoach(int athleteId, int year, int month);
         Task<ApiResponse> GetFaq();
     }
 }

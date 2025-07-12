@@ -87,6 +87,30 @@ namespace sport_app_backend.Controller
             if (result.Action != true) return BadRequest(result);
             return Ok(result);
         }
+        [HttpGet("AthleteMonthlyActivityForCoach/{athleteId}/{year}/{month}")]
+        [Authorize(Roles = "Coach")]
+
+        public async Task<IActionResult> AthleteMonthlyActivityForCoach([FromRoute] int athleteId,[FromRoute] int year,[FromRoute] int month)
+        {
+            var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
+            if (phoneNumber is null) return BadRequest("PhoneNumber is null");
+            var result = await coachRepository.AthleteMonthlyActivityForCoach(athleteId,year,month);
+            if (!result.Action) return BadRequest(result);
+            return Ok(result);
+
+        }
+        [HttpGet("AthleteReportForCoach/{athleteId}")]
+        [Authorize(Roles = "Coach")]
+
+        public async Task<IActionResult> AthleteReportForCoach([FromRoute] int athleteId)
+        {
+            var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
+            if (phoneNumber is null) return BadRequest("PhoneNumber is null");
+            var result = await coachRepository.AthleteReportForCoach(athleteId);
+            if (!result.Action) return BadRequest(result);
+            return Ok(result);
+
+        }
 
         /// get coaching Service
         [HttpGet("get_coaching_Service")]

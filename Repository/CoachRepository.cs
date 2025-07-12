@@ -20,6 +20,108 @@ namespace sport_app_backend.Repository
 {
     public class CoachRepository(ApplicationDbContext context) : ICoachRepository
     {
+        public async Task<ApiResponse> AthleteReportForCoach(int athleteId)
+        {
+            var athlete = await context.Athletes.Include(athlete => athlete.Activities)
+                .Include(athlete => athlete.WeightEntries).FirstOrDefaultAsync(a => a.Id == athleteId);
+              if (athlete is null)
+                return new ApiResponse { Message = "Athlete not found", Action = false };
+ 
+            var today = DateTime.Today.Date;
+            var lastSaturday = GetLastSaturday(today);
+            var firstDayOfPersianMonth = GetFirstDayOfPersianMonth(today);
+
+            var allActivities = athlete.Activities.ToList();
+
+            var totalActivities = allActivities.Count;
+            var totalTime = allActivities.Select(a => a.Duration).DefaultIfEmpty(0).Sum();
+            var totalCalories = allActivities.Select(a => a.CaloriesLost).DefaultIfEmpty(0).Sum();
+
+            var lastWeekActivities = Enumerable.Range(0, 7)
+                .Select(offset =>
+                {
+                    var date = lastSaturday.AddDays(offset).Date;
+                    return athlete.Activities.Any(a => a.Date.Date == date) ? 1 : 0;
+                })
+                .ToList();
+
+
+
+
+            var currentWeight = athlete.CurrentWeight;
+            var goalWeight = athlete.WeightGoal;
+
+            var lastMonthWeights = athlete.WeightEntries
+                .Where(w => w.CurrentDate >= firstDayOfPersianMonth)
+                .OrderByDescending(w => w.CurrentDate)
+                .Select(w => new WeightReportDto
+                {
+                    Date = w.CurrentDate.ToString("yyyy-MM-dd"),
+                    Weight = w.Weight
+                })
+                .ToList();
+
+            return new ApiResponse
+            {
+                Message = "Activities found",
+                Action = true,
+                Result = new ActivityPageDto()
+                {
+                    TotalActivities = totalActivities,
+                    TotalTime = totalTime,
+                    TotalCalories = totalCalories,
+                    LastWeekActivities = lastWeekActivities,
+                    CurrentWeight = currentWeight,
+                    GoalWeight = goalWeight,
+                    LastMonthWeights = lastMonthWeights,
+                }
+            };
+        }
+        public async Task<ApiResponse> AthleteMonthlyActivityForCoach(int athleteId, int year, int month)
+        {
+            ArgumentOutOfRangeException.ThrowIfNegative(month);
+            var athlete = await context.Athletes.FirstOrDefaultAsync(x => x.Id == athleteId);
+            if (athlete is null)
+                return new ApiResponse() { Message = "User is not an athlete", Action = false };
+
+            var persianCalendar = new System.Globalization.PersianCalendar();
+
+            try
+            {
+                var startDate = persianCalendar.ToDateTime(year, month, 1, 0, 0, 0, 0);
+                var endDate = month == 12
+                    ? persianCalendar.ToDateTime(year + 1, 1, 1, 0, 0, 0, 0)
+                    : persianCalendar.ToDateTime(year, month + 1, 1, 0, 0, 0, 0);
+
+                var activities = await context.Activities
+                    .Where(x => x.AthleteId == athlete.Id && x.Date >= startDate && x.Date < endDate)
+                    .ToListAsync();
+
+                return new ApiResponse()
+                {
+                    Message = "Activities found",
+                    Action = true,
+                    Result = activities.Select(x => new ActivityDto()
+                    {
+                        Id = x.Id,
+                        Date = x.Date.ToString("yyyy-MM-dd"),
+                        CaloriesLost = x.CaloriesLost,
+                        Duration = x.Duration,
+                        ActivityCategory = x.ActivityCategory.ToString(),
+                        Name = x.Name ?? ""
+                    }).ToList()
+                };
+            }
+            catch (Exception ex)
+            {
+                return new ApiResponse()
+                {
+                    Message = $"Error converting date: {ex.Message}",
+                    Action = false
+                };
+            }
+        }
+
         public async Task<ApiResponse> AddCoachingServices(string phoneNumber, AddCoachServiceDto addCoachingServiceDto)
         {
             var coach = await context.Coaches.Include(c => c.CoachingServices)
@@ -408,7 +510,6 @@ namespace sport_app_backend.Repository
                 var monthStartDate = pc.ToDateTime(currentYear, currentMonth, 1, 0, 0, 0, 0);
                 var monthEndDate = monthStartDate.AddMonths(1);
 
-                // این بخش چون روی لیست در حافظه اجرا می‌شود، از قبل درست بود و نیازی به تغییر ندارد
                 var monthlyIncome = successfulPayments
                     .Where(p => p.PaymentDate >= monthStartDate && p.PaymentDate < monthEndDate)
                     .GroupBy(p => p.PaymentDate.Date)
@@ -643,7 +744,9 @@ namespace sport_app_backend.Repository
                         ? $"{p.Athlete.User.FirstName} {p.Athlete.User.LastName}"
                         : "نامشخص",
                     ReferenceId = p.RefId.ToString(), // شناسه خرید یا همان RefId
-                    ProgramStatus = programStatus
+                    ProgramStatus = programStatus,
+                    AppFee = p.AppFee
+                    
                 };
             }).ToList();
 
@@ -733,6 +836,19 @@ namespace sport_app_backend.Repository
                 Result = getFaq
             };
 
+        }
+        private DateTime GetLastSaturday(DateTime today)
+        {
+            var diff = ((int)today.DayOfWeek - (int)DayOfWeek.Saturday + 7) % 7;
+            return today.AddDays(-diff);
+        }
+        
+        private DateTime GetFirstDayOfPersianMonth(DateTime date)
+        {
+            var pc = new PersianCalendar();
+            var year = pc.GetYear(date);
+            var month = pc.GetMonth(date);
+            return pc.ToDateTime(year, month, 1, 0, 0, 0, 0);
         }
     }
 }

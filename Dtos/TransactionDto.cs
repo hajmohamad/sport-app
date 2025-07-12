@@ -7,6 +7,7 @@ public class TransactionDto
     public string Date { get; set; }
     
     public string Description { get; set; }
+    public double AppFee { get; set; }
     public string? BuyerName { get; set; }
     public string? ReferenceId { get; set; }
     public string? ProgramStatus { get; set; }
