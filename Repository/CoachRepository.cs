@@ -22,7 +22,8 @@ namespace sport_app_backend.Repository
     {
         public async Task<ApiResponse> AthleteReportForCoach(int athleteId)
         {
-            var athlete = await context.Athletes.Include(athlete => athlete.Activities)
+            var athlete = await context.Athletes.Include(u=>u.User)
+                .Include(athlete => athlete.Activities)
                 .Include(athlete => athlete.WeightEntries).FirstOrDefaultAsync(a => a.Id == athleteId);
               if (athlete is null)
                 return new ApiResponse { Message = "Athlete not found", Action = false };
@@ -74,6 +75,8 @@ namespace sport_app_backend.Repository
                     CurrentWeight = currentWeight,
                     GoalWeight = goalWeight,
                     LastMonthWeights = lastMonthWeights,
+                    Height=athlete.Height,
+                    Name=athlete.User.FirstName+" "+athlete.User.LastName
                 }
             };
         }
