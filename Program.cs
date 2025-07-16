@@ -12,8 +12,18 @@ using sport_app_backend.Interface;
 using sport_app_backend.Services;
 using sport_app_backend.Repository;
 using Microsoft.OpenApi.Models;
+using Serilog;
+using sport_app_backend.Handler;
+
+Log.Logger = new LoggerConfiguration()
+    .WriteTo.Console()
+    .WriteTo.File("logs/server-log-.txt", rollingInterval: RollingInterval.Day,
+        shared: true)
+    .CreateBootstrapLogger();
+
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Host.UseSerilog();
 
 // اضافه کردن CORS
 builder.Services.AddCors(options =>
@@ -29,6 +39,8 @@ builder.Services.AddCors(options =>
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddExceptionHandler<GlobalExceptionHandler>(); 
+
 
 builder.Services.AddSwaggerGen(option =>
 {
@@ -113,7 +125,7 @@ builder.Services.AddAuthorization(options =>
 builder.Services.AddScoped<IZarinPal, ZarinPal>();
 builder.Services.AddScoped<ILiaraStorage, LiaraStorage>();
 builder.Services.AddScoped<ITokenService, TokenService>();
-builder.Services.AddScoped<ISendVerifyCodeService, SendVerifyCodeService>();
+builder.Services.AddSingleton<ISmsService, SmsService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<ICoachRepository, CoachRepository>();
 builder.Services.AddScoped<IAthleteRepository, AthleteRepository>();

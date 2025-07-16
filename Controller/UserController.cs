@@ -14,9 +14,16 @@ public class UserController(IUserRepository userRepository) : ControllerBase
 
 {
     [HttpPost("CheckCode")]
-    public async Task<ApiResponse> CheckCode([FromBody] CheckCodeRequestDto checkCodeRequestDto)
+    public async Task<IActionResult> CheckCode([FromBody] CheckCodeRequestDto checkCodeRequestDto)
     {
-        return await userRepository.CheckCode(checkCodeRequestDto);
+        var result =  await userRepository.CheckCode(checkCodeRequestDto);
+
+        if (!result.Action)
+        {
+            return BadRequest(result);
+        }
+
+        return Ok(result);
     }
 
     ///Send code

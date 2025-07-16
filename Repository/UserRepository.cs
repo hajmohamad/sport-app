@@ -14,7 +14,7 @@ namespace sport_app_backend.Repository;
 public class UserRepository(
     ApplicationDbContext dbContext,
     ITokenService tokenService,
-    ISendVerifyCodeService sendVerifyCode,
+    ISmsService sms,
     ILiaraStorage liaraStorage)
     : IUserRepository
 {
@@ -181,7 +181,7 @@ private async Task<string> GenerateUniqueUsername()
             await dbContext.CodeVerifies.AddAsync(new CodeVerify()
             {
                 PhoneNumber = userPhoneNumber,
-                Code = await sendVerifyCode.SendCode(userPhoneNumber),
+                Code = await sms.SendCode(userPhoneNumber),
                 TimeCodeSend = DateTime.Now
             });
             await dbContext.SaveChangesAsync();
@@ -205,7 +205,7 @@ private async Task<string> GenerateUniqueUsername()
         await dbContext.CodeVerifies.AddAsync(new CodeVerify()
         {
             PhoneNumber = userPhoneNumber,
-            Code = await sendVerifyCode.SendCode(userPhoneNumber),
+            Code = await sms.SendCode(userPhoneNumber),
             TimeCodeSend = DateTime.Now
         });
         await dbContext.SaveChangesAsync();

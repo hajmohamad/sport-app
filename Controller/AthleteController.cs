@@ -218,13 +218,7 @@ namespace sport_app_backend.Controller
             var user = await context.Users
                 .Include(u => u.Athlete).ThenInclude(w=>w.WaterInTake).FirstOrDefaultAsync(u => u.PhoneNumber == phoneNumber);
             if (user is null) return BadRequest(new ApiResponse() { Action = false, Message = "User not found" });
-            if (user.Athlete == null)
-                user.Athlete.WaterInTake ??= new WaterInTake()
-                {
-                    DailyCupOfWater = 0,
-                    Reminder = 0
-                };
-
+      
             return Ok(new ApiResponse()
                 { Action = true, Message = "User found", Result = user.ToAthleteProfileResponseDto() });
 

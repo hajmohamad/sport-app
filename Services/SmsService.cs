@@ -4,7 +4,7 @@ using sport_app_backend.Interface;
 
 namespace sport_app_backend.Services;
 
-public class SendVerifyCodeService (IConfiguration config) : ISendVerifyCodeService
+public class SmsService (IConfiguration config) : ISmsService
 {
     private readonly string _accessKey = config["SMS:accessKey"] ?? "string.Empty";
 
@@ -36,6 +36,33 @@ public class SendVerifyCodeService (IConfiguration config) : ISendVerifyCodeServ
         return randomNumber;
     }
 
+    public async Task<string> SendErrorSms()
+    {
+        var httpClient = new HttpClient();
+       
+        httpClient.DefaultRequestHeaders.Add("x-api-key",
+            _accessKey);
+        
+        var model = new VerifySendModel()
+        {
+            Mobile = "09395327229",
+            TemplateId = 980201,
+            Parameters =
+            [
+                new VerifySendParameterModel
+                {
+                    Name = "CODE", Value = "11111"
+                }
+            ]
+        };
+        
+        var payload = JsonSerializer.Serialize(model);
+        StringContent stringContent = new(payload, Encoding.UTF8, "application/json");
+        
+        var response = await httpClient.PostAsync("https://api.sms.ir/v1/send/verify", stringContent);
+        Console.WriteLine(response);
+        return "00000";
+    }
 }
 public class VerifySendParameterModel
 {

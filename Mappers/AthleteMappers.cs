@@ -1,5 +1,6 @@
 
 using sport_app_backend.Dtos;
+using sport_app_backend.Models;
 using sport_app_backend.Models.Account;
 
 namespace sport_app_backend.Mappers
@@ -9,8 +10,11 @@ namespace sport_app_backend.Mappers
         public static AthleteProfileResponse? ToAthleteProfileResponseDto(this User user)
         {
             if (user.Athlete == null) return null;
+            var waterInTake = user.Athlete.WaterInTake ?? new WaterInTake { DailyCupOfWater = 0, Reminder = 0 };
+
                 return new AthleteProfileResponse
                 {
+                    
                     FirstName = user.FirstName ?? string.Empty,
                     LastName = user.LastName ?? string.Empty,
                     UserName = user.UserName,
@@ -25,8 +29,8 @@ namespace sport_app_backend.Mappers
                     Bio = user.Bio ?? "",
                     TimeBeforeWorkout = user.Athlete.TimeBeforeWorkout,
                     RestTime = user.Athlete.RestTime,
-                    DailyCupOfWater = user.Athlete.WaterInTake.DailyCupOfWater,
-                    Reminder = user.Athlete.WaterInTake.Reminder
+                    DailyCupOfWater =waterInTake.DailyCupOfWater,
+                    Reminder = waterInTake.Reminder
                 };
         }
         

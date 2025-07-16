@@ -7,8 +7,9 @@ namespace sport_app_backend.Controller
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class AdminController(IAdminRepository adminRepository) : ControllerBase
+    public class AdminController(IAdminRepository adminRepository,IWebHostEnvironment webHostEnvironment ) : ControllerBase
     {
+     
         [HttpPost("add_Exercises")]
         public async Task<IActionResult> AddExercises([FromBody] List<AddExercisesRequestDto> exercises)
         {
@@ -51,6 +52,15 @@ namespace sport_app_backend.Controller
             }
             return Ok(result);
         }
+        [HttpPut("TestException")]
+        public  Task<IActionResult> TestException()
+        {
+            throw new InvalidOperationException("این یک خطای تستی برای بررسی GlobalExceptionHandler است.");
+
+        }
+        
+
+        
        
     }
 
