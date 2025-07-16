@@ -6,5 +6,5 @@ namespace sport_app_backend.Interface;
 public interface ISmsService
 {
     public Task<string> SendCode(string PhoneNumber);
-    public Task<string> SendErrorSms();
+    public Task<string> SendErrorSms(string message);
 }

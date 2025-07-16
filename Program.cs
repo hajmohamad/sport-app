@@ -13,19 +13,23 @@ using sport_app_backend.Services;
 using sport_app_backend.Repository;
 using Microsoft.OpenApi.Models;
 using Serilog;
+using Serilog.Events;
 using sport_app_backend.Handler;
 
 Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()
-    .WriteTo.File("logs/server-log-.txt", rollingInterval: RollingInterval.Day,
-        shared: true)
     .CreateBootstrapLogger();
 
 
 var builder = WebApplication.CreateBuilder(args);
-builder.Host.UseSerilog();
+builder.Host.UseSerilog((context, configuration) =>
+{
+    configuration
+        .MinimumLevel.Is(LogEventLevel.Error) 
+        .Enrich.FromLogContext()
+        .WriteTo.Console(); 
+});
 
-// اضافه کردن CORS
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowFrontendLocalhost", policy =>
@@ -39,7 +43,9 @@ builder.Services.AddCors(options =>
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddProblemDetails();
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>(); 
+
 
 
 builder.Services.AddSwaggerGen(option =>
@@ -139,9 +145,11 @@ builder.Services.AddSingleton<IRateLimitConfiguration, RateLimitConfiguration>()
 
 
 var app = builder.Build();
+app.UseExceptionHandler();
 
 app.UseSwagger();
 app.UseSwaggerUI();
+app.UseSerilogRequestLogging();
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();

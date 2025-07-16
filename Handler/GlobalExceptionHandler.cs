@@ -14,10 +14,10 @@ public class GlobalExceptionHandler(ILogger<GlobalExceptionHandler> logger, ISms
     {
         var traceId = Activity.Current?.Id ?? httpContext.TraceIdentifier;
 
-    
+        
         logger.LogError(
             exception,
-            "خطای مدیریت نشده رخ داد. TraceId: {TraceId}, Path: {Path}",
+            "on handel error TraceId: {TraceId}, Path: {Path}",
             traceId,
             httpContext.Request.Path
         );
@@ -25,7 +25,7 @@ public class GlobalExceptionHandler(ILogger<GlobalExceptionHandler> logger, ISms
 
         try
         {
-            await smsService.SendErrorSms();
+            await smsService.SendErrorSms(httpContext.Request.Path);
         }
         catch (Exception smsEx)
         {
@@ -40,6 +40,7 @@ public class GlobalExceptionHandler(ILogger<GlobalExceptionHandler> logger, ISms
             Status = StatusCodes.Status500InternalServerError,
             Detail = "یک مشکل غیرمنتظره در سرور رخ داده است. لطفاً بعداً تلاش کنید.",
             TraceId = traceId
+            
         }, cancellationToken);
 
         return true;

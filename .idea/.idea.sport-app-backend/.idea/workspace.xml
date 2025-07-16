@@ -11,18 +11,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="5687a4a9-3eda-4338-b6b2-29a217508823" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Handler/GlobalExceptionHandler.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/dataSources.local.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Controller/AdminController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Controller/AdminController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Controller/AthleteController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Controller/AthleteController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Controller/UserController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Controller/UserController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Interface/ISendVerifyCodeService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Interface/ISmsService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Mappers/AthleteMappers.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Mappers/AthleteMappers.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Handler/GlobalExceptionHandler.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Handler/GlobalExceptionHandler.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Interface/ISmsService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Interface/ISmsService.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Program.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Repository/UserRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Repository/UserRepository.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Services/SendVerifyCodeService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Services/SmsService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sport-app-backend.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/sport-app-backend.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Services/SmsService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Services/SmsService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/appsettings.Development.json" beforeDir="false" afterPath="$PROJECT_DIR$/appsettings.Development.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/appsettings.json" beforeDir="false" afterPath="$PROJECT_DIR$/appsettings.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -51,15 +47,48 @@
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/f8dbf677037c4363bdec07364295385f16908/2e/dce0ff94/ConfigurationManager.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/294078ecfce6fdb942ecfee089f09717de7a6fcfe5efd9fdb6f4f93c0fb4813/ActionMethodExecutor.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/3b92f859131bde25d0f7a63de08963e995d1e1426e584dfd4b8e833d2d3dba/ExecutionTimer.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/a0e4b2e73470454ceb852dfc7f10e6627ce0f0dab6b96680ff40e1e0a84ab9df/RateLimitConfiguration.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/b8c1c57742337e59591581af3eb2c647e9ed52d2951655fd74b1facf3ff520/ConfigurationExtensions.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/fb367341658aaedd7de424d4c9189db33c4387e268dcc4011918569442ab12/AsyncTaskMethodBuilderT.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="mock://D:/403-1/sport-app1/Controller/AdminController.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/403-1/sport-app1/Controller/AdminController.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/403-1/sport-app1/Controller/AdminController.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/403-1/sport-app1/Controller/AdminController.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/403-1/sport-app1/Controller/AthleteController.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/403-1/sport-app1/Controller/AthleteController.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Dtos/ExerciseDto.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="mock://D:/403-1/sport-app1/Mappers/AthleteMappers.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Mappers/ExercisesMappers.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Mappers/ProgramMappers.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Models/Actions/Exercise.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="mock://D:/403-1/sport-app1/Program.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/403-1/sport-app1/Program.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/403-1/sport-app1/Program.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/403-1/sport-app1/Program.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/403-1/sport-app1/Program.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/403-1/sport-app1/Program.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/403-1/sport-app1/Program.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/403-1/sport-app1/Program.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/403-1/sport-app1/Program.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/403-1/sport-app1/Program.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/403-1/sport-app1/Program.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Program.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="mock://D:/403-1/sport-app1/Program.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/403-1/sport-app1/Program.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/403-1/sport-app1/Program.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/403-1/sport-app1/Program.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/403-1/sport-app1/Program.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Repository/AthleteRepository.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Repository/UserRepository.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="mock://D:/403-1/sport-app1/appsettings.Development.json" root0="FORCE_HIGHLIGHTING" />
+    <setting file="mock://D:/403-1/sport-app1/appsettings.json" root0="FORCE_HIGHLIGHTING" />
+    <setting file="mock://D:/403-1/sport-app1/appsettings.json" root0="FORCE_HIGHLIGHTING" />
+    <setting file="mock://D:/403-1/sport-app1/appsettings.json" root0="FORCE_HIGHLIGHTING" />
+    <setting file="mock://D:/403-1/sport-app1/appsettings.json" root0="FORCE_HIGHLIGHTING" />
+    <setting file="mock://D:/403-1/sport-app1/appsettings.json" root0="FORCE_HIGHLIGHTING" />
+    <setting file="mock://D:/403-1/sport-app1/appsettings.json" root0="FORCE_HIGHLIGHTING" />
+    <setting file="mock://D:/403-1/sport-app1/appsettings.json" root0="FORCE_HIGHLIGHTING" />
+    <setting file="mock://D:/403-1/sport-app1/appsettings.json" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/obj/Debug/net8.0/.NETCoreApp,Version=v8.0.AssemblyAttributes.cs" root0="SKIP_HIGHLIGHTING" />
   </component>
   <component name="MetaFilesCheckinStateConfiguration" checkMetaFiles="true" />
@@ -74,32 +103,32 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    ".NET Launch Settings Profile.sport-app-backend: https.executor": "Run",
-    "Docker.Dockerfile.executor": "Debug",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "XThreadsFramesViewSplitterKey": "0.7494145",
-    "com.codeium.enabled": "true",
-    "database.data.extractors.current.export.id": "Comma-separated (CSV)_id",
-    "git-widget-placeholder": "master",
-    "ignore.virus.scanning.warn.message": "true",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "preferences.keymap",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;.NET Launch Settings Profile.sport-app-backend: https.executor&quot;: &quot;Run&quot;,
+    &quot;Docker.Dockerfile.executor&quot;: &quot;Debug&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;XThreadsFramesViewSplitterKey&quot;: &quot;0.7494145&quot;,
+    &quot;com.codeium.enabled&quot;: &quot;true&quot;,
+    &quot;database.data.extractors.current.export.id&quot;: &quot;Comma-separated (CSV)_id&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.keymap&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   },
-  "keyToStringList": {
-    "DatabaseDriversLRU": [
-      "sqlserver",
-      "mysql"
+  &quot;keyToStringList&quot;: {
+    &quot;DatabaseDriversLRU&quot;: [
+      &quot;sqlserver&quot;,
+      &quot;mysql&quot;
     ]
   }
-}]]></component>
+}</component>
   <component name="RunManager" selected=".NET Launch Settings Profile.sport-app-backend: https">
     <configuration name="sport-app-backend: IIS Express" type="LaunchSettings" factoryName=".NET Launch Settings Profile">
       <option name="LAUNCH_PROFILE_PROJECT_FILE_PATH" value="$PROJECT_DIR$/sport-app-backend.csproj" />
@@ -412,11 +441,48 @@
   <component name="UnityCheckinConfiguration" checkUnsavedScenes="true" />
   <component name="UnityProjectConfiguration" hasMinimizedUI="false" />
   <component name="Vcs.Log.Tabs.Properties">
+    <option name="RECENT_FILTERS">
+      <map>
+        <entry key="Paths">
+          <value>
+            <list>
+              <RecentGroup>
+                <option name="FILTER_VALUES">
+                  <option value="file:$PROJECT_DIR$/appsettings.json" />
+                </option>
+              </RecentGroup>
+              <RecentGroup>
+                <option name="FILTER_VALUES">
+                  <option value="file:$PROJECT_DIR$/Program.cs" />
+                </option>
+              </RecentGroup>
+              <RecentGroup>
+                <option name="FILTER_VALUES">
+                  <option value="dir:D:/403-1/sport-app1/Handler" />
+                </option>
+              </RecentGroup>
+            </list>
+          </value>
+        </entry>
+      </map>
+    </option>
     <option name="TAB_STATES">
       <map>
         <entry key="MAIN">
           <value>
-            <State />
+            <State>
+              <option name="FILTERS">
+                <map>
+                  <entry key="structure">
+                    <value>
+                      <list>
+                        <option value="file:$PROJECT_DIR$/appsettings.json" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
           </value>
         </entry>
       </map>
@@ -508,10 +574,10 @@
           <line>40</line>
           <properties documentPath="D:\403-1\sport-app1\Services\SmsService.cs" containingFunctionPresentation="Method 'SendErrorSms'">
             <startOffsets>
-              <option value="1246" />
+              <option value="1260" />
             </startOffsets>
             <endOffsets>
-              <option value="1280" />
+              <option value="1294" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="13" />

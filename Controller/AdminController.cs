@@ -52,13 +52,7 @@ namespace sport_app_backend.Controller
             }
             return Ok(result);
         }
-        [HttpPut("TestException")]
-        public  Task<IActionResult> TestException()
-        {
-            throw new InvalidOperationException("این یک خطای تستی برای بررسی GlobalExceptionHandler است.");
-
-        }
-        
+     
 
         
        

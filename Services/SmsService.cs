@@ -36,7 +36,7 @@ public class SmsService (IConfiguration config) : ISmsService
         return randomNumber;
     }
 
-    public async Task<string> SendErrorSms()
+    public async Task<string> SendErrorSms(string message)
     {
         var httpClient = new HttpClient();
        
@@ -51,7 +51,7 @@ public class SmsService (IConfiguration config) : ISmsService
             [
                 new VerifySendParameterModel
                 {
-                    Name = "CODE", Value = "11111"
+                    Name = "CODE", Value = message
                 }
             ]
         };
