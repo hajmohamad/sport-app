@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using sport_app_backend.Dtos;
 using sport_app_backend.Interface;
+using sport_app_backend.Models.Payments;
 
 namespace sport_app_backend.Controller
 {
@@ -28,6 +29,27 @@ namespace sport_app_backend.Controller
             if(result.Action == false) return BadRequest(result);
             return Ok(result);
         
+        }
+        [HttpGet("GetAllCoachPayouts")]
+        public async Task<IActionResult> GetAllCoachPayouts()
+        {
+            var result = await adminRepository.GetAllCoachPayouts();
+            return Ok(result);
+        }
+
+        [HttpPut("UpdateCoachPayoutStatus/{payoutId}")]
+        public async Task<IActionResult> UpdateCoachPayoutStatus(int payoutId, [FromQuery] string newStatus, [FromQuery] string? transactionReference)
+        {
+            if (!Enum.TryParse<PayoutStatus>(newStatus, true, out var statusEnum))
+            {
+                return BadRequest(new { Message = "مقدار وضعیت ارسال شده نامعتبر است." });
+            }
+            var result = await adminRepository.UpdateCoachPayoutStatus(payoutId, statusEnum, transactionReference);
+            if (!result.Action)
+            {
+                return BadRequest(result);
+            }
+            return Ok(result);
         }
        
     }

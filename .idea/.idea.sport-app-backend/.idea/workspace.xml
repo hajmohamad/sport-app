@@ -10,11 +10,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="5687a4a9-3eda-4338-b6b2-29a217508823" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/dataSources/a4225652-7597-4721-b39c-e253935810db.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/dataSources/a4225652-7597-4721-b39c-e253935810db.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Repository/CoachRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Repository/CoachRepository.cs" afterDir="false" />
-    </list>
+    <list default="true" id="5687a4a9-3eda-4338-b6b2-29a217508823" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -207,6 +203,7 @@
       <workItem from="1751928545738" duration="1007000" />
       <workItem from="1751992308497" duration="507000" />
       <workItem from="1752078393488" duration="11512000" />
+      <workItem from="1752498129634" duration="355000" />
     </task>
     <task id="LOCAL-00001" summary="add migration">
       <option name="closed" value="true" />
@@ -376,7 +373,15 @@
       <option name="project" value="LOCAL" />
       <updated>1752091385706</updated>
     </task>
-    <option name="localTasksCounter" value="22" />
+    <task id="LOCAL-00022" summary="add Name and Height">
+      <option name="closed" value="true" />
+      <created>1752498467821</created>
+      <option name="number" value="00022" />
+      <option name="presentableId" value="LOCAL-00022" />
+      <option name="project" value="LOCAL" />
+      <updated>1752498467821</updated>
+    </task>
+    <option name="localTasksCounter" value="23" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -417,7 +422,8 @@
     <MESSAGE value="add json" />
     <MESSAGE value="edit json" />
     <MESSAGE value="add AthleteFaq.cs" />
-    <option name="LAST_COMMIT_MESSAGE" value="add AthleteFaq.cs" />
+    <MESSAGE value="add Name and Height" />
+    <option name="LAST_COMMIT_MESSAGE" value="add Name and Height" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -427,10 +433,10 @@
           <line>220</line>
           <properties documentPath="D:\403-1\sport-app1\Controller\AthleteController.cs" containingFunctionPresentation="Method 'GetAthleteProfile'">
             <startOffsets>
-              <option value="8897" />
+              <option value="8896" />
             </startOffsets>
             <endOffsets>
-              <option value="8922" />
+              <option value="8921" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="1" />
@@ -466,10 +472,10 @@
           <line>186</line>
           <properties documentPath="D:\403-1\sport-app1\Controller\UserController.cs" containingFunctionPresentation="Method 'AppUpdate'">
             <startOffsets>
-              <option value="6391" />
+              <option value="6394" />
             </startOffsets>
             <endOffsets>
-              <option value="6441" />
+              <option value="6444" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="9" />

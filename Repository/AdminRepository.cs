@@ -107,6 +107,62 @@ namespace sport_app_backend.Repository
             }; 
 
         }
+        public async Task<ApiResponse> GetAllCoachPayouts()
+        {
+            var payouts = await context.CoachPayouts
+                .Include(p => p.Coach)
+                .ThenInclude(c => c.User)
+                .OrderByDescending(p => p.RequestDate)
+                .ToListAsync();
+
+            var payoutDtos = payouts.Select(p => new
+            {
+                p.Id,
+                CoachName = $"{p.Coach.User.FirstName} {p.Coach.User.LastName}",
+                p.Amount,
+                p.RequestDate,
+                p.Status,
+                p.PaidDate,
+                p.TransactionReference
+            });
+
+            return new ApiResponse { Action = true,
+                Message = "دریافت موفق لیست",Result = payoutDtos };
+            
+        }
+
+        public async Task<ApiResponse> UpdateCoachPayoutStatus(int payoutId, PayoutStatus newStatus, string? transactionReference)
+        {
+            var payout = await context.CoachPayouts
+                .Include(p => p.Coach)
+                .FirstOrDefaultAsync(p => p.Id == payoutId);
+
+            if (payout == null)
+            {
+                return new ApiResponse { Action = false, Message = "درخواست تسویه یافت نشد." };
+            }
+            
+
+            if (payout.Status == PayoutStatus.Paid || payout.Status == PayoutStatus.Rejected)
+            {
+                return new ApiResponse { Action = false, Message = $"وضعیت تسویه حساب قبلاً به {payout.Status} تغییر کرده است و قابل تغییر نیست." };
+            }
+
+            payout.Status = newStatus;
+            if (newStatus == PayoutStatus.Paid)
+            {
+                payout.PaidDate = DateTime.Now;
+                payout.TransactionReference = transactionReference;
+            }
+            else if (newStatus == PayoutStatus.Rejected)
+            {
+                payout.Coach.Amount += payout.Amount;
+            }
+
+            await context.SaveChangesAsync();
+
+            return new ApiResponse { Action = true, Message = "وضعیت تسویه با موفقیت به روز رسانی شد" };
+        }
     }
     
 }
