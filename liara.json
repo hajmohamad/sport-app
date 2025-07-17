@@ -1,5 +1,9 @@
 {
-  "app": "charset7",
+  "app": "charset8",
   "port": 8080,
+ "build": {
+     "location": "iran"
+  },
+
   "disks": []
 }

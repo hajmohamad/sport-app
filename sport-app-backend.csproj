@@ -26,72 +26,8 @@
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="8.0.0" />
-    <PackageReference Include="Serilog.AspNetCore" Version="9.0.0" />
-    <PackageReference Include="Serilog.Sinks.File" Version="7.0.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
     <PackageReference Include="xunit" Version="2.9.3" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <_ContentIncludedByDefault Remove="sport-app-backend\obj\project.packagespec.json" />
-    <_ContentIncludedByDefault Remove="TestProject\bin\Debug\net8.0\appsettings.Development.json" />
-    <_ContentIncludedByDefault Remove="TestProject\bin\Debug\net8.0\appsettings.json" />
-    <_ContentIncludedByDefault Remove="TestProject\bin\Debug\net8.0\sport-app-backend.deps.json" />
-    <_ContentIncludedByDefault Remove="TestProject\bin\Debug\net8.0\sport-app-backend.runtimeconfig.json" />
-    <_ContentIncludedByDefault Remove="TestProject\bin\Debug\net8.0\sport-app-backend.staticwebassets.runtime.json" />
-    <_ContentIncludedByDefault Remove="TestProject\bin\Debug\net8.0\TestProject.deps.json" />
-    <_ContentIncludedByDefault Remove="TestProject\bin\Debug\net8.0\TestProject.runtimeconfig.json" />
-    <_ContentIncludedByDefault Remove="TestProject\bin\Debug\net8.0\TestProject\bin\Debug\net8.0\appsettings.Development.json" />
-    <_ContentIncludedByDefault Remove="TestProject\bin\Debug\net8.0\TestProject\bin\Debug\net8.0\appsettings.json" />
-    <_ContentIncludedByDefault Remove="TestProject\bin\Debug\net8.0\TestProject\bin\Debug\net8.0\sport-app-backend.deps.json" />
-    <_ContentIncludedByDefault Remove="TestProject\bin\Debug\net8.0\TestProject\bin\Debug\net8.0\sport-app-backend.runtimeconfig.json" />
-    <_ContentIncludedByDefault Remove="TestProject\bin\Debug\net8.0\TestProject\bin\Debug\net8.0\sport-app-backend.staticwebassets.runtime.json" />
-    <_ContentIncludedByDefault Remove="TestProject\bin\Debug\net8.0\TestProject\bin\Debug\net8.0\TestProject.deps.json" />
-    <_ContentIncludedByDefault Remove="TestProject\bin\Debug\net8.0\TestProject\bin\Debug\net8.0\TestProject.runtimeconfig.json" />
-    <_ContentIncludedByDefault Remove="TestProject\bin\Debug\net8.0\TestProject\bin\Debug\net8.0\TestProject\bin\Debug\net8.0\appsettings.Development.json" />
-    <_ContentIncludedByDefault Remove="TestProject\bin\Debug\net8.0\TestProject\bin\Debug\net8.0\TestProject\bin\Debug\net8.0\appsettings.json" />
-    <_ContentIncludedByDefault Remove="TestProject\bin\Debug\net8.0\TestProject\bin\Debug\net8.0\TestProject\bin\Debug\net8.0\sport-app-backend.deps.json" />
-    <_ContentIncludedByDefault Remove="TestProject\bin\Debug\net8.0\TestProject\bin\Debug\net8.0\TestProject\bin\Debug\net8.0\sport-app-backend.runtimeconfig.json" />
-    <_ContentIncludedByDefault Remove="TestProject\bin\Debug\net8.0\TestProject\bin\Debug\net8.0\TestProject\bin\Debug\net8.0\sport-app-backend.staticwebassets.runtime.json" />
-    <_ContentIncludedByDefault Remove="TestProject\bin\Debug\net8.0\TestProject\bin\Debug\net8.0\TestProject\bin\Debug\net8.0\TestProject.deps.json" />
-    <_ContentIncludedByDefault Remove="TestProject\bin\Debug\net8.0\TestProject\bin\Debug\net8.0\TestProject\bin\Debug\net8.0\TestProject.runtimeconfig.json" />
-    <_ContentIncludedByDefault Remove="TestProject\bin\Debug\net8.0\TestProject\bin\Debug\net8.0\TestProject\bin\Debug\net8.0\TestProject\bin\Debug\net8.0\appsettings.Development.json" />
-    <_ContentIncludedByDefault Remove="TestProject\bin\Debug\net8.0\TestProject\bin\Debug\net8.0\TestProject\bin\Debug\net8.0\TestProject\bin\Debug\net8.0\appsettings.json" />
-    <_ContentIncludedByDefault Remove="TestProject\bin\Debug\net8.0\TestProject\bin\Debug\net8.0\TestProject\bin\Debug\net8.0\TestProject\bin\Debug\net8.0\sport-app-backend.deps.json" />
-    <_ContentIncludedByDefault Remove="TestProject\bin\Debug\net8.0\TestProject\bin\Debug\net8.0\TestProject\bin\Debug\net8.0\TestProject\bin\Debug\net8.0\sport-app-backend.runtimeconfig.json" />
-    <_ContentIncludedByDefault Remove="TestProject\bin\Debug\net8.0\TestProject\bin\Debug\net8.0\TestProject\bin\Debug\net8.0\TestProject\bin\Debug\net8.0\sport-app-backend.staticwebassets.runtime.json" />
-    <_ContentIncludedByDefault Remove="TestProject\bin\Debug\net8.0\TestProject\bin\Debug\net8.0\TestProject\bin\Debug\net8.0\TestProject\bin\Debug\net8.0\TestProject.deps.json" />
-    <_ContentIncludedByDefault Remove="TestProject\bin\Debug\net8.0\TestProject\bin\Debug\net8.0\TestProject\bin\Debug\net8.0\TestProject\bin\Debug\net8.0\TestProject.runtimeconfig.json" />
-    <_ContentIncludedByDefault Remove="TestProject\bin\Debug\net8.0\TestProject\bin\Debug\net8.0\TestProject\bin\Debug\net8.0\TestProject\bin\Debug\net8.0\TestProject\bin\Debug\net8.0\appsettings.Development.json" />
-    <_ContentIncludedByDefault Remove="TestProject\bin\Debug\net8.0\TestProject\bin\Debug\net8.0\TestProject\bin\Debug\net8.0\TestProject\bin\Debug\net8.0\TestProject\bin\Debug\net8.0\appsettings.json" />
-    <_ContentIncludedByDefault Remove="TestProject\bin\Debug\net8.0\TestProject\bin\Debug\net8.0\TestProject\bin\Debug\net8.0\TestProject\bin\Debug\net8.0\TestProject\bin\Debug\net8.0\sport-app-backend.deps.json" />
-    <_ContentIncludedByDefault Remove="TestProject\bin\Debug\net8.0\TestProject\bin\Debug\net8.0\TestProject\bin\Debug\net8.0\TestProject\bin\Debug\net8.0\TestProject\bin\Debug\net8.0\sport-app-backend.runtimeconfig.json" />
-    <_ContentIncludedByDefault Remove="TestProject\bin\Debug\net8.0\TestProject\bin\Debug\net8.0\TestProject\bin\Debug\net8.0\TestProject\bin\Debug\net8.0\TestProject\bin\Debug\net8.0\sport-app-backend.staticwebassets.runtime.json" />
-    <_ContentIncludedByDefault Remove="TestProject\bin\Debug\net8.0\TestProject\bin\Debug\net8.0\TestProject\bin\Debug\net8.0\TestProject\bin\Debug\net8.0\TestProject\bin\Debug\net8.0\TestProject.deps.json" />
-    <_ContentIncludedByDefault Remove="TestProject\bin\Debug\net8.0\TestProject\bin\Debug\net8.0\TestProject\bin\Debug\net8.0\TestProject\bin\Debug\net8.0\TestProject\bin\Debug\net8.0\TestProject.runtimeconfig.json" />
-    <_ContentIncludedByDefault Remove="TestProject\bin\Debug\net8.0\TestProject\bin\Debug\net8.0\TestProject\bin\Debug\net8.0\TestProject\bin\Debug\net8.0\TestProject\bin\Debug\net8.0\TestProject\obj\project.assets.json" />
-    <_ContentIncludedByDefault Remove="TestProject\bin\Debug\net8.0\TestProject\bin\Debug\net8.0\TestProject\bin\Debug\net8.0\TestProject\bin\Debug\net8.0\TestProject\bin\Debug\net8.0\TestProject\obj\project.packagespec.json" />
-    <_ContentIncludedByDefault Remove="TestProject\bin\Debug\net8.0\TestProject\bin\Debug\net8.0\TestProject\bin\Debug\net8.0\TestProject\bin\Debug\net8.0\TestProject\bin\Debug\net8.0\TestProject\obj\TestProject.csproj.nuget.dgspec.json" />
-    <_ContentIncludedByDefault Remove="TestProject\bin\Debug\net8.0\TestProject\bin\Debug\net8.0\TestProject\bin\Debug\net8.0\TestProject\bin\Debug\net8.0\TestProject\obj\Debug\net8.0\TestProject.sourcelink.json" />
-    <_ContentIncludedByDefault Remove="TestProject\bin\Debug\net8.0\TestProject\bin\Debug\net8.0\TestProject\bin\Debug\net8.0\TestProject\bin\Debug\net8.0\TestProject\obj\project.assets.json" />
-    <_ContentIncludedByDefault Remove="TestProject\bin\Debug\net8.0\TestProject\bin\Debug\net8.0\TestProject\bin\Debug\net8.0\TestProject\bin\Debug\net8.0\TestProject\obj\project.packagespec.json" />
-    <_ContentIncludedByDefault Remove="TestProject\bin\Debug\net8.0\TestProject\bin\Debug\net8.0\TestProject\bin\Debug\net8.0\TestProject\bin\Debug\net8.0\TestProject\obj\TestProject.csproj.nuget.dgspec.json" />
-    <_ContentIncludedByDefault Remove="TestProject\bin\Debug\net8.0\TestProject\bin\Debug\net8.0\TestProject\bin\Debug\net8.0\TestProject\obj\Debug\net8.0\TestProject.sourcelink.json" />
-    <_ContentIncludedByDefault Remove="TestProject\bin\Debug\net8.0\TestProject\bin\Debug\net8.0\TestProject\bin\Debug\net8.0\TestProject\obj\project.assets.json" />
-    <_ContentIncludedByDefault Remove="TestProject\bin\Debug\net8.0\TestProject\bin\Debug\net8.0\TestProject\bin\Debug\net8.0\TestProject\obj\project.packagespec.json" />
-    <_ContentIncludedByDefault Remove="TestProject\bin\Debug\net8.0\TestProject\bin\Debug\net8.0\TestProject\bin\Debug\net8.0\TestProject\obj\TestProject.csproj.nuget.dgspec.json" />
-    <_ContentIncludedByDefault Remove="TestProject\bin\Debug\net8.0\TestProject\bin\Debug\net8.0\TestProject\obj\Debug\net8.0\TestProject.sourcelink.json" />
-    <_ContentIncludedByDefault Remove="TestProject\bin\Debug\net8.0\TestProject\bin\Debug\net8.0\TestProject\obj\project.assets.json" />
-    <_ContentIncludedByDefault Remove="TestProject\bin\Debug\net8.0\TestProject\bin\Debug\net8.0\TestProject\obj\project.packagespec.json" />
-    <_ContentIncludedByDefault Remove="TestProject\bin\Debug\net8.0\TestProject\bin\Debug\net8.0\TestProject\obj\TestProject.csproj.nuget.dgspec.json" />
-    <_ContentIncludedByDefault Remove="TestProject\bin\Debug\net8.0\TestProject\obj\Debug\net8.0\TestProject.sourcelink.json" />
-    <_ContentIncludedByDefault Remove="TestProject\bin\Debug\net8.0\TestProject\obj\project.assets.json" />
-    <_ContentIncludedByDefault Remove="TestProject\bin\Debug\net8.0\TestProject\obj\project.packagespec.json" />
-    <_ContentIncludedByDefault Remove="TestProject\bin\Debug\net8.0\TestProject\obj\TestProject.csproj.nuget.dgspec.json" />
-    <_ContentIncludedByDefault Remove="TestProject\obj\Debug\net8.0\TestProject.sourcelink.json" />
-    <_ContentIncludedByDefault Remove="TestProject\obj\project.assets.json" />
-    <_ContentIncludedByDefault Remove="TestProject\obj\project.packagespec.json" />
-    <_ContentIncludedByDefault Remove="TestProject\obj\TestProject.csproj.nuget.dgspec.json" />
   </ItemGroup>
 
 </Project>

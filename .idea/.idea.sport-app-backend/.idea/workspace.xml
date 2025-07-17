@@ -10,12 +10,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="5687a4a9-3eda-4338-b6b2-29a217508823" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/dataSources.local.xml" afterDir="false" />
+    <list default="true" id="5687a4a9-3eda-4338-b6b2-29a217508823" name="Changes" comment="comment sms service">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Repository/CoachRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Repository/CoachRepository.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Repository/UserRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Repository/UserRepository.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Services/SmsService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Services/SmsService.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -245,7 +241,7 @@
       <workItem from="1752679815859" duration="3350000" />
       <workItem from="1752692399853" duration="4919000" />
       <workItem from="1752707091424" duration="531000" />
-      <workItem from="1752757505275" duration="1274000" />
+      <workItem from="1752757505275" duration="3265000" />
     </task>
     <task id="LOCAL-00001" summary="add migration">
       <option name="closed" value="true" />
@@ -439,7 +435,15 @@
       <option name="project" value="LOCAL" />
       <updated>1752706482477</updated>
     </task>
-    <option name="localTasksCounter" value="25" />
+    <task id="LOCAL-00025" summary="comment sms service">
+      <option name="closed" value="true" />
+      <created>1752759159182</created>
+      <option name="number" value="00025" />
+      <option name="presentableId" value="LOCAL-00025" />
+      <option name="project" value="LOCAL" />
+      <updated>1752759159182</updated>
+    </task>
+    <option name="localTasksCounter" value="26" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -477,19 +481,7 @@
       <map>
         <entry key="MAIN">
           <value>
-            <State>
-              <option name="FILTERS">
-                <map>
-                  <entry key="structure">
-                    <value>
-                      <list>
-                        <option value="file:$PROJECT_DIR$/appsettings.json" />
-                      </list>
-                    </value>
-                  </entry>
-                </map>
-              </option>
-            </State>
+            <State />
           </value>
         </entry>
       </map>
@@ -520,7 +512,8 @@
     <MESSAGE value="add Name and Height" />
     <MESSAGE value="add GetAllCoachPayouts" />
     <MESSAGE value="edit logs and add ip limit request" />
-    <option name="LAST_COMMIT_MESSAGE" value="edit logs and add ip limit request" />
+    <MESSAGE value="comment sms service" />
+    <option name="LAST_COMMIT_MESSAGE" value="comment sms service" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
