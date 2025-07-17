@@ -10,30 +10,30 @@ public class SmsService (IConfiguration config) : ISmsService
 
     public async Task<string> SendCode(string phoneNumber)
     {
-        var httpClient = new HttpClient();
-        var random = new Random();
-        var randomNumber = random.Next(10000, 100000).ToString();
-        httpClient.DefaultRequestHeaders.Add("x-api-key",
-            _accessKey);
-        
-        var model = new VerifySendModel()
-        {
-            Mobile = phoneNumber,
-            TemplateId = 980201,
-            Parameters =
-            [
-                new VerifySendParameterModel
-                {
-                    Name = "CODE", Value = randomNumber
-                }
-            ]
-        };
-        
-        var payload = JsonSerializer.Serialize(model);
-        StringContent stringContent = new(payload, Encoding.UTF8, "application/json");
-        
-        var response = await httpClient.PostAsync("https://api.sms.ir/v1/send/verify", stringContent);
-        return randomNumber;
+        // var httpClient = new HttpClient();
+        // var random = new Random();
+        // var randomNumber = random.Next(10000, 100000).ToString();
+        // httpClient.DefaultRequestHeaders.Add("x-api-key",
+        //     _accessKey);
+        //
+        // var model = new VerifySendModel()
+        // {
+        //     Mobile = phoneNumber,
+        //     TemplateId = 980201,
+        //     Parameters =
+        //     [
+        //         new VerifySendParameterModel
+        //         {
+        //             Name = "CODE", Value = randomNumber
+        //         }
+        //     ]
+        // };
+        //
+        // var payload = JsonSerializer.Serialize(model);
+        // StringContent stringContent = new(payload, Encoding.UTF8, "application/json");
+        //
+        // var response = await httpClient.PostAsync("https://api.sms.ir/v1/send/verify", stringContent);
+        return "12345";
     }
 
     public async Task<string> SendErrorSms(string message)

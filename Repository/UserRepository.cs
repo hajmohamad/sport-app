@@ -306,12 +306,16 @@ private async Task<string> GenerateUniqueUsername()
     }
     public async Task<ApiResponse> GetAllExercise()
     {
-        var exercise = await dbContext.Exercises.OrderByDescending(x => x.Views).ToListAsync();
+            var exercisesDto = await dbContext.Exercises
+                .AsNoTracking() 
+                .OrderByDescending(x => x.Views)
+                .Select(x => x.ToAllExerciseResponseDto()) 
+                .ToListAsync();
         return new ApiResponse()
         {
             Message = "Exercises found",
             Action = true,
-            Result = exercise.Select(x=>x.ToAllExerciseResponseDto())
+            Result = exercisesDto
         };
     }
 
