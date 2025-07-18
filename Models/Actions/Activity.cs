@@ -18,8 +18,8 @@ public class Activity
     [DataType(DataType.Date)]
     [Column(TypeName = "date")]
     public DateTime Date { get; set; }=DateTime.Now.Date;
-    public int AthleteId { get; set; }
-    public required Athlete Athlete { get; set; }
+    public required int AthleteId { get; set; }
+    public Athlete Athlete { get; set; }
 
    
 }

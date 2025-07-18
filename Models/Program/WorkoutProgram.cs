@@ -13,7 +13,7 @@ public class WorkoutProgram
     public required Coach Coach {get; set;}
     public required int AthleteId { get; set; }
     public required Athlete Athlete {get; set;}
-    [MaxLength(30)]
+    [MaxLength(50)]
     public string Title { get; set; }="";
     public required int PaymentId { get; set; }
     public required Payment Payment { get; set; }

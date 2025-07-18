@@ -193,7 +193,7 @@ public static class ProgramMappers
             Exercise = singleExercise.Exercise.ToExerciseDto()
         };
     }
-    private static int[] GetExerciseStatusArray(this byte[] bitmap)
+    public static int[] GetExerciseStatusArray(this byte[] bitmap)
     {
         int[] result = new int[bitmap.Length];
 
