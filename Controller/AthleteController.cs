@@ -252,7 +252,8 @@ namespace sport_app_backend.Controller
         [Authorize(Roles = "Athlete")]
         public async Task<IActionResult> GetCoachProfile([FromRoute] int coachId)
         {
-            var coach = await context.Coaches.Include(c => c.User).Include(c => c.CoachingServices)
+            var coach = await context.Coaches.Include(c => c.User).
+                Include(c => c.CoachingServices)
                 .FirstOrDefaultAsync(c => c.Id == coachId);
             if (coach == null) return BadRequest(new ApiResponse() { Action = false, Message = "Coach not found" });
             var payments = await context.Payments.Include(p => p.Athlete).Include(p => p.WorkoutProgram).Where(p =>

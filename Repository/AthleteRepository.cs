@@ -177,8 +177,8 @@ namespace sport_app_backend.Repository
             if (coachService == null)
                 return new ApiResponse { Message = "CoachingService not found", Action = false };
 
-            if (coachService.IsDeleted)
-                return new ApiResponse { Message = "CoachingService is deleted", Action = false };
+            if (coachService.IsDeleted || !coachService.IsActive)
+                return new ApiResponse { Message = "CoachingService is deleted or not active", Action = false };
 
             var zarinPalResponse = await zarinPal.RequestPaymentAsync(new ZarinPalPaymentRequestDto
             {

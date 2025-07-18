@@ -781,7 +781,7 @@ namespace sport_app_backend.Repository
             }
 
 
-            if ((program.TotalSessionCount > 0) && (program.TotalSessionCount - program.CompletedSessionCount) <= 5)
+            if ((program.TotalSessionCount > 0) && (program.TotalSessionCount - program.CompletedSessionCount) < 5)
             {
                 return ("NearingCompletion");
             }

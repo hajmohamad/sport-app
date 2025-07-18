@@ -106,7 +106,7 @@ namespace sport_app_backend.Mappers
                              .ToList() ??
                          new List<string>(), // Ensure it's not null
                 StartCoachingYear = coach.StartCoachingYear,
-                CoachServices = coach.CoachingServices.Where(x => !x.IsDeleted)
+                CoachServices = coach.CoachingServices.Where(x => x is { IsDeleted: false, IsActive: true })
                                     .Select(x => x.ToCoachingServiceResponse())
                                     .ToList() ,
                 NumberOfAthletes = numberOfAthlete,
