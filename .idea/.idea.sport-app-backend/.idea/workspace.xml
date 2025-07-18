@@ -10,14 +10,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="5687a4a9-3eda-4338-b6b2-29a217508823" name="Changes" comment="edit location">
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Mappers/ProgramMappers.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Mappers/ProgramMappers.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Models/Actions/Activity.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/Actions/Activity.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Models/Program/WorkoutProgram.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/Program/WorkoutProgram.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Repository/AthleteRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Repository/AthleteRepository.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sport-app-backend.sln.DotSettings.user" beforeDir="false" afterPath="$PROJECT_DIR$/sport-app-backend.sln.DotSettings.user" afterDir="false" />
-    </list>
+    <list default="true" id="5687a4a9-3eda-4338-b6b2-29a217508823" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -52,6 +45,7 @@
     <setting file="file://$PROJECT_DIR$/Dtos/ExerciseDto.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Mappers/ExercisesMappers.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Mappers/ProgramMappers.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="mock://D:/403-1/sport-app1/Models/Actions/Activity.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Models/Actions/Exercise.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Program.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Repository/AthleteRepository.cs" root0="FORCE_HIGHLIGHTING" />
@@ -219,7 +213,7 @@
       <workItem from="1752830670664" duration="801000" />
       <workItem from="1752831762376" duration="3016000" />
       <workItem from="1752841935488" duration="1941000" />
-      <workItem from="1752843969980" duration="8040000" />
+      <workItem from="1752843969980" duration="8239000" />
     </task>
     <task id="LOCAL-00001" summary="add migration">
       <option name="closed" value="true" />
@@ -445,7 +439,15 @@
       <option name="project" value="LOCAL" />
       <updated>1752833445637</updated>
     </task>
-    <option name="localTasksCounter" value="29" />
+    <task id="LOCAL-00029" summary="edit Lenght and query">
+      <option name="closed" value="true" />
+      <created>1752852287661</created>
+      <option name="number" value="00029" />
+      <option name="presentableId" value="LOCAL-00029" />
+      <option name="project" value="LOCAL" />
+      <updated>1752852287661</updated>
+    </task>
+    <option name="localTasksCounter" value="30" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -491,7 +493,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
-    <MESSAGE value="add migration" />
     <MESSAGE value="edit connection pull" />
     <MESSAGE value="test for Activity" />
     <MESSAGE value="fix bugs and edit publish active program method" />
@@ -516,7 +517,8 @@
     <MESSAGE value="fix bugs" />
     <MESSAGE value="add json" />
     <MESSAGE value="edit location" />
-    <option name="LAST_COMMIT_MESSAGE" value="edit location" />
+    <MESSAGE value="edit Lenght and query" />
+    <option name="LAST_COMMIT_MESSAGE" value="edit Lenght and query" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

@@ -12,23 +12,23 @@ using sport_app_backend.Interface;
 using sport_app_backend.Services;
 using sport_app_backend.Repository;
 using Microsoft.OpenApi.Models;
-// using Serilog;
-// using Serilog.Events;
-// using sport_app_backend.Handler;
+using Serilog;
+using Serilog.Events;
+using sport_app_backend.Handler;
 
-// Log.Logger = new LoggerConfiguration()
-//     .WriteTo.Console()
-//     .CreateBootstrapLogger();
+Log.Logger = new LoggerConfiguration()
+    .WriteTo.Console()
+    .CreateBootstrapLogger();
 
 
 var builder = WebApplication.CreateBuilder(args);
-// builder.Host.UseSerilog((context, configuration) =>
-// {
-//     configuration
-//         .MinimumLevel.Is(LogEventLevel.Error) 
-//         .Enrich.FromLogContext()
-//         .WriteTo.Console(); 
-// });
+builder.Host.UseSerilog((context, configuration) =>
+{
+    configuration
+        .MinimumLevel.Is(LogEventLevel.Error) 
+        .Enrich.FromLogContext()
+        .WriteTo.Console(); 
+});
 
 builder.Services.AddCors(options =>
 {
@@ -44,7 +44,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddProblemDetails();
-// builder.Services.AddExceptionHandler<GlobalExceptionHandler>(); 
+builder.Services.AddExceptionHandler<GlobalExceptionHandler>(); 
 
 
 
@@ -149,7 +149,7 @@ app.UseExceptionHandler();
 
 app.UseSwagger();
 app.UseSwaggerUI();
-// app.UseSerilogRequestLogging();
+app.UseSerilogRequestLogging();
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();

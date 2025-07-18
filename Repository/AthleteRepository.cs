@@ -1299,8 +1299,9 @@ namespace sport_app_backend.Repository
                     IsAthleteFound = true,
                     CurrentWeight = a.CurrentWeight,
                     GoalWeight = a.WeightGoal,
-                    DailyCupOfWater = a.WaterInTake.DailyCupOfWater,
-                    Reminder = a.WaterInTake.Reminder,
+
+                    DailyCupOfWater = a.WaterInTake != null ? a.WaterInTake.DailyCupOfWater : 0,
+                    Reminder = a.WaterInTake != null ? a.WaterInTake.Reminder : 0,
                     
                     Name = a.User.FirstName + " "+a.User.LastName,
                     Height= a.Height,

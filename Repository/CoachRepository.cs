@@ -463,7 +463,6 @@ namespace sport_app_backend.Repository
                     return new ApiResponse { Action = false, Message = "مربی یافت نشد." };
                 }
 
-                // ... تمام کد های قبلی تا قبل از محاسبه نمودار ها بدون تغییر باقی می مانند ...
                 var successfulPayments = await context.Payments
                     .Where(p => p.CoachId == coach.Id && p.PaymentStatus == PaymentStatus.SUCCESS)
                     .Include(p => p.WorkoutProgram)
