@@ -629,7 +629,13 @@ namespace sport_app_backend.Repository
 
         public async Task<ApiResponse> GetSocialMediaLink(string phoneNumber)
         {
-            var coach = await context.Coaches.FirstOrDefaultAsync(c => c.PhoneNumber == phoneNumber);
+            var coach = await context.Coaches.AsNoTracking().Where(c => c.PhoneNumber == phoneNumber).Select(coach =>
+                new
+                {
+                    coach.WhatsApp,
+                    coach.TelegramLink,
+                    coach.InstagramLink
+                }).FirstOrDefaultAsync();
             if (coach == null)
             {
                 return new ApiResponse { Action = false, Message = "مربی یافت نشد." };
@@ -638,12 +644,7 @@ namespace sport_app_backend.Repository
             return new ApiResponse
             {
                 Action = true, Message = "دریافت لینک ها",
-                Result = new
-                {
-                    coach.WhatsApp,
-                    coach.TelegramLink,
-                    coach.InstagramLink
-                }
+                Result = coach
             };
         }
 
@@ -664,7 +665,6 @@ namespace sport_app_backend.Repository
                 .Include(p => p.WorkoutProgram)
                 .ToListAsync();
 
-            // گروه‌بندی بر اساس ورزشکار برای جلوگیری از نمایش تکراری
             var athletes = payments
                 .GroupBy(p => p.Athlete)
                 .Select(g => g.Key)

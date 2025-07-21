@@ -53,8 +53,8 @@ namespace sport_app_backend.Repository
                     Payment = payment,
                     PaymentId = payment.Id
                 };
-                payment.Coach.Amount += (payment.Amount - payment.Coach.ServiceFee);
-                payment.AppFee = payment.Coach.ServiceFee;
+                payment.AppFee = (payment.Amount * payment.Coach.ServiceFee) ;
+                payment.Coach.Amount += (payment.Amount - payment.AppFee );
 
                 payment.WorkoutProgram = workoutProgram;
                 payment.PaymentStatus = PaymentStatus.SUCCESS;

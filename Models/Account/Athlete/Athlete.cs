@@ -13,7 +13,7 @@ public class Athlete
     [Key]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int Id { get; set; }
-
+    [StringLength(11)]
     public required string PhoneNumber { get; set; }
     public int UserId { get; set; }
     public required User User { get; set; }

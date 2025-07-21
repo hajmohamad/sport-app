@@ -9,14 +9,14 @@ public class LiaraStorage(IConfiguration config) :ILiaraStorage
 {
     private readonly string _accessKey = config["Liara:accessKey"] ?? "string.Empty";
     private readonly string _secretKey = config["Liara:secretKey"] ?? "string.Empty";
-    private const string BucketName = "charset7";
-    private const string Endpoint = "https://storage.c2.liara.space";
+    private readonly string _bucketName = config["Liara:BucketName"] ?? "string.Empty";
+    private readonly string _endpoint = config["Liara:EndPoint"] ?? "string.Empty";
 
     public async Task<ApiResponse> UploadImage(IFormFile image, string url)
     {
         var config = new AmazonS3Config
         {
-            ServiceURL = Endpoint,
+            ServiceURL = _endpoint,
             ForcePathStyle = true,
             SignatureVersion = "4"
         };
@@ -39,7 +39,7 @@ public class LiaraStorage(IConfiguration config) :ILiaraStorage
 
             var request = new PutObjectRequest
             {
-                BucketName = BucketName,
+                BucketName = _bucketName,
                 Key = objectKey,
                 InputStream = memoryStream,
                 ContentType = image.ContentType // اضافه برای بهتر بودن متادیتا
@@ -47,7 +47,7 @@ public class LiaraStorage(IConfiguration config) :ILiaraStorage
 
             await client.PutObjectAsync(request);
 
-            var fileUrl = $"{Endpoint}/{BucketName}/{objectKey}";
+            var fileUrl = $"{_endpoint}/{_bucketName}/{objectKey}";
             if (url.Length > 10)
             {
                 await DeleteObjectAsync(client, url);
@@ -79,7 +79,7 @@ public class LiaraStorage(IConfiguration config) :ILiaraStorage
    
         var config = new AmazonS3Config
         {
-            ServiceURL = Endpoint,
+            ServiceURL = _endpoint,
             ForcePathStyle = true,
             SignatureVersion = "4"
         };

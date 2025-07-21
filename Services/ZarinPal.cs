@@ -13,6 +13,7 @@ public class ZarinPal(IConfiguration config) : IZarinPal
 
 {
     private readonly string _merchantId = config["Zarinpal:MerchantId"] ?? "string.Empty";
+    private readonly string _endpoint = config["Zarinpal:endpoint"] ?? "string.Empty";
 
 
     private static readonly HttpClient Client = new HttpClient();
@@ -26,7 +27,7 @@ public class ZarinPal(IConfiguration config) : IZarinPal
         try
         {
             var response =
-                await Client.PostAsync("https://sandbox.zarinpal.com/pg/v4/payment/request.json", content);
+                await Client.PostAsync(_endpoint+"pg/v4/payment/request.json", content);
             var responseContent = await response.Content.ReadAsStringAsync();
             dynamic result = JsonConvert.DeserializeObject(responseContent);
 
@@ -72,7 +73,7 @@ public class ZarinPal(IConfiguration config) : IZarinPal
 
       
         var response =
-                await Client.PostAsync("https://sandbox.zarinpal.com/pg/v4/payment/verify.json", content);
+                await Client.PostAsync(_endpoint+"pg/v4/payment/verify.json", content);
         var responseContent = await response.Content.ReadAsStringAsync();
         var result = JsonConvert.DeserializeObject<ZarinpalVerifyApiResponseDto>(responseContent);
         return result;

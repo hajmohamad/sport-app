@@ -7,12 +7,46 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace sport_app_backend.Migrations
 {
     /// <inheritdoc />
-    public partial class Init : Migration
+    public partial class InitialBaseline : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AlterDatabase()
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "AthleteFaq",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    Question = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Answer = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AthleteFaq", x => x.Id);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "CoachFaq",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    Question = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Answer = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CoachFaq", x => x.Id);
+                })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
@@ -39,29 +73,27 @@ namespace sport_app_backend.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    EnglishName = table.Column<string>(type: "varchar(30)", maxLength: 30, nullable: false)
+                    EnglishName = table.Column<string>(type: "varchar(60)", maxLength: 60, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    PersianName = table.Column<string>(type: "varchar(30)", maxLength: 30, nullable: false)
+                    PersianName = table.Column<string>(type: "varchar(60)", maxLength: 60, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    ImageLink = table.Column<string>(type: "varchar(150)", maxLength: 150, nullable: false)
+                    ImageLink = table.Column<string>(type: "varchar(170)", maxLength: 170, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    VideoLink = table.Column<string>(type: "varchar(150)", maxLength: 150, nullable: false)
+                    VideoLink = table.Column<string>(type: "varchar(170)", maxLength: 170, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    Description = table.Column<string>(type: "varchar(1500)", maxLength: 1500, nullable: false)
+                    Description = table.Column<string>(type: "varchar(3000)", maxLength: 3000, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
+                    Met = table.Column<double>(type: "double", nullable: false),
                     ExerciseLevel = table.Column<int>(type: "int", nullable: false),
-                    TargetMuscles = table.Column<string>(type: "varchar(150)", maxLength: 150, nullable: false)
+                    TargetMuscles = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
+                    BaseMuscle = table.Column<int>(type: "int", nullable: false),
                     BaseCategory = table.Column<int>(type: "int", nullable: false),
                     Mechanics = table.Column<int>(type: "int", nullable: false),
                     ForceType = table.Column<int>(type: "int", nullable: false),
                     Views = table.Column<int>(type: "int", nullable: false),
-                    ExerciseCategories = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Equipment = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Locations = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4")
+                    ExerciseType = table.Column<int>(type: "int", nullable: false),
+                    Equipment = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -93,8 +125,7 @@ namespace sport_app_backend.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     TypeOfUser = table.Column<int>(type: "int", nullable: false),
                     RefreshToken = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    RefreshTokeNExpire = table.Column<DateTime>(type: "datetime(6)", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4")
                 },
                 constraints: table =>
                 {
@@ -108,14 +139,15 @@ namespace sport_app_backend.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    PhoneNumber = table.Column<string>(type: "longtext", nullable: false)
+                    PhoneNumber = table.Column<string>(type: "varchar(11)", maxLength: 11, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     UserId = table.Column<int>(type: "int", nullable: false),
                     Height = table.Column<int>(type: "int", nullable: false),
                     CurrentWeight = table.Column<double>(type: "double", nullable: false),
                     WeightGoal = table.Column<double>(type: "double", nullable: false),
                     TimeBeforeWorkout = table.Column<int>(type: "int", nullable: false),
-                    RestTime = table.Column<int>(type: "int", nullable: false)
+                    RestTime = table.Column<int>(type: "int", nullable: false),
+                    ActiveWorkoutProgramId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -332,16 +364,20 @@ namespace sport_app_backend.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     UserId = table.Column<int>(type: "int", nullable: false),
-                    PhoneNumber = table.Column<string>(type: "longtext", nullable: false)
+                    PhoneNumber = table.Column<string>(type: "varchar(11)", maxLength: 11, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    Email = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Domain = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    StartCoachingYear = table.Column<int>(type: "int", nullable: false),
                     CoachQuestionId = table.Column<int>(type: "int", nullable: true),
+                    InstagramLink = table.Column<string>(type: "varchar(51)", maxLength: 51, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    TelegramLink = table.Column<string>(type: "varchar(51)", maxLength: 51, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    WhatsApp = table.Column<string>(type: "varchar(51)", maxLength: 51, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Verified = table.Column<bool>(type: "tinyint(1)", nullable: false),
                     HeadLine = table.Column<string>(type: "varchar(124)", maxLength: 124, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4")
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Amount = table.Column<double>(type: "double", nullable: false),
+                    ServiceFee = table.Column<double>(type: "double", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -394,6 +430,32 @@ namespace sport_app_backend.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
+                name: "CoachPayouts",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    CoachId = table.Column<int>(type: "int", nullable: false),
+                    Amount = table.Column<double>(type: "double", nullable: false),
+                    RequestDate = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    Status = table.Column<int>(type: "int", nullable: false),
+                    PaidDate = table.Column<DateTime>(type: "datetime(6)", nullable: true),
+                    TransactionReference = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CoachPayouts", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_CoachPayouts_Coaches_CoachId",
+                        column: x => x.CoachId,
+                        principalTable: "Coaches",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
                 name: "CoachServices",
                 columns: table => new
                 {
@@ -439,7 +501,9 @@ namespace sport_app_backend.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     PaymentStatus = table.Column<int>(type: "int", nullable: false),
                     PaymentDate = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    AthleteQuestionId = table.Column<int>(type: "int", nullable: false)
+                    AthleteQuestionId = table.Column<int>(type: "int", nullable: false),
+                    AppFee = table.Column<double>(type: "double", nullable: false),
+                    RefId = table.Column<long>(type: "bigint", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -479,7 +543,7 @@ namespace sport_app_backend.Migrations
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     CoachId = table.Column<int>(type: "int", nullable: false),
                     AthleteId = table.Column<int>(type: "int", nullable: false),
-                    Title = table.Column<string>(type: "varchar(30)", maxLength: 30, nullable: false)
+                    Title = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     PaymentId = table.Column<int>(type: "int", nullable: false),
                     StartDate = table.Column<DateTime>(type: "datetime(6)", nullable: false),
@@ -495,7 +559,10 @@ namespace sport_app_backend.Migrations
                     Status = table.Column<int>(type: "int", nullable: false),
                     Duration = table.Column<int>(type: "int", nullable: false),
                     Description = table.Column<string>(type: "varchar(120)", maxLength: 120, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4")
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    LastExerciseDate = table.Column<DateTime>(type: "date", nullable: true),
+                    TotalSessionCount = table.Column<int>(type: "int", nullable: false),
+                    CompletedSessionCount = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -720,6 +787,11 @@ namespace sport_app_backend.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_CoachPayouts_CoachId",
+                table: "CoachPayouts",
+                column: "CoachId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_CoachQuestions_UserId",
                 table: "CoachQuestions",
                 column: "UserId");
@@ -865,7 +937,16 @@ namespace sport_app_backend.Migrations
                 name: "Activities");
 
             migrationBuilder.DropTable(
+                name: "AthleteFaq");
+
+            migrationBuilder.DropTable(
                 name: "Challenges");
+
+            migrationBuilder.DropTable(
+                name: "CoachFaq");
+
+            migrationBuilder.DropTable(
+                name: "CoachPayouts");
 
             migrationBuilder.DropTable(
                 name: "CodeVerifies");

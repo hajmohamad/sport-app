@@ -11,8 +11,8 @@ using sport_app_backend.Data;
 namespace sport_app_backend.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250709200236_AthleteFaq")]
-    partial class AthleteFaq
+    [Migration("20250721153904_InitialBaseline")]
+    partial class InitialBaseline
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -39,7 +39,8 @@ namespace sport_app_backend.Migrations
 
                     b.Property<string>("PhoneNumber")
                         .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasMaxLength(11)
+                        .HasColumnType("varchar(11)");
 
                     b.Property<int>("RestTime")
                         .HasColumnType("int");
@@ -73,14 +74,6 @@ namespace sport_app_backend.Migrations
                     b.Property<int?>("CoachQuestionId")
                         .HasColumnType("int");
 
-                    b.Property<string>("Domain")
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("varchar(50)");
-
                     b.Property<string>("HeadLine")
                         .IsRequired()
                         .HasMaxLength(124)
@@ -88,23 +81,21 @@ namespace sport_app_backend.Migrations
 
                     b.Property<string>("InstagramLink")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("varchar(50)");
+                        .HasMaxLength(51)
+                        .HasColumnType("varchar(51)");
 
                     b.Property<string>("PhoneNumber")
                         .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasMaxLength(11)
+                        .HasColumnType("varchar(11)");
 
                     b.Property<double>("ServiceFee")
                         .HasColumnType("double");
 
-                    b.Property<int>("StartCoachingYear")
-                        .HasColumnType("int");
-
                     b.Property<string>("TelegramLink")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("varchar(50)");
+                        .HasMaxLength(51)
+                        .HasColumnType("varchar(51)");
 
                     b.Property<int>("UserId")
                         .HasColumnType("int");
@@ -114,8 +105,8 @@ namespace sport_app_backend.Migrations
 
                     b.Property<string>("WhatsApp")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("varchar(50)");
+                        .HasMaxLength(51)
+                        .HasColumnType("varchar(51)");
 
                     b.HasKey("Id");
 
@@ -522,6 +513,9 @@ namespace sport_app_backend.Migrations
                     b.Property<double>("Amount")
                         .HasColumnType("double");
 
+                    b.Property<double>("AppFee")
+                        .HasColumnType("double");
+
                     b.Property<int>("AthleteId")
                         .HasColumnType("int");
 
@@ -770,8 +764,8 @@ namespace sport_app_backend.Migrations
 
                     b.Property<string>("Title")
                         .IsRequired()
-                        .HasMaxLength(30)
-                        .HasColumnType("varchar(30)");
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)");
 
                     b.Property<int>("TotalSessionCount")
                         .HasColumnType("int");

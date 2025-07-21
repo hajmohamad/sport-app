@@ -25,10 +25,10 @@ namespace sport_app_backend.Mappers
                 ImageProfile = user.ImageProfile,
                 Bio = user.Bio,
                 HeadLine = user.Coach?.HeadLine?? string.Empty,
-                Domain = user.Coach?.Domain?.Select(x => x.ToString())
-                             .ToList() ??
-                         [], // Ensure it's not null
-                StartCoachingYear = user.Coach?.StartCoachingYear ?? 0,
+                // Domain = user.Coach?.Domain?.Select(x => x.ToString())
+                //              .ToList() ??
+                //          [], // Ensure it's not null
+                // StartCoachingYear = user.Coach?.StartCoachingYear ?? 0,
                 CoachingServices = coachingServicesResponse,
                 Payments = payments.Select(p => p.ToCoachAllPaymentResponseDto())
                     .ToList(),
@@ -102,10 +102,10 @@ namespace sport_app_backend.Mappers
                 ImageProfile = coach.User?.ImageProfile ?? "",
                 Bio = coach.User?.Bio ?? "",
                 HeadLine = coach.HeadLine,
-                Domain = coach.Domain?.Select(x => x.ToString())
-                             .ToList() ??
-                         new List<string>(), // Ensure it's not null
-                StartCoachingYear = coach.StartCoachingYear,
+                // Domain = coach.Domain?.Select(x => x.ToString())
+                //              .ToList() ??
+                //          new List<string>(), // Ensure it's not null
+                // StartCoachingYear = coach.StartCoachingYear,
                 CoachServices = coach.CoachingServices.Where(x => x is { IsDeleted: false, IsActive: true })
                                     .Select(x => x.ToCoachingServiceResponse())
                                     .ToList() ,
