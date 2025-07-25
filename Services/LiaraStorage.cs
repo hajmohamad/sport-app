@@ -10,7 +10,7 @@ public class LiaraStorage(IConfiguration config) :ILiaraStorage
     private readonly string _accessKey = config["Liara:accessKey"] ?? "string.Empty";
     private readonly string _secretKey = config["Liara:secretKey"] ?? "string.Empty";
     private readonly string _bucketName = config["Liara:BucketName"] ?? "string.Empty";
-    private readonly string _endpoint = config["Liara:EndPoint"] ?? "string.Empty";
+    private readonly string _endpoint = config["Liara:endPoint"] ?? "string.Empty";
 
     public async Task<ApiResponse> UploadImage(IFormFile image, string url)
     {

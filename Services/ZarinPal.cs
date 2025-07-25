@@ -38,7 +38,7 @@ public class ZarinPal(IConfiguration config) : IZarinPal
                     ErrorMessage = result?.errors?.message ?? "Unknown error"
                 };
             var authority = result?.data.authority;
-            var paymentUrl = $"https://sandbox.zarinpal.com/pg/StartPay/{authority}";
+            var paymentUrl = _endpoint+$"pg/StartPay/{authority}";
 
             return new ZarinPalPaymentResponseDto
             {
