@@ -12,53 +12,8 @@
   <component name="ChangeListManager">
     <list default="true" id="5687a4a9-3eda-4338-b6b2-29a217508823" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/dataSources.local.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/dataSources.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/dataSources.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/dataSources/857ae735-1ac7-478d-93ef-643e1ca02ef3.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/dataSources/857ae735-1ac7-478d-93ef-643e1ca02ef3.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/dataSources/a4225652-7597-4721-b39c-e253935810db.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/dataSources/a4225652-7597-4721-b39c-e253935810db.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dtos/CoachProfileForAthleteDto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Dtos/CoachProfileForAthleteDto.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dtos/CoachProfileResponse.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Dtos/CoachProfileResponse.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Mappers/CoachMappers.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Mappers/CoachMappers.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Migrations/20250523142951_Init.Designer.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Migrations/20250523142951_Init.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Migrations/20250527112206_upmig.Designer.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Migrations/20250527112206_upmig.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Migrations/20250527231409_coe.Designer.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Migrations/20250527231409_coe.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Migrations/20250604155254_activeworkotprogramId.Designer.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Migrations/20250604155254_activeworkotprogramId.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Migrations/20250608171531_AddIndexesForDashboard.Designer.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Migrations/20250608171531_AddIndexesForDashboard.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Migrations/20250617122900_merchentId.Designer.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Migrations/20250617122900_merchentId.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Migrations/20250627081958_UpdateMaxLength.Designer.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Migrations/20250627081958_UpdateMaxLength.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Migrations/20250702125558_met.Designer.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Migrations/20250702125558_met.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Migrations/20250702170137_fixMigrations.Designer.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Migrations/20250702170137_fixMigrations.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Migrations/20250702171136_VerifiedCoach.Designer.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Migrations/20250702171136_VerifiedCoach.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Migrations/20250704151523_AmountToCoach.Designer.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Migrations/20250704151523_AmountToCoach.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Migrations/20250709193139_Faq.Designer.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Migrations/20250709193139_Faq.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Migrations/20250709200236_AthleteFaq.Designer.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Migrations/20250709200236_AthleteFaq.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Migrations/20250712182230_addAppFee.Designer.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Migrations/20250712182230_addAppFee.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Migrations/20250718152321_editlengh.Designer.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Migrations/20250718152321_editlengh.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Migrations/ApplicationDbContextModelSnapshot.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Models/Account/Athlete/Athlete.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/Account/Athlete/Athlete.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Models/Account/Coach/Coach.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/Account/Coach/Coach.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Repository/AthleteRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Repository/AthleteRepository.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Repository/CoachRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Repository/CoachRepository.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Services/LiaraStorage.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Services/LiaraStorage.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Services/SmsService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Services/SmsService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Services/ZarinPal.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Services/ZarinPal.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/appsettings.Development.json" beforeDir="false" afterPath="$PROJECT_DIR$/appsettings.Development.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/appsettings.json" beforeDir="false" afterPath="$PROJECT_DIR$/appsettings.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -69,6 +24,11 @@
     <option name="firstShow" value="false" />
   </component>
   <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="master" />
+      </map>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="GitHubPullRequestSearchHistory">{
@@ -80,7 +40,7 @@
   <component name="GithubPullRequestsUISettings">{
   &quot;selectedUrlAndAccountId&quot;: {
     &quot;url&quot;: &quot;https://github.com/charset-project/sport-app.git&quot;,
-    &quot;accountId&quot;: &quot;846913ca-618f-45d0-bb14-fe6c59bb4659&quot;
+    &quot;accountId&quot;: &quot;bd0c1e08-3e08-4361-bdcd-833554a46969&quot;
   }
 }</component>
   <component name="HighlightingSettingsPerFile">
@@ -123,14 +83,14 @@
     &quot;XThreadsFramesViewSplitterKey&quot;: &quot;0.7494145&quot;,
     &quot;com.codeium.enabled&quot;: &quot;true&quot;,
     &quot;database.data.extractors.current.export.id&quot;: &quot;Comma-separated (CSV)_id&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
     &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
     &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
     &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.keymap&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;org.jetbrains.plugins.github.ui.GithubSettingsConfigurable&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   },
   &quot;keyToStringList&quot;: {
@@ -266,7 +226,9 @@
       <workItem from="1752843969980" duration="8239000" />
       <workItem from="1752856674362" duration="1873000" />
       <workItem from="1753088762360" duration="3813000" />
-      <workItem from="1753108002958" duration="4833000" />
+      <workItem from="1753108002958" duration="6561000" />
+      <workItem from="1753365495424" duration="1549000" />
+      <workItem from="1753377671269" duration="6628000" />
     </task>
     <task id="LOCAL-00001" summary="add migration">
       <option name="closed" value="true" />
@@ -508,7 +470,15 @@
       <option name="project" value="LOCAL" />
       <updated>1752858558968</updated>
     </task>
-    <option name="localTasksCounter" value="31" />
+    <task id="LOCAL-00031" summary="add product v1.0">
+      <option name="closed" value="true" />
+      <created>1753113147689</created>
+      <option name="number" value="00031" />
+      <option name="presentableId" value="LOCAL-00031" />
+      <option name="project" value="LOCAL" />
+      <updated>1753113147689</updated>
+    </task>
+    <option name="localTasksCounter" value="32" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -554,7 +524,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
-    <MESSAGE value="edit connection pull" />
     <MESSAGE value="test for Activity" />
     <MESSAGE value="fix bugs and edit publish active program method" />
     <MESSAGE value="add test and fix bugs" />
@@ -579,24 +548,12 @@
     <MESSAGE value="edit location" />
     <MESSAGE value="edit Lenght and query" />
     <MESSAGE value="fix bugs" />
-    <option name="LAST_COMMIT_MESSAGE" value="fix bugs" />
+    <MESSAGE value="add product v1.0" />
+    <option name="LAST_COMMIT_MESSAGE" value="add product v1.0" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/Repository/AthleteRepository.cs</url>
-          <line>166</line>
-          <properties documentPath="D:\403-1\sport-app1\Repository\AthleteRepository.cs" containingFunctionPresentation="Method 'BuyCoachingService'">
-            <startOffsets>
-              <option value="5925" />
-            </startOffsets>
-            <endOffsets>
-              <option value="5985" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="2" />
-        </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Controller/UserController.cs</url>
           <line>193</line>

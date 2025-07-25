@@ -17,6 +17,7 @@ using sport_app_backend.Models.Program;
 using Newtonsoft.Json;
 using sport_app_backend.Dtos.ZarinPal;
 using sport_app_backend.Dtos.ZarinPal.Verify;
+using sport_app_backend.Models.Question.A_Question;
 using sport_app_backend.Models.TrainingPlan;
 
 
@@ -53,8 +54,8 @@ namespace sport_app_backend.Repository
                     Payment = payment,
                     PaymentId = payment.Id
                 };
-                payment.AppFee = (payment.Amount * payment.Coach.ServiceFee) ;
-                payment.Coach.Amount += (payment.Amount - payment.AppFee );
+                payment.AppFee = (payment.Amount * payment.Coach.ServiceFee);
+                payment.Coach.Amount += (payment.Amount - payment.AppFee);
 
                 payment.WorkoutProgram = workoutProgram;
                 payment.PaymentStatus = PaymentStatus.SUCCESS;
@@ -861,26 +862,57 @@ namespace sport_app_backend.Repository
 
         public async Task<ApiResponse> GetPayment(string phoneNumber, int paymentId)
         {
-            var payment = await context.Payments
+            var paymentData = await context.Payments
                 .AsNoTracking()
-                .Include(p => p.Athlete)
-                .ThenInclude(a => a.User)
-                .Include(x => x.Coach) // بارگذاری Coac
-                .ThenInclude(a => a.User)
-                .Include(a => a.AthleteQuestion) // بارگذاری User داخل Athlete
-                .ThenInclude(I => I!.InjuryArea)
-                .Include(w => w.WorkoutProgram)
-                .ThenInclude(z => z.ProgramInDays)
+                .Where(p => p.Id == paymentId && p.Athlete.PhoneNumber == phoneNumber)
+                .Select(payment => new
+                {
+                    Payment = payment,
+                    CoachUser = payment.Coach.User,
+                    AthleteUser = payment.Athlete.User,
+                    Athlete = payment.Athlete,
+                    AthleteQuestionId=payment.AthleteQuestionId
+                 
+                })
+                .FirstOrDefaultAsync();
+           
+            if (paymentData == null)
+            {
+                return new ApiResponse { Message = "Payment not found for this user", Action = false };
+            }
+
+            var athleteQuestion = await context.AthleteQuestions.Where(aq => aq.Id == paymentData.AthleteQuestionId)
+                .Include(aq => aq.InjuryArea).FirstOrDefaultAsync();
+            var workoutProgram = await context.WorkoutPrograms.Where(wp => wp.PaymentId == paymentData.Payment.Id)
+                .Include(z => z.ProgramInDays)
                 .ThenInclude(z => z.AllExerciseInDays)
                 .ThenInclude(e => e.Exercise)
-                .FirstOrDefaultAsync(p => p.Athlete.PhoneNumber == phoneNumber && p.Id == paymentId);
-            if (payment is null) return new ApiResponse() { Message = "Payment not found", Action = false };
-            return new ApiResponse()
+                .FirstOrDefaultAsync();
+            if (athleteQuestion   == null)
             {
-                Message = "Payment found",
-                Action = true,
-                Result = payment.ToAthletePaymentResponseDto()
+                return new ApiResponse { Message = "athleteQuestion not found for this user", Action = false };
+            }
+            if (workoutProgram   == null)
+            {
+                return new ApiResponse { Message = "workoutProgram not found for this user", Action = false };
+            }
+            var paymentResponseDto = new PaymentResponseDto
+            {
+                PaymentId = paymentData.Payment.Id,
+                TransactionId = paymentData.Payment.Authority,
+                PaymentStatus = paymentData.Payment.PaymentStatus.ToString(),
+                Name = paymentData.CoachUser.FirstName + " " + paymentData.CoachUser.LastName,
+                Amount = paymentData.Payment.Amount.ToString(CultureInfo.CurrentCulture),
+                DateTime = paymentData.Payment.PaymentDate.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture),
+                Height = paymentData.Athlete.Height,
+                ImageProfile = paymentData.CoachUser.ImageProfile ?? "",
+                Gender = paymentData.AthleteUser.Gender.ToString(),
+                BirthDate = paymentData.AthleteUser.BirthDate.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture),
+                AthleteQuestion = athleteQuestion.ToAthleteQuestionDto(),
+                WorkoutProgram = workoutProgram.ToProgramResponseDto() 
             };
+
+            return new ApiResponse { Message = "Payment details found", Action = true, Result = paymentResponseDto };
         }
 
         public Task<ApiResponse> GetAllPrograms(string phoneNumber)
@@ -1290,7 +1322,7 @@ namespace sport_app_backend.Repository
             var lastSaturday = GetLastSaturday(today);
             var firstDayOfPersianMonth = GetFirstDayOfPersianMonth(today);
 
-          
+
             var activityPageData = await context.Athletes
                 .AsNoTracking() //
                 .Where(a => a.PhoneNumber == phoneNumber)
@@ -1302,12 +1334,12 @@ namespace sport_app_backend.Repository
 
                     DailyCupOfWater = a.WaterInTake != null ? a.WaterInTake.DailyCupOfWater : 0,
                     Reminder = a.WaterInTake != null ? a.WaterInTake.Reminder : 0,
-                    
-                    Name = a.User.FirstName + " "+a.User.LastName,
-                    Height= a.Height,
+
+                    Name = a.User.FirstName + " " + a.User.LastName,
+                    Height = a.Height,
 
                     TotalActivities = a.Activities.Count(),
-                  
+
                     TotalTime = a.Activities.Sum(act => (double?)act.Duration) ?? 0,
                     TotalCalories = a.Activities.Sum(act => (double?)act.CaloriesLost) ?? 0,
 
@@ -1362,7 +1394,8 @@ namespace sport_app_backend.Repository
                 Message = "Activities found",
                 Action = true,
                 Result = new ActivityPageDto()
-                {   Name = activityPageData.Name,
+                {
+                    Name = activityPageData.Name,
                     Height = activityPageData.Height,
                     TotalActivities = activityPageData.TotalActivities,
                     TotalTime = activityPageData.TotalTime,
