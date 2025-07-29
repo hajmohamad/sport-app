@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using sport_app_backend.Models.TrainingPlan;
 using sport_app_backend.Models.TrainingService;
 
 namespace sport_app_backend.Models.Account;
@@ -18,8 +19,7 @@ public class CoachService
     public required double Price { get; set; }
     public bool IsActive { get; set; }
     public bool HaveSupport{get; set;}
-    [MaxLength(100)]
-    public required string CommunicateType{get; set;}
+    public required CommunicateType CommunicateType{get; set;}
     [DataType(DataType.Date)]
     [Column(TypeName = "date")]
     public DateTime CreatedDate { get; set; }=DateTime.Now.Date;

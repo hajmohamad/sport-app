@@ -11,9 +11,22 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="5687a4a9-3eda-4338-b6b2-29a217508823" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/dataSources.local.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Controller/AdminController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Controller/AdminController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Controller/UserController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Controller/UserController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dtos/AddCoachServiceDto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Dtos/AddCoachServiceDto.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Interface/ISmsService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Interface/ISmsService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Interface/IUserRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Interface/IUserRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Mappers/CoachMappers.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Mappers/CoachMappers.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Migrations/ApplicationDbContextModelSnapshot.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Migrations/ApplicationDbContextModelSnapshot.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Models/TrainingPlan/CoachService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/TrainingPlan/CoachService.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Repository/AthleteRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Repository/AthleteRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Repository/CoachRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Repository/CoachRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Repository/UserRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Repository/UserRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Services/SmsService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Services/SmsService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/appsettings.Development.json" beforeDir="false" afterPath="$PROJECT_DIR$/appsettings.Development.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/appsettings.json" beforeDir="false" afterPath="$PROJECT_DIR$/appsettings.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/liara.json" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -51,15 +64,18 @@
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/b8c1c57742337e59591581af3eb2c647e9ed52d2951655fd74b1facf3ff520/ConfigurationExtensions.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/cc7423889878bffc33fc9151e141d94b30a8472d1908fbe2f7b9213b9691054/ConcurrencyDetector.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/fb367341658aaedd7de424d4c9189db33c4387e268dcc4011918569442ab12/AsyncTaskMethodBuilderT.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="mock://D:/403-1/sport-app1/Controller/AdminController.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Dtos/ExerciseDto.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="mock://D:/403-1/sport-app1/Handler/GlobalExceptionHandler.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://D:/403-1/sport-app1/Interface/ISmsService.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Mappers/ExercisesMappers.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Mappers/ProgramMappers.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Models/Actions/Exercise.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Program.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Repository/AthleteRepository.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="mock://D:/403-1/sport-app1/Repository/AthleteRepository.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock://D:/403-1/sport-app1/Repository/CoachRepository.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Repository/UserRepository.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="mock://D:/403-1/sport-app1/Services/SmsService.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/obj/Debug/net8.0/.NETCoreApp,Version=v8.0.AssemblyAttributes.cs" root0="SKIP_HIGHLIGHTING" />
   </component>
   <component name="MetaFilesCheckinStateConfiguration" checkMetaFiles="true" />
@@ -74,32 +90,33 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;.NET Launch Settings Profile.sport-app-backend: https.executor&quot;: &quot;Run&quot;,
-    &quot;Docker.Dockerfile.executor&quot;: &quot;Debug&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;XThreadsFramesViewSplitterKey&quot;: &quot;0.7494145&quot;,
-    &quot;com.codeium.enabled&quot;: &quot;true&quot;,
-    &quot;database.data.extractors.current.export.id&quot;: &quot;Comma-separated (CSV)_id&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;org.jetbrains.plugins.github.ui.GithubSettingsConfigurable&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    ".NET Launch Settings Profile.sport-app-backend: https.executor": "Run",
+    "Docker.Dockerfile.executor": "Debug",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "XThreadsFramesViewSplitterKey": "0.7494145",
+    "com.codeium.enabled": "true",
+    "database.data.extractors.current.export.id": "SQL Inserts",
+    "database.data.extractors.current.id": "SQL Inserts",
+    "git-widget-placeholder": "master",
+    "ignore.virus.scanning.warn.message": "true",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "org.jetbrains.plugins.github.ui.GithubSettingsConfigurable",
+    "vue.rearranger.settings.migration": "true"
   },
-  &quot;keyToStringList&quot;: {
-    &quot;DatabaseDriversLRU&quot;: [
-      &quot;sqlserver&quot;,
-      &quot;mysql&quot;
+  "keyToStringList": {
+    "DatabaseDriversLRU": [
+      "sqlserver",
+      "mysql"
     ]
   }
-}</component>
+}]]></component>
   <component name="RunManager" selected=".NET Launch Settings Profile.sport-app-backend: https">
     <configuration name="sport-app-backend: IIS Express" type="LaunchSettings" factoryName=".NET Launch Settings Profile">
       <option name="LAUNCH_PROFILE_PROJECT_FILE_PATH" value="$PROJECT_DIR$/sport-app-backend.csproj" />
@@ -229,6 +246,9 @@
       <workItem from="1753108002958" duration="6561000" />
       <workItem from="1753365495424" duration="1549000" />
       <workItem from="1753377671269" duration="6628000" />
+      <workItem from="1753558628990" duration="1573000" />
+      <workItem from="1753627329737" duration="4841000" />
+      <workItem from="1753688206215" duration="3677000" />
     </task>
     <task id="LOCAL-00001" summary="add migration">
       <option name="closed" value="true" />
@@ -516,7 +536,19 @@
       <map>
         <entry key="MAIN">
           <value>
-            <State />
+            <State>
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="master" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
           </value>
         </entry>
       </map>
@@ -556,42 +588,55 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Controller/UserController.cs</url>
-          <line>193</line>
+          <line>183</line>
           <properties documentPath="D:\403-1\sport-app1\Controller\UserController.cs" containingFunctionPresentation="Method 'AppUpdate'">
             <startOffsets>
-              <option value="6519" />
+              <option value="6325" />
             </startOffsets>
             <endOffsets>
-              <option value="6569" />
+              <option value="6343" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="9" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/Services/SmsService.cs</url>
-          <line>44</line>
-          <properties documentPath="D:\403-1\sport-app1\Services\SmsService.cs" containingFunctionPresentation="Method 'SendErrorSms'">
-            <startOffsets>
-              <option value="1346" />
-            </startOffsets>
-            <endOffsets>
-              <option value="1380" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="13" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Repository/CoachRepository.cs</url>
           <line>182</line>
           <properties documentPath="D:\403-1\sport-app1\Repository\CoachRepository.cs" containingFunctionPresentation="Method 'UpdateCoachingService'">
             <startOffsets>
-              <option value="7460" />
+              <option value="7483" />
             </startOffsets>
             <endOffsets>
-              <option value="7461" />
+              <option value="7484" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="14" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Services/ZarinPal.cs</url>
+          <line>62</line>
+          <properties documentPath="D:\403-1\sport-app1\Services\ZarinPal.cs" containingFunctionPresentation="Method 'VerifyPaymentAsync'">
+            <startOffsets>
+              <option value="2190" />
+            </startOffsets>
+            <endOffsets>
+              <option value="2374" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="15" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Repository/CoachRepository.cs</url>
+          <line>341</line>
+          <properties documentPath="D:\403-1\sport-app1\Repository\CoachRepository.cs" containingFunctionPresentation="Method 'SaveWorkoutProgram'">
+            <startOffsets>
+              <option value="14299" />
+            </startOffsets>
+            <endOffsets>
+              <option value="14388" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="17" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

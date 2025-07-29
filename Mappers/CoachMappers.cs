@@ -2,6 +2,7 @@ using System.Globalization;
 using sport_app_backend.Dtos;
 using sport_app_backend.Models.Account;
 using sport_app_backend.Models.Payments;
+using sport_app_backend.Models.TrainingPlan;
 
 namespace sport_app_backend.Mappers
 {
@@ -51,7 +52,7 @@ namespace sport_app_backend.Mappers
                 Price = coachServiceDto.Price,
                 IsActive = coachServiceDto.IsActive,
                 HaveSupport = coachServiceDto.HaveSupport,
-                CommunicateType = coachServiceDto.CommunicateType??"",
+                CommunicateType = (CommunicateType)Enum.Parse(typeof(CommunicateType), coachServiceDto.CommunicateType.ToUpper()),
                 NumberOfSell = 0
                 // TypeOfCoachingServices = (TypeOfCoachingServices)Enum.Parse(typeof(TypeOfCoachingServices), coachServiceDto.TypeOfCoachingServices)
             };
@@ -64,10 +65,11 @@ namespace sport_app_backend.Mappers
             coachService.Price = coachServiceDto.Price;
             coachService.IsActive = coachServiceDto.IsActive;
             coachService.HaveSupport = coachServiceDto.HaveSupport;
-            coachService.CommunicateType = coachServiceDto.CommunicateType??"";
+            coachService.CommunicateType =
+                (CommunicateType)Enum.Parse(typeof(CommunicateType), coachServiceDto.CommunicateType.ToUpper());
             //coachService.TypeOfCoachingServices =
-           //(TypeOfCoachingServices)Enum.Parse(typeof(TypeOfCoachingServices), coachServiceDto.TypeOfCoachingServices);
-       
+            //(TypeOfCoachingServices)Enum.Parse(typeof(TypeOfCoachingServices), coachServiceDto.TypeOfCoachingServices);
+
 
         }
         public static CoachForSearch ToCoachForSearch(this User user)
@@ -130,7 +132,7 @@ namespace sport_app_backend.Mappers
                 Price = coachService.Price,
                 IsActive = coachService.IsActive,
                 HaveSupport = coachService.HaveSupport,
-                CommunicateType = coachService.CommunicateType,
+                CommunicateType = coachService.CommunicateType.ToString(),
                 NumberOfSell = coachService.NumberOfSell
                 
                 

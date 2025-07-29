@@ -52,10 +52,6 @@ namespace sport_app_backend.Controller
             }
             return Ok(result);
         }
-     
-
-        
-       
     }
 
 }

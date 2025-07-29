@@ -178,20 +178,10 @@ public class UserController(IUserRepository userRepository) : ControllerBase
     }
 
     [HttpGet("AppUpdate")]
-    public Task<IActionResult> AppUpdate()
+    public async Task<IActionResult> AppUpdate()
     {
-        var result = new ApiResponse()
-        {
-            Action = true,
-            Message = "update app link",
-            Result = new
-            {
-               version = "1.0",
-               requiredUpdate=false
-            }
-
-        };
-        return Task.FromResult<IActionResult>(Ok(result));
+        var result =  userRepository.UpdateApp();
+        return Ok(result);
 
     }
 

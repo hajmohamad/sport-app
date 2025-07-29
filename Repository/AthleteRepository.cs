@@ -24,7 +24,7 @@ using sport_app_backend.Models.TrainingPlan;
 namespace sport_app_backend.Repository
 
 {
-    public class AthleteRepository(ApplicationDbContext context, IZarinPal zarinPal) : IAthleteRepository
+    public class AthleteRepository(ApplicationDbContext context, IZarinPal zarinPal,ISmsService smsService) : IAthleteRepository
     {
         public async Task<ApiResponse> GetFaq()
         {
@@ -82,9 +82,9 @@ namespace sport_app_backend.Repository
         public async Task<ApiResponse> VerifyPaymentAsync(ZarinPalVerifyRequestDto request)
         {
             var payment = await context.Payments
-                .Include(p => p.Coach)
+                .Include(p => p.Coach).ThenInclude(coach => coach.User)
                 .Include(p => p.CoachService)
-                .Include(p => p.Athlete)
+                .Include(p => p.Athlete).ThenInclude(athlete => athlete.User)
                 .Include(p => p.WorkoutProgram)
                 .FirstOrDefaultAsync(x => x.Authority == request.Authority);
 
@@ -110,6 +110,20 @@ namespace sport_app_backend.Repository
                         if (!confirmResult.Action)
                         {
                             return confirmResult;
+                        }
+
+                        if (payment.Athlete.User.FirstName != null)
+                        {
+                            await smsService.AthleteSuccessfullySmsNotification(
+                                payment.Athlete.PhoneNumber,
+                                payment.Athlete.User.FirstName, payment.CoachService.Title);
+                        }
+
+                        if (payment.Coach.User.FirstName != null)
+                        {
+                            await smsService.CoachServiceBuySmsNotification(payment.Coach.PhoneNumber,
+                                payment.Coach.User.FirstName, payment.CoachService.Title,
+                                payment.Amount.ToString(CultureInfo.CurrentCulture));
                         }
 
                         return new ApiResponse

@@ -18,7 +18,7 @@ using sport_app_backend.Models.Program;
 
 namespace sport_app_backend.Repository
 {
-    public class CoachRepository(ApplicationDbContext context) : ICoachRepository
+    public class CoachRepository(ApplicationDbContext context,ISmsService smsService) : ICoachRepository
     {
         public async Task<ApiResponse> AthleteReportForCoach(int athleteId)
         {
@@ -355,7 +355,7 @@ namespace sport_app_backend.Repository
                     workoutProgram.DedicatedWarmUp =
                         (DedicatedWarmUp)Enum.Parse(typeof(DedicatedWarmUp), workoutProgramDto.DedicatedWarmUp);
                 }
-
+                
                 workoutProgram.ProgramPriorities = workoutProgramDto.ProgramPriority
                     .Select(x => (ProgramPriority)Enum.Parse(typeof(ProgramPriority), x.ToUpper())).ToList() ?? [];
                 if (workoutProgram.Status == WorkoutProgramStatus.NOTSTARTED)
@@ -366,7 +366,7 @@ namespace sport_app_backend.Repository
                 if (workoutProgramDto.Publish)
                 {
                     workoutProgram.Status = WorkoutProgramStatus.NOTACTIVE;
-                    var athlete = await context.Athletes.FirstOrDefaultAsync(a => a.Id == workoutProgram.AthleteId);
+                    var athlete = await context.Athletes.Include(u=>u.User).FirstOrDefaultAsync(a => a.Id == workoutProgram.AthleteId);
                     if (athlete is null)
                     {
                         return new ApiResponse()
@@ -375,6 +375,8 @@ namespace sport_app_backend.Repository
                             Message = "athlete not found"
                         };
                     }
+
+                    await smsService.WorkoutReadySms(athlete.PhoneNumber, athlete.User.FirstName, workoutProgram.Title);
 
 
                     if (athlete.ActiveWorkoutProgramId == 0)
