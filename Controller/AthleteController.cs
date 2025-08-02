@@ -654,5 +654,43 @@ namespace sport_app_backend.Controller
             return Ok(result);
         }
         
+        [HttpPost("uploadImageForAthleteQuestion")]
+        [Authorize(Roles = "Athlete")]
+        public async Task<IActionResult> UploadImageForAthleteQuestion([FromQuery] int id,[FromQuery]string sideName,IFormFile file)
+        {
+            var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
+            if (phoneNumber is null) return BadRequest("PhoneNumber is null");
+        
+            var result = await athleteRepository.UploadImageForAthleteQuestion(phoneNumber,id,sideName,file);
+
+            if (!result.Action) return NotFound(result);
+            return Ok(result);
+        }
+        [HttpDelete("RemoveImageForAthleteQuestion")]
+        [Authorize(Roles = "Athlete")]
+        public async Task<IActionResult> RemoveImageForAthleteQuestion([FromQuery] int id,[FromQuery]string sideName)
+        {
+            var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
+            if (phoneNumber is null) return BadRequest("PhoneNumber is null");
+        
+            var result = await athleteRepository.RemoveImageForAthleteQuestion(phoneNumber,id,sideName);
+
+            if (!result.Action) return NotFound(result);
+            return Ok(result);
+        }
+        [HttpGet("GetImageForAthleteQuestion")]
+        [Authorize(Roles = "Athlete")]
+        public async Task<IActionResult> GetImageForAthleteQuestion([FromQuery] int id)
+        {
+            var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
+            if (phoneNumber is null) return BadRequest("PhoneNumber is null");
+        
+            var result = await athleteRepository.GetImageForAthleteQuestion(phoneNumber,id);
+
+            if (!result.Action) return NotFound(result);
+            return Ok(result);
+        }
+        
+        
     }
 }

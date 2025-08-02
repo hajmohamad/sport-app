@@ -81,7 +81,6 @@ public class SmsService(IConfiguration config) : ISmsService
                       "برای مشاهده وضعیت برنامه‌ات می‌تونی به قسمت برنامه‌ها در حساب کاربریت در اپلیکیشن چارسِت سر بزنی.\n\n" +
                       "chaarset.ir";
 
-        const string apiKey = "im4kvQfuZNpEqF06YQi7KOKYPpGfHeN02hjfSdHxdWggG7h1";
         const string lineNumber = "9981802897";
         const string apiUrl = "https://api.sms.ir/v1/send/likeToLike";
 
@@ -93,7 +92,7 @@ public class SmsService(IConfiguration config) : ISmsService
             Mobiles = [mobileNumber]
         };
         var httpClient = new HttpClient();
-        httpClient.DefaultRequestHeaders.Add("x-api-key", apiKey);
+        httpClient.DefaultRequestHeaders.Add("x-api-key", _accessKey);
 
 
         var jsonPayload = JsonConvert.SerializeObject(payload);
@@ -119,7 +118,6 @@ public class SmsService(IConfiguration config) : ISmsService
                       "همین الان به اپلیکیشن چارسِت برو و برنامه‌ات رو مشاهده کن.\n\n" +
                       "chaarset.ir";
 
-        const string apiKey = "im4kvQfuZNpEqF06YQi7KOKYPpGfHeN02hjfSdHxdWggG7h1";
         const string lineNumber = "9981802897";
         const string apiUrl = "https://api.sms.ir/v1/send/likeToLike";
 
@@ -131,7 +129,7 @@ public class SmsService(IConfiguration config) : ISmsService
             Mobiles = [mobileNumber]
         };
         var httpClient = new HttpClient();
-        httpClient.DefaultRequestHeaders.Add("x-api-key", apiKey);
+        httpClient.DefaultRequestHeaders.Add("x-api-key", _accessKey);
 
 
         var jsonPayload = JsonConvert.SerializeObject(payload);
@@ -203,11 +201,9 @@ public class SmsPayload
     public DateTime? SendDateTime { get; set; } = null;
 }
 
-// یک DTO برای پاسخ احتمالی از سرویس
 public class SmsResponse
 {
     public bool IsSuccess { get; set; }
 
     public string Message { get; set; }
-    // سایر فیلدهایی که ممکن است از API برگردد
 }

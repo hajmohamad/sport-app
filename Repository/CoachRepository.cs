@@ -14,20 +14,21 @@ using sport_app_backend.Models;
 using sport_app_backend.Models.Actions;
 using sport_app_backend.Models.Payments;
 using sport_app_backend.Models.Program;
+using sport_app_backend.Models.Question.A_Question;
 
 
 namespace sport_app_backend.Repository
 {
-    public class CoachRepository(ApplicationDbContext context,ISmsService smsService) : ICoachRepository
+    public class CoachRepository(ApplicationDbContext context, ISmsService smsService, ILiaraStorage liaraStorage) : ICoachRepository
     {
         public async Task<ApiResponse> AthleteReportForCoach(int athleteId)
         {
-            var athlete = await context.Athletes.Include(u=>u.User)
+            var athlete = await context.Athletes.Include(u => u.User)
                 .Include(athlete => athlete.Activities)
                 .Include(athlete => athlete.WeightEntries).FirstOrDefaultAsync(a => a.Id == athleteId);
-              if (athlete is null)
+            if (athlete is null)
                 return new ApiResponse { Message = "Athlete not found", Action = false };
- 
+
             var today = DateTime.Today.Date;
             var lastSaturday = GetLastSaturday(today);
             var firstDayOfPersianMonth = GetFirstDayOfPersianMonth(today);
@@ -45,8 +46,6 @@ namespace sport_app_backend.Repository
                     return athlete.Activities.Any(a => a.Date.Date == date) ? 1 : 0;
                 })
                 .ToList();
-
-
 
 
             var currentWeight = athlete.CurrentWeight;
@@ -75,11 +74,12 @@ namespace sport_app_backend.Repository
                     CurrentWeight = currentWeight,
                     GoalWeight = goalWeight,
                     LastMonthWeights = lastMonthWeights,
-                    Height=athlete.Height,
-                    Name=athlete.User.FirstName+" "+athlete.User.LastName
+                    Height = athlete.Height,
+                    Name = athlete.User.FirstName + " " + athlete.User.LastName
                 }
             };
         }
+
         public async Task<ApiResponse> AthleteMonthlyActivityForCoach(int athleteId, int year, int month)
         {
             ArgumentOutOfRangeException.ThrowIfNegative(month);
@@ -281,11 +281,11 @@ namespace sport_app_backend.Repository
         public async Task<ApiResponse>  GetPayment(string phoneNumber, int paymentId)
         {
             var payment = await context.Payments
-                .Include(p => p.Coach) 
                 .Include(p => p.Athlete) // بارگذاری Athlete
                 .ThenInclude(a => a!.User)
                 .Include(a => a.AthleteQuestion) // بارگذاری User داخل Athlete
                 .ThenInclude(I => I!.InjuryArea)
+                .Include(a=>a.AthleteQuestion.AthleteBodyImage)
                 .Include(w => w.WorkoutProgram)
                 .ThenInclude(z => z.ProgramInDays)
                 .ThenInclude(z => z.AllExerciseInDays)
@@ -311,7 +311,7 @@ namespace sport_app_backend.Repository
             };
         }
 
-
+    
         public async Task<ApiResponse> GetProfile(string phoneNumber)
         {
             var user = await context.Users
@@ -321,12 +321,13 @@ namespace sport_app_backend.Repository
             if (user?.Coach == null) return new ApiResponse { Action = false, Message = "Coach not found" };
             var coachingService = user.Coach.CoachingServices.Where(x => x.IsDeleted == false).ToList();
             var coachingServiceDto = coachingService.Select(x => x.ToCoachingServiceResponse()).ToList();
-            var payments = await context.Payments.Include(p => p.Athlete).ThenInclude(u => u.User).OrderBy(c=>c.PaymentDate)
+            var payments = await context.Payments.Include(p => p.Athlete).ThenInclude(u => u.User)
+                .OrderBy(c => c.PaymentDate)
                 .Include(p => p.WorkoutProgram).Where(p =>
                     p.CoachId == user.Coach.Id && p.WorkoutProgram != null &&
                     p.WorkoutProgram.Status != WorkoutProgramStatus.WRITING &&
                     p.WorkoutProgram.Status != WorkoutProgramStatus.NOTSTARTED)
-            .ToListAsync();
+                .ToListAsync();
             return new ApiResponse
             {
                 Action = true, Message = "Coach found",
@@ -341,9 +342,9 @@ namespace sport_app_backend.Repository
             {
                 var coach = await context.Coaches.FirstOrDefaultAsync(c => c.PhoneNumber == phoneNumber);
                 if (coach == null) return new ApiResponse { Action = false, Message = "Coach not found" };
-                var workoutProgram = await context.WorkoutPrograms.Include(x => x.ProgramInDays)
+                var workoutProgram = await context.WorkoutPrograms.Include(p=>p.Payment).Include(x => x.ProgramInDays)
                     .ThenInclude(z => z.AllExerciseInDays)
-                    .FirstOrDefaultAsync(p => p.PaymentId == paymentId && p.CoachId == coach.Id );
+                    .FirstOrDefaultAsync(p => p.PaymentId == paymentId && p.CoachId == coach.Id);
                 if (workoutProgram is null) return new ApiResponse { Action = false, Message = "Payment not found" };
                 workoutProgram.ProgramInDays = workoutProgramDto.Days.ToListOfProgramInDays();
                 workoutProgram.ProgramDuration = workoutProgramDto.Week;
@@ -355,7 +356,7 @@ namespace sport_app_backend.Repository
                     workoutProgram.DedicatedWarmUp =
                         (DedicatedWarmUp)Enum.Parse(typeof(DedicatedWarmUp), workoutProgramDto.DedicatedWarmUp);
                 }
-                
+
                 workoutProgram.ProgramPriorities = workoutProgramDto.ProgramPriority
                     .Select(x => (ProgramPriority)Enum.Parse(typeof(ProgramPriority), x.ToUpper())).ToList() ?? [];
                 if (workoutProgram.Status == WorkoutProgramStatus.NOTSTARTED)
@@ -366,7 +367,8 @@ namespace sport_app_backend.Repository
                 if (workoutProgramDto.Publish)
                 {
                     workoutProgram.Status = WorkoutProgramStatus.NOTACTIVE;
-                    var athlete = await context.Athletes.Include(u=>u.User).FirstOrDefaultAsync(a => a.Id == workoutProgram.AthleteId);
+                    var athlete = await context.Athletes.Include(u => u.User)
+                        .FirstOrDefaultAsync(a => a.Id == workoutProgram.AthleteId);
                     if (athlete is null)
                     {
                         return new ApiResponse()
@@ -375,6 +377,28 @@ namespace sport_app_backend.Repository
                             Message = "athlete not found"
                         };
                     }
+                    coach.Amount += (workoutProgram.Payment.Amount - workoutProgram.Payment.AppFee);
+                    var athleteImg = await context.AthleteImage
+                        .Where(a => a.AthleteQuestionId == workoutProgram.Payment.AthleteQuestionId)
+                        .FirstOrDefaultAsync();
+                    if (athleteImg?.SideLink != null)
+                    {
+                            await liaraStorage.RemovePhoto(athleteImg.SideLink);
+                    }
+                    if (athleteImg?.BackLink != null)
+                    {
+                        await liaraStorage.RemovePhoto(athleteImg.BackLink);
+                    }
+                    if (athleteImg?.FrontLink != null)
+                    {
+                        await liaraStorage.RemovePhoto(athleteImg.FrontLink);
+                    }
+
+                    if (athleteImg is not null)
+                    {
+                         context.AthleteImage.Remove(athleteImg);
+                    }
+                    
 
                     await smsService.WorkoutReadySms(athlete.PhoneNumber, athlete.User.FirstName, workoutProgram.Title);
 
@@ -741,17 +765,16 @@ namespace sport_app_backend.Repository
 
                 return new TransactionDto
                 {
-                    Amount = $"{p.Amount:N0} ریال", // فرمت‌بندی عدد به همراه جداکننده هزارگان
+                    Amount = p.Amount- p.AppFee, 
                     Type = "افزایش",
                     Date = p.PaymentDate.ToString(CultureInfo.CurrentCulture),
                     Description = $"خرید سرویس {p.CoachService.Title}",
                     BuyerName = p.Athlete?.User != null
                         ? $"{p.Athlete.User.FirstName} {p.Athlete.User.LastName}"
                         : "نامشخص",
-                    ReferenceId = p.RefId.ToString(), // شناسه خرید یا همان RefId
+                    ReferenceId = p.RefId.ToString(), 
                     ProgramStatus = programStatus,
                     AppFee = p.AppFee
-                    
                 };
             }).ToList();
 
@@ -805,13 +828,11 @@ namespace sport_app_backend.Repository
             if (coachPayout is not null)
             {
                 return new ApiResponse { Action = false, Message = "شما یک تسویه در حال انجام دارید " };
-
             }
 
             if (coach.Amount < 50000)
             {
-                return new ApiResponse { Action = false, Message = "موجودی شما کمتر از مقدار مجاز برای برداشت است " };
-
+                return new ApiResponse { Action = false, Message = "حداقل موجودی قابل برداشت  ۵۰ هزارتومان است" };
             }
 
             var coachAmount = coach.Amount - 10000;
@@ -840,14 +861,14 @@ namespace sport_app_backend.Repository
                 Message = "get faq",
                 Result = getFaq
             };
-
         }
+
         private DateTime GetLastSaturday(DateTime today)
         {
             var diff = ((int)today.DayOfWeek - (int)DayOfWeek.Saturday + 7) % 7;
             return today.AddDays(-diff);
         }
-        
+
         private DateTime GetFirstDayOfPersianMonth(DateTime date)
         {
             var pc = new PersianCalendar();

@@ -10,7 +10,7 @@ public class PaymentResponseDto
     public string Amount { get; set; }= string.Empty;
     public string DateTime { get; set; }= string.Empty;
     public string PaymentStatus { get; set; }= string.Empty;
-    public AthleteQuestionDto? AthleteQuestion { get; set; }
+    public AthleteQuestionResponseDto? AthleteQuestion { get; set; }
     public required string Gender { get; set; }
     public int Height { get; set; }
     

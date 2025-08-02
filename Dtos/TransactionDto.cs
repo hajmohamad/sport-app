@@ -2,7 +2,7 @@ namespace sport_app_backend.Dtos;
 
 public class TransactionDto
 {
-    public string Amount { get; set; }
+    public double Amount { get; set; }
     public string Type { get; set; } // "افزایش" or "کاهش"
     public string Date { get; set; }
     

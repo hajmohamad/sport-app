@@ -50,6 +50,20 @@ namespace sport_app_backend.Mappers
                 Weight = dto.CurrentWeight
             };
         }
+        public static AthleteQuestionResponseDto AthleteQuestionResponseDto(this AthleteQuestion question)
+        {
+            return new AthleteQuestionResponseDto()
+            {
+                CurrentBodyForm = question.CurrentBodyForm,
+                DaysPerWeekToExercise = question.DaysPerWeekToExercise,
+                FitnessLevel = question.FitnessLevel.ToString() ?? "",
+                InjuryArea = question.InjuryArea?.ToInjuryAreaDto(),
+                ExerciseGoal = question.ExerciseGoal.ToString() ?? "",
+                CurrentWeight = question.Weight,
+                BirthDay = question.Athlete?.User?.BirthDate.ToString("yyyy-MM-dd"),
+                AthleteBodyImage = question.AthleteBodyImage.ToAthleteBodyImageDto()
+            };
+        }
         public static AthleteQuestionDto ToAthleteQuestionDto(this AthleteQuestion question)
         {
             return new AthleteQuestionDto
@@ -60,7 +74,23 @@ namespace sport_app_backend.Mappers
                 InjuryArea = question.InjuryArea?.ToInjuryAreaDto(),
                 ExerciseGoal = question.ExerciseGoal.ToString() ?? "",
                 CurrentWeight = question.Weight,
-                BirthDay = question.Athlete?.User?.BirthDate.ToString("yyyy-MM-dd")
+                BirthDay = question.Athlete?.User?.BirthDate.ToString("yyyy-MM-dd"),
+            };
+        }
+
+        public static AthleteBodyImageDto ToAthleteBodyImageDto(this AthleteBodyImage? athleteBodyImage)
+        {
+            if (athleteBodyImage is null)
+            {
+                return new AthleteBodyImageDto();
+            }
+            return new AthleteBodyImageDto()
+            {
+                Id = athleteBodyImage.Id,
+                AthleteQuestionId = athleteBodyImage.AthleteQuestionId,
+                BackLink = athleteBodyImage.BackLink,
+                FrontLink = athleteBodyImage.FrontLink,
+                SideLink = athleteBodyImage.SideLink
             };
         }
 

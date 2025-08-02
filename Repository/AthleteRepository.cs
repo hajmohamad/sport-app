@@ -19,12 +19,17 @@ using sport_app_backend.Dtos.ZarinPal;
 using sport_app_backend.Dtos.ZarinPal.Verify;
 using sport_app_backend.Models.Question.A_Question;
 using sport_app_backend.Models.TrainingPlan;
+using sport_app_backend.Services;
 
 
 namespace sport_app_backend.Repository
 
 {
-    public class AthleteRepository(ApplicationDbContext context, IZarinPal zarinPal,ISmsService smsService) : IAthleteRepository
+    public class AthleteRepository(
+        ApplicationDbContext context,
+        IZarinPal zarinPal,
+        ISmsService smsService,
+        ILiaraStorage liaraStorage) : IAthleteRepository
     {
         public async Task<ApiResponse> GetFaq()
         {
@@ -35,6 +40,288 @@ namespace sport_app_backend.Repository
                 Message = "get CoachFaq",
                 Result = getFaq
             };
+        }
+
+        public async Task<ApiResponse> UploadImageForAthleteQuestion(string phoneNumber,int id, string sideName, IFormFile file)
+        {
+            var athleteId = await context.Athletes.AsNoTracking()
+                .Where(a => a.PhoneNumber == phoneNumber)
+                .Select(a => a.Id).FirstOrDefaultAsync();
+            if (athleteId ==0)
+            {
+                return new ApiResponse
+                {
+                    Message = "athlete not found",
+                    Action = false
+                };
+            }
+            if (id != 0)
+            {
+               
+                var athleteImage = await context.AthleteImage.Where(ai => ai.Id == id&&ai.AthleteId==athleteId).FirstOrDefaultAsync();
+                if (athleteImage is null)
+                {
+                    return new ApiResponse
+                    {
+                        Message = "AthleteBodyImage not found",
+                        Action = false
+                    };
+                }
+               
+                switch (sideName)
+                {
+                    case "front":
+                    {
+                        var frontLink = athleteImage.FrontLink;
+                        if (frontLink is { Length: > 1 })
+                        {
+                            await liaraStorage.RemovePhoto(frontLink);
+                        }
+
+                        var response = await liaraStorage.UploadImage(file, "");
+                        if (response.Action)
+                        {
+                            athleteImage.FrontLink = response.Result as string;
+                        }
+                        else
+                        {
+                            return response;
+                        }
+
+                        break;
+                    }
+                    case "back":
+                    {
+                        var frontLink = athleteImage.BackLink;
+                        if (frontLink is { Length: > 1 })
+                        {
+                            await liaraStorage.RemovePhoto(frontLink);
+                        }
+
+                        var response = await liaraStorage.UploadImage(file, "");
+                        if (response.Action)
+                        {
+                            athleteImage.BackLink = response.Result as string;
+                        }
+                        else
+                        {
+                            return response;
+                        }
+
+                        break;
+                    }
+                    case "side":
+                    {
+                        var frontLink = athleteImage.SideLink;
+                        if (frontLink is { Length: > 1 })
+                        {
+                            await liaraStorage.RemovePhoto(frontLink);
+                        }
+
+                        var response = await liaraStorage.UploadImage(file, "");
+                        if (response.Action)
+                        {
+                            athleteImage.SideLink = response.Result as string;
+                        }
+                        else
+                        {
+                            return response;
+                        }
+
+                        break;
+                    }
+                }
+                await context.SaveChangesAsync();
+                return new ApiResponse()
+                {
+                    Action = true,
+                    Message = "img upload successfully",
+                    Result = athleteImage
+                };
+            }
+            else
+            {
+                var response = await liaraStorage.UploadImage(file, "");
+                if (!response.Action)
+                {
+                    return response;
+                }
+
+                var imageUrl = response.Result as string;
+
+                var athleteImage = new AthleteBodyImage();
+                switch (sideName)
+
+                {
+                    case "back":
+                    {
+                        athleteImage.BackLink = imageUrl;
+                        break;
+                    }
+                    case "front":
+                    {
+                        athleteImage.FrontLink = imageUrl;
+                        break;
+                    }
+                    case "side":
+                    {
+                        athleteImage.SideLink = imageUrl;
+                        break;
+                    }
+                }
+
+                athleteImage.AthleteId = athleteId;
+
+                await context.AthleteImage.AddAsync(athleteImage);
+                await context.SaveChangesAsync();
+                return new ApiResponse()
+                {
+                    Action = true,
+                    Message = "img upload successfully",
+                    Result = athleteImage
+                };
+            }
+        }
+
+        public async Task<ApiResponse> RemoveImageForAthleteQuestion(string phoneNumber,int id, string sideName)
+        {
+            var athleteId = await context.Athletes.AsNoTracking()
+                .Where(a => a.PhoneNumber == phoneNumber)
+                .Select(a => a.Id).FirstOrDefaultAsync();
+            if (athleteId ==0)
+            {
+                return new ApiResponse
+                {
+                    Message = "athlete not found",
+                    Action = false
+                };
+            }
+
+            var athleteImage = await context.AthleteImage.Where(ai => ai.Id == id&&ai.AthleteId==athleteId).FirstOrDefaultAsync();
+            if (athleteImage is null)
+            {
+                return new ApiResponse
+                {
+                    Message = "AthleteBodyImage not found",
+                    Action = false
+                };
+            }
+
+         
+          
+            switch (sideName)
+            {
+                case "front":
+                {
+                    var frontLink = athleteImage.FrontLink;
+                    if (frontLink is { Length: > 1 })
+                    {
+                        var removeResponse = await liaraStorage.RemovePhoto(frontLink);
+                        if (!removeResponse.Action)
+                        {
+                            return removeResponse;
+                        }
+
+                        athleteImage.FrontLink = "";
+                    }
+                    else
+                    {
+                        return new ApiResponse()
+                        {
+                            Action = false,
+                            Message = "no image Found"
+                        };
+                    }
+                    break;
+                }
+                case "back":
+                {
+                    var backLink = athleteImage.BackLink;
+                    if (backLink is { Length: > 1 })
+                    {
+                        var removeResponse = await liaraStorage.RemovePhoto(backLink);
+                        if (!removeResponse.Action)
+                        {
+                            return removeResponse;
+                        }
+
+                        athleteImage.BackLink = "";
+                    }
+                    else
+                    {
+                        return new ApiResponse()
+                        {
+                            Action = false,
+                            Message = "no image Found"
+                        };
+                    }
+                    break;
+                }
+                case "side":
+                {
+                    var sideLink = athleteImage.SideLink;
+                    if (sideLink is { Length: > 1 })
+                    {
+                        var removeResponse = await liaraStorage.RemovePhoto(sideLink);
+                        if (!removeResponse.Action)
+                        {
+                            return removeResponse;
+                        }
+
+                        athleteImage.SideLink = "";
+                    }
+                    else
+                    {
+                        return new ApiResponse()
+                        {
+                            Action = false,
+                            Message = "no image Found"
+                        };
+                    }
+                    break;
+                }
+            }
+            await context.SaveChangesAsync();
+            return new ApiResponse()
+            {
+                Action = true,
+                Message = "img remove successfully",
+                Result = athleteImage
+            }; 
+
+            
+            
+        }
+
+        public async Task<ApiResponse> GetImageForAthleteQuestion(string phoneNumber,int id)
+        {
+            var athleteId = await context.Athletes.AsNoTracking()
+                .Where(a => a.PhoneNumber == phoneNumber)
+                .Select(a => a.Id).FirstOrDefaultAsync();
+            if (athleteId ==0)
+            {
+                return new ApiResponse
+                {
+                    Message = "athlete not found",
+                    Action = false
+                };
+            }
+
+            var athleteImage = await context.AthleteImage.Where(ai => ai.Id == id&&ai.AthleteId==athleteId).FirstOrDefaultAsync();
+            if (athleteImage is null)
+            {
+                return new ApiResponse
+                {
+                    Message = "AthleteBodyImage not found",
+                    Action = false
+                };
+            }
+            return new ApiResponse()
+            {
+                Action = true,
+                Message = "img remove successfully",
+                Result = athleteImage
+            }; 
         }
 
         private async Task<ApiResponse> ConfirmTransactionId(Payment payment, long refId)
@@ -55,7 +342,6 @@ namespace sport_app_backend.Repository
                     PaymentId = payment.Id
                 };
                 payment.AppFee = (payment.Amount * payment.Coach.ServiceFee);
-                payment.Coach.Amount += (payment.Amount - payment.AppFee);
 
                 payment.WorkoutProgram = workoutProgram;
                 payment.PaymentStatus = PaymentStatus.SUCCESS;
@@ -524,25 +810,46 @@ namespace sport_app_backend.Repository
 
         public async Task<ApiResponse> SubmitAthleteQuestions(string phoneNumber, AthleteQuestionDto athleteQuestionDto)
         {
-            var athlete = await context.Athletes.Include(x => x.User)
+           
+            var athlete = await context.Athletes
+                .Include(a => a.User)
                 .FirstOrDefaultAsync(x => x.PhoneNumber == phoneNumber);
-            if (athlete is null)
-                return new ApiResponse()
-                    { Message = "User is not an athlete", Action = false }; // Ensure the user is an athlete
-            if (athlete.User is null) return new ApiResponse() { Message = "User not found", Action = false };
-            athlete.User.BirthDate = Convert.ToDateTime(athleteQuestionDto.BirthDay);
-            var athleteQuestion = athleteQuestionDto.ToAthleteQuestion(athlete);
-            athlete.AthleteQuestions.Add(athleteQuestion);
-            await context.AthleteQuestions.AddAsync(athleteQuestion);
 
+            if (athlete is null)
+            {
+                return new ApiResponse() { Message = "User is not an athlete", Action = false };
+            }
+
+        
+
+           
+            athlete.User.BirthDate = Convert.ToDateTime(athleteQuestionDto.BirthDay);
+
+            var athleteQuestion = athleteQuestionDto.ToAthleteQuestion(athlete);
+
+            if (athleteQuestionDto.AthleteBodyImageId > 0)
+            {
+                 var athleteImage = await context.AthleteImage
+                    .FirstOrDefaultAsync(ai => ai.Id == athleteQuestionDto.AthleteBodyImageId);
+                 if(athleteImage is not null){
+                     athleteImage.AthleteQuestion = athleteQuestion;
+                 }
+
+                
+            }
+    
+        
+            athlete.AthleteQuestions.Add(athleteQuestion);
+    
+       
             await context.SaveChangesAsync();
+
             return new ApiResponse()
             {
                 Message = "Athlete questions submitted successfully",
                 Action = true
             };
         }
-
         public async Task<ApiResponse> AthleteFirstQuestions(string phoneNumber,
             AthleteFirstQuestionsDto athleteFirstQuestionsDto)
         {
@@ -885,11 +1192,10 @@ namespace sport_app_backend.Repository
                     CoachUser = payment.Coach.User,
                     AthleteUser = payment.Athlete.User,
                     Athlete = payment.Athlete,
-                    AthleteQuestionId=payment.AthleteQuestionId
-                 
+                    AthleteQuestionId = payment.AthleteQuestionId
                 })
                 .FirstOrDefaultAsync();
-           
+
             if (paymentData == null)
             {
                 return new ApiResponse { Message = "Payment not found for this user", Action = false };
@@ -902,14 +1208,16 @@ namespace sport_app_backend.Repository
                 .ThenInclude(z => z.AllExerciseInDays)
                 .ThenInclude(e => e.Exercise)
                 .FirstOrDefaultAsync();
-            if (athleteQuestion   == null)
+            if (athleteQuestion == null)
             {
                 return new ApiResponse { Message = "athleteQuestion not found for this user", Action = false };
             }
-            if (workoutProgram   == null)
+
+            if (workoutProgram == null)
             {
                 return new ApiResponse { Message = "workoutProgram not found for this user", Action = false };
             }
+
             var paymentResponseDto = new PaymentResponseDto
             {
                 PaymentId = paymentData.Payment.Id,
@@ -922,8 +1230,8 @@ namespace sport_app_backend.Repository
                 ImageProfile = paymentData.CoachUser.ImageProfile ?? "",
                 Gender = paymentData.AthleteUser.Gender.ToString(),
                 BirthDate = paymentData.AthleteUser.BirthDate.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture),
-                AthleteQuestion = athleteQuestion.ToAthleteQuestionDto(),
-                WorkoutProgram = workoutProgram.ToProgramResponseDto() 
+                AthleteQuestion = athleteQuestion.AthleteQuestionResponseDto(),
+                WorkoutProgram = workoutProgram.ToProgramResponseDto()
             };
 
             return new ApiResponse { Message = "Payment details found", Action = true, Result = paymentResponseDto };

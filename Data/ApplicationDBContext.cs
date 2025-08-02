@@ -59,6 +59,8 @@ public class ApplicationDbContext : DbContext
     public DbSet<CoachPayout> CoachPayouts { get; set; }
     public DbSet<CoachFaq> CoachFaq { get; set; }
     public DbSet<AthleteFaq> AthleteFaq { get; set; }
+    public DbSet<AthleteBodyImage> AthleteImage { get; set; }
+
  
 
 }

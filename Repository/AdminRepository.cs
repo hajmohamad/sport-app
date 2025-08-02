@@ -143,20 +143,21 @@ namespace sport_app_backend.Repository
             }
             
 
-            if (payout.Status == PayoutStatus.Paid || payout.Status == PayoutStatus.Rejected)
+            if (payout.Status is PayoutStatus.Paid or PayoutStatus.Rejected)
             {
                 return new ApiResponse { Action = false, Message = $"وضعیت تسویه حساب قبلاً به {payout.Status} تغییر کرده است و قابل تغییر نیست." };
             }
 
             payout.Status = newStatus;
-            if (newStatus == PayoutStatus.Paid)
+            switch (newStatus)
             {
-                payout.PaidDate = DateTime.Now;
-                payout.TransactionReference = transactionReference;
-            }
-            else if (newStatus == PayoutStatus.Rejected)
-            {
-                payout.Coach.Amount += payout.Amount;
+                case PayoutStatus.Paid:
+                    payout.PaidDate = DateTime.Now;
+                    payout.TransactionReference = transactionReference;
+                    payout.Coach.Amount -= payout.Amount;
+                    break;
+                case PayoutStatus.Rejected:
+                    break;
             }
 
             await context.SaveChangesAsync();
