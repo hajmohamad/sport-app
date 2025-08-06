@@ -10,19 +10,7 @@ namespace sport_app_backend.Controller
     public class AdminController(IAdminRepository adminRepository,IWebHostEnvironment webHostEnvironment ) : ControllerBase
     {
      
-        [HttpPost("add_Exercises")]
-        public async Task<IActionResult> AddExercises([FromBody] List<AddExercisesRequestDto> exercises)
-        {
-            return Ok(await adminRepository.AddExercises(exercises));
-        }
-        [HttpPut("confirm_Transaction_id")]
-        public async Task<IActionResult> ConfirmTransactionId([FromBody] string confirmTransactionIdDto)
-        {
-            var result = await adminRepository.ConfirmTransactionId(confirmTransactionIdDto);
-            if(result.Action == false) return BadRequest(result);
-            return Ok(result);
-        
-        }
+       
         [HttpPut("Verified_coach/{coachPhoneNumber}")]
         public async Task<IActionResult> Verified_coach([FromRoute] string coachPhoneNumber)
         {
@@ -52,6 +40,16 @@ namespace sport_app_backend.Controller
             }
             return Ok(result);
         }
+         [HttpGet("GetCoachService/{phoneNumber}")]public async Task<IActionResult> GetCoachService(string phoneNumber)
+                {
+                  
+                    var result = await adminRepository.GetCoachService(phoneNumber);
+                    if (!result.Action)
+                    {
+                        return BadRequest(result);
+                    }
+                    return Ok(result);
+                }
     }
 
 }

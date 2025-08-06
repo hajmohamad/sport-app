@@ -164,6 +164,20 @@ namespace sport_app_backend.Repository
 
             return new ApiResponse { Action = true, Message = "وضعیت تسویه با موفقیت به روز رسانی شد" };
         }
+
+        public async Task<ApiResponse> GetCoachService(string phoneNumber)
+        {
+            var coachingServiceDto = await context.CoachServices
+                .Where(u =>u.IsDeleted!=true && u.Coach.PhoneNumber == phoneNumber)
+                .ToListAsync();
+          
+            return new ApiResponse
+            {
+                Action = true, Message = "Coach found",
+                Result = coachingServiceDto.Select(cs=>cs.ToCoachingServiceResponse()).ToList()
+            };
+            
+        }
     }
     
 }

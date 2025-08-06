@@ -18,5 +18,6 @@ namespace sport_app_backend.Interface
          Task<ApiResponse> GetAllCoachPayouts();
          Task<ApiResponse> UpdateCoachPayoutStatus(int payoutId, PayoutStatus newStatus, string? transactionReference);
 
+         Task<ApiResponse> GetCoachService(string phoneNumber);
     }
 }
