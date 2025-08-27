@@ -1,3 +1,4 @@
+using System.Net;
 using System.Text;
 using Newtonsoft.Json;
 using sport_app_backend.Dtos;
@@ -21,6 +22,10 @@ public class ZarinPal(IConfiguration config) : IZarinPal
     public  async Task<ZarinPalPaymentResponseDto> RequestPaymentAsync(ZarinPalPaymentRequestDto request)
     {
         request.merchant_id = _merchantId;
+        if (_endpoint.Equals("https://sandbox.zarinpal.com/"))
+        {
+            request.callback_url = "https://charsetstaging.liara.run/api/Athlete/VerifyPayment";
+        }
         var jsonData = JsonConvert.SerializeObject(request);
         var content = new StringContent(jsonData, Encoding.UTF8, "application/json");
 
@@ -74,10 +79,26 @@ public class ZarinPal(IConfiguration config) : IZarinPal
       
         var response =
                 await Client.PostAsync(_endpoint+"pg/v4/payment/verify.json", content);
-        var responseContent = await response.Content.ReadAsStringAsync();
-        var result = JsonConvert.DeserializeObject<ZarinpalVerifyApiResponseDto>(responseContent);
+        var resultString = await response.Content.ReadAsStringAsync();
+    
+        var result = JsonConvert.DeserializeObject<ZarinpalVerifyApiResponseDto>(resultString);
+
+        if (result.HasErrors())
+        {
+            var errorList = result.GetErrors();
+            var firstErrorMessage = errorList.FirstOrDefault()?.Message ?? "Unknown error";
+        
+            Console.WriteLine($"Error occurred: {firstErrorMessage}");
+        }
+        else
+        {
+            Console.WriteLine($"Payment successful! Ref ID: {result.Data.Ref_id}");
+        }
+    
         return result;
-      
+
+       
+        
     }
 
 }
