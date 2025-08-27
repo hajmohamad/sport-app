@@ -1,8 +1,6 @@
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
 using sport_app_backend.Dtos;
 using sport_app_backend.Interface;
 using sport_app_backend.Models;
@@ -183,6 +181,14 @@ public class UserController(IUserRepository userRepository) : ControllerBase
         var result =  userRepository.UpdateApp();
         return Ok(result);
 
+    }
+    [HttpGet("workout-plan/{wpId}")]
+    public async Task<IActionResult> GetWorkoutPlanPdf(string wpId)
+    {
+      
+        var result = await userRepository.CreateWorkoutPdfAsync(wpId);
+        if (result.Action != true) return BadRequest(result);
+        return Ok(result.Result);
     }
 
 

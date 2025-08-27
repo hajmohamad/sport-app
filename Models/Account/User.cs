@@ -9,11 +9,11 @@ public class User
     [Key]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public  int Id { get; set; }
-    
+
     [StringLength(15)]
-    public string? FirstName { get; set; }
+    public string FirstName { get; set; } = "";
     [StringLength(50)]
-    public  string? LastName { get; set; }
+    public  string LastName { get; set; }= "";
     [MaxLength(15)]
     [MinLength(6)]
     public string? UserName { get; set; } 

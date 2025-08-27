@@ -1,3 +1,4 @@
+using System.Globalization;
 using Microsoft.EntityFrameworkCore;
 using sport_app_backend.Data;
 using sport_app_backend.Dtos;
@@ -334,6 +335,7 @@ private async Task<string> GenerateUniqueUsername()
             {
                 version,
                 requiredUpdate=forceUpdateBool
+                ,wpid=tokenService.HashEncode(18)
             }
 
         };
@@ -387,6 +389,82 @@ private async Task<string> GenerateUniqueUsername()
             }
         };
     }
+    public async Task<ApiResponse> CreateWorkoutPdfAsync(string wpId)
+    {
+        var id = tokenService.DecodeHash(wpId);
+    // --- ۱. واکشی داده‌های خام از دیتابیس ---
+    var workoutData = await dbContext.WorkoutPrograms
+        .AsNoTracking()
+        .Where(wp => wp.Id == id)
+        .Select(wp => new // واکشی به یک شیء بی‌نام
+        {
+            wp.Title,
+            wp.StartDate,
+            CoachFirstName = wp.Coach.User.FirstName,
+            CoachLastName = wp.Coach.User.LastName,
+            AthleteCurrentBodyForm = wp.Payment.AthleteQuestion.CurrentBodyForm,
+            wp.ProgramLevel,
+            wp.ProgramDuration,
+            wp.ProgramPriorities, // <-- واکشی لیست خام Enum ها
+            AthleteCurrentWeight = wp.Athlete.CurrentWeight,
+            AthleteHeight = wp.Athlete.Height,
+            AhtleteGender= wp.Athlete.User.Gender,
+            ProgramInDays = wp.ProgramInDays.Select(pd => new 
+            {
+                pd.ForWhichDay,
+                Exercises = pd.AllExerciseInDays.Select(se => new 
+                {
+                    se.Exercise.PersianName,
+                    se.Set,
+                    se.Rep
+                }).ToList()
+            }).ToList()
+        })
+        .FirstOrDefaultAsync();
+        
+    if (workoutData == null) return null;
+
+
+    var heightInMeters = workoutData.AthleteHeight / 100.0;
+
+    var bmi = workoutData.AthleteCurrentWeight / (heightInMeters * heightInMeters);
+    var pc = new PersianCalendar();
+    
+
+
+    var pdfModel = new WorkoutPdfModel
+    {
+        ProgramTitle = workoutData.Title,
+        StartDate = workoutData.StartDate.ToShamsiDateString(),
+        CoachName = $"{workoutData.CoachFirstName} {workoutData.CoachLastName}",
+        ProgramLevel = workoutData.ProgramLevel.ToPersianString(),
+        ProgramDuration = workoutData.ProgramDuration.ToString() ,
+        ProgramPriorities = string.Join(" - ", workoutData.ProgramPriorities.Select(p => p.ToPersianString())),
+        AthleteWeight = workoutData.AthleteCurrentWeight.ToString(),
+        AthleteHeight = workoutData.AthleteHeight.ToString(),
+        AthleteBmi = Math.Round(bmi, 2).ToString(), 
+        AthleteFatPercentage = workoutData.AhtleteGender.GetFatPercentageRange(workoutData.AthleteCurrentBodyForm),
+        WorkoutDays = workoutData.ProgramInDays.Select(pd => new WorkoutDayModel
+        {
+            DayNumber = pd.ForWhichDay,
+            Exercises = pd.Exercises.Select(se => new ExerciseModel
+            {
+                Name = se.PersianName,
+                Set = se.Set,
+                Rep = se.Rep.ToString()
+            }).ToList()
+        }).ToList()
+    };
+    return new ApiResponse()
+    {
+        Action = true,
+        Message = "get program",
+        Result = pdfModel
+    };
+
+
+}
+    
 
 
 

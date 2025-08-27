@@ -23,4 +23,6 @@ public interface IUserRepository
     public Task<ApiResponse> GetExercise(int exerciseId);
 
     public Task<ApiResponse> RemoveProfilePhoto(string phoneNumber);
+    public Task<ApiResponse> CreateWorkoutPdfAsync(string wpId);
+
 }
