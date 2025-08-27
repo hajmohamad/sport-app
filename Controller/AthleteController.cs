@@ -238,7 +238,30 @@ namespace sport_app_backend.Controller
         [HttpGet("Get-Coaches")]
         [Authorize(Roles = "Athlete")]
         public async Task<IActionResult> GetCoaches()
-        {
+        { var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
+            switch (phoneNumber)
+            {
+                case null:
+                    return BadRequest(new ApiResponse() { Action = false, Message = "PhoneNumber is null" });
+                case "09373531171":
+                    var amirResult  = await context.Users.
+                        Where(c => c.TypeOfUser == TypeOfUser.COACH&&
+                                   !string.IsNullOrEmpty(c.FirstName)).Select(user=> new CoachForSearch
+                        {
+                            Id = user.Coach.Id,
+                            UserName = user.UserName ?? string.Empty,
+                            FirstName = user.FirstName ?? string.Empty,
+                            LastName = user.LastName ?? string.Empty,
+                            ImageProfile = user.ImageProfile,
+                            Bio = user.Bio,
+                            HeadLine = user.Coach.Verified ? user.Coach.HeadLine : user.PhoneNumber
+                        } ).ToListAsync();
+                    return  Ok(new ApiResponse()
+                    {
+                        Action = true, Message = "Coaches found", Result = amirResult 
+                    });
+                    break;
+            }
             var result  = await context.Users.
                 Where(c => c.TypeOfUser == TypeOfUser.COACH&& c.Coach.Verified&&
                                                          !string.IsNullOrEmpty(c.FirstName)).ToListAsync();

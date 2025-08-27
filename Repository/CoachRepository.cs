@@ -181,6 +181,7 @@ namespace sport_app_backend.Repository
         public async Task<ApiResponse> UpdateCoachingService(string phoneNumber, int id,
             AddCoachServiceDto addCoachingServices)
         {
+            
             var coach = await context.Coaches.Include(x => x.CoachingServices)
                 .FirstOrDefaultAsync(x => x.PhoneNumber == phoneNumber);
             if (coach is null)
@@ -350,7 +351,7 @@ namespace sport_app_backend.Repository
                 workoutProgram.ProgramDuration = workoutProgramDto.Week;
                 workoutProgram.GeneralWarmUp = workoutProgramDto.GeneralWarmUp
                     ?.Select(x => (GeneralWarmUp)Enum.Parse(typeof(GeneralWarmUp), x)).ToList() ?? [];
-                workoutProgram.ProgramLevel = workoutProgramDto.ProgramLevel;
+                workoutProgram.ProgramLevel = (ProgramLevel)Enum.Parse(typeof(ProgramLevel),workoutProgramDto.ProgramLevel);
                 if (workoutProgramDto.DedicatedWarmUp is not null)
                 {
                     workoutProgram.DedicatedWarmUp =
@@ -367,6 +368,7 @@ namespace sport_app_backend.Repository
                 if (workoutProgramDto.Publish)
                 {
                     workoutProgram.Status = WorkoutProgramStatus.NOTACTIVE;
+                    workoutProgram.StartDate = DateTime.Now;
                     var athlete = await context.Athletes.Include(u => u.User)
                         .FirstOrDefaultAsync(a => a.Id == workoutProgram.AthleteId);
                     if (athlete is null)
@@ -416,7 +418,11 @@ namespace sport_app_backend.Repository
                 return new ApiResponse()
                 {
                     Action = true,
-                    Message = "workout program saved"
+                    Message = "workout program saved",
+                    Result = new
+                    {
+                        pdfLink="chaarset.ir"
+                    }
                 };
             }
             catch (Exception e)

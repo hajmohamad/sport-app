@@ -178,7 +178,7 @@ namespace sport_app_backend.Repository
                 {
                     Action = true,
                     Message = "img upload successfully",
-                    Result = athleteImage
+                    Result = athleteImage.ToAthleteBodyImageDto()
                 };
             }
         }
@@ -286,7 +286,7 @@ namespace sport_app_backend.Repository
             {
                 Action = true,
                 Message = "img remove successfully",
-                Result = athleteImage
+                Result = athleteImage.ToAthleteBodyImageDto()
             }; 
 
             
@@ -320,7 +320,7 @@ namespace sport_app_backend.Repository
             {
                 Action = true,
                 Message = "img remove successfully",
-                Result = athleteImage
+                Result = athleteImage.ToAthleteBodyImageDto()
             }; 
         }
 
@@ -368,12 +368,14 @@ namespace sport_app_backend.Repository
         public async Task<ApiResponse> VerifyPaymentAsync(ZarinPalVerifyRequestDto request)
         {
             var payment = await context.Payments
-                .Include(p => p.Coach).ThenInclude(coach => coach.User)
+                .Include(p => p.Coach).
+                ThenInclude(coach => coach.User)
                 .Include(p => p.CoachService)
-                .Include(p => p.Athlete).ThenInclude(athlete => athlete.User)
+                .Include(p => p.Athlete).
+                ThenInclude(athlete => athlete.User)
                 .Include(p => p.WorkoutProgram)
                 .FirstOrDefaultAsync(x => x.Authority == request.Authority);
-
+            
             if (payment == null)
             {
                 return new ApiResponse
@@ -437,13 +439,13 @@ namespace sport_app_backend.Repository
                 payment.PaymentStatus = PaymentStatus.FAILED;
                 await context.SaveChangesAsync();
 
-                var error = result?.Errors?.Select(e => e.Message).ToString() ??
-                            "Unknown error from payment gateway.";
+                // var error = result?.Errors?.ToString() ??
+                //             "Unknown error from payment gateway.";
                 return new ApiResponse
                 {
                     Action = false,
                     Message = "پرداخت ناموفق",
-                    Result = error
+                    // Result = error
                 };
             }
             catch (Exception ex)
@@ -1231,7 +1233,8 @@ namespace sport_app_backend.Repository
                 Gender = paymentData.AthleteUser.Gender.ToString(),
                 BirthDate = paymentData.AthleteUser.BirthDate.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture),
                 AthleteQuestion = athleteQuestion.AthleteQuestionResponseDto(),
-                WorkoutProgram = workoutProgram.ToProgramResponseDto()
+                WorkoutProgram = workoutProgram.ToProgramResponseDto(),
+                PdfLink= "chaarset.ir"
             };
 
             return new ApiResponse { Message = "Payment details found", Action = true, Result = paymentResponseDto };
