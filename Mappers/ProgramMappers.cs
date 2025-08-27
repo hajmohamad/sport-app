@@ -2,6 +2,7 @@ using System.Globalization;
 using Humanizer;
 using sport_app_backend.Dtos;
 using sport_app_backend.Dtos.ProgramDto;
+using sport_app_backend.Models.Account;
 using sport_app_backend.Models.Actions;
 using sport_app_backend.Models.Program;
 using sport_app_backend.Models.Question.A_Question;
@@ -33,7 +34,7 @@ public static class ProgramMappers
             PaymentId = workoutProgram.PaymentId,
             StartDate = workoutProgram.StartDate,
             ProgramDuration = workoutProgram.ProgramDuration,
-            ProgramLevel = workoutProgram.ProgramLevel ,
+            ProgramLevel = workoutProgram.ProgramLevel.ToString() ,
             ProgramPriorities = workoutProgram.ProgramPriorities.Select(x => x.ToString()).ToList(),
             GeneralWarmUp = workoutProgram.GeneralWarmUp.Select(c=>c.ToString()).ToList(),
             #pragma warning disable CS8601 // Possible null reference assignment.
@@ -210,6 +211,63 @@ public static class ProgramMappers
         return result;
         
     }
+    public static string ToShamsiDateString(this DateTime date)
+    {
+        var pc = new PersianCalendar();
 
+        var year = pc.GetYear(date);
+        var month = pc.GetMonth(date);
+        var day = pc.GetDayOfMonth(date);
+
+      
+        return $"{year}/{month:D2}/{day:D2}";
+    }
+    public static string ToPersianString(this ProgramLevel level)
+    {
+        return level switch
+        {
+            ProgramLevel.Beginner => "مبتدی",
+            ProgramLevel.Intermediate => "متوسط",
+            ProgramLevel.SemiAdvanced => "نیمه پیشرفته",
+            ProgramLevel.Advanced => "پیشرفته",
+            ProgramLevel.UltraAdvanced => "فوق پیشرفته",
+            _ => level.ToString() // اگر ترجمه‌ای وجود نداشت، نام انگلیسی را برمی‌گرداند
+        };
+    }
+    public static string GetFatPercentageRange( this Gender gender ,int bodyFormNumber)
+    {
+        if (gender == Gender.MALE)
+        {
+            // محدوده‌ها برای مردان
+            return bodyFormNumber switch
+            {
+                1 => "4-6%",
+                2 => "7-10%",
+                3 => "11-15%",
+                4 => "16-23%",
+                5 => "31-40%",
+                6 => ">40%",
+
+                _ => "نامشخص" // برای مقادیر ورودی نامعتبر
+            };
+        }
+        else // if (gender == Gender.FEMALE)
+        {
+            // محدوده‌ها برای زنان
+            return bodyFormNumber switch
+            {
+                1 => "10-15%",
+                2 => "16-20%",
+                3 => "21-25%",
+                4 => "26-30%",
+                5 => "31-35%",
+                6 => "36-45%",
+                7 => ">40%",
+
+
+                _ => "نامشخص" // برای مقادیر ورودی نامعتبر
+            };
+        }
+    }
 
 }

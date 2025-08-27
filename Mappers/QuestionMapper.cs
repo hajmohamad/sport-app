@@ -2,12 +2,27 @@
 using sport_app_backend.Models;
 using sport_app_backend.Models.Account;
 using sport_app_backend.Models.C_Question;
+using sport_app_backend.Models.Program;
 using sport_app_backend.Models.Question.A_Question;
 
 namespace sport_app_backend.Mappers
 {
     public static class QuestionMapper
     {
+        
+        public static string ToPersianString(this ProgramPriority priority)
+        {
+            return priority switch
+            {
+                ProgramPriority.INCREASE_VOLUME => "افزایش حجم",
+                ProgramPriority.LOSS_WEIGHT => "کاهش وزن",
+                ProgramPriority.INCREASED_ENDURANCE => "افزایش استقامت",
+                ProgramPriority.INCREASE_STRENGTH => "افزایش قدرت",
+                ProgramPriority.INCREASED_AGILITY => "افزایش چابکی",
+                ProgramPriority.RECOVERY => "ریکاوری",
+                _ => priority.ToString() // اگر ترجمه‌ای وجود نداشت، نام انگلیسی را برمی‌گرداند
+            };
+        }
         private static InjuryArea ToInjuryArea(this InjuryAreaDto dto)
         {
 
@@ -87,7 +102,6 @@ namespace sport_app_backend.Mappers
             return new AthleteBodyImageDto()
             {
                 Id = athleteBodyImage.Id,
-                AthleteQuestionId = athleteBodyImage.AthleteQuestionId,
                 BackLink = athleteBodyImage.BackLink,
                 FrontLink = athleteBodyImage.FrontLink,
                 SideLink = athleteBodyImage.SideLink

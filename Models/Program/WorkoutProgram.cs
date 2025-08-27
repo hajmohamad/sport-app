@@ -19,8 +19,7 @@ public class WorkoutProgram
     public required Payment Payment { get; set; }
     public DateTime StartDate { get; set; }
     public int ProgramDuration { get; set; } = 3;
-    [MaxLength(20)] 
-    public string ProgramLevel { get; set; } = "Beginner";
+    public ProgramLevel ProgramLevel { get; set; } = ProgramLevel.Beginner;
     public List<ProgramPriority> ProgramPriorities { get; set; } = [];
     public List<GeneralWarmUp>? GeneralWarmUp { get; set; } = [];
     public DedicatedWarmUp? DedicatedWarmUp { get; set; } 
