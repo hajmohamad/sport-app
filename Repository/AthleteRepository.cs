@@ -365,7 +365,7 @@ namespace sport_app_backend.Repository
             }
         }
 
-        public async Task<ApiResponse> VerifyPaymentAsync(ZarinPalVerifyRequestDto request)
+        public async Task<ApiResponse> VerifyPaymentAsync(ZarinPalVerifyRequestDto request,string status)
         {
             var payment = await context.Payments
                 .Include(p => p.Coach).
@@ -384,6 +384,39 @@ namespace sport_app_backend.Repository
                     Message = "تراکنشی یافت نشد",
                 };
             }
+
+        
+            if (!status.Equals("ok", StringComparison.CurrentCultureIgnoreCase))
+            {
+                payment.PaymentStatus = PaymentStatus.FAILED;
+                await context.SaveChangesAsync();
+                return new ApiResponse()
+                {
+                    Action = false,
+                    Message = "!!پرداخت توسط کاربر لغو شد."
+                };
+            }
+
+            switch (payment.PaymentStatus)
+            {
+                case PaymentStatus.FAILED:
+                    return new ApiResponse()
+                    {
+                        Action = false,
+                        Message = "!!پرداخت ناموفق"
+                    };
+                case PaymentStatus.SUCCESS:
+                    return new ApiResponse()
+                    {
+                        Action = true,
+                        Message = "پرداخت با موفقیت انجام شد و قبلا تایید شده است  ",
+                    };
+
+                case PaymentStatus.INPROGRESS:
+                    break;
+                }
+
+
 
             request.Amount = payment.Amount;
 

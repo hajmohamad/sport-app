@@ -136,6 +136,8 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<ICoachRepository, CoachRepository>();
 builder.Services.AddScoped<IAthleteRepository, AthleteRepository>();
 builder.Services.AddScoped<IAdminRepository, AdminRepository>();
+builder.Services.AddScoped<IBuyFromSiteRepository, BuyFromSiteRepository>();
+
 builder.Services.AddCoreAdmin();
 
 builder.Services.AddMemoryCache();

@@ -10,13 +10,13 @@ public class WorkoutProgram
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int Id { get; set; }
     public required int CoachId { get; set; }
-    public required Coach Coach {get; set;}
+    public Coach Coach {get; set;} = null!;
     public required int AthleteId { get; set; }
-    public required Athlete Athlete {get; set;}
+    public Athlete Athlete {get; set;} = null!;
     [MaxLength(50)]
     public string Title { get; set; }="";
     public required int PaymentId { get; set; }
-    public required Payment Payment { get; set; }
+    public Payment Payment { get; set; } = null!;
     public DateTime StartDate { get; set; }
     public int ProgramDuration { get; set; } = 3;
     public ProgramLevel ProgramLevel { get; set; } = ProgramLevel.Beginner;

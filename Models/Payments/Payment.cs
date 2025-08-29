@@ -11,19 +11,19 @@ public class Payment
 {   [Key]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int Id { get; set; }  
-    public int AthleteId { get; set; }
-    public required Athlete Athlete { get; set; }
-    public int CoachId { get; set; }
-    public required Coach Coach { get; set; }
+    public required int AthleteId { get; set; }
+    public Athlete Athlete { get; set; } = null!;
+    public required int CoachId { get; set; }
+    public Coach Coach { get; set; }  = null!;
     public double Amount {get; set;}
-    public int CoachServiceId { get; set; }
-    public required CoachService CoachService { get; set; }
+    public required int CoachServiceId { get; set; }
+    public CoachService CoachService { get; set; }  = null!;
     [MaxLength(50)]
     public string Authority { get; set; }="";
     public PaymentStatus PaymentStatus { get; set; } = PaymentStatus.INPROGRESS;
     public DateTime PaymentDate { get; set; }=DateTime.Now;
-    public required AthleteQuestion AthleteQuestion { get; set; }
-    public int AthleteQuestionId { get; set; }
+    public AthleteQuestion? AthleteQuestion { get; set; } 
+    public  int? AthleteQuestionId { get; set; } 
     public  WorkoutProgram? WorkoutProgram { get; set; }
     public double AppFee { get; set; }
     public long RefId { get; set; }

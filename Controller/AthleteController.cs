@@ -640,15 +640,13 @@ namespace sport_app_backend.Controller
         
         public async Task<IActionResult> VerifyPayment([FromQuery] string authority, [FromQuery] string status)
         {
-            if (!status.Equals("ok", StringComparison.CurrentCultureIgnoreCase))
-                return BadRequest("!!پرداخت توسط کاربر لغو شد.");
 
             var verifyRequest = new ZarinPalVerifyRequestDto
             {
                 Authority = authority,
             };
 
-            var result = await athleteRepository.VerifyPaymentAsync(verifyRequest);
+            var result = await athleteRepository.VerifyPaymentAsync(verifyRequest,status);
 
             if (result.Action)
             {

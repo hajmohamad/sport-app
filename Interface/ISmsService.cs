@@ -13,5 +13,9 @@ public interface ISmsService
     public Task<SmsResponse> AthleteSuccessfullySmsNotification(string mobileNumber, string athleteName, string serviceName);
     public Task<SmsResponse> WorkoutReadySms(string mobileNumber, string athleteName, string serviceName);
 
+    public Task<SmsResponse> AthleteSuccessfullySmsNotificationFromBuyFromSite(string mobileNumber, string wpKey,
+        string serviceName);
+
+
 
 }

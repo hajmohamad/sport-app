@@ -6,7 +6,9 @@ public enum WorkoutProgramStatus
     ACTIVE,
     FINISHED,
     STOPPED,
-    NOTSTARTED
+    NOTSTARTED,
+    UNCOMPLETEDQUESTION
+    
     
     
 }
