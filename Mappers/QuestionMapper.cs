@@ -65,6 +65,20 @@ namespace sport_app_backend.Mappers
                 Weight = dto.CurrentWeight
             };
         }
+        public static AthleteQuestion ToAthleteQuestionBuyFromSite(this AthleteQuestionBuyFromSiteDto dto, Athlete athlete)
+        {
+            return new AthleteQuestion
+            {
+                AthleteId = athlete.Id,
+                Athlete = athlete,
+                CurrentBodyForm = dto.CurrentBodyForm,
+                DaysPerWeekToExercise = dto.DaysPerWeekToExercise,
+                FitnessLevel = Enum.Parse<FitnessLevel>(dto.FitnessLevel ?? string.Empty),
+                InjuryArea = dto.InjuryArea?.ToInjuryArea(),
+                ExerciseGoal = Enum.Parse<ExerciseGoal>(dto.ExerciseGoal ?? string.Empty),
+                Weight = dto.CurrentWeight
+            };
+        }
         public static AthleteQuestionResponseDto AthleteQuestionResponseDto(this AthleteQuestion question)
         {
             return new AthleteQuestionResponseDto()

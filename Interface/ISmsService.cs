@@ -13,8 +13,10 @@ public interface ISmsService
     public Task<SmsResponse> AthleteSuccessfullySmsNotification(string mobileNumber, string athleteName, string serviceName);
     public Task<SmsResponse> WorkoutReadySms(string mobileNumber, string athleteName, string serviceName);
 
-    public Task<SmsResponse> AthleteSuccessfullySmsNotificationFromBuyFromSite(string mobileNumber, string wpKey,
+    public Task<SmsResponse> AthleteSuccessfullySmsNotificationForBuyFromSite(string mobileNumber, string wpKey,
         string serviceName);
+
+    public Task<SmsResponse> NotifyAthleteOfProgramLinkSms(string mobileNumber, string athleteName, string programLink);
 
 
 

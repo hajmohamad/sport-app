@@ -1,15 +1,18 @@
 using System.Globalization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using sport_app_backend.Data;
 using sport_app_backend.Dtos;
 using sport_app_backend.Dtos.ZarinPal;
 using sport_app_backend.Dtos.ZarinPal.Verify;
 using sport_app_backend.Interface;
+using sport_app_backend.Mappers;
 using sport_app_backend.Models;
 using sport_app_backend.Models.Account;
 using sport_app_backend.Models.Login_Sinup;
 using sport_app_backend.Models.Payments;
 using sport_app_backend.Models.Program;
+using sport_app_backend.Models.Question.A_Question;
 
 namespace sport_app_backend.Repository;
 
@@ -143,7 +146,7 @@ public class BuyFromSiteRepository(
             var zarinPalResponse = await zarinPal.RequestPaymentAsync(new ZarinPalPaymentRequestDto
             {
                 amount = (long)coachService.Price,
-                callback_url = "https://chaarset.ir/payment/verify",
+                callback_url = "https://chaarset.ir/verify-payment",
                 description = "خرید",
                 Mobile = phoneNumber
             });
@@ -242,7 +245,12 @@ public class BuyFromSiteRepository(
                 return new ApiResponse()
                 {
                     Action = false,
-                    Message = "!!پرداخت توسط کاربر لغو شد."
+                    Message = "پرداخت توسط کاربر لغو شد.",
+                    Result = new 
+                    {                                    
+                        CoachPhoneNumber= payment.Coach.PhoneNumber
+                    }
+                    
                 };
             }
 
@@ -252,13 +260,24 @@ public class BuyFromSiteRepository(
                     return new ApiResponse()
                     {
                         Action = false,
-                        Message = "!!پرداخت ناموفق"
+                        Message = "پرداخت ناموفق",
+                        Result =new 
+                        {                                    
+                            CoachPhoneNumber= payment.Coach.PhoneNumber
+                        }
                     };
                 case PaymentStatus.SUCCESS:
                     return new ApiResponse()
                     {
                         Action = true,
                         Message = "پرداخت با موفقیت انجام شد و قبلا تایید شده است  ",
+                        Result = new
+                        {
+                            WpKey= tokenService.HashEncode(payment.WorkoutProgram!.Id),
+                            payment.RefId,
+                            CoachPhoneNumber= payment.Coach.PhoneNumber
+                        }
+                        
                     };
 
                 case PaymentStatus.INPROGRESS:
@@ -280,18 +299,23 @@ public class BuyFromSiteRepository(
                                     return confirmResult;
                                 }
 
-                                var wpkey =  tokenService.HashEncode((int)(confirmResult.Result ?? 0));
+                                var wpKey =  tokenService.HashEncode((int)(confirmResult.Result ?? 0));
 
-                                await sms.AthleteSuccessfullySmsNotificationFromBuyFromSite(
+                                await sms.AthleteSuccessfullySmsNotificationForBuyFromSite(
                                     payment.Athlete.PhoneNumber,
-                                    wpkey, payment.CoachService.Title);
+                                    wpKey, payment.CoachService.Title);
 
 
                                 return new ApiResponse
                                 {
                                     Action = true,
                                     Message = "پرداخت با موفقیت انجام شد ",
-                                    Result = wpkey
+                                    Result = new
+                                    {
+                                        WpKey= wpKey,
+                                        RefId=result.Data.Ref_id,
+                                        CoachPhoneNumber= payment.Coach.PhoneNumber
+                                    }
                                 };
                             }
                             case { Code: 101 }:
@@ -300,7 +324,12 @@ public class BuyFromSiteRepository(
                                 {
                                     Action = true,
                                     Message = "پرداخت با موفقیت انجام شد و قبلا تایید شده است  ",
-                                    Result = result.Data.Ref_id
+                                    Result = new
+                                    {
+                                        WpKey= tokenService.HashEncode(payment.WorkoutProgram!.Id),
+                                        payment.RefId,
+                                        CoachPhoneNumber= payment.Coach.PhoneNumber
+                                    }
                                 };
                         }
 
@@ -313,13 +342,11 @@ public class BuyFromSiteRepository(
                         payment.PaymentStatus = PaymentStatus.FAILED;
                         await dbContext.SaveChangesAsync();
 
-                        // var error = result?.Errors?.ToString() ??
-                        //             "Unknown error from payment gateway.";
+                     
                         return new ApiResponse
                         {
                             Action = false,
                             Message = "پرداخت ناموفق",
-                            // Result = error
                         };
                     }
                     catch (Exception ex)
@@ -382,16 +409,20 @@ public class BuyFromSiteRepository(
                 Message = "برنامه شما پیدا نشد"
             };
         }
-        var persianCalendar = new System.Globalization.PersianCalendar();
+        var pc = new System.Globalization.PersianCalendar();
+        var year = pc.GetYear(programData.PaymentDate);
+        var month = pc.GetMonth(programData.PaymentDate);
+        var day = pc.GetDayOfMonth(programData.PaymentDate);
+
+
+        var persianDate = $"{year}/{month:D2}/{day:D2}";
 
         var workoutProgramInfo = new WorkoutProgramInfoForSiteDto
         {
             Status = programData.Status.ToString(),
             WorkoutProgramPrice = programData.workoutProgramPrice.ToString(),
             AthleteName = programData.AhtleteFirstName + " " + programData.AthleteLastName,
-            PaymentDate = persianCalendar
-                .ToDateTime(programData.PaymentDate.Year, programData.PaymentDate.Month, programData.PaymentDate.Day, 0,
-                    0, 0, 0).ToString(CultureInfo.InvariantCulture),
+            PaymentDate = persianDate,
             ProgramDuration = programData.ProgramDuration,
             ProgramLevel = programData.ProgramLevel.ToString(),
             ProgramPriorities = programData.ProgramPriorities.Select(x => x.ToString()).ToList(),
@@ -438,7 +469,101 @@ public class BuyFromSiteRepository(
             } }
         };
     }
+    public async Task<ApiResponse> SubmitAthleteQuestionWithImages(
+    [FromForm] AthleteQuestionBuyFromSiteDto dto, 
+    IFormFile? frontImage, 
+    IFormFile? backImage, 
+    IFormFile? sideImage)
+{
+    var workoutProgramId = tokenService.DecodeHash(dto.WpKey);
+    if (workoutProgramId == 0)
+    {
+        return new ApiResponse { Action = false, Message = "برنامه شما پیدا نشد" };
+    }
+
+    var workProgram = await dbContext.WorkoutPrograms
+        .Include(wp => wp.Payment).ThenInclude(p => p.CoachService)
+        .Include(wp => wp.Payment).ThenInclude(p => p.Coach).ThenInclude(c => c.User)
+        .Include(wp => wp.Athlete).ThenInclude(a => a.User).Include(workoutProgram => workoutProgram.Payment)
+        .ThenInclude(payment => payment.Athlete).ThenInclude(athlete => athlete.User)
+        .FirstOrDefaultAsync(w => w.Id == workoutProgramId);
+   
+    
+    if (workProgram?.Athlete is null)
+    {
+        return new ApiResponse { Action = false, Message = "برنامه شما پیدا نشد" };
+    }
+    
+    var athlete = workProgram.Athlete;
+    AthleteBodyImage? newAthleteBodyImage = null;
+    if (frontImage != null || backImage != null || sideImage != null)
+    {
+         newAthleteBodyImage = new AthleteBodyImage { AthleteId = athlete.Id };
+
+        if (frontImage != null)
+        {
+            var response = await liaraStorage.UploadImage(frontImage,"");
+            if (!response.Action) return response;
+            newAthleteBodyImage.FrontLink = response.Result as string;
+        }
+        if (backImage != null)
+        {
+            var response = await liaraStorage.UploadImage(backImage,"");
+            if (!response.Action) return response;
+            newAthleteBodyImage.BackLink = response.Result as string;
+        }
+        if (sideImage != null)
+        {
+            var response = await liaraStorage.UploadImage(sideImage,"");
+            if (!response.Action) return response;
+            newAthleteBodyImage.SideLink = response.Result as string;
+        }
+    }
+
+    athlete.Height = dto.Height;
+    athlete.User.FirstName = dto.FirstName;
+    athlete.User.LastName = dto.LastName;
+    athlete.User.BirthDate = Convert.ToDateTime(dto.BirthDay);
+
+    var athleteQuestion = dto.ToAthleteQuestionBuyFromSite(athlete); // فرض می‌کنیم یک مپر برای DTO جدید دارید
+    workProgram.Payment.AthleteQuestion = athleteQuestion;
+    
+    if (newAthleteBodyImage != null)
+    {
+        athleteQuestion.AthleteBodyImage = newAthleteBodyImage;
+    }
+    
+    workProgram.Status = WorkoutProgramStatus.NOTSTARTED;
+    
+    
+    await dbContext.SaveChangesAsync();
+    
+    var payment = workProgram.Payment;
+    if (!string.IsNullOrEmpty(payment.Athlete.User.FirstName))
+    {
+        await sms.NotifyAthleteOfProgramLinkSms(
+            payment.Athlete.PhoneNumber,
+            payment.Athlete.User.FirstName,
+            dto.WpKey
+        );
+    }
+    
+    if (!string.IsNullOrEmpty(payment.Coach.User.FirstName))
+    {
+        await sms.CoachServiceBuySmsNotification(
+            payment.Coach.PhoneNumber,
+            payment.Coach.User.FirstName, 
+            payment.CoachService.Title,
+            payment.Amount.ToString(CultureInfo.CurrentCulture));
+    }
+
+    return new ApiResponse
+    {
+        Message = "Athlete questions submitted successfully",
+        Action = true
         
+    };
+}
 
     private async Task<ApiResponse> ConfirmTransactionId(Payment payment, long refId)
     {

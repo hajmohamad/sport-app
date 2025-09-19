@@ -112,42 +112,78 @@ public class SmsService(IConfiguration config) : ISmsService
             return new SmsResponse { IsSuccess = false, Message = $"An exception occurred: {ex.Message}" };
         }
     }
-    public async Task<SmsResponse> AthleteSuccessfullySmsNotificationFromBuyFromSite(string mobileNumber, string wpKey, string serviceName)
+    public async Task<SmsResponse> NotifyAthleteOfProgramLinkSms(string mobileNumber, string athleteName, string wpkey)
     {
-        var message = $"رزشکار عزیز ، پرداختت برای {serviceName} موفقیت آمیز بود. لطفا از طریق لینک زیر به سوالات مربی جواب بده تا برنامه اختصاصیت رو طراحی کنه" ;
+        var message = $"{athleteName} عزیز، درخواست شما برای مربی ارسال شد.\nلینک زیر مخصوص برنامه تمرینی شماست و همیشه از طریق همین لینک به آن دسترسی خواهید داشت:\nchaarset.ir/program/{wpkey}";
 
-        const string lineNumber = "9981802897";
-        const string apiUrl = "https://api.sms.ir/v1/send/likeToLike";
+        const string lineNumber = "9981802897"; // Your SMS line number
+        const string apiUrl = "https://api.sms.ir/v1/send/likeToLike"; // The API endpoint
 
-
-        var payload = new SmsPayload
+        var payload = new
         {
             LineNumber = lineNumber,
-            MessageTexts = [message],
-            Mobiles = [mobileNumber]
+            MessageTexts = new[] { message },
+            Mobiles = new[] { mobileNumber }
         };
+
         var httpClient = new HttpClient();
         httpClient.DefaultRequestHeaders.Add("x-api-key", _accessKey);
 
-
         var jsonPayload = JsonConvert.SerializeObject(payload);
-        var content = new StringContent(jsonPayload, Encoding.UTF8, "application/json");
+        var content = new StringContent(jsonPayload, System.Text.Encoding.UTF8, "application/json");
 
         try
         {
             var response = await httpClient.PostAsync(apiUrl, content);
             var resultString = await response.Content.ReadAsStringAsync();
 
-            return response.IsSuccessStatusCode
-                ? new SmsResponse { IsSuccess = true, Message = resultString }
-                : new SmsResponse { IsSuccess = false, Message = $"API Error: {response.StatusCode} - {resultString}" };
+            return response.IsSuccessStatusCode ? new SmsResponse { IsSuccess = true, Message = "پیامک اطلاع‌رسانی لینک با موفقیت ارسال شد." } :
+                new SmsResponse { IsSuccess = false, Message = $"خطا در ارسال پیامک: {response.StatusCode} - {resultString}" };
         }
         catch (Exception ex)
         {
-            return new SmsResponse { IsSuccess = false, Message = $"An exception occurred: {ex.Message}" };
+            return new SmsResponse { IsSuccess = false, Message = $"خطای غیرمنتظره: {ex.Message}" };
         }
     }
+    public async Task<SmsResponse> AthleteSuccessfullySmsNotificationForBuyFromSite(string mobileNumber, string wpKey, string serviceName)
+    {
+        var message = $"ورزشکار عزیز، پرداخت شما برای سرویس \"{serviceName}\" با موفقیت انجام شد. لطفاً از طریق لینک زیر به سوالات مربی پاسخ دهید تا برنامه اختصاصی شما طراحی شود:\nchaarset.ir/program/{wpKey}";
 
+        const string lineNumber = "9981802897"; 
+        const string apiUrl = "https://api.sms.ir/v1/send/likeToLike"; 
+
+        var payload = new
+        {
+            LineNumber = lineNumber,
+            MessageTexts = new[] { message },
+            Mobiles = new[] { mobileNumber }
+        };
+        var httpClient = new HttpClient();
+        httpClient.DefaultRequestHeaders.Add("x-api-key", _accessKey);
+
+        var jsonPayload = JsonConvert.SerializeObject(payload);
+        var content = new StringContent(jsonPayload, System.Text.Encoding.UTF8, "application/json");
+
+        try
+        {
+            var response = await httpClient.PostAsync(apiUrl, content);
+            var resultString = await response.Content.ReadAsStringAsync();
+
+            if (response.IsSuccessStatusCode)
+            {
+                return new SmsResponse { IsSuccess = true, Message = "پیامک با موفقیت ارسال شد." };
+            }
+            else
+            {
+              
+                return new SmsResponse { IsSuccess = false, Message = $"خطا در ارسال پیامک: {response.StatusCode} - {resultString}" };
+            }
+        }
+        catch (Exception ex)
+        {
+            return new SmsResponse { IsSuccess = false, Message = $"خطای غیرمنتظره: {ex.Message}" };
+        }
+    }
     public async Task<SmsResponse> WorkoutReadySms(string mobileNumber, string athleteName, string serviceName)
     {
         var message = $"{athleteName} عزیز، برنامه {serviceName} که منتظرش بودی آماده شد!\n" +

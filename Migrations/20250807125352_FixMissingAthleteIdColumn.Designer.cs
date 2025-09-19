@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using sport_app_backend.Data;
 
@@ -10,9 +11,11 @@ using sport_app_backend.Data;
 namespace sport_app_backend.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250807125352_FixMissingAthleteIdColumn")]
+    partial class FixMissingAthleteIdColumn
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -180,7 +183,6 @@ namespace sport_app_backend.Migrations
                         .HasColumnType("date");
 
                     b.Property<string>("FirstName")
-                        .IsRequired()
                         .HasMaxLength(15)
                         .HasColumnType("varchar(15)");
 
@@ -195,7 +197,6 @@ namespace sport_app_backend.Migrations
                         .HasColumnType("datetime(6)");
 
                     b.Property<string>("LastName")
-                        .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("varchar(50)");
 
@@ -516,7 +517,7 @@ namespace sport_app_backend.Migrations
                     b.Property<int>("AthleteId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("AthleteQuestionId")
+                    b.Property<int>("AthleteQuestionId")
                         .HasColumnType("int");
 
                     b.Property<string>("Authority")
@@ -744,8 +745,10 @@ namespace sport_app_backend.Migrations
                     b.Property<int>("ProgramDuration")
                         .HasColumnType("int");
 
-                    b.Property<int>("ProgramLevel")
-                        .HasColumnType("int");
+                    b.Property<string>("ProgramLevel")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("varchar(20)");
 
                     b.Property<string>("ProgramPriorities")
                         .IsRequired()
@@ -1053,7 +1056,9 @@ namespace sport_app_backend.Migrations
 
                     b.HasOne("sport_app_backend.Models.Question.A_Question.AthleteQuestion", "AthleteQuestion")
                         .WithMany()
-                        .HasForeignKey("AthleteQuestionId");
+                        .HasForeignKey("AthleteQuestionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("sport_app_backend.Models.Account.Coach", "Coach")
                         .WithMany("Payments")

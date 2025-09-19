@@ -1,5 +1,4 @@
 using System.Globalization;
-using Humanizer;
 using sport_app_backend.Dtos;
 using sport_app_backend.Dtos.ProgramDto;
 using sport_app_backend.Models.Account;

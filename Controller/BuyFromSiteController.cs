@@ -23,7 +23,6 @@ public class BuyFromSiteController(IBuyFromSiteRepository buyFromSiteRepository)
         return Ok(result);
     }
 
-    ///Send code
     [HttpPost("SendCode")]
     public async Task<IActionResult>SendCode([FromBody]string userPhoneNumber)
     {
@@ -81,5 +80,45 @@ public class BuyFromSiteController(IBuyFromSiteRepository buyFromSiteRepository)
 
         return BadRequest(result);
     }
+    // [HttpPost("AthleteQuestion")]
+    // public async Task<IActionResult> AthleteQuestion([FromBody] AthleteQuestionBuyFromSiteDto athleteQuestionBuyFromSiteDto)
+    // {
+    //     var result =  await buyFromSiteRepository.AthleteQuestion(athleteQuestionBuyFromSiteDto);
+    //
+    //     if (!result.Action)
+    //     {
+    //         return BadRequest(result);
+    //     }
+    //
+    //     return Ok(result);
+    // }
+    // [HttpPost("uploadImageForAthleteQuestion")]
+    // public async Task<IActionResult> UploadImageForAthleteQuestion([FromQuery] string wPkey,[FromQuery] int id,[FromQuery]string sideName,IFormFile file)
+    // {
+    //  
+    //     var result = await buyFromSiteRepository.UploadImageForAthleteQuestion(wPkey,id,sideName,file);
+    //
+    //     if (!result.Action) return NotFound(result);
+    //     return Ok(result);
+    // }
+    [HttpPost("submit-questionnaire")]
+    public async Task<IActionResult> SubmitQuestionnaireWithImages(
+        [FromForm] AthleteQuestionBuyFromSiteDto dto, 
+        IFormFile? frontImage, 
+        IFormFile? backImage, 
+        IFormFile? sideImage)
+    {
+        var response = await buyFromSiteRepository.SubmitAthleteQuestionWithImages(dto, frontImage, backImage, sideImage);
+
+        if (response.Action)
+        {
+            return Ok(response);
+        }
+
+        return BadRequest(response);
+    }
+ 
+
+    
 
 }

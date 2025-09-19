@@ -1,4 +1,5 @@
 using AspNetCoreRateLimit;
+using DotNetEd.CoreAdmin;
 using Microsoft.EntityFrameworkCore;
 using sport_app_backend.Data;
 
@@ -34,7 +35,7 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowFrontendLocalhost", policy =>
     {
-        policy.WithOrigins("http://localhost:21345", "https://charset-i-os-pwa.vercel.app","https://charset-pwa.pages.dev") 
+        policy.WithOrigins("http://localhost:21345","https://chaarset.ir", "https://charset-i-os-pwa.vercel.app","https://charset-pwa.pages.dev") 
               .AllowAnyHeader()
               .AllowAnyMethod();
     });
@@ -77,26 +78,47 @@ builder.Services.AddSwaggerGen(option =>
 });
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-var serverVersion = new MySqlServerVersion(new Version(9, 0, 1));
 
-var databaseSettings = builder.Configuration.GetSection("DatabaseSettings");
+if (string.IsNullOrEmpty(connectionString))
+{
+    throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+}
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseMySql(connectionString, serverVersion,
-        mySqlOptions => {
-            if (databaseSettings.GetValue<bool>("EnableRetryOnFailure"))
-            {
-                mySqlOptions.EnableRetryOnFailure(
-                    maxRetryCount: databaseSettings.GetValue<int>("MaxRetryCount"),
-                    maxRetryDelay: TimeSpan.FromSeconds(databaseSettings.GetValue<int>("MaxRetryDelaySeconds")),
-                    errorNumbersToAdd: null
-                );
-            }
-        })
-        .LogTo(Console.WriteLine, LogLevel.Information)
-        .EnableDetailedErrors()
-        .EnableSensitiveDataLogging()
-);
+{
+
+    if (connectionString.Contains(".db", StringComparison.OrdinalIgnoreCase) || 
+        connectionString.Contains("sqlite", StringComparison.OrdinalIgnoreCase))
+    {
+        Console.WriteLine("Using SQLite database.");
+        options.UseSqlite(connectionString);
+    }
+    else
+    {
+        Console.WriteLine("Using MySQL database.");
+        var serverVersion = new MySqlServerVersion(new Version(9, 0, 1));
+
+        var databaseSettings = builder.Configuration.GetSection("DatabaseSettings");
+
+
+        options.UseMySql(connectionString, serverVersion,
+                mySqlOptions =>
+                {
+                    if (databaseSettings.GetValue<bool>("EnableRetryOnFailure"))
+                    {
+                        mySqlOptions.EnableRetryOnFailure(
+                            maxRetryCount: databaseSettings.GetValue<int>("MaxRetryCount"),
+                            maxRetryDelay: TimeSpan.FromSeconds(databaseSettings.GetValue<int>("MaxRetryDelaySeconds")),
+                            errorNumbersToAdd: null
+                        );
+                    }
+                })
+            .LogTo(Console.WriteLine, LogLevel.Information)
+            .EnableDetailedErrors()
+            .EnableSensitiveDataLogging();
+    }
+});
+
 
 builder.Services.AddAuthentication(options =>
 {

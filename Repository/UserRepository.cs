@@ -118,7 +118,7 @@ public class UserRepository(
     var userEntity = await dbContext.Users.FirstOrDefaultAsync(x => x.PhoneNumber == checkCodeRequestDto.PhoneNumber);
     if (userEntity != null)
     {
-        var questions = userEntity.FirstName is not null;
+        var questions = userEntity.FirstName  is not "";
         
         userEntity.LastLogin = DateTime.Now;
         return await GenerateSuccessResponse(userEntity,questions);

@@ -22,7 +22,7 @@ public class ZarinPal(IConfiguration config) : IZarinPal
     public  async Task<ZarinPalPaymentResponseDto> RequestPaymentAsync(ZarinPalPaymentRequestDto request)
     {
         request.merchant_id = _merchantId;
-        if (_endpoint.Equals("https://sandbox.zarinpal.com/"))
+        if (_endpoint.Equals("https://sandbox.zarinpal.com/")&&(!request.callback_url.Equals("https://chaarset.ir/verify-payment")))
         {
             request.callback_url = "https://charsetstaging.liara.run/api/Athlete/VerifyPayment";
         }
