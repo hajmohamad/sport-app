@@ -67,6 +67,22 @@ public class BuyFromSiteController(IBuyFromSiteRepository buyFromSiteRepository)
 
         return BadRequest(result);
     }
+    // [HttpGet("get_AllExercise")]
+    // public async Task<IActionResult> GetAllExercise()
+    // {
+    //     var result = await buyFromSiteRepository.GetAllExercise();
+    //     if (result.Action != true) return BadRequest(result);
+    //     return Ok(result);
+    //         
+    // }
+    [HttpGet("get_Exercise/{exerciseId}")]
+    public async Task<IActionResult> GetExercise([FromRoute] int exerciseId)
+    {
+        var result = await buyFromSiteRepository.GetExercise(exerciseId);
+        if (result.Action != true) return BadRequest(result);
+        return Ok(result);
+            
+    }
     [HttpGet("GetWorkoutProgram")]
         
     public async Task<IActionResult> GetWorkoutProgram([FromQuery] string wPkey)
@@ -79,6 +95,14 @@ public class BuyFromSiteController(IBuyFromSiteRepository buyFromSiteRepository)
         }
 
         return BadRequest(result);
+    }
+    [HttpGet("workout-plan/{wPkey}")]
+    public async Task<IActionResult> GetWorkoutPlanPdf(string wPkey)
+    {
+      
+        var result = await buyFromSiteRepository.CreateWorkoutPdfAsync(wPkey);
+        if (result.Action != true) return BadRequest(result);
+        return Ok(result.Result);
     }
     // [HttpPost("AthleteQuestion")]
     // public async Task<IActionResult> AthleteQuestion([FromBody] AthleteQuestionBuyFromSiteDto athleteQuestionBuyFromSiteDto)

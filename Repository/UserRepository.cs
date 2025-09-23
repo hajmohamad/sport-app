@@ -413,7 +413,7 @@ private async Task<string> GenerateUniqueUsername()
             {
                 pd.ForWhichDay,
                 Exercises = pd.AllExerciseInDays.Select(se => new 
-                {
+                {   se.Exercise.Id,
                     se.Exercise.PersianName,
                     se.Set,
                     se.Rep

@@ -182,14 +182,7 @@ public class UserController(IUserRepository userRepository) : ControllerBase
         return Ok(result);
 
     }
-    [HttpGet("workout-plan/{wpId}")]
-    public async Task<IActionResult> GetWorkoutPlanPdf(string wpId)
-    {
-      
-        var result = await userRepository.CreateWorkoutPdfAsync(wpId);
-        if (result.Action != true) return BadRequest(result);
-        return Ok(result.Result);
-    }
+   
 
 
 

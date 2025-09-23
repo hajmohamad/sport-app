@@ -20,4 +20,6 @@ public interface IBuyFromSiteRepository
         IFormFile? backImage,
         IFormFile? sideImage);
 
+    public Task<ApiResponse> GetExercise(int exerciseId);
+    public Task<ApiResponse> CreateWorkoutPdfAsync(string wPkey);
 }
