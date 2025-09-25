@@ -14,7 +14,7 @@ public class Exercise
     public required string PersianName { get; set; }
     [MaxLength(170)]
     public string ImageLink { get; set; } = string.Empty;
-    [MaxLength(170)]
+    [MaxLength(2000)]
     public string VideoLink { get; set; } = string.Empty;
     [MaxLength(3000)]
     public required string Description { get; set; }

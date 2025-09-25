@@ -19,7 +19,7 @@ public class CoachService
     public required double Price { get; set; }
     public bool IsActive { get; set; }
     public bool HaveSupport{get; set;}
-    public required CommunicateType CommunicateType{get; set;}
+    // public required CommunicateType CommunicateTypenicateType{get; set;}
     [DataType(DataType.Date)]
     [Column(TypeName = "date")]
     public DateTime CreatedDate { get; set; }=DateTime.Now.Date;

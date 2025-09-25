@@ -182,7 +182,17 @@ public class UserController(IUserRepository userRepository) : ControllerBase
         return Ok(result);
 
     }
-   
+    [HttpGet("CheckQuestionSubmitted")]
+    [Authorize(Roles = "Athlete,Coach")]
+
+    public async Task<IActionResult> CheckQuestionSubmitted()
+    {
+        var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
+        if (phoneNumber is null) return BadRequest("PhoneNumber is null");
+        var result =  await userRepository.CheckQuestionSubmitted(phoneNumber);
+        if (!result.Action) return BadRequest(result);
+        return Ok(result);
+    }
 
 
 

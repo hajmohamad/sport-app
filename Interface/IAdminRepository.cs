@@ -1,10 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using sport_app_backend.Dtos;
 using sport_app_backend.Models;
 using sport_app_backend.Models.Payments;
+using sport_app_backend.Services;
 
 namespace sport_app_backend.Interface
 {
@@ -19,5 +21,6 @@ namespace sport_app_backend.Interface
          Task<ApiResponse> UpdateCoachPayoutStatus(int payoutId, PayoutStatus newStatus, string? transactionReference);
 
          Task<ApiResponse> GetCoachService(string phoneNumber);
+         Task<SmsResponse> SendMassageToCoach( string phoneNumber, string message);
     }
 }

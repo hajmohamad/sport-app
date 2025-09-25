@@ -495,6 +495,8 @@ namespace sport_app_backend.Repository
                     return new ApiResponse { Action = false, Message = "مربی یافت نشد." };
                 }
 
+                var coachAmount = coach.Amount;
+
                 var successfulPayments = await context.Payments
                     .Where(p => p.CoachId == coach.Id && p.PaymentStatus == PaymentStatus.SUCCESS)
                     .Include(p => p.WorkoutProgram)
@@ -577,7 +579,7 @@ namespace sport_app_backend.Repository
 
 
                 var dashboardDto = new CoachDashboardDto
-                {
+                {   CoachAmount= coachAmount,
                     TotalSales = totalSales,
                     TotalTransactions = totalTransactions,
                     MonthlyIncome = monthlyIncome,

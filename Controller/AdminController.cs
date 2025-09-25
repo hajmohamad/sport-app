@@ -2,14 +2,16 @@ using Microsoft.AspNetCore.Mvc;
 using sport_app_backend.Dtos;
 using sport_app_backend.Interface;
 using sport_app_backend.Models.Payments;
+using sport_app_backend.Services;
 
 namespace sport_app_backend.Controller
 {
+    
     [Route("api/[controller]")]
     [ApiController]
     public class AdminController(
         IAdminRepository adminRepository,
-        IWebHostEnvironment webHostEnvironment) : ControllerBase
+        IWebHostEnvironment webHostEnvironment, IConfiguration config) : ControllerBase
     {
         [HttpPut("Verified_coach/{coachPhoneNumber}")]
         public async Task<IActionResult> Verified_coach([FromRoute] string coachPhoneNumber)
@@ -55,6 +57,22 @@ namespace sport_app_backend.Controller
 
             return Ok(result);
         }
+
+        [HttpPost("sendMassageToCoach")]
+        [TypeFilter(typeof(IpAddressFilter))]
+
+        public async Task<IActionResult> SendMassageToCoach([FromQuery] string phoneNumber,
+            [FromQuery] string message)
+        {
+            var result = await adminRepository.SendMassageToCoach(phoneNumber, message);
+            if (!result.IsSuccess)
+            {
+                return BadRequest(result);
+            }
+
+            return Ok(result);
+        }
+        
 
        
     }

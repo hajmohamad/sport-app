@@ -1,3 +1,4 @@
+using System.Net;
 using Microsoft.EntityFrameworkCore;
 using sport_app_backend.Data;
 using sport_app_backend.Dtos;
@@ -7,11 +8,13 @@ using sport_app_backend.Models;
 using sport_app_backend.Models.Actions;
 using sport_app_backend.Models.Payments;
 using sport_app_backend.Models.Program;
+using sport_app_backend.Services;
 
 namespace sport_app_backend.Repository
 {
-    public class AdminRepository(ApplicationDbContext context) : IAdminRepository
+    public class AdminRepository(ApplicationDbContext context, ISmsService sms) : IAdminRepository
     {
+
         public Task<ApiResponse> AddExercises(List<AddExercisesRequestDto> exercises)
         {
             var exercisesList = exercises.Select(x => x.ToExercises()).ToList();
@@ -177,6 +180,14 @@ namespace sport_app_backend.Repository
                 Result = coachingServiceDto.Select(cs=>cs.ToCoachingServiceResponse()).ToList()
             };
             
+        }
+
+        public async Task<SmsResponse> SendMassageToCoach( string phoneNumber, string message)
+        {
+         
+      
+            var result = sms.SendSms(phoneNumber, message);
+            return await result;
         }
     }
     

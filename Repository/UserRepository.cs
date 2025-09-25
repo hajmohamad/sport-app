@@ -464,8 +464,43 @@ private async Task<string> GenerateUniqueUsername()
 
 
 }
-    
+
+    public async Task<ApiResponse> CheckQuestionSubmitted(string phoneNumber)
+    {
+        var user = await dbContext.Users.AsNoTracking()
+            .Where(u=> u.PhoneNumber == phoneNumber)
+            .Select(u=>new
+            {
+                u.FirstName,
+                u.LastName,
+                u.ImageProfile,
+                u.TypeOfUser,
+                u.PhoneNumber
+            })
+            .FirstOrDefaultAsync();
+        if (user == null)
+            return new ApiResponse()
+            {
+                Action = false,
+                Message = "Phone number doesn't exist"
+            };
+        return new ApiResponse()
+        {
+            Action = true,
+            Message = "find user",
+            Result = new
+            {
+                user.FirstName,
+                user.LastName,
+                user.ImageProfile,
+                TypeOfUser = user.TypeOfUser.ToString(),
+                user.PhoneNumber,
+                Question = user.FirstName != ""
 
 
+            }
+        };
 
+
+    }
 }

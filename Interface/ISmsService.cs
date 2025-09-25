@@ -18,6 +18,6 @@ public interface ISmsService
 
     public Task<SmsResponse> NotifyAthleteOfProgramLinkSms(string mobileNumber, string athleteName, string programLink);
 
-
+    public Task<SmsResponse> SendSms(string phoneNumber, string message);
 
 }

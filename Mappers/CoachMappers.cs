@@ -52,7 +52,7 @@ namespace sport_app_backend.Mappers
                 Price = coachServiceDto.Price,
                 IsActive = coachServiceDto.IsActive,
                 HaveSupport = coachServiceDto.HaveSupport,
-                CommunicateType = (CommunicateType)Enum.Parse(typeof(CommunicateType), coachServiceDto.CommunicateType.ToUpper()),
+                // CommunicateType = (CommunicateType)Enum.Parse(typeof(CommunicateType), coachServiceDto.CommunicateType.ToUpper()),
                 NumberOfSell = 0
                 // TypeOfCoachingServices = (TypeOfCoachingServices)Enum.Parse(typeof(TypeOfCoachingServices), coachServiceDto.TypeOfCoachingServices)
             };
@@ -65,9 +65,9 @@ namespace sport_app_backend.Mappers
             coachService.Price = coachServiceDto.Price;
             coachService.IsActive = coachServiceDto.IsActive;
             coachService.HaveSupport = coachServiceDto.HaveSupport;
-            coachService.CommunicateType =
-                (CommunicateType)Enum.Parse(typeof(CommunicateType), coachServiceDto.CommunicateType.ToUpper());
-            //coachService.TypeOfCoachingServices =
+            // coachService.CommunicateType =
+            //     (CommunicateType)Enum.Parse(typeof(CommunicateType), coachServiceDto.CommunicateType.ToUpper());
+            // //coachService.TypeOfCoachingServices =
             //(TypeOfCoachingServices)Enum.Parse(typeof(TypeOfCoachingServices), coachServiceDto.TypeOfCoachingServices);
 
 
@@ -132,7 +132,7 @@ namespace sport_app_backend.Mappers
                 Price = coachService.Price,
                 IsActive = coachService.IsActive,
                 HaveSupport = coachService.HaveSupport,
-                CommunicateType = coachService.CommunicateType.ToString(),
+                // CommunicateType = coachService.CommunicateType.ToString(),
                 NumberOfSell = coachService.NumberOfSell
                 
                 
