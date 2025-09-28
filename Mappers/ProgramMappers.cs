@@ -110,7 +110,10 @@ public static class ProgramMappers
             Id = singleExercise.Id,
             Set = singleExercise.Set,
             Rep = singleExercise.Rep,
-            ExerciseId = singleExercise.ExerciseId
+            ExerciseId = singleExercise.ExerciseId,
+            BaseCategory = singleExercise.Exercise.BaseCategory.ToString(),
+            PersianName = singleExercise.Exercise.PersianName,
+            
         };
     }
 

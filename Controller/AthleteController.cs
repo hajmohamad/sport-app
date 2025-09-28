@@ -519,7 +519,7 @@ namespace sport_app_backend.Controller
         //     if (!result.Action) return BadRequest(result);
         //     return Ok(result);
         // }
-        [HttpGet("ActiveProgram/{programId}")]
+        [HttpPut("ActiveProgram/{programId}")]
         [Authorize(Roles = "Athlete")]
         public async Task<IActionResult> ActiveProgram([FromRoute] int programId)
         {
