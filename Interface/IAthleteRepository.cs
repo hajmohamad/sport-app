@@ -40,7 +40,7 @@ namespace sport_app_backend.Interface
         public Task<ApiResponse> GetAllPrograms(string phoneNumber);
 
         public Task<ApiResponse> GetProgram(string phoneNumber, int programId);
-        public Task<ApiResponse> ActiveProgram(string phoneNumber, int programId);
+        public Task<ApiResponse> ActiveProgram(string phoneNumber, int paymentId);
         public Task<ApiResponse> ExerciseFeedBack(string phoneNumber, ExerciseFeedbackDto exerciseFeedbackDto);
         public Task<ApiResponse> ChangeExercise(string phoneNumber, ExerciseChangeDto changeExerciseDto);
         public Task<ApiResponse> GetAllTrainingSession(string phoneNumber);

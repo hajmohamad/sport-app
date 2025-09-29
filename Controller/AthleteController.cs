@@ -519,13 +519,13 @@ namespace sport_app_backend.Controller
         //     if (!result.Action) return BadRequest(result);
         //     return Ok(result);
         // }
-        [HttpPut("ActiveProgram/{programId}")]
+        [HttpPut("ActiveProgram/{paymentId}")]
         [Authorize(Roles = "Athlete")]
-        public async Task<IActionResult> ActiveProgram([FromRoute] int programId)
+        public async Task<IActionResult> ActiveProgram([FromRoute] int paymentId)
         {
             var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
             if (phoneNumber is null) return BadRequest("PhoneNumber is null");
-            var result = await athleteRepository.ActiveProgram(phoneNumber, programId);
+            var result = await athleteRepository.ActiveProgram(phoneNumber, paymentId);
             if (!result.Action) return BadRequest(result);
             return Ok(result);
         }

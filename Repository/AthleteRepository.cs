@@ -1283,17 +1283,17 @@ namespace sport_app_backend.Repository
             throw new NotImplementedException();
         }
 
-        public async Task<ApiResponse> ActiveProgram(string phoneNumber, int programId)
+        public async Task<ApiResponse> ActiveProgram(string phoneNumber, int paymentId)
         {
             var athlete = await context.Athletes.Include(a => a.WorkoutPrograms)
-                .FirstOrDefaultAsync(a => a.PhoneNumber == phoneNumber);
+                .FirstOrDefaultAsync(a => a.PhoneNumber == phoneNumber&&a.WorkoutPrograms.Any(wp => wp.PaymentId == paymentId));
 
             if (athlete == null)
             {
                 return new ApiResponse { Action = false, Message = "Athlete not found" };
             }
 
-            var targetProgram = athlete.WorkoutPrograms.FirstOrDefault(w => w.Id == programId);
+            var targetProgram = athlete.WorkoutPrograms.FirstOrDefault(w => w.PaymentId == paymentId);
 
             if (targetProgram == null)
             {
@@ -1301,7 +1301,7 @@ namespace sport_app_backend.Repository
             }
 
             var allTrainingSessions = await context.TrainingSessions
-                .Where(t => t.WorkoutProgramId == programId)
+                .Where(t => t.WorkoutProgramId ==  targetProgram.Id)
                 .ToListAsync();
 
             Action<TrainingSession> resetTrainingSession = ts =>
@@ -1314,7 +1314,7 @@ namespace sport_app_backend.Repository
 
             if (targetProgram.Status == WorkoutProgramStatus.ACTIVE)
             {
-                athlete.ActiveWorkoutProgramId = programId;
+                athlete.ActiveWorkoutProgramId = paymentId;
                 allTrainingSessions.ForEach(resetTrainingSession);
                 await context.SaveChangesAsync();
                 return new ApiResponse { Action = true, Message = "Program already active and reset." };
@@ -1343,7 +1343,7 @@ namespace sport_app_backend.Repository
             }
 
             targetProgram.Status = WorkoutProgramStatus.ACTIVE;
-            athlete.ActiveWorkoutProgramId = programId;
+            athlete.ActiveWorkoutProgramId = paymentId;
 
             await context.SaveChangesAsync();
             return new ApiResponse { Action = true, Message = "Program activated successfully." };
