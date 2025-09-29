@@ -469,6 +469,7 @@ public class BuyFromSiteRepository(
                 AhtleteFirstName= wr.Athlete.User.FirstName,
                 AthleteLastName = wr.Athlete.User.LastName,
                 wr.Payment.PaymentDate,
+                wr.Payment.Authority,
                 wr.ProgramDuration,
                 wr.ProgramLevel,
                 wr.ProgramPriorities,
@@ -524,7 +525,12 @@ public class BuyFromSiteRepository(
         {
             WorkoutProgramStatus.UNCOMPLETEDQUESTION => new ApiResponse()
             {
-                Action = true, Message = "no athlete Question submitted", Result = new { code = 201, wPkey }
+                Action = true, Message = "no athlete Question submitted", Result = new
+                {
+                    code = 201, 
+                    wPkey,
+                    athority = programData.Authority
+                }
             },
             WorkoutProgramStatus.NOTSTARTED => new ApiResponse()
             {

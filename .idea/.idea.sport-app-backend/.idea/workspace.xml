@@ -11,9 +11,9 @@
   <component name="ChangeListManager">
     <list default="true" id="11e104f8-869d-4d9d-9802-b48455f5eb31" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Controller/AthleteController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Controller/AthleteController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Interface/IAthleteRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Interface/IAthleteRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Mappers/QuestionMapper.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Mappers/QuestionMapper.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Repository/AthleteRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Repository/AthleteRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Repository/BuyFromSiteRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Repository/BuyFromSiteRepository.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -131,7 +131,9 @@
       <updated>1759095219731</updated>
       <workItem from="1759095220936" duration="72000" />
       <workItem from="1759095617807" duration="991000" />
-      <workItem from="1759133057061" duration="1201000" />
+      <workItem from="1759133057061" duration="1227000" />
+      <workItem from="1759149550658" duration="615000" />
+      <workItem from="1759152876848" duration="4732000" />
     </task>
     <task id="LOCAL‎−۰۰۰۰۱" summary="edit getpayment method">
       <option name="closed" value="true" />
@@ -140,7 +142,14 @@
       <option name="presentableId" value="LOCAL‎−۰۰۰۰۱" />
       <updated>1759096605637</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL‎−۰۰۰۰۲" summary="edit avtive program method for athlete">
+      <option name="closed" value="true" />
+      <created>1759134284288</created>
+      <option name="number" value="LOCAL‎−۰۰۰۰۲" />
+      <option name="presentableId" value="LOCAL‎−۰۰۰۰۲" />
+      <updated>1759134284288</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -151,7 +160,8 @@
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
     <MESSAGE value="edit getpayment method" />
-    <option name="LAST_COMMIT_MESSAGE" value="edit getpayment method" />
+    <MESSAGE value="edit avtive program method for athlete" />
+    <option name="LAST_COMMIT_MESSAGE" value="edit avtive program method for athlete" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

@@ -1237,7 +1237,7 @@ namespace sport_app_backend.Repository
             }
 
             var athleteQuestion = await context.AthleteQuestions.Where(aq => aq.Id == paymentData.AthleteQuestionId)
-                .Include(aq => aq.InjuryArea).FirstOrDefaultAsync();
+                .Include(aq => aq.InjuryArea).Include(im=>im.AthleteBodyImage).FirstOrDefaultAsync();
             var workoutProgram = await context.WorkoutPrograms.Where(wp => wp.PaymentId == paymentData.Payment.Id)
                 .Include(z => z.ProgramInDays)
                 .ThenInclude(z => z.AllExerciseInDays)
@@ -1265,7 +1265,7 @@ namespace sport_app_backend.Repository
                 ImageProfile = paymentData.CoachUser.ImageProfile ?? "",
                 Gender = paymentData.AthleteUser.Gender.ToString(),
                 BirthDate = paymentData.AthleteUser.BirthDate.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture),
-                AthleteQuestion = athleteQuestion.AthleteQuestionResponseDto(),
+                AthleteQuestion = athleteQuestion.AthleteQuestionResponseWithBirthdayDto( paymentData.AthleteUser.BirthDate.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture)),
                 WorkoutProgram = workoutProgram.ToProgramResponseDto(),
                 PdfLink= "chaarset.ir"
             };

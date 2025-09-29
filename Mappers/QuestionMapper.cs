@@ -89,7 +89,22 @@ namespace sport_app_backend.Mappers
                 InjuryArea = question.InjuryArea?.ToInjuryAreaDto(),
                 ExerciseGoal = question.ExerciseGoal.ToString() ?? "",
                 CurrentWeight = question.Weight,
+                AthleteBodyImageId = question.AthleteBodyImage.Id,
                 BirthDay = question.Athlete?.User?.BirthDate.ToString("yyyy-MM-dd"),
+                AthleteBodyImage = question.AthleteBodyImage.ToAthleteBodyImageDto()
+            };
+        }
+        public static AthleteQuestionResponseDto AthleteQuestionResponseWithBirthdayDto(this AthleteQuestion question, string birthday)
+        {
+            return new AthleteQuestionResponseDto()
+            {
+                CurrentBodyForm = question.CurrentBodyForm,
+                DaysPerWeekToExercise = question.DaysPerWeekToExercise,
+                FitnessLevel = question.FitnessLevel.ToString() ?? "",
+                InjuryArea = question.InjuryArea?.ToInjuryAreaDto(),
+                ExerciseGoal = question.ExerciseGoal.ToString() ?? "",
+                CurrentWeight = question.Weight,
+                BirthDay = birthday,
                 AthleteBodyImage = question.AthleteBodyImage.ToAthleteBodyImageDto()
             };
         }
