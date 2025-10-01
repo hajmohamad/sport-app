@@ -26,5 +26,7 @@ namespace sport_app_backend.Interface
         Task<ApiResponse> AthleteReportForCoach(int athleteId);
         Task<ApiResponse> AthleteMonthlyActivityForCoach(int athleteId, int year, int month);
         Task<ApiResponse> GetFaq();
+        Task<ApiResponse> test();
+        Task<ApiResponse> getwpkey(int paymentId);
     }
 }

@@ -292,14 +292,14 @@ private async Task<string> GenerateUniqueUsername()
         return new ApiResponse() { Message = "Success", Action = true };
     }
 
-    public async Task<ApiResponse> ReportApp(string phoneNumber, ReportAppDto reportAppDto)
+    public async Task<ApiResponse> AppSupport(string phoneNumber, ReportAppDto reportAppDto)
     {
         var user = await dbContext.Users.FirstOrDefaultAsync(x => x.PhoneNumber == phoneNumber);
         if (user is null) return new ApiResponse() { Message = "User not found", Action = false };
-        await dbContext.ReportApps.AddAsync(new ReportApp()
+        await dbContext.ReportApps.AddAsync(new SupportApp()
         {   User = user,
             UserId = user.Id,
-            Category =    reportAppDto.Category.Select(Enum.Parse<ReportAppCategory>).ToList()??[],
+            Category =    reportAppDto.Category.Select(Enum.Parse<SupportAppCategory>).ToList()??[],
             Description = reportAppDto.Description
         });
         await dbContext.SaveChangesAsync();
@@ -335,7 +335,7 @@ private async Task<string> GenerateUniqueUsername()
             {
                 version,
                 requiredUpdate=forceUpdateBool
-                ,wpid=tokenService.HashEncode(18)
+                
             }
 
         };

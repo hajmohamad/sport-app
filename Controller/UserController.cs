@@ -108,13 +108,13 @@ public class UserController(IUserRepository userRepository) : ControllerBase
         if (!result.Action) return NotFound(result);
         return Ok(result);
     }
-    [HttpPost("report_app")]
+    [HttpPost("AppSupport")]
     [Authorize(Roles = "Athlete,Coach")]
-    public async Task<IActionResult> ReportApp([FromBody] ReportAppDto reportAppDto)
+    public async Task<IActionResult> AppSupport([FromBody] ReportAppDto reportAppDto)
     {
         var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
         if (phoneNumber is null) return BadRequest("PhoneNumber is null");
-        var result = await userRepository.ReportApp(phoneNumber, reportAppDto);
+        var result = await userRepository.AppSupport(phoneNumber, reportAppDto);
         if (!result.Action) return BadRequest(result);
         return Ok(result);
     }

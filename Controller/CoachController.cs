@@ -282,6 +282,36 @@ namespace sport_app_backend.Controller
 
             return Ok(result);
         }
+        [HttpGet("test")]
+        public async Task<IActionResult> test()
+        {
+         
+
+            var result = await coachRepository.test();
+
+            if (!result.Action)
+            {
+                return BadRequest(result);
+            }
+
+            return Ok(result);
+        }
+        [HttpGet("getwpkey")]
+        public async Task<IActionResult> getwpkey([FromBody]int paymentId)
+        {
+         
+
+            var result = await coachRepository.getwpkey(paymentId);
+
+            if (!result.Action)
+            {
+                return BadRequest(result);
+            }
+
+            return Ok(result);
+        }
+        
+        
       
     }
 

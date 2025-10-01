@@ -543,7 +543,7 @@ public class BuyFromSiteRepository(
             },
             WorkoutProgramStatus.WRITING => new ApiResponse()
             {
-                Action = true, Message = "Your program is being designed.\n", Result = new
+                Action = true, Message = "Your program is being designed", Result = new
                 {
                     code = 203,
                     wPkey,

@@ -50,7 +50,7 @@ public class ApplicationDbContext : DbContext
     public DbSet<WaterInDay> WaterInDays { get; set; }
     public DbSet<CoachService> CoachServices { get; set; }
     public DbSet<Activity> Activities { get; set; }
-    public DbSet<ReportApp> ReportApps { get; set; }
+    public DbSet<SupportApp> ReportApps { get; set; }
     public DbSet<InjuryArea> InjuryAreas { get; set; }
     public DbSet<Challenge> Challenges { get; set; }
     public DbSet<TrainingSession> TrainingSessions  { get; set; }

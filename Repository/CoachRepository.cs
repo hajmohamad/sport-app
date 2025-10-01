@@ -19,7 +19,7 @@ using sport_app_backend.Models.Question.A_Question;
 
 namespace sport_app_backend.Repository
 {
-    public class CoachRepository(ApplicationDbContext context, ISmsService smsService, ILiaraStorage liaraStorage) : ICoachRepository
+    public class CoachRepository(ApplicationDbContext context, ISmsService smsService, ILiaraStorage liaraStorage,ITokenService token) : ICoachRepository
     {
         public async Task<ApiResponse> AthleteReportForCoach(int athleteId)
         {
@@ -438,34 +438,42 @@ namespace sport_app_backend.Repository
 
         private async Task AddTrainingSession(int paymentId)
         {
-            var workoutProgram = await context.WorkoutPrograms
-                .Include(p => p.Payment)
-                .ThenInclude(p => p.AthleteQuestion)
-                .Include(p => p.ProgramInDays)
-                .ThenInclude(d => d.AllExerciseInDays)
-                .FirstAsync(p => p.PaymentId == paymentId);
-
-            var numberOfDay = workoutProgram.ProgramDuration *
-                              workoutProgram.Payment.AthleteQuestion.DaysPerWeekToExercise;
-            var programInDayList = workoutProgram.ProgramInDays;
-            var programInDayCount = programInDayList.Count;
-            workoutProgram.TotalSessionCount = numberOfDay;
-
-
-            for (var day = 1; day <= numberOfDay; day++)
+            try
             {
-                var index = day % programInDayCount;
-                await context.TrainingSessions.AddAsync(new TrainingSession
+                var workoutProgram = await context.WorkoutPrograms
+                    .Include(p => p.Payment)
+                    .ThenInclude(p => p.AthleteQuestion)
+                    .Include(p => p.ProgramInDays)
+                    .ThenInclude(d => d.AllExerciseInDays)
+                    .FirstAsync(p => p.PaymentId == paymentId);
+
+                var numberOfDay = workoutProgram.ProgramDuration *
+                                  workoutProgram.Payment.AthleteQuestion.DaysPerWeekToExercise;
+                var programInDayList = workoutProgram.ProgramInDays;
+                var programInDayCount = programInDayList.Count;
+                workoutProgram.TotalSessionCount = numberOfDay;
+
+
+                for (var day = 1; day <= numberOfDay; day++)
                 {
-                    ProgramInDayId = programInDayList[index].Id,
-                    ProgramInDay = programInDayList[index],
-                    ExerciseCompletionBitmap = new byte[programInDayList[index].AllExerciseInDays.Count],
-                    TrainingSessionStatus = TrainingSessionStatus.NOTSTARTED,
-                    DayNumber = day,
-                    WorkoutProgram = workoutProgram,
-                    WorkoutProgramId = workoutProgram.Id
-                });
+                    var index = day % programInDayCount;
+                    await context.TrainingSessions.AddAsync(new TrainingSession
+                    {
+                        ProgramInDayId = programInDayList[index].Id,
+                        ProgramInDay = programInDayList[index],
+                        ExerciseCompletionBitmap = new byte[programInDayList[index].AllExerciseInDays.Count],
+                        TrainingSessionStatus = TrainingSessionStatus.NOTSTARTED,
+                        DayNumber = day,
+                        WorkoutProgram = workoutProgram,
+                        WorkoutProgramId = workoutProgram.Id
+                    });
+                }
             }
+            catch (Exception e)
+            {
+                Console.WriteLine("*+*" + paymentId);
+            }
+
         }
 
         public async Task<ApiResponse> GetWorkoutProgram(string phoneNumber, int paymentId)
@@ -868,6 +876,37 @@ namespace sport_app_backend.Repository
                 Action = true,
                 Message = "get faq",
                 Result = getFaq
+            };
+        }
+
+        public async Task<ApiResponse> test()
+        {
+            var payment = await context.Payments.Where(st=>st.PaymentStatus == PaymentStatus.SUCCESS&&st.WorkoutProgram.Status!=WorkoutProgramStatus.NOTSTARTED).ToListAsync();
+            foreach(var temp in payment)
+            {
+                await AddTrainingSession(temp.Id);
+                
+            }
+            await context.SaveChangesAsync();
+
+            return new ApiResponse()
+            {
+                Action = true,
+                Message = "test"
+            };
+        }
+
+        public async Task<ApiResponse> getwpkey(int paymentId)
+        {
+            return new ApiResponse()
+            {
+                Action = true,
+                Message = "getwpkey",
+                Result = new
+                {
+                    wpkey = token.HashEncode(paymentId)
+                }
+
             };
         }
 

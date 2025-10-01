@@ -18,8 +18,8 @@ public class WorkoutProgram
     public required int PaymentId { get; set; }
     public Payment Payment { get; set; } = null!;
     public DateTime StartDate { get; set; }
-    public int ProgramDuration { get; set; } = 3;
-    public ProgramLevel ProgramLevel { get; set; } = ProgramLevel.Beginner;
+    public int ProgramDuration { get; set; } 
+    public ProgramLevel ProgramLevel { get; set; } 
     public List<ProgramPriority> ProgramPriorities { get; set; } = [];
     public List<GeneralWarmUp>? GeneralWarmUp { get; set; } = [];
     public DedicatedWarmUp? DedicatedWarmUp { get; set; } 
@@ -33,6 +33,6 @@ public class WorkoutProgram
     [DataType(DataType.Date)]
     [Column(TypeName = "date")]
     public DateTime? LastExerciseDate { get; set; }     
-    public int TotalSessionCount { get; set; } = 0;
-    public int CompletedSessionCount { get; set; } = 0;
+    public int TotalSessionCount { get; set; } 
+    public int CompletedSessionCount { get; set; } 
 }
