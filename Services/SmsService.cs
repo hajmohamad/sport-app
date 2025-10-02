@@ -222,11 +222,11 @@ public class SmsService(IConfiguration config) : ISmsService
             return new SmsResponse { IsSuccess = false, Message = $"خطای غیرمنتظره: {ex.Message}" };
         }
     }
-    public async Task<SmsResponse> WorkoutReadySms(string mobileNumber, string athleteName, string serviceName)
+    public async Task<SmsResponse> WorkoutReadySms(string mobileNumber, string athleteName, string serviceName,string wpKey)
     {
         var message = $"{athleteName} عزیز، برنامه {serviceName} که منتظرش بودی آماده شد!\n" +
                       "همین الان به اپلیکیشن چارسِت برو و برنامه‌ات رو مشاهده کن.\n\n" +
-                      "chaarset.ir";
+                      "chaarset.ir/program/{wpKey}";
 
         const string lineNumber = "9981802897";
         const string apiUrl = "https://api.sms.ir/v1/send/likeToLike";

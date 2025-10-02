@@ -29,7 +29,8 @@ namespace sport_app_backend.Repository
         ApplicationDbContext context,
         IZarinPal zarinPal,
         ISmsService smsService,
-        ILiaraStorage liaraStorage) : IAthleteRepository
+        ILiaraStorage liaraStorage,
+        ITokenService tokenService) : IAthleteRepository
     {
         public async Task<ApiResponse> GetFaq()
         {
@@ -1267,7 +1268,7 @@ namespace sport_app_backend.Repository
                 BirthDate = paymentData.AthleteUser.BirthDate.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture),
                 AthleteQuestion = athleteQuestion.AthleteQuestionResponseWithBirthdayDto( paymentData.AthleteUser.BirthDate.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture)),
                 WorkoutProgram = workoutProgram.ToProgramResponseDto(),
-                PdfLink= "chaarset.ir"
+                PdfLink= $"chaarset.ir/program/{tokenService.HashEncode(workoutProgram.Id)}"
             };
 
             return new ApiResponse { Message = "Payment details found", Action = true, Result = paymentResponseDto };
@@ -1595,7 +1596,7 @@ namespace sport_app_backend.Repository
                     return new ApiResponse() { Message = "trainingSession not found", Action = false };
                 var athleteWeight = athlete.CurrentWeight;
 
-                var finalCalories = _CalculateCaloriesInternal(trainingSession, athleteWeight, true);
+                // var finalCalories = _CalculateCaloriesInternal(trainingSession, athleteWeight, false);
 
 
                 trainingSession.TrainingSessionStatus = TrainingSessionStatus.COMPLETED;
@@ -1606,7 +1607,7 @@ namespace sport_app_backend.Repository
                 {
                     AthleteId = athlete.Id,
                     Duration = finishTrainingSessionDto.Duration,
-                    CaloriesLost = finalCalories,
+                    CaloriesLost = finishTrainingSessionDto.CaloriesLost,
                     ActivityCategory = ActivityCategory.EXERCISE,
                     Name = finishTrainingSessionDto.TrainingSessionName,
                     Date = DateTime.Now.Date

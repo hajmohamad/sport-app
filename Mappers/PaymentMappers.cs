@@ -24,7 +24,7 @@ public static class PaymentMappers
         };
     }
     
-    public static PaymentResponseDto ToCoachPaymentResponseDto(this Payment payment)
+    public static PaymentResponseDto ToCoachPaymentResponseDto(this Payment payment,string wpkey)
     {
         return new PaymentResponseDto
         {   PaymentId = payment.Id,
@@ -39,7 +39,7 @@ public static class PaymentMappers
             WorkoutProgram = payment.WorkoutProgram?.ToProgramResponseDto()??new WorkoutProgramResponseDto(),
             Gender = payment.Athlete.User.Gender.ToString(),
             BirthDate = payment.Athlete.User.BirthDate.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture),
-            PdfLink = "chaarset.ir"
+            PdfLink = wpkey
         };
         
     }

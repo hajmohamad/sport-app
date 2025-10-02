@@ -382,7 +382,7 @@ public class BuyFromSiteRepository(
                                     return confirmResult;
                                 }
 
-                                var wpKey =  tokenService.HashEncode((int)(confirmResult.Result ?? 0));
+                                var wpKey =  tokenService.HashEncode(payment.WorkoutProgram!.Id);
 
                                 await sms.AthleteSuccessfullySmsNotificationForBuyFromSite(
                                     payment.Athlete.PhoneNumber,

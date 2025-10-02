@@ -297,11 +297,11 @@ namespace sport_app_backend.Controller
             return Ok(result);
         }
         [HttpGet("getwpkey")]
-        public async Task<IActionResult> getwpkey([FromBody]int paymentId)
+        public async Task<IActionResult> getwpkey([FromQuery]int workoutProgramId)
         {
          
 
-            var result = await coachRepository.getwpkey(paymentId);
+            var result = await coachRepository.getwpkey(workoutProgramId);
 
             if (!result.Action)
             {

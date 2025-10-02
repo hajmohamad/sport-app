@@ -294,7 +294,7 @@ namespace sport_app_backend.Repository
                 .FirstOrDefaultAsync(p => p.Coach.PhoneNumber == phoneNumber && p.Id == paymentId);
             if (payment is null) return new ApiResponse() { Message = "Payment not found", Action = false };
 
-            var result = payment.ToCoachPaymentResponseDto();
+            var result = payment.ToCoachPaymentResponseDto(token.HashEncode(payment.WorkoutProgram?.Id??0));
             if (result.WorkoutProgram!.ProgramInDays.Count == 0)
             {
                 result.WorkoutProgram.ProgramInDays.Add(new ProgramInDayDto()
@@ -402,7 +402,7 @@ namespace sport_app_backend.Repository
                     }
                     
 
-                    await smsService.WorkoutReadySms(athlete.PhoneNumber, athlete.User.FirstName, workoutProgram.Title);
+                    await smsService.WorkoutReadySms(athlete.PhoneNumber, athlete.User.FirstName, workoutProgram.Title,token.HashEncode(workoutProgram.Id));
 
 
                     if (athlete.ActiveWorkoutProgramId == 0)
@@ -421,7 +421,7 @@ namespace sport_app_backend.Repository
                     Message = "workout program saved",
                     Result = new
                     {
-                        pdfLink="chaarset.ir"
+                        pdfLink=$"chaarset.ir/program/{token.HashEncode(workoutProgram.Id)}"
                     }
                 };
             }
@@ -896,7 +896,7 @@ namespace sport_app_backend.Repository
             };
         }
 
-        public async Task<ApiResponse> getwpkey(int paymentId)
+        public async Task<ApiResponse> getwpkey(int workoutProgramId)
         {
             return new ApiResponse()
             {
@@ -904,7 +904,7 @@ namespace sport_app_backend.Repository
                 Message = "getwpkey",
                 Result = new
                 {
-                    wpkey = token.HashEncode(paymentId)
+                    wpkey = token.HashEncode(workoutProgramId)
                 }
 
             };

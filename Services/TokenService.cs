@@ -37,7 +37,7 @@ public class TokenService: ITokenService
         }
         public string HashEncode(int id)
         {
-            return _hashids.Encode(id);
+            return id == 0 ? string.Empty : _hashids.Encode(id);
         }
 
     
