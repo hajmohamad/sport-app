@@ -160,10 +160,9 @@ public static class ProgramMappers
             Id = trainingSession.Id,
             DayNumber = trainingSession.DayNumber,
             TrainingSessionStatus = trainingSession.TrainingSessionStatus.ToString(),
-            ExerciseCompletionBitmap = trainingSession.ExerciseCompletionBitmap.GetExerciseStatusArray()
         };
     }
-    public static TrainingSessionDto ToTrainingSessionDto(this TrainingSession trainingSession,double finalCalories)
+    public static TrainingSessionDto ToTrainingSessionDto(this TrainingSession trainingSession,double finalCalories,int time)
     {
         return new TrainingSessionDto
         {
@@ -174,7 +173,8 @@ public static class ProgramMappers
             ExerciseCompletionBitmap = trainingSession.ExerciseCompletionBitmap.GetExerciseStatusArray(),
             ProgramInDayId = trainingSession.ProgramInDayId,
             ProgramInDay = trainingSession.ProgramInDay.ToTrainingSessionProgramInDayDto(),
-            CaloriesLost = finalCalories
+            CaloriesLost = finalCalories,
+            Time=  time,
         };
     }
     private static TrainingSessionProgramInDayDto ToTrainingSessionProgramInDayDto(this ProgramInDay programInDay){
@@ -193,7 +193,9 @@ public static class ProgramMappers
             Set = singleExercise.Set,
             Rep = singleExercise.Rep,
             ExerciseId = singleExercise.ExerciseId,
-            Exercise = singleExercise.Exercise.ToExerciseDto()
+            ExercisePersianName = singleExercise.Exercise.PersianName,
+            ExerciseImage = singleExercise.Exercise.ImageLink,
+            
         };
     }
     public static int[] GetExerciseStatusArray(this byte[] bitmap)

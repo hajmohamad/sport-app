@@ -89,9 +89,9 @@ namespace sport_app_backend.Mappers
                 InjuryArea = question.InjuryArea?.ToInjuryAreaDto(),
                 ExerciseGoal = question.ExerciseGoal.ToString() ?? "",
                 CurrentWeight = question.Weight,
-                AthleteBodyImageId = question.AthleteBodyImage.Id,
+                AthleteBodyImageId = question.AthleteBodyImage?.Id??0,
                 BirthDay = question.Athlete?.User?.BirthDate.ToString("yyyy-MM-dd"),
-                AthleteBodyImage = question.AthleteBodyImage.ToAthleteBodyImageDto()
+                AthleteBodyImage = question.AthleteBodyImage?.ToAthleteBodyImageDto()?? new AthleteBodyImageDto()
             };
         }
         public static AthleteQuestionResponseDto AthleteQuestionResponseWithBirthdayDto(this AthleteQuestion question, string birthday)

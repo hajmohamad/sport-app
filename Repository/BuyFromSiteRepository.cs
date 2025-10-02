@@ -229,7 +229,7 @@ public class BuyFromSiteRepository(
             var zarinPalResponse = await zarinPal.RequestPaymentAsync(new ZarinPalPaymentRequestDto
             {
                 amount = (long)coachService.Price,
-                callback_url = "https://chaarset.ir/verify-payment",
+                callback_url = "https://chaarset.ir/verify-payment/",
                 description = "خرید",
                 Mobile = phoneNumber
             });
@@ -468,6 +468,7 @@ public class BuyFromSiteRepository(
                 workoutProgramPrice = wr.Payment.Amount,
                 AhtleteFirstName= wr.Athlete.User.FirstName,
                 AthleteLastName = wr.Athlete.User.LastName,
+                CoachPhoneNumber = wr.Coach.PhoneNumber,
                 wr.Payment.PaymentDate,
                 wr.Payment.Authority,
                 wr.ProgramDuration,
@@ -529,7 +530,8 @@ public class BuyFromSiteRepository(
                 {
                     code = 201, 
                     wPkey,
-                    athority = programData.Authority
+                    athority = programData.Authority,
+                    programData.CoachPhoneNumber
                 }
             },
             WorkoutProgramStatus.NOTSTARTED => new ApiResponse()
@@ -538,7 +540,8 @@ public class BuyFromSiteRepository(
                 {
                     code = 202,
                     wPkey,
-                    workoutProgramInfo
+                    workoutProgramInfo,
+                    programData.CoachPhoneNumber
                 }
             },
             WorkoutProgramStatus.WRITING => new ApiResponse()
@@ -547,14 +550,16 @@ public class BuyFromSiteRepository(
                 {
                     code = 203,
                     wPkey,
-                    workoutProgramInfo
+                    workoutProgramInfo,
+                    programData.CoachPhoneNumber
                 }
             },
             _ => new ApiResponse() { Action = true, Message = "Your program is ready.", Result = new
             {
                 code = 204,
                 wPkey,
-                workoutProgramInfo
+                workoutProgramInfo,
+                programData.CoachPhoneNumber
             } }
         };
     }

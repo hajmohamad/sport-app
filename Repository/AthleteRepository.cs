@@ -1500,7 +1500,7 @@ namespace sport_app_backend.Repository
                         Id = ts.Id,
                         DayNumber = ts.DayNumber,
                         TrainingSessionStatus = ts.TrainingSessionStatus.ToString(),
-                        ExerciseCompletionBitmap = ts.ExerciseCompletionBitmap.GetExerciseStatusArray()
+                        ExersiceCount = ts.ExerciseCompletionBitmap.GetExerciseStatusArray().Length
                     }).ToList()
                 })
                 .FirstOrDefaultAsync(); // Get the single active program's data.
@@ -1537,13 +1537,16 @@ namespace sport_app_backend.Repository
                 return new ApiResponse() { Message = "trainingSession not found", Action = false };
 
             var finalCalories = _CalculateCaloriesInternal(trainingSession, athlete.CurrentWeight, false);
+            var time = trainingSession.ProgramInDay.AllExerciseInDays.Sum(st => st.Set)*60;
+            
+            
 
 
             return new ApiResponse()
             {
                 Action = true,
                 Message = "get TrainingSession",
-                Result = trainingSession.ToTrainingSessionDto(finalCalories)
+                Result = trainingSession.ToTrainingSessionDto(finalCalories,time)
             };
         }
 
