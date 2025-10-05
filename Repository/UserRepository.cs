@@ -9,6 +9,8 @@ using sport_app_backend.Models.Login_Sinup;
 using Amazon.S3;
 using Amazon.S3.Model;
 using sport_app_backend.Mappers;
+using sport_app_backend.Models.Actions;
+using sport_app_backend.Models.SupportApp;
 
 namespace sport_app_backend.Repository;
 
@@ -296,7 +298,7 @@ private async Task<string> GenerateUniqueUsername()
     {
         var user = await dbContext.Users.FirstOrDefaultAsync(x => x.PhoneNumber == phoneNumber);
         if (user is null) return new ApiResponse() { Message = "User not found", Action = false };
-        await dbContext.ReportApps.AddAsync(new SupportApp()
+        await dbContext.SupportApp.AddAsync(new SupportApp()
         {   User = user,
             UserId = user.Id,
             Category =    reportAppDto.Category.Select(Enum.Parse<SupportAppCategory>).ToList()??[],
@@ -468,8 +470,8 @@ private async Task<string> GenerateUniqueUsername()
     public async Task<ApiResponse> CheckQuestionSubmitted(string phoneNumber)
     {
         var user = await dbContext.Users.AsNoTracking()
-            .Where(u=> u.PhoneNumber == phoneNumber)
-            .Select(u=>new
+            .Where(u => u.PhoneNumber == phoneNumber)
+            .Select(u => new
             {
                 u.FirstName,
                 u.LastName,
@@ -503,4 +505,59 @@ private async Task<string> GenerateUniqueUsername()
 
 
     }
+
+  
+        public async Task<(IEnumerable<AllExerciseResponseDto> Exercises, int TotalCount)> GetExercisesAsync(
+            string? level,
+            string? type,
+            string? equipment,
+            string? muscle,
+            string? place,
+            int page,
+            int pageSize)
+        {
+            var query = dbContext.Exercises.AsQueryable();
+
+            // 🔹 فیلتر بر اساس رشته‌ها
+            if (Enum.TryParse<ExerciseLevel>(level, true, out var levelEnum))
+                query = query.Where(e => e.ExerciseLevel == levelEnum);
+
+            if (Enum.TryParse<ExerciseType>(type, true, out var typeEnum))
+                query = query.Where(e => e.ExerciseType == typeEnum);
+
+            if (Enum.TryParse<EquipmentType>(equipment, true, out var equipEnum))
+                query = query.Where(e => e.Equipment == equipEnum);
+
+            if (Enum.TryParse<BaseCategory>(muscle, true, out var muscleEnum))
+                query = query.Where(e =>
+                    e.BaseMuscle == (MuscleGroup)muscleEnum ||
+                    e.TargetMuscles.Contains((MuscleGroup)muscleEnum));
+
+            if (!string.IsNullOrEmpty(place))
+                query = query.Where(e => EF.Functions.Like(e.Description, $"%{place}%"));
+
+            var totalCount = await query.CountAsync();
+
+            // 🔹 تبدیل به DTO
+            var exercises = await query
+                .OrderByDescending(e => e.Views)
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .Select(e => new AllExerciseResponseDto
+                {
+                    Id = e.Id,
+                    Name = e.PersianName,
+                    ImageLink = e.ImageLink,
+                    BaseCategory = e.BaseMuscle.ToString(),
+                    Equipment = e.Equipment.ToString(),
+                    ExerciseType = e.ExerciseType.ToString(),
+                    Level = e.ExerciseLevel.ToString(),
+                    Mechanics = e.Mechanics.ToString(),
+                    View = e.Views,
+                    Met = e.Met
+                })
+                .ToListAsync();
+
+            return (exercises, totalCount);
+        }
 }

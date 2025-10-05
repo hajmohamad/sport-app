@@ -22,5 +22,7 @@ namespace sport_app_backend.Interface
 
          Task<ApiResponse> GetCoachService(string phoneNumber);
          Task<SmsResponse> SendMassageToCoach( string phoneNumber, string message);
+         Task<ApiResponse> GetSupportApp();
+         Task<ApiResponse> AddSlug(string engName, string slug);
     }
 }

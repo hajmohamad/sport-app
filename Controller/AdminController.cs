@@ -57,6 +57,29 @@ namespace sport_app_backend.Controller
 
             return Ok(result);
         }
+        
+        [HttpGet("supportApp")]
+        public async Task<IActionResult> GetSupportApp( )
+        {
+            var result = await adminRepository.GetSupportApp();
+            if (!result.Action)
+            {
+                return BadRequest(result);
+            }
+
+            return Ok(result);
+        }
+        [HttpPut("addSlug")]
+        public async Task<IActionResult> AddSlug([FromQuery] string engName , [FromQuery]  string slug)
+        {
+            var result = await adminRepository.AddSlug(engName, slug);
+            if (!result.Action)
+            {
+                return BadRequest(result);
+            }
+
+            return Ok(result);
+        }
 
         [HttpPost("sendMassageToCoach")]
         [TypeFilter(typeof(IpAddressFilter))]
@@ -72,6 +95,7 @@ namespace sport_app_backend.Controller
 
             return Ok(result);
         }
+        
         
 
        

@@ -52,7 +52,8 @@ public class BuyFromSiteRepository(
                 {   se.Exercise.Id,
                     se.Exercise.PersianName,
                     se.Set,
-                    se.Rep
+                    se.Rep,
+                    se.Exercise.Slug
                 }).ToList()
             }).ToList()
         })
@@ -87,7 +88,8 @@ public class BuyFromSiteRepository(
             {
                 Name = se.PersianName,
                 Set = se.Set,
-                Rep = se.Rep.ToString()
+                Rep = se.Rep.ToString(),
+                slug = se.Slug
             }).ToList()
         }).ToList()
     };

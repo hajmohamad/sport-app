@@ -25,4 +25,5 @@ public class ExerciseModel
     public string Name { get; set; }
     public int Set { get; set; }
     public string Rep { get; set; }
+    public string slug { get; set; }
 }

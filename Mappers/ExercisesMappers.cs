@@ -73,9 +73,9 @@ namespace sport_app_backend.Mappers
             return exercise;
         }
 
-        public static AllExerciseResponseDto ToAllExerciseResponseDto(this Exercise exercise)
+        public static Dtos.AllExerciseResponseDto ToAllExerciseResponseDto(this Exercise exercise)
         {
-            return new AllExerciseResponseDto
+            return new Dtos.AllExerciseResponseDto
             {
                 Id = exercise.Id,
                 Name = exercise.PersianName,

@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using sport_app_backend.Models.Account;
 
-namespace sport_app_backend.Models;
+namespace sport_app_backend.Models.SupportApp;
 
 public class SupportApp
 {

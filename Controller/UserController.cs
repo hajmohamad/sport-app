@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using sport_app_backend.Dtos;
 using sport_app_backend.Interface;
 using sport_app_backend.Models;
+using sport_app_backend.Models.Actions;
 
 namespace sport_app_backend.Controller;
 [Route("api/[controller]")]
@@ -192,6 +193,27 @@ public class UserController(IUserRepository userRepository) : ControllerBase
         var result =  await userRepository.CheckQuestionSubmitted(phoneNumber);
         if (!result.Action) return BadRequest(result);
         return Ok(result);
+    }
+    [HttpGet("GetExercisesWithFilter")]
+    public async Task<IActionResult> GetExercises(
+        [FromQuery] string? level,
+        [FromQuery] string? type,
+        [FromQuery] string? equipment,
+        [FromQuery] string? muscle,
+        [FromQuery] string? place,
+        [FromQuery] int page = 1,
+        [FromQuery] int pageSize = 20)
+    {
+        var (exercises, totalCount) = await userRepository.GetExercisesAsync(
+            level, type, equipment, muscle, place, page, pageSize);
+
+        return Ok(new
+        {
+            totalCount,
+            page,
+            pageSize,
+            exercises
+        });
     }
 
 

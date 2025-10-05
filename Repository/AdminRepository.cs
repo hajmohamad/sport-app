@@ -189,6 +189,51 @@ namespace sport_app_backend.Repository
             var result = sms.SendSms(phoneNumber, message);
             return await result;
         }
+
+        public async Task<ApiResponse> GetSupportApp()
+        {
+            var result = await context.SupportApp.AsNoTracking().Select(rp=>new {
+                rp.Id,
+                rp.User.FirstName,
+                rp.User.LastName,
+                rp.User.PhoneNumber,
+                rp.Category,
+                rp.Description
+                
+            }).ToListAsync();
+            return new ApiResponse()
+            {
+                Action = true,
+                Message = "نمدونم برات چی بنویسم ولی بدون کار میکنه",
+                Result = result.Select(rp=>new
+                {
+                    rp.Id,
+                    Name = rp.FirstName+" "+rp.LastName,
+                    rp.PhoneNumber,
+                    Caregory = rp.Category.ToString(),
+                    rp.Description
+                }).ToList()
+            };
+
+        }
+
+        public async Task<ApiResponse> AddSlug(string engName, string slug)
+        {
+            var result =  await context.Exercises.FirstOrDefaultAsync(c => c.ImageLink == engName);
+            if (result is null)
+                return new ApiResponse()
+                {
+                    Action = false,
+                    Message = engName
+                };
+            result.Slug =  slug;
+            await context.SaveChangesAsync();
+            return new ApiResponse()
+            {
+                Action = true,
+                Message = "true"
+            };
+        }
     }
     
 }

@@ -10,8 +10,7 @@ using sport_app_backend.Models.Login_Sinup;
 using sport_app_backend.Models.Payments;
 using sport_app_backend.Models.Program;
 using sport_app_backend.Models.Question.A_Question;
-
-
+using sport_app_backend.Models.SupportApp;
 
 
 namespace sport_app_backend.Data;
@@ -50,7 +49,7 @@ public class ApplicationDbContext : DbContext
     public DbSet<WaterInDay> WaterInDays { get; set; }
     public DbSet<CoachService> CoachServices { get; set; }
     public DbSet<Activity> Activities { get; set; }
-    public DbSet<SupportApp> ReportApps { get; set; }
+    public DbSet<SupportApp> SupportApp { get; set; }
     public DbSet<InjuryArea> InjuryAreas { get; set; }
     public DbSet<Challenge> Challenges { get; set; }
     public DbSet<TrainingSession> TrainingSessions  { get; set; }
@@ -60,6 +59,7 @@ public class ApplicationDbContext : DbContext
     public DbSet<CoachFaq> CoachFaq { get; set; }
     public DbSet<AthleteFaq> AthleteFaq { get; set; }
     public DbSet<AthleteBodyImage> AthleteImage { get; set; }
+    
 
  
 

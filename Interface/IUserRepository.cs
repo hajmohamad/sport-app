@@ -1,6 +1,7 @@
 using sport_app_backend.Dtos;
 using sport_app_backend.Models;
 using sport_app_backend.Models.Account;
+using sport_app_backend.Models.Actions;
 
 namespace sport_app_backend.Interface;
 
@@ -26,4 +27,13 @@ public interface IUserRepository
     public Task<ApiResponse> CreateWorkoutPdfAsync(string wpId);
 
     public Task<ApiResponse> CheckQuestionSubmitted(string phoneNumber);
+    Task<(IEnumerable<AllExerciseResponseDto> Exercises, int TotalCount)> GetExercisesAsync(
+        string? level,
+        string? type,
+        string? equipment,
+        string? muscle,
+        string? place,
+        int page,
+        int pageSize
+    );
 }

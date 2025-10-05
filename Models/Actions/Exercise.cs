@@ -30,4 +30,6 @@ public class Exercise
     public int Views { get; set; } = 0;
     public ExerciseType ExerciseType { get; set; }
     public EquipmentType Equipment { get; set; }
+    [MaxLength(100)]
+    public string Slug { get; set; } = string.Empty;
 }
