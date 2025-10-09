@@ -54,11 +54,19 @@ public class TokenService: ITokenService
         using var rng = RandomNumberGenerator.Create();
         rng.GetBytes(randomNumber);
         user.RefreshToken = Convert.ToBase64String(randomNumber);
-        // user.RefreshTokeNExpire= DateTime.Now.AddDays(90);
         await _context.SaveChangesAsync();
         return user.RefreshToken;
     }
-
+    public async Task<string> CreateSiteRefreshToken(User user)
+    {
+        
+        var randomNumber = new byte[32];
+        using var rng = RandomNumberGenerator.Create();
+        rng.GetBytes(randomNumber);
+        user.SiteRefreshToken = Convert.ToBase64String(randomNumber);
+        await _context.SaveChangesAsync();
+        return user.SiteRefreshToken;
+    }
 
     public string CreateToken(User user)
     {

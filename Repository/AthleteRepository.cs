@@ -1195,7 +1195,8 @@ namespace sport_app_backend.Repository
                     DateTime = wp.Payment.PaymentDate.ToString("yyyy-MM-dd"),
                     ImageProfile = wp.Coach.User.ImageProfile,
                     CoachServiceTitle = wp.Payment.CoachService.Title,
-                    WorkoutProgramStatus = wp.Status.ToString()
+                    WorkoutProgramStatus = wp.Status.ToString(),
+                    WpKey = tokenService.HashEncode(wp.Id)
                 })
                 .ToListAsync();
 
@@ -1208,7 +1209,7 @@ namespace sport_app_backend.Repository
                     Result = new List<AllPaymentResponseDto>()
                 };
             }
-
+            
             return new ApiResponse()
             {
                 Action = true,
@@ -1266,9 +1267,10 @@ namespace sport_app_backend.Repository
                 ImageProfile = paymentData.CoachUser.ImageProfile ?? "",
                 Gender = paymentData.AthleteUser.Gender.ToString(),
                 BirthDate = paymentData.AthleteUser.BirthDate.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture),
-                AthleteQuestion = athleteQuestion.AthleteQuestionResponseWithBirthdayDto( paymentData.AthleteUser.BirthDate.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture)),
+                AthleteQuestion = athleteQuestion?.AthleteQuestionResponseWithBirthdayDto( paymentData.AthleteUser.BirthDate.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture))?? new AthleteQuestionResponseDto(),
                 WorkoutProgram = workoutProgram.ToProgramResponseDto(),
-                PdfLink= $"chaarset.ir/program/{tokenService.HashEncode(workoutProgram.Id)}"
+                PdfLink= $"chaarset.ir/program/{tokenService.HashEncode(workoutProgram.Id)}",
+                WpKey = tokenService.HashEncode(workoutProgram.Id),
             };
 
             return new ApiResponse { Message = "Payment details found", Action = true, Result = paymentResponseDto };

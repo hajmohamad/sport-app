@@ -29,11 +29,11 @@ namespace sport_app_backend.Repository
       
         }
 
-        public async Task<ApiResponse> ConfirmTransactionId(string TransactionId)
+        public async Task<ApiResponse> ConfirmTransactionId(string transactionId)
         {
             var payment = await context.Payments.Include(p => p.Coach).Include(z=>z
                     .CoachService)
-                .Include(p => p.Athlete).Include(payment => payment.WorkoutProgram).FirstOrDefaultAsync(x => x.Authority == TransactionId);
+                .Include(p => p.Athlete).Include(payment => payment.WorkoutProgram).FirstOrDefaultAsync(x => x.Authority == transactionId);
             if (payment is null) return new ApiResponse() { Message = "Payment not found", Action = false };
             payment.CoachService.NumberOfSell += 1;
             var workoutProgram = new WorkoutProgram()
@@ -41,8 +41,8 @@ namespace sport_app_backend.Repository
                 Title = payment.CoachService.Title,
                 Coach = payment.Coach,
                 Athlete = payment.Athlete,
-                AthleteId = payment.Athlete!.Id,
-                CoachId = payment.Coach!.Id,
+                AthleteId = payment.Athlete.Id,
+                CoachId = payment.Coach.Id,
                 Payment = payment,
                 PaymentId = payment.Id
 
@@ -192,10 +192,11 @@ namespace sport_app_backend.Repository
 
         public async Task<ApiResponse> GetSupportApp()
         {
-            var result = await context.SupportApp.AsNoTracking().Select(rp=>new {
+            var result = await context.SupportApp.AsNoTracking().Where(ap=>ap.IsActive).Select(rp=>new {
                 rp.Id,
                 rp.User.FirstName,
                 rp.User.LastName,
+                rp.User.TypeOfUser,
                 rp.User.PhoneNumber,
                 rp.Category,
                 rp.Description
@@ -210,8 +211,9 @@ namespace sport_app_backend.Repository
                     rp.Id,
                     Name = rp.FirstName+" "+rp.LastName,
                     rp.PhoneNumber,
-                    Caregory = rp.Category.ToString(),
-                    rp.Description
+                    Category = rp.Category.ToString(),
+                    rp.Description,
+                    TypeOfUser = rp.TypeOfUser.ToString()
                 }).ToList()
             };
 
@@ -232,6 +234,18 @@ namespace sport_app_backend.Repository
             {
                 Action = true,
                 Message = "true"
+            };
+        }
+
+        public async Task<ApiResponse> AnswerSupportApp(int id)
+        {
+            var supportApp = await context.SupportApp.FirstOrDefaultAsync(ap=>ap.Id==id);
+            if (supportApp != null) supportApp.IsActive = false;
+            await context.SaveChangesAsync();
+            return new ApiResponse
+            {
+                Action = true,
+                Message = "پاسخ داده شد"
             };
         }
     }

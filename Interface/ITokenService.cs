@@ -6,6 +6,8 @@ public interface ITokenService
 {
         string CreateToken(User user);
         Task<string> CreateRefreshToken(User user);
+        Task<string> CreateSiteRefreshToken(User user);
+
         string HashEncode(int id);
         int DecodeHash(string hash);
 

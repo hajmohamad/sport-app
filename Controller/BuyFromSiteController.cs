@@ -1,3 +1,5 @@
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using sport_app_backend.Dtos;
 using sport_app_backend.Dtos.ZarinPal.Verify;
@@ -22,6 +24,7 @@ public class BuyFromSiteController(IBuyFromSiteRepository buyFromSiteRepository)
 
         return Ok(result);
     }
+    
 
     [HttpPost("SendCode")]
     public async Task<IActionResult>SendCode([FromBody]string userPhoneNumber)
@@ -48,6 +51,16 @@ public class BuyFromSiteController(IBuyFromSiteRepository buyFromSiteRepository)
             
         }
     }
+    [HttpPost("buy_Service/{serviceId:int}")]
+    [Authorize(Roles = "Athlete")]
+    public async Task<IActionResult> BuyCoachingService([FromRoute] int serviceId)
+    {
+        var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
+        if (phoneNumber is null) return BadRequest("PhoneNumber is null");
+        var result = await buyFromSiteRepository.BuyCoachingService(phoneNumber, serviceId);
+        if (!result.Action) return BadRequest(result);
+        return Ok(result);
+    }
     [HttpGet("VerifyPayment")]
         
     public async Task<IActionResult> VerifyPayment([FromQuery] string authority, [FromQuery] string status)
@@ -67,14 +80,7 @@ public class BuyFromSiteController(IBuyFromSiteRepository buyFromSiteRepository)
 
         return BadRequest(result);
     }
-    // [HttpGet("get_AllExercise")]
-    // public async Task<IActionResult> GetAllExercise()
-    // {
-    //     var result = await buyFromSiteRepository.GetAllExercise();
-    //     if (result.Action != true) return BadRequest(result);
-    //     return Ok(result);
-    //         
-    // }
+
     [HttpGet("get_Exercise/{exerciseId}")]
     public async Task<IActionResult> GetExercise([FromRoute] int exerciseId)
     {
@@ -104,45 +110,41 @@ public class BuyFromSiteController(IBuyFromSiteRepository buyFromSiteRepository)
         if (result.Action != true) return BadRequest(result);
         return Ok(result.Result);
     }
-    // [HttpPost("AthleteQuestion")]
-    // public async Task<IActionResult> AthleteQuestion([FromBody] AthleteQuestionBuyFromSiteDto athleteQuestionBuyFromSiteDto)
-    // {
-    //     var result =  await buyFromSiteRepository.AthleteQuestion(athleteQuestionBuyFromSiteDto);
-    //
-    //     if (!result.Action)
-    //     {
-    //         return BadRequest(result);
-    //     }
-    //
-    //     return Ok(result);
-    // }
-    // [HttpPost("uploadImageForAthleteQuestion")]
-    // public async Task<IActionResult> UploadImageForAthleteQuestion([FromQuery] string wPkey,[FromQuery] int id,[FromQuery]string sideName,IFormFile file)
-    // {
-    //  
-    //     var result = await buyFromSiteRepository.UploadImageForAthleteQuestion(wPkey,id,sideName,file);
-    //
-    //     if (!result.Action) return NotFound(result);
-    //     return Ok(result);
-    // }
-    [HttpPost("submit-questionnaire")]
-    public async Task<IActionResult> SubmitQuestionnaireWithImages(
-        [FromForm] AthleteQuestionBuyFromSiteDto dto, 
-        IFormFile? frontImage, 
-        IFormFile? backImage, 
-        IFormFile? sideImage)
+    [HttpPost("AthleteQuestion")]
+    public async Task<IActionResult> AthleteQuestion([FromBody] AthleteQuestionBuyFromSiteDto athleteQuestionBuyFromSiteDto)
     {
-        var response = await buyFromSiteRepository.SubmitAthleteQuestionWithImages(dto, frontImage, backImage, sideImage);
-
-        if (response.Action)
-        {
-            return Ok(response);
-        }
-
-        return BadRequest(response);
-    }
- 
-
+        var result =  await buyFromSiteRepository.AthleteQuestion(athleteQuestionBuyFromSiteDto);
     
-
+        if (!result.Action)
+        {
+            return BadRequest(result);
+        }
+    
+        return Ok(result);
+    }
+    [HttpPost("uploadImageForAthleteQuestion")]
+    public async Task<IActionResult> UploadImageForAthleteQuestion([FromQuery] string wPkey,[FromQuery] int id,[FromQuery]string sideName,IFormFile file)
+    {
+     
+        var result = await buyFromSiteRepository.UploadImageForAthleteQuestion(wPkey,id,sideName,file);
+    
+        if (!result.Action) return NotFound(result);
+        return Ok(result);
+    }
+    [HttpPost("AccessToken")]
+    public async Task<IActionResult> AccessToken([FromHeader(Name = "Refresh-Token")] string refreshToken) 
+    {
+        if (string.IsNullOrEmpty(refreshToken))
+        {
+            return BadRequest("Refresh token is missing from the header.");
+        }
+        var result = await buyFromSiteRepository.GenerateAccessToken(refreshToken);
+        if (!result.Action)
+        {
+            return Unauthorized(result);
+        }
+    
+        return Ok(result);
+    }
+    
 }

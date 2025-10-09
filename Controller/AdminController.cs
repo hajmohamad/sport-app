@@ -69,10 +69,10 @@ namespace sport_app_backend.Controller
 
             return Ok(result);
         }
-        [HttpPut("addSlug")]
-        public async Task<IActionResult> AddSlug([FromQuery] string engName , [FromQuery]  string slug)
+        [HttpPost("AnswerSupportApp/{id:int}")]
+        public async Task<IActionResult> AnswerSupportApp([FromRoute] int id )
         {
-            var result = await adminRepository.AddSlug(engName, slug);
+            var result = await adminRepository.AnswerSupportApp(id);
             if (!result.Action)
             {
                 return BadRequest(result);
@@ -80,7 +80,7 @@ namespace sport_app_backend.Controller
 
             return Ok(result);
         }
-
+ 
         [HttpPost("sendMassageToCoach")]
         [TypeFilter(typeof(IpAddressFilter))]
 

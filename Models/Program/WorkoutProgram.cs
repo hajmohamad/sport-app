@@ -21,8 +21,8 @@ public class WorkoutProgram
     public int ProgramDuration { get; set; } 
     public ProgramLevel ProgramLevel { get; set; } 
     public List<ProgramPriority> ProgramPriorities { get; set; } = [];
-    public List<GeneralWarmUp>? GeneralWarmUp { get; set; } = [];
-    public DedicatedWarmUp? DedicatedWarmUp { get; set; } 
+    // public List<GeneralWarmUp>? GeneralWarmUp { get; set; } = [];
+    // public DedicatedWarmUp? DedicatedWarmUp { get; set; } 
     public DateTime EndDate { get; set; }
     public WorkoutProgramStatus Status { get; set; } = WorkoutProgramStatus.NOTSTARTED;
     public int Duration { get; set; }

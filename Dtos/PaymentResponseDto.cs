@@ -17,4 +17,5 @@ public class PaymentResponseDto
     public WorkoutProgramResponseDto? WorkoutProgram { get; set; }
     public required string BirthDate { get; set; }= string.Empty;
     public required string PdfLink { get; set; }
+    public string WpKey {get; set;}= string.Empty;
 }

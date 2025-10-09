@@ -13,8 +13,8 @@ public class WorkoutProgramResponseDto
     public int ProgramDuration { get; set; }
     public string ProgramLevel { get; set; }=string.Empty;
     public  List<string> ProgramPriorities { get; set; } = [];
-    public List<string> GeneralWarmUp { get; set; } = [];
-    public  string DedicatedWarmUp { get; set; } = "";
+    // public List<string> GeneralWarmUp { get; set; } = [];
+    // public  string DedicatedWarmUp { get; set; } = "";
     public DateTime EndDate { get; set; }
     public string Status { get; set; }= "";
     public int Duration { get; set; }

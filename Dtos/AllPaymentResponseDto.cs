@@ -10,4 +10,5 @@ public class AllPaymentResponseDto
     public int PaymentId { get; set; }
     public required string CoachServiceTitle { get; set; }
     public required string WorkoutProgramStatus { get; set; }
+    public string WpKey { get; set; }
 }

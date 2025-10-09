@@ -320,14 +320,12 @@ namespace sport_app_backend.Repository
                 .ThenInclude(c => c.CoachingServices)
                 .FirstOrDefaultAsync(u => u.PhoneNumber == phoneNumber);
             if (user?.Coach == null) return new ApiResponse { Action = false, Message = "Coach not found" };
-            var coachingService = user.Coach.CoachingServices.Where(x => x.IsDeleted == false).ToList();
+            var coachingService = user.Coach.CoachingServices.Where(x => !x.IsDeleted).ToList();
             var coachingServiceDto = coachingService.Select(x => x.ToCoachingServiceResponse()).ToList();
             var payments = await context.Payments.Include(p => p.Athlete).ThenInclude(u => u.User)
                 .OrderBy(c => c.PaymentDate)
                 .Include(p => p.WorkoutProgram).Where(p =>
-                    p.CoachId == user.Coach.Id && p.WorkoutProgram != null &&
-                    p.WorkoutProgram.Status != WorkoutProgramStatus.WRITING &&
-                    p.WorkoutProgram.Status != WorkoutProgramStatus.NOTSTARTED)
+                    p.CoachId == user.Coach.Id && p.PaymentStatus == PaymentStatus.SUCCESS)
                 .ToListAsync();
             return new ApiResponse
             {
@@ -349,14 +347,14 @@ namespace sport_app_backend.Repository
                 if (workoutProgram is null) return new ApiResponse { Action = false, Message = "Payment not found" };
                 workoutProgram.ProgramInDays = workoutProgramDto.Days.ToListOfProgramInDays();
                 workoutProgram.ProgramDuration = workoutProgramDto.Week;
-                workoutProgram.GeneralWarmUp = workoutProgramDto.GeneralWarmUp
-                    ?.Select(x => (GeneralWarmUp)Enum.Parse(typeof(GeneralWarmUp), x)).ToList() ?? [];
-                workoutProgram.ProgramLevel = (ProgramLevel)Enum.Parse(typeof(ProgramLevel),workoutProgramDto.ProgramLevel);
-                if (workoutProgramDto.DedicatedWarmUp is not null)
-                {
-                    workoutProgram.DedicatedWarmUp =
-                        (DedicatedWarmUp)Enum.Parse(typeof(DedicatedWarmUp), workoutProgramDto.DedicatedWarmUp);
-                }
+                // workoutProgram.GeneralWarmUp = workoutProgramDto.GeneralWarmUp
+                //     ?.Select(x => (GeneralWarmUp)Enum.Parse(typeof(GeneralWarmUp), x)).ToList() ?? [];
+                // workoutProgram.ProgramLevel = (ProgramLevel)Enum.Parse(typeof(ProgramLevel),workoutProgramDto.ProgramLevel);
+                // if (workoutProgramDto.DedicatedWarmUp is not null)
+                // {
+                //     workoutProgram.DedicatedWarmUp =
+                //         (DedicatedWarmUp)Enum.Parse(typeof(DedicatedWarmUp), workoutProgramDto.DedicatedWarmUp);
+                // }
 
                 workoutProgram.ProgramPriorities = workoutProgramDto.ProgramPriority
                     .Select(x => (ProgramPriority)Enum.Parse(typeof(ProgramPriority), x.ToUpper())).ToList() ?? [];

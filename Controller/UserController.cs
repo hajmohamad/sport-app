@@ -198,7 +198,7 @@ public class UserController(IUserRepository userRepository) : ControllerBase
     public async Task<IActionResult> GetExercises(
         [FromQuery] string? level,
         [FromQuery] string? type,
-        [FromQuery] string? equipment,
+        [FromQuery] string?[] equipment,
         [FromQuery] string? muscle,
         [FromQuery] string? place,
         [FromQuery] int page = 1,

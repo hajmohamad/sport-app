@@ -11,15 +11,14 @@ public interface IBuyFromSiteRepository
     public Task<ApiResponse> CheckCode(CheckCodeRequestFromBuyFromSiteDto checkCodeRequestDto);
     public Task<ApiResponse>  VerifyPaymentAsync(ZarinPalVerifyRequestDto verifyRequest, string status);
     public Task<ApiResponse> GetWorkoutProgram(string wPkey);
-    // public Task<ApiResponse>  AthleteQuestion(AthleteQuestionBuyFromSiteDto athleteQuestionBuyFromSiteDto);
-    // public Task<ApiResponse> UploadImageForAthleteQuestion(string wpKey, int id, string sideName, IFormFile file);
+    public Task<ApiResponse>  AthleteQuestion(AthleteQuestionBuyFromSiteDto athleteQuestionBuyFromSiteDto);
+    public Task<ApiResponse> UploadImageForAthleteQuestion(string wpKey, int id, string sideName, IFormFile file);
 
-    public Task<ApiResponse> SubmitAthleteQuestionWithImages(
-        [FromForm] AthleteQuestionBuyFromSiteDto dto,
-        IFormFile? frontImage,
-        IFormFile? backImage,
-        IFormFile? sideImage);
+ 
+    public  Task<ApiResponse> GenerateAccessToken(string refreshToken);
+
 
     public Task<ApiResponse> GetExercise(int exerciseId);
     public Task<ApiResponse> CreateWorkoutPdfAsync(string wPkey);
+    Task<ApiResponse> BuyCoachingService(string phoneNumber, int serviceId);
 }

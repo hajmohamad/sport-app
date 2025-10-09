@@ -41,6 +41,10 @@ public class User
     public Coach? Coach { get; set; }
     public TypeOfUser TypeOfUser { get; set; }
     public string? RefreshToken { get; set; }
+    [DataType(DataType.DateTime)]
+    [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd HH:mm:ss}")]
+    public DateTime LastLoginSite { get; set; } 
+    public string? SiteRefreshToken { get; set; }
     // public DateTime RefreshTokeNExpire { get; set; }
 
 }
