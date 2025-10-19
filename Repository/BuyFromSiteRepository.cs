@@ -29,7 +29,7 @@ public class BuyFromSiteRepository(
     {
         var user = await dbContext.Users.FirstOrDefaultAsync(x => x.SiteRefreshToken == refreshToken);
         if (user is null) return new ApiResponse() { Message = "Invalid refresh token", Action = false };
-        return user.LastLoginSite.AddDays(90) < DateTime.Now ? new ApiResponse() { Message = "Refresh token expired", Action = false } : new ApiResponse() { Message = "Success", Action = true, Result = new { AccessToken = tokenService.CreateSiteRefreshToken(user) } };
+        return user.LastLoginSite.AddDays(90) < DateTime.Now ? new ApiResponse() { Message = "Refresh token expired", Action = false } : new ApiResponse() { Message = "Success", Action = true, Result = new { AccessToken = tokenService.CreateToken(user) } };
     }
 
     public async Task<ApiResponse> CreateWorkoutPdfAsync(string wpId)
@@ -254,7 +254,139 @@ public class BuyFromSiteRepository(
             };
         }
     }
+    public async Task<ApiResponse> RemoveImageForAthleteQuestion(string wpKey,int id, string sideName)
+        {
+            var workoutProgramId = tokenService.DecodeHash(wpKey);
+            if (workoutProgramId == 0)
+            {
+                return new ApiResponse { Action = false, Message = "برنامه شما پیدا نشد" };
+            }
 
+            var athleteId = await dbContext.WorkoutPrograms.AsNoTracking().Where(wp => wp.Id == workoutProgramId)
+                .Select(wp => wp.AthleteId).FirstOrDefaultAsync();
+            var athleteImage = await dbContext.AthleteImage.Where(ai => ai.Id == id&&ai.AthleteId==athleteId).FirstOrDefaultAsync();
+            if (athleteImage is null)
+            {
+                return new ApiResponse
+                {
+                    Message = "AthleteBodyImage not found",
+                    Action = false
+                };
+            }
+
+         
+          
+            switch (sideName)
+            {
+                case "front":
+                {
+                    var frontLink = athleteImage.FrontLink;
+                    if (frontLink is { Length: > 1 })
+                    {
+                        var removeResponse = await liaraStorage.RemovePhoto(frontLink);
+                        if (!removeResponse.Action)
+                        {
+                            return removeResponse;
+                        }
+
+                        athleteImage.FrontLink = "";
+                    }
+                    else
+                    {
+                        return new ApiResponse()
+                        {
+                            Action = false,
+                            Message = "no image Found"
+                        };
+                    }
+                    break;
+                }
+                case "back":
+                {
+                    var backLink = athleteImage.BackLink;
+                    if (backLink is { Length: > 1 })
+                    {
+                        var removeResponse = await liaraStorage.RemovePhoto(backLink);
+                        if (!removeResponse.Action)
+                        {
+                            return removeResponse;
+                        }
+
+                        athleteImage.BackLink = "";
+                    }
+                    else
+                    {
+                        return new ApiResponse()
+                        {
+                            Action = false,
+                            Message = "no image Found"
+                        };
+                    }
+                    break;
+                }
+                case "side":
+                {
+                    var sideLink = athleteImage.SideLink;
+                    if (sideLink is { Length: > 1 })
+                    {
+                        var removeResponse = await liaraStorage.RemovePhoto(sideLink);
+                        if (!removeResponse.Action)
+                        {
+                            return removeResponse;
+                        }
+
+                        athleteImage.SideLink = "";
+                    }
+                    else
+                    {
+                        return new ApiResponse()
+                        {
+                            Action = false,
+                            Message = "no image Found"
+                        };
+                    }
+                    break;
+                }
+            }
+            await dbContext.SaveChangesAsync();
+            return new ApiResponse()
+            {
+                Action = true,
+                Message = "img remove successfully",
+                Result = athleteImage.ToAthleteBodyImageDto()
+            }; 
+
+            
+            
+        }
+
+    public async Task<ApiResponse> GetImageForAthleteQuestion(string wPkey,int id)
+        {
+            var workoutProgramId = tokenService.DecodeHash(wPkey);
+            if (workoutProgramId == 0)
+            {
+                return new ApiResponse { Action = false, Message = "برنامه شما پیدا نشد" };
+            }
+
+            var athleteId = await dbContext.WorkoutPrograms.AsNoTracking().Where(wp => wp.Id == workoutProgramId)
+                .Select(wp => wp.AthleteId).FirstOrDefaultAsync();
+
+            var athleteImage = await dbContext.AthleteImage.Where(ai => ai.Id == id&&ai.AthleteId==athleteId).FirstOrDefaultAsync();
+            if (athleteImage is null)
+            {
+                return new ApiResponse
+                {
+                    Message = "AthleteBodyImage not found",
+                    Action = false
+                };
+            }
+            return new ApiResponse()
+            {
+                Action = true,
+                Message = "img remove successfully",
+                Result = athleteImage.ToAthleteBodyImageDto()
+            }; 
+        }
     public Task<ApiResponse> GetExercise(int exerciseId)
     {
         var exercise = dbContext.Exercises.FirstOrDefault(x => x.Id == exerciseId);
@@ -427,6 +559,7 @@ public class BuyFromSiteRepository(
             }
         };
     }
+
 
     private async Task<User> CreateNewAthleteUser(string phoneNumber)
     {
@@ -747,7 +880,10 @@ public class BuyFromSiteRepository(
 
 
         athlete.User.BirthDate = Convert.ToDateTime(athleteQuestionBuyFromSiteDto.BirthDay);
-
+        athlete.User.Gender = Enum.Parse<Gender>(athleteQuestionBuyFromSiteDto.Gender.ToUpper() ?? string.Empty);
+        athlete.User.FirstName = athleteQuestionBuyFromSiteDto.FirstName;
+        athlete.User.LastName = athleteQuestionBuyFromSiteDto.LastName;
+        athlete.Height = athleteQuestionBuyFromSiteDto.Height;
         var athleteQuestion = athleteQuestionBuyFromSiteDto.ToAthleteQuestionBuyFromSite(athlete);
 
         if (athleteQuestionBuyFromSiteDto.AthleteBodyImageId > 0)
@@ -762,9 +898,12 @@ public class BuyFromSiteRepository(
 
 
         athlete.AthleteQuestions.Add(athleteQuestion);
+        workProgram.Status = WorkoutProgramStatus.NOTSTARTED;
 
-
+        workProgram.Payment.AthleteQuestion = athleteQuestion;
         await dbContext.SaveChangesAsync();
+        await sms.CoachServiceBuySmsNotification(workProgram.Payment.Coach.PhoneNumber, workProgram.Payment.Coach.User.FirstName,
+            workProgram.Title, workProgram.Payment.Amount.ToString());
 
         return new ApiResponse()
         {

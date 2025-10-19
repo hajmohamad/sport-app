@@ -510,6 +510,7 @@ private async Task<string> GenerateUniqueUsername()
 public async Task<(IEnumerable<AllExerciseResponseDto> Exercises, int TotalCount)> GetExercisesAsync(
     string? level,
     string? type,
+    string? mechanic,
     string?[]? equipment,
     string? muscle,
     string? place,
@@ -525,6 +526,8 @@ public async Task<(IEnumerable<AllExerciseResponseDto> Exercises, int TotalCount
     // 🔹 فیلتر نوع تمرین
     if (Enum.TryParse<ExerciseType>(type, true, out var typeEnum))
         query = query.Where(e => e.ExerciseType == typeEnum);
+    if (Enum.TryParse<MechanicType>(mechanic, true, out var mechanicEnum))
+        query = query.Where(e=>e.Mechanics== mechanicEnum);
 
     // 🔹 فیلتر تجهیزات (لیست)
     if (equipment != null && equipment.Any())

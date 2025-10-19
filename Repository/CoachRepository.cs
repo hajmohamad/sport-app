@@ -349,7 +349,7 @@ namespace sport_app_backend.Repository
                 workoutProgram.ProgramDuration = workoutProgramDto.Week;
                 // workoutProgram.GeneralWarmUp = workoutProgramDto.GeneralWarmUp
                 //     ?.Select(x => (GeneralWarmUp)Enum.Parse(typeof(GeneralWarmUp), x)).ToList() ?? [];
-                // workoutProgram.ProgramLevel = (ProgramLevel)Enum.Parse(typeof(ProgramLevel),workoutProgramDto.ProgramLevel);
+                workoutProgram.ProgramLevel = (ProgramLevel)Enum.Parse(typeof(ProgramLevel),workoutProgramDto.ProgramLevel);
                 // if (workoutProgramDto.DedicatedWarmUp is not null)
                 // {
                 //     workoutProgram.DedicatedWarmUp =

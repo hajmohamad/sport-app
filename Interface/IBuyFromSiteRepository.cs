@@ -13,6 +13,7 @@ public interface IBuyFromSiteRepository
     public Task<ApiResponse> GetWorkoutProgram(string wPkey);
     public Task<ApiResponse>  AthleteQuestion(AthleteQuestionBuyFromSiteDto athleteQuestionBuyFromSiteDto);
     public Task<ApiResponse> UploadImageForAthleteQuestion(string wpKey, int id, string sideName, IFormFile file);
+    
 
  
     public  Task<ApiResponse> GenerateAccessToken(string refreshToken);
@@ -21,4 +22,6 @@ public interface IBuyFromSiteRepository
     public Task<ApiResponse> GetExercise(int exerciseId);
     public Task<ApiResponse> CreateWorkoutPdfAsync(string wPkey);
     Task<ApiResponse> BuyCoachingService(string phoneNumber, int serviceId);
+    public Task<ApiResponse> RemoveImageForAthleteQuestion(string wPkey, int id, string sideName);
+    public Task<ApiResponse> GetImageForAthleteQuestion(string wPkey, int id);
 }

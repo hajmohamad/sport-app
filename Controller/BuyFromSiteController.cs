@@ -131,6 +131,28 @@ public class BuyFromSiteController(IBuyFromSiteRepository buyFromSiteRepository)
         if (!result.Action) return NotFound(result);
         return Ok(result);
     }
+    [HttpDelete("RemoveImageForAthleteQuestion")]
+    public async Task<IActionResult> RemoveImageForAthleteQuestion([FromQuery] string wPkey,[FromQuery] int id,[FromQuery]string sideName)
+    {
+        var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
+        if (phoneNumber is null) return BadRequest("PhoneNumber is null");
+        
+        var result = await buyFromSiteRepository.RemoveImageForAthleteQuestion(wPkey,id,sideName);
+
+        if (!result.Action) return NotFound(result);
+        return Ok(result);
+    }
+    [HttpGet("GetImageForAthleteQuestion")]
+    public async Task<IActionResult> GetImageForAthleteQuestion([FromQuery] string wPkey,[FromQuery] int id)
+    {
+        var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
+        if (phoneNumber is null) return BadRequest("PhoneNumber is null");
+        
+        var result = await buyFromSiteRepository.GetImageForAthleteQuestion(wPkey,id);
+
+        if (!result.Action) return NotFound(result);
+        return Ok(result);
+    }
     [HttpPost("AccessToken")]
     public async Task<IActionResult> AccessToken([FromHeader(Name = "Refresh-Token")] string refreshToken) 
     {

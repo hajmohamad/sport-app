@@ -42,38 +42,47 @@ public class SmsService(IConfiguration config) : ISmsService
         return randomNumber;
     }
 
-    public async Task<string> CoachServiceBuySmsNotification(string phoneNumber, string name, string nameService, string price)
+    public async Task<SmsResponse> CoachServiceBuySmsNotification(string phoneNumber, string name, string nameService,
+        string price)
     {
-        var httpClient = new HttpClient();
-        httpClient.DefaultRequestHeaders.Add("x-api-key",
-            _accessKey);
+        var message = $"{name} عزیز، یک نفر {nameService} رو ازت خریداری کرد.\n" +
+                      $"میتونی همین الان در عرض چند دقیقه برنامه رو طراحی و مبلغ {price} رو دریافت کنی.\n\n" +
+                      "chaarset.ir";
+        
+        const string lineNumber = "9981802897"; 
+        const string apiUrl = "https://api.sms.ir/v1/send/likeToLike"; 
 
-        var model = new VerifySendModel()
+        var payload = new
         {
-            Mobile = phoneNumber,
-            TemplateId = 932727,
-            Parameters =
-            [
-                new VerifySendParameterModel
-                {
-                    Name = "name", Value = name
-                },
-                new VerifySendParameterModel
-                {
-                    Name = "CNAME", Value = nameService
-                },
-                new VerifySendParameterModel
-                {
-                    Name = "price", Value = price
-                }
-            ]
+            LineNumber = lineNumber,
+            MessageTexts = new[] { message },
+            Mobiles = new[] { phoneNumber }
         };
+        var httpClient = new HttpClient();
+        httpClient.DefaultRequestHeaders.Add("x-api-key", _accessKey);
 
-        var payload = JsonSerializer.Serialize(model);
-        StringContent stringContent = new(payload, Encoding.UTF8, "application/json");
+        var jsonPayload = JsonConvert.SerializeObject(payload);
+        var content = new StringContent(jsonPayload, System.Text.Encoding.UTF8, "application/json");
 
-        var response = await httpClient.PostAsync("https://api.sms.ir/v1/send/verify", stringContent);
-        return phoneNumber;
+        try
+        {
+            var response = await httpClient.PostAsync(apiUrl, content);
+            var resultString = await response.Content.ReadAsStringAsync();
+
+            if (response.IsSuccessStatusCode)
+            {
+                return new SmsResponse { IsSuccess = true, Message = "پیامک با موفقیت ارسال شد." };
+            }
+            else
+            {
+              
+                return new SmsResponse { IsSuccess = false, Message = $"خطا در ارسال پیامک: {response.StatusCode} - {resultString}" };
+            }
+        }
+        catch (Exception ex)
+        {
+            return new SmsResponse { IsSuccess = false, Message = $"خطای غیرمنتظره: {ex.Message}" };
+        }
     }
     public async Task<SmsResponse> AthleteSuccessfullySmsNotification(string mobileNumber, string athleteName, string serviceName)
     {
@@ -185,8 +194,11 @@ public class SmsService(IConfiguration config) : ISmsService
 
     public async Task<SmsResponse> AthleteSuccessfullySmsNotificationForBuyFromSite(string mobileNumber, string wpKey, string serviceName)
     {
-        var message = $"ورزشکار عزیز، پرداخت شما برای سرویس \"{serviceName}\" با موفقیت انجام شد. لطفاً از طریق لینک زیر به سوالات مربی پاسخ دهید تا برنامه اختصاصی شما طراحی شود:\nchaarset.ir/program/{wpKey}";
-
+        var message = 
+            $"🏋️‍♂️ ورزشکار عزیز\n" +
+            $"پرداخت شما برای سرویس «{serviceName}» با موفقیت انجام شد. 🎉\n\n" +
+            $"لطفاً از طریق لینک زیر به سوالات مربی پاسخ دهید تا برنامه‌ی اختصاصی شما طراحی شود:\n" +
+            $"chaarset.ir/program/{wpKey}/";
         const string lineNumber = "9981802897"; 
         const string apiUrl = "https://api.sms.ir/v1/send/likeToLike"; 
 
@@ -226,7 +238,7 @@ public class SmsService(IConfiguration config) : ISmsService
     {
         var message = $"{athleteName} عزیز، برنامه {serviceName} که منتظرش بودی آماده شد!\n" +
                       "همین الان به اپلیکیشن چارسِت برو و برنامه‌ات رو مشاهده کن.\n\n" +
-                      "chaarset.ir/program/{wpKey}";
+                      $"chaarset.ir/program/{wpKey}/";
 
         const string lineNumber = "9981802897";
         const string apiUrl = "https://api.sms.ir/v1/send/likeToLike";

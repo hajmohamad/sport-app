@@ -33,12 +33,12 @@ public static class PaymentMappers
             Name = payment.Athlete.User?.FirstName + " " + payment.Athlete?.User?.LastName,
             Amount = payment.Amount.ToString(CultureInfo.CurrentCulture),
             DateTime = payment.PaymentDate.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture),
-            AthleteQuestion = payment.AthleteQuestion.AthleteQuestionResponseDto(),
+            AthleteQuestion = payment.AthleteQuestion?.AthleteQuestionResponseDto(),
             Height = payment.Athlete!.Height,
-            ImageProfile = payment.Athlete?.User?.ImageProfile ??"",
+            ImageProfile = payment.Athlete.User?.ImageProfile ??"",
             WorkoutProgram = payment.WorkoutProgram?.ToProgramResponseDto()??new WorkoutProgramResponseDto(),
-            Gender = payment.Athlete.User.Gender.ToString(),
-            BirthDate = payment.Athlete.User.BirthDate.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture),
+            Gender = payment.Athlete.User?.Gender.ToString(),
+            BirthDate = payment.Athlete.User?.BirthDate.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture),
             PdfLink = wpkey
         };
         
@@ -52,7 +52,7 @@ public static class PaymentMappers
             Name = payment.Coach.User.FirstName + " " + payment.Coach.User.LastName,
             Amount = payment.Amount.ToString(CultureInfo.CurrentCulture),
             DateTime = payment.PaymentDate.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture),
-            AthleteQuestion = payment.AthleteQuestion.AthleteQuestionResponseDto(),
+            AthleteQuestion = payment.AthleteQuestion?.AthleteQuestionResponseDto(),
             Height = payment.Athlete.Height,
             ImageProfile = payment.Athlete.User?.ImageProfile ??"",
             WorkoutProgram = payment.WorkoutProgram?.ToProgramResponseDto()??new WorkoutProgramResponseDto(),

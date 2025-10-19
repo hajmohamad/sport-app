@@ -48,7 +48,7 @@ namespace sport_app_backend.Mappers
                 InternalAndDigestive = model.InternalAndDigestive?.Select(e => e.ToString()).ToList()??[],
                 HormonalAndGlandular = model.HormonalAndGlandular?.Select(e => e.ToString()).ToList()??[],
                 Specific = model.Specific?.Select(e => e.ToString()).ToList()??[],
-                Others = model.Others=""
+                Others = model.Others ?? ""
             };
         }
         public static AthleteQuestion ToAthleteQuestion(this AthleteQuestionDto dto, Athlete athlete)

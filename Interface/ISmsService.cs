@@ -8,7 +8,7 @@ public interface ISmsService
 {
     public Task<string> SendCode(string PhoneNumber);
     public Task<string> SendErrorSms(string message);
-    public Task<string> CoachServiceBuySmsNotification(string phoneNumber, string name, string nameService,
+    public Task<SmsResponse> CoachServiceBuySmsNotification(string phoneNumber, string name, string nameService,
         string price);
     public Task<SmsResponse> AthleteSuccessfullySmsNotification(string mobileNumber, string athleteName, string serviceName);
     public Task<SmsResponse> WorkoutReadySms(string mobileNumber, string athleteName, string serviceName,string wpKey);

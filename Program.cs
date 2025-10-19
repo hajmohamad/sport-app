@@ -35,7 +35,7 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowFrontendLocalhost", policy =>
     {
-        policy.WithOrigins("http://localhost:21345","https://charsetpwa.liara.run","https://chaarset.ir", "https://charset-i-os-pwa.vercel.app","https://charset-pwa.pages.dev") 
+        policy.WithOrigins("http://localhost:21345","https://charsetpwa.liara.run","https://charset-pwa-staging.liara.run","https://app.chaarset.ir","https://chaarset.ir", "https://charset-i-os-pwa.vercel.app","https://charset-pwa.pages.dev") 
               .AllowAnyHeader()
               .AllowAnyMethod();
     });
@@ -187,14 +187,14 @@ app.UseAuthorization();
 app.MapControllers();
 app.MapDefaultControllerRoute();
 
-if (!app.Environment.IsDevelopment())
-{
-    using (var scope = app.Services.CreateScope())
-    {
-        var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-        dbContext.Database.Migrate();
-    }
-}
+// if (!app.Environment.IsDevelopment())
+// {
+//     using (var scope = app.Services.CreateScope())
+//     {
+//         var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+//         dbContext.Database.Migrate();
+//     }
+// }
 
 app.Run();
  

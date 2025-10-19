@@ -30,6 +30,7 @@ public interface IUserRepository
     Task<(IEnumerable<AllExerciseResponseDto> Exercises, int TotalCount)> GetExercisesAsync(
         string? level,
         string? type,
+        string? mechanic,
         string?[] equipment,
         string? muscle,
         string? place,

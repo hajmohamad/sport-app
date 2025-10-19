@@ -64,6 +64,7 @@ public class TokenService: ITokenService
         using var rng = RandomNumberGenerator.Create();
         rng.GetBytes(randomNumber);
         user.SiteRefreshToken = Convert.ToBase64String(randomNumber);
+        user.LastLoginSite = DateTime.Now;
         await _context.SaveChangesAsync();
         return user.SiteRefreshToken;
     }
