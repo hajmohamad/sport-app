@@ -377,8 +377,9 @@ namespace sport_app_backend.Repository
                             Message = "athlete not found"
                         };
                     }
-                    coach.Amount += (workoutProgram.Payment.Amount - workoutProgram.Payment.AppFee);
-                    var athleteImg = await context.AthleteImage
+                    var appFee = workoutProgram.Payment.AppFee < 50000 ? 50000 : workoutProgram.Payment.AppFee;
+                    
+                    coach.Amount += (workoutProgram.Payment.Amount - appFee);                    var athleteImg = await context.AthleteImage
                         .Where(a => a.AthleteQuestionId == workoutProgram.Payment.AthleteQuestionId)
                         .FirstOrDefaultAsync();
                     if (athleteImg?.SideLink != null)
