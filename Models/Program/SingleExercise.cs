@@ -8,6 +8,8 @@ public class SingleExercise
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int Id { get; set; }
     public int ProgramInDayId { get; set; }
+    public int Set {get; set;}
+    public int Rep { get; set; }
     public ProgramInDay? ProgramInDay { get; set; }
 
 
@@ -23,6 +25,7 @@ public class SingleExercise
 
         set => RepsJson = System.Text.Json.JsonSerializer.Serialize(value);
     }
+    
 
     public Exercise? Exercise { get; set; }
     public int ExerciseId { get; set; }
