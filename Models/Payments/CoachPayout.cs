@@ -16,7 +16,7 @@ public class CoachPayout
     public PayoutStatus Status { get; set; } = PayoutStatus.Pending;
     public DateTime? PaidDate { get; set; }
     [MaxLength(100)] 
-    public string Imagelink { get; set; } = "";
+    public string? Imagelink { get; set; } = "";
     
     [MaxLength(100)]
     public string? TransactionReference { get; set; }

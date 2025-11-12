@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using sport_app_backend.Data;
 
@@ -10,9 +11,11 @@ using sport_app_backend.Data;
 namespace sport_app_backend.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250925222535_EditVideoLinkLength")]
+    partial class EditVideoLinkLength
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -191,9 +194,6 @@ namespace sport_app_backend.Migrations
                     b.Property<DateTime>("LastLogin")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<DateTime>("LastLoginSite")
-                        .HasColumnType("datetime(6)");
-
                     b.Property<string>("LastName")
                         .IsRequired()
                         .HasMaxLength(50)
@@ -205,9 +205,6 @@ namespace sport_app_backend.Migrations
                         .HasColumnType("varchar(11)");
 
                     b.Property<string>("RefreshToken")
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("SiteRefreshToken")
                         .HasColumnType("longtext");
 
                     b.Property<int>("TypeOfUser")
@@ -327,11 +324,6 @@ namespace sport_app_backend.Migrations
                         .IsRequired()
                         .HasMaxLength(60)
                         .HasColumnType("varchar(60)");
-
-                    b.Property<string>("Slug")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("varchar(100)");
 
                     b.Property<string>("TargetMuscles")
                         .IsRequired()
@@ -488,10 +480,6 @@ namespace sport_app_backend.Migrations
 
                     b.Property<int>("CoachId")
                         .HasColumnType("int");
-
-                    b.Property<string>("Imagelink")
-                        .HasMaxLength(100)
-                        .HasColumnType("varchar(100)");
 
                     b.Property<DateTime?>("PaidDate")
                         .HasColumnType("datetime(6)");
@@ -660,11 +648,6 @@ namespace sport_app_backend.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasMaxLength(500)
-                        .HasColumnType("varchar(500)");
-
                     b.Property<int>("ExerciseId")
                         .HasColumnType("int");
 
@@ -673,13 +656,6 @@ namespace sport_app_backend.Migrations
 
                     b.Property<int>("Rep")
                         .HasColumnType("int");
-
-                    b.Property<int?>("RepType")
-                        .HasColumnType("int");
-
-                    b.Property<string>("RepsJson")
-                        .HasMaxLength(100)
-                        .HasColumnType("varchar(100)");
 
                     b.Property<int>("Set")
                         .HasColumnType("int");
@@ -742,6 +718,9 @@ namespace sport_app_backend.Migrations
                     b.Property<int>("CompletedSessionCount")
                         .HasColumnType("int");
 
+                    b.Property<int?>("DedicatedWarmUp")
+                        .HasColumnType("int");
+
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasMaxLength(120)
@@ -752,6 +731,9 @@ namespace sport_app_backend.Migrations
 
                     b.Property<DateTime>("EndDate")
                         .HasColumnType("datetime(6)");
+
+                    b.Property<string>("GeneralWarmUp")
+                        .HasColumnType("longtext");
 
                     b.Property<DateTime?>("LastExerciseDate")
                         .HasColumnType("date");
@@ -845,9 +827,6 @@ namespace sport_app_backend.Migrations
                     b.Property<int?>("ExerciseGoal")
                         .HasColumnType("int");
 
-                    b.Property<int>("ExerciseLocation")
-                        .HasColumnType("int");
-
                     b.Property<int?>("FitnessLevel")
                         .HasColumnType("int");
 
@@ -900,22 +879,20 @@ namespace sport_app_backend.Migrations
                     b.ToTable("InjuryAreas");
                 });
 
-            modelBuilder.Entity("sport_app_backend.Models.SupportApp.SupportApp", b =>
+            modelBuilder.Entity("sport_app_backend.Models.ReportApp", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<int>("Category")
-                        .HasColumnType("int");
+                    b.Property<string>("Category")
+                        .IsRequired()
+                        .HasColumnType("longtext");
 
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasMaxLength(300)
                         .HasColumnType("varchar(300)");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("tinyint(1)");
 
                     b.Property<int>("UserId")
                         .HasColumnType("int");
@@ -924,7 +901,7 @@ namespace sport_app_backend.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("SupportApp");
+                    b.ToTable("ReportApps");
                 });
 
             modelBuilder.Entity("sport_app_backend.Models.WaterInDay", b =>
@@ -1276,7 +1253,7 @@ namespace sport_app_backend.Migrations
                     b.Navigation("AthleteQuestion");
                 });
 
-            modelBuilder.Entity("sport_app_backend.Models.SupportApp.SupportApp", b =>
+            modelBuilder.Entity("sport_app_backend.Models.ReportApp", b =>
                 {
                     b.HasOne("sport_app_backend.Models.Account.User", "User")
                         .WithMany()
