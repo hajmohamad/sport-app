@@ -417,8 +417,9 @@ private async Task<string> GenerateUniqueUsername()
                 Exercises = pd.AllExerciseInDays.Select(se => new 
                 {   se.Exercise.Id,
                     se.Exercise.PersianName,
-                    se.Set,
-                    se.Rep
+                    se.RepsJson,
+                    se.Description,
+                    se.RepType
                 }).ToList()
             }).ToList()
         })
@@ -452,8 +453,9 @@ private async Task<string> GenerateUniqueUsername()
             Exercises = pd.Exercises.Select(se => new ExerciseModel
             {
                 Name = se.PersianName,
-                Set = se.Set,
-                Rep = se.Rep.ToString()
+                Reps = se.RepsJson.ToReps(),
+                Description = se.Description,
+                RepType = se.RepType.ToString(),
             }).ToList()
         }).ToList()
     };
@@ -475,6 +477,7 @@ private async Task<string> GenerateUniqueUsername()
             {
                 u.FirstName,
                 u.LastName,
+                u.Gender,
                 u.ImageProfile,
                 u.TypeOfUser,
                 u.PhoneNumber
@@ -497,6 +500,7 @@ private async Task<string> GenerateUniqueUsername()
                 user.ImageProfile,
                 TypeOfUser = user.TypeOfUser.ToString(),
                 user.PhoneNumber,
+                Gender = user.Gender.ToString(),
                 Question = user.FirstName != ""
 
 
@@ -568,7 +572,7 @@ public async Task<(IEnumerable<AllExerciseResponseDto> Exercises, int TotalCount
             Id = e.Id,
             Name = e.PersianName,
             ImageLink = e.ImageLink,
-            BaseCategory = e.BaseMuscle.ToString(),
+            BaseCategory = e.BaseCategory.ToString(),
             Equipment = e.Equipment.ToString(),
             ExerciseType = e.ExerciseType.ToString(),
             Level = e.ExerciseLevel.ToString(),

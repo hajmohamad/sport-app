@@ -15,4 +15,5 @@ public class AthleteQuestionBuyFromSiteDto
     public required string FirstName { get; set; }
     public required string LastName { get; set; }
     public int AthleteBodyImageId { get; set; }
+    public string ExerciseLocation { get; set; } = "";
 }

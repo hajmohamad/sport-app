@@ -14,6 +14,7 @@
         GLUTES,         // باسن - سرینی
         ABSLOWERBACK,   // شکم و فیله
         ABDDUCTORS,     // داخل و خارج ران
-        LATSUPPERBACK   // زیربغل و بالای کمر
+        LATSUPPERBACK ,  // زیربغل و بالای کمر
+        CARDIO
     }
 }

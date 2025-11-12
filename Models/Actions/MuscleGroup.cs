@@ -19,6 +19,7 @@ namespace sport_app_backend.Models.Actions
         LATS,           // زیر بغل
         UPPER_BACK,     // بالای کمر
         MIDDLE_BACK,    // کمر 
-        HIP_FLEXORS     // خم‌کننده ران
+        HIP_FLEXORS,     // خم‌کننده ران
+        FULL_BODY
     }
 }

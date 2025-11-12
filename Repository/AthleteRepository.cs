@@ -1184,7 +1184,7 @@ namespace sport_app_backend.Repository
         {
             var paymentDtos = await context.WorkoutPrograms
                 .AsNoTracking()
-                .Where(wp => wp.Athlete.PhoneNumber == phoneNumber)
+                .Where(wp => wp.Athlete.PhoneNumber == phoneNumber && wp.Status != WorkoutProgramStatus.REFUND)
                 .OrderByDescending(wp => wp.Payment.PaymentDate)
                 .Select(wp => new AllPaymentResponseDto
                 {
@@ -1520,8 +1520,7 @@ namespace sport_app_backend.Repository
                 Result = new
                 {
                     ToAllTrainingSession = resultData.TrainingSessions,
-                    ProgramName = resultData.ProgramName
-                }
+                    resultData.ProgramName}
             };
         }
 
@@ -1540,7 +1539,7 @@ namespace sport_app_backend.Repository
                 return new ApiResponse() { Message = "trainingSession not found", Action = false };
 
             var finalCalories = _CalculateCaloriesInternal(trainingSession, athlete.CurrentWeight, false);
-            var time = trainingSession.ProgramInDay.AllExerciseInDays.Sum(st => st.Set)*60;
+            var time = trainingSession.ProgramInDay.AllExerciseInDays.Sum(st => st.Reps.Count)*60;
             
             
 
@@ -1854,9 +1853,10 @@ namespace sport_app_backend.Repository
                 if (exercise.Exercise == null) continue;
 
                 exercisesCountInCalculation++;
+                var numberOfRep = exercise.Reps.Sum();
 
-                var workTimeSec = exercise.Set * exercise.Rep * avgParams.TimePerRepSec;
-                var restBetweenSetsSec = (exercise.Set > 1) ? (exercise.Set - 1) * avgParams.RestBetweenSetsSec : 0;
+                var workTimeSec = numberOfRep* avgParams.TimePerRepSec;
+                var restBetweenSetsSec = (exercise.Reps.Count > 1) ? (exercise.Reps.Count - 1) * avgParams.RestBetweenSetsSec : 0;
 
                 // اگر MET صفر بود، یک مقدار پیش‌فرض در نظر می‌گیریم
                 var exerciseMet = (exercise.Exercise.Met == 0) ? 3.0 : exercise.Exercise.Met;

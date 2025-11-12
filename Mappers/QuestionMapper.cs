@@ -62,6 +62,7 @@ namespace sport_app_backend.Mappers
                 FitnessLevel = Enum.Parse<FitnessLevel>(dto.FitnessLevel ?? string.Empty),
                 InjuryArea = dto.InjuryArea?.ToInjuryArea(),
                 ExerciseGoal = Enum.Parse<ExerciseGoal>(dto.ExerciseGoal ?? string.Empty),
+                ExerciseLocation = Enum.Parse<ExerciseLocation>(dto.ExerciseLocation.ToUpper() ?? string.Empty),
                 Weight = dto.CurrentWeight
             };
         }
@@ -76,6 +77,7 @@ namespace sport_app_backend.Mappers
                 FitnessLevel = Enum.Parse<FitnessLevel>(dto.FitnessLevel ?? string.Empty),
                 InjuryArea = dto.InjuryArea?.ToInjuryArea(),
                 ExerciseGoal = Enum.Parse<ExerciseGoal>(dto.ExerciseGoal ?? string.Empty),
+                ExerciseLocation = Enum.Parse<ExerciseLocation>(dto.ExerciseLocation.ToUpper()),
                 Weight = dto.CurrentWeight
             };
         }
@@ -91,6 +93,7 @@ namespace sport_app_backend.Mappers
                 CurrentWeight = question.Weight,
                 AthleteBodyImageId = question.AthleteBodyImage?.Id??0,
                 BirthDay = question.Athlete?.User?.BirthDate.ToString("yyyy-MM-dd"),
+                ExerciseLocation = question.ExerciseLocation.ToString(),
                 AthleteBodyImage = question.AthleteBodyImage?.ToAthleteBodyImageDto()?? new AthleteBodyImageDto()
             };
         }
@@ -104,6 +107,7 @@ namespace sport_app_backend.Mappers
                 InjuryArea = question.InjuryArea?.ToInjuryAreaDto(),
                 ExerciseGoal = question.ExerciseGoal.ToString() ?? "",
                 CurrentWeight = question.Weight,
+                ExerciseLocation = question.ExerciseLocation.ToString(),
                 BirthDay = birthday,
                 AthleteBodyImage = question.AthleteBodyImage.ToAthleteBodyImageDto()
             };
@@ -113,6 +117,7 @@ namespace sport_app_backend.Mappers
             return new AthleteQuestionDto
             {
                 CurrentBodyForm = question.CurrentBodyForm,
+                ExerciseLocation = question.ExerciseLocation.ToString() ,
                 DaysPerWeekToExercise = question.DaysPerWeekToExercise,
                 FitnessLevel = question.FitnessLevel.ToString() ?? "",
                 InjuryArea = question.InjuryArea?.ToInjuryAreaDto(),

@@ -12,13 +12,14 @@ namespace sport_app_backend.Interface
 {
     public interface IAdminRepository
     {
-        Task<ApiResponse> AddExercises(List<AddExercisesRequestDto> exercises);
+        Task<ApiResponse> AddExercises(AddExercisesRequestDto exercises);
         Task<ApiResponse> ConfirmTransactionId(string TransactionId);
         Task<ApiResponse> BackfillWorkoutProgramStats();
 
         Task<ApiResponse> VerifiedCoach(string coachPhoneNumber);
          Task<ApiResponse> GetAllCoachPayouts();
-         Task<ApiResponse> UpdateCoachPayoutStatus(int payoutId, PayoutStatus newStatus, string? transactionReference);
+         Task<ApiResponse> UpdateCoachPayoutStatus(int payoutId, PayoutStatus newStatus, string? transactionReference,
+             IFormFile file);
 
          Task<ApiResponse> GetCoachService(string phoneNumber);
          Task<SmsResponse> SendMassageToCoach( string phoneNumber, string message);

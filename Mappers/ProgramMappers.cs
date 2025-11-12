@@ -85,9 +85,10 @@ public static class ProgramMappers
         return new SingleExercise
         {
             Id = singleExerciseDto.Id,
-            Set = singleExerciseDto.Set,
-            Rep = singleExerciseDto.Rep,
-            ExerciseId = singleExerciseDto.ExerciseId
+            Reps = singleExerciseDto.Reps,
+            ExerciseId = singleExerciseDto.ExerciseId,
+            RepType = (RepType)Enum.Parse(typeof(RepType), singleExerciseDto.RepType),
+            Description = singleExerciseDto.Description,
         };
     }   
     
@@ -108,8 +109,9 @@ public static class ProgramMappers
         return new SingleExerciseDto
         {
             Id = singleExercise.Id,
-            Set = singleExercise.Set,
-            Rep = singleExercise.Rep,
+            Reps = singleExercise.Reps,
+            Description = singleExercise.Description,
+            RepType = singleExercise.RepType.ToString()?? nameof(RepType.Count),
             ExerciseId = singleExercise.ExerciseId,
             BaseCategory = singleExercise.Exercise.BaseCategory.ToString(),
             PersianName = singleExercise.Exercise.PersianName,
@@ -190,8 +192,9 @@ public static class ProgramMappers
         return new TrainingSessionSingleExerciseDto
         {
             Id = singleExercise.Id,
-            Set = singleExercise.Set,
-            Rep = singleExercise.Rep,
+            Reps = singleExercise.Reps,
+            Description = singleExercise.Description,
+            RepType = singleExercise.RepType.ToString()?? nameof(RepType.Count),
             ExerciseId = singleExercise.ExerciseId,
             ExercisePersianName = singleExercise.Exercise.PersianName,
             ExerciseImage = singleExercise.Exercise.ImageLink,

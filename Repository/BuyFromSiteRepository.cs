@@ -45,11 +45,13 @@ public class BuyFromSiteRepository(
                 wp.StartDate,
                 CoachFirstName = wp.Coach.User.FirstName,
                 CoachLastName = wp.Coach.User.LastName,
+                AthleteFirstName = wp.Athlete.User.FirstName,
+                AthleteLastName = wp.Athlete.User.LastName,
                 AthleteCurrentBodyForm = wp.Payment.AthleteQuestion.CurrentBodyForm,
                 wp.ProgramLevel,
                 wp.ProgramDuration,
                 wp.ProgramPriorities, // <-- واکشی لیست خام Enum ها
-                AthleteCurrentWeight = wp.Athlete.CurrentWeight,
+                AthleteCurrentWeight = wp.Payment.AthleteQuestion.Weight,
                 AthleteHeight = wp.Athlete.Height,
                 AhtleteGender = wp.Athlete.User.Gender,
                 ProgramInDays = wp.ProgramInDays.Select(pd => new
@@ -59,8 +61,9 @@ public class BuyFromSiteRepository(
                     {
                         se.Exercise.Id,
                         se.Exercise.PersianName,
-                        se.Set,
-                        se.Rep,
+                        se.RepType,
+                        se.Description,
+                        se.RepsJson,
                         se.Exercise.Slug
                     }).ToList()
                 }).ToList()
@@ -87,6 +90,7 @@ public class BuyFromSiteRepository(
             AthleteWeight = workoutData.AthleteCurrentWeight.ToString(),
             AthleteHeight = workoutData.AthleteHeight.ToString(),
             AthleteBmi = Math.Round(bmi, 2).ToString(),
+            AthleteName=$"{workoutData.AthleteFirstName} {workoutData.AthleteLastName}",
             AthleteFatPercentage = workoutData.AhtleteGender.GetFatPercentageRange(workoutData.AthleteCurrentBodyForm),
             WorkoutDays = workoutData.ProgramInDays.Select(pd => new WorkoutDayModel
             {
@@ -94,8 +98,9 @@ public class BuyFromSiteRepository(
                 Exercises = pd.Exercises.Select(se => new ExerciseModel
                 {
                     Name = se.PersianName,
-                    Set = se.Set,
-                    Rep = se.Rep.ToString(),
+                    Reps = se.RepsJson.ToReps(),
+                    Description = se.Description,
+                    RepType = se.RepType.ToString(),
                     slug = se.Slug
                 }).ToList()
             }).ToList()
@@ -884,6 +889,7 @@ public class BuyFromSiteRepository(
         athlete.User.FirstName = athleteQuestionBuyFromSiteDto.FirstName;
         athlete.User.LastName = athleteQuestionBuyFromSiteDto.LastName;
         athlete.Height = athleteQuestionBuyFromSiteDto.Height;
+        athlete.CurrentWeight = athleteQuestionBuyFromSiteDto.CurrentWeight;
         var athleteQuestion = athleteQuestionBuyFromSiteDto.ToAthleteQuestionBuyFromSite(athlete);
 
         if (athleteQuestionBuyFromSiteDto.AthleteBodyImageId > 0)

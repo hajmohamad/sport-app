@@ -1,3 +1,5 @@
+using sport_app_backend.Models.Actions;
+
 namespace sport_app_backend.Dtos;
 
 public class AllExerciseResponseDto
@@ -12,4 +14,5 @@ public class AllExerciseResponseDto
     public required string Mechanics { get; set; }
     public required int View {get; set; }
     public required double Met { get; set; }
+    public string BaseMuscle { get; set; }
 }

@@ -39,7 +39,8 @@ public static class PaymentMappers
             WorkoutProgram = payment.WorkoutProgram?.ToProgramResponseDto()??new WorkoutProgramResponseDto(),
             Gender = payment.Athlete.User?.Gender.ToString(),
             BirthDate = payment.Athlete.User?.BirthDate.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture),
-            PdfLink = wpkey
+            PdfLink =   $"chaarset.ir/program/{wpkey}",
+            WpKey = wpkey
         };
         
     }
@@ -58,7 +59,7 @@ public static class PaymentMappers
             WorkoutProgram = payment.WorkoutProgram?.ToProgramResponseDto()??new WorkoutProgramResponseDto(),
             Gender =   payment.Athlete.User?.Gender.ToString() ??"Female",
             BirthDate = payment.Athlete.User?.BirthDate.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture)??"2001-01-01",
-            PdfLink = "chaarset.ir"
+            WpKey = "chaarset.ir"
 
 
         };

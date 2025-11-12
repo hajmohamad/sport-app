@@ -30,14 +30,14 @@ namespace sport_app_backend.Controller
 
         [HttpPut("UpdateCoachPayoutStatus/{payoutId}")]
         public async Task<IActionResult> UpdateCoachPayoutStatus(int payoutId, [FromQuery] string newStatus,
-            [FromQuery] string? transactionReference)
+            [FromQuery] string? transactionReference,IFormFile file)
         {
             if (!Enum.TryParse<PayoutStatus>(newStatus, true, out var statusEnum))
             {
                 return BadRequest(new { Message = "مقدار وضعیت ارسال شده نامعتبر است." });
             }
 
-            var result = await adminRepository.UpdateCoachPayoutStatus(payoutId, statusEnum, transactionReference);
+            var result = await adminRepository.UpdateCoachPayoutStatus(payoutId, statusEnum, transactionReference,file);
             if (!result.Action)
             {
                 return BadRequest(result);
@@ -94,7 +94,20 @@ namespace sport_app_backend.Controller
             }
 
             return Ok(result);
+        } 
+        [HttpPost("addExercise")]
+
+        public async Task<IActionResult> addExercise([FromBody] AddExercisesRequestDto addExercisesRequestDto)
+        {
+            var result = await adminRepository.AddExercises(addExercisesRequestDto);
+            if (!result.Action)
+            {
+                return BadRequest(result);
+            }
+
+            return Ok(result);
         }
+
         
         
 

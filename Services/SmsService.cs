@@ -46,7 +46,7 @@ public class SmsService(IConfiguration config) : ISmsService
         string price)
     {
         var message = $"{name} عزیز، یک نفر {nameService} رو ازت خریداری کرد.\n" +
-                      $"میتونی همین الان در عرض چند دقیقه برنامه رو طراحی و مبلغ {price} رو دریافت کنی.\n\n" +
+                      $"میتونی همین الان در عرض چند دقیقه برنامه رو طراحی و مبلغ {price} تومان رو دریافت کنی.\n\n" +
                       "chaarset.ir";
         
         const string lineNumber = "9981802897"; 

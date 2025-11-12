@@ -17,6 +17,7 @@ namespace sport_app_backend.Dtos
         public string? FitnessLevel { get; set; }
         public required string? BirthDay { get; set; }
         public int? AthleteBodyImageId { get; set; }
+        public required string ExerciseLocation {get; set;}
 
     }
 }

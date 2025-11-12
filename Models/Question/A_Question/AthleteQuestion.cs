@@ -25,6 +25,7 @@ namespace sport_app_backend.Models.Question.A_Question
         public double Weight { get; set; }
         public ExerciseGoal? ExerciseGoal { get; set; }
         public AthleteBodyImage? AthleteBodyImage { get; set; }
+        public required ExerciseLocation  ExerciseLocation { get; set; }
         // public List<ExerciseMotivation>? ExerciseMotivation { get; set; }
         // public List<CommonIssues>? CommonIssues { get; set; }
         

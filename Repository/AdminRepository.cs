@@ -12,21 +12,36 @@ using sport_app_backend.Services;
 
 namespace sport_app_backend.Repository
 {
-    public class AdminRepository(ApplicationDbContext context, ISmsService sms) : IAdminRepository
+    public class AdminRepository(ApplicationDbContext context, ISmsService sms,    ILiaraStorage liaraStorage) : IAdminRepository
     {
 
-        public Task<ApiResponse> AddExercises(List<AddExercisesRequestDto> exercises)
-        {
-            var exercisesList = exercises.Select(x => x.ToExercises()).ToList();
-            context.Exercises.AddRange(exercisesList);
-            context.SaveChanges();
-            return Task.FromResult(new ApiResponse()
-            {
-                Message = "Exercises added successfully",
-                Action = true
-            });
+    
 
-      
+        public async Task<ApiResponse> AddExercises(AddExercisesRequestDto exercises)
+        {
+            try
+            {
+                var exe = await context.Exercises.AddAsync(exercises.ToExercise());
+                
+                await context.SaveChangesAsync();
+                return new ApiResponse()
+                {
+                    Action = true,
+                    Message = "Exercises added",
+                };
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return new ApiResponse()
+                {
+                    Action = false,
+                    Message = e.Message + exercises.PersianName,
+                };
+
+            }
+
+
         }
 
         public async Task<ApiResponse> ConfirmTransactionId(string transactionId)
@@ -126,7 +141,9 @@ namespace sport_app_backend.Repository
                 p.RequestDate,
                 p.Status,
                 p.PaidDate,
-                p.TransactionReference
+                p.TransactionReference,
+                p.Imagelink
+                
             });
 
             return new ApiResponse { Action = true,
@@ -134,7 +151,8 @@ namespace sport_app_backend.Repository
             
         }
 
-        public async Task<ApiResponse> UpdateCoachPayoutStatus(int payoutId, PayoutStatus newStatus, string? transactionReference)
+        public async Task<ApiResponse> UpdateCoachPayoutStatus(int payoutId, PayoutStatus newStatus,
+            string? transactionReference, IFormFile? file)
         {
             var payout = await context.CoachPayouts
                 .Include(p => p.Coach)
@@ -152,12 +170,24 @@ namespace sport_app_backend.Repository
             }
 
             payout.Status = newStatus;
+            var imageLink = "";
+            if (file != null)
+            {
+                var urlLink = await liaraStorage.UploadImage(file, "");
+                if (urlLink.Action)
+                {
+                    imageLink = (string)urlLink.Result!;
+                }
+            }
+
+
             switch (newStatus)
             {
                 case PayoutStatus.Paid:
                     payout.PaidDate = DateTime.Now;
                     payout.TransactionReference = transactionReference;
                     payout.Coach.Amount -= payout.Amount;
+                    payout.Imagelink = imageLink;
                     break;
                 case PayoutStatus.Rejected:
                     break;

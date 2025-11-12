@@ -134,8 +134,7 @@ public class BuyFromSiteController(IBuyFromSiteRepository buyFromSiteRepository)
     [HttpDelete("RemoveImageForAthleteQuestion")]
     public async Task<IActionResult> RemoveImageForAthleteQuestion([FromQuery] string wPkey,[FromQuery] int id,[FromQuery]string sideName)
     {
-        var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
-        if (phoneNumber is null) return BadRequest("PhoneNumber is null");
+   
         
         var result = await buyFromSiteRepository.RemoveImageForAthleteQuestion(wPkey,id,sideName);
 
@@ -145,8 +144,6 @@ public class BuyFromSiteController(IBuyFromSiteRepository buyFromSiteRepository)
     [HttpGet("GetImageForAthleteQuestion")]
     public async Task<IActionResult> GetImageForAthleteQuestion([FromQuery] string wPkey,[FromQuery] int id)
     {
-        var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
-        if (phoneNumber is null) return BadRequest("PhoneNumber is null");
         
         var result = await buyFromSiteRepository.GetImageForAthleteQuestion(wPkey,id);
 

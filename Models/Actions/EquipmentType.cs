@@ -10,6 +10,7 @@
         BENCH,               // نیمکت
         BANDS,               // کش 
         BODYWEIGHT,          // وزن بدن
-        OTHER                // موارد دیگر
+        OTHER  ,              // موارد دیگر
+        STEP /// استپ 
     }
 }

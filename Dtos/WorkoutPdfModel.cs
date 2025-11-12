@@ -13,6 +13,7 @@ public class WorkoutPdfModel
     public string ProgramDuration { get; set; }
     public string ProgramPriorities { get; set; }
     public List<WorkoutDayModel> WorkoutDays { get; set; } = new();
+    public string AthleteName { get; set; }
 }
 public class WorkoutDayModel
 {
@@ -23,7 +24,8 @@ public class WorkoutDayModel
 public class ExerciseModel
 {
     public string Name { get; set; }
-    public int Set { get; set; }
-    public string Rep { get; set; }
+    public required List<int> Reps { get; set; }
+    public string Description { get; set; } = "";
+    public required string RepType { get; set; }
     public string slug { get; set; }
 }
