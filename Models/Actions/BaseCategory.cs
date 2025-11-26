@@ -15,6 +15,7 @@
         ABSLOWERBACK,   // شکم و فیله
         ABDDUCTORS,     // داخل و خارج ران
         LATSUPPERBACK ,  // زیربغل و بالای کمر
-        CARDIO
+        CARDIO , //هوازی 
+        STRETCH, //اصلاحی
     }
 }
