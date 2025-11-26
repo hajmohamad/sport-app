@@ -323,7 +323,7 @@ namespace sport_app_backend.Repository
             var coachingService = user.Coach.CoachingServices.Where(x => !x.IsDeleted).ToList();
             var coachingServiceDto = coachingService.Select(x => x.ToCoachingServiceResponse()).ToList();
             var payments = await context.Payments.Include(p => p.Athlete).ThenInclude(u => u.User)
-                .OrderBy(c => c.PaymentDate)
+                .OrderByDescending(c => c.PaymentDate)
                 .Include(p => p.WorkoutProgram).Where(p =>
                     p.CoachId == user.Coach.Id && p.PaymentStatus == PaymentStatus.SUCCESS)
                 .ToListAsync();
@@ -377,9 +377,8 @@ namespace sport_app_backend.Repository
                             Message = "athlete not found"
                         };
                     }
-                    var appFee = workoutProgram.Payment.AppFee < 50000 ? 50000 : workoutProgram.Payment.AppFee;
-                    
-                    coach.Amount += (workoutProgram.Payment.Amount - appFee);                    var athleteImg = await context.AthleteImage
+                    coach.Amount += (workoutProgram.Payment.Amount - workoutProgram.Payment.AppFee);              
+                    var athleteImg = await context.AthleteImage
                         .Where(a => a.AthleteQuestionId == workoutProgram.Payment.AthleteQuestionId)
                         .FirstOrDefaultAsync();
                     if (athleteImg?.SideLink != null)
@@ -780,7 +779,7 @@ namespace sport_app_backend.Repository
 
                 return new TransactionDto
                 {
-                    Amount = p.Amount- p.AppFee, 
+                    Amount = p.Amount, 
                     Type = "افزایش",
                     Date = p.PaymentDate.ToString(CultureInfo.CurrentCulture),
                     Description = $"خرید سرویس {p.CoachService.Title}",

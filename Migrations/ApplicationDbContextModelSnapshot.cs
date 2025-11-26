@@ -671,18 +671,12 @@ namespace sport_app_backend.Migrations
                     b.Property<int>("ProgramInDayId")
                         .HasColumnType("int");
 
-                    b.Property<int>("Rep")
-                        .HasColumnType("int");
-
                     b.Property<int?>("RepType")
                         .HasColumnType("int");
 
                     b.Property<string>("RepsJson")
                         .HasMaxLength(100)
                         .HasColumnType("varchar(100)");
-
-                    b.Property<int>("Set")
-                        .HasColumnType("int");
 
                     b.HasKey("Id");
 

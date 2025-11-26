@@ -499,7 +499,7 @@
     </routine>
     <schema id="191" parent="1" name="main">
       <Current>1</Current>
-      <LastIntrospectionLocalTimestamp>2025-10-09.10:21:11</LastIntrospectionLocalTimestamp>
+      <LastIntrospectionLocalTimestamp>2025-11-25.12:12:48</LastIntrospectionLocalTimestamp>
     </schema>
     <argument id="192" parent="16">
       <ArgumentDirection>R</ArgumentDirection>
@@ -1608,1204 +1608,1199 @@
     <table id="570" parent="191" name="InjuryAreas"/>
     <table id="571" parent="191" name="Payments"/>
     <table id="572" parent="191" name="ProgramInDays"/>
-    <table id="573" parent="191" name="SingleExercises"/>
-    <table id="574" parent="191" name="SupportApp"/>
-    <table id="575" parent="191" name="TrainingSessions"/>
-    <table id="576" parent="191" name="Users"/>
-    <table id="577" parent="191" name="WaterInDays"/>
-    <table id="578" parent="191" name="WaterInTakes"/>
-    <table id="579" parent="191" name="WeightEntries"/>
-    <table id="580" parent="191" name="WorkoutPrograms"/>
-    <table id="581" parent="191" name="__EFMigrationsHistory"/>
-    <table id="582" parent="191" name="sqlite_master">
+    <table id="573" parent="191" name="PushSubscriptions"/>
+    <table id="574" parent="191" name="SingleExercises"/>
+    <table id="575" parent="191" name="SupportApp"/>
+    <table id="576" parent="191" name="TrainingSessions"/>
+    <table id="577" parent="191" name="Users"/>
+    <table id="578" parent="191" name="WaterInDays"/>
+    <table id="579" parent="191" name="WaterInTakes"/>
+    <table id="580" parent="191" name="WeightEntries"/>
+    <table id="581" parent="191" name="WorkoutPrograms"/>
+    <table id="582" parent="191" name="__EFMigrationsHistory"/>
+    <table id="583" parent="191" name="sqlite_master">
       <System>1</System>
     </table>
-    <table id="583" parent="191" name="sqlite_sequence">
+    <table id="584" parent="191" name="sqlite_sequence">
       <System>1</System>
     </table>
-    <column id="584" parent="555" name="Id">
+    <column id="585" parent="555" name="Id">
       <AutoIncrement>1</AutoIncrement>
       <NotNull>1</NotNull>
       <Position>1</Position>
       <StoredType>INTEGER|0s</StoredType>
     </column>
-    <column id="585" parent="555" name="Name">
+    <column id="586" parent="555" name="Name">
       <Position>2</Position>
       <StoredType>TEXT|0s</StoredType>
     </column>
-    <column id="586" parent="555" name="ActivityCategory">
+    <column id="587" parent="555" name="ActivityCategory">
       <NotNull>1</NotNull>
       <Position>3</Position>
       <StoredType>INTEGER|0s</StoredType>
     </column>
-    <column id="587" parent="555" name="CaloriesLost">
+    <column id="588" parent="555" name="CaloriesLost">
       <NotNull>1</NotNull>
       <Position>4</Position>
       <StoredType>REAL|0s</StoredType>
     </column>
-    <column id="588" parent="555" name="Duration">
+    <column id="589" parent="555" name="Duration">
       <NotNull>1</NotNull>
       <Position>5</Position>
       <StoredType>REAL|0s</StoredType>
     </column>
-    <column id="589" parent="555" name="Distance">
+    <column id="590" parent="555" name="Distance">
       <NotNull>1</NotNull>
       <Position>6</Position>
       <StoredType>REAL|0s</StoredType>
     </column>
-    <column id="590" parent="555" name="Date">
+    <column id="591" parent="555" name="Date">
       <NotNull>1</NotNull>
       <Position>7</Position>
       <StoredType>date|0s</StoredType>
     </column>
-    <column id="591" parent="555" name="AthleteId">
+    <column id="592" parent="555" name="AthleteId">
       <NotNull>1</NotNull>
       <Position>8</Position>
       <StoredType>INTEGER|0s</StoredType>
     </column>
-    <foreign-key id="592" parent="555" name="FK_Activities_Athletes_AthleteId">
+    <foreign-key id="593" parent="555" name="FK_Activities_Athletes_AthleteId">
       <ColNames>AthleteId</ColNames>
       <OnDelete>cascade</OnDelete>
       <RefColNames>Id</RefColNames>
       <RefTableName>Athletes</RefTableName>
     </foreign-key>
-    <index id="593" parent="555" name="IX_Activities_AthleteId">
+    <index id="594" parent="555" name="IX_Activities_AthleteId">
       <ColNames>AthleteId</ColNames>
     </index>
-    <key id="594" parent="555" name="PK_Activities">
+    <key id="595" parent="555" name="PK_Activities">
       <ColNames>Id</ColNames>
       <Primary>1</Primary>
     </key>
-    <column id="595" parent="556" name="Id">
+    <column id="596" parent="556" name="Id">
       <AutoIncrement>1</AutoIncrement>
       <NotNull>1</NotNull>
       <Position>1</Position>
       <StoredType>INTEGER|0s</StoredType>
     </column>
-    <column id="596" parent="556" name="Question">
+    <column id="597" parent="556" name="Question">
       <NotNull>1</NotNull>
       <Position>2</Position>
       <StoredType>TEXT|0s</StoredType>
     </column>
-    <column id="597" parent="556" name="Answer">
+    <column id="598" parent="556" name="Answer">
       <NotNull>1</NotNull>
       <Position>3</Position>
       <StoredType>TEXT|0s</StoredType>
     </column>
-    <key id="598" parent="556" name="PK_AthleteFaq">
+    <key id="599" parent="556" name="PK_AthleteFaq">
       <ColNames>Id</ColNames>
       <Primary>1</Primary>
     </key>
-    <column id="599" parent="557" name="Id">
+    <column id="600" parent="557" name="Id">
       <AutoIncrement>1</AutoIncrement>
       <NotNull>1</NotNull>
       <Position>1</Position>
       <StoredType>INTEGER|0s</StoredType>
     </column>
-    <column id="600" parent="557" name="AthleteId">
+    <column id="601" parent="557" name="AthleteId">
       <NotNull>1</NotNull>
       <Position>2</Position>
       <StoredType>INTEGER|0s</StoredType>
     </column>
-    <column id="601" parent="557" name="AthleteQuestionId">
+    <column id="602" parent="557" name="AthleteQuestionId">
       <Position>3</Position>
       <StoredType>INTEGER|0s</StoredType>
     </column>
-    <column id="602" parent="557" name="FrontLink">
+    <column id="603" parent="557" name="FrontLink">
       <Position>4</Position>
       <StoredType>TEXT|0s</StoredType>
     </column>
-    <column id="603" parent="557" name="BackLink">
+    <column id="604" parent="557" name="BackLink">
       <Position>5</Position>
       <StoredType>TEXT|0s</StoredType>
     </column>
-    <column id="604" parent="557" name="SideLink">
+    <column id="605" parent="557" name="SideLink">
       <Position>6</Position>
       <StoredType>TEXT|0s</StoredType>
     </column>
-    <foreign-key id="605" parent="557" name="FK_AthleteImage_AthleteQuestions_AthleteQuestionId">
+    <foreign-key id="606" parent="557" name="FK_AthleteImage_AthleteQuestions_AthleteQuestionId">
       <ColNames>AthleteQuestionId</ColNames>
       <RefColNames>Id</RefColNames>
       <RefTableName>AthleteQuestions</RefTableName>
     </foreign-key>
-    <index id="606" parent="557" name="IX_AthleteImage_AthleteQuestionId">
+    <index id="607" parent="557" name="IX_AthleteImage_AthleteQuestionId">
       <ColNames>AthleteQuestionId</ColNames>
       <Unique>1</Unique>
     </index>
-    <key id="607" parent="557" name="PK_AthleteImage">
+    <key id="608" parent="557" name="PK_AthleteImage">
       <ColNames>Id</ColNames>
       <Primary>1</Primary>
     </key>
-    <column id="608" parent="558" name="Id">
+    <column id="609" parent="558" name="Id">
       <AutoIncrement>1</AutoIncrement>
       <NotNull>1</NotNull>
       <Position>1</Position>
       <StoredType>INTEGER|0s</StoredType>
     </column>
-    <column id="609" parent="558" name="AthleteId">
+    <column id="610" parent="558" name="AthleteId">
       <NotNull>1</NotNull>
       <Position>2</Position>
       <StoredType>INTEGER|0s</StoredType>
     </column>
-    <column id="610" parent="558" name="CreatedAt">
+    <column id="611" parent="558" name="CreatedAt">
       <NotNull>1</NotNull>
       <Position>3</Position>
       <StoredType>date|0s</StoredType>
     </column>
-    <column id="611" parent="558" name="FitnessLevel">
+    <column id="612" parent="558" name="FitnessLevel">
       <Position>4</Position>
       <StoredType>INTEGER|0s</StoredType>
     </column>
-    <column id="612" parent="558" name="CurrentBodyForm">
+    <column id="613" parent="558" name="CurrentBodyForm">
       <NotNull>1</NotNull>
       <Position>5</Position>
       <StoredType>INTEGER|0s</StoredType>
     </column>
-    <column id="613" parent="558" name="DaysPerWeekToExercise">
+    <column id="614" parent="558" name="DaysPerWeekToExercise">
       <NotNull>1</NotNull>
       <Position>6</Position>
       <StoredType>INTEGER|0s</StoredType>
     </column>
-    <column id="614" parent="558" name="Weight">
+    <column id="615" parent="558" name="Weight">
       <NotNull>1</NotNull>
       <Position>7</Position>
       <StoredType>REAL|0s</StoredType>
     </column>
-    <column id="615" parent="558" name="ExerciseGoal">
+    <column id="616" parent="558" name="ExerciseGoal">
       <Position>8</Position>
       <StoredType>INTEGER|0s</StoredType>
     </column>
-    <foreign-key id="616" parent="558" name="FK_AthleteQuestions_Athletes_AthleteId">
+    <column id="617" parent="558" name="ExerciseLocation">
+      <DefaultExpression>0</DefaultExpression>
+      <NotNull>1</NotNull>
+      <Position>9</Position>
+      <StoredType>INTEGER|0s</StoredType>
+    </column>
+    <foreign-key id="618" parent="558" name="FK_AthleteQuestions_Athletes_AthleteId">
       <ColNames>AthleteId</ColNames>
       <OnDelete>cascade</OnDelete>
       <RefColNames>Id</RefColNames>
       <RefTableName>Athletes</RefTableName>
     </foreign-key>
-    <index id="617" parent="558" name="IX_AthleteQuestions_AthleteId">
+    <index id="619" parent="558" name="IX_AthleteQuestions_AthleteId">
       <ColNames>AthleteId</ColNames>
     </index>
-    <key id="618" parent="558" name="PK_AthleteQuestions">
+    <key id="620" parent="558" name="PK_AthleteQuestions">
       <ColNames>Id</ColNames>
       <Primary>1</Primary>
     </key>
-    <column id="619" parent="559" name="Id">
+    <column id="621" parent="559" name="Id">
       <AutoIncrement>1</AutoIncrement>
       <NotNull>1</NotNull>
       <Position>1</Position>
       <StoredType>INTEGER|0s</StoredType>
     </column>
-    <column id="620" parent="559" name="PhoneNumber">
+    <column id="622" parent="559" name="PhoneNumber">
       <NotNull>1</NotNull>
       <Position>2</Position>
       <StoredType>TEXT|0s</StoredType>
     </column>
-    <column id="621" parent="559" name="UserId">
+    <column id="623" parent="559" name="UserId">
       <NotNull>1</NotNull>
       <Position>3</Position>
       <StoredType>INTEGER|0s</StoredType>
     </column>
-    <column id="622" parent="559" name="Height">
+    <column id="624" parent="559" name="Height">
       <NotNull>1</NotNull>
       <Position>4</Position>
       <StoredType>INTEGER|0s</StoredType>
     </column>
-    <column id="623" parent="559" name="CurrentWeight">
+    <column id="625" parent="559" name="CurrentWeight">
       <NotNull>1</NotNull>
       <Position>5</Position>
       <StoredType>REAL|0s</StoredType>
     </column>
-    <column id="624" parent="559" name="WeightGoal">
+    <column id="626" parent="559" name="WeightGoal">
       <NotNull>1</NotNull>
       <Position>6</Position>
       <StoredType>REAL|0s</StoredType>
     </column>
-    <column id="625" parent="559" name="TimeBeforeWorkout">
+    <column id="627" parent="559" name="TimeBeforeWorkout">
       <NotNull>1</NotNull>
       <Position>7</Position>
       <StoredType>INTEGER|0s</StoredType>
     </column>
-    <column id="626" parent="559" name="RestTime">
+    <column id="628" parent="559" name="RestTime">
       <NotNull>1</NotNull>
       <Position>8</Position>
       <StoredType>INTEGER|0s</StoredType>
     </column>
-    <column id="627" parent="559" name="ActiveWorkoutProgramId">
+    <column id="629" parent="559" name="ActiveWorkoutProgramId">
       <NotNull>1</NotNull>
       <Position>9</Position>
       <StoredType>INTEGER|0s</StoredType>
     </column>
-    <foreign-key id="628" parent="559" name="FK_Athletes_Users_UserId">
+    <foreign-key id="630" parent="559" name="FK_Athletes_Users_UserId">
       <ColNames>UserId</ColNames>
       <OnDelete>cascade</OnDelete>
       <RefColNames>Id</RefColNames>
       <RefTableName>Users</RefTableName>
     </foreign-key>
-    <index id="629" parent="559" name="IX_Athletes_UserId">
+    <index id="631" parent="559" name="IX_Athletes_UserId">
       <ColNames>UserId</ColNames>
       <Unique>1</Unique>
     </index>
-    <key id="630" parent="559" name="PK_Athletes">
+    <key id="632" parent="559" name="PK_Athletes">
       <ColNames>Id</ColNames>
       <Primary>1</Primary>
     </key>
-    <column id="631" parent="560" name="Id">
+    <column id="633" parent="560" name="Id">
       <AutoIncrement>1</AutoIncrement>
       <NotNull>1</NotNull>
       <Position>1</Position>
       <StoredType>INTEGER|0s</StoredType>
     </column>
-    <column id="632" parent="560" name="AthleteId">
+    <column id="634" parent="560" name="AthleteId">
       <NotNull>1</NotNull>
       <Position>2</Position>
       <StoredType>INTEGER|0s</StoredType>
     </column>
-    <column id="633" parent="560" name="ChallengeType">
+    <column id="635" parent="560" name="ChallengeType">
       <NotNull>1</NotNull>
       <Position>3</Position>
       <StoredType>INTEGER|0s</StoredType>
     </column>
-    <column id="634" parent="560" name="CompletedAt">
+    <column id="636" parent="560" name="CompletedAt">
       <NotNull>1</NotNull>
       <Position>4</Position>
       <StoredType>TEXT|0s</StoredType>
     </column>
-    <foreign-key id="635" parent="560" name="FK_Challenges_Athletes_AthleteId">
+    <foreign-key id="637" parent="560" name="FK_Challenges_Athletes_AthleteId">
       <ColNames>AthleteId</ColNames>
       <OnDelete>cascade</OnDelete>
       <RefColNames>Id</RefColNames>
       <RefTableName>Athletes</RefTableName>
     </foreign-key>
-    <index id="636" parent="560" name="IX_Challenges_AthleteId">
+    <index id="638" parent="560" name="IX_Challenges_AthleteId">
       <ColNames>AthleteId</ColNames>
     </index>
-    <key id="637" parent="560" name="PK_Challenges">
+    <key id="639" parent="560" name="PK_Challenges">
       <ColNames>Id</ColNames>
       <Primary>1</Primary>
     </key>
-    <column id="638" parent="561" name="Id">
+    <column id="640" parent="561" name="Id">
       <AutoIncrement>1</AutoIncrement>
       <NotNull>1</NotNull>
       <Position>1</Position>
       <StoredType>INTEGER|0s</StoredType>
     </column>
-    <column id="639" parent="561" name="Question">
+    <column id="641" parent="561" name="Question">
       <NotNull>1</NotNull>
       <Position>2</Position>
       <StoredType>TEXT|0s</StoredType>
     </column>
-    <column id="640" parent="561" name="Answer">
+    <column id="642" parent="561" name="Answer">
       <NotNull>1</NotNull>
       <Position>3</Position>
       <StoredType>TEXT|0s</StoredType>
     </column>
-    <key id="641" parent="561" name="PK_CoachFaq">
+    <key id="643" parent="561" name="PK_CoachFaq">
       <ColNames>Id</ColNames>
       <Primary>1</Primary>
     </key>
-    <column id="642" parent="562" name="Id">
+    <column id="644" parent="562" name="Id">
       <AutoIncrement>1</AutoIncrement>
       <NotNull>1</NotNull>
       <Position>1</Position>
       <StoredType>INTEGER|0s</StoredType>
     </column>
-    <column id="643" parent="562" name="CoachId">
+    <column id="645" parent="562" name="Amount">
       <NotNull>1</NotNull>
       <Position>2</Position>
-      <StoredType>INTEGER|0s</StoredType>
-    </column>
-    <column id="644" parent="562" name="Amount">
-      <NotNull>1</NotNull>
-      <Position>3</Position>
       <StoredType>REAL|0s</StoredType>
     </column>
-    <column id="645" parent="562" name="RequestDate">
+    <column id="646" parent="562" name="CoachId">
       <NotNull>1</NotNull>
+      <Position>3</Position>
+      <StoredType>INTEGER|0s</StoredType>
+    </column>
+    <column id="647" parent="562" name="Imagelink">
       <Position>4</Position>
       <StoredType>TEXT|0s</StoredType>
     </column>
-    <column id="646" parent="562" name="Status">
-      <NotNull>1</NotNull>
+    <column id="648" parent="562" name="PaidDate">
       <Position>5</Position>
-      <StoredType>INTEGER|0s</StoredType>
+      <StoredType>TEXT|0s</StoredType>
     </column>
-    <column id="647" parent="562" name="PaidDate">
+    <column id="649" parent="562" name="RequestDate">
+      <NotNull>1</NotNull>
       <Position>6</Position>
       <StoredType>TEXT|0s</StoredType>
     </column>
-    <column id="648" parent="562" name="TransactionReference">
+    <column id="650" parent="562" name="Status">
+      <NotNull>1</NotNull>
       <Position>7</Position>
+      <StoredType>INTEGER|0s</StoredType>
+    </column>
+    <column id="651" parent="562" name="TransactionReference">
+      <Position>8</Position>
       <StoredType>TEXT|0s</StoredType>
     </column>
-    <foreign-key id="649" parent="562" name="FK_CoachPayouts_Coaches_CoachId">
+    <foreign-key id="652" parent="562" name="FK_CoachPayouts_Coaches_CoachId">
       <ColNames>CoachId</ColNames>
       <OnDelete>cascade</OnDelete>
       <RefColNames>Id</RefColNames>
       <RefTableName>Coaches</RefTableName>
     </foreign-key>
-    <index id="650" parent="562" name="IX_CoachPayouts_CoachId">
+    <index id="653" parent="562" name="IX_CoachPayouts_CoachId">
       <ColNames>CoachId</ColNames>
     </index>
-    <key id="651" parent="562" name="PK_CoachPayouts">
+    <key id="654" parent="562" name="PK_CoachPayouts">
       <ColNames>Id</ColNames>
       <Primary>1</Primary>
     </key>
-    <column id="652" parent="563" name="Id">
+    <column id="655" parent="563" name="Id">
       <AutoIncrement>1</AutoIncrement>
       <NotNull>1</NotNull>
       <Position>1</Position>
       <StoredType>INTEGER|0s</StoredType>
     </column>
-    <column id="653" parent="563" name="UserId">
+    <column id="656" parent="563" name="UserId">
       <NotNull>1</NotNull>
       <Position>2</Position>
       <StoredType>INTEGER|0s</StoredType>
     </column>
-    <column id="654" parent="563" name="Disciplines">
+    <column id="657" parent="563" name="Disciplines">
       <NotNull>1</NotNull>
       <Position>3</Position>
       <StoredType>TEXT|0s</StoredType>
     </column>
-    <column id="655" parent="563" name="Motivations">
+    <column id="658" parent="563" name="Motivations">
       <NotNull>1</NotNull>
       <Position>4</Position>
       <StoredType>TEXT|0s</StoredType>
     </column>
-    <column id="656" parent="563" name="WorkOnlineWithAthletes">
+    <column id="659" parent="563" name="WorkOnlineWithAthletes">
       <NotNull>1</NotNull>
       <Position>5</Position>
       <StoredType>INTEGER|0s</StoredType>
     </column>
-    <column id="657" parent="563" name="PresentsPracticeProgram">
+    <column id="660" parent="563" name="PresentsPracticeProgram">
       <NotNull>1</NotNull>
       <Position>6</Position>
       <StoredType>TEXT|0s</StoredType>
     </column>
-    <column id="658" parent="563" name="TrackAthlete">
+    <column id="661" parent="563" name="TrackAthlete">
       <Position>7</Position>
       <StoredType>INTEGER|0s</StoredType>
     </column>
-    <column id="659" parent="563" name="ManagingRevenue">
+    <column id="662" parent="563" name="ManagingRevenue">
       <Position>8</Position>
       <StoredType>INTEGER|0s</StoredType>
     </column>
-    <column id="660" parent="563" name="DifficultTrackAthletes">
+    <column id="663" parent="563" name="DifficultTrackAthletes">
       <NotNull>1</NotNull>
       <Position>9</Position>
       <StoredType>INTEGER|0s</StoredType>
     </column>
-    <column id="661" parent="563" name="HardCommunicationWithAthletes">
+    <column id="664" parent="563" name="HardCommunicationWithAthletes">
       <NotNull>1</NotNull>
       <Position>10</Position>
       <StoredType>INTEGER|0s</StoredType>
     </column>
-    <foreign-key id="662" parent="563" name="FK_CoachQuestions_Users_UserId">
+    <foreign-key id="665" parent="563" name="FK_CoachQuestions_Users_UserId">
       <ColNames>UserId</ColNames>
       <OnDelete>cascade</OnDelete>
       <RefColNames>Id</RefColNames>
       <RefTableName>Users</RefTableName>
     </foreign-key>
-    <index id="663" parent="563" name="IX_CoachQuestions_UserId">
+    <index id="666" parent="563" name="IX_CoachQuestions_UserId">
       <ColNames>UserId</ColNames>
     </index>
-    <key id="664" parent="563" name="PK_CoachQuestions">
+    <key id="667" parent="563" name="PK_CoachQuestions">
       <ColNames>Id</ColNames>
       <Primary>1</Primary>
     </key>
-    <column id="665" parent="564" name="Id">
+    <column id="668" parent="564" name="Id">
       <AutoIncrement>1</AutoIncrement>
       <NotNull>1</NotNull>
       <Position>1</Position>
       <StoredType>INTEGER|0s</StoredType>
     </column>
-    <column id="666" parent="564" name="CoachId">
+    <column id="669" parent="564" name="CoachId">
       <NotNull>1</NotNull>
       <Position>2</Position>
       <StoredType>INTEGER|0s</StoredType>
     </column>
-    <column id="667" parent="564" name="CreatedDate">
+    <column id="670" parent="564" name="CreatedDate">
       <NotNull>1</NotNull>
       <Position>3</Position>
       <StoredType>date|0s</StoredType>
     </column>
-    <column id="668" parent="564" name="Description">
+    <column id="671" parent="564" name="Description">
       <NotNull>1</NotNull>
       <Position>4</Position>
       <StoredType>TEXT|0s</StoredType>
     </column>
-    <column id="669" parent="564" name="HaveSupport">
+    <column id="672" parent="564" name="HaveSupport">
       <NotNull>1</NotNull>
       <Position>5</Position>
       <StoredType>INTEGER|0s</StoredType>
     </column>
-    <column id="670" parent="564" name="IsActive">
+    <column id="673" parent="564" name="IsActive">
       <NotNull>1</NotNull>
       <Position>6</Position>
       <StoredType>INTEGER|0s</StoredType>
     </column>
-    <column id="671" parent="564" name="IsDeleted">
+    <column id="674" parent="564" name="IsDeleted">
       <NotNull>1</NotNull>
       <Position>7</Position>
       <StoredType>INTEGER|0s</StoredType>
     </column>
-    <column id="672" parent="564" name="NumberOfSell">
+    <column id="675" parent="564" name="NumberOfSell">
       <NotNull>1</NotNull>
       <Position>8</Position>
       <StoredType>INTEGER|0s</StoredType>
     </column>
-    <column id="673" parent="564" name="Price">
+    <column id="676" parent="564" name="Price">
       <NotNull>1</NotNull>
       <Position>9</Position>
       <StoredType>REAL|0s</StoredType>
     </column>
-    <column id="674" parent="564" name="Title">
+    <column id="677" parent="564" name="Title">
       <NotNull>1</NotNull>
       <Position>10</Position>
       <StoredType>TEXT|0s</StoredType>
     </column>
-    <foreign-key id="675" parent="564" name="FK_CoachServices_Coaches_CoachId">
+    <foreign-key id="678" parent="564" name="FK_CoachServices_Coaches_CoachId">
       <ColNames>CoachId</ColNames>
       <OnDelete>cascade</OnDelete>
       <RefColNames>Id</RefColNames>
       <RefTableName>Coaches</RefTableName>
     </foreign-key>
-    <index id="676" parent="564" name="IX_CoachServices_CoachId">
+    <index id="679" parent="564" name="IX_CoachServices_CoachId">
       <ColNames>CoachId</ColNames>
     </index>
-    <key id="677" parent="564" name="PK_CoachServices">
+    <key id="680" parent="564" name="PK_CoachServices">
       <ColNames>Id</ColNames>
       <Primary>1</Primary>
     </key>
-    <column id="678" parent="565" name="Id">
+    <column id="681" parent="565" name="Id">
       <AutoIncrement>1</AutoIncrement>
       <NotNull>1</NotNull>
       <Position>1</Position>
       <StoredType>INTEGER|0s</StoredType>
     </column>
-    <column id="679" parent="565" name="UserId">
+    <column id="682" parent="565" name="UserId">
       <NotNull>1</NotNull>
       <Position>2</Position>
       <StoredType>INTEGER|0s</StoredType>
     </column>
-    <column id="680" parent="565" name="PhoneNumber">
+    <column id="683" parent="565" name="PhoneNumber">
       <NotNull>1</NotNull>
       <Position>3</Position>
       <StoredType>TEXT|0s</StoredType>
     </column>
-    <column id="681" parent="565" name="CoachQuestionId">
+    <column id="684" parent="565" name="CoachQuestionId">
       <Position>4</Position>
       <StoredType>INTEGER|0s</StoredType>
     </column>
-    <column id="682" parent="565" name="InstagramLink">
+    <column id="685" parent="565" name="InstagramLink">
       <NotNull>1</NotNull>
       <Position>5</Position>
       <StoredType>TEXT|0s</StoredType>
     </column>
-    <column id="683" parent="565" name="TelegramLink">
+    <column id="686" parent="565" name="TelegramLink">
       <NotNull>1</NotNull>
       <Position>6</Position>
       <StoredType>TEXT|0s</StoredType>
     </column>
-    <column id="684" parent="565" name="WhatsApp">
+    <column id="687" parent="565" name="WhatsApp">
       <NotNull>1</NotNull>
       <Position>7</Position>
       <StoredType>TEXT|0s</StoredType>
     </column>
-    <column id="685" parent="565" name="Verified">
+    <column id="688" parent="565" name="Verified">
       <NotNull>1</NotNull>
       <Position>8</Position>
       <StoredType>INTEGER|0s</StoredType>
     </column>
-    <column id="686" parent="565" name="HeadLine">
+    <column id="689" parent="565" name="HeadLine">
       <NotNull>1</NotNull>
       <Position>9</Position>
       <StoredType>TEXT|0s</StoredType>
     </column>
-    <column id="687" parent="565" name="Amount">
+    <column id="690" parent="565" name="Amount">
       <NotNull>1</NotNull>
       <Position>10</Position>
       <StoredType>REAL|0s</StoredType>
     </column>
-    <column id="688" parent="565" name="ServiceFee">
+    <column id="691" parent="565" name="ServiceFee">
       <NotNull>1</NotNull>
       <Position>11</Position>
       <StoredType>REAL|0s</StoredType>
     </column>
-    <foreign-key id="689" parent="565" name="FK_Coaches_Users_UserId">
+    <foreign-key id="692" parent="565" name="FK_Coaches_Users_UserId">
       <ColNames>UserId</ColNames>
       <OnDelete>cascade</OnDelete>
       <RefColNames>Id</RefColNames>
       <RefTableName>Users</RefTableName>
     </foreign-key>
-    <foreign-key id="690" parent="565" name="FK_Coaches_CoachQuestions_CoachQuestionId">
+    <foreign-key id="693" parent="565" name="FK_Coaches_CoachQuestions_CoachQuestionId">
       <ColNames>CoachQuestionId</ColNames>
       <RefColNames>Id</RefColNames>
       <RefTableName>CoachQuestions</RefTableName>
     </foreign-key>
-    <index id="691" parent="565" name="IX_Coaches_UserId">
+    <index id="694" parent="565" name="IX_Coaches_UserId">
       <ColNames>UserId</ColNames>
       <Unique>1</Unique>
     </index>
-    <index id="692" parent="565" name="IX_Coaches_CoachQuestionId">
+    <index id="695" parent="565" name="IX_Coaches_CoachQuestionId">
       <ColNames>CoachQuestionId</ColNames>
     </index>
-    <key id="693" parent="565" name="PK_Coaches">
+    <key id="696" parent="565" name="PK_Coaches">
       <ColNames>Id</ColNames>
       <Primary>1</Primary>
     </key>
-    <column id="694" parent="566" name="Id">
+    <column id="697" parent="566" name="Id">
       <AutoIncrement>1</AutoIncrement>
       <NotNull>1</NotNull>
       <Position>1</Position>
       <StoredType>INTEGER|0s</StoredType>
     </column>
-    <column id="695" parent="566" name="PhoneNumber">
+    <column id="698" parent="566" name="PhoneNumber">
       <NotNull>1</NotNull>
       <Position>2</Position>
       <StoredType>TEXT|0s</StoredType>
     </column>
-    <column id="696" parent="566" name="Code">
+    <column id="699" parent="566" name="Code">
       <NotNull>1</NotNull>
       <Position>3</Position>
       <StoredType>TEXT|0s</StoredType>
     </column>
-    <column id="697" parent="566" name="TimeCodeSend">
+    <column id="700" parent="566" name="TimeCodeSend">
       <NotNull>1</NotNull>
       <Position>4</Position>
       <StoredType>TEXT|0s</StoredType>
     </column>
-    <key id="698" parent="566" name="PK_CodeVerifies">
+    <key id="701" parent="566" name="PK_CodeVerifies">
       <ColNames>Id</ColNames>
       <Primary>1</Primary>
     </key>
-    <column id="699" parent="567" name="Id">
+    <column id="702" parent="567" name="Id">
       <AutoIncrement>1</AutoIncrement>
       <NotNull>1</NotNull>
       <Position>1</Position>
       <StoredType>INTEGER|0s</StoredType>
     </column>
-    <column id="700" parent="567" name="SingleExerciseId">
+    <column id="703" parent="567" name="SingleExerciseId">
       <NotNull>1</NotNull>
       <Position>2</Position>
       <StoredType>INTEGER|0s</StoredType>
     </column>
-    <column id="701" parent="567" name="Reason">
+    <column id="704" parent="567" name="Reason">
       <NotNull>1</NotNull>
       <Position>3</Position>
       <StoredType>INTEGER|0s</StoredType>
     </column>
-    <column id="702" parent="567" name="AthleteId">
+    <column id="705" parent="567" name="AthleteId">
       <NotNull>1</NotNull>
       <Position>4</Position>
       <StoredType>INTEGER|0s</StoredType>
     </column>
-    <column id="703" parent="567" name="CoachId">
+    <column id="706" parent="567" name="CoachId">
       <NotNull>1</NotNull>
       <Position>5</Position>
       <StoredType>INTEGER|0s</StoredType>
     </column>
-    <column id="704" parent="567" name="TrainingSessionId">
+    <column id="707" parent="567" name="TrainingSessionId">
       <NotNull>1</NotNull>
       <Position>6</Position>
       <StoredType>INTEGER|0s</StoredType>
     </column>
-    <foreign-key id="705" parent="567" name="FK_ExerciseChangeRequests_SingleExercises_SingleExerciseId">
+    <foreign-key id="708" parent="567" name="FK_ExerciseChangeRequests_SingleExercises_SingleExerciseId">
       <ColNames>SingleExerciseId</ColNames>
       <OnDelete>cascade</OnDelete>
       <RefColNames>Id</RefColNames>
       <RefTableName>SingleExercises</RefTableName>
     </foreign-key>
-    <foreign-key id="706" parent="567" name="FK_ExerciseChangeRequests_Athletes_AthleteId">
+    <foreign-key id="709" parent="567" name="FK_ExerciseChangeRequests_Athletes_AthleteId">
       <ColNames>AthleteId</ColNames>
       <OnDelete>cascade</OnDelete>
       <RefColNames>Id</RefColNames>
       <RefTableName>Athletes</RefTableName>
     </foreign-key>
-    <foreign-key id="707" parent="567" name="FK_ExerciseChangeRequests_Coaches_CoachId">
+    <foreign-key id="710" parent="567" name="FK_ExerciseChangeRequests_Coaches_CoachId">
       <ColNames>CoachId</ColNames>
       <OnDelete>cascade</OnDelete>
       <RefColNames>Id</RefColNames>
       <RefTableName>Coaches</RefTableName>
     </foreign-key>
-    <foreign-key id="708" parent="567" name="FK_ExerciseChangeRequests_TrainingSessions_TrainingSessionId">
+    <foreign-key id="711" parent="567" name="FK_ExerciseChangeRequests_TrainingSessions_TrainingSessionId">
       <ColNames>TrainingSessionId</ColNames>
       <OnDelete>cascade</OnDelete>
       <RefColNames>Id</RefColNames>
       <RefTableName>TrainingSessions</RefTableName>
     </foreign-key>
-    <index id="709" parent="567" name="IX_ExerciseChangeRequests_SingleExerciseId">
+    <index id="712" parent="567" name="IX_ExerciseChangeRequests_SingleExerciseId">
       <ColNames>SingleExerciseId</ColNames>
     </index>
-    <index id="710" parent="567" name="IX_ExerciseChangeRequests_AthleteId">
+    <index id="713" parent="567" name="IX_ExerciseChangeRequests_AthleteId">
       <ColNames>AthleteId</ColNames>
     </index>
-    <index id="711" parent="567" name="IX_ExerciseChangeRequests_CoachId">
+    <index id="714" parent="567" name="IX_ExerciseChangeRequests_CoachId">
       <ColNames>CoachId</ColNames>
     </index>
-    <index id="712" parent="567" name="IX_ExerciseChangeRequests_TrainingSessionId">
+    <index id="715" parent="567" name="IX_ExerciseChangeRequests_TrainingSessionId">
       <ColNames>TrainingSessionId</ColNames>
     </index>
-    <key id="713" parent="567" name="PK_ExerciseChangeRequests">
+    <key id="716" parent="567" name="PK_ExerciseChangeRequests">
       <ColNames>Id</ColNames>
       <Primary>1</Primary>
     </key>
-    <column id="714" parent="568" name="Id">
+    <column id="717" parent="568" name="Id">
       <AutoIncrement>1</AutoIncrement>
       <NotNull>1</NotNull>
       <Position>1</Position>
       <StoredType>INTEGER|0s</StoredType>
     </column>
-    <column id="715" parent="568" name="SingleExerciseId">
+    <column id="718" parent="568" name="SingleExerciseId">
       <NotNull>1</NotNull>
       <Position>2</Position>
       <StoredType>INTEGER|0s</StoredType>
     </column>
-    <column id="716" parent="568" name="IsPositive">
+    <column id="719" parent="568" name="IsPositive">
       <NotNull>1</NotNull>
       <Position>3</Position>
       <StoredType>INTEGER|0s</StoredType>
     </column>
-    <column id="717" parent="568" name="NegativeReason">
+    <column id="720" parent="568" name="NegativeReason">
       <Position>4</Position>
       <StoredType>INTEGER|0s</StoredType>
     </column>
-    <column id="718" parent="568" name="AthleteId">
+    <column id="721" parent="568" name="AthleteId">
       <NotNull>1</NotNull>
       <Position>5</Position>
       <StoredType>INTEGER|0s</StoredType>
     </column>
-    <column id="719" parent="568" name="CoachId">
+    <column id="722" parent="568" name="CoachId">
       <NotNull>1</NotNull>
       <Position>6</Position>
       <StoredType>INTEGER|0s</StoredType>
     </column>
-    <column id="720" parent="568" name="TrainingSessionId">
+    <column id="723" parent="568" name="TrainingSessionId">
       <NotNull>1</NotNull>
       <Position>7</Position>
       <StoredType>INTEGER|0s</StoredType>
     </column>
-    <foreign-key id="721" parent="568" name="FK_ExerciseFeedbacks_SingleExercises_SingleExerciseId">
+    <foreign-key id="724" parent="568" name="FK_ExerciseFeedbacks_SingleExercises_SingleExerciseId">
       <ColNames>SingleExerciseId</ColNames>
       <OnDelete>cascade</OnDelete>
       <RefColNames>Id</RefColNames>
       <RefTableName>SingleExercises</RefTableName>
     </foreign-key>
-    <foreign-key id="722" parent="568" name="FK_ExerciseFeedbacks_Athletes_AthleteId">
+    <foreign-key id="725" parent="568" name="FK_ExerciseFeedbacks_Athletes_AthleteId">
       <ColNames>AthleteId</ColNames>
       <OnDelete>cascade</OnDelete>
       <RefColNames>Id</RefColNames>
       <RefTableName>Athletes</RefTableName>
     </foreign-key>
-    <foreign-key id="723" parent="568" name="FK_ExerciseFeedbacks_Coaches_CoachId">
+    <foreign-key id="726" parent="568" name="FK_ExerciseFeedbacks_Coaches_CoachId">
       <ColNames>CoachId</ColNames>
       <OnDelete>cascade</OnDelete>
       <RefColNames>Id</RefColNames>
       <RefTableName>Coaches</RefTableName>
     </foreign-key>
-    <foreign-key id="724" parent="568" name="FK_ExerciseFeedbacks_TrainingSessions_TrainingSessionId">
+    <foreign-key id="727" parent="568" name="FK_ExerciseFeedbacks_TrainingSessions_TrainingSessionId">
       <ColNames>TrainingSessionId</ColNames>
       <OnDelete>cascade</OnDelete>
       <RefColNames>Id</RefColNames>
       <RefTableName>TrainingSessions</RefTableName>
     </foreign-key>
-    <index id="725" parent="568" name="IX_ExerciseFeedbacks_SingleExerciseId">
+    <index id="728" parent="568" name="IX_ExerciseFeedbacks_SingleExerciseId">
       <ColNames>SingleExerciseId</ColNames>
     </index>
-    <index id="726" parent="568" name="IX_ExerciseFeedbacks_AthleteId">
+    <index id="729" parent="568" name="IX_ExerciseFeedbacks_AthleteId">
       <ColNames>AthleteId</ColNames>
     </index>
-    <index id="727" parent="568" name="IX_ExerciseFeedbacks_CoachId">
+    <index id="730" parent="568" name="IX_ExerciseFeedbacks_CoachId">
       <ColNames>CoachId</ColNames>
     </index>
-    <index id="728" parent="568" name="IX_ExerciseFeedbacks_TrainingSessionId">
+    <index id="731" parent="568" name="IX_ExerciseFeedbacks_TrainingSessionId">
       <ColNames>TrainingSessionId</ColNames>
     </index>
-    <key id="729" parent="568" name="PK_ExerciseFeedbacks">
+    <key id="732" parent="568" name="PK_ExerciseFeedbacks">
       <ColNames>Id</ColNames>
       <Primary>1</Primary>
     </key>
-    <column id="730" parent="569" name="Id">
+    <column id="733" parent="569" name="Id">
       <AutoIncrement>1</AutoIncrement>
       <NotNull>1</NotNull>
       <Position>1</Position>
       <StoredType>INTEGER|0s</StoredType>
     </column>
-    <column id="731" parent="569" name="EnglishName">
+    <column id="734" parent="569" name="EnglishName">
       <NotNull>1</NotNull>
       <Position>2</Position>
       <StoredType>TEXT|0s</StoredType>
     </column>
-    <column id="732" parent="569" name="PersianName">
+    <column id="735" parent="569" name="PersianName">
       <NotNull>1</NotNull>
       <Position>3</Position>
       <StoredType>TEXT|0s</StoredType>
     </column>
-    <column id="733" parent="569" name="ImageLink">
+    <column id="736" parent="569" name="ImageLink">
       <NotNull>1</NotNull>
       <Position>4</Position>
       <StoredType>TEXT|0s</StoredType>
     </column>
-    <column id="734" parent="569" name="VideoLink">
+    <column id="737" parent="569" name="VideoLink">
       <NotNull>1</NotNull>
       <Position>5</Position>
       <StoredType>TEXT|0s</StoredType>
     </column>
-    <column id="735" parent="569" name="Description">
+    <column id="738" parent="569" name="Description">
       <NotNull>1</NotNull>
       <Position>6</Position>
       <StoredType>TEXT|0s</StoredType>
     </column>
-    <column id="736" parent="569" name="Met">
+    <column id="739" parent="569" name="Met">
       <NotNull>1</NotNull>
       <Position>7</Position>
       <StoredType>REAL|0s</StoredType>
     </column>
-    <column id="737" parent="569" name="ExerciseLevel">
+    <column id="740" parent="569" name="ExerciseLevel">
       <NotNull>1</NotNull>
       <Position>8</Position>
       <StoredType>INTEGER|0s</StoredType>
     </column>
-    <column id="738" parent="569" name="TargetMuscles">
+    <column id="741" parent="569" name="TargetMuscles">
       <NotNull>1</NotNull>
       <Position>9</Position>
       <StoredType>TEXT|0s</StoredType>
     </column>
-    <column id="739" parent="569" name="BaseMuscle">
+    <column id="742" parent="569" name="BaseMuscle">
       <NotNull>1</NotNull>
       <Position>10</Position>
       <StoredType>INTEGER|0s</StoredType>
     </column>
-    <column id="740" parent="569" name="BaseCategory">
+    <column id="743" parent="569" name="BaseCategory">
       <NotNull>1</NotNull>
       <Position>11</Position>
       <StoredType>INTEGER|0s</StoredType>
     </column>
-    <column id="741" parent="569" name="Mechanics">
+    <column id="744" parent="569" name="Mechanics">
       <NotNull>1</NotNull>
       <Position>12</Position>
       <StoredType>INTEGER|0s</StoredType>
     </column>
-    <column id="742" parent="569" name="ForceType">
+    <column id="745" parent="569" name="ForceType">
       <NotNull>1</NotNull>
       <Position>13</Position>
       <StoredType>INTEGER|0s</StoredType>
     </column>
-    <column id="743" parent="569" name="Views">
+    <column id="746" parent="569" name="Views">
       <NotNull>1</NotNull>
       <Position>14</Position>
       <StoredType>INTEGER|0s</StoredType>
     </column>
-    <column id="744" parent="569" name="ExerciseType">
+    <column id="747" parent="569" name="ExerciseType">
       <NotNull>1</NotNull>
       <Position>15</Position>
       <StoredType>INTEGER|0s</StoredType>
     </column>
-    <column id="745" parent="569" name="Equipment">
+    <column id="748" parent="569" name="Equipment">
       <NotNull>1</NotNull>
       <Position>16</Position>
       <StoredType>INTEGER|0s</StoredType>
     </column>
-    <column id="746" parent="569" name="Slug">
+    <column id="749" parent="569" name="Slug">
       <DefaultExpression>&apos;&apos;</DefaultExpression>
       <NotNull>1</NotNull>
       <Position>17</Position>
       <StoredType>TEXT|0s</StoredType>
     </column>
-    <key id="747" parent="569" name="PK_Exercises">
+    <key id="750" parent="569" name="PK_Exercises">
       <ColNames>Id</ColNames>
       <Primary>1</Primary>
     </key>
-    <column id="748" parent="570" name="Id">
+    <column id="751" parent="570" name="Id">
       <AutoIncrement>1</AutoIncrement>
       <NotNull>1</NotNull>
       <Position>1</Position>
       <StoredType>INTEGER|0s</StoredType>
     </column>
-    <column id="749" parent="570" name="AthleteQuestionId">
+    <column id="752" parent="570" name="AthleteQuestionId">
       <NotNull>1</NotNull>
       <Position>2</Position>
       <StoredType>INTEGER|0s</StoredType>
     </column>
-    <column id="750" parent="570" name="None">
+    <column id="753" parent="570" name="None">
       <NotNull>1</NotNull>
       <Position>3</Position>
       <StoredType>INTEGER|0s</StoredType>
     </column>
-    <column id="751" parent="570" name="Skeletal">
+    <column id="754" parent="570" name="Skeletal">
       <Position>4</Position>
       <StoredType>TEXT|0s</StoredType>
     </column>
-    <column id="752" parent="570" name="SoftTissueAndLigament">
+    <column id="755" parent="570" name="SoftTissueAndLigament">
       <Position>5</Position>
       <StoredType>TEXT|0s</StoredType>
     </column>
-    <column id="753" parent="570" name="InternalAndDigestive">
+    <column id="756" parent="570" name="InternalAndDigestive">
       <Position>6</Position>
       <StoredType>TEXT|0s</StoredType>
     </column>
-    <column id="754" parent="570" name="HormonalAndGlandular">
+    <column id="757" parent="570" name="HormonalAndGlandular">
       <Position>7</Position>
       <StoredType>TEXT|0s</StoredType>
     </column>
-    <column id="755" parent="570" name="Specific">
+    <column id="758" parent="570" name="Specific">
       <Position>8</Position>
       <StoredType>TEXT|0s</StoredType>
     </column>
-    <column id="756" parent="570" name="Others">
+    <column id="759" parent="570" name="Others">
       <Position>9</Position>
       <StoredType>TEXT|0s</StoredType>
     </column>
-    <foreign-key id="757" parent="570" name="FK_InjuryAreas_AthleteQuestions_AthleteQuestionId">
+    <foreign-key id="760" parent="570" name="FK_InjuryAreas_AthleteQuestions_AthleteQuestionId">
       <ColNames>AthleteQuestionId</ColNames>
       <OnDelete>cascade</OnDelete>
       <RefColNames>Id</RefColNames>
       <RefTableName>AthleteQuestions</RefTableName>
     </foreign-key>
-    <index id="758" parent="570" name="IX_InjuryAreas_AthleteQuestionId">
+    <index id="761" parent="570" name="IX_InjuryAreas_AthleteQuestionId">
       <ColNames>AthleteQuestionId</ColNames>
       <Unique>1</Unique>
     </index>
-    <key id="759" parent="570" name="PK_InjuryAreas">
+    <key id="762" parent="570" name="PK_InjuryAreas">
       <ColNames>Id</ColNames>
       <Primary>1</Primary>
     </key>
-    <column id="760" parent="571" name="Id">
+    <column id="763" parent="571" name="Id">
       <AutoIncrement>1</AutoIncrement>
       <NotNull>1</NotNull>
       <Position>1</Position>
       <StoredType>INTEGER|0s</StoredType>
     </column>
-    <column id="761" parent="571" name="AthleteId">
+    <column id="764" parent="571" name="AthleteId">
       <NotNull>1</NotNull>
       <Position>2</Position>
       <StoredType>INTEGER|0s</StoredType>
     </column>
-    <column id="762" parent="571" name="CoachId">
+    <column id="765" parent="571" name="CoachId">
       <NotNull>1</NotNull>
       <Position>3</Position>
       <StoredType>INTEGER|0s</StoredType>
     </column>
-    <column id="763" parent="571" name="Amount">
+    <column id="766" parent="571" name="Amount">
       <NotNull>1</NotNull>
       <Position>4</Position>
       <StoredType>REAL|0s</StoredType>
     </column>
-    <column id="764" parent="571" name="CoachServiceId">
+    <column id="767" parent="571" name="CoachServiceId">
       <NotNull>1</NotNull>
       <Position>5</Position>
       <StoredType>INTEGER|0s</StoredType>
     </column>
-    <column id="765" parent="571" name="Authority">
+    <column id="768" parent="571" name="Authority">
       <NotNull>1</NotNull>
       <Position>6</Position>
       <StoredType>TEXT|0s</StoredType>
     </column>
-    <column id="766" parent="571" name="PaymentStatus">
+    <column id="769" parent="571" name="PaymentStatus">
       <NotNull>1</NotNull>
       <Position>7</Position>
       <StoredType>INTEGER|0s</StoredType>
     </column>
-    <column id="767" parent="571" name="PaymentDate">
+    <column id="770" parent="571" name="PaymentDate">
       <NotNull>1</NotNull>
       <Position>8</Position>
       <StoredType>TEXT|0s</StoredType>
     </column>
-    <column id="768" parent="571" name="AthleteQuestionId">
+    <column id="771" parent="571" name="AthleteQuestionId">
       <Position>9</Position>
       <StoredType>INTEGER|0s</StoredType>
     </column>
-    <column id="769" parent="571" name="AppFee">
+    <column id="772" parent="571" name="AppFee">
       <NotNull>1</NotNull>
       <Position>10</Position>
       <StoredType>REAL|0s</StoredType>
     </column>
-    <column id="770" parent="571" name="RefId">
+    <column id="773" parent="571" name="RefId">
       <NotNull>1</NotNull>
       <Position>11</Position>
       <StoredType>INTEGER|0s</StoredType>
     </column>
-    <foreign-key id="771" parent="571" name="FK_Payments_Athletes_AthleteId">
+    <foreign-key id="774" parent="571" name="FK_Payments_Athletes_AthleteId">
       <ColNames>AthleteId</ColNames>
       <OnDelete>cascade</OnDelete>
       <RefColNames>Id</RefColNames>
       <RefTableName>Athletes</RefTableName>
     </foreign-key>
-    <foreign-key id="772" parent="571" name="FK_Payments_Coaches_CoachId">
+    <foreign-key id="775" parent="571" name="FK_Payments_Coaches_CoachId">
       <ColNames>CoachId</ColNames>
       <OnDelete>cascade</OnDelete>
       <RefColNames>Id</RefColNames>
       <RefTableName>Coaches</RefTableName>
     </foreign-key>
-    <foreign-key id="773" parent="571" name="FK_Payments_CoachServices_CoachServiceId">
+    <foreign-key id="776" parent="571" name="FK_Payments_CoachServices_CoachServiceId">
       <ColNames>CoachServiceId</ColNames>
       <OnDelete>cascade</OnDelete>
       <RefColNames>Id</RefColNames>
       <RefTableName>CoachServices</RefTableName>
     </foreign-key>
-    <foreign-key id="774" parent="571" name="FK_Payments_AthleteQuestions_AthleteQuestionId">
+    <foreign-key id="777" parent="571" name="FK_Payments_AthleteQuestions_AthleteQuestionId">
       <ColNames>AthleteQuestionId</ColNames>
       <RefColNames>Id</RefColNames>
       <RefTableName>AthleteQuestions</RefTableName>
     </foreign-key>
-    <index id="775" parent="571" name="IX_Payments_AthleteId">
+    <index id="778" parent="571" name="IX_Payments_AthleteId">
       <ColNames>AthleteId</ColNames>
     </index>
-    <index id="776" parent="571" name="IX_Payments_CoachId">
+    <index id="779" parent="571" name="IX_Payments_CoachId">
       <ColNames>CoachId</ColNames>
     </index>
-    <index id="777" parent="571" name="IX_Payments_CoachServiceId">
+    <index id="780" parent="571" name="IX_Payments_CoachServiceId">
       <ColNames>CoachServiceId</ColNames>
     </index>
-    <index id="778" parent="571" name="IX_Payments_AthleteQuestionId">
+    <index id="781" parent="571" name="IX_Payments_AthleteQuestionId">
       <ColNames>AthleteQuestionId</ColNames>
     </index>
-    <key id="779" parent="571" name="PK_Payments">
+    <key id="782" parent="571" name="PK_Payments">
       <ColNames>Id</ColNames>
       <Primary>1</Primary>
     </key>
-    <column id="780" parent="572" name="Id">
+    <column id="783" parent="572" name="Id">
       <AutoIncrement>1</AutoIncrement>
       <NotNull>1</NotNull>
       <Position>1</Position>
       <StoredType>INTEGER|0s</StoredType>
     </column>
-    <column id="781" parent="572" name="WorkoutProgramId">
+    <column id="784" parent="572" name="WorkoutProgramId">
       <NotNull>1</NotNull>
       <Position>2</Position>
       <StoredType>INTEGER|0s</StoredType>
     </column>
-    <column id="782" parent="572" name="ForWhichDay">
+    <column id="785" parent="572" name="ForWhichDay">
       <NotNull>1</NotNull>
       <Position>3</Position>
       <StoredType>INTEGER|0s</StoredType>
     </column>
-    <foreign-key id="783" parent="572" name="FK_ProgramInDays_WorkoutPrograms_WorkoutProgramId">
+    <foreign-key id="786" parent="572" name="FK_ProgramInDays_WorkoutPrograms_WorkoutProgramId">
       <ColNames>WorkoutProgramId</ColNames>
       <OnDelete>cascade</OnDelete>
       <RefColNames>Id</RefColNames>
       <RefTableName>WorkoutPrograms</RefTableName>
     </foreign-key>
-    <index id="784" parent="572" name="IX_ProgramInDays_WorkoutProgramId">
+    <index id="787" parent="572" name="IX_ProgramInDays_WorkoutProgramId">
       <ColNames>WorkoutProgramId</ColNames>
     </index>
-    <key id="785" parent="572" name="PK_ProgramInDays">
+    <key id="788" parent="572" name="PK_ProgramInDays">
       <ColNames>Id</ColNames>
       <Primary>1</Primary>
     </key>
-    <column id="786" parent="573" name="Id">
+    <column id="789" parent="573" name="Id">
       <AutoIncrement>1</AutoIncrement>
       <NotNull>1</NotNull>
       <Position>1</Position>
       <StoredType>INTEGER|0s</StoredType>
     </column>
-    <column id="787" parent="573" name="ProgramInDayId">
+    <column id="790" parent="573" name="UserId">
       <NotNull>1</NotNull>
       <Position>2</Position>
       <StoredType>INTEGER|0s</StoredType>
     </column>
-    <column id="788" parent="573" name="Set">
+    <column id="791" parent="573" name="Endpoint">
       <NotNull>1</NotNull>
       <Position>3</Position>
-      <StoredType>INTEGER|0s</StoredType>
+      <StoredType>TEXT|0s</StoredType>
     </column>
-    <column id="789" parent="573" name="Rep">
+    <column id="792" parent="573" name="P256DH">
       <NotNull>1</NotNull>
       <Position>4</Position>
-      <StoredType>INTEGER|0s</StoredType>
+      <StoredType>TEXT|0s</StoredType>
     </column>
-    <column id="790" parent="573" name="ExerciseId">
+    <column id="793" parent="573" name="Auth">
       <NotNull>1</NotNull>
       <Position>5</Position>
-      <StoredType>INTEGER|0s</StoredType>
-    </column>
-    <foreign-key id="791" parent="573" name="FK_SingleExercises_ProgramInDays_ProgramInDayId">
-      <ColNames>ProgramInDayId</ColNames>
-      <OnDelete>cascade</OnDelete>
-      <RefColNames>Id</RefColNames>
-      <RefTableName>ProgramInDays</RefTableName>
-    </foreign-key>
-    <foreign-key id="792" parent="573" name="FK_SingleExercises_Exercises_ExerciseId">
-      <ColNames>ExerciseId</ColNames>
-      <OnDelete>cascade</OnDelete>
-      <RefColNames>Id</RefColNames>
-      <RefTableName>Exercises</RefTableName>
-    </foreign-key>
-    <index id="793" parent="573" name="IX_SingleExercises_ProgramInDayId">
-      <ColNames>ProgramInDayId</ColNames>
-    </index>
-    <index id="794" parent="573" name="IX_SingleExercises_ExerciseId">
-      <ColNames>ExerciseId</ColNames>
-    </index>
-    <key id="795" parent="573" name="PK_SingleExercises">
-      <ColNames>Id</ColNames>
-      <Primary>1</Primary>
-    </key>
-    <column id="796" parent="574" name="Id">
-      <AutoIncrement>1</AutoIncrement>
-      <NotNull>1</NotNull>
-      <Position>1</Position>
-      <StoredType>INTEGER|0s</StoredType>
-    </column>
-    <column id="797" parent="574" name="UserId">
-      <NotNull>1</NotNull>
-      <Position>2</Position>
-      <StoredType>INTEGER|0s</StoredType>
-    </column>
-    <column id="798" parent="574" name="Category">
-      <NotNull>1</NotNull>
-      <Position>3</Position>
       <StoredType>TEXT|0s</StoredType>
     </column>
-    <column id="799" parent="574" name="Description">
+    <column id="794" parent="573" name="IsActive">
       <NotNull>1</NotNull>
-      <Position>4</Position>
+      <Position>6</Position>
+      <StoredType>INTEGER|0s</StoredType>
+    </column>
+    <column id="795" parent="573" name="LastNotificationSentAtUtc">
+      <NotNull>1</NotNull>
+      <Position>7</Position>
       <StoredType>TEXT|0s</StoredType>
     </column>
-    <foreign-key id="800" parent="574" name="FK_SupportApp_Users_UserId">
+    <column id="796" parent="573" name="CreatedAtUtc">
+      <NotNull>1</NotNull>
+      <Position>8</Position>
+      <StoredType>TEXT|0s</StoredType>
+    </column>
+    <foreign-key id="797" parent="573" name="FK_PushSubscriptions_Users_UserId">
       <ColNames>UserId</ColNames>
       <OnDelete>cascade</OnDelete>
       <RefColNames>Id</RefColNames>
       <RefTableName>Users</RefTableName>
     </foreign-key>
-    <index id="801" parent="574" name="IX_SupportApp_UserId">
+    <index id="798" parent="573" name="IX_PushSubscriptions_UserId">
       <ColNames>UserId</ColNames>
     </index>
-    <key id="802" parent="574" name="PK_SupportApp">
+    <key id="799" parent="573" name="PK_PushSubscriptions">
       <ColNames>Id</ColNames>
       <Primary>1</Primary>
     </key>
-    <column id="803" parent="575" name="Id">
+    <column id="800" parent="574" name="Id">
       <AutoIncrement>1</AutoIncrement>
       <NotNull>1</NotNull>
       <Position>1</Position>
       <StoredType>INTEGER|0s</StoredType>
     </column>
-    <column id="804" parent="575" name="WorkoutProgramId">
+    <column id="801" parent="574" name="Description">
       <NotNull>1</NotNull>
       <Position>2</Position>
-      <StoredType>INTEGER|0s</StoredType>
+      <StoredType>TEXT|0s</StoredType>
     </column>
-    <column id="805" parent="575" name="ProgramInDayId">
+    <column id="802" parent="574" name="ExerciseId">
       <NotNull>1</NotNull>
       <Position>3</Position>
       <StoredType>INTEGER|0s</StoredType>
     </column>
-    <column id="806" parent="575" name="DayNumber">
+    <column id="803" parent="574" name="ProgramInDayId">
       <NotNull>1</NotNull>
       <Position>4</Position>
       <StoredType>INTEGER|0s</StoredType>
     </column>
-    <column id="807" parent="575" name="TrainingSessionStatus">
-      <NotNull>1</NotNull>
+    <column id="804" parent="574" name="RepType">
       <Position>5</Position>
       <StoredType>INTEGER|0s</StoredType>
     </column>
-    <column id="808" parent="575" name="ExerciseFeeling">
-      <NotNull>1</NotNull>
+    <column id="805" parent="574" name="RepsJson">
       <Position>6</Position>
-      <StoredType>INTEGER|0s</StoredType>
+      <StoredType>TEXT|0s</StoredType>
     </column>
-    <column id="809" parent="575" name="ExerciseCompletionBitmap">
-      <NotNull>1</NotNull>
-      <Position>7</Position>
-      <StoredType>BLOB|0s</StoredType>
-    </column>
-    <foreign-key id="810" parent="575" name="FK_TrainingSessions_WorkoutPrograms_WorkoutProgramId">
-      <ColNames>WorkoutProgramId</ColNames>
+    <foreign-key id="806" parent="574" name="FK_SingleExercises_Exercises_ExerciseId">
+      <ColNames>ExerciseId</ColNames>
       <OnDelete>cascade</OnDelete>
       <RefColNames>Id</RefColNames>
-      <RefTableName>WorkoutPrograms</RefTableName>
+      <RefTableName>Exercises</RefTableName>
     </foreign-key>
-    <foreign-key id="811" parent="575" name="FK_TrainingSessions_ProgramInDays_ProgramInDayId">
+    <foreign-key id="807" parent="574" name="FK_SingleExercises_ProgramInDays_ProgramInDayId">
       <ColNames>ProgramInDayId</ColNames>
       <OnDelete>cascade</OnDelete>
       <RefColNames>Id</RefColNames>
       <RefTableName>ProgramInDays</RefTableName>
     </foreign-key>
-    <index id="812" parent="575" name="IX_TrainingSessions_WorkoutProgramId">
-      <ColNames>WorkoutProgramId</ColNames>
+    <index id="808" parent="574" name="IX_SingleExercises_ExerciseId">
+      <ColNames>ExerciseId</ColNames>
     </index>
-    <index id="813" parent="575" name="IX_TrainingSessions_ProgramInDayId">
+    <index id="809" parent="574" name="IX_SingleExercises_ProgramInDayId">
       <ColNames>ProgramInDayId</ColNames>
     </index>
-    <key id="814" parent="575" name="PK_TrainingSessions">
+    <key id="810" parent="574" name="PK_SingleExercises">
       <ColNames>Id</ColNames>
       <Primary>1</Primary>
     </key>
-    <column id="815" parent="576" name="Id">
+    <column id="811" parent="575" name="Id">
       <AutoIncrement>1</AutoIncrement>
       <NotNull>1</NotNull>
       <Position>1</Position>
       <StoredType>INTEGER|0s</StoredType>
     </column>
-    <column id="816" parent="576" name="FirstName">
+    <column id="812" parent="575" name="Category">
       <NotNull>1</NotNull>
       <Position>2</Position>
-      <StoredType>TEXT|0s</StoredType>
+      <StoredType>INTEGER|0s</StoredType>
     </column>
-    <column id="817" parent="576" name="LastName">
+    <column id="813" parent="575" name="Description">
       <NotNull>1</NotNull>
       <Position>3</Position>
       <StoredType>TEXT|0s</StoredType>
     </column>
-    <column id="818" parent="576" name="UserName">
+    <column id="814" parent="575" name="IsActive">
+      <NotNull>1</NotNull>
       <Position>4</Position>
-      <StoredType>TEXT|0s</StoredType>
+      <StoredType>INTEGER|0s</StoredType>
     </column>
-    <column id="819" parent="576" name="BirthDate">
+    <column id="815" parent="575" name="UserId">
       <NotNull>1</NotNull>
       <Position>5</Position>
-      <StoredType>date|0s</StoredType>
+      <StoredType>INTEGER|0s</StoredType>
     </column>
-    <column id="820" parent="576" name="PhoneNumber">
+    <foreign-key id="816" parent="575" name="FK_SupportApp_Users_UserId">
+      <ColNames>UserId</ColNames>
+      <OnDelete>cascade</OnDelete>
+      <RefColNames>Id</RefColNames>
+      <RefTableName>Users</RefTableName>
+    </foreign-key>
+    <index id="817" parent="575" name="IX_SupportApp_UserId">
+      <ColNames>UserId</ColNames>
+    </index>
+    <key id="818" parent="575" name="PK_SupportApp">
+      <ColNames>Id</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <column id="819" parent="576" name="Id">
+      <AutoIncrement>1</AutoIncrement>
+      <NotNull>1</NotNull>
+      <Position>1</Position>
+      <StoredType>INTEGER|0s</StoredType>
+    </column>
+    <column id="820" parent="576" name="WorkoutProgramId">
+      <NotNull>1</NotNull>
+      <Position>2</Position>
+      <StoredType>INTEGER|0s</StoredType>
+    </column>
+    <column id="821" parent="576" name="ProgramInDayId">
+      <NotNull>1</NotNull>
+      <Position>3</Position>
+      <StoredType>INTEGER|0s</StoredType>
+    </column>
+    <column id="822" parent="576" name="DayNumber">
+      <NotNull>1</NotNull>
+      <Position>4</Position>
+      <StoredType>INTEGER|0s</StoredType>
+    </column>
+    <column id="823" parent="576" name="TrainingSessionStatus">
+      <NotNull>1</NotNull>
+      <Position>5</Position>
+      <StoredType>INTEGER|0s</StoredType>
+    </column>
+    <column id="824" parent="576" name="ExerciseFeeling">
       <NotNull>1</NotNull>
       <Position>6</Position>
-      <StoredType>TEXT|0s</StoredType>
+      <StoredType>INTEGER|0s</StoredType>
     </column>
-    <column id="821" parent="576" name="CreateDate">
+    <column id="825" parent="576" name="ExerciseCompletionBitmap">
       <NotNull>1</NotNull>
       <Position>7</Position>
-      <StoredType>date|0s</StoredType>
+      <StoredType>BLOB|0s</StoredType>
     </column>
-    <column id="822" parent="576" name="LastLogin">
-      <NotNull>1</NotNull>
-      <Position>8</Position>
-      <StoredType>TEXT|0s</StoredType>
-    </column>
-    <column id="823" parent="576" name="Gender">
-      <NotNull>1</NotNull>
-      <Position>9</Position>
-      <StoredType>INTEGER|0s</StoredType>
-    </column>
-    <column id="824" parent="576" name="ImageProfile">
-      <NotNull>1</NotNull>
-      <Position>10</Position>
-      <StoredType>TEXT|0s</StoredType>
-    </column>
-    <column id="825" parent="576" name="Bio">
-      <NotNull>1</NotNull>
-      <Position>11</Position>
-      <StoredType>TEXT|0s</StoredType>
-    </column>
-    <column id="826" parent="576" name="TypeOfUser">
-      <NotNull>1</NotNull>
-      <Position>12</Position>
-      <StoredType>INTEGER|0s</StoredType>
-    </column>
-    <column id="827" parent="576" name="RefreshToken">
-      <Position>13</Position>
-      <StoredType>TEXT|0s</StoredType>
-    </column>
-    <column id="828" parent="576" name="LastLoginSite">
-      <DefaultExpression>&apos;0001-01-01 00:00:00&apos;</DefaultExpression>
-      <NotNull>1</NotNull>
-      <Position>14</Position>
-      <StoredType>TEXT|0s</StoredType>
-    </column>
-    <column id="829" parent="576" name="SiteRefreshToken">
-      <Position>15</Position>
-      <StoredType>TEXT|0s</StoredType>
-    </column>
-    <key id="830" parent="576" name="PK_Users">
+    <foreign-key id="826" parent="576" name="FK_TrainingSessions_WorkoutPrograms_WorkoutProgramId">
+      <ColNames>WorkoutProgramId</ColNames>
+      <OnDelete>cascade</OnDelete>
+      <RefColNames>Id</RefColNames>
+      <RefTableName>WorkoutPrograms</RefTableName>
+    </foreign-key>
+    <foreign-key id="827" parent="576" name="FK_TrainingSessions_ProgramInDays_ProgramInDayId">
+      <ColNames>ProgramInDayId</ColNames>
+      <OnDelete>cascade</OnDelete>
+      <RefColNames>Id</RefColNames>
+      <RefTableName>ProgramInDays</RefTableName>
+    </foreign-key>
+    <index id="828" parent="576" name="IX_TrainingSessions_WorkoutProgramId">
+      <ColNames>WorkoutProgramId</ColNames>
+    </index>
+    <index id="829" parent="576" name="IX_TrainingSessions_ProgramInDayId">
+      <ColNames>ProgramInDayId</ColNames>
+    </index>
+    <key id="830" parent="576" name="PK_TrainingSessions">
       <ColNames>Id</ColNames>
       <Primary>1</Primary>
     </key>
@@ -2815,259 +2810,337 @@
       <Position>1</Position>
       <StoredType>INTEGER|0s</StoredType>
     </column>
-    <column id="832" parent="577" name="AthleteId">
+    <column id="832" parent="577" name="FirstName">
       <NotNull>1</NotNull>
       <Position>2</Position>
-      <StoredType>INTEGER|0s</StoredType>
+      <StoredType>TEXT|0s</StoredType>
     </column>
-    <column id="833" parent="577" name="NumberOfCupsDrinked">
+    <column id="833" parent="577" name="LastName">
       <NotNull>1</NotNull>
       <Position>3</Position>
-      <StoredType>INTEGER|0s</StoredType>
+      <StoredType>TEXT|0s</StoredType>
     </column>
-    <column id="834" parent="577" name="Date">
-      <NotNull>1</NotNull>
+    <column id="834" parent="577" name="UserName">
       <Position>4</Position>
-      <StoredType>date|0s</StoredType>
+      <StoredType>TEXT|0s</StoredType>
     </column>
-    <foreign-key id="835" parent="577" name="FK_WaterInDays_Athletes_AthleteId">
-      <ColNames>AthleteId</ColNames>
-      <OnDelete>cascade</OnDelete>
-      <RefColNames>Id</RefColNames>
-      <RefTableName>Athletes</RefTableName>
-    </foreign-key>
-    <index id="836" parent="577" name="IX_WaterInDays_AthleteId">
-      <ColNames>AthleteId</ColNames>
-    </index>
-    <key id="837" parent="577" name="PK_WaterInDays">
-      <ColNames>Id</ColNames>
-      <Primary>1</Primary>
-    </key>
-    <column id="838" parent="578" name="Id">
-      <AutoIncrement>1</AutoIncrement>
-      <NotNull>1</NotNull>
-      <Position>1</Position>
-      <StoredType>INTEGER|0s</StoredType>
-    </column>
-    <column id="839" parent="578" name="AthleteId">
-      <NotNull>1</NotNull>
-      <Position>2</Position>
-      <StoredType>INTEGER|0s</StoredType>
-    </column>
-    <column id="840" parent="578" name="DailyCupOfWater">
-      <NotNull>1</NotNull>
-      <Position>3</Position>
-      <StoredType>INTEGER|0s</StoredType>
-    </column>
-    <column id="841" parent="578" name="Reminder">
-      <NotNull>1</NotNull>
-      <Position>4</Position>
-      <StoredType>INTEGER|0s</StoredType>
-    </column>
-    <foreign-key id="842" parent="578" name="FK_WaterInTakes_Athletes_AthleteId">
-      <ColNames>AthleteId</ColNames>
-      <OnDelete>cascade</OnDelete>
-      <RefColNames>Id</RefColNames>
-      <RefTableName>Athletes</RefTableName>
-    </foreign-key>
-    <index id="843" parent="578" name="IX_WaterInTakes_AthleteId">
-      <ColNames>AthleteId</ColNames>
-      <Unique>1</Unique>
-    </index>
-    <key id="844" parent="578" name="PK_WaterInTakes">
-      <ColNames>Id</ColNames>
-      <Primary>1</Primary>
-    </key>
-    <column id="845" parent="579" name="Id">
-      <AutoIncrement>1</AutoIncrement>
-      <NotNull>1</NotNull>
-      <Position>1</Position>
-      <StoredType>INTEGER|0s</StoredType>
-    </column>
-    <column id="846" parent="579" name="AthleteId">
-      <NotNull>1</NotNull>
-      <Position>2</Position>
-      <StoredType>INTEGER|0s</StoredType>
-    </column>
-    <column id="847" parent="579" name="Weight">
-      <NotNull>1</NotNull>
-      <Position>3</Position>
-      <StoredType>REAL|0s</StoredType>
-    </column>
-    <column id="848" parent="579" name="CurrentDate">
-      <NotNull>1</NotNull>
-      <Position>4</Position>
-      <StoredType>date|0s</StoredType>
-    </column>
-    <foreign-key id="849" parent="579" name="FK_WeightEntries_Athletes_AthleteId">
-      <ColNames>AthleteId</ColNames>
-      <OnDelete>cascade</OnDelete>
-      <RefColNames>Id</RefColNames>
-      <RefTableName>Athletes</RefTableName>
-    </foreign-key>
-    <index id="850" parent="579" name="IX_WeightEntries_AthleteId">
-      <ColNames>AthleteId</ColNames>
-    </index>
-    <key id="851" parent="579" name="PK_WeightEntries">
-      <ColNames>Id</ColNames>
-      <Primary>1</Primary>
-    </key>
-    <column id="852" parent="580" name="Id">
-      <AutoIncrement>1</AutoIncrement>
-      <NotNull>1</NotNull>
-      <Position>1</Position>
-      <StoredType>INTEGER|0s</StoredType>
-    </column>
-    <column id="853" parent="580" name="AthleteId">
-      <NotNull>1</NotNull>
-      <Position>2</Position>
-      <StoredType>INTEGER|0s</StoredType>
-    </column>
-    <column id="854" parent="580" name="CoachId">
-      <NotNull>1</NotNull>
-      <Position>3</Position>
-      <StoredType>INTEGER|0s</StoredType>
-    </column>
-    <column id="855" parent="580" name="CompletedSessionCount">
-      <NotNull>1</NotNull>
-      <Position>4</Position>
-      <StoredType>INTEGER|0s</StoredType>
-    </column>
-    <column id="856" parent="580" name="Description">
+    <column id="835" parent="577" name="BirthDate">
       <NotNull>1</NotNull>
       <Position>5</Position>
-      <StoredType>TEXT|0s</StoredType>
-    </column>
-    <column id="857" parent="580" name="Duration">
-      <NotNull>1</NotNull>
-      <Position>6</Position>
-      <StoredType>INTEGER|0s</StoredType>
-    </column>
-    <column id="858" parent="580" name="EndDate">
-      <NotNull>1</NotNull>
-      <Position>7</Position>
-      <StoredType>TEXT|0s</StoredType>
-    </column>
-    <column id="859" parent="580" name="LastExerciseDate">
-      <Position>8</Position>
       <StoredType>date|0s</StoredType>
     </column>
-    <column id="860" parent="580" name="PaymentId">
+    <column id="836" parent="577" name="PhoneNumber">
+      <NotNull>1</NotNull>
+      <Position>6</Position>
+      <StoredType>TEXT|0s</StoredType>
+    </column>
+    <column id="837" parent="577" name="CreateDate">
+      <NotNull>1</NotNull>
+      <Position>7</Position>
+      <StoredType>date|0s</StoredType>
+    </column>
+    <column id="838" parent="577" name="LastLogin">
+      <NotNull>1</NotNull>
+      <Position>8</Position>
+      <StoredType>TEXT|0s</StoredType>
+    </column>
+    <column id="839" parent="577" name="Gender">
       <NotNull>1</NotNull>
       <Position>9</Position>
       <StoredType>INTEGER|0s</StoredType>
     </column>
-    <column id="861" parent="580" name="ProgramDuration">
+    <column id="840" parent="577" name="ImageProfile">
       <NotNull>1</NotNull>
       <Position>10</Position>
-      <StoredType>INTEGER|0s</StoredType>
-    </column>
-    <column id="862" parent="580" name="ProgramLevel">
-      <NotNull>1</NotNull>
-      <Position>11</Position>
-      <StoredType>INTEGER|0s</StoredType>
-    </column>
-    <column id="863" parent="580" name="ProgramPriorities">
-      <NotNull>1</NotNull>
-      <Position>12</Position>
       <StoredType>TEXT|0s</StoredType>
     </column>
-    <column id="864" parent="580" name="StartDate">
+    <column id="841" parent="577" name="Bio">
       <NotNull>1</NotNull>
+      <Position>11</Position>
+      <StoredType>TEXT|0s</StoredType>
+    </column>
+    <column id="842" parent="577" name="TypeOfUser">
+      <NotNull>1</NotNull>
+      <Position>12</Position>
+      <StoredType>INTEGER|0s</StoredType>
+    </column>
+    <column id="843" parent="577" name="RefreshToken">
       <Position>13</Position>
       <StoredType>TEXT|0s</StoredType>
     </column>
-    <column id="865" parent="580" name="Status">
+    <column id="844" parent="577" name="LastLoginSite">
+      <DefaultExpression>&apos;0001-01-01 00:00:00&apos;</DefaultExpression>
       <NotNull>1</NotNull>
       <Position>14</Position>
-      <StoredType>INTEGER|0s</StoredType>
+      <StoredType>TEXT|0s</StoredType>
     </column>
-    <column id="866" parent="580" name="Title">
-      <NotNull>1</NotNull>
+    <column id="845" parent="577" name="SiteRefreshToken">
       <Position>15</Position>
       <StoredType>TEXT|0s</StoredType>
     </column>
-    <column id="867" parent="580" name="TotalSessionCount">
+    <key id="846" parent="577" name="PK_Users">
+      <ColNames>Id</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <column id="847" parent="578" name="Id">
+      <AutoIncrement>1</AutoIncrement>
       <NotNull>1</NotNull>
-      <Position>16</Position>
+      <Position>1</Position>
       <StoredType>INTEGER|0s</StoredType>
     </column>
-    <foreign-key id="868" parent="580" name="FK_WorkoutPrograms_Athletes_AthleteId">
+    <column id="848" parent="578" name="AthleteId">
+      <NotNull>1</NotNull>
+      <Position>2</Position>
+      <StoredType>INTEGER|0s</StoredType>
+    </column>
+    <column id="849" parent="578" name="NumberOfCupsDrinked">
+      <NotNull>1</NotNull>
+      <Position>3</Position>
+      <StoredType>INTEGER|0s</StoredType>
+    </column>
+    <column id="850" parent="578" name="Date">
+      <NotNull>1</NotNull>
+      <Position>4</Position>
+      <StoredType>date|0s</StoredType>
+    </column>
+    <foreign-key id="851" parent="578" name="FK_WaterInDays_Athletes_AthleteId">
       <ColNames>AthleteId</ColNames>
       <OnDelete>cascade</OnDelete>
       <RefColNames>Id</RefColNames>
       <RefTableName>Athletes</RefTableName>
     </foreign-key>
-    <foreign-key id="869" parent="580" name="FK_WorkoutPrograms_Coaches_CoachId">
+    <index id="852" parent="578" name="IX_WaterInDays_AthleteId">
+      <ColNames>AthleteId</ColNames>
+    </index>
+    <key id="853" parent="578" name="PK_WaterInDays">
+      <ColNames>Id</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <column id="854" parent="579" name="Id">
+      <AutoIncrement>1</AutoIncrement>
+      <NotNull>1</NotNull>
+      <Position>1</Position>
+      <StoredType>INTEGER|0s</StoredType>
+    </column>
+    <column id="855" parent="579" name="AthleteId">
+      <NotNull>1</NotNull>
+      <Position>2</Position>
+      <StoredType>INTEGER|0s</StoredType>
+    </column>
+    <column id="856" parent="579" name="DailyCupOfWater">
+      <NotNull>1</NotNull>
+      <Position>3</Position>
+      <StoredType>INTEGER|0s</StoredType>
+    </column>
+    <column id="857" parent="579" name="Reminder">
+      <NotNull>1</NotNull>
+      <Position>4</Position>
+      <StoredType>INTEGER|0s</StoredType>
+    </column>
+    <foreign-key id="858" parent="579" name="FK_WaterInTakes_Athletes_AthleteId">
+      <ColNames>AthleteId</ColNames>
+      <OnDelete>cascade</OnDelete>
+      <RefColNames>Id</RefColNames>
+      <RefTableName>Athletes</RefTableName>
+    </foreign-key>
+    <index id="859" parent="579" name="IX_WaterInTakes_AthleteId">
+      <ColNames>AthleteId</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <key id="860" parent="579" name="PK_WaterInTakes">
+      <ColNames>Id</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <column id="861" parent="580" name="Id">
+      <AutoIncrement>1</AutoIncrement>
+      <NotNull>1</NotNull>
+      <Position>1</Position>
+      <StoredType>INTEGER|0s</StoredType>
+    </column>
+    <column id="862" parent="580" name="AthleteId">
+      <NotNull>1</NotNull>
+      <Position>2</Position>
+      <StoredType>INTEGER|0s</StoredType>
+    </column>
+    <column id="863" parent="580" name="Weight">
+      <NotNull>1</NotNull>
+      <Position>3</Position>
+      <StoredType>REAL|0s</StoredType>
+    </column>
+    <column id="864" parent="580" name="CurrentDate">
+      <NotNull>1</NotNull>
+      <Position>4</Position>
+      <StoredType>date|0s</StoredType>
+    </column>
+    <foreign-key id="865" parent="580" name="FK_WeightEntries_Athletes_AthleteId">
+      <ColNames>AthleteId</ColNames>
+      <OnDelete>cascade</OnDelete>
+      <RefColNames>Id</RefColNames>
+      <RefTableName>Athletes</RefTableName>
+    </foreign-key>
+    <index id="866" parent="580" name="IX_WeightEntries_AthleteId">
+      <ColNames>AthleteId</ColNames>
+    </index>
+    <key id="867" parent="580" name="PK_WeightEntries">
+      <ColNames>Id</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <column id="868" parent="581" name="Id">
+      <AutoIncrement>1</AutoIncrement>
+      <NotNull>1</NotNull>
+      <Position>1</Position>
+      <StoredType>INTEGER|0s</StoredType>
+    </column>
+    <column id="869" parent="581" name="AthleteId">
+      <NotNull>1</NotNull>
+      <Position>2</Position>
+      <StoredType>INTEGER|0s</StoredType>
+    </column>
+    <column id="870" parent="581" name="CoachId">
+      <NotNull>1</NotNull>
+      <Position>3</Position>
+      <StoredType>INTEGER|0s</StoredType>
+    </column>
+    <column id="871" parent="581" name="CompletedSessionCount">
+      <NotNull>1</NotNull>
+      <Position>4</Position>
+      <StoredType>INTEGER|0s</StoredType>
+    </column>
+    <column id="872" parent="581" name="Description">
+      <NotNull>1</NotNull>
+      <Position>5</Position>
+      <StoredType>TEXT|0s</StoredType>
+    </column>
+    <column id="873" parent="581" name="Duration">
+      <NotNull>1</NotNull>
+      <Position>6</Position>
+      <StoredType>INTEGER|0s</StoredType>
+    </column>
+    <column id="874" parent="581" name="EndDate">
+      <NotNull>1</NotNull>
+      <Position>7</Position>
+      <StoredType>TEXT|0s</StoredType>
+    </column>
+    <column id="875" parent="581" name="LastExerciseDate">
+      <Position>8</Position>
+      <StoredType>date|0s</StoredType>
+    </column>
+    <column id="876" parent="581" name="PaymentId">
+      <NotNull>1</NotNull>
+      <Position>9</Position>
+      <StoredType>INTEGER|0s</StoredType>
+    </column>
+    <column id="877" parent="581" name="ProgramDuration">
+      <NotNull>1</NotNull>
+      <Position>10</Position>
+      <StoredType>INTEGER|0s</StoredType>
+    </column>
+    <column id="878" parent="581" name="ProgramLevel">
+      <NotNull>1</NotNull>
+      <Position>11</Position>
+      <StoredType>INTEGER|0s</StoredType>
+    </column>
+    <column id="879" parent="581" name="ProgramPriorities">
+      <NotNull>1</NotNull>
+      <Position>12</Position>
+      <StoredType>TEXT|0s</StoredType>
+    </column>
+    <column id="880" parent="581" name="StartDate">
+      <NotNull>1</NotNull>
+      <Position>13</Position>
+      <StoredType>TEXT|0s</StoredType>
+    </column>
+    <column id="881" parent="581" name="Status">
+      <NotNull>1</NotNull>
+      <Position>14</Position>
+      <StoredType>INTEGER|0s</StoredType>
+    </column>
+    <column id="882" parent="581" name="Title">
+      <NotNull>1</NotNull>
+      <Position>15</Position>
+      <StoredType>TEXT|0s</StoredType>
+    </column>
+    <column id="883" parent="581" name="TotalSessionCount">
+      <NotNull>1</NotNull>
+      <Position>16</Position>
+      <StoredType>INTEGER|0s</StoredType>
+    </column>
+    <foreign-key id="884" parent="581" name="FK_WorkoutPrograms_Athletes_AthleteId">
+      <ColNames>AthleteId</ColNames>
+      <OnDelete>cascade</OnDelete>
+      <RefColNames>Id</RefColNames>
+      <RefTableName>Athletes</RefTableName>
+    </foreign-key>
+    <foreign-key id="885" parent="581" name="FK_WorkoutPrograms_Coaches_CoachId">
       <ColNames>CoachId</ColNames>
       <OnDelete>cascade</OnDelete>
       <RefColNames>Id</RefColNames>
       <RefTableName>Coaches</RefTableName>
     </foreign-key>
-    <foreign-key id="870" parent="580" name="FK_WorkoutPrograms_Payments_PaymentId">
+    <foreign-key id="886" parent="581" name="FK_WorkoutPrograms_Payments_PaymentId">
       <ColNames>PaymentId</ColNames>
       <OnDelete>cascade</OnDelete>
       <RefColNames>Id</RefColNames>
       <RefTableName>Payments</RefTableName>
     </foreign-key>
-    <index id="871" parent="580" name="IX_WorkoutPrograms_PaymentId">
+    <index id="887" parent="581" name="IX_WorkoutPrograms_PaymentId">
       <ColNames>PaymentId</ColNames>
       <Unique>1</Unique>
     </index>
-    <index id="872" parent="580" name="IX_WorkoutPrograms_AthleteId">
+    <index id="888" parent="581" name="IX_WorkoutPrograms_AthleteId">
       <ColNames>AthleteId</ColNames>
     </index>
-    <index id="873" parent="580" name="IX_WorkoutPrograms_CoachId">
+    <index id="889" parent="581" name="IX_WorkoutPrograms_CoachId">
       <ColNames>CoachId</ColNames>
     </index>
-    <key id="874" parent="580" name="PK_WorkoutPrograms">
+    <key id="890" parent="581" name="PK_WorkoutPrograms">
       <ColNames>Id</ColNames>
       <Primary>1</Primary>
     </key>
-    <column id="875" parent="581" name="MigrationId">
+    <column id="891" parent="582" name="MigrationId">
       <NotNull>1</NotNull>
       <Position>1</Position>
       <StoredType>TEXT|0s</StoredType>
     </column>
-    <column id="876" parent="581" name="ProductVersion">
+    <column id="892" parent="582" name="ProductVersion">
       <NotNull>1</NotNull>
       <Position>2</Position>
       <StoredType>TEXT|0s</StoredType>
     </column>
-    <index id="877" parent="581" name="sqlite_autoindex___EFMigrationsHistory_1">
+    <index id="893" parent="582" name="sqlite_autoindex___EFMigrationsHistory_1">
       <ColNames>MigrationId</ColNames>
       <NameSurrogate>1</NameSurrogate>
       <Unique>1</Unique>
     </index>
-    <key id="878" parent="581" name="PK___EFMigrationsHistory">
+    <key id="894" parent="582" name="PK___EFMigrationsHistory">
       <ColNames>MigrationId</ColNames>
       <Primary>1</Primary>
       <UnderlyingIndexName>sqlite_autoindex___EFMigrationsHistory_1</UnderlyingIndexName>
     </key>
-    <column id="879" parent="582" name="type">
+    <column id="895" parent="583" name="type">
       <Position>1</Position>
       <StoredType>TEXT|0s</StoredType>
     </column>
-    <column id="880" parent="582" name="name">
+    <column id="896" parent="583" name="name">
       <Position>2</Position>
       <StoredType>TEXT|0s</StoredType>
     </column>
-    <column id="881" parent="582" name="tbl_name">
+    <column id="897" parent="583" name="tbl_name">
       <Position>3</Position>
       <StoredType>TEXT|0s</StoredType>
     </column>
-    <column id="882" parent="582" name="rootpage">
+    <column id="898" parent="583" name="rootpage">
       <Position>4</Position>
       <StoredType>INT|0s</StoredType>
     </column>
-    <column id="883" parent="582" name="sql">
+    <column id="899" parent="583" name="sql">
       <Position>5</Position>
       <StoredType>TEXT|0s</StoredType>
     </column>
-    <column id="884" parent="583" name="name">
+    <column id="900" parent="584" name="name">
       <Position>1</Position>
     </column>
-    <column id="885" parent="583" name="seq">
+    <column id="901" parent="584" name="seq">
       <Position>2</Position>
     </column>
   </database-model>

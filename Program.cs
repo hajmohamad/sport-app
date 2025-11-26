@@ -15,6 +15,7 @@ using sport_app_backend.Repository;
 using Microsoft.OpenApi.Models;
 using Serilog;
 using Serilog.Events;
+using sport_app_backend.BackgroundServices;
 using sport_app_backend.Handler;
 
 Log.Logger = new LoggerConfiguration()
@@ -35,7 +36,7 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowFrontendLocalhost", policy =>
     {
-        policy.WithOrigins("http://localhost:21345","https://charsetpwa.liara.run","https://charset-pwa-staging.liara.run","https://app.chaarset.ir","https://chaarset.ir", "https://charset-i-os-pwa.vercel.app","https://charset-pwa.pages.dev") 
+        policy.WithOrigins("http://localhost:3000","https://charsetpwa.liara.run","https://charset-pwa-staging.liara.run","https://app.chaarset.ir","https://chaarset.ir", "https://charset-i-os-pwa.vercel.app","https://charset-pwa.pages.dev") 
               .AllowAnyHeader()
               .AllowAnyMethod();
     });
@@ -160,6 +161,7 @@ builder.Services.AddScoped<IAthleteRepository, AthleteRepository>();
 builder.Services.AddScoped<IAdminRepository, AdminRepository>();
 builder.Services.AddScoped<IBuyFromSiteRepository, BuyFromSiteRepository>();
 
+
 builder.Services.AddCoreAdmin();
 
 builder.Services.AddMemoryCache();
@@ -169,6 +171,7 @@ builder.Services.AddSingleton<IRateLimitConfiguration, RateLimitConfiguration>()
 
 
 var app = builder.Build();
+
 app.UseExceptionHandler();
 
 app.UseSwagger();
@@ -187,14 +190,14 @@ app.UseAuthorization();
 app.MapControllers();
 app.MapDefaultControllerRoute();
 
-// if (!app.Environment.IsDevelopment())
-// {
-//     using (var scope = app.Services.CreateScope())
-//     {
-//         var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-//         dbContext.Database.Migrate();
-//     }
-// }
+    if (!app.Environment.IsDevelopment())
+    {
+        using (var scope = app.Services.CreateScope())
+        {
+            var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+            dbContext.Database.Migrate();
+        }
+    }
 
 app.Run();
  

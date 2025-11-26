@@ -934,8 +934,8 @@ public class BuyFromSiteRepository(
                 PaymentId = payment.Id,
                 Status = WorkoutProgramStatus.UNCOMPLETEDQUESTION
             };
-            payment.AppFee = (payment.Amount * payment.Coach.ServiceFee);
-
+            var appFee = (payment.Amount * payment.Coach.ServiceFee) < 50000 ? 50000 : (payment.Amount * payment.Coach.ServiceFee);
+            payment.AppFee = appFee;
             payment.WorkoutProgram = workoutProgram;
             payment.PaymentStatus = PaymentStatus.SUCCESS;
 

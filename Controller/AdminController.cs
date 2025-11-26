@@ -95,10 +95,9 @@ namespace sport_app_backend.Controller
 
             return Ok(result);
         } 
-        [HttpPost("addExercise")]
-
-        public async Task<IActionResult> addExercise([FromBody] AddExercisesRequestDto addExercisesRequestDto)
-        {
+            [HttpPost("addExercise")]
+            public async Task<IActionResult> addExercise([FromBody] AddExercisesRequestDto addExercisesRequestDto)
+            {
             var result = await adminRepository.AddExercises(addExercisesRequestDto);
             if (!result.Action)
             {
