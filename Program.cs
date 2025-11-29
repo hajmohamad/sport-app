@@ -36,9 +36,18 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowFrontendLocalhost", policy =>
     {
-        policy.WithOrigins("http://localhost:21345","https://charsetpwa.liara.run","https://charset-pwa-staging.liara.run/","https://app.chaarset.ir","https://chaarset.ir", "https://charset-i-os-pwa.vercel.app","https://charset-pwa.pages.dev") 
-              .AllowAnyHeader()
-              .AllowAnyMethod();
+        policy.WithOrigins(
+                "http://localhost:21345",
+                "https://charsetpwa.liara.run",
+                "https://charset-pwa-staging.liara.run",
+                "https://app.chaarset.ir",
+                "https://chaarset.ir",
+                "https://charset-i-os-pwa.vercel.app",
+                "https://charset-pwa.pages.dev"
+            )
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            .AllowCredentials();
     });
 });
 
