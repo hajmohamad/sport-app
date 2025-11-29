@@ -26,8 +26,16 @@ namespace sport_app_backend.Models.Question.A_Question
         public ExerciseGoal? ExerciseGoal { get; set; }
         public AthleteBodyImage? AthleteBodyImage { get; set; }
         public required ExerciseLocation  ExerciseLocation { get; set; }
+        public string? ComingCompetition  { get; set; }
+        public string? CompetitionHistory { get; set; }
+        public string? CurrentMedications {get; set;}
+        public SittingHour SittingHour {get; set;}
+        public string? YourJob {get; set;}
+        public string? YourCity {get; set;}
+
+
         // public List<ExerciseMotivation>? ExerciseMotivation { get; set; }
         // public List<CommonIssues>? CommonIssues { get; set; }
-        
+
     }
 }
