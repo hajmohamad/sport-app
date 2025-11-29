@@ -46,7 +46,9 @@ builder.Services.AddCors(options =>
                 "https://charset-pwa.pages.dev"
             )
             .AllowAnyHeader()
-            .AllowAnyMethod();
+            .AllowAnyMethod()
+            .AllowCredentials();
+
     });
 });
 
@@ -191,7 +193,7 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseIpRateLimiting(); 
 
-app.UseCors("AllowFrontendLocalhost"); // فعال کردن CORS در مسیر مناسب
+app.UseCors("AllowFrontend");
 
 app.UseAuthentication();
 app.UseAuthorization();
