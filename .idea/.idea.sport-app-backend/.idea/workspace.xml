@@ -12,23 +12,8 @@
   <component name="ChangeListManager">
     <list default="true" id="11e104f8-869d-4d9d-9802-b48455f5eb31" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/dataSources.local.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/dataSources.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/dataSources.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/dataSources/1815ef41-7fc7-4e59-899d-80d4ae6d10ab.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/dataSources/1815ef41-7fc7-4e59-899d-80d4ae6d10ab/storage_v2/_src_/schema/main.uQUzAA.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/dataSources/375ae7a9-68b6-4a79-b9c0-39ffe783f254.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/dataSources/375ae7a9-68b6-4a79-b9c0-39ffe783f254/storage_v2/_src_/schema/information_schema.FNRwLQ.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/dataSources/375ae7a9-68b6-4a79-b9c0-39ffe783f254/storage_v2/_src_/schema/information_schema.FNRwLQ.zip" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/dataSources/375ae7a9-68b6-4a79-b9c0-39ffe783f254/storage_v2/_src_/schema/performance_schema.kIw0nw.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/dataSources/3e138e79-63f8-4f1b-a97d-8b1a569a4f0c.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/dataSources/3e138e79-63f8-4f1b-a97d-8b1a569a4f0c.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/dataSources/c72a18f1-fb23-4e44-b2bb-e21175169276.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/dataSources/d51fbb42-2f4d-4896-9082-58ef61b5c8fc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/dataSources/d51fbb42-2f4d-4896-9082-58ef61b5c8fc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/dataSources/f174cf0b-10b8-44c3-8265-2a562d81b4af.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/dataSources/f174cf0b-10b8-44c3-8265-2a562d81b4af/storage_v2/_src_/schema/main.uQUzAA.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/data_source_mapping.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MvcMovieContext-69c678d9-0976-406c-9d44-239ed1395d90.db" beforeDir="false" afterPath="$PROJECT_DIR$/MvcMovieContext-69c678d9-0976-406c-9d44-239ed1395d90.db" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Services/LiaraStorage.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Services/LiaraStorage.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/appsettings.Development.json" beforeDir="false" afterPath="$PROJECT_DIR$/appsettings.Development.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MvcMovieContext-69c678d9-0976-406c-9d44-239ed1395d90.db" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -56,18 +41,13 @@
   <component name="HighlightingSettingsPerFile">
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/a6e45763fd2549c785509ca11525b35c273a00/a2/b813d4e0/HttpProtocol.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Dtos/ExerciseDto.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="mock:///Users/mohamad/RiderProjects/sport-app/Dtos/ProgramDto/ExerciseForTrainingSessionDto.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Dtos/ProgramDto/ExerciseForTrainingSessionDto.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Mappers/ExercisesMappers.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Mappers/ProgramMappers.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="mock:///Users/mohamad/RiderProjects/sport-app/Models/Account/User.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Users/mohamad/RiderProjects/sport-app/Models/Actions/BaseCategory.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Models/Actions/Exercise.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="mock:///Users/mohamad/RiderProjects/sport-app/Models/Program/SingleExercise.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Program.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="mock:///Users/mohamad/RiderProjects/sport-app/Program.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Repository/AthleteRepository.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="mock:///Users/mohamad/RiderProjects/sport-app/Repository/BuyFromSiteRepository.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Users/mohamad/RiderProjects/sport-app/Repository/CoachRepository.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Repository/UserRepository.cs" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="KubernetesApiPersistence">{}</component>
@@ -95,13 +75,13 @@
     &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
     &quot;database.data.extractors.current.export.id&quot;: &quot;Comma-separated (CSV)_id&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;stagingMain&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
     &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
     &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;editor.preferences.smartKeys_rider&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;CodeLensConfigurable&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   },
   &quot;keyToStringList&quot;: {
@@ -203,6 +183,12 @@
       <workItem from="1764244625991" duration="88000" />
       <workItem from="1764247781353" duration="771000" />
       <workItem from="1764249772643" duration="10191000" />
+      <workItem from="1764406604228" duration="542000" />
+      <workItem from="1764407169348" duration="716000" />
+      <workItem from="1764408492717" duration="5850000" />
+      <workItem from="1764431779098" duration="687000" />
+      <workItem from="1764499917547" duration="1061000" />
+      <workItem from="1764524136729" duration="560000" />
     </task>
     <task id="LOCAL‎−۰۰۰۰۱" summary="edit getpayment method">
       <option name="closed" value="true" />
@@ -260,7 +246,28 @@
       <option name="presentableId" value="LOCAL‎−۰۰۰۰۸" />
       <updated>1764184888508</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL‎−۰۰۰۰۹" summary="add new enum ExerciseGoal">
+      <option name="closed" value="true" />
+      <created>1764407426197</created>
+      <option name="number" value="LOCAL‎−۰۰۰۰۹" />
+      <option name="presentableId" value="LOCAL‎−۰۰۰۰۹" />
+      <updated>1764407426197</updated>
+    </task>
+    <task id="LOCAL‎−۰۰۰۱۰" summary="edit cors">
+      <option name="closed" value="true" />
+      <created>1764408664901</created>
+      <option name="number" value="LOCAL‎−۰۰۰۱۰" />
+      <option name="presentableId" value="LOCAL‎−۰۰۰۱۰" />
+      <updated>1764408664901</updated>
+    </task>
+    <task id="LOCAL‎−۰۰۰۱۱" summary="add new question to AthleteQuestion.cs">
+      <option name="closed" value="true" />
+      <created>1764413055241</created>
+      <option name="number" value="LOCAL‎−۰۰۰۱۱" />
+      <option name="presentableId" value="LOCAL‎−۰۰۰۱۱" />
+      <updated>1764413055241</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -289,7 +296,11 @@
     <MESSAGE value="add wpkey to sms" />
     <MESSAGE value="add mysql migrations" />
     <MESSAGE value="add new BaseCategory enum" />
-    <option name="LAST_COMMIT_MESSAGE" value="add new BaseCategory enum" />
+    <MESSAGE value="&lt;!DOCTYPE html&gt;&#10;&lt;html lang=en&gt;&#10;  &lt;meta charset=utf-8&gt;&#10;  &lt;meta name=viewport content=&quot;initial-scale=1, minimum-scale=1, width=device-width&quot;&gt;&#10;  &lt;title&gt;Error 403 (Forbidden)!!1&lt;/title&gt;&#10;  &lt;style&gt;&#10;    *{margin:0;padding:0}html,code{font:15px/22px arial,sans-serif}html{background:#fff;color:#222;padding:15px}body{margin:7% auto 0;max-width:390px;min-height:180px;padding:30px 0 15px}* &gt; body{background:url(//www.google.com/images/errors/robot.png) 100% 5px no-repeat;padding-right:205px}p{margin:11px 0 22px;overflow:hidden}ins{color:#777;text-decoration:none}a img{border:0}@media screen and (max-width:772px){body{background:none;margin-top:0;max-width:none;padding-right:0}}#logo{background:url(//www.google.com/images/branding/googlelogo/1x/googlelogo_color_150x54dp.png) no-repeat;margin-left:-5px}@media only screen and (min-resolution:192dpi){#logo{background:url(//www.google.com/images/branding/googlelogo/2x/googlelogo_color_150x54dp.png) no-repeat 0% 0%/100% 100%;-moz-border-image:url(//www.google.com/images/branding/googlelogo/2x/googlelogo_color_150x54dp.png) 0}}@media only screen and (-webkit-min-device-pixel-ratio:2){#logo{background:url(//www.google.com/images/branding/googlelogo/2x/googlelogo_color_150x54dp.png) no-repeat;-webkit-background-size:100% 100%}}#logo{display:inline-block;height:54px;width:150px}&#10;  &lt;/style&gt;&#10;  &lt;a href=//www.google.com/&gt;&lt;span id=logo aria-label=Google&gt;&lt;/span&gt;&lt;/a&gt;&#10;  &lt;p&gt;&lt;b&gt;403.&lt;/b&gt; &lt;ins&gt;That’s an error.&lt;/ins&gt;&#10;  &lt;p&gt;Your client does not have permission to get URL &lt;code&gt;/v1beta/models/gemini-1.5-pro:streamGenerateContent&lt;/code&gt; from this server.  &lt;ins&gt;That’s all we know.&lt;/ins&gt;" />
+    <MESSAGE value="add new enum ExerciseGoal" />
+    <MESSAGE value="edit cors" />
+    <MESSAGE value="add new question to AthleteQuestion.cs" />
+    <option name="LAST_COMMIT_MESSAGE" value="add new question to AthleteQuestion.cs" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
