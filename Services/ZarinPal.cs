@@ -24,7 +24,7 @@ public class ZarinPal(IConfiguration config) : IZarinPal
         request.merchant_id = _merchantId;
         if (_endpoint.Equals("https://sandbox.zarinpal.com/"))
         {
-            request.callback_url = "chaarset.ir/verify-payment-staging/";
+            request.callback_url = "https://chaarset.ir/verify-payment-staging/";
         }
         var jsonData = JsonConvert.SerializeObject(request);
         var content = new StringContent(jsonData, Encoding.UTF8, "application/json");
