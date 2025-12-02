@@ -14,8 +14,7 @@ namespace sport_app_backend.Dtos
         public required string UserName { get; set; }
 
         public string ImageProfile { get; set; }="";
-        public string Bio { get; set; } = "";
-        public string HeadLine { get; set; } = "";
+       
         public int CoachId { get; set; }
         public List<CoachingServiceResponse> CoachServices { get; set; } = [];
         public required int NumberOfAthletes { get; set; }

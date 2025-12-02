@@ -13,7 +13,19 @@
     <list default="true" id="11e104f8-869d-4d9d-9802-b48455f5eb31" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/dataSources.local.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MvcMovieContext-69c678d9-0976-406c-9d44-239ed1395d90.db" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Controller/AthleteController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Controller/AthleteController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dtos/AthleteProfileResponse.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Dtos/AthleteProfileResponse.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dtos/CoachForSearch.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Dtos/CoachForSearch.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dtos/CoachProfileForAthleteDto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Dtos/CoachProfileForAthleteDto.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dtos/CoachProfileResponse.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Dtos/CoachProfileResponse.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dtos/EditAthleteProfileDto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Dtos/EditAthleteProfileDto.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Mappers/AthleteMappers.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Mappers/AthleteMappers.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Mappers/CoachMappers.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Mappers/CoachMappers.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Migrations/ApplicationDbContextModelSnapshot.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Migrations/ApplicationDbContextModelSnapshot.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Models/Account/Coach/Coach.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/Account/Coach/Coach.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Models/Account/User.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/Account/User.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Repository/UserRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Repository/UserRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/appsettings.Development.json" beforeDir="false" afterPath="$PROJECT_DIR$/appsettings.Development.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -46,9 +58,13 @@
     <setting file="file://$PROJECT_DIR$/Mappers/ProgramMappers.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Models/Actions/Exercise.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Program.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="mock:///Users/mohamad/RiderProjects/sport-app/Program.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Repository/AthleteRepository.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Repository/UserRepository.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="mock:///Users/mohamad/RiderProjects/sport-app/Services/ZarinPal.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Users/mohamad/RiderProjects/sport-app/Services/ZarinPal.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Users/mohamad/RiderProjects/sport-app/Services/ZarinPal.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Users/mohamad/RiderProjects/sport-app/appsettings.Development.json" root0="FORCE_HIGHLIGHTING" />
+    <setting file="mock:///Users/mohamad/RiderProjects/sport-app/appsettings.Development.json" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="KubernetesApiPersistence">{}</component>
   <component name="KubernetesApiProvider">{
@@ -64,32 +80,32 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;.NET Launch Settings Profile.sport-app-backend: http.executor&quot;: &quot;Run&quot;,
-    &quot;.NET Launch Settings Profile.sport-app-backend: https.executor&quot;: &quot;Run&quot;,
-    &quot;ASKED_SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;Docker.Dockerfile.executor&quot;: &quot;Debug&quot;,
-    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;database.data.extractors.current.export.id&quot;: &quot;Comma-separated (CSV)_id&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;stagingMain&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;CodeLensConfigurable&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    ".NET Launch Settings Profile.sport-app-backend: http.executor": "Run",
+    ".NET Launch Settings Profile.sport-app-backend: https.executor": "Run",
+    "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "Docker.Dockerfile.executor": "Debug",
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "database.data.extractors.current.export.id": "Comma-separated (CSV)_id",
+    "git-widget-placeholder": "stagingMain",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "CodeLensConfigurable",
+    "vue.rearranger.settings.migration": "true"
   },
-  &quot;keyToStringList&quot;: {
-    &quot;DatabaseDriversLRU&quot;: [
-      &quot;mysql&quot;
+  "keyToStringList": {
+    "DatabaseDriversLRU": [
+      "mysql"
     ]
   }
-}</component>
+}]]></component>
   <component name="RunManager" selected=".NET Launch Settings Profile.sport-app-backend: http">
     <configuration name="sport-app-backend: http" type="LaunchSettings" factoryName=".NET Launch Settings Profile">
       <option name="LAUNCH_PROFILE_PROJECT_FILE_PATH" value="$PROJECT_DIR$/sport-app-backend.csproj" />
@@ -188,7 +204,13 @@
       <workItem from="1764408492717" duration="5850000" />
       <workItem from="1764431779098" duration="687000" />
       <workItem from="1764499917547" duration="1061000" />
-      <workItem from="1764524136729" duration="560000" />
+      <workItem from="1764524136729" duration="1664000" />
+      <workItem from="1764526215988" duration="25000" />
+      <workItem from="1764526502429" duration="327000" />
+      <workItem from="1764582312222" duration="56000" />
+      <workItem from="1764612973588" duration="1270000" />
+      <workItem from="1764619634142" duration="1330000" />
+      <workItem from="1764674459455" duration="496000" />
     </task>
     <task id="LOCAL‎−۰۰۰۰۱" summary="edit getpayment method">
       <option name="closed" value="true" />
@@ -267,7 +289,35 @@
       <option name="presentableId" value="LOCAL‎−۰۰۰۱۱" />
       <updated>1764413055241</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL‎−۰۰۰۱۲" summary="migration for new athleteQuestion">
+      <option name="closed" value="true" />
+      <created>1764525010504</created>
+      <option name="number" value="LOCAL‎−۰۰۰۱۲" />
+      <option name="presentableId" value="LOCAL‎−۰۰۰۱۲" />
+      <updated>1764525010504</updated>
+    </task>
+    <task id="LOCAL‎−۰۰۰۱۳" summary="addd new callBackurl for staging">
+      <option name="closed" value="true" />
+      <created>1764613099769</created>
+      <option name="number" value="LOCAL‎−۰۰۰۱۳" />
+      <option name="presentableId" value="LOCAL‎−۰۰۰۱۳" />
+      <updated>1764613099769</updated>
+    </task>
+    <task id="LOCAL‎−۰۰۰۱۴" summary="addd new callBackurl for staging">
+      <option name="closed" value="true" />
+      <created>1764613511169</created>
+      <option name="number" value="LOCAL‎−۰۰۰۱۴" />
+      <option name="presentableId" value="LOCAL‎−۰۰۰۱۴" />
+      <updated>1764613511169</updated>
+    </task>
+    <task id="LOCAL‎−۰۰۰۱۵" summary="change callBakcUrl">
+      <option name="closed" value="true" />
+      <created>1764614195776</created>
+      <option name="number" value="LOCAL‎−۰۰۰۱۵" />
+      <option name="presentableId" value="LOCAL‎−۰۰۰۱۵" />
+      <updated>1764614195776</updated>
+    </task>
+    <option name="localTasksCounter" value="16" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -300,7 +350,11 @@
     <MESSAGE value="add new enum ExerciseGoal" />
     <MESSAGE value="edit cors" />
     <MESSAGE value="add new question to AthleteQuestion.cs" />
-    <option name="LAST_COMMIT_MESSAGE" value="add new question to AthleteQuestion.cs" />
+    <MESSAGE value="migration for new athleteQuestion" />
+    <MESSAGE value="addd new callBackurl for staging" />
+    <MESSAGE value="Merge remote-tracking branch 'origin/stagingMain' into stagingMain&#10;&#10;# Conflicts:&#10;#&#9;Services/ZarinPal.cs" />
+    <MESSAGE value="change callBakcUrl" />
+    <option name="LAST_COMMIT_MESSAGE" value="change callBakcUrl" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -335,6 +389,19 @@
           <line>6</line>
           <properties documentPath="$PROJECT_DIR$/Middleware/IranIpMiddleware.cs" containingFunctionPresentation="Method 'Invoke'" />
           <option name="timeStamp" value="6" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Services/ZarinPal.cs</url>
+          <line>29</line>
+          <properties documentPath="$PROJECT_DIR$/Services/ZarinPal.cs" containingFunctionPresentation="Method 'RequestPaymentAsync'">
+            <startOffsets>
+              <option value="1019" />
+            </startOffsets>
+            <endOffsets>
+              <option value="1096" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="7" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

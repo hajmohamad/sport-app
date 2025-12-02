@@ -254,8 +254,7 @@ private async Task<string> GenerateUniqueUsername()
         user.UserName = editUserProfileDto.UserName; user.FirstName = editUserProfileDto.FirstName;
         user.LastName = editUserProfileDto.LastName;
         user.BirthDate = Convert.ToDateTime(editUserProfileDto.BirthDate);
-        user.Bio = editUserProfileDto.Bio;
-        if(user.Coach is not null) user.Coach.HeadLine = editUserProfileDto.HeadLine;
+       
         await dbContext.SaveChangesAsync();
         return new ApiResponse()
         {
@@ -278,8 +277,6 @@ private async Task<string> GenerateUniqueUsername()
                 user.FirstName,
                 user.LastName,
                 user.BirthDate,
-                user.Bio,
-                user.Coach?.HeadLine,
                 user.ImageProfile,
                 user.PhoneNumber
             }

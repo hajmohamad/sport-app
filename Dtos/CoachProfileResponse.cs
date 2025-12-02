@@ -19,8 +19,6 @@ namespace sport_app_backend.Dtos
         public string? Gender { get; set; }
         public string ImageProfile { get; set; }="";
       
-        public string Bio { get; set; } = "";
-        public string HeadLine { get; set; } = "";
         
         public required List<CoachingServiceResponse> CoachingServices{ get; set; }
         public required List<AllPaymentResponseDto> Payments { get; set; }
