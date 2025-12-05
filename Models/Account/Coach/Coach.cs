@@ -28,5 +28,7 @@ public class Coach
     public bool Verified { get; set; } = false;
     public double Amount { get; set; } = 0;
     public double ServiceFee { get; set; } = 0.1;
+    [StringLength(51)]
+    public string? WebSiteUrl { get; set; } = "";
 
 }

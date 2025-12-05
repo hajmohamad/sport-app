@@ -154,7 +154,7 @@ public class BuyFromSiteRepository(
                         await liaraStorage.RemovePhoto(frontLink);
                     }
 
-                    var response = await liaraStorage.UploadImage(file, "");
+                    var response = await liaraStorage.UploadImage(file, "","bodyImage");
                     if (response.Action)
                     {
                         athleteImage.FrontLink = response.Result as string;
@@ -174,7 +174,7 @@ public class BuyFromSiteRepository(
                         await liaraStorage.RemovePhoto(frontLink);
                     }
 
-                    var response = await liaraStorage.UploadImage(file, "");
+                    var response = await liaraStorage.UploadImage(file, "","bodyImage");
                     if (response.Action)
                     {
                         athleteImage.BackLink = response.Result as string;
@@ -194,7 +194,7 @@ public class BuyFromSiteRepository(
                         await liaraStorage.RemovePhoto(frontLink);
                     }
 
-                    var response = await liaraStorage.UploadImage(file, "");
+                    var response = await liaraStorage.UploadImage(file, "","bodyImage");
                     if (response.Action)
                     {
                         athleteImage.SideLink = response.Result as string;
@@ -218,7 +218,7 @@ public class BuyFromSiteRepository(
         }
         else
         {
-            var response = await liaraStorage.UploadImage(file, "");
+            var response = await liaraStorage.UploadImage(file, "","bodyImage");
             if (!response.Action)
             {
                 return response;

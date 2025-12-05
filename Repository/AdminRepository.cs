@@ -173,7 +173,7 @@ namespace sport_app_backend.Repository
             var imageLink = "";
             if (file != null)
             {
-                var urlLink = await liaraStorage.UploadImage(file, "");
+                var urlLink = await liaraStorage.UploadImage(file, "","coachPayout");
                 if (urlLink.Action)
                 {
                     imageLink = (string)urlLink.Result!;
@@ -276,6 +276,26 @@ namespace sport_app_backend.Repository
             {
                 Action = true,
                 Message = "پاسخ داده شد"
+            };
+        }
+
+        public async Task<ApiResponse> SetCoachWebsiteUrl(string phoneNumber, string webSiteUrl)
+        {
+            var coach = await context.Coaches.FirstOrDefaultAsync(c => c.PhoneNumber == phoneNumber);
+            if (coach is null)
+            {
+                return new ApiResponse()
+                {
+                    Action = false,
+                    Message = "coach Not Found"
+                };
+            }
+            coach.WebSiteUrl = webSiteUrl;
+            await context.SaveChangesAsync();
+            return new ApiResponse()
+            {
+                Action = true,
+                Message = "success"
             };
         }
     }

@@ -5,5 +5,5 @@ namespace sport_app_backend.Interface;
 public interface ILiaraStorage
 {
     Task<ApiResponse> RemovePhoto(string url);
-    Task<ApiResponse> UploadImage(IFormFile image, string url);
+    Task<ApiResponse> UploadImage(IFormFile image, string url,string folderName);
 }

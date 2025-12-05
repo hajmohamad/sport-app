@@ -369,7 +369,7 @@ private async Task<string> GenerateUniqueUsername()
         if (user is null) return new ApiResponse() { Message = "User not found", Action = false };
         if (image.Length <= 0) return new ApiResponse() { Message = "image not receive", Action = false }; ;
 
-        var response = await liaraStorage.UploadImage(image, user.ImageProfile);
+        var response = await liaraStorage.UploadImage(image, user.ImageProfile,"profileImage");
         if (!response.Action) return response;
         if (response.Result is not null)
         {

@@ -45,6 +45,19 @@ namespace sport_app_backend.Controller
 
             return Ok(result);
         }
+        [HttpPut("setCoachWebsiteUrl")]
+        public async Task<IActionResult> SetCoachWebsiteUrl([FromBody] string phoneNumber, [FromBody] string webSiteUrl)
+        {
+            
+
+            var result = await adminRepository.SetCoachWebsiteUrl(phoneNumber,webSiteUrl);
+            if (!result.Action)
+            {
+                return BadRequest(result);
+            }
+
+            return Ok(result);
+        }
 
         [HttpGet("GetCoachService/{phoneNumber}")]
         public async Task<IActionResult> GetCoachService(string phoneNumber)

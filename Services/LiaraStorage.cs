@@ -13,7 +13,7 @@ public class LiaraStorage(IConfiguration config) :ILiaraStorage
     private readonly string _bucketName = config["Liara:BucketName"] ?? "string.Empty";
     private readonly string _endpoint = config["Liara:endPoint"] ?? "string.Empty";
 
-    public async Task<ApiResponse> UploadImage(IFormFile image, string url)
+    public async Task<ApiResponse> UploadImage(IFormFile image, string url,string folderName)
     {
         var config = new AmazonS3Config
         {
@@ -30,7 +30,13 @@ public class LiaraStorage(IConfiguration config) :ILiaraStorage
         using var client = new AmazonS3Client(credentials, config);
 
         var extension = Path.GetExtension(image.FileName);
-        var objectKey = $"{Guid.NewGuid()}{extension}";
+
+        folderName = folderName.Trim().TrimEnd('/');
+
+        var objectKey = string.IsNullOrEmpty(folderName)
+            ? $"{Guid.NewGuid()}{extension}"
+            : $"{folderName}/{Guid.NewGuid()}{extension}";
+
 
         try
         {
@@ -43,7 +49,7 @@ public class LiaraStorage(IConfiguration config) :ILiaraStorage
                 BucketName = _bucketName,
                 Key = objectKey,
                 InputStream = memoryStream,
-                ContentType = image.ContentType // اضافه برای بهتر بودن متادیتا
+                ContentType = image.ContentType 
             };
 
             await client.PutObjectAsync(request);
