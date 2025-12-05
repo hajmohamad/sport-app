@@ -46,7 +46,7 @@ namespace sport_app_backend.Controller
             return Ok(result);
         }
         [HttpPut("setCoachWebsiteUrl")]
-        public async Task<IActionResult> SetCoachWebsiteUrl([FromBody] string phoneNumber, [FromBody] string webSiteUrl)
+        public async Task<IActionResult> SetCoachWebsiteUrl([FromQuery] string phoneNumber, [FromQuery] string webSiteUrl)
         {
             
 
