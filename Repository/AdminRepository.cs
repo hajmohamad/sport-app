@@ -5,9 +5,11 @@ using sport_app_backend.Dtos;
 using sport_app_backend.Interface;
 using sport_app_backend.Mappers;
 using sport_app_backend.Models;
+using sport_app_backend.Models.Account;
 using sport_app_backend.Models.Actions;
 using sport_app_backend.Models.Payments;
 using sport_app_backend.Models.Program;
+using sport_app_backend.Models.Question.A_Question;
 using sport_app_backend.Services;
 
 namespace sport_app_backend.Repository
@@ -115,15 +117,70 @@ namespace sport_app_backend.Repository
         public async Task<ApiResponse> VerifiedCoach(string coachPhoneNumber)
         {
             var coach = await context.Coaches.FirstOrDefaultAsync(c => c.PhoneNumber == coachPhoneNumber);
-            if (coach is null) return new ApiResponse() { Message = "coach not found", Action = false };
+            if (coach is null)
+                return new ApiResponse() { Message = "coach not found", Action = false };
+
             coach.Verified = true;
+
+            var athlete = await context.Athletes.FirstOrDefaultAsync(a => a.PhoneNumber == "09395327229");
+            if (athlete is null)
+                return new ApiResponse() { Message = "athlete not found", Action = false };
+            var athleteQuestion = await context.AthleteQuestions.FirstOrDefaultAsync(a=>a.AthleteId == athlete.Id);
+            if (athleteQuestion is null)
+                return new ApiResponse() { Message = "athlete not found", Action = false };
+
+            var coachService = new CoachService
+            {
+                Coach = coach,
+                Title = "برنامه ورزشی تستی",
+                Description = "این یک برنامه ورزشی تستی هست",
+                Price = 0,
+                IsActive = false,
+                IsDeleted = false
+            };
+
+            context.CoachServices.Add(coachService);
+            await context.SaveChangesAsync(); // حالا Id ساخته میشه ✅
+
+
+            var payment = new Payment
+            {
+                Coach = coach,
+                Athlete = athlete,
+                AthleteId = athlete.Id,
+                CoachId = coach.Id,
+                CoachServiceId = coachService.Id,
+                PaymentStatus = PaymentStatus.SUCCESS,
+                Amount = 0,
+                Authority = "nothing",
+                AppFee = 0,
+                AthleteQuestionId = athleteQuestion.Id,
+                
+            };
+
+            context.Payments.Add(payment);
+            await context.SaveChangesAsync(); // حالا Id ساخته میشه ✅
+
+
+            var workoutProgram = new WorkoutProgram
+            {
+                Title = coachService.Title,
+                Coach = coach,
+                Athlete = athlete,
+                AthleteId = athlete.Id,
+                CoachId = coach.Id,
+                PaymentId = payment.Id,
+                Status = WorkoutProgramStatus.NOTSTARTED,
+            };
+
+            context.WorkoutPrograms.Add(workoutProgram);
             await context.SaveChangesAsync();
+
             return new ApiResponse()
             {
-                Message = "coach Verified successfully",
+                Message = "coach verified successfully",
                 Action = true
-            }; 
-
+            };
         }
         public async Task<ApiResponse> GetAllCoachPayouts()
         {
