@@ -136,7 +136,7 @@ namespace sport_app_backend.Repository
                 Description = "این یک برنامه ورزشی تستی هست",
                 Price = 0,
                 IsActive = false,
-                IsDeleted = false
+                IsDeleted = true
             };
 
             context.CoachServices.Add(coachService);
