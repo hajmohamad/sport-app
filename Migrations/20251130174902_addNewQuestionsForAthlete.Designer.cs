@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using sport_app_backend.Data;
 
@@ -10,9 +11,11 @@ using sport_app_backend.Data;
 namespace sport_app_backend.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251130174902_addNewQuestionsForAthlete")]
+    partial class addNewQuestionsForAthlete
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -71,6 +74,11 @@ namespace sport_app_backend.Migrations
                     b.Property<int?>("CoachQuestionId")
                         .HasColumnType("int");
 
+                    b.Property<string>("HeadLine")
+                        .IsRequired()
+                        .HasMaxLength(124)
+                        .HasColumnType("varchar(124)");
+
                     b.Property<string>("InstagramLink")
                         .IsRequired()
                         .HasMaxLength(51)
@@ -94,10 +102,6 @@ namespace sport_app_backend.Migrations
 
                     b.Property<bool>("Verified")
                         .HasColumnType("tinyint(1)");
-
-                    b.Property<string>("WebSiteUrl")
-                        .HasMaxLength(51)
-                        .HasColumnType("varchar(51)");
 
                     b.Property<string>("WhatsApp")
                         .IsRequired()
@@ -163,6 +167,11 @@ namespace sport_app_backend.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    b.Property<string>("Bio")
+                        .IsRequired()
+                        .HasMaxLength(150)
+                        .HasColumnType("varchar(150)");
 
                     b.Property<DateTime>("BirthDate")
                         .HasColumnType("date");

@@ -79,7 +79,7 @@ namespace sport_app_backend.Repository
                             await liaraStorage.RemovePhoto(frontLink);
                         }
 
-                        var response = await liaraStorage.UploadImage(file, "");
+                        var response = await liaraStorage.UploadImage(file, "","bodyImage");
                         if (response.Action)
                         {
                             athleteImage.FrontLink = response.Result as string;
@@ -99,7 +99,7 @@ namespace sport_app_backend.Repository
                             await liaraStorage.RemovePhoto(frontLink);
                         }
 
-                        var response = await liaraStorage.UploadImage(file, "");
+                        var response = await liaraStorage.UploadImage(file, "","bodyImage");
                         if (response.Action)
                         {
                             athleteImage.BackLink = response.Result as string;
@@ -119,7 +119,7 @@ namespace sport_app_backend.Repository
                             await liaraStorage.RemovePhoto(frontLink);
                         }
 
-                        var response = await liaraStorage.UploadImage(file, "");
+                        var response = await liaraStorage.UploadImage(file, "","bodyImage");
                         if (response.Action)
                         {
                             athleteImage.SideLink = response.Result as string;
@@ -142,7 +142,7 @@ namespace sport_app_backend.Repository
             }
             else
             {
-                var response = await liaraStorage.UploadImage(file, "");
+                var response = await liaraStorage.UploadImage(file, "","bodyImage");
                 if (!response.Action)
                 {
                     return response;

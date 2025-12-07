@@ -24,12 +24,6 @@ namespace sport_app_backend.Mappers
                 Id = user.Id,
                 Gender = user.Gender.ToString(),
                 ImageProfile = user.ImageProfile,
-                Bio = user.Bio,
-                HeadLine = user.Coach?.HeadLine?? string.Empty,
-                // Domain = user.Coach?.Domain?.Select(x => x.ToString())
-                //              .ToList() ??
-                //          [], // Ensure it's not null
-                // StartCoachingYear = user.Coach?.StartCoachingYear ?? 0,
                 CoachingServices = coachingServicesResponse,
                 Payments = payments.Select(p => p.ToCoachAllPaymentResponseDto())
                     .ToList(),
@@ -85,9 +79,7 @@ namespace sport_app_backend.Mappers
                 FirstName = user.FirstName ?? string.Empty,
                 LastName = user.LastName ?? string.Empty,
                 ImageProfile = user.ImageProfile,
-                Bio = user.Bio,
-                HeadLine = user.Coach?.HeadLine?? string.Empty,
-
+             
             };
 
         }
@@ -102,12 +94,6 @@ namespace sport_app_backend.Mappers
                 UserName = coach.User?.UserName ?? string.Empty,
                 Id = coach.Id,
                 ImageProfile = coach.User?.ImageProfile ?? "",
-                Bio = coach.User?.Bio ?? "",
-                HeadLine = coach.HeadLine,
-                // Domain = coach.Domain?.Select(x => x.ToString())
-                //              .ToList() ??
-                //          new List<string>(), // Ensure it's not null
-                // StartCoachingYear = coach.StartCoachingYear,
                 CoachServices = coach.CoachingServices.Where(x => x is { IsDeleted: false, IsActive: true })
                                     .Select(x => x.ToCoachingServiceResponse())
                                     .ToList() ,

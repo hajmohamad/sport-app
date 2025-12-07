@@ -253,8 +253,6 @@ namespace sport_app_backend.Controller
                             FirstName = user.FirstName ?? string.Empty,
                             LastName = user.LastName ?? string.Empty,
                             ImageProfile = user.ImageProfile,
-                            Bio = user.Bio,
-                            HeadLine = user.Coach.Verified ? user.Coach.HeadLine : user.PhoneNumber
                         } ).ToListAsync();
                     return  Ok(new ApiResponse()
                     {

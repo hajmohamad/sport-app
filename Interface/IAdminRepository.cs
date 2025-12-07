@@ -26,5 +26,6 @@ namespace sport_app_backend.Interface
          Task<ApiResponse> GetSupportApp();
          Task<ApiResponse> AddSlug(string engName, string slug);
          Task<ApiResponse> AnswerSupportApp(int id);
+         Task<ApiResponse> SetCoachWebsiteUrl(string phoneNumber, string webSiteUrl);
     }
 }

@@ -63,8 +63,13 @@ namespace sport_app_backend.Mappers
                 InjuryArea = dto.InjuryArea?.ToInjuryArea(),
                 ExerciseGoal = Enum.Parse<ExerciseGoal>(dto.ExerciseGoal ?? string.Empty),
                 ExerciseLocation = Enum.Parse<ExerciseLocation>(dto.ExerciseLocation.ToUpper() ?? string.Empty),
-                Weight = dto.CurrentWeight
-            };
+                Weight = dto.CurrentWeight,
+                ComingCompetition = dto.ComingCompetition,
+                CompetitionHistory = dto.CompetitionHistory,
+                CurrentMedications = dto.CurrentMedications,
+                SittingHour = Enum.Parse<SittingHour>(dto.SittingHour ?? string.Empty),
+                YourJob = dto.YourJob,
+                YourCity = dto.YourCity,            };
         }
         public static AthleteQuestion ToAthleteQuestionBuyFromSite(this AthleteQuestionBuyFromSiteDto dto, Athlete athlete)
         {
@@ -78,12 +83,18 @@ namespace sport_app_backend.Mappers
                 InjuryArea = dto.InjuryArea?.ToInjuryArea(),
                 ExerciseGoal = Enum.Parse<ExerciseGoal>(dto.ExerciseGoal ?? string.Empty),
                 ExerciseLocation = Enum.Parse<ExerciseLocation>(dto.ExerciseLocation.ToUpper()),
-                Weight = dto.CurrentWeight
+                Weight = dto.CurrentWeight,
+                ComingCompetition = dto.ComingCompetition,
+                CompetitionHistory = dto.CompetitionHistory,
+                CurrentMedications = dto.CurrentMedications,
+                SittingHour = Enum.Parse<SittingHour>(dto.SittingHour ?? string.Empty),
+                YourJob = dto.YourJob,
+                YourCity = dto.YourCity,
             };
         }
         public static AthleteQuestionResponseDto AthleteQuestionResponseDto(this AthleteQuestion question)
         {
-            return new AthleteQuestionResponseDto()
+            return new AthleteQuestionResponseDto
             {
                 CurrentBodyForm = question.CurrentBodyForm,
                 DaysPerWeekToExercise = question.DaysPerWeekToExercise,
@@ -91,15 +102,22 @@ namespace sport_app_backend.Mappers
                 InjuryArea = question.InjuryArea?.ToInjuryAreaDto(),
                 ExerciseGoal = question.ExerciseGoal.ToString() ?? "",
                 CurrentWeight = question.Weight,
-                AthleteBodyImageId = question.AthleteBodyImage?.Id??0,
+                AthleteBodyImageId = question.AthleteBodyImage?.Id ?? 0,
                 BirthDay = question.Athlete?.User?.BirthDate.ToString("yyyy-MM-dd"),
                 ExerciseLocation = question.ExerciseLocation.ToString(),
-                AthleteBodyImage = question.AthleteBodyImage?.ToAthleteBodyImageDto()?? new AthleteBodyImageDto()
+                ComingCompetition = question.ComingCompetition?.ToString() ?? "",
+                CompetitionHistory = question.CompetitionHistory??"",
+                CurrentMedications = question.CurrentMedications??"",
+                SittingHour = question.SittingHour.ToString() ?? "",
+                YourJob = question.YourJob??"",
+                YourCity = question.YourCity??"",
+                AthleteBodyImage = question.AthleteBodyImage?.ToAthleteBodyImageDto() ?? new AthleteBodyImageDto(),
+
             };
         }
         public static AthleteQuestionResponseDto AthleteQuestionResponseWithBirthdayDto(this AthleteQuestion question, string birthday)
         {
-            return new AthleteQuestionResponseDto()
+            return new AthleteQuestionResponseDto
             {
                 CurrentBodyForm = question.CurrentBodyForm,
                 DaysPerWeekToExercise = question.DaysPerWeekToExercise,
@@ -109,7 +127,13 @@ namespace sport_app_backend.Mappers
                 CurrentWeight = question.Weight,
                 ExerciseLocation = question.ExerciseLocation.ToString(),
                 BirthDay = birthday,
-                AthleteBodyImage = question.AthleteBodyImage.ToAthleteBodyImageDto()
+                AthleteBodyImage = question.AthleteBodyImage.ToAthleteBodyImageDto(),
+                CompetitionHistory = question.CompetitionHistory ?? "",
+                CurrentMedications = question.CurrentMedications ?? "",
+                SittingHour = question.SittingHour.ToString() ?? "",
+                YourJob = question.YourJob ?? "",
+                YourCity = question.YourCity ?? "",
+                ComingCompetition = question.ComingCompetition?.ToString() ?? "",
             };
         }
         public static AthleteQuestionDto ToAthleteQuestionDto(this AthleteQuestion question)

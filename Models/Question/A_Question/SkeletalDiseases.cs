@@ -23,6 +23,7 @@
         LumbarLordosis, // گودی کمر
         HeelSpur, // خار پاشنه
         GolfersElbow, // گلف البو
-        TennisElbow // تنیس البو
+        TennisElbow, // تنیس البو
+        Osteoporosis
     }
 }

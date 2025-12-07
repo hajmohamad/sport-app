@@ -4,7 +4,10 @@ namespace sport_app_backend.Models.Question.A_Question
     {
         LOSEWEIGHT,
         GAINWEIGHT,
-        STAYFIT
+        STAYFIT, 
+        KEEPINGFIT,
+        PREPARINGCOMPETITION
+        
     }
 
 }

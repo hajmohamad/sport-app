@@ -18,6 +18,12 @@ namespace sport_app_backend.Dtos
         public required string? BirthDay { get; set; }
         public int? AthleteBodyImageId { get; set; }
         public required string ExerciseLocation {get; set;}
+        public string ComingCompetition  { get; set; }= "";
+        public string CompetitionHistory { get; set; }= "";
+        public string CurrentMedications {get; set;}= "";
+        public string SittingHour {get; set;}= "";
+        public string YourJob {get; set;}= "";
+        public string YourCity {get; set;}= "";
 
     }
 }
