@@ -28,7 +28,8 @@ namespace sport_app_backend.Mappers
                 Payments = payments.Select(p => p.ToCoachAllPaymentResponseDto())
                     .ToList(),
                 NumberOfAthlete = numberOfAthlete,
-                NumberOfProgram = numberOfProgram
+                NumberOfProgram = numberOfProgram,
+                WebsiteUrl = user.Coach.WebSiteUrl??""
             };
 
 
