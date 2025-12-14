@@ -13,5 +13,5 @@ public class BmrRequestDto
     public double WeightKg { get; set; }
     public double HeightCm { get; set; }
     public Gender Gender { get; set; }
-    public ActivityLevel? ActivityLevel { get; set; }
+    public ActivityLevel ActivityLevel { get; set; }
 }

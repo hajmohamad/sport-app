@@ -32,8 +32,7 @@ public class Calculator : ICalculator
         }
 
 
-        double pal = ((int)request.ActivityLevel) / 10.0;
-        double dailyCalories = bmr * pal;
+        var dailyCalories = bmr/(int)request.ActivityLevel;
 
 
         return dailyCalories;
