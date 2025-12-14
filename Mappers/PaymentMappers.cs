@@ -24,7 +24,7 @@ public static class PaymentMappers
         };
     }
     
-    public static PaymentResponseDto ToCoachPaymentResponseDto(this Payment payment,string wpkey)
+    public static PaymentResponseDto ToCoachPaymentResponseDto(this Payment payment,string wpkey,double ear)
     {
         return new PaymentResponseDto
         {   PaymentId = payment.Id,
@@ -33,7 +33,7 @@ public static class PaymentMappers
             Name = payment.Athlete.User?.FirstName + " " + payment.Athlete?.User?.LastName,
             Amount = payment.Amount.ToString(CultureInfo.CurrentCulture),
             DateTime = payment.PaymentDate.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture),
-            AthleteQuestion = payment.AthleteQuestion?.AthleteQuestionResponseDto(),
+            AthleteQuestion = payment.AthleteQuestion?.AthleteQuestionResponseDto(ear),
             Height = payment.Athlete!.Height,
             ImageProfile = payment.Athlete.User?.ImageProfile ??"",
             WorkoutProgram = payment.WorkoutProgram?.ToProgramResponseDto()??new WorkoutProgramResponseDto(),
@@ -44,26 +44,26 @@ public static class PaymentMappers
         };
         
     }
-    public static PaymentResponseDto ToAthletePaymentResponseDto(this Payment payment)
-    {
-        return new PaymentResponseDto
-        {   PaymentId = payment.Id,
-            TransactionId = payment.Authority,
-            PaymentStatus = payment.PaymentStatus.ToString(),
-            Name = payment.Coach.User.FirstName + " " + payment.Coach.User.LastName,
-            Amount = payment.Amount.ToString(CultureInfo.CurrentCulture),
-            DateTime = payment.PaymentDate.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture),
-            AthleteQuestion = payment.AthleteQuestion?.AthleteQuestionResponseDto(),
-            Height = payment.Athlete.Height,
-            ImageProfile = payment.Athlete.User?.ImageProfile ??"",
-            WorkoutProgram = payment.WorkoutProgram?.ToProgramResponseDto()??new WorkoutProgramResponseDto(),
-            Gender =   payment.Athlete.User?.Gender.ToString() ??"Female",
-            BirthDate = payment.Athlete.User?.BirthDate.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture)??"2001-01-01",
-            WpKey = "chaarset.ir"
-
-
-        };
-        
-    }
+    // public static PaymentResponseDto ToAthletePaymentResponseDto(this Payment payment)
+    // {
+    //     return new PaymentResponseDto
+    //     {   PaymentId = payment.Id,
+    //         TransactionId = payment.Authority,
+    //         PaymentStatus = payment.PaymentStatus.ToString(),
+    //         Name = payment.Coach.User.FirstName + " " + payment.Coach.User.LastName,
+    //         Amount = payment.Amount.ToString(CultureInfo.CurrentCulture),
+    //         DateTime = payment.PaymentDate.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture),
+    //         AthleteQuestion = payment.AthleteQuestion?.AthleteQuestionResponseDto(),
+    //         Height = payment.Athlete.Height,
+    //         ImageProfile = payment.Athlete.User?.ImageProfile ??"",
+    //         WorkoutProgram = payment.WorkoutProgram?.ToProgramResponseDto()??new WorkoutProgramResponseDto(),
+    //         Gender =   payment.Athlete.User?.Gender.ToString() ??"Female",
+    //         BirthDate = payment.Athlete.User?.BirthDate.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture)??"2001-01-01",
+    //         WpKey = "chaarset.ir"
+    //
+    //
+    //     };
+    //     
+    // }
     
 }

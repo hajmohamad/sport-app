@@ -22,4 +22,5 @@ public class AthleteQuestionBuyFromSiteDto
     public string SittingHour {get; set;}= "";
     public string YourJob {get; set;}= "";
     public string YourCity {get; set;}= "";
+    public string ActivityLevel { get; set; }
 }

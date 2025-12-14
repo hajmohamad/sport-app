@@ -30,7 +30,8 @@ namespace sport_app_backend.Repository
         IZarinPal zarinPal,
         ISmsService smsService,
         ILiaraStorage liaraStorage,
-        ITokenService tokenService) : IAthleteRepository
+        ITokenService tokenService,
+        ICalculator calculator) : IAthleteRepository
     {
         public async Task<ApiResponse> GetFaq()
         {
@@ -1254,6 +1255,18 @@ namespace sport_app_backend.Repository
             {
                 return new ApiResponse { Message = "workoutProgram not found for this user", Action = false };
             }
+            var Ear = calculator.BmrCalculator(new BmrRequestDto()
+            {
+                ActivityLevel = athleteQuestion.ActivityLevel,
+                Age = DateTime.Today.Year - paymentData.Payment.Athlete.User.BirthDate.Year
+                                          - (paymentData.Payment.Athlete.User.BirthDate.Date > DateTime.Today.AddYears(
+                                              -(DateTime.Today.Year - paymentData.Payment.Athlete.User.BirthDate.Year))
+                                              ? 1
+                                              : 0),
+                Gender = paymentData.AthleteUser.Gender,
+                HeightCm = paymentData.Athlete.Height,
+                WeightKg = paymentData.Athlete.CurrentWeight
+            });
 
             var paymentResponseDto = new PaymentResponseDto
             {
@@ -1267,7 +1280,7 @@ namespace sport_app_backend.Repository
                 ImageProfile = paymentData.CoachUser.ImageProfile ?? "",
                 Gender = paymentData.AthleteUser.Gender.ToString(),
                 BirthDate = paymentData.AthleteUser.BirthDate.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture),
-                AthleteQuestion = athleteQuestion?.AthleteQuestionResponseWithBirthdayDto( paymentData.AthleteUser.BirthDate.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture))?? new AthleteQuestionResponseDto(),
+                AthleteQuestion = athleteQuestion?.AthleteQuestionResponseWithBirthdayDto( paymentData.AthleteUser.BirthDate.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture),Ear)?? new AthleteQuestionResponseDto(),
                 WorkoutProgram = workoutProgram.ToProgramResponseDto(),
                 PdfLink= $"chaarset.ir/program/{tokenService.HashEncode(workoutProgram.Id)}",
                 WpKey = tokenService.HashEncode(workoutProgram.Id),

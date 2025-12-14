@@ -1,4 +1,5 @@
 ﻿using sport_app_backend.Dtos;
+using sport_app_backend.Interface;
 using sport_app_backend.Models;
 using sport_app_backend.Models.Account;
 using sport_app_backend.Models.C_Question;
@@ -69,7 +70,10 @@ namespace sport_app_backend.Mappers
                 CurrentMedications = dto.CurrentMedications,
                 SittingHour = Enum.Parse<SittingHour>(dto.SittingHour ?? string.Empty),
                 YourJob = dto.YourJob,
-                YourCity = dto.YourCity,            };
+                YourCity = dto.YourCity,
+                ActivityLevel = Enum.Parse<ActivityLevel>(dto.ActivityLevel.ToUpper()),
+
+            };
         }
         public static AthleteQuestion ToAthleteQuestionBuyFromSite(this AthleteQuestionBuyFromSiteDto dto, Athlete athlete)
         {
@@ -90,9 +94,11 @@ namespace sport_app_backend.Mappers
                 SittingHour = Enum.Parse<SittingHour>(dto.SittingHour ?? string.Empty),
                 YourJob = dto.YourJob,
                 YourCity = dto.YourCity,
+                ActivityLevel = Enum.Parse<ActivityLevel>(dto.ActivityLevel.ToUpper()),
+
             };
         }
-        public static AthleteQuestionResponseDto AthleteQuestionResponseDto(this AthleteQuestion question)
+        public static AthleteQuestionResponseDto AthleteQuestionResponseDto(this AthleteQuestion question,double ear)
         {
             return new AthleteQuestionResponseDto
             {
@@ -112,10 +118,12 @@ namespace sport_app_backend.Mappers
                 YourJob = question.YourJob??"",
                 YourCity = question.YourCity??"",
                 AthleteBodyImage = question.AthleteBodyImage?.ToAthleteBodyImageDto() ?? new AthleteBodyImageDto(),
+                ActivityLevel = question.ActivityLevel.ToString(),
+                Ear = ear
 
             };
         }
-        public static AthleteQuestionResponseDto AthleteQuestionResponseWithBirthdayDto(this AthleteQuestion question, string birthday)
+        public static AthleteQuestionResponseDto AthleteQuestionResponseWithBirthdayDto(this AthleteQuestion question, string birthday,double ear)
         {
             return new AthleteQuestionResponseDto
             {
@@ -134,6 +142,8 @@ namespace sport_app_backend.Mappers
                 YourJob = question.YourJob ?? "",
                 YourCity = question.YourCity ?? "",
                 ComingCompetition = question.ComingCompetition?.ToString() ?? "",
+                ActivityLevel = question.ActivityLevel.ToString(),
+                Ear = ear
             };
         }
         public static AthleteQuestionDto ToAthleteQuestionDto(this AthleteQuestion question)
@@ -141,13 +151,14 @@ namespace sport_app_backend.Mappers
             return new AthleteQuestionDto
             {
                 CurrentBodyForm = question.CurrentBodyForm,
-                ExerciseLocation = question.ExerciseLocation.ToString() ,
+                ExerciseLocation = question.ExerciseLocation.ToString(),
                 DaysPerWeekToExercise = question.DaysPerWeekToExercise,
                 FitnessLevel = question.FitnessLevel.ToString() ?? "",
                 InjuryArea = question.InjuryArea?.ToInjuryAreaDto(),
                 ExerciseGoal = question.ExerciseGoal.ToString() ?? "",
                 CurrentWeight = question.Weight,
                 BirthDay = question.Athlete?.User?.BirthDate.ToString("yyyy-MM-dd"),
+                ActivityLevel = question.ActivityLevel.ToString() ?? "",
             };
         }
 

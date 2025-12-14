@@ -11,6 +11,7 @@ using sport_app_backend.Dtos.ProgramDto;
 using sport_app_backend.Interface;
 using sport_app_backend.Mappers;
 using sport_app_backend.Models;
+using sport_app_backend.Models.Account;
 using sport_app_backend.Models.Actions;
 using sport_app_backend.Models.Payments;
 using sport_app_backend.Models.Program;
@@ -19,7 +20,7 @@ using sport_app_backend.Models.Question.A_Question;
 
 namespace sport_app_backend.Repository
 {
-    public class CoachRepository(ApplicationDbContext context, ISmsService smsService, ILiaraStorage liaraStorage,ITokenService token) : ICoachRepository
+    public class CoachRepository(ApplicationDbContext context, ISmsService smsService, ILiaraStorage liaraStorage,ITokenService token,ICalculator calculator) : ICoachRepository
     {
         public async Task<ApiResponse> AthleteReportForCoach(int athleteId)
         {
@@ -293,8 +294,21 @@ namespace sport_app_backend.Repository
                 .ThenInclude(e => e.Exercise)
                 .FirstOrDefaultAsync(p => p.Coach.PhoneNumber == phoneNumber && p.Id == paymentId);
             if (payment is null) return new ApiResponse() { Message = "Payment not found", Action = false };
+                var Ear = calculator.BmrCalculator(new BmrRequestDto()
+                {
+                    ActivityLevel = payment.AthleteQuestion.ActivityLevel,
+                    Age = DateTime.Today.Year - payment.Athlete.User.BirthDate.Year
+                                              - (payment.Athlete.User.BirthDate.Date > DateTime.Today.AddYears(
+                                                  -(DateTime.Today.Year - payment.Athlete.User.BirthDate.Year))
+                                                  ? 1
+                                                  : 0),
+                    Gender = payment.Athlete.User.Gender,
+                    HeightCm = payment.Athlete.Height,
+                    WeightKg = payment.Athlete.CurrentWeight
+                });
+            
 
-            var result = payment.ToCoachPaymentResponseDto(token.HashEncode(payment.WorkoutProgram?.Id??0));
+            var result = payment.ToCoachPaymentResponseDto(token.HashEncode(payment.WorkoutProgram?.Id??0),Ear);
             if (result.WorkoutProgram!.ProgramInDays.Count == 0)
             {
                 result.WorkoutProgram.ProgramInDays.Add(new ProgramInDayDto()
