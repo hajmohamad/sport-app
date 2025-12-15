@@ -325,7 +325,10 @@ namespace sport_app_backend.Repository
             var payments = await context.Payments.Include(p => p.Athlete).ThenInclude(u => u.User)
                 .OrderByDescending(c => c.PaymentDate)
                 .Include(p => p.WorkoutProgram).Where(p =>
-                    p.CoachId == user.Coach.Id && p.PaymentStatus == PaymentStatus.SUCCESS)
+                    p.CoachId == user.Coach.Id && p.PaymentStatus == PaymentStatus.SUCCESS&& p.WorkoutProgram != null &&
+                    p.WorkoutProgram.Status != WorkoutProgramStatus.WRITING &&
+                    p.WorkoutProgram.Status != WorkoutProgramStatus.NOTSTARTED&&
+                    p.WorkoutProgram.Status != WorkoutProgramStatus.UNCOMPLETEDQUESTION)
                 .ToListAsync();
             return new ApiResponse
             {
