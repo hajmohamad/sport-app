@@ -94,7 +94,7 @@ namespace sport_app_backend.Mappers
                 SittingHour = Enum.Parse<SittingHour>(dto.SittingHour ?? string.Empty),
                 YourJob = dto.YourJob,
                 YourCity = dto.YourCity,
-                ActivityLevel = Enum.Parse<ActivityLevel>(dto.ActivityLevel.ToUpper()),
+                ActivityLevel = Enum.Parse<ActivityLevel>(dto.ActivityLevel),
 
             };
         }
