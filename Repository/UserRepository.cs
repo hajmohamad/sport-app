@@ -31,6 +31,8 @@ public class UserRepository(
 
         var gender = Enum.Parse<Gender>(roleGenderDto.Gender.ToUpper());
         user.Gender = gender;
+        user.FirstName = roleGenderDto.FirstName;
+        user.LastName = roleGenderDto.LastName;
         
 
         switch (roleGenderDto.Role.ToUpper())
