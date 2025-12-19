@@ -1258,9 +1258,9 @@ namespace sport_app_backend.Repository
             var Ear = calculator.BmrCalculator(new BmrRequestDto()
             {
                 ActivityLevel = athleteQuestion.ActivityLevel,
-                Age = DateTime.Today.Year - paymentData.Payment.Athlete.User.BirthDate.Year
-                                          - (paymentData.Payment.Athlete.User.BirthDate.Date > DateTime.Today.AddYears(
-                                              -(DateTime.Today.Year - paymentData.Payment.Athlete.User.BirthDate.Year))
+                Age = DateTime.Today.Year - paymentData.AthleteUser.BirthDate.Year
+                                          - (paymentData.AthleteUser.BirthDate.Date > DateTime.Today.AddYears(
+                                              -(DateTime.Today.Year - paymentData.AthleteUser.BirthDate.Year))
                                               ? 1
                                               : 0),
                 Gender = paymentData.AthleteUser.Gender,
