@@ -19,16 +19,16 @@ public class Calculator : ICalculator
         if (request.Gender == Gender.MALE)
         {
             bmr = 88.362
-                  - (13.397 * request.WeightKg)
+                  + (13.397 * request.WeightKg)
                   + (4.799 * request.HeightCm)
-                  + (5.677 * request.Age);
+                  -(5.677 * request.Age);
         }
         else
         {
             bmr = 447.593
-                  - (9.247 * request.WeightKg)
+                  + (9.247 * request.WeightKg)
                   + (3.098 * request.HeightCm)
-                  + (4.330 * request.Age);
+                  - (4.330 * request.Age);
         }
 
 
