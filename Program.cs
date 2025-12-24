@@ -200,7 +200,7 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseIpRateLimiting(); 
 
-app.UseCors("AllowFrontendLocalhost");
+app.UseCors("AllowFrontend");
 
 app.UseAuthentication();
 app.UseAuthorization();
