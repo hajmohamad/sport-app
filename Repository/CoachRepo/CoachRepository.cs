@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Threading.Tasks;
-using Humanizer;
+﻿using System.Globalization;
 using Microsoft.EntityFrameworkCore;
 using sport_app_backend.Data;
 using sport_app_backend.Dtos;
@@ -11,14 +6,11 @@ using sport_app_backend.Dtos.ProgramDto;
 using sport_app_backend.Interface;
 using sport_app_backend.Mappers;
 using sport_app_backend.Models;
-using sport_app_backend.Models.Account;
 using sport_app_backend.Models.Actions;
 using sport_app_backend.Models.Payments;
 using sport_app_backend.Models.Program;
-using sport_app_backend.Models.Question.A_Question;
 
-
-namespace sport_app_backend.Repository
+namespace sport_app_backend.Repository.CoachRepo
 {
     public class CoachRepository(ApplicationDbContext context, ISmsService smsService, ILiaraStorage liaraStorage,ITokenService token,ICalculator calculator) : ICoachRepository
     {

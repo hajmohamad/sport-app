@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using sport_app_backend.Models;
 using sport_app_backend.Models.Account;
+using sport_app_backend.Models.Account.Athlete;
 using sport_app_backend.Models.Actions;
 using sport_app_backend.Models.Challenge_Achievement;
 using sport_app_backend.Models.Login_Sinup;

@@ -1,10 +1,12 @@
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using sport_app_backend.Dtos;
 using sport_app_backend.Interface;
 using sport_app_backend.Models;
 using sport_app_backend.Models.Actions;
+using WebPush;
 
 namespace sport_app_backend.Controller;
 [Route("api/[controller]")]
@@ -175,6 +177,49 @@ public class UserController(IUserRepository userRepository) : ControllerBase
         return Ok(result);
             
     }
+    private const string VapidPublicKey = "BFtaOg7TbbrtSgj87M8UIRyYoeZQP3JFoTuM84lR3VjAi3P4PsR5cuvQw8zgTPww5K71eklziLb0mjH-9gL_1R8";
+    private const string VapidPrivateKey = "BpndCrC7Y-Dn-Knh0by2FZ029uplKpco4RS4_tVhRVM";
+
+    [HttpPost("subscribe")]
+    public IActionResult Subscribe([FromBody] NotificationSubscription sub)
+    {
+      Console.WriteLine(sub.Endpoint);
+      Console.WriteLine(sub.Keys.Auth);
+      Console.WriteLine(sub.Keys.P256dh);
+
+
+        return Ok(new { message = "Subscription saved successfully." });
+    }
+
+    // ۲. متد ارسال نوتیفیکیشن (از سمت ادمین یا رویدادهای سیستم)
+    [HttpPost("send")]
+    public async Task<IActionResult> SendNotification([FromBody] string messageText)
+    {
+       
+        var subscription = new PushSubscription(
+           "https://fcm.googleapis.com/fcm/send/dOtHPoF9ejY:APA91bG0C01X0ffpydw5sdgHLk9rVBsx5orcuUgGs0GeqfhMP1Xu572kuExofvqJxANrZ4pkPuaniylzTx72ujJ7y8V8oYSRDSoMUTLFGXeebSkbNQuk6OQ0vmeDKyT-D6l3V4gUXEil",
+           "BNuAyIwS2NcMZtdBNhHsEpg6UsUuXh3geme32lrXl7sPysfCGznqfy33arQip0EtX2T3JY_OQ6oLj91-fJ6Vsco",
+           "ob0pcaPXO4TMdgUgvydwmQ"
+        );
+
+        var vapidDetails = new VapidDetails("mailto:example@yourdomain.com", VapidPublicKey, VapidPrivateKey);
+        var webPushClient = new WebPushClient();
+
+        try
+        {
+            var payload = System.Text.Json.JsonSerializer.Serialize(new {
+                title = "پیام جدید از سرور",
+                body = messageText
+            });
+
+            await webPushClient.SendNotificationAsync(subscription, payload, vapidDetails);
+            return Ok("Notification sent successfully!");
+        }
+        catch (WebPushException ex)
+        {
+            return BadRequest("Error sending notification: " + ex.Message);
+        }
+    }
 
     [HttpGet("AppUpdate")]
     public async Task<IActionResult> AppUpdate()
@@ -216,7 +261,17 @@ public class UserController(IUserRepository userRepository) : ControllerBase
             exercises
         });
     }
+    public class NotificationSubscription
+    {
+        public string Endpoint { get; set; }
+        public SubscriptionKeys Keys { get; set; } // فیلد کلیدها به عنوان یک شیء مجزا
+    }
 
+    public class SubscriptionKeys
+    {
+        public string P256dh { get; set; }
+        public string Auth { get; set; }
+    }
 
 
 }

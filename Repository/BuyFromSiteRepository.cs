@@ -8,6 +8,8 @@ using sport_app_backend.Dtos.ZarinPal.Verify;
 using sport_app_backend.Interface;
 using sport_app_backend.Mappers;
 using sport_app_backend.Models;
+using sport_app_backend.Models.Account.Athlete;
+
 using sport_app_backend.Models.Account;
 using sport_app_backend.Models.Login_Sinup;
 using sport_app_backend.Models.Payments;

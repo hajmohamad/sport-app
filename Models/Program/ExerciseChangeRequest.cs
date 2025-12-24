@@ -1,6 +1,7 @@
 ﻿using sport_app_backend.Models.Account;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using sport_app_backend.Models.Account.Athlete;
 
 namespace sport_app_backend.Models.Program
 {

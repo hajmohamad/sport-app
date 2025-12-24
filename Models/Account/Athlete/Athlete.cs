@@ -5,8 +5,7 @@ using sport_app_backend.Models.Payments;
 using sport_app_backend.Models.Program;
 using sport_app_backend.Models.Question.A_Question;
 
-
-namespace sport_app_backend.Models.Account;
+namespace sport_app_backend.Models.Account.Athlete;
 
 public class Athlete
 {

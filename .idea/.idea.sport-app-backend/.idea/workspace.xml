@@ -11,23 +11,48 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="11e104f8-869d-4d9d-9802-b48455f5eb31" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Interface/ICalculator.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Models/Question/A_Question/ActivityLevel.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Services/Calculator.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/dataSources.local.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Controller/AthleteController/AchievementController.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Controller/AthleteController/AthleteActivityController.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Controller/AthleteController/AthleteController.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Controller/AthleteController/BuyProgramFromApplicationController.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Controller/AthleteController/WaterAndWeightController.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Interface/Athlete/IAchievements.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Interface/Athlete/IActivity.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Interface/Athlete/IBuyProgramFromApplications.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Interface/Athlete/IWaterAndWeight.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Repository/AthleteRepo/AchievementsRepository.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Repository/AthleteRepo/ActivityRepository.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Repository/AthleteRepo/BuyProgramFromApplicationRepository.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Repository/AthleteRepo/WaterAndWeightRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/data_source_mapping.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/data_source_mapping.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/dictionaries/project.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/dictionaries/project.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dtos/AthleteQuestionBuyFromSiteDto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Dtos/AthleteQuestionBuyFromSiteDto.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dtos/AthleteQuestionDto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Dtos/AthleteQuestionDto.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dtos/AthleteQuestionResponseDto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Dtos/AthleteQuestionResponseDto.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dtos/CoachingServiceResponse.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Dtos/CoachingServiceResponse.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Mappers/CoachMappers.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Mappers/CoachMappers.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Mappers/PaymentMappers.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Mappers/PaymentMappers.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Controller/AthleteController.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Controller/UserController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Controller/UserController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Data/ApplicationDBContext.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Data/ApplicationDBContext.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Interface/IAthleteRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Interface/Athlete/IAthleteRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Interface/ICoachRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Interface/Coach/ICoachRepository.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Mappers/QuestionMapper.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Mappers/QuestionMapper.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Models/Account/Athlete/Athlete.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/Account/Athlete/Athlete.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Models/Account/Athlete/WeightEntry.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/Account/Athlete/WeightEntry.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Models/Account/User.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/Account/User.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Models/Actions/Activity.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/Actions/Activity.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Models/Challenge_Achievement/Challenge.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/Challenge_Achievement/Challenge.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Models/Payments/Payment.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/Payments/Payment.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Models/Program/ExerciseChangeRequest.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/Program/ExerciseChangeRequest.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Models/Program/ExerciseFeedback.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/Program/ExerciseFeedback.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Models/Program/WorkoutProgram.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/Program/WorkoutProgram.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Models/Question/A_Question/AthleteQuestion.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/Question/A_Question/AthleteQuestion.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Models/TrainingPlan/CoachService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/TrainingPlan/CoachService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Models/WaterInDay.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/WaterInDay.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Models/WaterInTake.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/WaterInTake.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Program.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Repository/AthleteRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Repository/AthleteRepository.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Repository/CoachRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Repository/CoachRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Repository/AthleteRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Repository/AthleteRepo/AthleteRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Repository/BuyFromSiteRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Repository/BuyFromSiteRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Repository/CoachRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Repository/CoachRepo/CoachRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Repository/UserRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Repository/UserRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/appsettings.Development.json" beforeDir="false" afterPath="$PROJECT_DIR$/appsettings.Development.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sport-app-backend.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/sport-app-backend.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sport-app-backend.sln.DotSettings.user" beforeDir="false" afterPath="$PROJECT_DIR$/sport-app-backend.sln.DotSettings.user" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -59,14 +84,28 @@
 }</component>
   <component name="HighlightingSettingsPerFile">
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/a6e45763fd2549c785509ca11525b35c273a00/a2/b813d4e0/HttpProtocol.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Controller/AdminController.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="mock:///Users/mohamad/RiderProjects/sport-app/Controller/AthleteController.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Controller/AthleteController/AchievementController.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Controller/AthleteController/AthleteActivityController.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Controller/AthleteController/BuyProgramFromApplicationController.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Controller/AthleteController/WaterAndWeightController.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Dtos/ExerciseDto.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Dtos/ProgramDto/ExerciseForTrainingSessionDto.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Interface/Athlete/IAchievements.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Interface/Athlete/IActivity.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Interface/Athlete/IBuyProgramFromApplications.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Interface/Athlete/IWaterAndWeight.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Interface/ICalculator.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Mappers/ExercisesMappers.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Mappers/ProgramMappers.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Models/Actions/Exercise.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Program.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Repository/AthleteRepository.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Repository/AthleteRepo/AchievementsRepository.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Repository/AthleteRepo/ActivityRepository.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Repository/AthleteRepo/AthleteRepository.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Repository/AthleteRepo/BuyProgramFromApplicationRepository.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Repository/AthleteRepo/WaterAndWeightRepository.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Repository/UserRepository.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Services/Calculator.cs" root0="FORCE_HIGHLIGHTING" />
   </component>
@@ -84,32 +123,32 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;.NET Launch Settings Profile.sport-app-backend: http.executor&quot;: &quot;Run&quot;,
-    &quot;.NET Launch Settings Profile.sport-app-backend: https.executor&quot;: &quot;Run&quot;,
-    &quot;ASKED_SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;Docker.Dockerfile.executor&quot;: &quot;Debug&quot;,
-    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;database.data.extractors.current.export.id&quot;: &quot;Comma-separated (CSV)_id&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;stagingMain&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;CodeLensConfigurable&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    ".NET Launch Settings Profile.sport-app-backend: http.executor": "Run",
+    ".NET Launch Settings Profile.sport-app-backend: https.executor": "Run",
+    "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "Docker.Dockerfile.executor": "Debug",
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "database.data.extractors.current.export.id": "Comma-separated (CSV)_id",
+    "git-widget-placeholder": "stagingMain",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "preferences.keymap",
+    "vue.rearranger.settings.migration": "true"
   },
-  &quot;keyToStringList&quot;: {
-    &quot;DatabaseDriversLRU&quot;: [
-      &quot;mysql&quot;
+  "keyToStringList": {
+    "DatabaseDriversLRU": [
+      "mysql"
     ]
   }
-}</component>
+}]]></component>
   <component name="RunManager" selected=".NET Launch Settings Profile.sport-app-backend: https">
     <configuration name="sport-app-backend: http" type="LaunchSettings" factoryName=".NET Launch Settings Profile">
       <option name="LAUNCH_PROFILE_PROJECT_FILE_PATH" value="$PROJECT_DIR$/sport-app-backend.csproj" />
@@ -224,6 +263,20 @@
       <workItem from="1764967425093" duration="2048000" />
       <workItem from="1764971451217" duration="332000" />
       <workItem from="1765741155168" duration="1228000" />
+      <workItem from="1766081880511" duration="631000" />
+      <workItem from="1766113962018" duration="3933000" />
+      <workItem from="1766178171309" duration="253000" />
+      <workItem from="1766413253115" duration="6043000" />
+      <workItem from="1766488860013" duration="97000" />
+      <workItem from="1766488964430" duration="208000" />
+      <workItem from="1766489175523" duration="252000" />
+      <workItem from="1766489509715" duration="291000" />
+      <workItem from="1766489840268" duration="565000" />
+      <workItem from="1766490423307" duration="4659000" />
+      <workItem from="1766603315326" duration="2512000" />
+      <workItem from="1766607778573" duration="635000" />
+      <workItem from="1766608420736" duration="163000" />
+      <workItem from="1766608598501" duration="5295000" />
     </task>
     <task id="LOCAL‎−۰۰۰۰۱" summary="edit getpayment method">
       <option name="closed" value="true" />
@@ -337,11 +390,53 @@
       <option name="presentableId" value="LOCAL‎−۰۰۰۱۶" />
       <updated>1764674986021</updated>
     </task>
-    <option name="localTasksCounter" value="17" />
+    <task id="LOCAL-00017" summary="add firstName And LastName to roleAndGender">
+      <option name="closed" value="true" />
+      <created>1766082389331</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1766082389331</updated>
+    </task>
+    <task id="LOCAL-00018" summary="edit ear method">
+      <option name="closed" value="true" />
+      <created>1766115351715</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1766115351715</updated>
+    </task>
+    <task id="LOCAL-00019" summary="edit ear">
+      <option name="closed" value="true" />
+      <created>1766178263028</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1766178263028</updated>
+    </task>
+    <task id="LOCAL-00020" summary="change responce off role method">
+      <option name="closed" value="true" />
+      <created>1766605329048</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1766605329048</updated>
+    </task>
+    <option name="localTasksCounter" value="21" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="UnitTestsCoverage.Settings">
+    <option name="coveragePercentColumnWidth" value="150" />
+    <option name="sortOrder" value="DESCENDING" />
+    <option name="sortedColumn" value="1" />
+    <option name="symbolColumnWidth" value="405" />
+    <coverage-tree-state>
+      <expand />
+      <select />
+    </coverage-tree-state>
   </component>
   <component name="UnityCheckinConfiguration" checkUnsavedScenes="true" />
   <component name="UnityProjectConfiguration" hasMinimizedUI="false" />
@@ -375,7 +470,11 @@
     <MESSAGE value="Merge remote-tracking branch 'origin/stagingMain' into stagingMain&#10;&#10;# Conflicts:&#10;#&#9;Services/ZarinPal.cs" />
     <MESSAGE value="change callBakcUrl" />
     <MESSAGE value="remove Bio and Line" />
-    <option name="LAST_COMMIT_MESSAGE" value="remove Bio and Line" />
+    <MESSAGE value="add firstName And LastName to roleAndGender" />
+    <MESSAGE value="edit ear method" />
+    <MESSAGE value="edit ear" />
+    <MESSAGE value="change responce off role method" />
+    <option name="LAST_COMMIT_MESSAGE" value="change responce off role method" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -411,7 +510,45 @@
           </properties>
           <option name="timeStamp" value="7" />
         </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Services/Calculator.cs</url>
+          <line>10</line>
+          <properties documentPath="$PROJECT_DIR$/Services/Calculator.cs" containingFunctionPresentation="Method 'BmrCalculator'">
+            <startOffsets>
+              <option value="276" />
+            </startOffsets>
+            <endOffsets>
+              <option value="287" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="9" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Controller/AthleteController/AchievementController.cs</url>
+          <line>27</line>
+          <properties documentPath="$PROJECT_DIR$/Controller/AchievementController.cs" containingFunctionPresentation="Method 'CompleteNewChallenge'">
+            <startOffsets>
+              <option value="903" />
+            </startOffsets>
+            <endOffsets>
+              <option value="904" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="10" />
+        </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
+  </component>
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand />
+    <select />
+  </component>
+  <component name="github-copilot-workspace">
+    <instructionFileLocations>
+      <option value=".github/instructions" />
+    </instructionFileLocations>
+    <promptFileLocations>
+      <option value=".github/prompts" />
+    </promptFileLocations>
   </component>
 </project>

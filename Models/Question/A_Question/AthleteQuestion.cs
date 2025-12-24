@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 using sport_app_backend.Models.Account;
+using sport_app_backend.Models.Account.Athlete;
 
 namespace sport_app_backend.Models.Question.A_Question
 {

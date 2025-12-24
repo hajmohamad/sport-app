@@ -2,6 +2,7 @@
 using sport_app_backend.Interface;
 using sport_app_backend.Models;
 using sport_app_backend.Models.Account;
+using sport_app_backend.Models.Account.Athlete;
 using sport_app_backend.Models.C_Question;
 using sport_app_backend.Models.Program;
 using sport_app_backend.Models.Question.A_Question;
