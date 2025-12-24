@@ -60,7 +60,7 @@ public class UserRepository(
                         AccessToken = tokenService.CreateToken(user),
                         TypeOfUser = user.TypeOfUser.ToString(),
                         Gender = user.Gender.ToString(),
-                        Questions= false 
+                        Questions= true 
                     }
                 };
             }
@@ -85,7 +85,7 @@ public class UserRepository(
                         AccessToken = tokenService.CreateToken(user),
                         TypeOfUser = user.TypeOfUser.ToString(),
                         Gender = user.Gender.ToString(),
-                        Questions= false 
+                        Questions= true 
                         }
                 };
             default:
