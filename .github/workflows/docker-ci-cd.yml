@@ -1,40 +1,34 @@
-name: Docker CI/CD for ASP.NET
+name: Docker CI/CD ASP.NET
 
 on:
   push:
     branches:
-      - master
       - stagingMain
+      - master
 
 jobs:
-  build-and-test:
+  deploy:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
+      - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v3
-        with:
-          dotnet-version: '8.0.x'
+      - name: Set environment variables
+        id: env
+        run: |
+          if [[ "${GITHUB_REF##*/}" == "stagingMain" ]]; then
+            echo "ENV=staging" >> $GITHUB_ENV
+            echo "PORT=8080" >> $GITHUB_ENV
+            echo "CONTAINER=sport-staging-backend" >> $GITHUB_ENV
+          else
+            echo "ENV=production" >> $GITHUB_ENV
+            echo "PORT=8081" >> $GITHUB_ENV
+            echo "CONTAINER=sport-prod-backend" >> $GITHUB_ENV
+          fi
 
       - name: Build Docker image
-        run: |
-          docker build -t myapp:latest .
-
-      - name: Run tests inside Docker
-        run: |
-          docker run --rm myapp:latest dotnet test
-
-  deploy:
-    needs: build-and-test
-    if: success()
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+        run: docker build -t $CONTAINER:latest .
 
       - name: Deploy via SSH
         uses: appleboy/ssh-action@v1
@@ -43,24 +37,22 @@ jobs:
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            cd /home/myuser/sport-app
+            docker stop $CONTAINER || true
+            docker rm $CONTAINER || true
 
-            # تعیین کانتینر بر اساس برنچ
-            if [ "${GITHUB_REF##*/}" = "stagingMain" ]; then
-              CONTAINER_NAME="sport-staging-backend"
-              PORT_MAP="8080:8080"
-            elif [ "${GITHUB_REF##*/}" = "master" ]; then
-              CONTAINER_NAME="sport-prod-backend"
-              PORT_MAP="8081:8080"
-            else
-              echo "Not a deployable branch"
-              exit 0
-            fi
+            docker run -d \
+              --name $CONTAINER \
+              -p $PORT:8080 \
+              -e ASPNETCORE_ENVIRONMENT=$ENV \
+              -e ConnectionStrings__DefaultConnection="${{ secrets[ env.ENV == 'staging' && 'STAGING_ConnectionStrings__DefaultConnection' || 'PROD_ConnectionStrings__DefaultConnection' ] }}" \
+              -e Zarinpal__MerchantId="${{ secrets[ env.ENV == 'staging' && 'STAGING_Zarinpal__MerchantId' || 'PROD_Zarinpal__MerchantId' ] }}" \
+              -e Liara__accessKey="${{ secrets[ env.ENV == 'staging' && 'STAGING_Liara__accessKey' || 'PROD_Liara__accessKey' ] }}" \
+              -e Liara__secretKey="${{ secrets[ env.ENV == 'staging' && 'STAGING_Liara__secretKey' || 'PROD_Liara__secretKey' ] }}" \
+              -e JWT__SigningKey="${{ secrets[ env.ENV == 'staging' && 'STAGING_JWT__SigningKey' || 'PROD_JWT__SigningKey' ] }}" \
+              -e SMS__accessKey="${{ secrets[ env.ENV == 'staging' && 'STAGING_SMS__accessKey' || 'PROD_SMS__accessKey' ] }}" \
+              -e Liara__endpoint="${{ secrets[ env.ENV == 'staging' && 'STAGING_Liara__endpoint' || 'PROD_Liara__endpoint' ] }}" \
+              -e Liara__BucketName="${{ secrets[ env.ENV == 'staging' && 'STAGING_Liara__BucketName' || 'PROD_Liara__BucketName' ] }}" \
+              -e Zarinpal__endpoint="${{ secrets[ env.ENV == 'staging' && 'STAGING_Zarinpal__endpoint' || 'PROD_Zarinpal__endpoint' ] }}" \
+              -e AllowedIps__0="${{ secrets[ env.ENV == 'staging' && 'STAGING_AllowedIps__0' || 'PROD_AllowedIps__0' ] }}" \
+              $CONTAINER:latest
 
-            # Stop & remove old container
-            docker stop $CONTAINER_NAME || true
-            docker rm $CONTAINER_NAME || true
-
-            # Build new image & run
-            docker build -t $CONTAINER_NAME:latest .
-            docker run -d --name $CONTAINER_NAME -p $PORT_MAP $CONTAINER_NAME:latest

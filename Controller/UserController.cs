@@ -221,13 +221,7 @@ public class UserController(IUserRepository userRepository) : ControllerBase
         }
     }
 
-    [HttpGet("AppUpdate")]
-    public async Task<IActionResult> AppUpdate()
-    {
-        var result =  userRepository.UpdateApp();
-        return Ok(result);
-
-    }
+ 
     [HttpGet("CheckQuestionSubmitted")]
     [Authorize(Roles = "Athlete,Coach")]
 

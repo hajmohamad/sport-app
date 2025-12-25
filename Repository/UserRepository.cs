@@ -323,26 +323,6 @@ private async Task<string> GenerateUniqueUsername()
         };
     }
 
-    public ApiResponse UpdateApp()
-    {
-        var version = config["app:version"] ?? "1.1";
-        var forceUpdate = config["app:forceUpdate"] ?? "false";
-        var forceUpdateBool = forceUpdate == "yes";
-
-        var result = new ApiResponse()
-        {
-            Action = true,
-            Message = "update app link",
-            Result = new
-            {
-                version,
-                requiredUpdate=forceUpdateBool
-                
-            }
-
-        };
-        return result;
-    }
 
     public Task<ApiResponse> GetExercise(int exerciseId)
     {
