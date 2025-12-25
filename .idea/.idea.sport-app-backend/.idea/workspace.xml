@@ -11,47 +11,19 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="11e104f8-869d-4d9d-9802-b48455f5eb31" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Controller/AthleteController/AchievementController.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Controller/AthleteController/AthleteActivityController.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Controller/AthleteController/AthleteController.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Controller/AthleteController/BuyProgramFromApplicationController.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Controller/AthleteController/WaterAndWeightController.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Interface/Athlete/IAchievements.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Interface/Athlete/IActivity.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Interface/Athlete/IBuyProgramFromApplications.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Interface/Athlete/IWaterAndWeight.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Repository/AthleteRepo/AchievementsRepository.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Repository/AthleteRepo/ActivityRepository.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Repository/AthleteRepo/BuyProgramFromApplicationRepository.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Repository/AthleteRepo/WaterAndWeightRepository.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/data_source_mapping.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/data_source_mapping.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/dictionaries/project.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/dictionaries/project.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/projectTest/AthleteControllerTests.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/projectTest/AthleteRepositoryTests.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/projectTest/CoachRepositoryTests.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/projectTest/projectTest.csproj" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Controller/AthleteController.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Controller/UserController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Controller/UserController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Data/ApplicationDBContext.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Data/ApplicationDBContext.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Interface/IAthleteRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Interface/Athlete/IAthleteRepository.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Interface/ICoachRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Interface/Coach/ICoachRepository.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Mappers/QuestionMapper.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Mappers/QuestionMapper.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Controller/CoachController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Controller/CoachController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dtos/FeedbackTrainingSessionDto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Dtos/FeedbackTrainingSessionDto.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Interface/Coach/ICoachRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Interface/Coach/ICoachRepository.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Models/Account/Athlete/Athlete.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/Account/Athlete/Athlete.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Models/Account/Athlete/WeightEntry.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/Account/Athlete/WeightEntry.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Models/Account/User.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/Account/User.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Models/Actions/Activity.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/Actions/Activity.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Models/Challenge_Achievement/Challenge.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/Challenge_Achievement/Challenge.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Models/Payments/Payment.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/Payments/Payment.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Models/Program/ExerciseChangeRequest.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/Program/ExerciseChangeRequest.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Models/Program/ExerciseFeedback.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/Program/ExerciseFeedback.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Models/Program/WorkoutProgram.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/Program/WorkoutProgram.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Models/Question/A_Question/AthleteQuestion.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/Question/A_Question/AthleteQuestion.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Models/WaterInDay.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/WaterInDay.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Models/WaterInTake.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/WaterInTake.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Models/TrainingPlan/CoachService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/TrainingPlan/CoachService.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Program.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Repository/AthleteRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Repository/AthleteRepo/AthleteRepository.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Repository/BuyFromSiteRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Repository/BuyFromSiteRepository.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Repository/CoachRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Repository/CoachRepo/CoachRepository.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Repository/UserRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Repository/UserRepository.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/appsettings.Development.json" beforeDir="false" afterPath="$PROJECT_DIR$/appsettings.Development.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sport-app-backend.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/sport-app-backend.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Repository/CoachRepo/CoachRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Repository/CoachRepo/CoachRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sport-app-backend.sln" beforeDir="false" afterPath="$PROJECT_DIR$/sport-app-backend.sln" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/sport-app-backend.sln.DotSettings.user" beforeDir="false" afterPath="$PROJECT_DIR$/sport-app-backend.sln.DotSettings.user" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -84,6 +56,7 @@
 }</component>
   <component name="HighlightingSettingsPerFile">
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/a6e45763fd2549c785509ca11525b35c273a00/a2/b813d4e0/HttpProtocol.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/c694c498917a4d9daa891180876e41b8d83a00/0d/beaf1246/ArgumentNullException.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Controller/AdminController.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="mock:///Users/mohamad/RiderProjects/sport-app/Controller/AthleteController.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Controller/AthleteController/AchievementController.cs" root0="FORCE_HIGHLIGHTING" />
@@ -91,6 +64,7 @@
     <setting file="file://$PROJECT_DIR$/Controller/AthleteController/BuyProgramFromApplicationController.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Controller/AthleteController/WaterAndWeightController.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Dtos/ExerciseDto.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="mock:///Users/mohamad/RiderProjects/sport-app/Dtos/FeedbackTrainingSessionDto.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Dtos/ProgramDto/ExerciseForTrainingSessionDto.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Interface/Athlete/IAchievements.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Interface/Athlete/IActivity.cs" root0="FORCE_HIGHLIGHTING" />
@@ -99,21 +73,37 @@
     <setting file="file://$PROJECT_DIR$/Interface/ICalculator.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Mappers/ExercisesMappers.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Mappers/ProgramMappers.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="mock:///Users/mohamad/RiderProjects/sport-app/Models/Account/Athlete/Athlete.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Models/Actions/Exercise.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="mock:///Users/mohamad/RiderProjects/sport-app/Program.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Users/mohamad/RiderProjects/sport-app/Program.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Users/mohamad/RiderProjects/sport-app/Program.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Users/mohamad/RiderProjects/sport-app/Program.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Program.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="mock:///Users/mohamad/RiderProjects/sport-app/Program.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Repository/AthleteRepo/AchievementsRepository.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Repository/AthleteRepo/ActivityRepository.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Repository/AthleteRepo/AthleteRepository.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Repository/AthleteRepo/BuyProgramFromApplicationRepository.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Repository/AthleteRepo/WaterAndWeightRepository.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Repository/UserRepository.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="mock:///Users/mohamad/RiderProjects/sport-app/Repository/UserRepository.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Users/mohamad/RiderProjects/sport-app/Repository/UserRepository.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Users/mohamad/RiderProjects/sport-app/Services/Calculator.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Services/Calculator.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="mock:///Users/mohamad/RiderProjects/sport-app/Services/Calculator.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/projectTest/AthleteControllerTests.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/projectTest/AthleteRepositoryTests.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/projectTest/CoachRepositoryTests.cs" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="KubernetesApiPersistence">{}</component>
   <component name="KubernetesApiProvider">{
   &quot;isMigrated&quot;: true
 }</component>
   <component name="MetaFilesCheckinStateConfiguration" checkMetaFiles="true" />
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="CurrentFile" />
+  </component>
   <component name="ProjectColorInfo">{
   &quot;customColor&quot;: &quot;&quot;,
   &quot;associatedIndex&quot;: 6
@@ -140,7 +130,7 @@
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "preferences.keymap",
+    "settings.editor.selected.configurable": "com.github.copilot.settings.chat.ChatConfigurable",
     "vue.rearranger.settings.migration": "true"
   },
   "keyToStringList": {
@@ -149,7 +139,7 @@
     ]
   }
 }]]></component>
-  <component name="RunManager" selected=".NET Launch Settings Profile.sport-app-backend: https">
+  <component name="RunManager" selected="Multi-Launch.Multi-Launch: sport-app-backend">
     <configuration name="sport-app-backend: http" type="LaunchSettings" factoryName=".NET Launch Settings Profile">
       <option name="LAUNCH_PROFILE_PROJECT_FILE_PATH" value="$PROJECT_DIR$/sport-app-backend.csproj" />
       <option name="LAUNCH_PROFILE_TFM" value="net8.0" />
@@ -182,6 +172,9 @@
         <option name="Build" />
       </method>
     </configuration>
+    <configuration name="Multi-Launch: sport-app-backend" type="com.intellij.execution.configurations.multilaunch" factoryName="MultiLaunchConfiguration">
+      <method v="2" />
+    </configuration>
     <configuration name="Dockerfile" type="docker-deploy" factoryName="dockerfile" server-name="Docker">
       <deployment type="dockerfile">
         <settings>
@@ -204,6 +197,7 @@
       <item itemvalue=".NET Launch Settings Profile.sport-app-backend: http" />
       <item itemvalue=".NET Launch Settings Profile.sport-app-backend: https" />
       <item itemvalue="Docker.Dockerfile" />
+      <item itemvalue="Multi-Launch.Multi-Launch: sport-app-backend" />
     </list>
   </component>
   <component name="TaskManager">
@@ -276,7 +270,7 @@
       <workItem from="1766603315326" duration="2512000" />
       <workItem from="1766607778573" duration="635000" />
       <workItem from="1766608420736" duration="163000" />
-      <workItem from="1766608598501" duration="5295000" />
+      <workItem from="1766608598501" duration="12584000" />
     </task>
     <task id="LOCAL‎−۰۰۰۰۱" summary="edit getpayment method">
       <option name="closed" value="true" />
@@ -422,7 +416,23 @@
       <option name="project" value="LOCAL" />
       <updated>1766605329048</updated>
     </task>
-    <option name="localTasksCounter" value="21" />
+    <task id="LOCAL-00021" summary="refactor: reorganize namespaces and add athlete-related interfaces and controllers">
+      <option name="closed" value="true" />
+      <created>1766614086566</created>
+      <option name="number" value="00021" />
+      <option name="presentableId" value="LOCAL-00021" />
+      <option name="project" value="LOCAL" />
+      <updated>1766614086566</updated>
+    </task>
+    <task id="LOCAL-00022" summary="fix: update CORS policy to allow frontend access">
+      <option name="closed" value="true" />
+      <created>1766615152336</created>
+      <option name="number" value="00022" />
+      <option name="presentableId" value="LOCAL-00022" />
+      <option name="project" value="LOCAL" />
+      <updated>1766615152336</updated>
+    </task>
+    <option name="localTasksCounter" value="23" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -432,9 +442,56 @@
     <option name="coveragePercentColumnWidth" value="150" />
     <option name="sortOrder" value="DESCENDING" />
     <option name="sortedColumn" value="1" />
-    <option name="symbolColumnWidth" value="405" />
+    <option name="symbolColumnWidth" value="460" />
     <coverage-tree-state>
-      <expand />
+      <expand>
+        <path>
+          <item name="rootNode" type="c53c71d1:RiderDotCoverCoverageTreeModel$RootNode" />
+          <item name="Total 0% 11513/11513" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
+        </path>
+        <path>
+          <item name="rootNode" type="c53c71d1:RiderDotCoverCoverageTreeModel$RootNode" />
+          <item name="Total 0% 11513/11513" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
+          <item name="sport-app-backend 0% 10482/10482" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
+        </path>
+        <path>
+          <item name="rootNode" type="c53c71d1:RiderDotCoverCoverageTreeModel$RootNode" />
+          <item name="Total 0% 11513/11513" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
+          <item name="sport-app-backend 0% 10482/10482" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
+          <item name="sport_app_backend 0% 10371/10371" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
+        </path>
+        <path>
+          <item name="rootNode" type="c53c71d1:RiderDotCoverCoverageTreeModel$RootNode" />
+          <item name="Total 0% 11513/11513" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
+          <item name="sport-app-backend 0% 10482/10482" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
+          <item name="sport_app_backend 0% 10371/10371" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
+          <item name="Repository 0% 1949/1949" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
+        </path>
+        <path>
+          <item name="rootNode" type="c53c71d1:RiderDotCoverCoverageTreeModel$RootNode" />
+          <item name="Total 0% 11513/11513" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
+          <item name="sport-app-backend 0% 10482/10482" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
+          <item name="sport_app_backend 0% 10371/10371" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
+          <item name="Repository 0% 1949/1949" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
+          <item name="AthleteRepo 0% 796/796" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
+        </path>
+        <path>
+          <item name="rootNode" type="c53c71d1:RiderDotCoverCoverageTreeModel$RootNode" />
+          <item name="Total 0% 11513/11513" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
+          <item name="sport-app-backend 0% 10482/10482" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
+          <item name="sport_app_backend 0% 10371/10371" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
+          <item name="Repository 0% 1949/1949" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
+          <item name="AthleteRepo 0% 796/796" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
+          <item name="AthleteRepository 0% 271/271" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
+        </path>
+        <path>
+          <item name="rootNode" type="c53c71d1:RiderDotCoverCoverageTreeModel$RootNode" />
+          <item name="Total 0% 11513/11513" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
+          <item name="sport-app-backend 0% 10482/10482" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
+          <item name="sport_app_backend 0% 10371/10371" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
+          <item name="Controller 0% 1400/1400" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
+        </path>
+      </expand>
       <select />
     </coverage-tree-state>
   </component>
@@ -474,7 +531,9 @@
     <MESSAGE value="edit ear method" />
     <MESSAGE value="edit ear" />
     <MESSAGE value="change responce off role method" />
-    <option name="LAST_COMMIT_MESSAGE" value="change responce off role method" />
+    <MESSAGE value="refactor: reorganize namespaces and add athlete-related interfaces and controllers" />
+    <MESSAGE value="fix: update CORS policy to allow frontend access" />
+    <option name="LAST_COMMIT_MESSAGE" value="fix: update CORS policy to allow frontend access" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

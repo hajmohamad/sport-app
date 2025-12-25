@@ -18,6 +18,7 @@ using Serilog.Events;
 using sport_app_backend.BackgroundServices;
 using sport_app_backend.Handler;
 using sport_app_backend.Interface.Athlete;
+using sport_app_backend.Interface.Coach;
 using sport_app_backend.Repository.AthleteRepo;
 using sport_app_backend.Repository.CoachRepo;
 

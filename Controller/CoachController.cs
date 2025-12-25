@@ -8,6 +8,7 @@ using sport_app_backend.Mappers;
 using sport_app_backend.Models;
 using System.Security.Claims;
 using sport_app_backend.Dtos.ProgramDto;
+using sport_app_backend.Interface.Coach;
 
 
 namespace sport_app_backend.Controller

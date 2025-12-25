@@ -4,6 +4,7 @@ using sport_app_backend.Data;
 using sport_app_backend.Dtos;
 using sport_app_backend.Dtos.ProgramDto;
 using sport_app_backend.Interface;
+using sport_app_backend.Interface.Coach;
 using sport_app_backend.Mappers;
 using sport_app_backend.Models;
 using sport_app_backend.Models.Actions;
@@ -80,7 +81,7 @@ namespace sport_app_backend.Repository.CoachRepo
             if (athlete is null)
                 return new ApiResponse() { Message = "User is not an athlete", Action = false };
 
-            var persianCalendar = new System.Globalization.PersianCalendar();
+            var persianCalendar = new PersianCalendar();
 
             try
             {
@@ -286,7 +287,7 @@ namespace sport_app_backend.Repository.CoachRepo
                 .ThenInclude(e => e.Exercise)
                 .FirstOrDefaultAsync(p => p.Coach.PhoneNumber == phoneNumber && p.Id == paymentId);
             if (payment is null) return new ApiResponse() { Message = "Payment not found", Action = false };
-                var Ear = calculator.BmrCalculator(new BmrRequestDto()
+                var ear = calculator.BmrCalculator(new BmrRequestDto()
                 {
                     ActivityLevel = payment.AthleteQuestion.ActivityLevel,
                     Age = DateTime.Today.Year - payment.Athlete.User.BirthDate.Year
@@ -300,7 +301,7 @@ namespace sport_app_backend.Repository.CoachRepo
                 });
             
 
-            var result = payment.ToCoachPaymentResponseDto(token.HashEncode(payment.WorkoutProgram?.Id??0),Ear);
+            var result = payment.ToCoachPaymentResponseDto(token.HashEncode(payment.WorkoutProgram?.Id??0),ear);
             if (result.WorkoutProgram!.ProgramInDays.Count == 0)
             {
                 result.WorkoutProgram.ProgramInDays.Add(new ProgramInDayDto()
