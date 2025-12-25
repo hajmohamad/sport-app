@@ -1,0 +1,66 @@
+name: Docker CI/CD for ASP.NET
+
+on:
+  push:
+    branches:
+      - master
+      - stagingMain
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Build Docker image
+        run: |
+          docker build -t myapp:latest .
+
+      - name: Run tests inside Docker
+        run: |
+          docker run --rm myapp:latest dotnet test
+
+  deploy:
+    needs: build-and-test
+    if: success()
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.SERVER_IP }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            cd /home/myuser/sport-app
+
+            # تعیین کانتینر بر اساس برنچ
+            if [ "${GITHUB_REF##*/}" = "stagingMain" ]; then
+              CONTAINER_NAME="sport-staging-backend"
+              PORT_MAP="8080:8080"
+            elif [ "${GITHUB_REF##*/}" = "master" ]; then
+              CONTAINER_NAME="sport-prod-backend"
+              PORT_MAP="8081:8080"
+            else
+              echo "Not a deployable branch"
+              exit 0
+            fi
+
+            # Stop & remove old container
+            docker stop $CONTAINER_NAME || true
+            docker rm $CONTAINER_NAME || true
+
+            # Build new image & run
+            docker build -t $CONTAINER_NAME:latest .
+            docker run -d --name $CONTAINER_NAME -p $PORT_MAP $CONTAINER_NAME:latest
