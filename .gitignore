@@ -1,2 +1,8 @@
 obj/
 bin/
+**/.git
+**/.gitignore
+**/.vs
+**/.vscode
+**/bin
+**/obj
