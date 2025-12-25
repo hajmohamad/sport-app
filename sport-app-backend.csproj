@@ -43,6 +43,14 @@
     <_ContentIncludedByDefault Remove="Test-sport-app\obj\project.packagespec.json" />
     <_ContentIncludedByDefault Remove="Test-sport-app\obj\Test-sport-app.csproj.nuget.dgspec.json" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Models\Program\WorkoutProgram\NotUse\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Models\Program\WorkoutProgram\NotUse\ExerciseInDay.cs" />
+  </ItemGroup>
   
 
 </Project>
