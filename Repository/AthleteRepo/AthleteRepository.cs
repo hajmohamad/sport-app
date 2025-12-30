@@ -218,7 +218,7 @@ namespace sport_app_backend.Repository.AthleteRepo
 
             if (targetProgram.Status == WorkoutProgramStatus.ACTIVE)
             {
-                athlete.ActiveWorkoutProgramId = paymentId;
+                athlete.ActiveWorkoutProgramId = targetProgram.Id;
                 allTrainingSessions.ForEach(resetTrainingSession);
                 await context.SaveChangesAsync();
                 return new ApiResponse { Action = true, Message = "Program already active and reset." };
@@ -247,7 +247,7 @@ namespace sport_app_backend.Repository.AthleteRepo
             }
 
             targetProgram.Status = WorkoutProgramStatus.ACTIVE;
-            athlete.ActiveWorkoutProgramId = paymentId;
+            athlete.ActiveWorkoutProgramId = targetProgram.Id;
 
             await context.SaveChangesAsync();
             return new ApiResponse { Action = true, Message = "Program activated successfully." };

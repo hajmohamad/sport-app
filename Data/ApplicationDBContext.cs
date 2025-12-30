@@ -12,6 +12,7 @@ using sport_app_backend.Models.Payments;
 using sport_app_backend.Models.Program;
 using sport_app_backend.Models.Question.A_Question;
 using sport_app_backend.Models.SupportApp;
+using WebPush;
 
 
 namespace sport_app_backend.Data;
@@ -24,6 +25,17 @@ public class ApplicationDbContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
+        modelBuilder.Entity<Athlete>()
+            .HasMany(a => a.WorkoutPrograms)
+            .WithOne(w => w.Athlete)
+            .HasForeignKey(w => w.AthleteId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<Athlete>()
+            .HasOne(a => a.ActiveWorkoutProgram)
+            .WithMany()
+            .HasForeignKey(a => a.ActiveWorkoutProgramId)
+            .OnDelete(DeleteBehavior.Restrict);
         
          modelBuilder.Entity<User>()
         .Navigation(u => u.Coach)
@@ -33,6 +45,8 @@ public class ApplicationDbContext : DbContext
          modelBuilder.Entity<User>()
         .Navigation(u => u.Athlete)
         .AutoInclude(); 
+         
+      
     }
     public DbSet<User> Users { get; set; }
     public DbSet<Coach> Coaches { get; set; }
@@ -60,7 +74,7 @@ public class ApplicationDbContext : DbContext
     public DbSet<CoachFaq> CoachFaq { get; set; }
     public DbSet<AthleteFaq> AthleteFaq { get; set; }
     public DbSet<AthleteBodyImage> AthleteImage { get; set; }
-    
+     public DbSet<NotificationSubscription> NotificationSubscriptions { get; set; }
 
  
 

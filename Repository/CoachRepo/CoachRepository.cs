@@ -413,7 +413,7 @@ namespace sport_app_backend.Repository.CoachRepo
                     await smsService.WorkoutReadySms(athlete.PhoneNumber, athlete.User.FirstName, workoutProgram.Title,token.HashEncode(workoutProgram.Id));
 
 
-                    if (athlete.ActiveWorkoutProgramId == 0)
+                    if (athlete.ActiveWorkoutProgramId is null)
                     {
                         await context.SaveChangesAsync();
                         await AddTrainingSession(paymentId);
