@@ -28,6 +28,12 @@ jobs:
             echo "CONTAINER=sport-prod-backend" >> $GITHUB_ENV
           fi
 
+      - name: Debug VAPID
+        run: |
+          echo "PUB=${{ secrets[format('{0}_VAPID__PUBLICKEY', env.ENV == 'staging' && 'STAGING' || 'PROD')] }}"
+          echo "PRIV=${{ secrets[format('{0}_VAPID__PRIVATEKEY', env.ENV == 'staging' && 'STAGING' || 'PROD')] }}"
+      
+
       - name: Login to Docker Hub
         uses: docker/login-action@v3
         with:
@@ -47,12 +53,6 @@ jobs:
           # اضافه کردن کش: پکیج‌های NuGet را در حافظه گیت‌هاب ذخیره می‌کند
           cache-from: type=gha
           cache-to: type=gha,mode=max
-
-      - name: Check Vapid keys
-        run: |
-          echo "Vapid Public Key: ${{ secrets.STAGING_Vapid__PublicKey }}"
-          echo "Vapid Private Key: ${{ secrets.STAGING_Vapid__PrivateKey }}"
-
 
       - name: Deploy via SSH
         uses: appleboy/ssh-action@v1.0.3
@@ -80,8 +80,8 @@ jobs:
               -e Liara__BucketName="${{ secrets[format('{0}_Liara__BucketName', env.ENV == 'staging' && 'STAGING' || 'PROD')] }}" \
               -e Zarinpal__endpoint="${{ secrets[format('{0}_Zarinpal__endpoint', env.ENV == 'staging' && 'STAGING' || 'PROD')] }}" \
               -e AllowedIps__0="${{ secrets[format('{0}_AllowedIps__0', env.ENV == 'staging' && 'STAGING' || 'PROD')] }}" \
-              -e Vapid__PublicKey="${{ secrets[format('{0}_Vapid__PublicKey', env.ENV == 'staging' && 'STAGING' || 'PROD')] }}" \
-              -e Vapid__PrivateKey="${{ secrets[format('{0}_Vapid__PrivateKey', env.ENV == 'staging' && 'STAGING' || 'PROD')] }}" \
+              -e Vapid__PublicKey="${{ secrets[format('{0}_VAPID__PUBLICKEY', env.ENV == 'staging' && 'STAGING' || 'PROD')] }}" \
+              -e Vapid__PrivateKey="${{ secrets[format('{0}_VAPID__PRIVATEKEY', env.ENV == 'staging' && 'STAGING' || 'PROD')] }}" \
               mohamadrahi98/${{ env.CONTAINER }}:latest
             
             docker image prune -f
