@@ -11,7 +11,16 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="11e104f8-869d-4d9d-9802-b48455f5eb31" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/dataSources.local.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/dataSources/b995594b-b1c6-4f7b-a3d8-4a5b1ad21ad7.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/dataSources/b995594b-b1c6-4f7b-a3d8-4a5b1ad21ad7.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Controller/NotificationController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Controller/NotificationController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dtos/SubscriptionKeysDto.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Repository/NotificationRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Repository/NotificationRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Services/WebPushNotificationService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Services/WebPushNotificationService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/appsettings.Development.json" beforeDir="false" afterPath="$PROJECT_DIR$/appsettings.Development.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sport-app-backend.sln.DotSettings.user" beforeDir="false" afterPath="$PROJECT_DIR$/sport-app-backend.sln.DotSettings.user" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -47,6 +56,7 @@
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/9efc724329ab415f9a4af6b465bba4d621800/7b/104903aa/ServiceCollectionServiceExtensions.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/a6e45763fd2549c785509ca11525b35c273a00/a2/b813d4e0/HttpProtocol.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/c694c498917a4d9daa891180876e41b8d83a00/0d/beaf1246/ArgumentNullException.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/c694c498917a4d9daa891180876e41b8d83a00/60/8ae2f6cb/String.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/d998dc20d86d44a3993d3fd14c1bed1c6000/02/6c8c0e6a/PushSubscription.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/d998dc20d86d44a3993d3fd14c1bed1c6000/e2/83f1787c/WebPushClient.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/BackgroundServices/TrainingReminderService.cs" root0="FORCE_HIGHLIGHTING" />
@@ -56,9 +66,8 @@
     <setting file="file://$PROJECT_DIR$/Controller/AthleteController/BuyProgramFromApplicationController.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Controller/AthleteController/WaterAndWeightController.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Controller/NotificationController.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="mock:///Users/mohamad/RiderProjects/sport-app/Data/ApplicationDBContext.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Users/mohamad/RiderProjects/sport-app/Data/ApplicationDBContext.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Dtos/ExerciseDto.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="mock:///Users/mohamad/RiderProjects/sport-app/Dtos/NotificationSubscriptionDto.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Dtos/ProgramDto/ExerciseForTrainingSessionDto.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Interface/Athlete/IAchievements.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Interface/Athlete/IActivity.cs" root0="FORCE_HIGHLIGHTING" />
@@ -68,8 +77,6 @@
     <setting file="file://$PROJECT_DIR$/Interface/INotification.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Mappers/ExercisesMappers.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Mappers/ProgramMappers.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="mock:///Users/mohamad/RiderProjects/sport-app/Migrations/ApplicationDbContextModelSnapshot.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Users/mohamad/RiderProjects/sport-app/Migrations/ApplicationDbContextModelSnapshot.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Models/Actions/Exercise.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Models/NotificationSubscription.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Program.cs" root0="FORCE_HIGHLIGHTING" />
@@ -78,11 +85,11 @@
     <setting file="file://$PROJECT_DIR$/Repository/AthleteRepo/AthleteRepository.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Repository/AthleteRepo/BuyProgramFromApplicationRepository.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Repository/AthleteRepo/WaterAndWeightRepository.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="mock:///Users/mohamad/RiderProjects/sport-app/Repository/NotificationRepository.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Repository/NotificationRepository.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Repository/UserRepository.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Services/Calculator.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Services/WebPushNotificationService.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="mock:///Users/mohamad/RiderProjects/sport-app/appsettings.Development.json" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/projectTest/AthleteControllerTests.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/projectTest/AthleteRepositoryTests.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/projectTest/CoachRepositoryTests.cs" root0="FORCE_HIGHLIGHTING" />
@@ -104,35 +111,35 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;.NET Launch Settings Profile.sport-app-backend: http.executor&quot;: &quot;Run&quot;,
-    &quot;.NET Launch Settings Profile.sport-app-backend: https.executor&quot;: &quot;Run&quot;,
-    &quot;ASKED_SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;Docker.Dockerfile.executor&quot;: &quot;Run&quot;,
-    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;database.data.extractors.current.export.id&quot;: &quot;Comma-separated (CSV)_id&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;stagingMain&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    ".NET Launch Settings Profile.sport-app-backend: http.executor": "Run",
+    ".NET Launch Settings Profile.sport-app-backend: https.executor": "Run",
+    "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "Docker.Dockerfile.executor": "Run",
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "database.data.extractors.current.export.id": "Comma-separated (CSV)_id",
+    "git-widget-placeholder": "stagingMain",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "CodeLensConfigurable",
+    "vue.rearranger.settings.migration": "true"
   },
-  &quot;keyToStringList&quot;: {
-    &quot;ChangesTree.GroupingKeys&quot;: [
-      &quot;repository&quot;
+  "keyToStringList": {
+    "ChangesTree.GroupingKeys": [
+      "repository"
     ],
-    &quot;DatabaseDriversLRU&quot;: [
-      &quot;mysql&quot;
+    "DatabaseDriversLRU": [
+      "mysql"
     ]
   }
-}</component>
+}]]></component>
   <component name="RunManager" selected=".NET Launch Settings Profile.sport-app-backend: https">
     <configuration name="sport-app-backend: http" type="LaunchSettings" factoryName=".NET Launch Settings Profile">
       <option name="LAUNCH_PROFILE_PROJECT_FILE_PATH" value="$PROJECT_DIR$/sport-app-backend.csproj" />
@@ -274,6 +281,7 @@
       <workItem from="1767119880245" duration="97000" />
       <workItem from="1767120106749" duration="1223000" />
       <workItem from="1767121953350" duration="10917000" />
+      <workItem from="1767211931143" duration="5208000" />
     </task>
     <task id="LOCAL‎−۰۰۰۰۱" summary="edit getpayment method">
       <option name="closed" value="true" />
@@ -475,7 +483,23 @@
       <option name="project" value="LOCAL" />
       <updated>1767129682374</updated>
     </task>
-    <option name="localTasksCounter" value="28" />
+    <task id="LOCAL-00028" summary="edit notifications dto">
+      <option name="closed" value="true" />
+      <created>1767212140278</created>
+      <option name="number" value="00028" />
+      <option name="presentableId" value="LOCAL-00028" />
+      <option name="project" value="LOCAL" />
+      <updated>1767212140278</updated>
+    </task>
+    <task id="LOCAL-00029" summary="edit dto">
+      <option name="closed" value="true" />
+      <created>1767213214792</created>
+      <option name="number" value="00029" />
+      <option name="presentableId" value="LOCAL-00029" />
+      <option name="project" value="LOCAL" />
+      <updated>1767213214792</updated>
+    </task>
+    <option name="localTasksCounter" value="30" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -506,8 +530,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
-    <MESSAGE value="add support app" />
-    <MESSAGE value="add phoennumber to getworkoutprogramstatus" />
     <MESSAGE value="add wpkey to sms" />
     <MESSAGE value="add mysql migrations" />
     <MESSAGE value="add new BaseCategory enum" />
@@ -531,7 +553,9 @@
     <MESSAGE value="add new yml" />
     <MESSAGE value="edit yml" />
     <MESSAGE value="add pushNotifications" />
-    <option name="LAST_COMMIT_MESSAGE" value="add pushNotifications" />
+    <MESSAGE value="edit notifications dto" />
+    <MESSAGE value="edit dto" />
+    <option name="LAST_COMMIT_MESSAGE" value="edit dto" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

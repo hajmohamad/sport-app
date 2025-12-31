@@ -12,7 +12,7 @@ namespace sport_app_backend.Controller;
 
 [ApiController]
 [Route("api/notifications")]
-public class NotificationController(INotification notification) : ControllerBase
+public class NotificationController(INotification notification,ApplicationDbContext db,IWebPushNotificationService webPushNotificationService) : ControllerBase
 {
     [HttpPost("subscribe")]
     [Authorize(Roles = "Athlete,Coach")]
@@ -26,33 +26,38 @@ public class NotificationController(INotification notification) : ControllerBase
         return Ok(result);
     }
 
-    // [HttpPost("send")]
-    // public async Task<IActionResult> SendNotification([FromBody] string messageText)
-    // {
-    //    
-    //     var subscription = new PushSubscription(
-    //         "https://fcm.googleapis.com/fcm/send/dOtHPoF9ejY:APA91bG0C01X0ffpydw5sdgHLk9rVBsx5orcuUgGs0GeqfhMP1Xu572kuExofvqJxANrZ4pkPuaniylzTx72ujJ7y8V8oYSRDSoMUTLFGXeebSkbNQuk6OQ0vmeDKyT-D6l3V4gUXEil",
-    //         "BNuAyIwS2NcMZtdBNhHsEpg6UsUuXh3geme32lrXl7sPysfCGznqfy33arQip0EtX2T3JY_OQ6oLj91-fJ6Vsco",
-    //         "ob0pcaPXO4TMdgUgvydwmQ"
-    //     );
-    //
-    //     var vapidDetails = new VapidDetails("mailto:example@yourdomain.com", VapidPublicKey, VapidPrivateKey);
-    //     var webPushClient = new WebPushClient();
-    //
-    //     try
-    //     {
-    //         var payload = System.Text.Json.JsonSerializer.Serialize(new {
-    //             title = "پیام جدید از سرور",
-    //             body = messageText
-    //         });
-    //
-    //         await webPushClient.SendNotificationAsync(subscription, payload, vapidDetails);
-    //         return Ok("Notification sent successfully!");
-    //     }
-    //     catch (WebPushException ex)
-    //     {
-    //         return BadRequest("Error sending notification: " + ex.Message);
-    //     }
-    // }
+    [HttpPost("send")]
+    public async Task<IActionResult> SendNotification([FromBody] string messageText)
+    {
+        var users =await db.NotificationSubscriptions.ToListAsync();
+        foreach (var user in users)
+        {
+
+         
+            webPushNotificationService.SendAsync(user,"notification",messageText);
+            
+            // var vapidDetails = new VapidDetails("mailto:example@yourdomain.com",
+            //     "BOEaNF0WMvjqB3QrKDYvHg28v6brpn1PpJuJZZBsYT0OwEy1E2skB4KSl3jFbPdqty0xRWSd1ncqfYbGNX6MEbc",
+            //     "YLKGteozQLjg2MeYDitWEq2UAiGhI52_FPmldC9-Sog");
+            // var webPushClient = new WebPushClient();
+            //
+            // try
+            // {
+            //     var payload = System.Text.Json.JsonSerializer.Serialize(new
+            //     {
+            //         title = "پیام جدید از سرور",
+            //         body = messageText
+            //     });
+            //
+            //     await webPushClient.SendNotificationAsync(subscription, payload, vapidDetails);
+            // }
+            // catch (WebPushException ex)
+            // {
+            //     return BadRequest("Error sending notification: " + ex.Message);
+            // }
+        }
+        return Ok("Success");
+        
+    }
 
 }

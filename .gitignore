@@ -6,3 +6,4 @@ bin/
 **/.vscode
 **/bin
 **/obj
+appsettings.Development.json

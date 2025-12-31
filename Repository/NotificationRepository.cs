@@ -22,6 +22,25 @@ public class NotificationRepository(ApplicationDbContext db,IWebPushNotification
                 Action = false,
                 Message = "User not found"
             };
+        var existing = await db.NotificationSubscriptions
+            .FirstOrDefaultAsync(n =>
+                n.UserId == user.Id &&
+                n.Endpoint == notificationDto.Endpoint &&
+                n.P256DH == notificationDto.P256dh &&
+                n.Auth == notificationDto.Auth
+            );
+
+        if (existing != null)
+        {
+             await webPushNotificationService.SendAsync(existing, "چارست", "نوتیفیکشن قبلا  برای شما فعال شده است");
+
+            return new ApiResponse()
+            {
+                Action = false,
+                Message = "Notification subscription already exists"
+            };
+        }
+
         var newEntity = new NotificationSubscription
         {
             UserId = user.Id,
@@ -29,11 +48,14 @@ public class NotificationRepository(ApplicationDbContext db,IWebPushNotification
             Endpoint = notificationDto.Endpoint,
             P256DH = notificationDto.P256dh,
             Auth = notificationDto.Auth,
-
         };
+
         db.NotificationSubscriptions.Add(newEntity);
         await db.SaveChangesAsync();
-        var response = webPushNotificationService.SendAsync(newEntity, "چارست", "نوتیفیکشن با موفقیت برای شما فعال شد");
+        await webPushNotificationService.SendAsync(newEntity, "چارست", "نوتیفیکشن با موفقیت برای شما فعال شد");
+        
+
+        webPushNotificationService.SendAsync(newEntity, "چارست", "نوتیفیکشن با موفقیت برای شما فعال شد");
         
         return new ApiResponse()
         {
