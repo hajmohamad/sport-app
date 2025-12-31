@@ -10,6 +10,11 @@ public class WebPushNotificationService(IConfiguration config):IWebPushNotificat
     
     public async Task SendAsync(NotificationSubscription sub, string title, string body)
     {
+        if (string.IsNullOrWhiteSpace(config["Vapid:PublicKey"]) ||
+            string.IsNullOrWhiteSpace(config["Vapid:PrivateKey"]))
+        {
+            throw new Exception("VAPID keys are not set in configuration!");
+        }
         var vapid = new VapidDetails(
             subject: "mailto:support@charset.com",
             publicKey: config["Vapid:PublicKey"],
