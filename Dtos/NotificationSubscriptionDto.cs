@@ -1,4 +1,4 @@
-namespace sport_app_backend.Controller;
+namespace sport_app_backend.Dtos;
 
 public class NotificationSubscriptionDto
 {

@@ -11,31 +11,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="11e104f8-869d-4d9d-9802-b48455f5eb31" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/BackgroundServices/TrainingReminderService.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Controller/NotificationController.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Dtos/NotificationSubscriptionDto.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Dtos/SubscriptionKeysDto.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Interface/INotification.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Interface/IWebPushNotificationService.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Models/NotificationSubscription.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Repository/NotificationRepository.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Services/WebPushNotificationService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.github/workflows/docker-ci-cd.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.github/workflows/docker-ci-cd.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/dataSources.local.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/dataSources/3e138e79-63f8-4f1b-a97d-8b1a569a4f0c.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/dataSources/3e138e79-63f8-4f1b-a97d-8b1a569a4f0c.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/dataSources/b995594b-b1c6-4f7b-a3d8-4a5b1ad21ad7.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/dataSources/b995594b-b1c6-4f7b-a3d8-4a5b1ad21ad7.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/data_source_mapping.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/data_source_mapping.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/dictionaries/project.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/dictionaries/project.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Controller/UserController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Controller/UserController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Data/ApplicationDBContext.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Data/ApplicationDBContext.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Migrations/ApplicationDbContextModelSnapshot.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Migrations/ApplicationDbContextModelSnapshot.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Models/Account/Athlete/Athlete.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/Account/Athlete/Athlete.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Program.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Repository/AthleteRepo/AthleteRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Repository/AthleteRepo/AthleteRepository.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Repository/CoachRepo/CoachRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Repository/CoachRepo/CoachRepository.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/appsettings.json" beforeDir="false" afterPath="$PROJECT_DIR$/appsettings.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sport-app-backend.sln.DotSettings.user" beforeDir="false" afterPath="$PROJECT_DIR$/sport-app-backend.sln.DotSettings.user" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -297,7 +273,7 @@
       <workItem from="1767118252963" duration="1618000" />
       <workItem from="1767119880245" duration="97000" />
       <workItem from="1767120106749" duration="1223000" />
-      <workItem from="1767121953350" duration="6165000" />
+      <workItem from="1767121953350" duration="10917000" />
     </task>
     <task id="LOCAL‎−۰۰۰۰۱" summary="edit getpayment method">
       <option name="closed" value="true" />
@@ -491,66 +467,27 @@
       <option name="project" value="LOCAL" />
       <updated>1766662432515</updated>
     </task>
-    <option name="localTasksCounter" value="27" />
+    <task id="LOCAL-00027" summary="add pushNotifications">
+      <option name="closed" value="true" />
+      <created>1767129682374</created>
+      <option name="number" value="00027" />
+      <option name="presentableId" value="LOCAL-00027" />
+      <option name="project" value="LOCAL" />
+      <updated>1767129682374</updated>
+    </task>
+    <option name="localTasksCounter" value="28" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
   <component name="UnitTestsCoverage.Settings">
-    <option name="coveragePercentColumnWidth" value="150" />
+    <option name="coveragePercentColumnWidth" value="111" />
     <option name="sortOrder" value="DESCENDING" />
     <option name="sortedColumn" value="1" />
-    <option name="symbolColumnWidth" value="460" />
+    <option name="symbolColumnWidth" value="333" />
     <coverage-tree-state>
-      <expand>
-        <path>
-          <item name="rootNode" type="c53c71d1:RiderDotCoverCoverageTreeModel$RootNode" />
-          <item name="Total 0% 11513/11513" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
-        </path>
-        <path>
-          <item name="rootNode" type="c53c71d1:RiderDotCoverCoverageTreeModel$RootNode" />
-          <item name="Total 0% 11513/11513" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
-          <item name="sport-app-backend 0% 10482/10482" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
-        </path>
-        <path>
-          <item name="rootNode" type="c53c71d1:RiderDotCoverCoverageTreeModel$RootNode" />
-          <item name="Total 0% 11513/11513" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
-          <item name="sport-app-backend 0% 10482/10482" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
-          <item name="sport_app_backend 0% 10371/10371" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
-        </path>
-        <path>
-          <item name="rootNode" type="c53c71d1:RiderDotCoverCoverageTreeModel$RootNode" />
-          <item name="Total 0% 11513/11513" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
-          <item name="sport-app-backend 0% 10482/10482" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
-          <item name="sport_app_backend 0% 10371/10371" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
-          <item name="Repository 0% 1949/1949" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
-        </path>
-        <path>
-          <item name="rootNode" type="c53c71d1:RiderDotCoverCoverageTreeModel$RootNode" />
-          <item name="Total 0% 11513/11513" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
-          <item name="sport-app-backend 0% 10482/10482" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
-          <item name="sport_app_backend 0% 10371/10371" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
-          <item name="Repository 0% 1949/1949" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
-          <item name="AthleteRepo 0% 796/796" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
-        </path>
-        <path>
-          <item name="rootNode" type="c53c71d1:RiderDotCoverCoverageTreeModel$RootNode" />
-          <item name="Total 0% 11513/11513" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
-          <item name="sport-app-backend 0% 10482/10482" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
-          <item name="sport_app_backend 0% 10371/10371" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
-          <item name="Repository 0% 1949/1949" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
-          <item name="AthleteRepo 0% 796/796" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
-          <item name="AthleteRepository 0% 271/271" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
-        </path>
-        <path>
-          <item name="rootNode" type="c53c71d1:RiderDotCoverCoverageTreeModel$RootNode" />
-          <item name="Total 0% 11513/11513" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
-          <item name="sport-app-backend 0% 10482/10482" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
-          <item name="sport_app_backend 0% 10371/10371" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
-          <item name="Controller 0% 1400/1400" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
-        </path>
-      </expand>
+      <expand />
       <select />
     </coverage-tree-state>
   </component>
@@ -569,7 +506,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
-    <MESSAGE value="edit get payment method from athlet" />
     <MESSAGE value="add support app" />
     <MESSAGE value="add phoennumber to getworkoutprogramstatus" />
     <MESSAGE value="add wpkey to sms" />
@@ -594,7 +530,8 @@
     <MESSAGE value="add ci-cd" />
     <MESSAGE value="add new yml" />
     <MESSAGE value="edit yml" />
-    <option name="LAST_COMMIT_MESSAGE" value="edit yml" />
+    <MESSAGE value="add pushNotifications" />
+    <option name="LAST_COMMIT_MESSAGE" value="add pushNotifications" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
