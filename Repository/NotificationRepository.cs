@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using sport_app_backend.Controller;
 using sport_app_backend.Data;
+using sport_app_backend.Dtos;
 using sport_app_backend.Interface;
 using sport_app_backend.Models;
 
