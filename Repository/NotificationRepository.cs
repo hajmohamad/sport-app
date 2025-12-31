@@ -27,8 +27,8 @@ public class NotificationRepository(ApplicationDbContext db,IWebPushNotification
             UserId = user.Id,
             Role = user.TypeOfUser,
             Endpoint = notificationDto.Endpoint,
-            P256DH = notificationDto.Keys.P256dh,
-            Auth = notificationDto.Keys.Auth,
+            P256DH = notificationDto.P256dh,
+            Auth = notificationDto.Auth,
 
         };
         db.NotificationSubscriptions.Add(newEntity);
