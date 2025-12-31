@@ -27,6 +27,6 @@ public class WebPushNotificationService(IConfiguration config):IWebPushNotificat
 
         var subscription = new  PushSubscription(sub.Endpoint, sub.P256DH, sub.Auth);
 
-        await webPushClient.SendNotificationAsync(subscription, payload, vapid);
+       await webPushClient.SendNotificationAsync(subscription, payload, vapid);
     }
 }
