@@ -3,5 +3,6 @@ namespace sport_app_backend.Dtos;
 public class NotificationSubscriptionDto
 {
     public required string Endpoint { get; set; }
-    public required SubscriptionKeysDto Keys { get; set; } // فیلد کلیدها به عنوان یک شیء مجزا
+    public required string P256dh { get; set; }
+    public required string Auth { get; set; }
 }
