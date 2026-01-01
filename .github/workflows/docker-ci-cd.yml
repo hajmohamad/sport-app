@@ -9,6 +9,8 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    environment: ${{ github.ref_name == 'stagingMain' && 'staging' || 'production' }}
+
 
     steps:
       - name: Checkout
@@ -27,6 +29,12 @@ jobs:
             echo "PORT=8081" >> $GITHUB_ENV
             echo "CONTAINER=sport-prod-backend" >> $GITHUB_ENV
           fi
+
+      - name: Debug VAPID
+        run: |
+          echo "PUB=${{ secrets[format('{0}_VAPID__PUBLICKEY', env.ENV == 'staging' && 'STAGING' || 'PROD')] }}"
+          echo "PRIV=${{ secrets[format('{0}_VAPID__PRIVATEKEY', env.ENV == 'staging' && 'STAGING' || 'PROD')] }}"
+      
 
       - name: Login to Docker Hub
         uses: docker/login-action@v3
@@ -74,8 +82,8 @@ jobs:
               -e Liara__BucketName="${{ secrets[format('{0}_Liara__BucketName', env.ENV == 'staging' && 'STAGING' || 'PROD')] }}" \
               -e Zarinpal__endpoint="${{ secrets[format('{0}_Zarinpal__endpoint', env.ENV == 'staging' && 'STAGING' || 'PROD')] }}" \
               -e AllowedIps__0="${{ secrets[format('{0}_AllowedIps__0', env.ENV == 'staging' && 'STAGING' || 'PROD')] }}" \
-              -e Vapid__PublicKey="${{ secrets[format('{0}_Vapid__PublicKey', env.ENV == 'staging' && 'STAGING' || 'PROD')] }}" \
-              -e Vapid__PrivateKey="${{ secrets[format('{0}_Vapid__PrivateKey', env.ENV == 'staging' && 'STAGING' || 'PROD')] }}" \
+              -e Vapid__PublicKey="${{ secrets[format('{0}_VAPID__PUBLICKEY', env.ENV == 'staging' && 'STAGING' || 'PROD')] }}" \
+              -e Vapid__PrivateKey="${{ secrets[format('{0}_VAPID__PRIVATEKEY', env.ENV == 'staging' && 'STAGING' || 'PROD')] }}" \
               mohamadrahi98/${{ env.CONTAINER }}:latest
             
             docker image prune -f
