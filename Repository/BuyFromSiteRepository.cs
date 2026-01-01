@@ -84,7 +84,7 @@ public class BuyFromSiteRepository(
         var pdfModel = new WorkoutPdfModel
         {
             ProgramTitle = workoutData.Title,
-            StartDate = workoutData.StartDate.ToShamsiDateString(),
+            StartDate = workoutData.StartDate?.ToShamsiDateString()!,
             CoachName = $"{workoutData.CoachFirstName} {workoutData.CoachLastName}",
             ProgramLevel = workoutData.ProgramLevel.ToPersianString(),
             ProgramDuration = workoutData.ProgramDuration.ToString(),

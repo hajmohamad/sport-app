@@ -8,7 +8,6 @@ namespace sport_app_backend.BackgroundServices;
 public class TrainingReminderService(IServiceScopeFactory scopeFactory)
     : BackgroundService
 {
-    private static readonly TimeSpan Tolerance = TimeSpan.FromMinutes(10);
 
     private readonly string[] _messages =
     {
@@ -26,7 +25,7 @@ public class TrainingReminderService(IServiceScopeFactory scopeFactory)
             var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
             var push = scope.ServiceProvider.GetRequiredService<IWebPushNotificationService>();
         
-            var now = DateTime.UtcNow;
+            var now = DateTime.Now;
         
             var athletes = await db.NotificationSubscriptions
                 .Where(s => s.Role == TypeOfUser.ATHLETE)
@@ -38,37 +37,39 @@ public class TrainingReminderService(IServiceScopeFactory scopeFactory)
                 )
                 .Where(x =>
                     x.athlete.ActiveWorkoutProgram != null &&
-                    x.athlete.ActiveWorkoutProgram.LastExerciseDate != null
-                )
+(                    x.athlete.ActiveWorkoutProgram.LastExerciseDate != null || x.athlete.ActiveWorkoutProgram.StartDate != null)
+                    )
                 .ToListAsync(stoppingToken);
         
             foreach (var athlete in athletes)
             {
-                var last = athlete.athlete.ActiveWorkoutProgram!.LastExerciseDate!.Value;
-        
+                var last = athlete.athlete.ActiveWorkoutProgram!.LastExerciseDate!??
+                           athlete.athlete.ActiveWorkoutProgram!.StartDate!.Value;
                 var daysPassed = (now.Date - last.Date).Days;
-                if (daysPassed < 1) continue;
-        
+
+                if (daysPassed < 1)
+                    continue;
+                
                 var sendTime = last.Date
                     .AddDays(daysPassed)
-                    .Add(last.TimeOfDay)
-                    .AddMinutes(-30);
-        
-                if (now < sendTime || now > sendTime.Add(Tolerance))
+                    .Add(last.TimeOfDay);
+
+                if (now < sendTime)
                     continue;
-        
+
                 if (athlete.sub.LastTrainingReminderSentAtUtc.Date == now.Date)
                     continue;
-        
+
                 var msgIndex = daysPassed <= 3 ? daysPassed - 1 : 3;
-        
+
                 await push.SendAsync(
                     athlete.sub,
                     "یادآوری تمرین",
                     _messages[msgIndex]
                 );
-        
+
                 athlete.sub.LastTrainingReminderSentAtUtc = now;
+
             }
         
             await db.SaveChangesAsync(stoppingToken);

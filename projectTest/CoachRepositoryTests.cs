@@ -1592,7 +1592,7 @@ namespace sport_app_backend.projectTest
                 CoachId = coach.Id,
                 Amount = 50000,
                 Status = PayoutStatus.Pending,
-                RequestDate = DateTime.UtcNow
+                RequestDate = DateTime.Now
             };
 
             _context.CoachPayouts.Add(existingPayout);

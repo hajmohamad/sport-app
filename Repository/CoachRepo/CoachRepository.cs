@@ -357,14 +357,8 @@ namespace sport_app_backend.Repository.CoachRepo
                 if (workoutProgram is null) return new ApiResponse { Action = false, Message = "Payment not found" };
                 workoutProgram.ProgramInDays = workoutProgramDto.Days.ToListOfProgramInDays();
                 workoutProgram.ProgramDuration = workoutProgramDto.Week;
-                // workoutProgram.GeneralWarmUp = workoutProgramDto.GeneralWarmUp
-                //     ?.Select(x => (GeneralWarmUp)Enum.Parse(typeof(GeneralWarmUp), x)).ToList() ?? [];
+           
                 workoutProgram.ProgramLevel = (ProgramLevel)Enum.Parse(typeof(ProgramLevel),workoutProgramDto.ProgramLevel);
-                // if (workoutProgramDto.DedicatedWarmUp is not null)
-                // {
-                //     workoutProgram.DedicatedWarmUp =
-                //         (DedicatedWarmUp)Enum.Parse(typeof(DedicatedWarmUp), workoutProgramDto.DedicatedWarmUp);
-                // }
 
                 workoutProgram.ProgramPriorities = workoutProgramDto.ProgramPriority
                     .Select(x => (ProgramPriority)Enum.Parse(typeof(ProgramPriority), x.ToUpper())).ToList() ?? [];
@@ -867,7 +861,7 @@ namespace sport_app_backend.Repository.CoachRepo
                 Coach = coach,
                 Amount = coachAmount,
                 Status = PayoutStatus.Pending,
-                RequestDate = DateTime.UtcNow
+                RequestDate = DateTime.Now
             };
 
             await context.CoachPayouts.AddAsync(payoutRequest);
