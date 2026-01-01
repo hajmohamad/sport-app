@@ -11,15 +11,27 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="11e104f8-869d-4d9d-9802-b48455f5eb31" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/projectTest/TrainingReminderServiceTests.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/dataSources.local.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/dataSources/b995594b-b1c6-4f7b-a3d8-4a5b1ad21ad7.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/dataSources/b995594b-b1c6-4f7b-a3d8-4a5b1ad21ad7.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/dataSources/3e138e79-63f8-4f1b-a97d-8b1a569a4f0c.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/dataSources/3e138e79-63f8-4f1b-a97d-8b1a569a4f0c.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Controller/NotificationController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Controller/NotificationController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dtos/SubscriptionKeysDto.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Repository/NotificationRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Repository/NotificationRepository.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Services/WebPushNotificationService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Services/WebPushNotificationService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BackgroundServices/TrainingReminderService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/BackgroundServices/TrainingReminderService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BackgroundServices/UnverifiedPaymentsChecker.cs" beforeDir="false" afterPath="$PROJECT_DIR$/BackgroundServices/UnverifiedPaymentsChecker.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dtos/WorkoutProgramResponseDto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Dtos/WorkoutProgramResponseDto.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Mappers/ProgramMappers.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Mappers/ProgramMappers.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Migrations/ApplicationDbContextModelSnapshot.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Migrations/ApplicationDbContextModelSnapshot.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Models/Actions/Activity.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/Actions/Activity.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Models/NotificationSubscription.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/NotificationSubscription.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Models/Program/WorkoutProgram.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/Program/WorkoutProgram.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Repository/AthleteRepo/AchievementsRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Repository/AthleteRepo/AchievementsRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Repository/AthleteRepo/AthleteRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Repository/AthleteRepo/AthleteRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Repository/BuyFromSiteRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Repository/BuyFromSiteRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Repository/CoachRepo/CoachRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Repository/CoachRepo/CoachRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Repository/UserRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Repository/UserRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Services/TokenService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Services/TokenService.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/appsettings.Development.json" beforeDir="false" afterPath="$PROJECT_DIR$/appsettings.Development.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/projectTest/CoachRepositoryTests.cs" beforeDir="false" afterPath="$PROJECT_DIR$/projectTest/CoachRepositoryTests.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sport-app-backend.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/sport-app-backend.csproj" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/sport-app-backend.sln.DotSettings.user" beforeDir="false" afterPath="$PROJECT_DIR$/sport-app-backend.sln.DotSettings.user" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -57,6 +69,7 @@
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/a6e45763fd2549c785509ca11525b35c273a00/a2/b813d4e0/HttpProtocol.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/c694c498917a4d9daa891180876e41b8d83a00/0d/beaf1246/ArgumentNullException.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/c694c498917a4d9daa891180876e41b8d83a00/60/8ae2f6cb/String.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/c694c498917a4d9daa891180876e41b8d83a00/93/13850c19/DateTime.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/d998dc20d86d44a3993d3fd14c1bed1c6000/02/6c8c0e6a/PushSubscription.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/d998dc20d86d44a3993d3fd14c1bed1c6000/e2/83f1787c/WebPushClient.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/BackgroundServices/TrainingReminderService.cs" root0="FORCE_HIGHLIGHTING" />
@@ -67,7 +80,6 @@
     <setting file="file://$PROJECT_DIR$/Controller/AthleteController/WaterAndWeightController.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Controller/NotificationController.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Dtos/ExerciseDto.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="mock:///Users/mohamad/RiderProjects/sport-app/Dtos/NotificationSubscriptionDto.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Dtos/ProgramDto/ExerciseForTrainingSessionDto.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Interface/Athlete/IAchievements.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Interface/Athlete/IActivity.cs" root0="FORCE_HIGHLIGHTING" />
@@ -85,7 +97,6 @@
     <setting file="file://$PROJECT_DIR$/Repository/AthleteRepo/AthleteRepository.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Repository/AthleteRepo/BuyProgramFromApplicationRepository.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Repository/AthleteRepo/WaterAndWeightRepository.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="mock:///Users/mohamad/RiderProjects/sport-app/Repository/NotificationRepository.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Repository/NotificationRepository.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Repository/UserRepository.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Services/Calculator.cs" root0="FORCE_HIGHLIGHTING" />
@@ -93,6 +104,7 @@
     <setting file="file://$PROJECT_DIR$/projectTest/AthleteControllerTests.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/projectTest/AthleteRepositoryTests.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/projectTest/CoachRepositoryTests.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/projectTest/TrainingReminderServiceTests.cs" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="KubernetesApiPersistence">{}</component>
   <component name="KubernetesApiProvider">{
@@ -111,35 +123,35 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    ".NET Launch Settings Profile.sport-app-backend: http.executor": "Run",
-    ".NET Launch Settings Profile.sport-app-backend: https.executor": "Run",
-    "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "Docker.Dockerfile.executor": "Run",
-    "ModuleVcsDetector.initialDetectionPerformed": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "database.data.extractors.current.export.id": "Comma-separated (CSV)_id",
-    "git-widget-placeholder": "stagingMain",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "CodeLensConfigurable",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;.NET Launch Settings Profile.sport-app-backend: http.executor&quot;: &quot;Run&quot;,
+    &quot;.NET Launch Settings Profile.sport-app-backend: https.executor&quot;: &quot;Debug&quot;,
+    &quot;ASKED_SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;Docker.Dockerfile.executor&quot;: &quot;Run&quot;,
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;database.data.extractors.current.export.id&quot;: &quot;Comma-separated (CSV)_id&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;stagingMain&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;CodeLensConfigurable&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   },
-  "keyToStringList": {
-    "ChangesTree.GroupingKeys": [
-      "repository"
+  &quot;keyToStringList&quot;: {
+    &quot;ChangesTree.GroupingKeys&quot;: [
+      &quot;repository&quot;
     ],
-    "DatabaseDriversLRU": [
-      "mysql"
+    &quot;DatabaseDriversLRU&quot;: [
+      &quot;mysql&quot;
     ]
   }
-}]]></component>
+}</component>
   <component name="RunManager" selected=".NET Launch Settings Profile.sport-app-backend: https">
     <configuration name="sport-app-backend: http" type="LaunchSettings" factoryName=".NET Launch Settings Profile">
       <option name="LAUNCH_PROFILE_PROJECT_FILE_PATH" value="$PROJECT_DIR$/sport-app-backend.csproj" />
@@ -281,7 +293,12 @@
       <workItem from="1767119880245" duration="97000" />
       <workItem from="1767120106749" duration="1223000" />
       <workItem from="1767121953350" duration="10917000" />
-      <workItem from="1767211931143" duration="5208000" />
+      <workItem from="1767211931143" duration="7934000" />
+      <workItem from="1767220324828" duration="558000" />
+      <workItem from="1767220888994" duration="683000" />
+      <workItem from="1767221578907" duration="3506000" />
+      <workItem from="1767301662075" duration="1521000" />
+      <workItem from="1767303193409" duration="2262000" />
     </task>
     <task id="LOCAL‎−۰۰۰۰۱" summary="edit getpayment method">
       <option name="closed" value="true" />
@@ -499,7 +516,31 @@
       <option name="project" value="LOCAL" />
       <updated>1767213214792</updated>
     </task>
-    <option name="localTasksCounter" value="30" />
+    <task id="LOCAL-00030" summary="edit for Notification">
+      <option name="closed" value="true" />
+      <created>1767217228676</created>
+      <option name="number" value="00030" />
+      <option name="presentableId" value="LOCAL-00030" />
+      <option name="project" value="LOCAL" />
+      <updated>1767217228676</updated>
+    </task>
+    <task id="LOCAL-00031" summary="edit WebPushNotificationService">
+      <option name="closed" value="true" />
+      <created>1767218228869</created>
+      <option name="number" value="00031" />
+      <option name="presentableId" value="LOCAL-00031" />
+      <option name="project" value="LOCAL" />
+      <updated>1767218228869</updated>
+    </task>
+    <task id="LOCAL-00032" summary="edit app setting">
+      <option name="closed" value="true" />
+      <created>1767218921395</created>
+      <option name="number" value="00032" />
+      <option name="presentableId" value="LOCAL-00032" />
+      <option name="project" value="LOCAL" />
+      <updated>1767218921395</updated>
+    </task>
+    <option name="localTasksCounter" value="33" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -530,9 +571,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
-    <MESSAGE value="add wpkey to sms" />
-    <MESSAGE value="add mysql migrations" />
-    <MESSAGE value="add new BaseCategory enum" />
     <MESSAGE value="&lt;!DOCTYPE html&gt;&#10;&lt;html lang=en&gt;&#10;  &lt;meta charset=utf-8&gt;&#10;  &lt;meta name=viewport content=&quot;initial-scale=1, minimum-scale=1, width=device-width&quot;&gt;&#10;  &lt;title&gt;Error 403 (Forbidden)!!1&lt;/title&gt;&#10;  &lt;style&gt;&#10;    *{margin:0;padding:0}html,code{font:15px/22px arial,sans-serif}html{background:#fff;color:#222;padding:15px}body{margin:7% auto 0;max-width:390px;min-height:180px;padding:30px 0 15px}* &gt; body{background:url(//www.google.com/images/errors/robot.png) 100% 5px no-repeat;padding-right:205px}p{margin:11px 0 22px;overflow:hidden}ins{color:#777;text-decoration:none}a img{border:0}@media screen and (max-width:772px){body{background:none;margin-top:0;max-width:none;padding-right:0}}#logo{background:url(//www.google.com/images/branding/googlelogo/1x/googlelogo_color_150x54dp.png) no-repeat;margin-left:-5px}@media only screen and (min-resolution:192dpi){#logo{background:url(//www.google.com/images/branding/googlelogo/2x/googlelogo_color_150x54dp.png) no-repeat 0% 0%/100% 100%;-moz-border-image:url(//www.google.com/images/branding/googlelogo/2x/googlelogo_color_150x54dp.png) 0}}@media only screen and (-webkit-min-device-pixel-ratio:2){#logo{background:url(//www.google.com/images/branding/googlelogo/2x/googlelogo_color_150x54dp.png) no-repeat;-webkit-background-size:100% 100%}}#logo{display:inline-block;height:54px;width:150px}&#10;  &lt;/style&gt;&#10;  &lt;a href=//www.google.com/&gt;&lt;span id=logo aria-label=Google&gt;&lt;/span&gt;&lt;/a&gt;&#10;  &lt;p&gt;&lt;b&gt;403.&lt;/b&gt; &lt;ins&gt;That’s an error.&lt;/ins&gt;&#10;  &lt;p&gt;Your client does not have permission to get URL &lt;code&gt;/v1beta/models/gemini-1.5-pro:streamGenerateContent&lt;/code&gt; from this server.  &lt;ins&gt;That’s all we know.&lt;/ins&gt;" />
     <MESSAGE value="add new enum ExerciseGoal" />
     <MESSAGE value="edit cors" />
@@ -555,7 +593,10 @@
     <MESSAGE value="add pushNotifications" />
     <MESSAGE value="edit notifications dto" />
     <MESSAGE value="edit dto" />
-    <option name="LAST_COMMIT_MESSAGE" value="edit dto" />
+    <MESSAGE value="edit for Notification" />
+    <MESSAGE value="edit WebPushNotificationService" />
+    <MESSAGE value="edit app setting" />
+    <option name="LAST_COMMIT_MESSAGE" value="edit app setting" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -571,6 +612,12 @@
         <breakpoint enabled="true" type="DotNet_Exception_Breakpoints">
           <properties exception="System.Threading.ThreadAbortException" breakIfHandledByOtherCode="false" displayValue="System.Threading.ThreadAbortException" />
           <option name="timeStamp" value="3" />
+        </breakpoint>
+        <breakpoint enabled="true" type="DotNet_Exception_Breakpoints">
+          <properties exception="System.NotSupportedException" breakIfHandledByUserCode="true" isInternal="false" displayValue="NotSupportedException" namespaceName="System">
+            <option name="internal" value="false" />
+          </properties>
+          <option name="timeStamp" value="16" />
         </breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Middleware/IranIpMiddleware.cs</url>
@@ -616,6 +663,32 @@
             </endOffsets>
           </properties>
           <option name="timeStamp" value="10" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/BackgroundServices/TrainingReminderService.cs</url>
+          <line>70</line>
+          <properties documentPath="$PROJECT_DIR$/BackgroundServices/TrainingReminderService.cs" containingFunctionPresentation="Method 'ExecuteAsync'">
+            <startOffsets>
+              <option value="2647" />
+            </startOffsets>
+            <endOffsets>
+              <option value="2695" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="15" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/BackgroundServices/TrainingReminderService.cs</url>
+          <line>43</line>
+          <properties documentPath="$PROJECT_DIR$/BackgroundServices/TrainingReminderService.cs" containingFunctionPresentation="Method 'ExecuteAsync'">
+            <startOffsets>
+              <option value="1728" />
+            </startOffsets>
+            <endOffsets>
+              <option value="1761" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="17" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

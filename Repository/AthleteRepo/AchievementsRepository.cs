@@ -78,8 +78,9 @@ public class AchievementsRepository(
             var oneMonthComplete = workoutDays.Count >= 30;
             var threeMonthsGolden = workoutDays.Count >= 90;
             var masterAthlete = workoutDays.Count >= 365;
-            var firstProgramDone = athlete.WorkoutPrograms.Any(w => w.EndDate > DateTime.Now);
-
+            //check 
+            var firstProgramDone = athlete.WorkoutPrograms.Any(w => w.StartDate < DateTime.Now);
+            //
             var achievements = new List<AchievementType>();
             if (firstWorkout)
                 achievements.Add(AchievementType.FirstWorkout);

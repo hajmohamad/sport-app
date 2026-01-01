@@ -13,7 +13,7 @@ public class NotificationSubscription
     public string? P256DH { get; set; } = null!;
     public string Auth { get; set; } = null!;
 
-    public DateTime CreatedAtUtc { get; set; } = DateTime.UtcNow;
-    public DateTime LastTrainingReminderSentAtUtc { get; set; } = DateTime.UtcNow;
+    public DateTime CreatedAtUtc { get; set; } = DateTime.Now;
+    public DateTime LastTrainingReminderSentAtUtc { get; set; } = DateTime.Now.AddDays(-1);
     
 }

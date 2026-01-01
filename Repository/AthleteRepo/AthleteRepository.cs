@@ -220,6 +220,7 @@ namespace sport_app_backend.Repository.AthleteRepo
             {
                 athlete.ActiveWorkoutProgramId = targetProgram.Id;
                 allTrainingSessions.ForEach(resetTrainingSession);
+                targetProgram.StartDate = DateTime.Now;
                 await context.SaveChangesAsync();
                 return new ApiResponse { Action = true, Message = "Program already active and reset." };
             }
@@ -248,6 +249,7 @@ namespace sport_app_backend.Repository.AthleteRepo
 
             targetProgram.Status = WorkoutProgramStatus.ACTIVE;
             athlete.ActiveWorkoutProgramId = targetProgram.Id;
+            targetProgram.StartDate = DateTime.Now;
 
             await context.SaveChangesAsync();
             return new ApiResponse { Action = true, Message = "Program activated successfully." };
@@ -477,7 +479,7 @@ namespace sport_app_backend.Repository.AthleteRepo
 
 
                 trainingSession.TrainingSessionStatus = TrainingSessionStatus.COMPLETED;
-                trainingSession.WorkoutProgram.LastExerciseDate = DateTime.Now.Date;
+                trainingSession.WorkoutProgram.LastExerciseDate = DateTime.Now;
                 trainingSession.WorkoutProgram.CompletedSessionCount++;
 
                 var activity = new Activity()

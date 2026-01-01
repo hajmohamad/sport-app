@@ -253,7 +253,7 @@ namespace sport_app_backend.Migrations
                         .HasColumnType("double");
 
                     b.Property<DateTime>("Date")
-                        .HasColumnType("date");
+                        .HasColumnType("datetime(6)");
 
                     b.Property<double>("Distance")
                         .HasColumnType("double");
@@ -770,14 +770,8 @@ namespace sport_app_backend.Migrations
                         .HasMaxLength(120)
                         .HasColumnType("varchar(120)");
 
-                    b.Property<int>("Duration")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("EndDate")
-                        .HasColumnType("datetime(6)");
-
                     b.Property<DateTime?>("LastExerciseDate")
-                        .HasColumnType("date");
+                        .HasColumnType("datetime(6)");
 
                     b.Property<int>("PaymentId")
                         .HasColumnType("int");
@@ -792,7 +786,7 @@ namespace sport_app_backend.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<DateTime>("StartDate")
+                    b.Property<DateTime?>("StartDate")
                         .HasColumnType("datetime(6)");
 
                     b.Property<int>("Status")

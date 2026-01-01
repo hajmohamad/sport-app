@@ -8,6 +8,7 @@
 	<s:String x:Key="/Default/CodeInspection/ExcludedFiles/FilesAndFoldersToSkip2/=7020124F_002D9FFC_002D4AC3_002D8F3D_002DAAB8E0240759_002Ff_003AConvert_002Ecs_002Fl_003AC_0021_003FUsers_003FMohamad_003FAppData_003FRoaming_003FJetBrains_003FRider2024_002E3_003Fresharper_002Dhost_003FSourcesCache_003F106927d79dae58d552cf02cc6259937374ebd8103ac66086c62595612c9a6a_003FConvert_002Ecs/@EntryIndexedValue">ForceIncluded</s:String>
 	<s:String x:Key="/Default/CodeInspection/ExcludedFiles/FilesAndFoldersToSkip2/=7020124F_002D9FFC_002D4AC3_002D8F3D_002DAAB8E0240759_002Ff_003ACoreAdminConfigurationExtensions_002Ecs_002Fl_003AC_0021_003FUsers_003FMohamad_003FAppData_003FRoaming_003FJetBrains_003FRider2024_002E3_003Fresharper_002Dhost_003FDecompilerCache_003Fdecompiler_003F082a296031a74ecb8f9c7c4a11d979bc22a00_003F87_003F9c6cd284_003FCoreAdminConfigurationExtensions_002Ecs/@EntryIndexedValue">ForceIncluded</s:String>
 	<s:String x:Key="/Default/CodeInspection/ExcludedFiles/FilesAndFoldersToSkip2/=7020124F_002D9FFC_002D4AC3_002D8F3D_002DAAB8E0240759_002Ff_003ACoreAdminOptions_002Ecs_002Fl_003AC_0021_003FUsers_003FMohamad_003FAppData_003FRoaming_003FJetBrains_003FRider2024_002E3_003Fresharper_002Dhost_003FDecompilerCache_003Fdecompiler_003F082a296031a74ecb8f9c7c4a11d979bc22a00_003Ff0_003F6fbc21d0_003FCoreAdminOptions_002Ecs/@EntryIndexedValue">ForceIncluded</s:String>
+	<s:String x:Key="/Default/CodeInspection/ExcludedFiles/FilesAndFoldersToSkip2/=7020124F_002D9FFC_002D4AC3_002D8F3D_002DAAB8E0240759_002Ff_003ADateTime_002Ecs_002Fl_003A_002E_002E_003F_002E_002E_003FLibrary_003FApplication_0020Support_003FJetBrains_003FRider2025_002E2_003Fresharper_002Dhost_003FDecompilerCache_003Fdecompiler_003Fc694c498917a4d9daa891180876e41b8d83a00_003F93_003F13850c19_003FDateTime_002Ecs/@EntryIndexedValue">ForceIncluded</s:String>
 	<s:String x:Key="/Default/CodeInspection/ExcludedFiles/FilesAndFoldersToSkip2/=7020124F_002D9FFC_002D4AC3_002D8F3D_002DAAB8E0240759_002Ff_003AEnumerable_002Ecs_002Fl_003AC_0021_003FUsers_003FMohamad_003FAppData_003FRoaming_003FJetBrains_003FRider2024_002E3_003Fresharper_002Dhost_003FDecompilerCache_003Fdecompiler_003F9abdf068a8774c97a3780c88b63c27b884928_003F7c_003Fb1486de9_003FEnumerable_002Ecs/@EntryIndexedValue">ForceIncluded</s:String>
 	<s:String x:Key="/Default/CodeInspection/ExcludedFiles/FilesAndFoldersToSkip2/=7020124F_002D9FFC_002D4AC3_002D8F3D_002DAAB8E0240759_002Ff_003AExceptionDispatchInfo_002Ecs_002Fl_003AC_0021_003FUsers_003FMohamad_003FAppData_003FRoaming_003FJetBrains_003FRider2024_002E3_003Fresharper_002Dhost_003FDecompilerCache_003Fdecompiler_003F2832e8c2b81f4641b3863f406ce3a519c90938_003F4d_003Ff6566c0d_003FExceptionDispatchInfo_002Ecs/@EntryIndexedValue">ForceIncluded</s:String>
 	<s:String x:Key="/Default/CodeInspection/ExcludedFiles/FilesAndFoldersToSkip2/=7020124F_002D9FFC_002D4AC3_002D8F3D_002DAAB8E0240759_002Ff_003AHttpProtocol_002Ecs_002Fl_003A_002E_002E_003F_002E_002E_003FLibrary_003FApplication_0020Support_003FJetBrains_003FRider2025_002E2_003Fresharper_002Dhost_003FDecompilerCache_003Fdecompiler_003Fa6e45763fd2549c785509ca11525b35c273a00_003Fa2_003Fb813d4e0_003FHttpProtocol_002Ecs/@EntryIndexedValue">ForceIncluded</s:String>
@@ -25,12 +26,13 @@
   &lt;Assembly Path="C:\Users\Mohamad\.nuget\packages\coreadmin\3.0.0\lib\net8.0\DotNetEd.CoreAdmin.dll" /&gt;
   &lt;Assembly Path="/Users/mohamad/.nuget/packages/webpush/1.0.12/lib/net5.0/WebPush.dll" /&gt;
 &lt;/AssemblyExplorer&gt;</s:String>
-	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=4e03b139_002Dcf78_002D402c_002D9627_002D0f6b74735d14/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="AddFirstQuestions_WithValidData_ReturnsOkResult" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=4e03b139_002Dcf78_002D402c_002D9627_002D0f6b74735d14/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="AddFirstQuestions_WithValidData_ReturnsOkResult" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
   &lt;Or&gt;
     &lt;TestAncestor&gt;
       &lt;TestId&gt;xUnit::27B63680-A5B7-55C3-C88B-EBD5D7F12023::net8.0::sport_app_backend.Controller.AthleteControllerTests&lt;/TestId&gt;
       &lt;TestId&gt;xUnit::27B63680-A5B7-55C3-C88B-EBD5D7F12023::net8.0::sport_app_backend.projectTest.AthleteRepositoryTests&lt;/TestId&gt;
       &lt;TestId&gt;xUnit::27B63680-A5B7-55C3-C88B-EBD5D7F12023::net8.0::sport_app_backend.projectTest.CoachRepositoryTests&lt;/TestId&gt;
+      &lt;TestId&gt;xUnit::27B63680-A5B7-55C3-C88B-EBD5D7F12023::net8.0::sport_app_backend.Tests.BackgroundServices.TrainingReminderServiceTests&lt;/TestId&gt;
     &lt;/TestAncestor&gt;
     &lt;Project Location="/Users/mohamad/RiderProjects/sport-app/projectTest" Presentation="&amp;lt;projectTest&amp;gt;" /&gt;
   &lt;/Or&gt;
@@ -40,7 +42,7 @@
     &lt;TestId&gt;xUnit::13123267-E24A-4329-8C17-74FBFCDF564C::net8.0::Test_sport_app.UnitTest1.Test1&lt;/TestId&gt;
   &lt;/TestAncestor&gt;
 &lt;/SessionState&gt;</s:String>
-	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=ac12fa42_002D43cd_002D4af7_002Da0a7_002D275ccb218b72/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="All tests from &amp;lt;projectTest&amp;gt;" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=ac12fa42_002D43cd_002D4af7_002Da0a7_002D275ccb218b72/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="All tests from &amp;lt;projectTest&amp;gt;" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
   &lt;Project Location="/Users/mohamad/RiderProjects/sport-app/projectTest" Presentation="&amp;lt;projectTest&amp;gt;" /&gt;
 &lt;/SessionState&gt;</s:String>
 	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=b0162d81_002Db084_002D4338_002Dbbad_002Da320c9d6237b/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="All tests from Solution" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;

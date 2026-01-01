@@ -54,7 +54,7 @@ private async Task CheckPaymentsAsync(CancellationToken cancellationToken)
         var zarinPal = scope.ServiceProvider.GetRequiredService<IZarinPal>();
         var smsService = scope.ServiceProvider.GetRequiredService<ISmsService>();
 
-        var fifteenMinutesAgo = DateTime.UtcNow.AddMinutes(-15);
+        var fifteenMinutesAgo = DateTime.Now.AddMinutes(-15);
         
         var pendingPayments = await context.Payments
             .Where(p => p.PaymentStatus == PaymentStatus.INPROGRESS && p.PaymentDate < fifteenMinutesAgo)
