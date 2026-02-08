@@ -16,7 +16,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      # تنظیم متغیرها (بدون تغییر)
+      # تنظیم متغیرها ( تغییر)
       - name: Set environment variables
         id: env
         run: |
