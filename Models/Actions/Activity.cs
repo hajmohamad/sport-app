@@ -1,6 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using sport_app_backend.Models.Account;
+using sport_app_backend.Models.Account.Athlete;
 
 
 namespace sport_app_backend.Models.Actions;
@@ -15,9 +16,7 @@ public class Activity
     public double CaloriesLost { get; set; }
     public double Duration { get; set; }
     public double Distance { get; set; }
-    [DataType(DataType.Date)]
-    [Column(TypeName = "date")]
-    public DateTime Date { get; set; }=DateTime.Now.Date;
+    public DateTime Date { get; set; }=DateTime.Now;
     public required int AthleteId { get; set; }
     public Athlete Athlete { get; set; }
 

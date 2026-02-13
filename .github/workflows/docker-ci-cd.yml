@@ -1,0 +1,89 @@
+name: Docker CI/CD ASP.NET
+
+on:
+  push:
+    branches:
+      - stagingMain
+      - master
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: ${{ github.ref_name == 'stagingMain' && 'staging' || 'production' }}
+
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # تنظیم متغیرها ( تغییر)
+      - name: Set environment variables
+        id: env
+        run: |
+          if [[ "${GITHUB_REF##*/}" == "stagingMain" ]]; then
+            echo "ENV=staging" >> $GITHUB_ENV
+            echo "PORT=8080" >> $GITHUB_ENV
+            echo "CONTAINER=sport-staging-backend" >> $GITHUB_ENV
+          else
+            echo "ENV=production" >> $GITHUB_ENV
+            echo "PORT=8081" >> $GITHUB_ENV
+            echo "CONTAINER=sport-prod-backend" >> $GITHUB_ENV
+          fi
+
+      - name: Debug VAPID
+        run: |
+          echo "PUB=${{ secrets[format('{0}_VAPID__PUBLICKEY', env.ENV == 'staging' && 'STAGING' || 'PROD')] }}"
+          echo "PRIV=${{ secrets[format('{0}_VAPID__PRIVATEKEY', env.ENV == 'staging' && 'STAGING' || 'PROD')] }}"
+      
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      # نصب Buildx برای استفاده از قابلیت کش پیشرفته
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          tags: mohamadrahi98/${{ env.CONTAINER }}:latest
+          # اضافه کردن کش: پکیج‌های NuGet را در حافظه گیت‌هاب ذخیره می‌کند
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SERVER_IP }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: 22
+          script: |
+            docker pull mohamadrahi98/${{ env.CONTAINER }}:latest
+            docker stop ${{ env.CONTAINER }} || true
+            docker rm ${{ env.CONTAINER }} || true
+            
+            docker run -d \
+              --name ${{ env.CONTAINER }} \
+              -p ${{ env.PORT }}:8080 \
+              -e ASPNETCORE_ENVIRONMENT=${{ env.ENV }} \
+              -e ConnectionStrings__DefaultConnection="${{ secrets[format('{0}_ConnectionStrings__DefaultConnection', env.ENV == 'staging' && 'STAGING' || 'PROD')] }}" \
+              -e Zarinpal__MerchantId="${{ secrets[format('{0}_Zarinpal__MerchantId', env.ENV == 'staging' && 'STAGING' || 'PROD')] }}" \
+              -e Liara__accessKey="${{ secrets[format('{0}_Liara__accessKey', env.ENV == 'staging' && 'STAGING' || 'PROD')] }}" \
+              -e Liara__secretKey="${{ secrets[format('{0}_Liara__secretKey', env.ENV == 'staging' && 'STAGING' || 'PROD')] }}" \
+              -e JWT__SigningKey="${{ secrets[format('{0}_JWT__SigningKey', env.ENV == 'staging' && 'STAGING' || 'PROD')] }}" \
+              -e SMS__accessKey="${{ secrets[format('{0}_SMS__accessKey', env.ENV == 'staging' && 'STAGING' || 'PROD')] }}" \
+              -e Liara__endpoint="${{ secrets[format('{0}_Liara__endpoint', env.ENV == 'staging' && 'STAGING' || 'PROD')] }}" \
+              -e Liara__BucketName="${{ secrets[format('{0}_Liara__BucketName', env.ENV == 'staging' && 'STAGING' || 'PROD')] }}" \
+              -e Zarinpal__endpoint="${{ secrets[format('{0}_Zarinpal__endpoint', env.ENV == 'staging' && 'STAGING' || 'PROD')] }}" \
+              -e AllowedIps__0="${{ secrets[format('{0}_AllowedIps__0', env.ENV == 'staging' && 'STAGING' || 'PROD')] }}" \
+              -e Vapid__PublicKey="${{ secrets[format('{0}_VAPID__PUBLICKEY', env.ENV == 'staging' && 'STAGING' || 'PROD')] }}" \
+              -e Vapid__PrivateKey="${{ secrets[format('{0}_VAPID__PRIVATEKEY', env.ENV == 'staging' && 'STAGING' || 'PROD')] }}" \
+              mohamadrahi98/${{ env.CONTAINER }}:latest
+            
+            docker image prune -f

@@ -9,7 +9,7 @@ public class WorkoutProgramResponseDto
     public int Id { get; set; }
     public string Title { get; set; }="";
     public int PaymentId { get; set; }
-    public DateTime StartDate { get; set; }
+    public DateTime? StartDate { get; set; }
     public int ProgramDuration { get; set; }
     public string ProgramLevel { get; set; }=string.Empty;
     public  List<string> ProgramPriorities { get; set; } = [];

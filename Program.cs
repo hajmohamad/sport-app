@@ -17,6 +17,10 @@ using Serilog;
 using Serilog.Events;
 using sport_app_backend.BackgroundServices;
 using sport_app_backend.Handler;
+using sport_app_backend.Interface.Athlete;
+using sport_app_backend.Interface.Coach;
+using sport_app_backend.Repository.AthleteRepo;
+using sport_app_backend.Repository.CoachRepo;
 
 Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()
@@ -168,12 +172,19 @@ builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddSingleton<ISmsService, SmsService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<ICoachRepository, CoachRepository>();
+builder.Services.AddScoped<IWebPushNotificationService, WebPushNotificationService>();
+builder.Services.AddScoped<INotification,NotificationRepository>();
+builder.Services.AddHostedService<TrainingReminderService>();
 builder.Services.AddScoped<IAthleteRepository, AthleteRepository>();
 builder.Services.AddScoped<IAdminRepository, AdminRepository>();
 builder.Services.AddScoped<IBuyFromSiteRepository, BuyFromSiteRepository>();
+builder.Services.AddScoped<ICalculator, Calculator>();
+builder.Services.AddScoped<IAchievements, AchievementsRepository>();
+builder.Services.AddScoped<IWaterAndWeight, WaterAndWeightRepository>();
+builder.Services.AddScoped<IBuyProgramFromApplications, BuyProgramFromApplicationRepository>();
+builder.Services.AddScoped<IActivity, ActivityRepository>();
 
 
-builder.Services.AddCoreAdmin();
 
 builder.Services.AddMemoryCache();
 builder.Services.Configure<IpRateLimitOptions>(builder.Configuration.GetSection("IpRateLimiting"));
@@ -211,4 +222,6 @@ app.MapDefaultControllerRoute();
     }
 
 app.Run();
+
+
  

@@ -28,7 +28,8 @@ namespace sport_app_backend.Mappers
                 Payments = payments.Select(p => p.ToCoachAllPaymentResponseDto())
                     .ToList(),
                 NumberOfAthlete = numberOfAthlete,
-                NumberOfProgram = numberOfProgram
+                NumberOfProgram = numberOfProgram,
+                WebsiteUrl = user.Coach.WebSiteUrl??""
             };
 
 
@@ -44,8 +45,7 @@ namespace sport_app_backend.Mappers
                 Title = coachServiceDto.Title,
                 Description = coachServiceDto.Description,
                 Price = coachServiceDto.Price,
-                IsActive = coachServiceDto.IsActive,
-                HaveSupport = coachServiceDto.HaveSupport,
+                IsActive = coachServiceDto.IsActive, 
                 // CommunicateType = (CommunicateType)Enum.Parse(typeof(CommunicateType), coachServiceDto.CommunicateType.ToUpper()),
                 NumberOfSell = 0
                 // TypeOfCoachingServices = (TypeOfCoachingServices)Enum.Parse(typeof(TypeOfCoachingServices), coachServiceDto.TypeOfCoachingServices)
@@ -58,7 +58,6 @@ namespace sport_app_backend.Mappers
             coachService.Description = coachServiceDto.Description;
             coachService.Price = coachServiceDto.Price;
             coachService.IsActive = coachServiceDto.IsActive;
-            coachService.HaveSupport = coachServiceDto.HaveSupport;
             // coachService.CommunicateType =
             //     (CommunicateType)Enum.Parse(typeof(CommunicateType), coachServiceDto.CommunicateType.ToUpper());
             // //coachService.TypeOfCoachingServices =
@@ -117,7 +116,6 @@ namespace sport_app_backend.Mappers
                 Description = coachService.Description,
                 Price = coachService.Price,
                 IsActive = coachService.IsActive,
-                HaveSupport = coachService.HaveSupport,
                 // CommunicateType = coachService.CommunicateType.ToString(),
                 NumberOfSell = coachService.NumberOfSell
                 
