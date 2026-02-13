@@ -1,9 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using sport_app_backend.Dtos;
+﻿using sport_app_backend.Dtos;
 using sport_app_backend.Dtos.ProgramDto;
 using sport_app_backend.Models;
 
-namespace sport_app_backend.Interface
+namespace sport_app_backend.Interface.Coach
 {
     public interface ICoachRepository
     {

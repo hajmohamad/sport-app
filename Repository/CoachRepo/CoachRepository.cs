@@ -1,25 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Threading.Tasks;
-using Humanizer;
+﻿using System.Globalization;
 using Microsoft.EntityFrameworkCore;
 using sport_app_backend.Data;
 using sport_app_backend.Dtos;
 using sport_app_backend.Dtos.ProgramDto;
 using sport_app_backend.Interface;
+using sport_app_backend.Interface.Coach;
 using sport_app_backend.Mappers;
 using sport_app_backend.Models;
 using sport_app_backend.Models.Actions;
 using sport_app_backend.Models.Payments;
 using sport_app_backend.Models.Program;
-using sport_app_backend.Models.Question.A_Question;
 
-
-namespace sport_app_backend.Repository
+namespace sport_app_backend.Repository.CoachRepo
 {
-    public class CoachRepository(ApplicationDbContext context, ISmsService smsService, ILiaraStorage liaraStorage,ITokenService token) : ICoachRepository
+    public class CoachRepository(ApplicationDbContext context, ISmsService smsService, ILiaraStorage liaraStorage,ITokenService token,ICalculator calculator) : ICoachRepository
     {
         public async Task<ApiResponse> AthleteReportForCoach(int athleteId)
         {
@@ -87,7 +81,7 @@ namespace sport_app_backend.Repository
             if (athlete is null)
                 return new ApiResponse() { Message = "User is not an athlete", Action = false };
 
-            var persianCalendar = new System.Globalization.PersianCalendar();
+            var persianCalendar = new PersianCalendar();
 
             try
             {
@@ -253,9 +247,9 @@ namespace sport_app_backend.Repository
         {
             var payments = await context.Payments
                 .Include(p => p.Coach)
-                .ThenInclude(c => c!.User)
+                .ThenInclude(c => c.User)
                 .Include(p => p.Athlete)
-                .ThenInclude(a => a!.User)
+                .ThenInclude(a => a.User)
                 .Include(p => p.CoachService)
                 .Include(p => p.WorkoutProgram)
                 .Where(p =>
@@ -293,8 +287,21 @@ namespace sport_app_backend.Repository
                 .ThenInclude(e => e.Exercise)
                 .FirstOrDefaultAsync(p => p.Coach.PhoneNumber == phoneNumber && p.Id == paymentId);
             if (payment is null) return new ApiResponse() { Message = "Payment not found", Action = false };
+                var ear = calculator.BmrCalculator(new BmrRequestDto()
+                {
+                    ActivityLevel = payment.AthleteQuestion.ActivityLevel,
+                    Age = DateTime.Today.Year - payment.Athlete.User.BirthDate.Year
+                                              - (payment.Athlete.User.BirthDate.Date > DateTime.Today.AddYears(
+                                                  -(DateTime.Today.Year - payment.Athlete.User.BirthDate.Year))
+                                                  ? 1
+                                                  : 0),
+                    Gender = payment.Athlete.User.Gender,
+                    HeightCm = payment.Athlete.Height,
+                    WeightKg = payment.Athlete.CurrentWeight
+                });
+            
 
-            var result = payment.ToCoachPaymentResponseDto(token.HashEncode(payment.WorkoutProgram?.Id??0));
+            var result = payment.ToCoachPaymentResponseDto(token.HashEncode(payment.WorkoutProgram?.Id??0),ear);
             if (result.WorkoutProgram!.ProgramInDays.Count == 0)
             {
                 result.WorkoutProgram.ProgramInDays.Add(new ProgramInDayDto()
@@ -325,7 +332,10 @@ namespace sport_app_backend.Repository
             var payments = await context.Payments.Include(p => p.Athlete).ThenInclude(u => u.User)
                 .OrderByDescending(c => c.PaymentDate)
                 .Include(p => p.WorkoutProgram).Where(p =>
-                    p.CoachId == user.Coach.Id && p.PaymentStatus == PaymentStatus.SUCCESS)
+                    p.CoachId == user.Coach.Id && p.PaymentStatus == PaymentStatus.SUCCESS&& p.WorkoutProgram != null &&
+                    p.WorkoutProgram.Status != WorkoutProgramStatus.WRITING &&
+                    p.WorkoutProgram.Status != WorkoutProgramStatus.NOTSTARTED&&
+                    p.WorkoutProgram.Status != WorkoutProgramStatus.UNCOMPLETEDQUESTION)
                 .ToListAsync();
             return new ApiResponse
             {
@@ -347,14 +357,8 @@ namespace sport_app_backend.Repository
                 if (workoutProgram is null) return new ApiResponse { Action = false, Message = "Payment not found" };
                 workoutProgram.ProgramInDays = workoutProgramDto.Days.ToListOfProgramInDays();
                 workoutProgram.ProgramDuration = workoutProgramDto.Week;
-                // workoutProgram.GeneralWarmUp = workoutProgramDto.GeneralWarmUp
-                //     ?.Select(x => (GeneralWarmUp)Enum.Parse(typeof(GeneralWarmUp), x)).ToList() ?? [];
+           
                 workoutProgram.ProgramLevel = (ProgramLevel)Enum.Parse(typeof(ProgramLevel),workoutProgramDto.ProgramLevel);
-                // if (workoutProgramDto.DedicatedWarmUp is not null)
-                // {
-                //     workoutProgram.DedicatedWarmUp =
-                //         (DedicatedWarmUp)Enum.Parse(typeof(DedicatedWarmUp), workoutProgramDto.DedicatedWarmUp);
-                // }
 
                 workoutProgram.ProgramPriorities = workoutProgramDto.ProgramPriority
                     .Select(x => (ProgramPriority)Enum.Parse(typeof(ProgramPriority), x.ToUpper())).ToList() ?? [];
@@ -403,7 +407,7 @@ namespace sport_app_backend.Repository
                     await smsService.WorkoutReadySms(athlete.PhoneNumber, athlete.User.FirstName, workoutProgram.Title,token.HashEncode(workoutProgram.Id));
 
 
-                    if (athlete.ActiveWorkoutProgramId == 0)
+                    if (athlete.ActiveWorkoutProgramId is null)
                     {
                         await context.SaveChangesAsync();
                         await AddTrainingSession(paymentId);
@@ -857,7 +861,7 @@ namespace sport_app_backend.Repository
                 Coach = coach,
                 Amount = coachAmount,
                 Status = PayoutStatus.Pending,
-                RequestDate = DateTime.UtcNow
+                RequestDate = DateTime.Now
             };
 
             await context.CoachPayouts.AddAsync(payoutRequest);

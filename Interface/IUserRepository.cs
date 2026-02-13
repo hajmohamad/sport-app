@@ -18,9 +18,6 @@ public interface IUserRepository
     public Task<ApiResponse> AppSupport(string phoneNumber, ReportAppDto reportAppDto);
     public Task<ApiResponse> SaveImageAsync(string phoneNumber,IFormFile file);
     public Task<ApiResponse> GetAllExercise();
-    public ApiResponse UpdateApp();
-
-
     public Task<ApiResponse> GetExercise(int exerciseId);
 
     public Task<ApiResponse> RemoveProfilePhoto(string phoneNumber);

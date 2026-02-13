@@ -24,6 +24,7 @@ namespace sport_app_backend.Dtos
         public required List<AllPaymentResponseDto> Payments { get; set; }
         public required int NumberOfAthlete { get; set; }
         public required int NumberOfProgram { get; set; }
+        public string? WebsiteUrl { get; set; } = "";
 
     }
 }

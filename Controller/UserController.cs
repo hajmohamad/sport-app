@@ -1,10 +1,12 @@
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using sport_app_backend.Dtos;
 using sport_app_backend.Interface;
 using sport_app_backend.Models;
 using sport_app_backend.Models.Actions;
+using WebPush;
 
 namespace sport_app_backend.Controller;
 [Route("api/[controller]")]
@@ -175,14 +177,9 @@ public class UserController(IUserRepository userRepository) : ControllerBase
         return Ok(result);
             
     }
-
-    [HttpGet("AppUpdate")]
-    public async Task<IActionResult> AppUpdate()
-    {
-        var result =  userRepository.UpdateApp();
-        return Ok(result);
-
-    }
+    private const string VapidPublicKey = "BFtaOg7TbbrtSgj87M8UIRyYoeZQP3JFoTuM84lR3VjAi3P4PsR5cuvQw8zgTPww5K71eklziLb0mjH-9gL_1R8";
+    private const string VapidPrivateKey = "BpndCrC7Y-Dn-Knh0by2FZ029uplKpco4RS4_tVhRVM";
+ 
     [HttpGet("CheckQuestionSubmitted")]
     [Authorize(Roles = "Athlete,Coach")]
 
@@ -216,7 +213,7 @@ public class UserController(IUserRepository userRepository) : ControllerBase
             exercises
         });
     }
-
+ 
 
 
 }

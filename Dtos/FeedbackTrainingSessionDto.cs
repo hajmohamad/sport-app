@@ -3,6 +3,6 @@
     public class FeedbackTrainingSessionDto
     {
         public int TrainingSessionId { get; set; }
-        public required string ExerciseFeeling { get; set; } = "Good";
+        public  string ExerciseFeeling { get; set; } = "Good";
     }
 }

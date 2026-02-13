@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 using sport_app_backend.Models.Account;
+using sport_app_backend.Models.Account.Athlete;
 
 namespace sport_app_backend.Models.Question.A_Question
 {
@@ -32,6 +33,7 @@ namespace sport_app_backend.Models.Question.A_Question
         public SittingHour SittingHour {get; set;}
         public string? YourJob {get; set;}
         public string? YourCity {get; set;}
+        public required ActivityLevel ActivityLevel {get; set;}
 
 
         // public List<ExerciseMotivation>? ExerciseMotivation { get; set; }

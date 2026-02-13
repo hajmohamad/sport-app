@@ -24,6 +24,6 @@ namespace sport_app_backend.Dtos
         public string SittingHour {get; set;}= "";
         public string YourJob {get; set;}= "";
         public string YourCity {get; set;}= "";
-
+        public required string ActivityLevel { get; set; }
     }
 }

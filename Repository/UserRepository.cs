@@ -9,6 +9,7 @@ using sport_app_backend.Models.Login_Sinup;
 using Amazon.S3;
 using Amazon.S3.Model;
 using sport_app_backend.Mappers;
+using sport_app_backend.Models.Account.Athlete;
 using sport_app_backend.Models.Actions;
 using sport_app_backend.Models.SupportApp;
 
@@ -31,6 +32,8 @@ public class UserRepository(
 
         var gender = Enum.Parse<Gender>(roleGenderDto.Gender.ToUpper());
         user.Gender = gender;
+        user.FirstName = roleGenderDto.FirstName;
+        user.LastName = roleGenderDto.LastName;
         
 
         switch (roleGenderDto.Role.ToUpper())
@@ -58,7 +61,7 @@ public class UserRepository(
                         AccessToken = tokenService.CreateToken(user),
                         TypeOfUser = user.TypeOfUser.ToString(),
                         Gender = user.Gender.ToString(),
-                        Questions= false 
+                        Questions= true 
                     }
                 };
             }
@@ -83,7 +86,7 @@ public class UserRepository(
                         AccessToken = tokenService.CreateToken(user),
                         TypeOfUser = user.TypeOfUser.ToString(),
                         Gender = user.Gender.ToString(),
-                        Questions= false 
+                        Questions= true 
                         }
                 };
             default:
@@ -320,26 +323,6 @@ private async Task<string> GenerateUniqueUsername()
         };
     }
 
-    public ApiResponse UpdateApp()
-    {
-        var version = config["app:version"] ?? "1.1";
-        var forceUpdate = config["app:forceUpdate"] ?? "false";
-        var forceUpdateBool = forceUpdate == "yes";
-
-        var result = new ApiResponse()
-        {
-            Action = true,
-            Message = "update app link",
-            Result = new
-            {
-                version,
-                requiredUpdate=forceUpdateBool
-                
-            }
-
-        };
-        return result;
-    }
 
     public Task<ApiResponse> GetExercise(int exerciseId)
     {
@@ -435,7 +418,7 @@ private async Task<string> GenerateUniqueUsername()
     var pdfModel = new WorkoutPdfModel
     {
         ProgramTitle = workoutData.Title,
-        StartDate = workoutData.StartDate.ToShamsiDateString(),
+        StartDate = workoutData.StartDate?.ToShamsiDateString()!,
         CoachName = $"{workoutData.CoachFirstName} {workoutData.CoachLastName}",
         ProgramLevel = workoutData.ProgramLevel.ToPersianString(),
         ProgramDuration = workoutData.ProgramDuration.ToString() ,
