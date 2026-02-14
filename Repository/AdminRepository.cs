@@ -114,13 +114,14 @@ namespace sport_app_backend.Repository
             };
         }
 
-        public async Task<ApiResponse> VerifiedCoach(string coachPhoneNumber)
+        public async Task<ApiResponse> VerifiedCoach(string coachPhoneNumber, string siteUrl)
         {
             var coach = await context.Coaches.FirstOrDefaultAsync(c => c.PhoneNumber == coachPhoneNumber);
             if (coach is null)
                 return new ApiResponse() { Message = "coach not found", Action = false };
 
             coach.Verified = true;
+            coach.WebSiteUrl = siteUrl;
 
             var athlete = await context.Athletes.FirstOrDefaultAsync(a => a.PhoneNumber == "09395327229");
             if (athlete is null)
@@ -140,7 +141,7 @@ namespace sport_app_backend.Repository
             };
 
             context.CoachServices.Add(coachService);
-            await context.SaveChangesAsync(); // حالا Id ساخته میشه ✅
+            await context.SaveChangesAsync();
 
 
             var payment = new Payment

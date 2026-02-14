@@ -786,6 +786,9 @@ namespace sport_app_backend.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
+                    b.Property<bool>("RenewalReminderSent")
+                        .HasColumnType("tinyint(1)");
+
                     b.Property<DateTime?>("StartDate")
                         .HasColumnType("datetime(6)");
 

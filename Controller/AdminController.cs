@@ -14,9 +14,9 @@ namespace sport_app_backend.Controller
         IWebHostEnvironment webHostEnvironment, IConfiguration config) : ControllerBase
     {
         [HttpPut("Verified_coach/{coachPhoneNumber}")]
-        public async Task<IActionResult> Verified_coach([FromRoute] string coachPhoneNumber)
+        public async Task<IActionResult> Verified_coach([FromRoute] string coachPhoneNumber, [FromBody] string siteUrl)
         {
-            var result = await adminRepository.VerifiedCoach(coachPhoneNumber);
+            var result = await adminRepository.VerifiedCoach(coachPhoneNumber,siteUrl);
             if (result.Action == false) return BadRequest(result);
             return Ok(result);
         }
