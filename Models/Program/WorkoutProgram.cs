@@ -32,4 +32,6 @@ public class WorkoutProgram
     public DateTime? LastExerciseDate { get; set; }
     public int TotalSessionCount { get; set; } 
     public int CompletedSessionCount { get; set; } 
+    public bool RenewalReminderSent { get; set; } = false;
+
 }
