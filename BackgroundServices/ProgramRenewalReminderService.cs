@@ -16,7 +16,7 @@ public class ProgramRenewalReminderService(
         while (!stoppingToken.IsCancellationRequested)
         {
             var now = DateTime.Now;
-            var nextRun = now.Date.AddHours(20);
+            var nextRun = now.Date.AddHours(16).AddMinutes(28);
 
             if (now > nextRun)
             {
@@ -24,7 +24,7 @@ public class ProgramRenewalReminderService(
             }
 
             var delay = nextRun - now;
-            logger.LogInformation(
+            logger.LogError(
                 "ProgramRenewalReminder: Next run at {NextRun}. Waiting {Delay}",
                 nextRun, delay);
 
@@ -109,14 +109,14 @@ public class ProgramRenewalReminderService(
             }
             catch (Exception ex)
             {
-                logger.LogWarning(ex,
+                logger.LogError(ex,
                     "Failed to send SMS to athlete {AthleteId}",
                     program.AthleteId);
             }
 
             program.RenewalReminderSent = true;
 
-            logger.LogInformation(
+            logger.LogError(
                 "Renewal reminder sent to Athlete {AthleteId} for Program {ProgramId}. " +
                 "Expired: {IsExpired}, Completion: {Completion:P0}, RemainingSession: {Remaining}",
                 program.AthleteId, program.Id, isProgramExpired, completionPercentage, remainingSessions);
