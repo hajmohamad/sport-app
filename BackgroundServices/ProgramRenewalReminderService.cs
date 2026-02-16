@@ -16,7 +16,7 @@ public class ProgramRenewalReminderService(
         while (!stoppingToken.IsCancellationRequested)
         {
             var now = DateTime.Now;
-            var nextRun = now.Date.AddHours(16).AddMinutes(28);
+            var nextRun = now.Date.AddHours(20);
 
             if (now > nextRun)
             {
