@@ -369,39 +369,77 @@ namespace sport_app_backend.Repository.AthleteRepo
 
 
         public async Task<ApiResponse> GetAllTrainingSession(string phoneNumber)
+{
+    var resultData = await context.WorkoutPrograms
+        .AsNoTracking()
+        .Where(wp => wp.Athlete.PhoneNumber == phoneNumber && wp.Status == WorkoutProgramStatus.ACTIVE)
+        .Select(wp => new
         {
-            var resultData = await context.WorkoutPrograms
-                .AsNoTracking()
-                .Where(wp => wp.Athlete.PhoneNumber == phoneNumber && wp.Status == WorkoutProgramStatus.ACTIVE)
-                .Select(wp => new
-                {
-                    ProgramName = wp.Title,
-                    TrainingSessions = wp.TrainingSessions.Select(ts => new AllTrainingSessionDto
-                    {
-                        Id = ts.Id,
-                        DayNumber = ts.DayNumber,
-                        TrainingSessionStatus = ts.TrainingSessionStatus.ToString(),
-                        ExersiceCount = ts.ExerciseCompletionBitmap.GetExerciseStatusArray().Length
-                    }).ToList()
-                })
-                .FirstOrDefaultAsync(); // Get the single active program's data.
-
-            if (resultData == null)
+            ProgramName = wp.Title,
+            wp.StartDate,
+            wp.ProgramDuration,
+            wp.TotalSessionCount,
+            wp.CompletedSessionCount,
+            CoachWebsite = wp.Coach.WebSiteUrl ?? "chaarset.ir",
+            TrainingSessions = wp.TrainingSessions.Select(ts => new AllTrainingSessionDto
             {
-                return new ApiResponse() { Message = "Active workout program not found", Action = true, Result = null };
-            }
+                Id = ts.Id,
+                DayNumber = ts.DayNumber,
+                TrainingSessionStatus = ts.TrainingSessionStatus.ToString(),
+                ExersiceCount = ts.ExerciseCompletionBitmap.GetExerciseStatusArray().Length
+            }).ToList()
+        })
+        .FirstOrDefaultAsync();
 
-            return new ApiResponse()
-            {
-                Action = true,
-                Message = "Training sessions retrieved successfully",
-                Result = new
-                {
-                    ToAllTrainingSession = resultData.TrainingSessions,
-                    resultData.ProgramName}
-            };
+    if (resultData == null)
+    {
+        return new ApiResponse() { Message = "Active workout program not found", Action = true, Result = null };
+    }
+
+    string? renewalMessage = null;
+    var now = DateTime.Now;
+
+    if (resultData.StartDate != null)
+    {
+        var programEndDate = resultData.StartDate.Value.AddDays(resultData.ProgramDuration * 7);
+        var daysSinceEnd = (now - programEndDate).Days;
+
+        var remainingSessions = resultData.TotalSessionCount - resultData.CompletedSessionCount;
+
+        double completionPercentage = 0;
+        if (resultData.TotalSessionCount > 0)
+        {
+            completionPercentage = (double)resultData.CompletedSessionCount / resultData.TotalSessionCount;
         }
 
+        bool isProgramExpired = now >= programEndDate;
+        bool isSeventyPercentCompleted = completionPercentage >= 0.70;
+
+        if (isProgramExpired)
+        {
+            renewalMessage =
+                $"{daysSinceEnd} روز از آخرین برنامه تمرینی که دریافت کردی گذشته. ";
+        }
+        else if (isSeventyPercentCompleted)
+        {
+            renewalMessage =
+                $"کمتر از {remainingSessions} جلسه از برنامه تمرینیت باقی مونده. ";
+        }
+    }
+
+    return new ApiResponse()
+    {
+        Action = true,
+        Message = "Training sessions retrieved successfully",
+        Result = new
+        {
+            ToAllTrainingSession = resultData.TrainingSessions,
+            resultData.ProgramName,
+            RenewalMessage = renewalMessage,
+            resultData.CoachWebsite,
+        }
+    };
+}
         public async Task<ApiResponse> GetTrainingSession(string phoneNumber, int trainingSessionId)
         {
             var athlete = await context.Athletes.FirstOrDefaultAsync(a => a.PhoneNumber == phoneNumber);
