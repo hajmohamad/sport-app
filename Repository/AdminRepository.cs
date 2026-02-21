@@ -76,10 +76,11 @@ namespace sport_app_backend.Repository
 
           
         }
-        public async Task<ApiResponse> BackfillWorkoutProgramStats()
+        public async Task<ApiResponse> EditTotalSessionCount()
         {
             var allPrograms = await context.WorkoutPrograms
                 .Include(p => p.TrainingSessions)
+                .Where(wp => wp.TotalSessionCount==0&&wp.Status==WorkoutProgramStatus.ACTIVE)
                 .ToListAsync();
 
             int updatedProgramsCount = 0;
@@ -92,16 +93,6 @@ namespace sport_app_backend.Repository
                     .Count(ts => ts.TrainingSessionStatus == TrainingSessionStatus.COMPLETED);
 
               
-                var lastExerciseActivity = await context.Activities
-                    .Where(a => a.AthleteId == program.AthleteId && a.ActivityCategory == ActivityCategory.EXERCISE)
-                    .OrderByDescending(a => a.Date)
-                    .FirstOrDefaultAsync();
-                
-                if (lastExerciseActivity != null)
-                {
-                    program.LastExerciseDate = lastExerciseActivity.Date;
-                }
-                
                 updatedProgramsCount++;
             }
 

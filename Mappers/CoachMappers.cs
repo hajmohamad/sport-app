@@ -29,7 +29,7 @@ namespace sport_app_backend.Mappers
                     .ToList(),
                 NumberOfAthlete = numberOfAthlete,
                 NumberOfProgram = numberOfProgram,
-                WebsiteUrl = user.Coach.WebSiteUrl??""
+                WebsiteUrl = user.Coach?.WebSiteUrl ?? null
             };
 
 
