@@ -20,6 +20,15 @@ namespace sport_app_backend.Controller
             if (result.Action == false) return BadRequest(result);
             return Ok(result);
         }
+        [HttpPut("EditTotalSessionCount")]
+        public async Task<IActionResult> EditTotalSessionCount()
+        {
+            var result = await adminRepository.EditTotalSessionCount();
+            if (result.Action == false) return BadRequest(result);
+            return Ok(result);
+        }
+
+        
 
         [HttpGet("GetAllCoachPayouts")]
         public async Task<IActionResult> GetAllCoachPayouts()

@@ -14,7 +14,7 @@ namespace sport_app_backend.Interface
     {
         Task<ApiResponse> AddExercises(AddExercisesRequestDto exercises);
         Task<ApiResponse> ConfirmTransactionId(string TransactionId);
-        Task<ApiResponse> BackfillWorkoutProgramStats();
+        Task<ApiResponse> EditTotalSessionCount();
 
         Task<ApiResponse> VerifiedCoach(string coachPhoneNumber, string siteUrl);
          Task<ApiResponse> GetAllCoachPayouts();

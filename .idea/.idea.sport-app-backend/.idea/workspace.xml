@@ -11,17 +11,17 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="11e104f8-869d-4d9d-9802-b48455f5eb31" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/BackgroundServices/ProgramRenewalReminderService.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/dataSources.local.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/shelf/Uncommitted_changes_before_Update_at_12_31_25,_19_08_[Changes]/shelved.patch" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/shelf/Uncommitted_changes_before_Update_at_12_31_25__19_08__Changes_.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/shelf/Uncommitted_changes_before_Checkout_at_2_13_26,_22_31_[Changes]1/shelved.patch" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/shelf/Uncommitted_changes_before_Checkout_at_2_13_26__22_31__Changes_1.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/shelf/Uncommitted_changes_before_Merge_at_2_13_26,_22_32_[Changes]/shelved.patch" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/shelf/Uncommitted_changes_before_Merge_at_2_13_26__22_32__Changes_.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Controller/AdminController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Controller/AdminController.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Interface/IAdminRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Interface/IAdminRepository.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Models/Program/WorkoutProgram.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/Program/WorkoutProgram.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Program.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Mappers/CoachMappers.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Mappers/CoachMappers.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Repository/AdminRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Repository/AdminRepository.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sport-app-backend.sln.DotSettings.user" beforeDir="false" afterPath="$PROJECT_DIR$/sport-app-backend.sln.DotSettings.user" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Repository/AthleteRepo/AthleteRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Repository/AthleteRepo/AthleteRepository.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -35,16 +35,26 @@
     <option name="PUSH_AUTO_UPDATE" value="true" />
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="bdb532921f8308f4eff69bf317f9066d2489d4b4" />
+        <entry key="$PROJECT_DIR$" value="master" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="GitHubPullRequestSearchHistory">{
   &quot;lastFilter&quot;: {
-    &quot;state&quot;: &quot;OPEN&quot;,
-    &quot;assignee&quot;: &quot;hajmohamad&quot;
+    &quot;state&quot;: &quot;OPEN&quot;
   }
+}</component>
+  <component name="GitHubPullRequestState">{
+  &quot;prStates&quot;: [
+    {
+      &quot;id&quot;: {
+        &quot;id&quot;: &quot;PR_kwDOOAp9cs7AE5yp&quot;,
+        &quot;number&quot;: 6
+      },
+      &quot;lastSeen&quot;: 1771106445898
+    }
+  ]
 }</component>
   <component name="GithubPullRequestsUISettings">{
   &quot;selectedUrlAndAccountId&quot;: {
@@ -85,6 +95,7 @@
     <setting file="file://$PROJECT_DIR$/Program.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Repository/AthleteRepo/AchievementsRepository.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Repository/AthleteRepo/ActivityRepository.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="mock:///Users/mohamad/RiderProjects/sport-app/Repository/AthleteRepo/AthleteRepository.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Repository/AthleteRepo/AthleteRepository.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Repository/AthleteRepo/BuyProgramFromApplicationRepository.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Repository/AthleteRepo/WaterAndWeightRepository.cs" root0="FORCE_HIGHLIGHTING" />
@@ -124,7 +135,7 @@
     &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
     &quot;database.data.extractors.current.export.id&quot;: &quot;Comma-separated (CSV)_id&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;stagingMain&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
@@ -291,6 +302,15 @@
       <workItem from="1767303193409" duration="2262000" />
       <workItem from="1771096922047" duration="111000" />
       <workItem from="1771097794997" duration="4485000" />
+      <workItem from="1771106386378" duration="75000" />
+      <workItem from="1771159783178" duration="1977000" />
+      <workItem from="1771186285667" duration="262000" />
+      <workItem from="1771187514741" duration="836000" />
+      <workItem from="1771269166797" duration="328000" />
+      <workItem from="1771273984399" duration="17000" />
+      <workItem from="1771428518045" duration="2084000" />
+      <workItem from="1771517296064" duration="2620000" />
+      <workItem from="1771694255805" duration="1714000" />
     </task>
     <task id="LOCAL‎−۰۰۰۰۱" summary="edit getpayment method">
       <option name="closed" value="true" />
@@ -532,7 +552,39 @@
       <option name="project" value="LOCAL" />
       <updated>1767218921395</updated>
     </task>
-    <option name="localTasksCounter" value="33" />
+    <task id="LOCAL-00033" summary="add migrations for ProgramRenewalReminderService">
+      <option name="closed" value="true" />
+      <created>1771106252905</created>
+      <option name="number" value="00033" />
+      <option name="presentableId" value="LOCAL-00033" />
+      <option name="project" value="LOCAL" />
+      <updated>1771106252905</updated>
+    </task>
+    <task id="LOCAL-00034" summary="edit log for ProgramRenewalReminderService.cs">
+      <option name="closed" value="true" />
+      <created>1771186308790</created>
+      <option name="number" value="00034" />
+      <option name="presentableId" value="LOCAL-00034" />
+      <option name="project" value="LOCAL" />
+      <updated>1771186308790</updated>
+    </task>
+    <task id="LOCAL-00035" summary="edit send time">
+      <option name="closed" value="true" />
+      <created>1771269355429</created>
+      <option name="number" value="00035" />
+      <option name="presentableId" value="LOCAL-00035" />
+      <option name="project" value="LOCAL" />
+      <updated>1771269355429</updated>
+    </task>
+    <task id="LOCAL-00036" summary="edit GetAllTrainingSession and add message for buy new program">
+      <option name="closed" value="true" />
+      <created>1771516982903</created>
+      <option name="number" value="00036" />
+      <option name="presentableId" value="LOCAL-00036" />
+      <option name="project" value="LOCAL" />
+      <updated>1771516982903</updated>
+    </task>
+    <option name="localTasksCounter" value="37" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -561,7 +613,7 @@
                   <entry key="branch">
                     <value>
                       <list>
-                        <option value="master" />
+                        <option value="stagingMain" />
                       </list>
                     </value>
                   </entry>
@@ -575,10 +627,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
-    <MESSAGE value="&lt;!DOCTYPE html&gt;&#10;&lt;html lang=en&gt;&#10;  &lt;meta charset=utf-8&gt;&#10;  &lt;meta name=viewport content=&quot;initial-scale=1, minimum-scale=1, width=device-width&quot;&gt;&#10;  &lt;title&gt;Error 403 (Forbidden)!!1&lt;/title&gt;&#10;  &lt;style&gt;&#10;    *{margin:0;padding:0}html,code{font:15px/22px arial,sans-serif}html{background:#fff;color:#222;padding:15px}body{margin:7% auto 0;max-width:390px;min-height:180px;padding:30px 0 15px}* &gt; body{background:url(//www.google.com/images/errors/robot.png) 100% 5px no-repeat;padding-right:205px}p{margin:11px 0 22px;overflow:hidden}ins{color:#777;text-decoration:none}a img{border:0}@media screen and (max-width:772px){body{background:none;margin-top:0;max-width:none;padding-right:0}}#logo{background:url(//www.google.com/images/branding/googlelogo/1x/googlelogo_color_150x54dp.png) no-repeat;margin-left:-5px}@media only screen and (min-resolution:192dpi){#logo{background:url(//www.google.com/images/branding/googlelogo/2x/googlelogo_color_150x54dp.png) no-repeat 0% 0%/100% 100%;-moz-border-image:url(//www.google.com/images/branding/googlelogo/2x/googlelogo_color_150x54dp.png) 0}}@media only screen and (-webkit-min-device-pixel-ratio:2){#logo{background:url(//www.google.com/images/branding/googlelogo/2x/googlelogo_color_150x54dp.png) no-repeat;-webkit-background-size:100% 100%}}#logo{display:inline-block;height:54px;width:150px}&#10;  &lt;/style&gt;&#10;  &lt;a href=//www.google.com/&gt;&lt;span id=logo aria-label=Google&gt;&lt;/span&gt;&lt;/a&gt;&#10;  &lt;p&gt;&lt;b&gt;403.&lt;/b&gt; &lt;ins&gt;That’s an error.&lt;/ins&gt;&#10;  &lt;p&gt;Your client does not have permission to get URL &lt;code&gt;/v1beta/models/gemini-1.5-pro:streamGenerateContent&lt;/code&gt; from this server.  &lt;ins&gt;That’s all we know.&lt;/ins&gt;" />
-    <MESSAGE value="add new enum ExerciseGoal" />
-    <MESSAGE value="edit cors" />
-    <MESSAGE value="add new question to AthleteQuestion.cs" />
     <MESSAGE value="migration for new athleteQuestion" />
     <MESSAGE value="addd new callBackurl for staging" />
     <MESSAGE value="Merge remote-tracking branch 'origin/stagingMain' into stagingMain&#10;&#10;# Conflicts:&#10;#&#9;Services/ZarinPal.cs" />
@@ -600,7 +648,11 @@
     <MESSAGE value="edit for Notification" />
     <MESSAGE value="edit WebPushNotificationService" />
     <MESSAGE value="edit app setting" />
-    <option name="LAST_COMMIT_MESSAGE" value="edit app setting" />
+    <MESSAGE value="add migrations for ProgramRenewalReminderService" />
+    <MESSAGE value="edit log for ProgramRenewalReminderService.cs" />
+    <MESSAGE value="edit send time" />
+    <MESSAGE value="edit GetAllTrainingSession and add message for buy new program" />
+    <option name="LAST_COMMIT_MESSAGE" value="edit GetAllTrainingSession and add message for buy new program" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

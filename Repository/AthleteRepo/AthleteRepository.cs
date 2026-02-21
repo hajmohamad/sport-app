@@ -220,7 +220,7 @@ namespace sport_app_backend.Repository.AthleteRepo
             {
                 athlete.ActiveWorkoutProgramId = targetProgram.Id;
                 allTrainingSessions.ForEach(resetTrainingSession);
-                targetProgram.StartDate = DateTime.Now;
+                targetProgram.CompletedSessionCount = 0;
                 await context.SaveChangesAsync();
                 return new ApiResponse { Action = true, Message = "Program already active and reset." };
             }
@@ -268,6 +268,7 @@ namespace sport_app_backend.Repository.AthleteRepo
                               workoutProgram.Payment.AthleteQuestion.DaysPerWeekToExercise;
             var programInDayList = workoutProgram.ProgramInDays;
             var programInDayCount = programInDayList.Count;
+            workoutProgram.TotalSessionCount = numberOfDay;
 
             var sessions = new List<TrainingSession>();
 
