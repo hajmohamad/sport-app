@@ -184,6 +184,7 @@ builder.Services.AddScoped<IAchievements, AchievementsRepository>();
 builder.Services.AddScoped<IWaterAndWeight, WaterAndWeightRepository>();
 builder.Services.AddScoped<IBuyProgramFromApplications, BuyProgramFromApplicationRepository>();
 builder.Services.AddScoped<IActivity, ActivityRepository>();
+builder.Services.AddScoped<IInAppMessageRepository, InAppMessageRepository>();
 
 
 

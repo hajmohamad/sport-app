@@ -411,7 +411,7 @@ public class BuyFromSiteRepository(
             await dbContext.CodeVerifies.AddAsync(new CodeVerify()
             {
                 PhoneNumber = userPhoneNumber,
-                Code = await sms.SendCode(userPhoneNumber),
+                Code = await sms.SiteLogin(userPhoneNumber),
                 TimeCodeSend = DateTime.Now
             });
             await dbContext.SaveChangesAsync();
@@ -435,7 +435,7 @@ public class BuyFromSiteRepository(
         await dbContext.CodeVerifies.AddAsync(new CodeVerify()
         {
             PhoneNumber = userPhoneNumber,
-            Code = await sms.SendCode(userPhoneNumber),
+            Code = await sms.SiteLogin(userPhoneNumber),
             TimeCodeSend = DateTime.Now
         });
         await dbContext.SaveChangesAsync();

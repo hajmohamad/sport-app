@@ -270,6 +270,12 @@ private async Task<string> GenerateUniqueUsername()
     {
         var user= await dbContext.Users.Include(q=>q.Coach).FirstOrDefaultAsync(x => x.PhoneNumber == phoneNumber);
         if (user is null) return new ApiResponse() { Message = "User not found", Action = false };
+        
+        var hasUnreadMessages = await dbContext.InAppMessages
+            .Where(m => m.TargetRole == user.TypeOfUser)
+            .AnyAsync(m => !dbContext.UserMessageStatuses
+                .Any(s => s.UserId == user.Id && s.InAppMessageId == m.Id && s.IsRead));
+
         return new ApiResponse()
         {
             Message = "user profile fetched successfully",
@@ -281,7 +287,8 @@ private async Task<string> GenerateUniqueUsername()
                 user.LastName,
                 user.BirthDate,
                 user.ImageProfile,
-                user.PhoneNumber
+                user.PhoneNumber,
+                HasUnreadMessages = hasUnreadMessages
             }
         };
     }
