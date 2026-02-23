@@ -5,7 +5,8 @@ using sport_app_backend.Models.Account;
 
 namespace sport_app_backend.BackgroundServices;
 
-public class TrainingReminderService(IServiceScopeFactory scopeFactory)
+public class TrainingReminderService(IServiceScopeFactory scopeFactory,
+    ILogger<ProgramRenewalReminderService> logger)
     : BackgroundService
 {
 
@@ -62,11 +63,18 @@ public class TrainingReminderService(IServiceScopeFactory scopeFactory)
 
                 var msgIndex = daysPassed <= 3 ? daysPassed - 1 : 3;
 
-                await push.SendAsync(
-                    athlete.sub,
-                    "یادآوری تمرین",
-                    _messages[msgIndex]
-                );
+                try
+                {
+                    await push.SendAsync(
+                        athlete.sub,
+                        "یادآوری تمرین",
+                        _messages[msgIndex]
+                    );
+                }
+                catch (Exception e)
+                {
+                    logger.LogError(e, "خطا در ارسال نوتیفیکیشن");
+                }
 
                 athlete.sub.LastTrainingReminderSentAtUtc = now;
 
