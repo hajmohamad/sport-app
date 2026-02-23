@@ -7,6 +7,8 @@ namespace sport_app_backend.Interface;
 public interface ISmsService
 {
     public Task<string> SendCode(string PhoneNumber);
+    public Task<string> SiteLogin(string phoneNumber);
+
     public Task<string> SendErrorSms(string message);
     public Task<SmsResponse> CoachServiceBuySmsNotification(string phoneNumber, string name, string nameService,
         string price);

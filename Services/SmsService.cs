@@ -41,6 +41,26 @@ public class SmsService(IConfiguration config) : ISmsService
         var response = await httpClient.PostAsync("https://api.sms.ir/v1/send/verify", stringContent);
         return randomNumber;
     }
+    public async Task<string> SiteLogin(string phoneNumber)
+    {
+        if (_accessKey == "deployMode")
+        {
+            return "12345";
+        }
+
+        var random = new Random();
+        var randomNumber = random.Next(10000, 100000).ToString();
+        var message = "کد ورود به سایت بدنسازی چارسِت \n" +
+                      $"Code:{randomNumber}\n" +
+                      "Chaarset.ir";
+
+
+
+        await SendSms(phoneNumber, message);
+        
+        return randomNumber;
+    }
+
 
     public async Task<SmsResponse> CoachServiceBuySmsNotification(string phoneNumber, string name, string nameService,
         string price)

@@ -74,8 +74,9 @@ public class ApplicationDbContext : DbContext
     public DbSet<CoachFaq> CoachFaq { get; set; }
     public DbSet<AthleteFaq> AthleteFaq { get; set; }
     public DbSet<AthleteBodyImage> AthleteImage { get; set; }
-     public DbSet<NotificationSubscription> NotificationSubscriptions { get; set; }
-
+    public DbSet<NotificationSubscription> NotificationSubscriptions { get; set; }
+    public DbSet<InAppMessage> InAppMessages { get; set; }
+    public DbSet<UserMessageStatus> UserMessageStatuses { get; set; }
  
 
 }
