@@ -271,10 +271,7 @@ private async Task<string> GenerateUniqueUsername()
         var user= await dbContext.Users.Include(q=>q.Coach).FirstOrDefaultAsync(x => x.PhoneNumber == phoneNumber);
         if (user is null) return new ApiResponse() { Message = "User not found", Action = false };
         
-        var hasUnreadMessages = await dbContext.InAppMessages
-            .Where(m => m.TargetRole == user.TypeOfUser)
-            .AnyAsync(m => !dbContext.UserMessageStatuses
-                .Any(s => s.UserId == user.Id && s.InAppMessageId == m.Id && s.IsRead));
+       
 
         return new ApiResponse()
         {
@@ -288,7 +285,6 @@ private async Task<string> GenerateUniqueUsername()
                 user.BirthDate,
                 user.ImageProfile,
                 user.PhoneNumber,
-                HasUnreadMessages = hasUnreadMessages
             }
         };
     }
@@ -462,6 +458,7 @@ private async Task<string> GenerateUniqueUsername()
             .Where(u => u.PhoneNumber == phoneNumber)
             .Select(u => new
             {
+                u.Id,
                 u.FirstName,
                 u.LastName,
                 u.Gender,
@@ -470,12 +467,17 @@ private async Task<string> GenerateUniqueUsername()
                 u.PhoneNumber
             })
             .FirstOrDefaultAsync();
+      
         if (user == null)
             return new ApiResponse()
             {
                 Action = false,
                 Message = "Phone number doesn't exist"
             };
+        var hasUnreadMessage = await dbContext.InAppMessages
+            .Where(m => m.TargetRole == user.TypeOfUser)
+            .AnyAsync(m => !dbContext.UserMessageStatuses
+                .Any(s => s.UserId == user.Id && s.InAppMessageId == m.Id && s.IsRead));
         return new ApiResponse()
         {
             Action = true,
@@ -488,7 +490,8 @@ private async Task<string> GenerateUniqueUsername()
                 TypeOfUser = user.TypeOfUser.ToString(),
                 user.PhoneNumber,
                 Gender = user.Gender.ToString(),
-                Question = user.FirstName != ""
+                Question = user.FirstName != "",
+                hasUnreadMessage
 
 
             }
