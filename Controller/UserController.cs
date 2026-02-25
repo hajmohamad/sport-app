@@ -193,6 +193,7 @@ public class UserController(IUserRepository userRepository) : ControllerBase
     }
     [HttpGet("GetExercisesWithFilter")]
     public async Task<IActionResult> GetExercises(
+                [FromQuery] string? name,
         [FromQuery] string? level,
         [FromQuery] string? type,
         [FromQuery] string? mechanic,
@@ -203,7 +204,7 @@ public class UserController(IUserRepository userRepository) : ControllerBase
         [FromQuery] int pageSize = 20)
     {
         var (exercises, totalCount) = await userRepository.GetExercisesAsync(
-            level, type,mechanic, equipment, muscle, place, page, pageSize);
+            level, type,mechanic, equipment, muscle, place, page, pageSize, name);
 
         return Ok(new
         {

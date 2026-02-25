@@ -83,7 +83,6 @@ public class InAppMessageRepository(ApplicationDbContext db) : IInAppMessageRepo
         if (message == null)
             return new ApiResponse { Action = false, Message = "پیام یافت نشد." };
 
-        // علامت‌گذاری به عنوان خوانده‌شده
         var status = await db.UserMessageStatuses
             .FirstOrDefaultAsync(s => s.UserId == user.Id && s.InAppMessageId == messageId);
 
