@@ -501,29 +501,30 @@ private async Task<string> GenerateUniqueUsername()
     }
 
   
-public async Task<(IEnumerable<AllExerciseResponseDto> Exercises, int TotalCount)> GetExercisesAsync(
-    string? level,
+public async Task<(IEnumerable<AllExerciseResponseDto> Exercises, int TotalCount)> GetExercisesAsync(string? level,
     string? type,
     string? mechanic,
-    string?[]? equipment,
+    string?[] equipment,
     string? muscle,
     string? place,
     int page,
-    int pageSize)
+    int pageSize, string? searchTerm)
 {
     var query = dbContext.Exercises.AsQueryable();
+    if (!string.IsNullOrWhiteSpace(searchTerm))
+    {
+        query = query.Where(e => e.PersianName.Contains(searchTerm) || 
+                                 e.EnglishName.Contains(searchTerm));
+    }
 
-    // 🔹 فیلتر سطح
     if (Enum.TryParse<ExerciseLevel>(level, true, out var levelEnum))
         query = query.Where(e => e.ExerciseLevel == levelEnum);
 
-    // 🔹 فیلتر نوع تمرین
     if (Enum.TryParse<ExerciseType>(type, true, out var typeEnum))
         query = query.Where(e => e.ExerciseType == typeEnum);
     if (Enum.TryParse<MechanicType>(mechanic, true, out var mechanicEnum))
         query = query.Where(e=>e.Mechanics== mechanicEnum);
 
-    // 🔹 فیلتر تجهیزات (لیست)
     if (equipment != null && equipment.Any())
     {
         var validEquipments = new List<EquipmentType>();
@@ -538,7 +539,6 @@ public async Task<(IEnumerable<AllExerciseResponseDto> Exercises, int TotalCount
             query = query.Where(e => validEquipments.Contains(e.Equipment));
     }
 
-    // 🔹 فیلتر عضله
     if (Enum.TryParse<BaseCategory>(muscle, true, out var muscleEnum))
     {
         query = query.Where(e =>
@@ -546,7 +546,6 @@ public async Task<(IEnumerable<AllExerciseResponseDto> Exercises, int TotalCount
             e.TargetMuscles.Contains((MuscleGroup)muscleEnum));
     }
 
-    // 🔹 فیلتر محل تمرین (در توضیحات)
     if (!string.IsNullOrEmpty(place))
         query = query.Where(e => EF.Functions.Like(e.Description, $"%{place}%"));
 

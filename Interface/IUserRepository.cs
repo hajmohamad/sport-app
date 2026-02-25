@@ -24,14 +24,12 @@ public interface IUserRepository
     public Task<ApiResponse> CreateWorkoutPdfAsync(string wpId);
 
     public Task<ApiResponse> CheckQuestionSubmitted(string phoneNumber);
-    Task<(IEnumerable<AllExerciseResponseDto> Exercises, int TotalCount)> GetExercisesAsync(
-        string? level,
+    Task<(IEnumerable<AllExerciseResponseDto> Exercises, int TotalCount)> GetExercisesAsync(string? level,
         string? type,
         string? mechanic,
         string?[] equipment,
         string? muscle,
         string? place,
         int page,
-        int pageSize
-    );
+        int pageSize, string? searchTerm);
 }
