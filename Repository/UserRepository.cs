@@ -501,19 +501,22 @@ private async Task<string> GenerateUniqueUsername()
     }
 
   
-public async Task<(IEnumerable<AllExerciseResponseDto> Exercises, int TotalCount)> GetExercisesAsync(string? level,
+public async Task<(IEnumerable<AllExerciseResponseDto> Exercises, int TotalCount)> GetExercisesAsync(
+    string? level,
     string? type,
     string? mechanic,
     string?[] equipment,
     string? muscle,
     string? place,
     int page,
-    int pageSize, string? searchTerm)
+    int pageSize,
+    string? searchTerm)
 {
-    var query = dbContext.Exercises.AsQueryable();
+    var query = dbContext.Exercises.AsNoTracking().AsQueryable();
+
     if (!string.IsNullOrWhiteSpace(searchTerm))
     {
-        query = query.Where(e => e.PersianName.Contains(searchTerm) || 
+        query = query.Where(e => e.PersianName.Contains(searchTerm) ||
                                  e.EnglishName.Contains(searchTerm));
     }
 
@@ -522,13 +525,13 @@ public async Task<(IEnumerable<AllExerciseResponseDto> Exercises, int TotalCount
 
     if (Enum.TryParse<ExerciseType>(type, true, out var typeEnum))
         query = query.Where(e => e.ExerciseType == typeEnum);
+
     if (Enum.TryParse<MechanicType>(mechanic, true, out var mechanicEnum))
-        query = query.Where(e=>e.Mechanics== mechanicEnum);
+        query = query.Where(e => e.Mechanics == mechanicEnum);
 
     if (equipment != null && equipment.Any())
     {
         var validEquipments = new List<EquipmentType>();
-
         foreach (var eq in equipment)
         {
             if (Enum.TryParse<EquipmentType>(eq, true, out var equipEnum))
@@ -539,21 +542,32 @@ public async Task<(IEnumerable<AllExerciseResponseDto> Exercises, int TotalCount
             query = query.Where(e => validEquipments.Contains(e.Equipment));
     }
 
-    if (Enum.TryParse<BaseCategory>(muscle, true, out var muscleEnum))
-    {
-        query = query.Where(e =>
-            e.BaseMuscle == (MuscleGroup)muscleEnum ||
-            e.TargetMuscles.Contains((MuscleGroup)muscleEnum));
-    }
-
     if (!string.IsNullOrEmpty(place))
         query = query.Where(e => EF.Functions.Like(e.Description, $"%{place}%"));
+    MuscleGroup? muscleGroup = null;
+    if (Enum.TryParse<BaseCategory>(muscle, true, out var muscleEnum))
+    {
+        muscleGroup = (MuscleGroup)muscleEnum;
 
-    var totalCount = await query.CountAsync();
-
-    // 🔹 تبدیل به DTO
-    var exercises = await query
+     
+    }
+   
+    var candidateList = await query
         .OrderByDescending(e => e.Views)
+        .ToListAsync();
+
+    if (muscleGroup.HasValue)
+    {
+        var mg = muscleGroup.Value;
+        candidateList = candidateList
+            .Where(e => e.BaseMuscle == mg ||
+                        (e.TargetMuscles != null && e.TargetMuscles.Contains(mg)))
+            .ToList();
+    }
+
+    var totalCount = candidateList.Count;
+
+    var paged = candidateList
         .Skip((page - 1) * pageSize)
         .Take(pageSize)
         .Select(e => new AllExerciseResponseDto
@@ -569,10 +583,9 @@ public async Task<(IEnumerable<AllExerciseResponseDto> Exercises, int TotalCount
             View = e.Views,
             Met = e.Met
         })
-        .ToListAsync();
+        .ToList();
 
-    return (exercises, totalCount);
+    return (paged, totalCount);
 }
-
 }
 
