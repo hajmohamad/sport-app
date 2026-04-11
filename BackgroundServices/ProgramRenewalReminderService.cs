@@ -27,7 +27,7 @@ public class ProgramRenewalReminderService(
             logger.LogError(
                 "ProgramRenewalReminder: Next run at {NextRun}. Waiting {Delay}",
                 nextRun, delay);
-
+            
             await Task.Delay(delay, stoppingToken);
 
             try
@@ -69,7 +69,7 @@ public class ProgramRenewalReminderService(
             var coachWebsite = program.Coach?.WebSiteUrl ?? "chaarset.ir";
 
             var programEndDate = program.StartDate!.Value.AddDays(program.ProgramDuration * 7);
-            var daysSinceEnd = (now - programEndDate).Days;
+            var daysSinceEnd = (programEndDate - program.StartDate.Value).Days;
 
             var remainingSessions = program.TotalSessionCount - program.CompletedSessionCount;
 
@@ -105,7 +105,7 @@ public class ProgramRenewalReminderService(
 
             try
             {
-                await sms.SendSms(phoneNumber, message);
+                 await sms.SendSms(phoneNumber, message);
             }
             catch (Exception ex)
             {
