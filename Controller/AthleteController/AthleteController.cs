@@ -35,6 +35,19 @@ namespace sport_app_backend.Controller
             if (!result.Action) return BadRequest(result);
             return Ok(result);
         }
+        [HttpPost("FeedbackWorkoutProgram")]
+        [Authorize(Roles = "Athlete")]
+        public async Task<IActionResult> FeedbackWorkoutProgram(
+            [FromBody] FeedbackWorkoutProgramDto feedbackTrainingSessionDto)
+        {
+            var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
+            if (phoneNumber is null) return BadRequest("PhoneNumber is null");
+            var result = await athleteRepository.FeedbackWorkoutProgram(phoneNumber, feedbackTrainingSessionDto);
+            if (!result.Action) return BadRequest(result);
+            return Ok(result);
+
+        }
+
    
 
         [HttpGet("get_Athlete_profile")]
@@ -212,6 +225,7 @@ namespace sport_app_backend.Controller
             return Ok(result);
 
         }
+        
         [HttpGet("CalculateCalories/{trainingSessionId}")]
         [Authorize(Roles = "Athlete")]
         public async Task<IActionResult> CalculateCalories([FromRoute] int trainingSessionId)

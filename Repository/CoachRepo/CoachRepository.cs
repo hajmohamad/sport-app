@@ -881,7 +881,7 @@ namespace sport_app_backend.Repository.CoachRepo
             };
         }
 
-        public async Task<ApiResponse> test()
+        public async Task<ApiResponse> Test()
         {
             var payment = await context.Payments.Where(st=>st.PaymentStatus == PaymentStatus.SUCCESS&&st.WorkoutProgram.Status!=WorkoutProgramStatus.NOTSTARTED).ToListAsync();
             foreach(var temp in payment)
@@ -898,17 +898,58 @@ namespace sport_app_backend.Repository.CoachRepo
             };
         }
 
-        public async Task<ApiResponse> getwpkey(int workoutProgramId)
+        public Task<ApiResponse> GetWPkey(int workoutProgramId)
         {
+            try
+            {
+                return Task.FromResult(new ApiResponse()
+                {
+                    Action = true,
+                    Message = "getwpkey",
+                    Result = new
+                    {
+                        wpkey = token.HashEncode(workoutProgramId)
+                    }
+
+                });
+            }
+            catch (Exception exception)
+            {
+                return Task.FromException<ApiResponse>(exception);
+            }
+        }
+        public async Task<ApiResponse> ChoseWorkoutProgramFeedBack(string phoneNumber , int id)
+        {
+            var coach = await context.Coaches.FirstOrDefaultAsync(c => c.PhoneNumber == phoneNumber);
+            if (coach == null)
+            {
+                return new ApiResponse { Action = false, Message = "مربی یافت نشد." };
+            }
+
+            var feedBack = await context.WorkoutProgramFeedback.Where(fb=>fb.CouchId==coach.Id).ToListAsync();
             return new ApiResponse()
             {
                 Action = true,
-                Message = "getwpkey",
-                Result = new
-                {
-                    wpkey = token.HashEncode(workoutProgramId)
-                }
+                Message = "feedback",
+                Result = feedBack
+            };
+        }
+        
 
+        public async Task<ApiResponse> GetWorkoutProgramFeedBack(string phoneNumber)
+        {
+            var coach = await context.Coaches.FirstOrDefaultAsync(c => c.PhoneNumber == phoneNumber);
+            if (coach == null)
+            {
+                return new ApiResponse { Action = false, Message = "مربی یافت نشد." };
+            }
+
+            var feedBack = await context.WorkoutProgramFeedback.Where(fb=>fb.CouchId==coach.Id).ToListAsync();
+            return new ApiResponse()
+            {
+                Action = true,
+                Message = "feedback",
+                Result = feedBack
             };
         }
 

@@ -288,7 +288,7 @@ namespace sport_app_backend.Controller
         {
          
 
-            var result = await coachRepository.test();
+            var result = await coachRepository.Test();
 
             if (!result.Action)
             {
@@ -302,7 +302,7 @@ namespace sport_app_backend.Controller
         {
          
 
-            var result = await coachRepository.getwpkey(workoutProgramId);
+            var result = await coachRepository.GetWPkey(workoutProgramId);
 
             if (!result.Action)
             {
@@ -311,7 +311,34 @@ namespace sport_app_backend.Controller
 
             return Ok(result);
         }
-        
+        [HttpGet("getWorkoutProgramFeedBack")]
+        public async Task<IActionResult> GetWorkoutProgramFeedBack()
+        {
+            var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
+            if (string.IsNullOrEmpty(phoneNumber))
+            {
+                return Unauthorized(new ApiResponse { Action = false, Message = "خطای احراز هویت." });
+            }
+
+            var result = await coachRepository.GetWorkoutProgramFeedBack(phoneNumber);
+
+            if (!result.Action)
+            {
+                return BadRequest(result);
+            }
+
+            return Ok(result);
+        }        
+        [HttpGet("ChoseWorkoutProgramFeedBack/{WorkoutProgramFeedBackId}")]
+        [Authorize(Roles = "Coach")]
+        public async Task<IActionResult> ChoseWorkoutProgramFeedBack([FromRoute] int workoutProgramFeedBackId){
+            var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
+            if (phoneNumber is null) return BadRequest(new ApiResponse { Action = false, Message = "PhoneNumber is null" });
+            var result = await coachRepository.ChoseWorkoutProgramFeedBack(phoneNumber, workoutProgramFeedBackId);
+            if (!result.Action) return BadRequest(result);
+            return Ok(result);
+            
+        }
         
       
     }

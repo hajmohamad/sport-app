@@ -50,10 +50,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Models\Program\WorkoutProgram\NotUse\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Compile Remove="Models\Program\WorkoutProgram\NotUse\ExerciseInDay.cs" />
   </ItemGroup>
   
