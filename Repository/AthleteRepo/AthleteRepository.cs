@@ -39,7 +39,7 @@ namespace sport_app_backend.Repository.AthleteRepo
             };
         }
 
-        public async Task<ApiResponse> FeedbackWorkoutProgram(string phoneNumber, FeedbackWorkoutProgramDto feedbackWorkoutProgramDto)
+        public async Task<ApiResponse> WorkoutProgramFeedback(string phoneNumber, FeedbackWorkoutProgramDto feedbackWorkoutProgramDto)
         {
             var user = await context.Users.Include(a => a.Athlete)
                 .ThenInclude(wp=>wp!.ActiveWorkoutProgram)
