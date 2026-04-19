@@ -20,6 +20,6 @@ namespace sport_app_backend.Interface.Athlete
         public Task<ApiResponse> ResetTrainingSession(string phoneNumber, int trainingSessionId);
         public Task<ApiResponse> CalculateCalories(string phoneNumber, int trainingSessionId);
         public Task<ApiResponse> GetFaq();
-
+        public Task<ApiResponse> FeedbackWorkoutProgram(string phoneNumber, FeedbackWorkoutProgramDto feedbackWorkoutProgramDto);
     }
 }

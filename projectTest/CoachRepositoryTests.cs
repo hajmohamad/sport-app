@@ -1715,7 +1715,7 @@ namespace sport_app_backend.projectTest
         {
             _mockTokenService.Setup(t => t.HashEncode(123)).Returns("hashedKey123");
 
-            var result = await _repository.getwpkey(123);
+            var result = await _repository.GetWPkey(123);
 
             Assert.True(result.Action);
             Assert.Equal("getwpkey", result.Message);

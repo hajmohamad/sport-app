@@ -77,6 +77,5 @@ public class ApplicationDbContext : DbContext
     public DbSet<NotificationSubscription> NotificationSubscriptions { get; set; }
     public DbSet<InAppMessage> InAppMessages { get; set; }
     public DbSet<UserMessageStatus> UserMessageStatuses { get; set; }
- 
-
+    public DbSet<WorkoutProgramFeedback> WorkoutProgramFeedback { get; set; }
 }

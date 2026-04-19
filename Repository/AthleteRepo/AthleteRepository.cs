@@ -39,7 +39,50 @@ namespace sport_app_backend.Repository.AthleteRepo
             };
         }
 
-    
+        public async Task<ApiResponse> FeedbackWorkoutProgram(string phoneNumber, FeedbackWorkoutProgramDto feedbackWorkoutProgramDto)
+        {
+            var user = await context.Users.Include(a => a.Athlete)
+                .ThenInclude(wp=>wp!.ActiveWorkoutProgram)
+                .FirstOrDefaultAsync(a => a.PhoneNumber == phoneNumber);
+            if (user is null) return new ApiResponse() { Message = "User not found", Action = false };
+            var athlete = user.Athlete;
+            if (athlete is null)
+                return new ApiResponse()
+                    { Message = "User is not an athlete", Action = false }; 
+            var workoutProgram = athlete.ActiveWorkoutProgram;
+            if (workoutProgram is null)
+            {
+                return new ApiResponse()
+                {
+                    Action = false,
+                    Message = "Workout program is not active",
+                };
+            }
+            
+            var feedBack = new WorkoutProgramFeedback()
+            {
+                AthleteId = athlete.Id,
+                CouchId = workoutProgram.CoachId,
+                AthleteName = athlete.User.FirstName + " " + athlete.User.LastName,
+                WorkoutProgramId = workoutProgram.Id,
+                WorkoutProgramName = workoutProgram.Title,
+                Score = feedbackWorkoutProgramDto.Score,
+                FeedBack = feedbackWorkoutProgramDto.FeedBack,
+            };
+            await context.WorkoutProgramFeedback.AddAsync(feedBack);
+            await context.SaveChangesAsync();
+            
+            
+
+
+            return new ApiResponse()
+            {
+                Action = true,
+                Message = "Feedback workout program submitted successfully",
+                Result = feedBack
+            };
+        }
+
 
         public async Task<ApiResponse> AthleteFirstQuestions(string phoneNumber,
             AthleteFirstQuestionsDto athleteFirstQuestionsDto)
@@ -382,6 +425,7 @@ namespace sport_app_backend.Repository.AthleteRepo
             wp.TotalSessionCount,
             wp.CompletedSessionCount,
             CoachWebsite = wp.Coach.WebSiteUrl ?? "chaarset.ir",
+            wp.WorkoutProgramFeedbackId,
             TrainingSessions = wp.TrainingSessions.Select(ts => new AllTrainingSessionDto
             {
                 Id = ts.Id,
@@ -396,6 +440,13 @@ namespace sport_app_backend.Repository.AthleteRepo
     {
         return new ApiResponse() { Message = "Active workout program not found", Action = true, Result = null };
     }
+    double completionPercentage = 0;
+    if (resultData.TotalSessionCount > 0)
+    {
+        completionPercentage = (double)resultData.CompletedSessionCount / resultData.TotalSessionCount;
+    }
+
+    var shouldGetFeedback = completionPercentage >= 0.30 && resultData.WorkoutProgramFeedbackId == null;
 
     string? renewalMessage = null;
     var now = DateTime.Now;
@@ -406,15 +457,8 @@ namespace sport_app_backend.Repository.AthleteRepo
         var daysSinceEnd = (now - programEndDate).Days;
 
         var remainingSessions = resultData.TotalSessionCount - resultData.CompletedSessionCount;
-
-        double completionPercentage = 0;
-        if (resultData.TotalSessionCount > 0)
-        {
-            completionPercentage = (double)resultData.CompletedSessionCount / resultData.TotalSessionCount;
-        }
-
-        bool isProgramExpired = now >= programEndDate;
-        bool isSeventyPercentCompleted = completionPercentage >= 0.70;
+        var isProgramExpired = now >= programEndDate;
+        var isSeventyPercentCompleted = completionPercentage >= 0.70;
 
         if (isProgramExpired)
         {
@@ -438,6 +482,7 @@ namespace sport_app_backend.Repository.AthleteRepo
             resultData.ProgramName,
             RenewalMessage = renewalMessage,
             resultData.CoachWebsite,
+            shouldGetFeedback
         }
     };
 }
