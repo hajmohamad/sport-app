@@ -329,7 +329,7 @@ namespace sport_app_backend.Controller
 
             return Ok(result);
         }        
-        [HttpGet("ChoseWorkoutProgramFeedBack/{WorkoutProgramFeedBackId}")]
+        [HttpGet("ChoseWorkoutProgramFeedBack/{workoutProgramFeedBackId:int}")]
         [Authorize(Roles = "Coach")]
         public async Task<IActionResult> ChoseWorkoutProgramFeedBack([FromRoute] int workoutProgramFeedBackId){
             var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
