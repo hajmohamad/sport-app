@@ -926,7 +926,12 @@ namespace sport_app_backend.Repository.CoachRepo
                 return new ApiResponse { Action = false, Message = "مربی یافت نشد." };
             }
 
-            var feedBack = await context.WorkoutProgramFeedback.Where(fb=>fb.CouchId==coach.Id).ToListAsync();
+
+            var feedBack = await context.WorkoutProgramFeedback.Where(e => e.Id == id && e.CouchId == coach.Id)
+                .FirstAsync();
+            feedBack.IsChosen = true;
+            await context.SaveChangesAsync();
+            
             return new ApiResponse()
             {
                 Action = true,
