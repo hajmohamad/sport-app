@@ -918,29 +918,45 @@ namespace sport_app_backend.Repository.CoachRepo
                 return Task.FromException<ApiResponse>(exception);
             }
         }
-        public async Task<ApiResponse> ChoseWorkoutProgramFeedBack(string phoneNumber, List<int> feedbackIds)
+        public async Task<ApiResponse> ChoseWorkoutProgramFeedBack(
+            string phoneNumber,
+            List<ChoseWorkoutProgramFeedBackDto> choseWorkoutProgramFeedBackDtos)
         {
-            var coach = await context.Coaches.FirstOrDefaultAsync(c => c.PhoneNumber == phoneNumber);
+            var coach = await context.Coaches
+                .FirstOrDefaultAsync(c => c.PhoneNumber == phoneNumber);
+
             if (coach == null)
             {
                 return new ApiResponse { Action = false, Message = "مربی یافت نشد." };
             }
 
-            var affectedRows = await context.WorkoutProgramFeedback
-                .Where(e => feedbackIds.Contains(e.Id) && e.CouchId == coach.Id)
-                .ExecuteUpdateAsync(e =>
-                    e.SetProperty(fb => fb.IsChosen, true)
-                );
+            var dtoById = choseWorkoutProgramFeedBackDtos
+                .ToDictionary(x => x.Id, x => x.IsShouldBeTrue);
 
-            if (affectedRows == 0)
+            var feedbacks = await context.WorkoutProgramFeedback
+                .Where(e => e.CouchId == coach.Id)
+                .ToListAsync();
+
+            if (!feedbacks.Any())
             {
-                return new ApiResponse { Action = false, Message = "هیچ فیدبکی یافت نشد." };
+                return new ApiResponse { Action = false, Message = "هیچ فیدبکی برای این مربی یافت نشد." };
             }
+
+            foreach (var fb in feedbacks)
+            {
+                if (dtoById.TryGetValue(fb.Id, out var shouldBeTrue))
+                {
+                    fb.IsChosen = shouldBeTrue;
+                }
+               
+            }
+
+            var affectedRows = await context.SaveChangesAsync();
 
             return new ApiResponse
             {
                 Action = true,
-                Message = "همه فیدبک ها تایید شد",
+                Message = "فیدبک‌ها بروزرسانی شدند",
                 Result = affectedRows
             };
         }
