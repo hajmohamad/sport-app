@@ -329,19 +329,25 @@ namespace sport_app_backend.Controller
 
             return Ok(result);
         }        
-        [HttpGet("ChoseWorkoutProgramFeedBack/{workoutProgramFeedBackId:int}")]
+      
+        [HttpGet("ChoseWorkoutProgramFeedBack")]
         [Authorize(Roles = "Coach")]
-        public async Task<IActionResult> ChoseWorkoutProgramFeedBack([FromRoute] int workoutProgramFeedBackId){
+        public async Task<IActionResult> ChoseWorkoutProgramFeedBack([FromBody] ChoseWorkoutProgramFeedBackDto dto){
             var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
             if (phoneNumber is null) return BadRequest(new ApiResponse { Action = false, Message = "PhoneNumber is null" });
-            var result = await coachRepository.ChoseWorkoutProgramFeedBack(phoneNumber, workoutProgramFeedBackId);
+            var result = await coachRepository.ChoseWorkoutProgramFeedBack(phoneNumber, dto.FeedbackIds);
             if (!result.Action) return BadRequest(result);
             return Ok(result);
             
+            
         }
+        
+        
         
       
     }
+
+  
 
    
 }

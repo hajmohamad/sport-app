@@ -918,7 +918,7 @@ namespace sport_app_backend.Repository.CoachRepo
                 return Task.FromException<ApiResponse>(exception);
             }
         }
-        public async Task<ApiResponse> ChoseWorkoutProgramFeedBack(string phoneNumber , int id)
+        public async Task<ApiResponse> ChoseWorkoutProgramFeedBack(string phoneNumber, List<int> feedbackIds)
         {
             var coach = await context.Coaches.FirstOrDefaultAsync(c => c.PhoneNumber == phoneNumber);
             if (coach == null)
@@ -926,20 +926,25 @@ namespace sport_app_backend.Repository.CoachRepo
                 return new ApiResponse { Action = false, Message = "مربی یافت نشد." };
             }
 
+            var affectedRows = await context.WorkoutProgramFeedback
+                .Where(e => feedbackIds.Contains(e.Id) && e.CouchId == coach.Id)
+                .ExecuteUpdateAsync(e =>
+                    e.SetProperty(fb => fb.IsChosen, true)
+                );
 
-            var feedBack = await context.WorkoutProgramFeedback.Where(e => e.Id == id && e.CouchId == coach.Id)
-                .FirstAsync();
-            feedBack.IsChosen = true;
-            await context.SaveChangesAsync();
-            
-            return new ApiResponse()
+            if (affectedRows == 0)
+            {
+                return new ApiResponse { Action = false, Message = "هیچ فیدبکی یافت نشد." };
+            }
+
+            return new ApiResponse
             {
                 Action = true,
-                Message = "feedback",
-                Result = feedBack
+                Message = "همه فیدبک ها تایید شد",
+                Result = affectedRows
             };
         }
-        
+
 
         public async Task<ApiResponse> GetWorkoutProgramFeedBack(string phoneNumber)
         {
