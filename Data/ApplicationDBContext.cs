@@ -12,6 +12,7 @@ using sport_app_backend.Models.Payments;
 using sport_app_backend.Models.Program;
 using sport_app_backend.Models.Question.A_Question;
 using sport_app_backend.Models.SupportApp;
+using sport_app_backend.Models.TrainingPlan;
 using WebPush;
 
 
@@ -45,6 +46,16 @@ public class ApplicationDbContext : DbContext
          modelBuilder.Entity<User>()
         .Navigation(u => u.Athlete)
         .AutoInclude(); 
+
+        modelBuilder.Entity<DiscountCode>()
+            .HasIndex(x => x.Code)
+            .IsUnique();
+
+        modelBuilder.Entity<Payment>()
+            .HasOne(x => x.DiscountCode)
+            .WithMany(x => x.Payments)
+            .HasForeignKey(x => x.DiscountCodeId)
+            .OnDelete(DeleteBehavior.Restrict);
          
       
     }
@@ -78,4 +89,5 @@ public class ApplicationDbContext : DbContext
     public DbSet<InAppMessage> InAppMessages { get; set; }
     public DbSet<UserMessageStatus> UserMessageStatuses { get; set; }
     public DbSet<WorkoutProgramFeedback> WorkoutProgramFeedback { get; set; }
+    public DbSet<DiscountCode> DiscountCodes { get; set; }
 }

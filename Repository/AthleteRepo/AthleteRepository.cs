@@ -440,13 +440,13 @@ namespace sport_app_backend.Repository.AthleteRepo
     {
         return new ApiResponse() { Message = "Active workout program not found", Action = true, Result = null };
     }
-    double completionPercentage = 0;
+    double completionPercent = 0;
     if (resultData.TotalSessionCount > 0)
     {
-        completionPercentage = (double)resultData.CompletedSessionCount / resultData.TotalSessionCount;
+        completionPercent = (double)resultData.CompletedSessionCount / resultData.TotalSessionCount;
     }
 
-    var shouldGetFeedback = completionPercentage >= 0.30 && resultData.WorkoutProgramFeedbackId == null;
+    var shouldGetFeedback = completionPercent >= 0.30 && resultData.WorkoutProgramFeedbackId == null;
 
     string? renewalMessage = null;
     var now = DateTime.Now;
@@ -458,7 +458,7 @@ namespace sport_app_backend.Repository.AthleteRepo
 
         var remainingSessions = resultData.TotalSessionCount - resultData.CompletedSessionCount;
         var isProgramExpired = now >= programEndDate;
-        var isSeventyPercentCompleted = completionPercentage >= 0.70;
+        var isSeventyPercentCompleted = completionPercent >= 0.70;
 
         if (isProgramExpired)
         {
@@ -684,7 +684,7 @@ namespace sport_app_backend.Repository.AthleteRepo
                 RestBetweenSetsSec = priorities.Average(p => TrainingGoalParameters.Parameters[p].RestBetweenSetsSec),
                 RestBetweenMovesSec = priorities.Average(p => TrainingGoalParameters.Parameters[p].RestBetweenMovesSec),
                 TimePerRepSec = priorities.Average(p => TrainingGoalParameters.Parameters[p].TimePerRepSec),
-                EpocPercentage = priorities.Average(p => TrainingGoalParameters.Parameters[p].EpocPercentage)
+                EpocPercent = priorities.Average(p => TrainingGoalParameters.Parameters[p].EpocPercent)
             };
 
             double totalCaloriesActiveAndRestSets = 0;
@@ -736,7 +736,7 @@ namespace sport_app_backend.Repository.AthleteRepo
             var totalCaloriesBeforeEpoc = totalCaloriesActiveAndRestSets + caloriesRestMoves;
 
 
-            var finalCalories = totalCaloriesBeforeEpoc * (1 + avgParams.EpocPercentage);
+            var finalCalories = totalCaloriesBeforeEpoc * (1 + avgParams.EpocPercent);
 
             return Math.Round(finalCalories, 2);
         }

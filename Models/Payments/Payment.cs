@@ -4,6 +4,7 @@ using sport_app_backend.Models.Account;
 using sport_app_backend.Models.Account.Athlete;
 using sport_app_backend.Models.Program;
 using sport_app_backend.Models.Question.A_Question;
+using sport_app_backend.Models.TrainingPlan;
 using sport_app_backend.Models.TrainingService;
 
 namespace sport_app_backend.Models.Payments;
@@ -28,4 +29,9 @@ public class Payment
     public  WorkoutProgram? WorkoutProgram { get; set; }
     public double AppFee { get; set; }
     public long RefId { get; set; }
+    public double OriginalAmount { get; set; }
+    public double PublicDiscountAmount { get; set; }
+    public double CodeDiscountAmount { get; set; }
+    public int? DiscountCodeId { get; set; }
+    public DiscountCode? DiscountCode { get; set; }
 }

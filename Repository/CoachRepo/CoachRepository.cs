@@ -135,6 +135,12 @@ namespace sport_app_backend.Repository.CoachRepo
                 };
             }
 
+            var publicDiscountValidation = ValidatePublicDiscount(addCoachingServiceDto);
+            if (!publicDiscountValidation.Action)
+            {
+                return publicDiscountValidation;
+            }
+
             var coachingService = addCoachingServiceDto.ToCoachService(coach);
             coach.CoachingServices ??= [];
             coach.CoachingServices.Add(coachingService);
@@ -190,6 +196,12 @@ namespace sport_app_backend.Repository.CoachRepo
                 };
             }
 
+            var publicDiscountValidation = ValidatePublicDiscount(addCoachingServices);
+            if (!publicDiscountValidation.Action)
+            {
+                return publicDiscountValidation;
+            }
+
             var coachingService = coach.CoachingServices
                 .FirstOrDefault(x => x.Id == id && !x.IsDeleted);
 
@@ -206,6 +218,8 @@ namespace sport_app_backend.Repository.CoachRepo
                 coachingService.IsDeleted = true;
                 var newCoachService = addCoachingServices.ToCoachService(coach);
                 newCoachService.NumberOfSell = coachingService.NumberOfSell;
+                newCoachService.UsageLimit = coachingService.UsageLimit;
+                newCoachService.NumberOfSellWithDiscount = coachingService.NumberOfSellWithDiscount;
                 coach.CoachingServices.Add(newCoachService);
                 await context.CoachServices.AddAsync(newCoachService);
             }
@@ -220,6 +234,192 @@ namespace sport_app_backend.Repository.CoachRepo
                 Message = "Coaching Service updated successfully",
                 Action = true,
                 Result = coachingService.ToCoachingServiceResponse()
+            };
+        }
+
+        public async Task<ApiResponse> CreateDiscountCode(string phoneNumber, int serviceId,
+            DiscountCodeCreateDto discountCodeCreateDto)
+        {
+            var coach = await context.Coaches
+                .Include(x => x.CoachingServices)
+                .FirstOrDefaultAsync(x => x.PhoneNumber == phoneNumber);
+            if (coach is null)
+            {
+                return new ApiResponse { Action = false, Message = "User is not a coach" };
+            }
+
+            var service = coach.CoachingServices.FirstOrDefault(x => x.Id == serviceId && !x.IsDeleted);
+            if (service is null)
+            {
+                return new ApiResponse { Action = false, Message = "سرویس کوچینگ یافت نشد." };
+            }
+
+            var validation = await ValidateDiscountCodeInput(discountCodeCreateDto.Code,
+                discountCodeCreateDto.DiscountPercent, discountCodeCreateDto.UsageLimit,
+                discountCodeCreateDto.ExpiresAt, null);
+            if (!validation.Action)
+            {
+                return validation;
+            }
+
+
+            var discountCode = new DiscountCode
+            {
+                CoachId = coach.Id,
+                Coach = coach,
+                Code = discountCodeCreateDto.Code,
+                DiscountPercent = discountCodeCreateDto.DiscountPercent,
+                UsageLimit = discountCodeCreateDto.UsageLimit,
+                ExpiresAt = discountCodeCreateDto.ExpiresAt,
+                Status = discountCodeCreateDto.ExpiresAt.HasValue && discountCodeCreateDto.ExpiresAt.Value <= DateTime.UtcNow
+                    ? DiscountCodeStatus.EXPIRED
+                    : DiscountCodeStatus.ACTIVE
+            };
+
+            await context.DiscountCodes.AddAsync(discountCode);
+            await context.SaveChangesAsync();
+
+            return new ApiResponse
+            {
+                Action = true,
+                Message = "کد تخفیف با موفقیت ساخته شد.",
+                Result = discountCode.ToDiscountCodeListItemDto()
+            };
+        }
+
+        public async Task<ApiResponse> UpdateDiscountCode(string phoneNumber, int discountCodeId,
+            DiscountCodeUpdateDto discountCodeUpdateDto)
+        {
+            var discountCode = await context.DiscountCodes
+                .Include(x => x.Coach)
+                .FirstOrDefaultAsync(x => x.Id == discountCodeId && !x.IsDeleted && x.Coach.PhoneNumber == phoneNumber);
+            if (discountCode is null)
+            {
+                return new ApiResponse { Action = false, Message = "کد تخفیف یافت نشد." };
+            }
+
+            var validation = await ValidateDiscountCodeInput(discountCodeUpdateDto.Code, 
+                discountCodeUpdateDto.DiscountPercent, discountCodeUpdateDto.UsageLimit,
+                discountCodeUpdateDto.ExpiresAt, discountCode.Id);
+            if (!validation.Action)
+            {
+                return validation;
+            }
+
+            discountCode.Code = validation.Result as string ?? discountCode.Code;
+            discountCode.DiscountPercent = discountCodeUpdateDto.DiscountPercent;
+            discountCode.UsageLimit = discountCodeUpdateDto.UsageLimit;
+            discountCode.ExpiresAt = discountCodeUpdateDto.ExpiresAt;
+            discountCode.UpdatedAt = DateTime.UtcNow;
+
+            
+            if (!string.IsNullOrWhiteSpace(discountCodeUpdateDto.Status))
+            {
+                if (!Enum.TryParse<DiscountCodeStatus>(discountCodeUpdateDto.Status, true, out var status))
+                {
+                    return new ApiResponse { Action = false, Message = "وضعیت کد تخفیف نامعتبر است." };
+                }
+
+                discountCode.Status = status;
+            }
+
+            if (discountCode.ExpiresAt.HasValue && discountCode.ExpiresAt.Value <= DateTime.UtcNow)
+            {
+                discountCode.Status = DiscountCodeStatus.EXPIRED;
+            }
+
+            await context.SaveChangesAsync();
+
+            return new ApiResponse
+            {
+                Action = true,
+                Message = "کد تخفیف با موفقیت ویرایش شد.",
+                Result = discountCode.ToDiscountCodeListItemDto()
+            };
+        }
+        public async Task<ApiResponse> GetDiscountCodes(string phoneNumber)
+        {
+       
+            var coach = await context.Coaches.FirstOrDefaultAsync(x => x.PhoneNumber == phoneNumber);
+            if (coach is null)
+            {
+                return new ApiResponse { Action = false, Message = "User is not a coach" };
+            }
+
+            var discountCodes = await context.DiscountCodes
+                .Where(x => x.CoachId == coach.Id  && !x.IsDeleted).ToListAsync();
+
+   
+
+            return new ApiResponse
+            {
+                Action = true,
+                Message = discountCodes.Count == 0 ? "هیچ کد تخفیفی موجود نیست" : "لیست کدهای تخفیف",
+                Result = discountCodes.Select(x => x.ToDiscountCodeListItemDto()).ToList()
+            };
+        }
+
+        public async Task<ApiResponse> GetDiscountCodeById(string phoneNumber, int discountCodeId)
+        {
+            var discountCode = await context.DiscountCodes
+                .Include(x => x.Coach)
+                .FirstOrDefaultAsync(x => x.Id == discountCodeId && !x.IsDeleted && x.Coach.PhoneNumber == phoneNumber);
+            if (discountCode is null)
+            {
+                return new ApiResponse { Action = false, Message = "کد تخفیف یافت نشد." };
+            }
+
+            await SyncExpiredDiscountCodes([discountCode]);
+
+            return new ApiResponse
+            {
+                Action = true,
+                Message = "کد تخفیف",
+                Result = discountCode.ToDiscountCodeListItemDto()
+            };
+        }
+
+        public async Task<ApiResponse> DisableDiscountCode(string phoneNumber, int discountCodeId)
+        {
+            var discountCode = await context.DiscountCodes
+                .Include(x => x.Coach)
+                .FirstOrDefaultAsync(x => x.Id == discountCodeId && !x.IsDeleted && x.Coach.PhoneNumber == phoneNumber);
+            if (discountCode is null)
+            {
+                return new ApiResponse { Action = false, Message = "کد تخفیف یافت نشد." };
+            }
+
+            discountCode.Status = DiscountCodeStatus.INACTIVE;
+            discountCode.UpdatedAt = DateTime.UtcNow;
+            await context.SaveChangesAsync();
+
+            return new ApiResponse
+            {
+                Action = true,
+                Message = "کد تخفیف غیرفعال شد.",
+                Result = discountCode.ToDiscountCodeListItemDto()
+            };
+        }
+
+        public async Task<ApiResponse> GenerateDiscountCode(string phoneNumber)
+        {
+            var coachExists = await context.Coaches.AnyAsync(x => x.PhoneNumber == phoneNumber);
+            if (!coachExists)
+            {
+                return new ApiResponse { Action = false, Message = "User is not a coach" };
+            }
+
+            string code;
+            do
+            {
+                code = "GenerateRandomDiscountCode()";
+            } while (await context.DiscountCodes.AnyAsync(x => x.Code == code && !x.IsDeleted));
+
+            return new ApiResponse
+            {
+                Action = true,
+                Message = "کد تخفیف تصادفی ساخته شد.",
+                Result = new { Code = code }
             };
         }
 
@@ -962,6 +1162,100 @@ namespace sport_app_backend.Repository.CoachRepo
         {
             var diff = ((int)today.DayOfWeek - (int)DayOfWeek.Saturday + 7) % 7;
             return today.AddDays(-diff);
+        }
+
+        private ApiResponse ValidatePublicDiscount(AddCoachServiceDto dto)
+        {
+            if (dto.PublicDiscountPercent is null || dto.PublicDiscountPercent <= 0)
+            {
+                dto.UsageLimit = null;
+                dto.PublicDiscountExpiresAt = null;
+                dto.PublicDiscountPercent = null;
+                return new ApiResponse
+                {
+                    Action = true ,
+                    Message = "کد تخفیفی ایجاد نشده است"
+                };
+            }
+            var now = DateTime.Now;
+
+         
+
+            if (dto.PublicDiscountExpiresAt.HasValue && dto.PublicDiscountExpiresAt.HasValue &&
+                now >= dto.PublicDiscountExpiresAt.Value)
+            {
+                return new ApiResponse { Action = false, Message = "تاریخ انقضا قبل از تاریخ شروع است" };
+            }
+
+            var amount = CoachMappers.CalculateDiscountAmount(dto.Price, dto.PublicDiscountPercent.Value);
+            if (amount <= 0)
+            {
+                return new ApiResponse { Action = false, Message = "مقدار تخفیف عمومی نامعتبر است." };
+            }
+
+            return new ApiResponse
+            {
+                Action = true
+                , Message = "کد تخفیف درست است"
+            };
+        }
+
+        private async Task<ApiResponse> ValidateDiscountCodeInput(string code, double DiscountPercent,
+            int? usageLimit, DateTime? expiresAt, int? currentDiscountCodeId)
+        {
+            var now  = DateTime.Now;
+            
+            if (DiscountPercent <= 0)
+            {
+                return new ApiResponse { Action = false, Message = "مقدار تخفیف باید بیشتر از صفر باشد." };
+            }
+
+            if (usageLimit is <= 0)
+            {
+                return new ApiResponse { Action = false, Message = "سقف استفاده باید بیشتر از صفر باشد." };
+            }
+
+            if ( expiresAt.HasValue && now < expiresAt.Value)
+            {
+                return new ApiResponse { Action = false, Message = "تاریخ شروع باید قبل از تاریخ انقضا باشد." };
+            }
+            
+            var exists = await context.DiscountCodes
+                .AnyAsync(x => x.Code == code && !x.IsDeleted && x.Id != currentDiscountCodeId);
+        
+            if (exists)
+            {
+                return new ApiResponse { Action = false, Message = "این کد تخفیف قبلاً ثبت شده است." };
+            }
+
+            return new ApiResponse { Action = true,
+                Message = "کد تخفیف درست است ",
+                Result = code };
+            
+        }
+
+   
+       
+
+        private async Task SyncExpiredDiscountCodes(IEnumerable<DiscountCode> discountCodes)
+        {
+            var shouldSave = false;
+            foreach (var discountCode in discountCodes)
+            {
+                if (discountCode.Status != DiscountCodeStatus.INACTIVE &&
+                    discountCode.ExpiresAt.HasValue &&
+                    discountCode.ExpiresAt.Value <= DateTime.UtcNow &&
+                    discountCode.Status != DiscountCodeStatus.EXPIRED)
+                {
+                    discountCode.Status = DiscountCodeStatus.EXPIRED;
+                    shouldSave = true;
+                }
+            }
+
+            if (shouldSave)
+            {
+                await context.SaveChangesAsync();
+            }
         }
 
         private DateTime GetFirstDayOfPersianMonth(DateTime date)
