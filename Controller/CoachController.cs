@@ -330,7 +330,7 @@ namespace sport_app_backend.Controller
             return Ok(result);
         }        
       
-        [HttpPost("ChoseWorkoutProgramFeedBack")]
+        [HttpPost("ChooseWorkoutProgramFeedBack")]
         [Authorize(Roles = "Coach")]
         public async Task<IActionResult> ChoseWorkoutProgramFeedBack([FromBody] ChoseWorkoutProgramFeedBackDto dto){
             var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
