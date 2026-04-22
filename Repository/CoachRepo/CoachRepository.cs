@@ -401,27 +401,7 @@ namespace sport_app_backend.Repository.CoachRepo
             };
         }
 
-        public async Task<ApiResponse> GenerateDiscountCode(string phoneNumber)
-        {
-            var coachExists = await context.Coaches.AnyAsync(x => x.PhoneNumber == phoneNumber);
-            if (!coachExists)
-            {
-                return new ApiResponse { Action = false, Message = "User is not a coach" };
-            }
-
-            string code;
-            do
-            {
-                code = "GenerateRandomDiscountCode()";
-            } while (await context.DiscountCodes.AnyAsync(x => x.Code == code && !x.IsDeleted));
-
-            return new ApiResponse
-            {
-                Action = true,
-                Message = "کد تخفیف تصادفی ساخته شد.",
-                Result = new { Code = code }
-            };
-        }
+        
 
         public async Task<ApiResponse> DeleteCoachingService(string phoneNumber, int id)
         {
@@ -649,31 +629,34 @@ namespace sport_app_backend.Repository.CoachRepo
                     .ThenInclude(d => d.AllExerciseInDays)
                     .FirstAsync(p => p.PaymentId == paymentId);
 
-                var numberOfDay = workoutProgram.ProgramDuration *
-                                  workoutProgram.Payment.AthleteQuestion.DaysPerWeekToExercise;
-                var programInDayList = workoutProgram.ProgramInDays;
-                var programInDayCount = programInDayList.Count;
-                workoutProgram.TotalSessionCount = numberOfDay;
-
-
-                for (var day = 1; day <= numberOfDay; day++)
+                if (workoutProgram.Payment.AthleteQuestion != null)
                 {
-                    var index = day % programInDayCount;
-                    await context.TrainingSessions.AddAsync(new TrainingSession
+                    var numberOfDay = workoutProgram.ProgramDuration *
+                                      workoutProgram.Payment.AthleteQuestion.DaysPerWeekToExercise;
+                    var programInDayList = workoutProgram.ProgramInDays;
+                    var programInDayCount = programInDayList.Count;
+                    workoutProgram.TotalSessionCount = numberOfDay;
+
+
+                    for (var day = 1; day <= numberOfDay; day++)
                     {
-                        ProgramInDayId = programInDayList[index].Id,
-                        ProgramInDay = programInDayList[index],
-                        ExerciseCompletionBitmap = new byte[programInDayList[index].AllExerciseInDays.Count],
-                        TrainingSessionStatus = TrainingSessionStatus.NOTSTARTED,
-                        DayNumber = day,
-                        WorkoutProgram = workoutProgram,
-                        WorkoutProgramId = workoutProgram.Id
-                    });
+                        var index = day % programInDayCount;
+                        await context.TrainingSessions.AddAsync(new TrainingSession
+                        {
+                            ProgramInDayId = programInDayList[index].Id,
+                            ProgramInDay = programInDayList[index],
+                            ExerciseCompletionBitmap = new byte[programInDayList[index].AllExerciseInDays.Count],
+                            TrainingSessionStatus = TrainingSessionStatus.NOTSTARTED,
+                            DayNumber = day,
+                            WorkoutProgram = workoutProgram,
+                            WorkoutProgramId = workoutProgram.Id
+                        });
+                    }
                 }
             }
             catch (Exception e)
             {
-                Console.WriteLine("*+*" + paymentId);
+                Console.WriteLine("*+*" + paymentId+"------"+e.Message);
             }
 
         }
@@ -901,7 +884,6 @@ namespace sport_app_backend.Repository.CoachRepo
                 return new ApiResponse { Action = false, Message = "مربی یافت نشد." };
             }
 
-            // واکشی تمام پرداخت‌های موفق که به این مربی و یک برنامه تمرینی متصل هستند
             var payments = await context.Payments
                 .Where(p => p.CoachId == coach.Id && p.PaymentStatus == PaymentStatus.SUCCESS &&
                             p.WorkoutProgram != null)
@@ -983,16 +965,20 @@ namespace sport_app_backend.Repository.CoachRepo
 
                 return new TransactionDto
                 {
-                    Amount = p.Amount, 
+                    Amount = p.Amount,
                     Type = "افزایش",
                     Date = p.PaymentDate.ToString(CultureInfo.CurrentCulture),
                     Description = $"خرید سرویس {p.CoachService.Title}",
                     BuyerName = p.Athlete?.User != null
                         ? $"{p.Athlete.User.FirstName} {p.Athlete.User.LastName}"
                         : "نامشخص",
-                    ReferenceId = p.RefId.ToString(), 
+                    ReferenceId = p.RefId.ToString(),
                     ProgramStatus = programStatus,
+                    OriginalAmount = p.OriginalAmount,
+                    CodeDiscountAmount = p.CodeDiscountAmount,
+                    PublicDiscountAmount = p.PublicDiscountAmount,
                     AppFee = p.AppFee
+
                 };
             }).ToList();
 
@@ -1081,22 +1067,7 @@ namespace sport_app_backend.Repository.CoachRepo
             };
         }
 
-        public async Task<ApiResponse> Test()
-        {
-            var payment = await context.Payments.Where(st=>st.PaymentStatus == PaymentStatus.SUCCESS&&st.WorkoutProgram.Status!=WorkoutProgramStatus.NOTSTARTED).ToListAsync();
-            foreach(var temp in payment)
-            {
-                await AddTrainingSession(temp.Id);
-                
-            }
-            await context.SaveChangesAsync();
-
-            return new ApiResponse()
-            {
-                Action = true,
-                Message = "test"
-            };
-        }
+       
 
         public Task<ApiResponse> GetWPkey(int workoutProgramId)
         {
