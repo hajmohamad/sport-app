@@ -330,12 +330,12 @@ namespace sport_app_backend.Controller
             return Ok(result);
         }        
       
-        [HttpPost("ChooseWorkoutProgramFeedBack")]
+        [HttpPut("ChooseWorkoutProgramFeedBack")]
         [Authorize(Roles = "Coach")]
-        public async Task<IActionResult> ChoseWorkoutProgramFeedBack([FromBody] ChoseWorkoutProgramFeedBackDto dto){
+        public async Task<IActionResult> ChoseWorkoutProgramFeedBack([FromBody] List<ChoseWorkoutProgramFeedBackDto> choseWorkoutProgramFeedBackDtOs){
             var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
             if (phoneNumber is null) return BadRequest(new ApiResponse { Action = false, Message = "PhoneNumber is null" });
-            var result = await coachRepository.ChoseWorkoutProgramFeedBack(phoneNumber, dto.FeedbackIds);
+            var result = await coachRepository.ChoseWorkoutProgramFeedBack(phoneNumber,choseWorkoutProgramFeedBackDtOs);
             if (!result.Action) return BadRequest(result);
             return Ok(result);
             

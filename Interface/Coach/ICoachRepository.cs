@@ -28,7 +28,7 @@ namespace sport_app_backend.Interface.Coach
         Task<ApiResponse> Test();
         Task<ApiResponse> GetWPkey(int workoutProgramId);
         Task<ApiResponse> GetWorkoutProgramFeedBack(string phoneNumber);
-        Task<ApiResponse> ChoseWorkoutProgramFeedBack(string phoneNumber, List<int> feedbackIds);
+        Task<ApiResponse> ChoseWorkoutProgramFeedBack(string phoneNumber,List<ChoseWorkoutProgramFeedBackDto> choseWorkoutProgramFeedBackDtOs);
 
     }
 }
