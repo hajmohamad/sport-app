@@ -26,7 +26,7 @@ public class TrainingReminderService(IServiceScopeFactory scopeFactory,
             var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
             var push = scope.ServiceProvider.GetRequiredService<IWebPushNotificationService>();
         
-            var now = DateTime.Now;
+            var now = DateTime.UtcNow;
         
             var athletes = await db.NotificationSubscriptions
                 .Where(s => s.Role == TypeOfUser.ATHLETE)

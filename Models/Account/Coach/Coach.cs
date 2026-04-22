@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.AspNetCore.Identity;
 using sport_app_backend.Models.Payments;
 using sport_app_backend.Models.Program;
+using sport_app_backend.Models.TrainingPlan;
 
 namespace sport_app_backend.Models.Account;
 
@@ -28,6 +29,7 @@ public class Coach
     public bool Verified { get; set; } = false;
     public double Amount { get; set; } = 0;
     public double ServiceFee { get; set; } = 0.1;
+    public List<DiscountCode> DiscountCodes { get; set; } = [];
     [StringLength(51)]
     public string? WebSiteUrl { get; set; } = "";
 

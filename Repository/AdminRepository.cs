@@ -10,6 +10,7 @@ using sport_app_backend.Models.Actions;
 using sport_app_backend.Models.Payments;
 using sport_app_backend.Models.Program;
 using sport_app_backend.Models.Question.A_Question;
+using sport_app_backend.Models.TrainingPlan;
 using sport_app_backend.Services;
 
 namespace sport_app_backend.Repository
