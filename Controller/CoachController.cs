@@ -185,17 +185,7 @@ namespace sport_app_backend.Controller
             return Ok(result);
         }
 
-        [HttpGet("discount-codes/generate")]
-        [Authorize(Roles = "Coach")]
-        public async Task<IActionResult> GenerateDiscountCode()
-        {
-            var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
-            if (phoneNumber is null) return BadRequest(new ApiResponse { Action = false, Message = "PhoneNumber is null" });
-            var result = await coachRepository.GenerateDiscountCode(phoneNumber);
-            if (!result.Action) return BadRequest(result);
-            return Ok(result);
-        }
-       
+        
 
         
         [HttpGet("get_all_payment")]
@@ -351,20 +341,7 @@ namespace sport_app_backend.Controller
 
             return Ok(result);
         }
-        [HttpGet("test")]
-        public async Task<IActionResult> test()
-        {
-         
-
-            var result = await coachRepository.Test();
-
-            if (!result.Action)
-            {
-                return BadRequest(result);
-            }
-
-            return Ok(result);
-        }
+        
         [HttpGet("getwpkey")]
         public async Task<IActionResult> getwpkey([FromQuery]int workoutProgramId)
         {

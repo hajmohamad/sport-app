@@ -603,7 +603,7 @@ public class BuyFromSiteRepository(
                 zarinPalResponse.PaymentUrl,
                 Price = pricing.OriginalPrice,
                 pricing.PublicDiscountAmount,
-                DiscountCodeAmount = pricing.CodeDiscountAmount,
+                pricing.CodeDiscountAmount,
                 pricing.FinalPrice,
 
             }
@@ -988,7 +988,7 @@ public class BuyFromSiteRepository(
                 PaymentId = payment.Id,
                 Status = WorkoutProgramStatus.UNCOMPLETEDQUESTION
             };
-            var appFee = (payment.Amount * payment.Coach.ServiceFee) < 50000 ? 50000 : (payment.Amount * payment.Coach.ServiceFee);
+            var appFee = (payment.OriginalAmount * payment.Coach.ServiceFee) < 50000 ? 50000 : (payment.OriginalAmount * payment.Coach.ServiceFee);
             payment.AppFee = appFee;
             payment.WorkoutProgram = workoutProgram;
             payment.PaymentStatus = PaymentStatus.SUCCESS;
