@@ -48,7 +48,8 @@ namespace sport_app_backend.Repository.AthleteRepo
             if (athlete is null)
                 return new ApiResponse()
                     { Message = "User is not an athlete", Action = false }; 
-            var workoutProgram = await context.WorkoutPrograms.FirstOrDefaultAsync(wp=>wp.PaymentId == feedbackWorkoutProgramDto.PaymentId);
+            var workoutProgram = await context.WorkoutPrograms
+                .Include(workoutProgram => workoutProgram.WorkoutProgramFeedback).FirstOrDefaultAsync(wp=>wp.PaymentId == feedbackWorkoutProgramDto.PaymentId);
             if (workoutProgram is null )
             {
                 return new ApiResponse()
@@ -58,7 +59,7 @@ namespace sport_app_backend.Repository.AthleteRepo
                 };
             }
 
-            if (workoutProgram.WorkoutProgramFeedbackId is not null)
+            if (workoutProgram.WorkoutProgramFeedback is not null)
             {
                 return new ApiResponse()
                 {
@@ -148,7 +149,7 @@ namespace sport_app_backend.Repository.AthleteRepo
                     WpKey = tokenService.HashEncode(wp.Id),
                     wp.TotalSessionCount,
                     wp.CompletedSessionCount,
-                    wp.WorkoutProgramFeedbackId,
+                    wp.WorkoutProgramFeedback,
                     wp.Coach.WebSiteUrl
                 })
                 .ToListAsync();
@@ -172,7 +173,7 @@ namespace sport_app_backend.Repository.AthleteRepo
                 if (wp.TotalSessionCount > 0)
                     completionPercentage = (double)wp.CompletedSessionCount / wp.TotalSessionCount;
 
-                var shouldGetFeedback = completionPercentage >= 0.30 && wp.WorkoutProgramFeedbackId == null;
+                var shouldGetFeedback = completionPercentage >= 0.30 && wp.WorkoutProgramFeedback is null;
 
                 return new AllPaymentResponseDto
                 {
@@ -465,7 +466,7 @@ namespace sport_app_backend.Repository.AthleteRepo
             wp.TotalSessionCount,
             wp.CompletedSessionCount,
             CoachWebsite = wp.Coach.WebSiteUrl ?? "chaarset.ir",
-            wp.WorkoutProgramFeedbackId,
+            wp.WorkoutProgramFeedback,
             TrainingSessions = wp.TrainingSessions.Select(ts => new AllTrainingSessionDto
             {
                 Id = ts.Id,
@@ -486,7 +487,7 @@ namespace sport_app_backend.Repository.AthleteRepo
         completionPercentage = (double)resultData.CompletedSessionCount / resultData.TotalSessionCount;
     }
 
-    var shouldGetFeedback = completionPercentage >= 0.30 && resultData.WorkoutProgramFeedbackId == null;
+    var shouldGetFeedback = completionPercentage >= 0.30 && resultData.WorkoutProgramFeedback == null;
 
     string? renewalMessage = null;
     var now = DateTime.Now;
