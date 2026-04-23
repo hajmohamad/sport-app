@@ -34,5 +34,6 @@ public class WorkoutProgram
     public int CompletedSessionCount { get; set; } 
     public bool RenewalReminderSent { get; set; } = false;
     public int? WorkoutProgramFeedbackId { get; set; }
+    public WorkoutProgramFeedback? WorkoutProgramFeedback { get; set; }
 
 }

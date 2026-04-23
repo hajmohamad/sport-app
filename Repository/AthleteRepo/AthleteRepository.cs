@@ -79,6 +79,7 @@ namespace sport_app_backend.Repository.AthleteRepo
                 FeedBack = feedbackWorkoutProgramDto.FeedBack,
                 WorkoutProgram = workoutProgram
             };
+            workoutProgram.WorkoutProgramFeedback = feedBack;
             await context.WorkoutProgramFeedback.AddAsync(feedBack);
             await context.SaveChangesAsync();
             
