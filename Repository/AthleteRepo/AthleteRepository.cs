@@ -42,21 +42,30 @@ namespace sport_app_backend.Repository.AthleteRepo
         public async Task<ApiResponse> WorkoutProgramFeedback(string phoneNumber, FeedbackWorkoutProgramDto feedbackWorkoutProgramDto)
         {
             var user = await context.Users.Include(a => a.Athlete)
-                .ThenInclude(wp=>wp!.ActiveWorkoutProgram)
                 .FirstOrDefaultAsync(a => a.PhoneNumber == phoneNumber);
             if (user is null) return new ApiResponse() { Message = "User not found", Action = false };
             var athlete = user.Athlete;
             if (athlete is null)
                 return new ApiResponse()
                     { Message = "User is not an athlete", Action = false }; 
-            var workoutProgram = athlete.ActiveWorkoutProgram;
-            if (workoutProgram is null)
+            var workoutProgram = await context.WorkoutPrograms.FirstOrDefaultAsync(wp=>wp.PaymentId == feedbackWorkoutProgramDto.PaymentId);
+            if (workoutProgram is null )
             {
                 return new ApiResponse()
                 {
                     Action = false,
                     Message = "Workout program is not active",
                 };
+            }
+
+            if (workoutProgram.WorkoutProgramFeedbackId is not null)
+            {
+                return new ApiResponse()
+                {
+                    Action = false,
+                    Message = "فیدبک قبلا ثبت شده",
+                };
+                
             }
             
             var feedBack = new WorkoutProgramFeedback()
@@ -68,13 +77,11 @@ namespace sport_app_backend.Repository.AthleteRepo
                 WorkoutProgramName = workoutProgram.Title,
                 Score = feedbackWorkoutProgramDto.Score,
                 FeedBack = feedbackWorkoutProgramDto.FeedBack,
+                WorkoutProgram = workoutProgram
             };
             await context.WorkoutProgramFeedback.AddAsync(feedBack);
             await context.SaveChangesAsync();
             
-            
-
-
             return new ApiResponse()
             {
                 Action = true,
