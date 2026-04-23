@@ -12,6 +12,7 @@ public class WorkoutProgramFeedback
     public int CouchId { get; set; }
     public int AthleteId { get; set; }
     public int WorkoutProgramId { get; set; }
+    public required WorkoutProgram WorkoutProgram { get; set; }
     public bool IsChosen { get; set; }
     [StringLength(200)] 
     public string WorkoutProgramName { get; set; } = "";
