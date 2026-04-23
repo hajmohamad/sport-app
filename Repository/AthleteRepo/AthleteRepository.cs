@@ -174,12 +174,12 @@ namespace sport_app_backend.Repository.AthleteRepo
             {
                 double completionPercentage = 0;
                 var passFiveDay = false;
-                if (wp.StartDay.HasValue && wp.StartDay.Value.Date > dateTimeNow.Date)
+                if (wp.StartDay is not null)
                     passFiveDay = wp.StartDay!.Value.AddDays(5) < dateTimeNow;
 
                 if (wp.TotalSessionCount > 0)
                     completionPercentage = (double)wp.CompletedSessionCount / wp.TotalSessionCount;
-                var workoutStatus = wp.WorkoutProgramStatus>(WorkoutProgramStatus)1 &&  wp.WorkoutProgramStatus<(WorkoutProgramStatus)5;
+                var workoutStatus = wp.WorkoutProgramStatus is > (WorkoutProgramStatus)1 and < (WorkoutProgramStatus)5;
 
 
                 var shouldGetFeedback = (completionPercentage >= 0.30||passFiveDay) && wp.WorkoutProgramFeedback is null && workoutStatus;
