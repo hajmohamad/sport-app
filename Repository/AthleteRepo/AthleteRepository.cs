@@ -87,8 +87,8 @@ namespace sport_app_backend.Repository.AthleteRepo
             return new ApiResponse()
             {
                 Action = true,
-                Message = "Feedback workout program submitted successfully",
-                Result = feedBack
+                Message = "Feedback workout program submitted successfully"
+                
             };
         }
 
