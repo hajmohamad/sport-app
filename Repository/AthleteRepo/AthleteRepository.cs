@@ -173,8 +173,9 @@ namespace sport_app_backend.Repository.AthleteRepo
             var allPayment = paymentDtos.Select(wp =>
             {
                 double completionPercentage = 0;
-                var passFiveDay = wp.StartDay!.Value.AddDays(5) < dateTimeNow;
-                
+                var passFiveDay = false;
+                if (wp.StartDay.HasValue && wp.StartDay.Value.Date > dateTimeNow.Date)
+                    passFiveDay = wp.StartDay!.Value.AddDays(5) < dateTimeNow;
 
                 if (wp.TotalSessionCount > 0)
                     completionPercentage = (double)wp.CompletedSessionCount / wp.TotalSessionCount;
