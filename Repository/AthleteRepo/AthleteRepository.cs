@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using System.Globalization;
 using Microsoft.EntityFrameworkCore;
 using sport_app_backend.Controller;
@@ -18,6 +19,7 @@ using sport_app_backend.Models.Payments;
 using sport_app_backend.Models.Program;
 using sport_app_backend.Models.Question.A_Question;
 using sport_app_backend.Models.TrainingPlan;
+using Activity = sport_app_backend.Models.Actions.Activity;
 
 namespace sport_app_backend.Repository.AthleteRepo
 
@@ -143,6 +145,7 @@ namespace sport_app_backend.Repository.AthleteRepo
                     Name = wp.Coach.User.FirstName + " " + wp.Coach.User.LastName,
                     Amount = wp.Payment.Amount.ToString(),
                     DateTime = wp.Payment.PaymentDate.ToString("yyyy-MM-dd"),
+                    StartDay = wp.StartDate,
                     wp.Coach.User.ImageProfile,
                     CoachServiceTitle = wp.Payment.CoachService.Title,
                     WorkoutProgramStatus = wp.Status,
@@ -166,16 +169,19 @@ namespace sport_app_backend.Repository.AthleteRepo
                     Result = new List<AllPaymentResponseDto>()
                 };
             }
+            var dateTimeNow = DateTime.Now;
             var allPayment = paymentDtos.Select(wp =>
             {
                 double completionPercentage = 0;
+                var passFiveDay = wp.StartDay!.Value.AddDays(5) < dateTimeNow;
+                
 
                 if (wp.TotalSessionCount > 0)
                     completionPercentage = (double)wp.CompletedSessionCount / wp.TotalSessionCount;
                 var workoutStatus = wp.WorkoutProgramStatus>(WorkoutProgramStatus)1 &&  wp.WorkoutProgramStatus<(WorkoutProgramStatus)5;
 
 
-                var shouldGetFeedback = completionPercentage >= 0.30 && wp.WorkoutProgramFeedback is null && workoutStatus;
+                var shouldGetFeedback = (completionPercentage >= 0.30||passFiveDay) && wp.WorkoutProgramFeedback is null && workoutStatus;
 
                 return new AllPaymentResponseDto
                 {
