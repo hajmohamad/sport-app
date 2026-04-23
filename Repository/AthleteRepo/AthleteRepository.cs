@@ -145,7 +145,7 @@ namespace sport_app_backend.Repository.AthleteRepo
                     DateTime = wp.Payment.PaymentDate.ToString("yyyy-MM-dd"),
                     wp.Coach.User.ImageProfile,
                     CoachServiceTitle = wp.Payment.CoachService.Title,
-                    WorkoutProgramStatus = wp.Status.ToString(),
+                    WorkoutProgramStatus = wp.Status,
                     WpKey = tokenService.HashEncode(wp.Id),
                     wp.TotalSessionCount,
                     wp.CompletedSessionCount,
@@ -172,8 +172,10 @@ namespace sport_app_backend.Repository.AthleteRepo
 
                 if (wp.TotalSessionCount > 0)
                     completionPercentage = (double)wp.CompletedSessionCount / wp.TotalSessionCount;
+                var workoutStatus = wp.WorkoutProgramStatus>(WorkoutProgramStatus)1 &&  wp.WorkoutProgramStatus<(WorkoutProgramStatus)5;
 
-                var shouldGetFeedback = completionPercentage >= 0.30 && wp.WorkoutProgramFeedback is null;
+
+                var shouldGetFeedback = completionPercentage >= 0.30 && wp.WorkoutProgramFeedback is null && workoutStatus;
 
                 return new AllPaymentResponseDto
                 {
@@ -184,7 +186,7 @@ namespace sport_app_backend.Repository.AthleteRepo
                     DateTime = wp.DateTime,
                     ImageProfile = wp.ImageProfile,
                     CoachServiceTitle = wp.CoachServiceTitle,
-                    WorkoutProgramStatus = wp.WorkoutProgramStatus,
+                    WorkoutProgramStatus = wp.WorkoutProgramStatus.ToString(),
                     WpKey = wp.WpKey,
                     ShouldGetFeedback = shouldGetFeedback,
                     CouchUrlSite = wp.WebSiteUrl ?? ""
