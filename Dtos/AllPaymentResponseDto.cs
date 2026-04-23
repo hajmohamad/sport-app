@@ -11,4 +11,6 @@ public class AllPaymentResponseDto
     public required string CoachServiceTitle { get; set; }
     public required string WorkoutProgramStatus { get; set; }
     public string WpKey { get; set; }
+    public bool ShouldGetFeedback{ get; set; }
+    public string CouchUrlSite { get; set; }
 }

@@ -127,19 +127,26 @@ namespace sport_app_backend.Repository.AthleteRepo
                 .AsNoTracking()
                 .Where(wp => wp.Athlete.PhoneNumber == phoneNumber && wp.Status != WorkoutProgramStatus.REFUND)
                 .OrderByDescending(wp => wp.Payment.PaymentDate)
-                .Select(wp => new AllPaymentResponseDto
+                .Select(wp => new 
                 {
-                    PaymentId = wp.PaymentId,
+                 wp.PaymentId,
                     PaymentStatus = wp.Payment.PaymentStatus.ToString(),
                     Name = wp.Coach.User.FirstName + " " + wp.Coach.User.LastName,
                     Amount = wp.Payment.Amount.ToString(),
                     DateTime = wp.Payment.PaymentDate.ToString("yyyy-MM-dd"),
-                    ImageProfile = wp.Coach.User.ImageProfile,
+                    wp.Coach.User.ImageProfile,
                     CoachServiceTitle = wp.Payment.CoachService.Title,
                     WorkoutProgramStatus = wp.Status.ToString(),
-                    WpKey = tokenService.HashEncode(wp.Id)
+                    WpKey = tokenService.HashEncode(wp.Id),
+                    wp.TotalSessionCount,
+                    wp.CompletedSessionCount,
+                    wp.WorkoutProgramFeedbackId,
+                    wp.Coach.WebSiteUrl
                 })
                 .ToListAsync();
+          
+
+        
 
             if (!paymentDtos.Any())
             {
@@ -150,12 +157,37 @@ namespace sport_app_backend.Repository.AthleteRepo
                     Result = new List<AllPaymentResponseDto>()
                 };
             }
+            var allPayment = paymentDtos.Select(wp =>
+            {
+                double completionPercentage = 0;
+
+                if (wp.TotalSessionCount > 0)
+                    completionPercentage = (double)wp.CompletedSessionCount / wp.TotalSessionCount;
+
+                var shouldGetFeedback = completionPercentage >= 0.30 && wp.WorkoutProgramFeedbackId == null;
+
+                return new AllPaymentResponseDto
+                {
+                    PaymentId = wp.PaymentId,
+                    PaymentStatus = wp.PaymentStatus.ToString(),
+                    Name = wp.Name,
+                    Amount = wp.Amount,
+                    DateTime = wp.DateTime,
+                    ImageProfile = wp.ImageProfile,
+                    CoachServiceTitle = wp.CoachServiceTitle,
+                    WorkoutProgramStatus = wp.WorkoutProgramStatus,
+                    WpKey = wp.WpKey,
+                    ShouldGetFeedback = shouldGetFeedback,
+                    CouchUrlSite = wp.WebSiteUrl ?? ""
+                    
+                };
+            }).ToList();
             
             return new ApiResponse()
             {
                 Action = true,
                 Message = "Payments found",
-                Result = paymentDtos
+                Result = allPayment
             };
         }
 
