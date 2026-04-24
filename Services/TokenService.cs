@@ -71,12 +71,26 @@ public class TokenService: ITokenService
 
     public string CreateToken(User user)
     {
-        var claims = new[]
+        var claims = new List<Claim>
         {
             new Claim(ClaimTypes.Name, user.PhoneNumber),
             new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
         };
+
+        if (user.TypeOfUser == TypeOfUser.COACH)
+        {
+            var coachId = _context.Coaches
+                .AsNoTracking()
+                .Where(c => c.UserId == user.Id)
+                .Select(c => c.Id)
+                .FirstOrDefault();
+
+            if (coachId > 0)
+            {
+                claims.Add(new Claim("coach_id", coachId.ToString()));
+            }
+        }
 
         var userRoles = user.TypeOfUser switch
         {
@@ -88,7 +102,7 @@ public class TokenService: ITokenService
         };
         
         
-        claims = claims.Concat(userRoles.Select(role => new Claim(ClaimTypes.Role, role))).ToArray();
+        claims.AddRange(userRoles.Select(role => new Claim(ClaimTypes.Role, role)));
         var tokenDescriptor = new SecurityTokenDescriptor
         {
             Subject = new ClaimsIdentity(claims),

@@ -21,10 +21,10 @@ namespace sport_app_backend.Controller
         [Authorize(Roles = "Coach")]
         public async Task<IActionResult> SubmitCoachQuestions([FromBody] CoachQuestionDto coachQuestionDto)
         {
-            var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
-            if (phoneNumber is null) return BadRequest("PhoneNumber is null");
+            var coachId = await GetCoachIdAsync();
+            if (coachId is null) return BadRequest("CoachId is null");
 
-            var result = await coachRepository.SubmitCoachQuestions(phoneNumber, coachQuestionDto);
+            var result = await coachRepository.SubmitCoachQuestions(coachId.Value, coachQuestionDto);
             if (!result.Action) return BadRequest(result);
 
             return Ok(result);
@@ -33,9 +33,9 @@ namespace sport_app_backend.Controller
         [Authorize(Roles = "Coach")]
         public async Task<IActionResult> CreatePayoutRequest()
         {
-            var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
-            if (phoneNumber is null) return BadRequest(new ApiResponse { Action = false, Message = "PhoneNumber is null" });
-            var result = await coachRepository.CreatePayoutRequest(phoneNumber);
+            var coachId = await GetCoachIdAsync();
+            if (coachId is null) return BadRequest(new ApiResponse { Action = false, Message = "CoachId is null" });
+            var result = await coachRepository.CreatePayoutRequest(coachId.Value);
             if (!result.Action) return BadRequest(result);
             return Ok(result);
         }
@@ -45,9 +45,9 @@ namespace sport_app_backend.Controller
         [Authorize(Roles = "Coach")]
         public async Task<IActionResult> GetCoachProfile()
         {
-            var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
-            if (phoneNumber is null) return BadRequest(new ApiResponse { Action = false, Message = "PhoneNumber is null" });
-            var result = await coachRepository.GetProfile(phoneNumber);
+            var coachId = await GetCoachIdAsync();
+            if (coachId is null) return BadRequest(new ApiResponse { Action = false, Message = "CoachId is null" });
+            var result = await coachRepository.GetProfile(coachId.Value);
             if (!result.Action) return BadRequest(result);
             return Ok(result);
         }
@@ -56,9 +56,9 @@ namespace sport_app_backend.Controller
         [Authorize(Roles = "Coach")]
         public async Task<IActionResult> AddCoachingService(AddCoachServiceDto coachingServiceDto)
         {
-            var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
-            if (phoneNumber is null) return BadRequest(new ApiResponse { Action = false, Message = "PhoneNumber is null" });
-            var result = await coachRepository.AddCoachingServices(phoneNumber, coachingServiceDto);
+            var coachId = await GetCoachIdAsync();
+            if (coachId is null) return BadRequest(new ApiResponse { Action = false, Message = "CoachId is null" });
+            var result = await coachRepository.AddCoachingServices(coachId.Value, coachingServiceDto);
 
             if (result.Action) return Ok(result);
             else return BadRequest(result);
@@ -70,9 +70,9 @@ namespace sport_app_backend.Controller
 
         public async Task<IActionResult> EditCoachingService([FromRoute] int id, AddCoachServiceDto coachingServiceDto)
         {
-            var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
-            if (phoneNumber is null) return BadRequest(new ApiResponse { Action = false, Message = "PhoneNumber is null" });
-            var result = await coachRepository.UpdateCoachingService(phoneNumber, id, coachingServiceDto);
+            var coachId = await GetCoachIdAsync();
+            if (coachId is null) return BadRequest(new ApiResponse { Action = false, Message = "CoachId is null" });
+            var result = await coachRepository.UpdateCoachingService(coachId.Value, id, coachingServiceDto);
             if (result.Action != true) return BadRequest(result);
             return Ok(result);
         }
@@ -82,9 +82,9 @@ namespace sport_app_backend.Controller
         [Authorize(Roles = "Coach")]
         public async Task<IActionResult> DeleteCoachingService([FromRoute] int id)
         {
-            var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
-            if (phoneNumber is null) return BadRequest(new ApiResponse { Action = false, Message = "PhoneNumber is null" });
-            var result = await coachRepository.DeleteCoachingService(phoneNumber, id);
+            var coachId = await GetCoachIdAsync();
+            if (coachId is null) return BadRequest(new ApiResponse { Action = false, Message = "CoachId is null" });
+            var result = await coachRepository.DeleteCoachingService(coachId.Value, id);
             if (result.Action != true) return BadRequest(result);
             return Ok(result);
         }
@@ -93,8 +93,8 @@ namespace sport_app_backend.Controller
 
         public async Task<IActionResult> AthleteMonthlyActivityForCoach([FromRoute] int athleteId,[FromRoute] int year,[FromRoute] int month)
         {
-            var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
-            if (phoneNumber is null) return BadRequest("PhoneNumber is null");
+            var coachId = await GetCoachIdAsync();
+            if (coachId is null) return BadRequest("CoachId is null");
             var result = await coachRepository.AthleteMonthlyActivityForCoach(athleteId,year,month);
             if (!result.Action) return BadRequest(result);
             return Ok(result);
@@ -105,8 +105,8 @@ namespace sport_app_backend.Controller
 
         public async Task<IActionResult> AthleteReportForCoach([FromRoute] int athleteId)
         {
-            var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
-            if (phoneNumber is null) return BadRequest("PhoneNumber is null");
+            var coachId = await GetCoachIdAsync();
+            if (coachId is null) return BadRequest("CoachId is null");
             var result = await coachRepository.AthleteReportForCoach(athleteId);
             if (!result.Action) return BadRequest(result);
             return Ok(result);
@@ -118,9 +118,9 @@ namespace sport_app_backend.Controller
         [Authorize(Roles = "Coach")]
         public async Task<IActionResult> GetCoachingService()
         {
-            var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
-            if (phoneNumber is null) return BadRequest(new ApiResponse { Action = false, Message = "PhoneNumber is null" });
-            var coach = await dbContext.Coaches.Include(c => c.CoachingServices).FirstOrDefaultAsync(c => c.PhoneNumber == phoneNumber);
+            var coachId = await GetCoachIdAsync();
+            if (coachId is null) return BadRequest(new ApiResponse { Action = false, Message = "CoachId is null" });
+            var coach = await dbContext.Coaches.Include(c => c.CoachingServices).FirstOrDefaultAsync(c => c.Id == coachId.Value);
             if (coach == null) return NotFound(new ApiResponse { Action = false, Message = "Coach not found" });
             var coachingService = coach.CoachingServices.Where(x=>x.IsDeleted==false).ToList();
             var coachingServiceDto = coachingService.Select(x => x.ToCoachingServiceResponse()).ToList();
@@ -134,9 +134,9 @@ namespace sport_app_backend.Controller
         [Authorize(Roles = "Coach")]
         public async Task<IActionResult> GetAllPayment()
         {
-            var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
-            if (phoneNumber is null) return BadRequest(new ApiResponse { Action = false, Message = "PhoneNumber is null" });
-            var result = await coachRepository.GetAllPayment(phoneNumber);
+            var coachId = await GetCoachIdAsync();
+            if (coachId is null) return BadRequest(new ApiResponse { Action = false, Message = "CoachId is null" });
+            var result = await coachRepository.GetAllPayment(coachId.Value);
             if (result.Action != true) return BadRequest(result);
             return Ok(result);
         }
@@ -144,9 +144,9 @@ namespace sport_app_backend.Controller
         [HttpGet("get_payment/{paymentId}")]
         [Authorize(Roles = "Coach")]
         public async Task<IActionResult> GetPayment([FromRoute] int paymentId){
-            var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
-            if (phoneNumber is null) return BadRequest(new ApiResponse { Action = false, Message = "PhoneNumber is null" });
-            var result = await coachRepository.GetPayment(phoneNumber, paymentId);
+            var coachId = await GetCoachIdAsync();
+            if (coachId is null) return BadRequest(new ApiResponse { Action = false, Message = "CoachId is null" });
+            var result = await coachRepository.GetPayment(coachId.Value, paymentId);
             if (result.Action != true) return BadRequest(result);
             return Ok(result);
             
@@ -158,9 +158,9 @@ namespace sport_app_backend.Controller
         [Authorize(Roles = "Coach")]
         public async Task<IActionResult> SaveWorkoutProgram([FromRoute] int paymentId,[FromBody]WorkoutProgramDto  saveWorkoutProgramDto)
         {
-            var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
-            if (phoneNumber is null) return BadRequest(new ApiResponse { Action = false, Message = "PhoneNumber is null" });
-            var result = await coachRepository.SaveWorkoutProgram(phoneNumber,paymentId, saveWorkoutProgramDto);
+            var coachId = await GetCoachIdAsync();
+            if (coachId is null) return BadRequest(new ApiResponse { Action = false, Message = "CoachId is null" });
+            var result = await coachRepository.SaveWorkoutProgram(coachId.Value,paymentId, saveWorkoutProgramDto);
             if (result.Action != true) return BadRequest(result);
             return Ok(result);
             
@@ -169,11 +169,11 @@ namespace sport_app_backend.Controller
         [Authorize(Roles = "Coach")]
         public async Task<IActionResult> GetDashboard()
         {
-            var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
-            if (phoneNumber is null) 
+            var coachId = await GetCoachIdAsync();
+            if (coachId is null) 
                 return Unauthorized(new ApiResponse { Action = false, Message = "خطای احراز هویت." });
 
-            var result = await coachRepository.GetCoachDashboard(phoneNumber);
+            var result = await coachRepository.GetCoachDashboard(coachId.Value);
 
             if (!result.Action) 
                 return BadRequest(result);
@@ -185,11 +185,11 @@ namespace sport_app_backend.Controller
         [Authorize(Roles = "Coach")]
         public async Task<IActionResult> GetMonthlyChart([FromRoute] int year, [FromRoute] int month)
         {
-            var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
-            if (phoneNumber is null) 
+            var coachId = await GetCoachIdAsync();
+            if (coachId is null) 
                 return Unauthorized(new ApiResponse { Action = false, Message = "خطای احراز هویت." });
 
-            var result = await coachRepository.GetMonthlyIncomeChart(phoneNumber, year, month);
+            var result = await coachRepository.GetMonthlyIncomeChart(coachId.Value, year, month);
 
             if (!result.Action) 
                 return BadRequest(result);
@@ -200,11 +200,11 @@ namespace sport_app_backend.Controller
         [Authorize(Roles = "Coach")]
         public async Task<IActionResult> UpdateSocialMediaLink([FromBody] SocialMediaLinkDto socialMediaLinkDto)
         {
-            var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
-            if (phoneNumber is null) 
+            var coachId = await GetCoachIdAsync();
+            if (coachId is null) 
                 return Unauthorized(new ApiResponse { Action = false, Message = "خطای احراز هویت." });
 
-            var result = await coachRepository.UpdateSocialMediaLink(phoneNumber,socialMediaLinkDto);
+            var result = await coachRepository.UpdateSocialMediaLink(coachId.Value,socialMediaLinkDto);
 
             if (!result.Action) 
                 return BadRequest(result);
@@ -215,11 +215,11 @@ namespace sport_app_backend.Controller
         [Authorize(Roles = "Coach")]
         public async Task<IActionResult> GetSocialMediaLink()
         {
-            var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
-            if (phoneNumber is null) 
+            var coachId = await GetCoachIdAsync();
+            if (coachId is null) 
                 return Unauthorized(new ApiResponse { Action = false, Message = "خطای احراز هویت." });
 
-            var result = await coachRepository.GetSocialMediaLink(phoneNumber);
+            var result = await coachRepository.GetSocialMediaLink(coachId.Value);
 
             if (!result.Action) 
                 return BadRequest(result);
@@ -230,13 +230,13 @@ namespace sport_app_backend.Controller
         [Authorize(Roles = "Coach")]
         public async Task<IActionResult> GetStudentList()
         {
-            var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
-            if (string.IsNullOrEmpty(phoneNumber))
+            var coachId = await GetCoachIdAsync();
+            if (coachId is null)
             {
                 return Unauthorized(new ApiResponse { Action = false, Message = "خطای احراز هویت." });
             }
 
-            var result = await coachRepository.GetAthletesWithStatus(phoneNumber);
+            var result = await coachRepository.GetAthletesWithStatus(coachId.Value);
 
             if (!result.Action)
             {
@@ -249,13 +249,13 @@ namespace sport_app_backend.Controller
         [Authorize(Roles = "Coach")]
         public async Task<IActionResult> GetTransactionList()
         {
-            var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
-            if (string.IsNullOrEmpty(phoneNumber))
+            var coachId = await GetCoachIdAsync();
+            if (coachId is null)
             {
                 return Unauthorized(new ApiResponse { Action = false, Message = "خطای احراز هویت." });
             }
 
-            var result = await coachRepository.GetTransactions(phoneNumber);
+            var result = await coachRepository.GetTransactions(coachId.Value);
 
             if (!result.Action)
             {
@@ -268,11 +268,8 @@ namespace sport_app_backend.Controller
         [Authorize(Roles = "Coach")]
         public async Task<IActionResult> GetFaq()
         {
-            var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
-            if (string.IsNullOrEmpty(phoneNumber))
-            {
-                return Unauthorized(new ApiResponse { Action = false, Message = "خطای احراز هویت." });
-            }
+            var coachId = await GetCoachIdAsync();
+            if (coachId is null) return Unauthorized(new ApiResponse { Action = false, Message = "خطای احراز هویت." });
 
             var result = await coachRepository.GetFaq();
 
@@ -314,13 +311,13 @@ namespace sport_app_backend.Controller
         [HttpGet("getWorkoutProgramFeedBack")]
         public async Task<IActionResult> GetWorkoutProgramFeedBack()
         {
-            var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
-            if (string.IsNullOrEmpty(phoneNumber))
+            var coachId = await GetCoachIdAsync();
+            if (coachId is null)
             {
                 return Unauthorized(new ApiResponse { Action = false, Message = "خطای احراز هویت." });
             }
 
-            var result = await coachRepository.GetWorkoutProgramFeedBack(phoneNumber);
+            var result = await coachRepository.GetWorkoutProgramFeedBack(coachId.Value);
 
             if (!result.Action)
             {
@@ -333,9 +330,9 @@ namespace sport_app_backend.Controller
         [HttpPut("ChooseWorkoutProgramFeedBack")]
         [Authorize(Roles = "Coach")]
         public async Task<IActionResult> ChoseWorkoutProgramFeedBack([FromBody] List<ChoseWorkoutProgramFeedBackDto> choseWorkoutProgramFeedBackDtOs){
-            var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
-            if (phoneNumber is null) return BadRequest(new ApiResponse { Action = false, Message = "PhoneNumber is null" });
-            var result = await coachRepository.ChoseWorkoutProgramFeedBack(phoneNumber,choseWorkoutProgramFeedBackDtOs);
+            var coachId = await GetCoachIdAsync();
+            if (coachId is null) return BadRequest(new ApiResponse { Action = false, Message = "CoachId is null" });
+            var result = await coachRepository.ChoseWorkoutProgramFeedBack(coachId.Value,choseWorkoutProgramFeedBackDtOs);
             if (!result.Action) return BadRequest(result);
             return Ok(result);
             
@@ -344,7 +341,27 @@ namespace sport_app_backend.Controller
         
         
         
-      
+        private async Task<int?> GetCoachIdAsync()
+        {
+            var coachIdClaim = User.FindFirst("coach_id")?.Value;
+            if (int.TryParse(coachIdClaim, out var coachId))
+            {
+                return coachId;
+            }
+
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (!int.TryParse(userIdClaim, out var userId))
+            {
+                return null;
+            }
+
+            return await dbContext.Coaches
+                .AsNoTracking()
+                .Where(c => c.UserId == userId)
+                .Select(c => (int?)c.Id)
+                .FirstOrDefaultAsync();
+        }
+        
     }
 
   

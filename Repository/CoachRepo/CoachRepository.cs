@@ -15,6 +15,125 @@ namespace sport_app_backend.Repository.CoachRepo
 {
     public class CoachRepository(ApplicationDbContext context, ISmsService smsService, ILiaraStorage liaraStorage,ITokenService token,ICalculator calculator) : ICoachRepository
     {
+        private async Task<int?> ResolveCoachIdByPhoneNumber(string phoneNumber)
+        {
+            return await context.Coaches
+                .AsNoTracking()
+                .Where(c => c.PhoneNumber == phoneNumber)
+                .Select(c => (int?)c.Id)
+                .FirstOrDefaultAsync();
+        }
+
+        public async Task<ApiResponse> SubmitCoachQuestions(string phoneNumber, CoachQuestionDto coachQuestionDto)
+        {
+            var user = await context.Users.Include(u => u.Coach).FirstOrDefaultAsync(u => u.PhoneNumber == phoneNumber);
+            if (user is null) return new ApiResponse { Action = false, Message = "User not found" };
+            if (user.Coach is null) return new ApiResponse { Action = false, Message = "User is not a coach" };
+            return await SubmitCoachQuestions(user.Coach.Id, coachQuestionDto);
+        }
+
+        public async Task<ApiResponse> AddCoachingServices(string phoneNumber, AddCoachServiceDto addCoachingServiceDto)
+        {
+            var coachId = await ResolveCoachIdByPhoneNumber(phoneNumber);
+            return coachId is null ? new ApiResponse { Action = false, Message = "User is not a coach" } : await AddCoachingServices(coachId.Value, addCoachingServiceDto);
+        }
+
+        public async Task<ApiResponse> UpdateCoachingService(string phoneNumber, int id, AddCoachServiceDto addCoachingServiceDto)
+        {
+            var coachId = await ResolveCoachIdByPhoneNumber(phoneNumber);
+            return coachId is null ? new ApiResponse { Action = false, Message = "User is not a coach" } : await UpdateCoachingService(coachId.Value, id, addCoachingServiceDto);
+        }
+
+        public async Task<ApiResponse> DeleteCoachingService(string phoneNumber, int id)
+        {
+            var coachId = await ResolveCoachIdByPhoneNumber(phoneNumber);
+            return coachId is null ? new ApiResponse { Action = false, Message = "User is not a coach" } : await DeleteCoachingService(coachId.Value, id);
+        }
+
+        public async Task<ApiResponse> GetAllPayment(string phoneNumber)
+        {
+            var coachId = await ResolveCoachIdByPhoneNumber(phoneNumber);
+            return coachId is null ? new ApiResponse { Action = false, Message = "مربی یافت نشد." } : await GetAllPayment(coachId.Value);
+        }
+
+        public async Task<ApiResponse> GetPayment(string phoneNumber, int paymentId)
+        {
+            var coachId = await ResolveCoachIdByPhoneNumber(phoneNumber);
+            return coachId is null ? new ApiResponse { Action = false, Message = "مربی یافت نشد." } : await GetPayment(coachId.Value, paymentId);
+        }
+
+        public async Task<ApiResponse> GetProfile(string phoneNumber)
+        {
+            var coachId = await ResolveCoachIdByPhoneNumber(phoneNumber);
+            return coachId is null ? new ApiResponse { Action = false, Message = "Coach not found" } : await GetProfile(coachId.Value);
+        }
+
+        public async Task<ApiResponse> SaveWorkoutProgram(string phoneNumber, int paymentId, WorkoutProgramDto saveWorkoutProgramDto)
+        {
+            var coachId = await ResolveCoachIdByPhoneNumber(phoneNumber);
+            return coachId is null ? new ApiResponse { Action = false, Message = "Coach not found" } : await SaveWorkoutProgram(coachId.Value, paymentId, saveWorkoutProgramDto);
+        }
+
+        public async Task<ApiResponse> GetWorkoutProgram(string phoneNumber, int paymentId)
+        {
+            var coachId = await ResolveCoachIdByPhoneNumber(phoneNumber);
+            return coachId is null ? new ApiResponse { Action = false, Message = "Coach not found" } : await GetWorkoutProgram(coachId.Value, paymentId);
+        }
+
+        public async Task<ApiResponse> GetCoachDashboard(string phoneNumber)
+        {
+            var coachId = await ResolveCoachIdByPhoneNumber(phoneNumber);
+            return coachId is null ? new ApiResponse { Action = false, Message = "مربی یافت نشد." } : await GetCoachDashboard(coachId.Value);
+        }
+
+        public async Task<ApiResponse> GetMonthlyIncomeChart(string phoneNumber, int year, int month)
+        {
+            var coachId = await ResolveCoachIdByPhoneNumber(phoneNumber);
+            return coachId is null ? new ApiResponse { Action = false, Message = "مربی یافت نشد." } : await GetMonthlyIncomeChart(coachId.Value, year, month);
+        }
+
+        public async Task<ApiResponse> UpdateSocialMediaLink(string phoneNumber, SocialMediaLinkDto socialMediaLinkDto)
+        {
+            var coachId = await ResolveCoachIdByPhoneNumber(phoneNumber);
+            return coachId is null ? new ApiResponse { Action = false, Message = "مربی یافت نشد." } : await UpdateSocialMediaLink(coachId.Value, socialMediaLinkDto);
+        }
+
+        public async Task<ApiResponse> GetSocialMediaLink(string phoneNumber)
+        {
+            var coachId = await ResolveCoachIdByPhoneNumber(phoneNumber);
+            return coachId is null ? new ApiResponse { Action = false, Message = "مربی یافت نشد." } : await GetSocialMediaLink(coachId.Value);
+        }
+
+        public async Task<ApiResponse> GetAthletesWithStatus(string coachPhoneNumber)
+        {
+            var coachId = await ResolveCoachIdByPhoneNumber(coachPhoneNumber);
+            return coachId is null ? new ApiResponse { Action = false, Message = "مربی یافت نشد." } : await GetAthletesWithStatus(coachId.Value);
+        }
+
+        public async Task<ApiResponse> GetTransactions(string coachPhoneNumber)
+        {
+            var coachId = await ResolveCoachIdByPhoneNumber(coachPhoneNumber);
+            return coachId is null ? new ApiResponse { Action = false, Message = "مربی یافت نشد." } : await GetTransactions(coachId.Value);
+        }
+
+        public async Task<ApiResponse> CreatePayoutRequest(string coachPhoneNumber)
+        {
+            var coachId = await ResolveCoachIdByPhoneNumber(coachPhoneNumber);
+            return coachId is null ? new ApiResponse { Action = false, Message = "مربی یافت نشد." } : await CreatePayoutRequest(coachId.Value);
+        }
+
+        public async Task<ApiResponse> GetWorkoutProgramFeedBack(string phoneNumber)
+        {
+            var coachId = await ResolveCoachIdByPhoneNumber(phoneNumber);
+            return coachId is null ? new ApiResponse { Action = false, Message = "مربی یافت نشد." } : await GetWorkoutProgramFeedBack(coachId.Value);
+        }
+
+        public async Task<ApiResponse> ChoseWorkoutProgramFeedBack(string phoneNumber, List<ChoseWorkoutProgramFeedBackDto> choseWorkoutProgramFeedBackDtOs)
+        {
+            var coachId = await ResolveCoachIdByPhoneNumber(phoneNumber);
+            return coachId is null ? new ApiResponse { Action = false, Message = "مربی یافت نشد." } : await ChoseWorkoutProgramFeedBack(coachId.Value, choseWorkoutProgramFeedBackDtOs);
+        }
+
         public async Task<ApiResponse> AthleteReportForCoach(int athleteId)
         {
             var athlete = await context.Athletes.Include(u => u.User)
@@ -119,10 +238,10 @@ namespace sport_app_backend.Repository.CoachRepo
             }
         }
 
-        public async Task<ApiResponse> AddCoachingServices(string phoneNumber, AddCoachServiceDto addCoachingServiceDto)
+        public async Task<ApiResponse> AddCoachingServices(int coachId, AddCoachServiceDto addCoachingServiceDto)
         {
             var coach = await context.Coaches.Include(c => c.CoachingServices)
-                .FirstOrDefaultAsync(c => c.PhoneNumber == phoneNumber);
+                .FirstOrDefaultAsync(c => c.Id == coachId);
             if (coach is null)
                 return new ApiResponse()
                     { Message = "User is not a coach", Action = false }; // Ensure the user is a coach
@@ -147,14 +266,15 @@ namespace sport_app_backend.Repository.CoachRepo
             };
         }
 
-        public async Task<ApiResponse> SubmitCoachQuestions(string phoneNumber, CoachQuestionDto coachQuestionDto)
+        public async Task<ApiResponse> SubmitCoachQuestions(int coachId, CoachQuestionDto coachQuestionDto)
         {
-            var user = await context.Users.FirstOrDefaultAsync(x => x.PhoneNumber == phoneNumber);
-            if (user is null) return new ApiResponse() { Message = "User not found", Action = false };
-            var coach = user.Coach;
-            if (coach == null)
+            var coach = await context.Coaches
+                .Include(c => c.User)
+                .FirstOrDefaultAsync(c => c.Id == coachId);
+            if (coach?.User == null)
                 return new ApiResponse()
                     { Message = "User is not a coach", Action = false }; // Ensure the user is a coach
+            var user = coach.User;
             user.FirstName = coachQuestionDto.FirstName;
             user.LastName = coachQuestionDto.LastName;
             var coachQuestion = coachQuestionDto.ToCoachQuestion(user);
@@ -172,12 +292,12 @@ namespace sport_app_backend.Repository.CoachRepo
             };
         }
 
-        public async Task<ApiResponse> UpdateCoachingService(string phoneNumber, int id,
+        public async Task<ApiResponse> UpdateCoachingService(int coachId, int id,
             AddCoachServiceDto addCoachingServices)
         {
             
             var coach = await context.Coaches.Include(x => x.CoachingServices)
-                .FirstOrDefaultAsync(x => x.PhoneNumber == phoneNumber);
+                .FirstOrDefaultAsync(x => x.Id == coachId);
             if (coach is null)
                 return new ApiResponse()
                     { Message = "User is not a coach", Action = false }; // Ensure the user is a coach
@@ -223,10 +343,10 @@ namespace sport_app_backend.Repository.CoachRepo
             };
         }
 
-        public async Task<ApiResponse> DeleteCoachingService(string phoneNumber, int id)
+        public async Task<ApiResponse> DeleteCoachingService(int coachId, int id)
         {
             var coach = await context.Coaches.Include(x => x.CoachingServices)
-                .FirstOrDefaultAsync(x => x.PhoneNumber == phoneNumber);
+                .FirstOrDefaultAsync(x => x.Id == coachId);
             if (coach is null)
                 return new ApiResponse()
                     { Message = "User is not a coach", Action = false }; // Ensure the user is a coach
@@ -243,7 +363,7 @@ namespace sport_app_backend.Repository.CoachRepo
             };
         }
 
-        public async Task<ApiResponse> GetAllPayment(string phoneNumber)
+        public async Task<ApiResponse> GetAllPayment(int coachId)
         {
             var payments = await context.Payments
                 .Include(p => p.Coach)
@@ -254,7 +374,7 @@ namespace sport_app_backend.Repository.CoachRepo
                 .Include(p => p.WorkoutProgram)
                 .Where(p =>
                     p.Coach != null &&
-                    p.Coach.PhoneNumber == phoneNumber &&
+                    p.CoachId == coachId &&
                     p.PaymentStatus == PaymentStatus.SUCCESS &&
                     p.WorkoutProgram != null &&
                     (
@@ -273,7 +393,7 @@ namespace sport_app_backend.Repository.CoachRepo
             };
         }
 
-        public async Task<ApiResponse>  GetPayment(string phoneNumber, int paymentId)
+        public async Task<ApiResponse>  GetPayment(int coachId, int paymentId)
         {
             var payment = await context.Payments
                 .Include(p => p.Athlete) // بارگذاری Athlete
@@ -285,7 +405,7 @@ namespace sport_app_backend.Repository.CoachRepo
                 .ThenInclude(z => z.ProgramInDays)
                 .ThenInclude(z => z.AllExerciseInDays)
                 .ThenInclude(e => e.Exercise)
-                .FirstOrDefaultAsync(p => p.Coach.PhoneNumber == phoneNumber && p.Id == paymentId);
+                .FirstOrDefaultAsync(p => p.CoachId == coachId && p.Id == paymentId);
             if (payment is null) return new ApiResponse() { Message = "Payment not found", Action = false };
                 var ear = calculator.BmrCalculator(new BmrRequestDto()
                 {
@@ -320,19 +440,19 @@ namespace sport_app_backend.Repository.CoachRepo
         }
 
     
-        public async Task<ApiResponse> GetProfile(string phoneNumber)
+        public async Task<ApiResponse> GetProfile(int coachId)
         {
-            var user = await context.Users
-                .Include(u => u.Coach)
-                .ThenInclude(c => c.CoachingServices)
-                .FirstOrDefaultAsync(u => u.PhoneNumber == phoneNumber);
-            if (user?.Coach == null) return new ApiResponse { Action = false, Message = "Coach not found" };
-            var coachingService = user.Coach.CoachingServices.Where(x => !x.IsDeleted).ToList();
+            var coach = await context.Coaches
+                .Include(c => c.User)
+                .Include(c => c.CoachingServices)
+                .FirstOrDefaultAsync(c => c.Id == coachId);
+            if (coach?.User == null) return new ApiResponse { Action = false, Message = "Coach not found" };
+            var coachingService = coach.CoachingServices.Where(x => !x.IsDeleted).ToList();
             var coachingServiceDto = coachingService.Select(x => x.ToCoachingServiceResponse()).ToList();
             var payments = await context.Payments.Include(p => p.Athlete).ThenInclude(u => u.User)
                 .OrderByDescending(c => c.PaymentDate)
                 .Include(p => p.WorkoutProgram).Where(p =>
-                    p.CoachId == user.Coach.Id && p.PaymentStatus == PaymentStatus.SUCCESS&& p.WorkoutProgram != null &&
+                    p.CoachId == coachId && p.PaymentStatus == PaymentStatus.SUCCESS&& p.WorkoutProgram != null &&
                     p.WorkoutProgram.Status != WorkoutProgramStatus.WRITING &&
                     p.WorkoutProgram.Status != WorkoutProgramStatus.NOTSTARTED&&
                     p.WorkoutProgram.Status != WorkoutProgramStatus.UNCOMPLETEDQUESTION)
@@ -340,16 +460,16 @@ namespace sport_app_backend.Repository.CoachRepo
             return new ApiResponse
             {
                 Action = true, Message = "Coach found",
-                Result = user.ToCoachProfileResponseDto(coachingServiceDto, payments)
+                Result = coach.User.ToCoachProfileResponseDto(coachingServiceDto, payments)
             };
         }
 
-        public async Task<ApiResponse> SaveWorkoutProgram(string phoneNumber, int paymentId,
+        public async Task<ApiResponse> SaveWorkoutProgram(int coachId, int paymentId,
             WorkoutProgramDto workoutProgramDto)
         {
             try
             {
-                var coach = await context.Coaches.FirstOrDefaultAsync(c => c.PhoneNumber == phoneNumber);
+                var coach = await context.Coaches.FirstOrDefaultAsync(c => c.Id == coachId);
                 if (coach == null) return new ApiResponse { Action = false, Message = "Coach not found" };
                 var workoutProgram = await context.WorkoutPrograms.Include(p=>p.Payment).Include(x => x.ProgramInDays)
                     .ThenInclude(z => z.AllExerciseInDays)
@@ -478,13 +598,13 @@ namespace sport_app_backend.Repository.CoachRepo
 
         }
 
-        public async Task<ApiResponse> GetWorkoutProgram(string phoneNumber, int paymentId)
+        public async Task<ApiResponse> GetWorkoutProgram(int coachId, int paymentId)
         {
-            var coach = await context.Coaches.FirstOrDefaultAsync(c => c.PhoneNumber == phoneNumber);
+            var coach = await context.Coaches.FirstOrDefaultAsync(c => c.Id == coachId);
             if (coach == null) return new ApiResponse { Action = false, Message = "Coach not found" };
             var workoutProgram = await context.WorkoutPrograms.Include(x => x.ProgramInDays)
                 .ThenInclude(z => z.AllExerciseInDays)
-                .FirstOrDefaultAsync(p => p.Id == paymentId);
+                .FirstOrDefaultAsync(p => p.Id == paymentId && p.CoachId == coachId);
             if (workoutProgram is null) return new ApiResponse { Action = false, Message = "Payment not found" };
 
             return new ApiResponse()
@@ -495,11 +615,11 @@ namespace sport_app_backend.Repository.CoachRepo
             };
         }
 
-        public async Task<ApiResponse> GetCoachDashboard(string phoneNumber)
+        public async Task<ApiResponse> GetCoachDashboard(int coachId)
         {
             try
             {
-                var coach = await context.Coaches.FirstOrDefaultAsync(c => c.PhoneNumber == phoneNumber);
+                var coach = await context.Coaches.AsNoTracking().FirstOrDefaultAsync(c => c.Id == coachId);
                 if (coach == null)
                 {
                     return new ApiResponse { Action = false, Message = "مربی یافت نشد." };
@@ -508,9 +628,22 @@ namespace sport_app_backend.Repository.CoachRepo
                 var coachAmount = coach.Amount;
 
                 var successfulPayments = await context.Payments
+                    .AsNoTracking()
                     .Where(p => p.CoachId == coach.Id && p.PaymentStatus == PaymentStatus.SUCCESS)
-                    .Include(p => p.WorkoutProgram)
-                    .Include(p => p.Athlete)
+                    .Select(p => new
+                    {
+                        p.Amount,
+                        p.AthleteId,
+                        p.PaymentDate,
+                        WorkoutProgram = p.WorkoutProgram == null ? null : new
+                        {
+                            p.WorkoutProgram.Status,
+                            p.WorkoutProgram.AthleteId,
+                            p.WorkoutProgram.LastExerciseDate,
+                            p.WorkoutProgram.TotalSessionCount,
+                            p.WorkoutProgram.CompletedSessionCount
+                        }
+                    })
                     .ToListAsync();
 
                 if (!successfulPayments.Any())
@@ -608,9 +741,9 @@ namespace sport_app_backend.Repository.CoachRepo
             }
         }
 
-        public async Task<ApiResponse> GetMonthlyIncomeChart(string phoneNumber, int year, int month)
+        public async Task<ApiResponse> GetMonthlyIncomeChart(int coachId, int year, int month)
         {
-            var coach = await context.Coaches.FirstOrDefaultAsync(c => c.PhoneNumber == phoneNumber);
+            var coach = await context.Coaches.AsNoTracking().FirstOrDefaultAsync(c => c.Id == coachId);
             if (coach == null)
             {
                 return new ApiResponse { Action = false, Message = "مربی یافت نشد." };
@@ -655,9 +788,9 @@ namespace sport_app_backend.Repository.CoachRepo
                 { Action = true, Message = "نمودار درآمد ماهانه با موفقیت دریافت شد.", Result = monthlyIncome };
         }
 
-        public async Task<ApiResponse> UpdateSocialMediaLink(string phoneNumber, SocialMediaLinkDto socialMediaLinkDto)
+        public async Task<ApiResponse> UpdateSocialMediaLink(int coachId, SocialMediaLinkDto socialMediaLinkDto)
         {
-            var coach = await context.Coaches.FirstOrDefaultAsync(c => c.PhoneNumber == phoneNumber);
+            var coach = await context.Coaches.FirstOrDefaultAsync(c => c.Id == coachId);
             if (coach == null)
             {
                 return new ApiResponse { Action = false, Message = "مربی یافت نشد." };
@@ -671,9 +804,9 @@ namespace sport_app_backend.Repository.CoachRepo
             return new ApiResponse { Action = true, Message = "لینک ها تغییر پیدا کرد" };
         }
 
-        public async Task<ApiResponse> GetSocialMediaLink(string phoneNumber)
+        public async Task<ApiResponse> GetSocialMediaLink(int coachId)
         {
-            var coach = await context.Coaches.AsNoTracking().Where(c => c.PhoneNumber == phoneNumber).Select(coach =>
+            var coach = await context.Coaches.AsNoTracking().Where(c => c.Id == coachId).Select(coach =>
                 new
                 {
                     coach.WhatsApp,
@@ -693,36 +826,39 @@ namespace sport_app_backend.Repository.CoachRepo
         }
 
 
-        public async Task<ApiResponse> GetAthletesWithStatus(string coachPhoneNumber)
+        public async Task<ApiResponse> GetAthletesWithStatus(int coachId)
         {
-            var coach = await context.Coaches.FirstOrDefaultAsync(c => c.PhoneNumber == coachPhoneNumber);
+            var coach = await context.Coaches.AsNoTracking().FirstOrDefaultAsync(c => c.Id == coachId);
             if (coach == null)
             {
                 return new ApiResponse { Action = false, Message = "مربی یافت نشد." };
             }
 
-            // واکشی تمام پرداخت‌های موفق که به این مربی و یک برنامه تمرینی متصل هستند
             var payments = await context.Payments
-                .Where(p => p.CoachId == coach.Id && p.PaymentStatus == PaymentStatus.SUCCESS &&
-                            p.WorkoutProgram != null)
-                .Include(p => p.Athlete).ThenInclude(a => a.User)
-                .Include(p => p.WorkoutProgram)
+                .AsNoTracking()
+                .Where(p => p.CoachId == coach.Id && p.PaymentStatus == PaymentStatus.SUCCESS && p.WorkoutProgram != null)
+                .Select(p => new
+                {
+                    p.AthleteId,
+                    AthleteFirstName = p.Athlete.User.FirstName,
+                    AthleteLastName = p.Athlete.User.LastName,
+                    AthletePhoneNumber = p.Athlete.User.PhoneNumber,
+                    AthleteProfileImage = p.Athlete.User.ImageProfile,
+                    WorkoutProgram = p.WorkoutProgram
+                })
                 .ToListAsync();
 
             var athletes = payments
-                .GroupBy(p => p.Athlete)
-                .Select(g => g.Key)
+                .GroupBy(p => p.AthleteId)
+                .Select(g => g.First())
                 .ToList();
 
             var athleteDtos = new List<AthleteStatusDto>();
 
             foreach (var athlete in athletes)
             {
-                var user = athlete.User;
-
-
                 var relevantProgram = payments
-                    .Where(p => p.AthleteId == athlete.Id)
+                    .Where(p => p.AthleteId == athlete.AthleteId)
                     .Select(p => p.WorkoutProgram)
                     .OrderByDescending(wp => wp.Status == WorkoutProgramStatus.ACTIVE) // اولویت با فعال
                     .ThenByDescending(wp => wp.StartDate) // سپس جدیدترین
@@ -734,10 +870,10 @@ namespace sport_app_backend.Repository.CoachRepo
 
                 athleteDtos.Add(new AthleteStatusDto
                 {
-                    AthleteId = athlete.Id,
-                    FullName = $"{user.FirstName} {user.LastName}",
-                    PhoneNumber = user.PhoneNumber,
-                    ProfileImageUrl = user.ImageProfile,
+                    AthleteId = athlete.AthleteId,
+                    FullName = $"{athlete.AthleteFirstName} {athlete.AthleteLastName}",
+                    PhoneNumber = athlete.AthletePhoneNumber,
+                    ProfileImageUrl = athlete.AthleteProfileImage,
                     Status = statusInfo,
                     Service = relevantProgram.Title,
                     LastWorkout = relevantProgram.LastExerciseDate.ToString() ?? ""
@@ -748,9 +884,9 @@ namespace sport_app_backend.Repository.CoachRepo
                 { Action = true, Message = "لیست شاگردان با موفقیت دریافت شد.", Result = athleteDtos };
         }
 
-        public async Task<ApiResponse> GetTransactions(string coachPhoneNumber)
+        public async Task<ApiResponse> GetTransactions(int coachId)
         {
-            var coach = await context.Coaches.FirstOrDefaultAsync(c => c.PhoneNumber == coachPhoneNumber);
+            var coach = await context.Coaches.AsNoTracking().FirstOrDefaultAsync(c => c.Id == coachId);
             if (coach == null)
             {
                 return new ApiResponse { Action = false, Message = "مربی یافت نشد." };
@@ -764,7 +900,7 @@ namespace sport_app_backend.Repository.CoachRepo
                 .OrderByDescending(p => p.PaymentDate)
                 .ToListAsync();
 
-            var coachPayout = await context.CoachPayouts.Where(p => p.CoachId == coach.Id)
+            var coachPayout = await context.CoachPayouts.AsNoTracking().Where(p => p.CoachId == coach.Id)
                 .OrderByDescending(p => p.RequestDate).ToListAsync();
 
             var pendingPayout = coachPayout.Find(c => c.Status == PayoutStatus.Pending)?.ToCoachPayoutDto();
@@ -832,9 +968,9 @@ namespace sport_app_backend.Repository.CoachRepo
             return ("Active");
         }
 
-        public async Task<ApiResponse> CreatePayoutRequest(string coachPhoneNumber)
+        public async Task<ApiResponse> CreatePayoutRequest(int coachId)
         {
-            var coach = await context.Coaches.FirstOrDefaultAsync(c => c.PhoneNumber == coachPhoneNumber);
+            var coach = await context.Coaches.FirstOrDefaultAsync(c => c.Id == coachId);
             if (coach == null)
             {
                 return new ApiResponse { Action = false, Message = "مربی یافت نشد." };
@@ -919,11 +1055,12 @@ namespace sport_app_backend.Repository.CoachRepo
             }
         }
         public async Task<ApiResponse> ChoseWorkoutProgramFeedBack(
-            string phoneNumber,
+            int coachId,
             List<ChoseWorkoutProgramFeedBackDto> choseWorkoutProgramFeedBackDtos)
         {
             var coach = await context.Coaches
-                .FirstOrDefaultAsync(c => c.PhoneNumber == phoneNumber);
+                .AsNoTracking()
+                .FirstOrDefaultAsync(c => c.Id == coachId);
 
             if (coach == null)
             {
@@ -962,9 +1099,9 @@ namespace sport_app_backend.Repository.CoachRepo
         }
 
 
-        public async Task<ApiResponse> GetWorkoutProgramFeedBack(string phoneNumber)
+        public async Task<ApiResponse> GetWorkoutProgramFeedBack(int coachId)
         {
-            var coach = await context.Coaches.FirstOrDefaultAsync(c => c.PhoneNumber == phoneNumber);
+            var coach = await context.Coaches.AsNoTracking().FirstOrDefaultAsync(c => c.Id == coachId);
             if (coach == null)
             {
                 return new ApiResponse { Action = false, Message = "مربی یافت نشد." };
