@@ -495,8 +495,8 @@ private async Task<string> GenerateUniqueUsername()
                     hasUnreadMessage
                 }
             };
-        var couchId =await  dbContext.Coaches.AsNoTracking().Where(c => c.UserId == userId).Select(c=>c.Id).FirstOrDefaultAsync();
-        var numberOfFeedBack =  dbContext.WorkoutProgramFeedback.Count(e => e.CouchId == couchId);
+        var coachId =await  dbContext.Coaches.AsNoTracking().Where(c => c.UserId == userId).Select(c=>c.Id).FirstOrDefaultAsync();
+        var numberOfFeedBack =  dbContext.WorkoutProgramFeedback.Count(e => e.CouchId == coachId);
 
 
         return new ApiResponse()
