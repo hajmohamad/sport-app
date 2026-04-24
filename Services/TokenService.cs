@@ -80,7 +80,7 @@ public class TokenService: ITokenService
 
         if (user.TypeOfUser == TypeOfUser.COACH)
         {
-            var coachId = _context.Coaches
+            var coachId = user.Coach?.Id ?? _context.Coaches
                 .AsNoTracking()
                 .Where(c => c.UserId == user.Id)
                 .Select(c => c.Id)

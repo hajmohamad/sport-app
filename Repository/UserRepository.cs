@@ -120,7 +120,9 @@ public class UserRepository(
     dbContext.CodeVerifies.Remove(user);
     await dbContext.SaveChangesAsync();
     
-    var userEntity = await dbContext.Users.FirstOrDefaultAsync(x => x.PhoneNumber == checkCodeRequestDto.PhoneNumber);
+    var userEntity = await dbContext.Users
+        .Include(u => u.Coach)
+        .FirstOrDefaultAsync(x => x.PhoneNumber == checkCodeRequestDto.PhoneNumber);
     if (userEntity != null)
     {
         var questions = userEntity.FirstName  is not "";
@@ -226,7 +228,9 @@ private async Task<string> GenerateUniqueUsername()
 
     public async Task<ApiResponse> GenerateAccessToken(string refreshToken)
     {
-        var user = await dbContext.Users.FirstOrDefaultAsync(x => x.RefreshToken == refreshToken);
+        var user = await dbContext.Users
+            .Include(u => u.Coach)
+            .FirstOrDefaultAsync(x => x.RefreshToken == refreshToken);
         if (user is null) return new ApiResponse() { Message = "Invalid refresh token", Action = false };
         return user.LastLogin.AddDays(90) < DateTime.Now ? new ApiResponse() { Message = "Refresh token expired", Action = false } : new ApiResponse() { Message = "Success", Action = true, Result = new { AccessToken = tokenService.CreateToken(user) } };
     }
