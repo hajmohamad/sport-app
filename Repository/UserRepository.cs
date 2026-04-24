@@ -478,6 +478,27 @@ private async Task<string> GenerateUniqueUsername()
             .Where(m => m.TargetRole == user.TypeOfUser)
             .AnyAsync(m => !dbContext.UserMessageStatuses
                 .Any(s => s.UserId == user.Id && s.InAppMessageId == m.Id && s.IsRead));
+        if (user.TypeOfUser != TypeOfUser.COACH)
+            return new ApiResponse()
+            {
+                Action = true,
+                Message = "find user",
+                Result = new
+                {
+                    user.FirstName,
+                    user.LastName,
+                    user.ImageProfile,
+                    TypeOfUser = user.TypeOfUser.ToString(),
+                    user.PhoneNumber,
+                    Gender = user.Gender.ToString(),
+                    Question = user.FirstName != "",
+                    hasUnreadMessage
+                }
+            };
+        var couchId =await  dbContext.Coaches.AsNoTracking().Where(c => c.PhoneNumber == phoneNumber).Select(c=>c.Id).FirstOrDefaultAsync();
+        var numberOfFeedBack =  dbContext.WorkoutProgramFeedback.Count(e => e.CouchId == couchId);
+
+
         return new ApiResponse()
         {
             Action = true,
@@ -491,7 +512,8 @@ private async Task<string> GenerateUniqueUsername()
                 user.PhoneNumber,
                 Gender = user.Gender.ToString(),
                 Question = user.FirstName != "",
-                hasUnreadMessage
+                hasUnreadMessage,
+                numberOfFeedBack
 
 
             }
