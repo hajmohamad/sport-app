@@ -23,9 +23,9 @@ public class UserRepository(
     IConfiguration config)
     : IUserRepository
 {
-    public async Task<ApiResponse> AddRoleGender(string phoneNumber, RoleGenderDto roleGenderDto)
+    public async Task<ApiResponse> AddRoleGender(int userId, RoleGenderDto roleGenderDto)
     {
-        var user = await dbContext.Users.FirstOrDefaultAsync(x => x.PhoneNumber == phoneNumber);
+        var user = await dbContext.Users.FirstOrDefaultAsync(x => x.Id == userId);
         if (user is null) return new ApiResponse() { Message = "User not found", Action = false };
         if(roleGenderDto.Role is null) return new ApiResponse() { Message = "Role is null", Action = false };
         if(roleGenderDto.Gender is null) return new ApiResponse() { Message = "Gender is null", Action = false };
@@ -248,9 +248,9 @@ private async Task<string> GenerateUniqueUsername()
         await dbContext.SaveChangesAsync();
         return new ApiResponse() { Message = "Success", Action = true };
     }
-    public async Task<ApiResponse> EditUserProfile(string phoneNumber, EditUserProfileDto editUserProfileDto)
+    public async Task<ApiResponse> EditUserProfile(int userId, EditUserProfileDto editUserProfileDto)
     {
-        var user= await dbContext.Users.Include(q=>q.Coach).FirstOrDefaultAsync(x => x.PhoneNumber == phoneNumber);
+        var user= await dbContext.Users.Include(q=>q.Coach).FirstOrDefaultAsync(x => x.Id == userId);
         if (user is null) return new ApiResponse() { Message = "User not found", Action = false };
         var findUserName= await dbContext.Users.FirstOrDefaultAsync(x => x.UserName == editUserProfileDto.UserName);
         if(findUserName is not null&& findUserName!=user) return new ApiResponse() { Message = "Username already exists", Action = false };// Ensure the user is an athlete
@@ -266,9 +266,9 @@ private async Task<string> GenerateUniqueUsername()
         };
     }
 
-    public async  Task<ApiResponse> GetUserProfileForEdit(string phoneNumber)
+    public async  Task<ApiResponse> GetUserProfileForEdit(int userId)
     {
-        var user= await dbContext.Users.Include(q=>q.Coach).FirstOrDefaultAsync(x => x.PhoneNumber == phoneNumber);
+        var user= await dbContext.Users.Include(q=>q.Coach).FirstOrDefaultAsync(x => x.Id == userId);
         if (user is null) return new ApiResponse() { Message = "User not found", Action = false };
         
        
@@ -289,17 +289,17 @@ private async Task<string> GenerateUniqueUsername()
         };
     }
 
-    public async Task<ApiResponse> Logout(string phoneNumber)
-    { var user = await dbContext.Users.FirstOrDefaultAsync(x => x.PhoneNumber == phoneNumber);
+    public async Task<ApiResponse> Logout(int userId)
+    { var user = await dbContext.Users.FirstOrDefaultAsync(x => x.Id == userId);
         if (user is null) return new ApiResponse() { Message = "User not found", Action = false };
         user.RefreshToken = null;
         await dbContext.SaveChangesAsync();
         return new ApiResponse() { Message = "Success", Action = true };
     }
 
-    public async Task<ApiResponse> AppSupport(string phoneNumber, ReportAppDto reportAppDto)
+    public async Task<ApiResponse> AppSupport(int userId, ReportAppDto reportAppDto)
     {
-        var user = await dbContext.Users.FirstOrDefaultAsync(x => x.PhoneNumber == phoneNumber);
+        var user = await dbContext.Users.FirstOrDefaultAsync(x => x.Id == userId);
         if (user is null) return new ApiResponse() { Message = "User not found", Action = false };
         await dbContext.SupportApp.AddAsync(new SupportApp()
         {   User = user,
@@ -335,9 +335,9 @@ private async Task<string> GenerateUniqueUsername()
             { Message = "Success", Action = true, Result = exercise.ToExerciseDto() });
     }
 
-    public async Task<ApiResponse> RemoveProfilePhoto(string phoneNumber)
+    public async Task<ApiResponse> RemoveProfilePhoto(int userId)
     {
-        var user = await dbContext.Users.FirstOrDefaultAsync(x => x.PhoneNumber == phoneNumber);
+        var user = await dbContext.Users.FirstOrDefaultAsync(x => x.Id == userId);
         if (user is null) return new ApiResponse() { Message = "User not found", Action = false };
         var img = user.ImageProfile;
         if (img=="") return new ApiResponse() { Message = "now img found", Action = false };
@@ -348,10 +348,10 @@ private async Task<string> GenerateUniqueUsername()
         return response;
     }
 
-    public async Task<ApiResponse> SaveImageAsync(string phoneNumber, IFormFile image)
+    public async Task<ApiResponse> SaveImageAsync(int userId, IFormFile image)
     {
         
-        var user = await dbContext.Users.FirstOrDefaultAsync(x => x.PhoneNumber == phoneNumber);
+        var user = await dbContext.Users.FirstOrDefaultAsync(x => x.Id == userId);
         if (user is null) return new ApiResponse() { Message = "User not found", Action = false };
         if (image.Length <= 0) return new ApiResponse() { Message = "image not receive", Action = false }; ;
 
@@ -452,10 +452,10 @@ private async Task<string> GenerateUniqueUsername()
 
 }
 
-    public async Task<ApiResponse> CheckQuestionSubmitted(string phoneNumber)
+    public async Task<ApiResponse> CheckQuestionSubmitted(int userId)
     {
         var user = await dbContext.Users.AsNoTracking()
-            .Where(u => u.PhoneNumber == phoneNumber)
+            .Where(u => u.Id == userId)
             .Select(u => new
             {
                 u.Id,
@@ -495,7 +495,7 @@ private async Task<string> GenerateUniqueUsername()
                     hasUnreadMessage
                 }
             };
-        var couchId =await  dbContext.Coaches.AsNoTracking().Where(c => c.PhoneNumber == phoneNumber).Select(c=>c.Id).FirstOrDefaultAsync();
+        var couchId =await  dbContext.Coaches.AsNoTracking().Where(c => c.UserId == userId).Select(c=>c.Id).FirstOrDefaultAsync();
         var numberOfFeedBack =  dbContext.WorkoutProgramFeedback.Count(e => e.CouchId == couchId);
 
 
@@ -594,4 +594,3 @@ public async Task<(IEnumerable<AllExerciseResponseDto> Exercises, int TotalCount
     return (exercises, totalCount);
 }
 }
-

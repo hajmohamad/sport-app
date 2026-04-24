@@ -57,9 +57,9 @@ public class UserController(IUserRepository userRepository) : ControllerBase
     [Authorize(Roles = "None")]
     public async Task<IActionResult> AddRoleGender([FromBody] RoleGenderDto roleGenderDto)
     {
-        var phoneNumber =  User.FindFirst(ClaimTypes.Name)?.Value;
-        if (phoneNumber is null) return BadRequest("PhoneNumber is null");
-        return Ok(await userRepository.AddRoleGender(phoneNumber, roleGenderDto));
+        var userId = GetUserId();
+        if (userId is null) return BadRequest("UserId is null");
+        return Ok(await userRepository.AddRoleGender(userId.Value, roleGenderDto));
     }
 
     [HttpPost("AccessToken")]
@@ -94,9 +94,9 @@ public class UserController(IUserRepository userRepository) : ControllerBase
     [Authorize(Roles = "Athlete,Coach")]
     public async Task<IActionResult> EditUserProfile([FromBody] EditUserProfileDto userProfileDto)
     {
-        var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
-        if (phoneNumber is null) return BadRequest("PhoneNumber is null");
-        var result = await userRepository.EditUserProfile(phoneNumber, userProfileDto);
+        var userId = GetUserId();
+        if (userId is null) return BadRequest("UserId is null");
+        var result = await userRepository.EditUserProfile(userId.Value, userProfileDto);
         if (!result.Action) return BadRequest(result);
         return Ok(result);
     }
@@ -105,9 +105,9 @@ public class UserController(IUserRepository userRepository) : ControllerBase
     [Authorize(Roles = "Athlete,Coach")]
     public async Task<IActionResult> GetUserProfileForEdit()
     {
-        var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
-        if (phoneNumber is null) return BadRequest("PhoneNumber is null");
-        var result = await userRepository.GetUserProfileForEdit(phoneNumber);
+        var userId = GetUserId();
+        if (userId is null) return BadRequest("UserId is null");
+        var result = await userRepository.GetUserProfileForEdit(userId.Value);
         if (!result.Action) return NotFound(result);
         return Ok(result);
     }
@@ -115,9 +115,9 @@ public class UserController(IUserRepository userRepository) : ControllerBase
     [Authorize(Roles = "Athlete,Coach")]
     public async Task<IActionResult> AppSupport([FromBody] ReportAppDto reportAppDto)
     {
-        var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
-        if (phoneNumber is null) return BadRequest("PhoneNumber is null");
-        var result = await userRepository.AppSupport(phoneNumber, reportAppDto);
+        var userId = GetUserId();
+        if (userId is null) return BadRequest("UserId is null");
+        var result = await userRepository.AppSupport(userId.Value, reportAppDto);
         if (!result.Action) return BadRequest(result);
         return Ok(result);
     }
@@ -127,9 +127,9 @@ public class UserController(IUserRepository userRepository) : ControllerBase
     [Authorize(Roles = "Athlete,Coach")]
     public async Task<IActionResult> Logout()
     {
-        var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
-        if (phoneNumber is null) return BadRequest("PhoneNumber is null");
-        var result = await userRepository.Logout(phoneNumber);
+        var userId = GetUserId();
+        if (userId is null) return BadRequest("UserId is null");
+        var result = await userRepository.Logout(userId.Value);
         if (!result.Action) return NotFound(result);
         return Ok(result);
     }
@@ -138,10 +138,10 @@ public class UserController(IUserRepository userRepository) : ControllerBase
     [Authorize(Roles = "Athlete,Coach")]
     public async Task<IActionResult> uploadProfilePhoto(IFormFile file)
     {
-        var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
-        if (phoneNumber is null) return BadRequest("PhoneNumber is null");
+        var userId = GetUserId();
+        if (userId is null) return BadRequest("UserId is null");
         
-        var result = await userRepository.SaveImageAsync(phoneNumber,file);
+        var result = await userRepository.SaveImageAsync(userId.Value,file);
 
         if (!result.Action) return NotFound(result);
         return Ok(result);
@@ -170,9 +170,9 @@ public class UserController(IUserRepository userRepository) : ControllerBase
     [Authorize(Roles = "Athlete,Coach")]
     public async Task<IActionResult> RemoveProfilePhoto()
     {
-        var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
-        if (phoneNumber is null) return BadRequest("PhoneNumber is null");
-        var result = await userRepository.RemoveProfilePhoto(phoneNumber);
+        var userId = GetUserId();
+        if (userId is null) return BadRequest("UserId is null");
+        var result = await userRepository.RemoveProfilePhoto(userId.Value);
         if (result.Action != true) return BadRequest(result);
         return Ok(result);
             
@@ -185,9 +185,9 @@ public class UserController(IUserRepository userRepository) : ControllerBase
 
     public async Task<IActionResult> CheckQuestionSubmitted()
     {
-        var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
-        if (phoneNumber is null) return BadRequest("PhoneNumber is null");
-        var result =  await userRepository.CheckQuestionSubmitted(phoneNumber);
+        var userId = GetUserId();
+        if (userId is null) return BadRequest("UserId is null");
+        var result =  await userRepository.CheckQuestionSubmitted(userId.Value);
         if (!result.Action) return BadRequest(result);
         return Ok(result);
     }
@@ -214,7 +214,9 @@ public class UserController(IUserRepository userRepository) : ControllerBase
             exercises
         });
     }
- 
-
-
+    private int? GetUserId()
+    {
+        var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        return int.TryParse(userIdClaim, out var userId) ? userId : null;
+    }
 }
