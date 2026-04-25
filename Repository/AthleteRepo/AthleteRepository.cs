@@ -30,6 +30,127 @@ namespace sport_app_backend.Repository.AthleteRepo
         ITokenService tokenService,
         ICalculator calculator) : IAthleteRepository
     {
+        private async Task<string?> ResolveAthletePhoneById(int athleteId)
+        {
+            return await context.Athletes
+                .AsNoTracking()
+                .Where(a => a.Id == athleteId)
+                .Select(a => a.PhoneNumber)
+                .FirstOrDefaultAsync();
+        }
+
+        public async Task<ApiResponse> WorkoutProgramFeedback(int athleteId, FeedbackWorkoutProgramDto feedbackWorkoutProgramDto)
+        {
+            var phoneNumber = await ResolveAthletePhoneById(athleteId);
+            return string.IsNullOrEmpty(phoneNumber)
+                ? new ApiResponse { Action = false, Message = "User is not an athlete" }
+                : await WorkoutProgramFeedback(phoneNumber, feedbackWorkoutProgramDto);
+        }
+
+        public async Task<ApiResponse> AthleteFirstQuestions(int athleteId, AthleteFirstQuestionsDto athleteFirstQuestionsDto)
+        {
+            var phoneNumber = await ResolveAthletePhoneById(athleteId);
+            return string.IsNullOrEmpty(phoneNumber)
+                ? new ApiResponse { Action = false, Message = "User is not an athlete" }
+                : await AthleteFirstQuestions(phoneNumber, athleteFirstQuestionsDto);
+        }
+
+        public async Task<ApiResponse> GetAllPayments(int athleteId)
+        {
+            var phoneNumber = await ResolveAthletePhoneById(athleteId);
+            return string.IsNullOrEmpty(phoneNumber)
+                ? new ApiResponse { Action = false, Message = "Athlete not found" }
+                : await GetAllPayments(phoneNumber);
+        }
+
+        public async Task<ApiResponse> GetPayment(int athleteId, int paymentId)
+        {
+            var phoneNumber = await ResolveAthletePhoneById(athleteId);
+            return string.IsNullOrEmpty(phoneNumber)
+                ? new ApiResponse { Action = false, Message = "Payment not found for this user" }
+                : await GetPayment(phoneNumber, paymentId);
+        }
+
+        public async Task<ApiResponse> ActiveProgram(int athleteId, int paymentId)
+        {
+            var phoneNumber = await ResolveAthletePhoneById(athleteId);
+            return string.IsNullOrEmpty(phoneNumber)
+                ? new ApiResponse { Action = false, Message = "Athlete not found" }
+                : await ActiveProgram(phoneNumber, paymentId);
+        }
+
+        public async Task<ApiResponse> ExerciseFeedBack(int athleteId, ExerciseFeedbackDto exerciseFeedbackDto)
+        {
+            var phoneNumber = await ResolveAthletePhoneById(athleteId);
+            return string.IsNullOrEmpty(phoneNumber)
+                ? new ApiResponse { Action = false, Message = "ورزشکار یافت نشد!" }
+                : await ExerciseFeedBack(phoneNumber, exerciseFeedbackDto);
+        }
+
+        public async Task<ApiResponse> ChangeExercise(int athleteId, ExerciseChangeDto changeExerciseDto)
+        {
+            var phoneNumber = await ResolveAthletePhoneById(athleteId);
+            return string.IsNullOrEmpty(phoneNumber)
+                ? new ApiResponse { Action = false, Message = "Athlete not found" }
+                : await ChangeExercise(phoneNumber, changeExerciseDto);
+        }
+
+        public async Task<ApiResponse> GetAllTrainingSession(int athleteId)
+        {
+            var phoneNumber = await ResolveAthletePhoneById(athleteId);
+            return string.IsNullOrEmpty(phoneNumber)
+                ? new ApiResponse { Action = false, Message = "Athlete not found" }
+                : await GetAllTrainingSession(phoneNumber);
+        }
+
+        public async Task<ApiResponse> GetTrainingSession(int athleteId, int trainingSessionId)
+        {
+            var phoneNumber = await ResolveAthletePhoneById(athleteId);
+            return string.IsNullOrEmpty(phoneNumber)
+                ? new ApiResponse { Action = false, Message = "Athlete not found" }
+                : await GetTrainingSession(phoneNumber, trainingSessionId);
+        }
+
+        public async Task<ApiResponse> DoTrainingSession(int athleteId, int trainingSessionId, int exerciseNumber)
+        {
+            var phoneNumber = await ResolveAthletePhoneById(athleteId);
+            return string.IsNullOrEmpty(phoneNumber)
+                ? new ApiResponse { Action = false, Message = "Athlete not found" }
+                : await DoTrainingSession(phoneNumber, trainingSessionId, exerciseNumber);
+        }
+
+        public async Task<ApiResponse> FinishTrainingSession(int athleteId, FinishTrainingSessionDto finishTrainingSessionDto)
+        {
+            var phoneNumber = await ResolveAthletePhoneById(athleteId);
+            return string.IsNullOrEmpty(phoneNumber)
+                ? new ApiResponse { Action = false, Message = "Athlete not found" }
+                : await FinishTrainingSession(phoneNumber, finishTrainingSessionDto);
+        }
+
+        public async Task<ApiResponse> FeedbackTrainingSession(int athleteId, FeedbackTrainingSessionDto feedbackTrainingSessionDto)
+        {
+            var phoneNumber = await ResolveAthletePhoneById(athleteId);
+            return string.IsNullOrEmpty(phoneNumber)
+                ? new ApiResponse { Action = false, Message = "Athlete not found" }
+                : await FeedbackTrainingSession(phoneNumber, feedbackTrainingSessionDto);
+        }
+
+        public async Task<ApiResponse> ResetTrainingSession(int athleteId, int trainingSessionId)
+        {
+            var phoneNumber = await ResolveAthletePhoneById(athleteId);
+            return string.IsNullOrEmpty(phoneNumber)
+                ? new ApiResponse { Action = false, Message = "Athlete not found" }
+                : await ResetTrainingSession(phoneNumber, trainingSessionId);
+        }
+
+        public async Task<ApiResponse> CalculateCalories(int athleteId, int trainingSessionId)
+        {
+            var phoneNumber = await ResolveAthletePhoneById(athleteId);
+            return string.IsNullOrEmpty(phoneNumber)
+                ? new ApiResponse { Action = false, Message = "Athlete not found" }
+                : await CalculateCalories(phoneNumber, trainingSessionId);
+        }
+
         public async Task<ApiResponse> GetFaq()
         {
             var getFaq = await context.AthleteFaq.AsNoTracking().ToListAsync();

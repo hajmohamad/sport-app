@@ -122,6 +122,7 @@ public class UserRepository(
     
     var userEntity = await dbContext.Users
         .Include(u => u.Coach)
+        .Include(u => u.Athlete)
         .FirstOrDefaultAsync(x => x.PhoneNumber == checkCodeRequestDto.PhoneNumber);
     if (userEntity != null)
     {
@@ -230,6 +231,7 @@ private async Task<string> GenerateUniqueUsername()
     {
         var user = await dbContext.Users
             .Include(u => u.Coach)
+            .Include(u => u.Athlete)
             .FirstOrDefaultAsync(x => x.RefreshToken == refreshToken);
         if (user is null) return new ApiResponse() { Message = "Invalid refresh token", Action = false };
         return user.LastLogin.AddDays(90) < DateTime.Now ? new ApiResponse() { Message = "Refresh token expired", Action = false } : new ApiResponse() { Message = "Success", Action = true, Result = new { AccessToken = tokenService.CreateToken(user) } };

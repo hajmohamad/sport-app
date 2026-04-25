@@ -91,6 +91,19 @@ public class TokenService: ITokenService
                 claims.Add(new Claim("coach_id", coachId.ToString()));
             }
         }
+        else if (user.TypeOfUser == TypeOfUser.ATHLETE)
+        {
+            var athleteId = user.Athlete?.Id ?? _context.Athletes
+                .AsNoTracking()
+                .Where(a => a.UserId == user.Id)
+                .Select(a => a.Id)
+                .FirstOrDefault();
+
+            if (athleteId > 0)
+            {
+                claims.Add(new Claim("athlete_id", athleteId.ToString()));
+            }
+        }
 
         var userRoles = user.TypeOfUser switch
         {

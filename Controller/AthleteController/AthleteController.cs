@@ -29,7 +29,7 @@ namespace sport_app_backend.Controller
         [Authorize(Roles = "Athlete")]
         public async Task<IActionResult> AddFirstQuestions([FromBody] AthleteFirstQuestionsDto athleteFirstQuestions)
         {
-            var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
+            var phoneNumber = await GetAthletePhoneNumberAsync();
             if (phoneNumber is null) return BadRequest("PhoneNumber is null");
             var result = await athleteRepository.AthleteFirstQuestions(phoneNumber, athleteFirstQuestions);
             if (!result.Action) return BadRequest(result);
@@ -40,7 +40,7 @@ namespace sport_app_backend.Controller
         public async Task<IActionResult> WorkoutProgramFeedback(
             [FromBody] FeedbackWorkoutProgramDto feedbackTrainingSessionDto)
         {
-            var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
+            var phoneNumber = await GetAthletePhoneNumberAsync();
             if (phoneNumber is null) return BadRequest("PhoneNumber is null");
             var result = await athleteRepository.WorkoutProgramFeedback(phoneNumber, feedbackTrainingSessionDto);
             if (!result.Action) return BadRequest(result);
@@ -54,7 +54,7 @@ namespace sport_app_backend.Controller
         [Authorize(Roles = "Athlete")]
         public async Task<IActionResult> GetAthleteProfile()
         {
-            var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
+            var phoneNumber = await GetAthletePhoneNumberAsync();
             if (phoneNumber is null)
                 return BadRequest(new ApiResponse() { Action = false, Message = "PhoneNumber is null" });
             var user = await context.Users
@@ -74,7 +74,7 @@ namespace sport_app_backend.Controller
         [Authorize(Roles = "Athlete")]
         public async Task<IActionResult> UpdateTimeBeforeWorkout([FromRoute] int timeBeforeWorkoutDto)
         {
-            var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
+            var phoneNumber = await GetAthletePhoneNumberAsync();
             if (phoneNumber is null) return BadRequest("PhoneNumber is null");
             var athlete = await context.Athletes.FirstOrDefaultAsync(u => u.PhoneNumber == phoneNumber);
             if (athlete is null) return BadRequest("User not found");
@@ -93,7 +93,7 @@ namespace sport_app_backend.Controller
         [Authorize(Roles = "Athlete")]
         public async Task<IActionResult> UpdateRestTime([FromRoute] int restTimeDto)
         {
-            var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
+            var phoneNumber = await GetAthletePhoneNumberAsync();
             if (phoneNumber is null) return BadRequest("PhoneNumber is null");
             var athlete = await context.Athletes.FirstOrDefaultAsync(u => u.PhoneNumber == phoneNumber);
             if (athlete is null) return BadRequest("User not found");
@@ -113,7 +113,7 @@ namespace sport_app_backend.Controller
         [Authorize(Roles = "Athlete")]
         public async Task<IActionResult> GetAllPayments()
         {
-            var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
+            var phoneNumber = await GetAthletePhoneNumberAsync();
             if (phoneNumber is null) return BadRequest("PhoneNumber is null");
             var result = await athleteRepository.GetAllPayments(phoneNumber);
             if (!result.Action) return BadRequest(result);
@@ -124,7 +124,7 @@ namespace sport_app_backend.Controller
         [Authorize(Roles = "Athlete")]
         public async Task<IActionResult> GetPayment([FromRoute] int paymentId)
         {
-            var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
+            var phoneNumber = await GetAthletePhoneNumberAsync();
             if (phoneNumber is null) return BadRequest("PhoneNumber is null");
             var result = await athleteRepository.GetPayment(phoneNumber, paymentId);
             if (!result.Action) return BadRequest(result);
@@ -134,7 +134,7 @@ namespace sport_app_backend.Controller
         [Authorize(Roles = "Athlete")]
         public async Task<IActionResult> ActiveProgram([FromRoute] int paymentId)
         {
-            var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
+            var phoneNumber = await GetAthletePhoneNumberAsync();
             if (phoneNumber is null) return BadRequest("PhoneNumber is null");
             var result = await athleteRepository.ActiveProgram(phoneNumber, paymentId);
             if (!result.Action) return BadRequest(result);
@@ -145,7 +145,7 @@ namespace sport_app_backend.Controller
         [Authorize(Roles = "Athlete")]
         public async Task<IActionResult> FeedbackExercise([FromBody] ExerciseFeedbackDto feedbackExerciseDto)
         {
-            var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
+            var phoneNumber = await GetAthletePhoneNumberAsync();
             if (phoneNumber is null) return BadRequest("PhoneNumber is null");
             var result = await athleteRepository.ExerciseFeedBack(phoneNumber, feedbackExerciseDto);
             if (!result.Action) return BadRequest(result);
@@ -157,7 +157,7 @@ namespace sport_app_backend.Controller
         [Authorize(Roles = "Athlete")]
         public async Task<IActionResult> ChangeExerciseRequest([FromBody] ExerciseChangeDto exerciseChangeDto)
         {
-            var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
+            var phoneNumber = await GetAthletePhoneNumberAsync();
             if (phoneNumber is null) return BadRequest("PhoneNumber is null");
             var result = await athleteRepository.ChangeExercise(phoneNumber, exerciseChangeDto);
             if (!result.Action) return BadRequest(result);
@@ -168,7 +168,7 @@ namespace sport_app_backend.Controller
         [Authorize(Roles = "Athlete")]
         public async Task<IActionResult> GetAllTrainingSession()
         {
-            var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
+            var phoneNumber = await GetAthletePhoneNumberAsync();
             if (phoneNumber is null) return BadRequest("PhoneNumber is null");
             var result = await athleteRepository.GetAllTrainingSession(phoneNumber);
             if (!result.Action) return BadRequest(result);
@@ -180,7 +180,7 @@ namespace sport_app_backend.Controller
         [Authorize(Roles = "Athlete")]
         public async Task<IActionResult> GetTrainingSession([FromRoute] int trainingSessionId)
         {
-            var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
+            var phoneNumber = await GetAthletePhoneNumberAsync();
             if (phoneNumber is null) return BadRequest("PhoneNumber is null");
             var result = await athleteRepository.GetTrainingSession(phoneNumber, trainingSessionId);
             if (!result.Action) return BadRequest(result);
@@ -192,7 +192,7 @@ namespace sport_app_backend.Controller
         public async Task<IActionResult> DoTrainingSession([FromRoute] int trainingSessionId,
             [FromRoute] int exerciseNumber)
         {
-            var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
+            var phoneNumber = await GetAthletePhoneNumberAsync();
             if (phoneNumber is null) return BadRequest("PhoneNumber is null");
             var result = await athleteRepository.DoTrainingSession(phoneNumber, trainingSessionId, exerciseNumber);
             if (!result.Action) return BadRequest(result);
@@ -204,7 +204,7 @@ namespace sport_app_backend.Controller
         public async Task<IActionResult> FinishTrainingSession(
             [FromBody] FinishTrainingSessionDto finishTrainingSessionDto)
         {
-            var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
+            var phoneNumber = await GetAthletePhoneNumberAsync();
             if (phoneNumber is null) return BadRequest("PhoneNumber is null");
             var result = await athleteRepository.FinishTrainingSession(phoneNumber, finishTrainingSessionDto);
             if (!result.Action) return BadRequest(result);
@@ -218,7 +218,7 @@ namespace sport_app_backend.Controller
         public async Task<IActionResult> FeedbackTrainingSession(
             [FromBody] FeedbackTrainingSessionDto feedbackTrainingSessionDto)
         {
-            var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
+            var phoneNumber = await GetAthletePhoneNumberAsync();
             if (phoneNumber is null) return BadRequest("PhoneNumber is null");
             var result = await athleteRepository.FeedbackTrainingSession(phoneNumber, feedbackTrainingSessionDto);
             if (!result.Action) return BadRequest(result);
@@ -230,7 +230,7 @@ namespace sport_app_backend.Controller
         [Authorize(Roles = "Athlete")]
         public async Task<IActionResult> CalculateCalories([FromRoute] int trainingSessionId)
         {
-            var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
+            var phoneNumber = await GetAthletePhoneNumberAsync();
             if (phoneNumber is null) return BadRequest("PhoneNumber is null");
             var result = await athleteRepository.CalculateCalories(phoneNumber, trainingSessionId);
             if (!result.Action) return BadRequest(result);
@@ -242,7 +242,7 @@ namespace sport_app_backend.Controller
         [Authorize(Roles = "Athlete")]
         public async Task<IActionResult> ResetTrainingSession([FromRoute] int trainingSessionId)
         {
-            var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
+            var phoneNumber = await GetAthletePhoneNumberAsync();
             if (phoneNumber is null) return BadRequest("PhoneNumber is null");
             var result = await athleteRepository.ResetTrainingSession(phoneNumber, trainingSessionId);
             if (!result.Action) return BadRequest(result);
@@ -252,7 +252,7 @@ namespace sport_app_backend.Controller
         [Authorize(Roles = "Athlete")]
         public async Task<IActionResult> GetFaq()
         {
-            var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
+            var phoneNumber = await GetAthletePhoneNumberAsync();
             if (string.IsNullOrEmpty(phoneNumber))
             {
                 return Unauthorized(new ApiResponse { Action = false, Message = "خطای احراز هویت." });
@@ -266,6 +266,27 @@ namespace sport_app_backend.Controller
             }
 
             return Ok(result);
+        }
+        
+        private async Task<string?> GetAthletePhoneNumberAsync()
+        {
+            var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
+            if (!string.IsNullOrWhiteSpace(phoneNumber))
+            {
+                return phoneNumber;
+            }
+
+            var athleteIdClaim = User.FindFirst("athlete_id")?.Value;
+            if (!int.TryParse(athleteIdClaim, out var athleteId))
+            {
+                return null;
+            }
+
+            return await context.Athletes
+                .AsNoTracking()
+                .Where(a => a.Id == athleteId)
+                .Select(a => a.PhoneNumber)
+                .FirstOrDefaultAsync();
         }
         
         
