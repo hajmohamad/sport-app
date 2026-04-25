@@ -100,65 +100,64 @@ public class UserRepository(
 
     private async Task AddTemplateProgramForNewCouch(Coach coach, Gender gender)
     {
-        //
-        // AthleteQuestion? question;
-        // if (gender == Gender.MALE)
-        // {
-        //     question= await dbContext.AthleteQuestions.Include(aq=>aq.Athlete).FirstOrDefaultAsync(a=>a.Id==166);
-        // }
-        // else
-        // {
-        //     question = await dbContext.AthleteQuestions.FirstOrDefaultAsync(a=>a.AthleteId == athlete.Id);
-        // }
-        //
-        // if (question is null) return;
-        //
-        //
-        // var coachService = new CoachService
-        // {
-        //     Coach = coach,
-        //     Title = "برنامه ورزشی تستی",
-        //     Description = "این یک برنامه ورزشی تستی هست",
-        //     Price = 0,
-        //     IsActive = false,
-        //     IsDeleted = true
-        // };
-        //
-        // dbContext.CoachServices.Add(coachService);
-        // await dbContext.SaveChangesAsync();
-        //
-        //
-        // var payment = new Payment
-        // {
-        //     Coach = coach,
-        //     AthleteId = question.AthleteId,
-        //     CoachId = coach.Id,
-        //     CoachServiceId = coachService.Id,
-        //     PaymentStatus = PaymentStatus.SUCCESS,
-        //     Amount = 0,
-        //     Authority = "nothing",
-        //     AppFee = 0,
-        //     AthleteQuestionId = question.Id,
-        //         
-        // };
-        //
-        // dbContext.Payments.Add(payment);
-        // await dbContext.SaveChangesAsync(); 
-        //
-        //
-        // var workoutProgram = new WorkoutProgram
-        // {
-        //     Title = coachService.Title,
-        //     Coach = coach,
-        //     Athlete = athlete,
-        //     AthleteId = athlete.Id,
-        //     CoachId = coach.Id,
-        //     PaymentId = payment.Id,
-        //     Status = WorkoutProgramStatus.NOTSTARTED,
-        // };
-        //
-        // dbContext.WorkoutPrograms.Add(workoutProgram);
-        // await dbContext.SaveChangesAsync();
+        
+        AthleteQuestion? question;
+        if (gender == Gender.MALE)
+        {
+            question= await dbContext.AthleteQuestions.Include(aq=>aq.Athlete).FirstOrDefaultAsync(a=>a.Id==166);
+        }
+        else
+        {
+            question= await dbContext.AthleteQuestions.Include(aq=>aq.Athlete).FirstOrDefaultAsync(a=>a.Id==167);
+        }
+        
+        if (question is null) return;
+        
+        
+        var coachService = new CoachService
+        {
+            Coach = coach,
+            Title = "برنامه ورزشی تستی",
+            Description = "این یک برنامه ورزشی تستی هست",
+            Price = 0,
+            IsActive = false,
+            IsDeleted = true
+        };
+        
+        dbContext.CoachServices.Add(coachService);
+        await dbContext.SaveChangesAsync();
+        
+        
+        var payment = new Payment
+        {
+            Coach = coach,
+            AthleteId = question.AthleteId,
+            CoachId = coach.Id,
+            CoachServiceId = coachService.Id,
+            PaymentStatus = PaymentStatus.SUCCESS,
+            Amount = 0,
+            Authority = "nothing",
+            AppFee = 0,
+            AthleteQuestionId = question.Id,
+                
+        };
+        
+        dbContext.Payments.Add(payment);
+        await dbContext.SaveChangesAsync(); 
+        
+        
+        var workoutProgram = new WorkoutProgram
+        {
+            Title = coachService.Title,
+            Coach = coach,
+            AthleteId = question.AthleteId,
+            CoachId = coach.Id,
+            PaymentId = payment.Id,
+            Status = WorkoutProgramStatus.NOTSTARTED,
+        };
+        
+        dbContext.WorkoutPrograms.Add(workoutProgram);
+        await dbContext.SaveChangesAsync();
     }
 
 
