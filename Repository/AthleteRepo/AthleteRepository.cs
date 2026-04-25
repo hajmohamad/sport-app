@@ -39,6 +39,15 @@ namespace sport_app_backend.Repository.AthleteRepo
                 .FirstOrDefaultAsync();
         }
 
+        private async Task<int?> ResolveAthleteIdByPhone(string phoneNumber)
+        {
+            return await context.Athletes
+                .AsNoTracking()
+                .Where(a => a.PhoneNumber == phoneNumber)
+                .Select(a => (int?)a.Id)
+                .FirstOrDefaultAsync();
+        }
+
         public async Task<ApiResponse> WorkoutProgramFeedback(int athleteId, FeedbackWorkoutProgramDto feedbackWorkoutProgramDto)
         {
             var phoneNumber = await ResolveAthletePhoneById(athleteId);
@@ -49,10 +58,39 @@ namespace sport_app_backend.Repository.AthleteRepo
 
         public async Task<ApiResponse> AthleteFirstQuestions(int athleteId, AthleteFirstQuestionsDto athleteFirstQuestionsDto)
         {
-            var phoneNumber = await ResolveAthletePhoneById(athleteId);
-            return string.IsNullOrEmpty(phoneNumber)
-                ? new ApiResponse { Action = false, Message = "User is not an athlete" }
-                : await AthleteFirstQuestions(phoneNumber, athleteFirstQuestionsDto);
+            var user = await context.Users
+                .Include(u => u.Athlete)
+                .FirstOrDefaultAsync(u => u.Athlete != null && u.Athlete.Id == athleteId);
+            if (user is null) return new ApiResponse { Action = false, Message = "User not found" };
+
+            var athlete = user.Athlete;
+            if (athlete is null)
+            {
+                return new ApiResponse { Action = false, Message = "User is not an athlete" };
+            }
+
+            athlete.Height = athleteFirstQuestionsDto.Height;
+            athlete.CurrentWeight = athleteFirstQuestionsDto.CurrentWeight;
+            var weightEntry = new WeightEntry
+            {
+                Athlete = athlete,
+                AthleteId = athlete.Id,
+                CurrentDate = DateTime.Now,
+                Weight = athleteFirstQuestionsDto.CurrentWeight
+            };
+            await context.WeightEntries.AddAsync(weightEntry);
+            user.LastName = athleteFirstQuestionsDto.LastName;
+            user.FirstName = athleteFirstQuestionsDto.FirstName;
+            await context.SaveChangesAsync();
+            return new ApiResponse
+            {
+                Message = "Athlete first questions submitted successfully",
+                Action = true,
+                Result = new
+                {
+                    Questions = true
+                }
+            };
         }
 
         public async Task<ApiResponse> GetAllPayments(int athleteId)
@@ -164,10 +202,11 @@ namespace sport_app_backend.Repository.AthleteRepo
 
         public async Task<ApiResponse> WorkoutProgramFeedback(string phoneNumber, FeedbackWorkoutProgramDto feedbackWorkoutProgramDto)
         {
-            var user = await context.Users.Include(a => a.Athlete)
-                .FirstOrDefaultAsync(a => a.PhoneNumber == phoneNumber);
-            if (user is null) return new ApiResponse() { Message = "User not found", Action = false };
-            var athlete = user.Athlete;
+            var athleteId = await ResolveAthleteIdByPhone(phoneNumber);
+            if (athleteId is null) return new ApiResponse() { Message = "User not found", Action = false };
+            var athlete = await context.Athletes
+                .Include(a => a.User)
+                .FirstOrDefaultAsync(a => a.Id == athleteId.Value);
             if (athlete is null)
                 return new ApiResponse()
                     { Message = "User is not an athlete", Action = false }; 
@@ -219,7 +258,8 @@ namespace sport_app_backend.Repository.AthleteRepo
         public async Task<ApiResponse> AthleteFirstQuestions(string phoneNumber,
             AthleteFirstQuestionsDto athleteFirstQuestionsDto)
         {
-            var user = await context.Users.Include(a => a.Athlete)
+            var user = await context.Users
+                .Include(a => a.Athlete)
                 .FirstOrDefaultAsync(x => x.PhoneNumber == phoneNumber);
             if (user is null) return new ApiResponse() { Message = "User not found", Action = false };
             var athlete = user.Athlete;
@@ -255,9 +295,20 @@ namespace sport_app_backend.Repository.AthleteRepo
 
         public async Task<ApiResponse> GetAllPayments(string phoneNumber)
         {
+            var athleteId = await ResolveAthleteIdByPhone(phoneNumber);
+            if (athleteId is null)
+            {
+                return new ApiResponse()
+                {
+                    Action = true,
+                    Message = "No payment history found",
+                    Result = new List<AllPaymentResponseDto>()
+                };
+            }
+
             var paymentDtos = await context.WorkoutPrograms
                 .AsNoTracking()
-                .Where(wp => wp.Athlete.PhoneNumber == phoneNumber && wp.Status != WorkoutProgramStatus.REFUND)
+                .Where(wp => wp.AthleteId == athleteId.Value && wp.Status != WorkoutProgramStatus.REFUND)
                 .OrderByDescending(wp => wp.Payment.PaymentDate)
                 .Select(wp => new 
                 {
@@ -332,9 +383,15 @@ namespace sport_app_backend.Repository.AthleteRepo
 
         public async Task<ApiResponse> GetPayment(string phoneNumber, int paymentId)
         {
+            var athleteId = await ResolveAthleteIdByPhone(phoneNumber);
+            if (athleteId is null)
+            {
+                return new ApiResponse { Message = "Payment not found for this user", Action = false };
+            }
+
             var paymentData = await context.Payments
                 .AsNoTracking()
-                .Where(p => p.Id == paymentId && p.Athlete.PhoneNumber == phoneNumber)
+                .Where(p => p.Id == paymentId && p.AthleteId == athleteId.Value)
                 .Select(payment => new
                 {
                     Payment = payment,
@@ -403,8 +460,14 @@ namespace sport_app_backend.Repository.AthleteRepo
 
         public async Task<ApiResponse> ActiveProgram(string phoneNumber, int paymentId)
         {
+            var athleteId = await ResolveAthleteIdByPhone(phoneNumber);
+            if (athleteId is null)
+            {
+                return new ApiResponse { Action = false, Message = "Athlete not found" };
+            }
+
             var athlete = await context.Athletes.Include(a => a.WorkoutPrograms)
-                .FirstOrDefaultAsync(a => a.PhoneNumber == phoneNumber&&a.WorkoutPrograms.Any(wp => wp.PaymentId == paymentId));
+                .FirstOrDefaultAsync(a => a.Id == athleteId.Value && a.WorkoutPrograms.Any(wp => wp.PaymentId == paymentId));
 
             if (athlete == null)
             {
@@ -585,9 +648,15 @@ namespace sport_app_backend.Repository.AthleteRepo
 
         public async Task<ApiResponse> GetAllTrainingSession(string phoneNumber)
 {
+    var athleteId = await ResolveAthleteIdByPhone(phoneNumber);
+    if (athleteId is null)
+    {
+        return new ApiResponse() { Message = "Athlete not found", Action = true, Result = null };
+    }
+
     var resultData = await context.WorkoutPrograms
         .AsNoTracking()
-        .Where(wp => wp.Athlete.PhoneNumber == phoneNumber && wp.Status == WorkoutProgramStatus.ACTIVE)
+        .Where(wp => wp.AthleteId == athleteId.Value && wp.Status == WorkoutProgramStatus.ACTIVE)
         .Select(wp => new
         {
             ProgramName = wp.Title,

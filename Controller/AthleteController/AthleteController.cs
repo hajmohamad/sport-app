@@ -270,23 +270,21 @@ namespace sport_app_backend.Controller
         
         private async Task<string?> GetAthletePhoneNumberAsync()
         {
-            var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
-            if (!string.IsNullOrWhiteSpace(phoneNumber))
-            {
-                return phoneNumber;
-            }
-
             var athleteIdClaim = User.FindFirst("athlete_id")?.Value;
             if (!int.TryParse(athleteIdClaim, out var athleteId))
             {
-                return null;
+                return User.FindFirst(ClaimTypes.Name)?.Value;
             }
 
-            return await context.Athletes
+            var phoneNumber = await context.Athletes
                 .AsNoTracking()
                 .Where(a => a.Id == athleteId)
                 .Select(a => a.PhoneNumber)
                 .FirstOrDefaultAsync();
+
+            return string.IsNullOrWhiteSpace(phoneNumber)
+                ? User.FindFirst(ClaimTypes.Name)?.Value
+                : phoneNumber;
         }
         
         
