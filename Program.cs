@@ -174,8 +174,10 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<ICoachRepository, CoachRepository>();
 builder.Services.AddScoped<IWebPushNotificationService, WebPushNotificationService>();
 builder.Services.AddScoped<INotification,NotificationRepository>();
-builder.Services.AddHostedService<TrainingReminderService>();
+// builder.Services.AddHostedService<TrainingReminderService>();
 builder.Services.AddHostedService<ProgramRenewalReminderService>();
+builder.Services.AddHostedService<QuestionReminderService >();
+
 builder.Services.AddScoped<IAthleteRepository, AthleteRepository>();
 builder.Services.AddScoped<IAdminRepository, AdminRepository>();
 builder.Services.AddScoped<IBuyFromSiteRepository, BuyFromSiteRepository>();
