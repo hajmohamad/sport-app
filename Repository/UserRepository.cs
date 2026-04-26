@@ -15,6 +15,7 @@ using sport_app_backend.Models.Payments;
 using sport_app_backend.Models.Program;
 using sport_app_backend.Models.Question.A_Question;
 using sport_app_backend.Models.SupportApp;
+using sport_app_backend.Models.TrainingPlan;
 
 namespace sport_app_backend.Repository;
 

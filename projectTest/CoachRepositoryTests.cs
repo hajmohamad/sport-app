@@ -896,7 +896,8 @@ namespace sport_app_backend.projectTest
             {
                 PhoneNumber = "09121234567",
                 FirstName = "Coach",
-                LastName = "Test"
+                LastName = "Test",
+                BirthDate = new DateTime(2000, 1, 1),
             };
             var coach = new Coach
             {
@@ -943,7 +944,7 @@ namespace sport_app_backend.projectTest
         [Fact]
         public async Task GetProfile_ExcludesDeletedCoachingServices()
         {
-            var user = new User { PhoneNumber = "09121234567" };
+            var user = new User { PhoneNumber = "09121234567" ,BirthDate = new DateTime(2000, 1, 1) };
             var service1 = new CoachService { Title = "Active", Description = "Active service", Price = 100000, IsDeleted = false };
             var service2 = new CoachService { Title = "Deleted", Description = "Deleted service", Price = 150000, IsDeleted = true };
             
