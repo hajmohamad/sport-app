@@ -127,7 +127,65 @@ namespace sport_app_backend.Controller
             return Ok(new ApiResponse { Action = true, Message = "Coaching Service found", Result = coachingServiceDto });
 
         }
-       
+
+        [HttpPost("coaching-services/{serviceId:int}/discount-codes")]
+        [Authorize(Roles = "Coach")]
+        public async Task<IActionResult> CreateDiscountCode([FromRoute] int serviceId,
+            [FromBody] DiscountCodeCreateDto discountCodeCreateDto)
+        {
+            var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
+            if (phoneNumber is null) return BadRequest(new ApiResponse { Action = false, Message = "PhoneNumber is null" });
+            var result = await coachRepository.CreateDiscountCode(phoneNumber, serviceId, discountCodeCreateDto);
+            if (!result.Action) return BadRequest(result);
+            return Ok(result);
+        }
+
+        [HttpPut("discount-codes/{discountCodeId:int}")]
+        [Authorize(Roles = "Coach")]
+        public async Task<IActionResult> UpdateDiscountCode([FromRoute] int discountCodeId,
+            [FromBody] DiscountCodeUpdateDto discountCodeUpdateDto)
+        {
+            var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
+            if (phoneNumber is null) return BadRequest(new ApiResponse { Action = false, Message = "PhoneNumber is null" });
+            var result = await coachRepository.UpdateDiscountCode(phoneNumber, discountCodeId, discountCodeUpdateDto);
+            if (!result.Action) return BadRequest(result);
+            return Ok(result);
+        }
+
+        [HttpGet("discount-codes")]
+        [Authorize(Roles = "Coach")]
+        public async Task<IActionResult> GetDiscountCodes()
+        {
+            var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
+            if (phoneNumber is null) return BadRequest(new ApiResponse { Action = false, Message = "PhoneNumber is null" });
+            var result = await coachRepository.GetDiscountCodes(phoneNumber);
+            if (!result.Action) return BadRequest(result);
+            return Ok(result);
+        }
+
+        [HttpGet("discount-codes/{discountCodeId:int}")]
+        [Authorize(Roles = "Coach")]
+        public async Task<IActionResult> GetDiscountCode([FromRoute] int discountCodeId)
+        {
+            var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
+            if (phoneNumber is null) return BadRequest(new ApiResponse { Action = false, Message = "PhoneNumber is null" });
+            var result = await coachRepository.GetDiscountCodeById(phoneNumber, discountCodeId);
+            if (!result.Action) return BadRequest(result);
+            return Ok(result);
+        }
+
+        [HttpPut("discount-codes/{discountCodeId:int}/disable")]
+        [Authorize(Roles = "Coach")]
+        public async Task<IActionResult> DisableDiscountCode([FromRoute] int discountCodeId)
+        {
+            var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
+            if (phoneNumber is null) return BadRequest(new ApiResponse { Action = false, Message = "PhoneNumber is null" });
+            var result = await coachRepository.DisableDiscountCode(phoneNumber, discountCodeId);
+            if (!result.Action) return BadRequest(result);
+            return Ok(result);
+        }
+
+        
 
         
         [HttpGet("get_all_payment")]
@@ -283,20 +341,7 @@ namespace sport_app_backend.Controller
 
             return Ok(result);
         }
-        [HttpGet("test")]
-        public async Task<IActionResult> test()
-        {
-         
-
-            var result = await coachRepository.Test();
-
-            if (!result.Action)
-            {
-                return BadRequest(result);
-            }
-
-            return Ok(result);
-        }
+        
         [HttpGet("getwpkey")]
         public async Task<IActionResult> getwpkey([FromQuery]int workoutProgramId)
         {

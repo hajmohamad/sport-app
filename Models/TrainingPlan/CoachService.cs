@@ -1,9 +1,9 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using sport_app_backend.Models.TrainingPlan;
-using sport_app_backend.Models.TrainingService;
+using sport_app_backend.Models.Account;
+using sport_app_backend.Models.Payments;
 
-namespace sport_app_backend.Models.Account;
+namespace sport_app_backend.Models.TrainingPlan;
 
 public class CoachService
 {
@@ -25,4 +25,8 @@ public class CoachService
     // public TypeOfCoachingServices TypeOfCoachingServices { get; set; }
     public bool IsDeleted { get; set; } = false;
     public  int NumberOfSell { get; set; } = 0;
+    public int? PublicDiscountPercent { get; set; }
+    public DateTime? PublicDiscountExpiresAt { get; set; }
+    public int? UsageLimit { get; set; }
+    public int? NumberOfSellWithDiscount { get; set; }
 }

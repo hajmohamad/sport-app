@@ -495,7 +495,7 @@ private async Task<string> GenerateUniqueUsername()
         AthleteWeight = workoutData.AthleteCurrentWeight.ToString(),
         AthleteHeight = workoutData.AthleteHeight.ToString(),
         AthleteBmi = Math.Round(bmi, 2).ToString(), 
-        AthleteFatPercentage = workoutData.AhtleteGender.GetFatPercentageRange(workoutData.AthleteCurrentBodyForm),
+        AthleteFatPercent = workoutData.AhtleteGender.GetFatPercentRange(workoutData.AthleteCurrentBodyForm),
         WorkoutDays = workoutData.ProgramInDays.Select(pd => new WorkoutDayModel
         {
             DayNumber = pd.ForWhichDay,
