@@ -36,6 +36,7 @@
       &lt;TestId&gt;xUnit::27B63680-A5B7-55C3-C88B-EBD5D7F12023::net8.0::sport_app_backend.Tests.BackgroundServices.TrainingReminderServiceTests&lt;/TestId&gt;
     &lt;/TestAncestor&gt;
     &lt;Project Location="/Users/mohamad/RiderProjects/sport-app/projectTest" Presentation="&amp;lt;projectTest&amp;gt;" /&gt;
+    &lt;Project Location="/Users/mohamadrahi/RiderProjects/sport-app/projectTest" Presentation="&amp;lt;projectTest&amp;gt;" /&gt;
   &lt;/Or&gt;
 &lt;/SessionState&gt;</s:String>
 	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=a96ffe3b_002Dfc64_002D412f_002D8c18_002D740928fa63a3/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="AthleteRepositoryTests" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;

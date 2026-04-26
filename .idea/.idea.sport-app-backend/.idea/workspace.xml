@@ -11,18 +11,20 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="11e104f8-869d-4d9d-9802-b48455f5eb31" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/dataSources/b995594b-b1c6-4f7b-a3d8-4a5b1ad21ad7.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/dataSources/b995594b-b1c6-4f7b-a3d8-4a5b1ad21ad7.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/dataSources.local.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Controller/CoachController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Controller/CoachController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dtos/TransactionDto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Dtos/TransactionDto.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Interface/Coach/ICoachRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Interface/Coach/ICoachRepository.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Repository/BuyFromSiteRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Repository/BuyFromSiteRepository.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Repository/CoachRepo/CoachRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Repository/CoachRepo/CoachRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Migrations/ApplicationDbContextModelSnapshot.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Migrations/ApplicationDbContextModelSnapshot.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sport-app-backend.sln.DotSettings.user" beforeDir="false" afterPath="$PROJECT_DIR$/sport-app-backend.sln.DotSettings.user" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="CopilotPersistence">
+    <persistenceIdMap>
+      <entry key="_/Users/mohamadrahi/RiderProjects/sport-app" value="33LTBgyByjRLtpKJCaU5yg8dssQ" />
+    </persistenceIdMap>
   </component>
   <component name="DpaMonitoringSettings">
     <option name="firstShow" value="false" />
@@ -52,12 +54,12 @@
     }
   ]
 }</component>
-  <component name="GithubPullRequestsUISettings">{
-  &quot;selectedUrlAndAccountId&quot;: {
-    &quot;url&quot;: &quot;https://github.com/charset-project/sport-app.git&quot;,
-    &quot;accountId&quot;: &quot;eb9a479a-647b-45ee-992f-78d9a638bc32&quot;
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "https://github.com/hajmohamad/sport-app.git",
+    "accountId": "1fc8f194-e272-424d-9edc-d528bf1f1825"
   }
-}</component>
+}]]></component>
   <component name="HighlightingSettingsPerFile">
     <setting file="file://$PROJECT_DIR$/BackgroundServices/ProgramRenewalReminderService.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/BackgroundServices/TrainingReminderService.cs" root0="FORCE_HIGHLIGHTING" />
@@ -130,7 +132,7 @@
     &quot;RunOnceActivity.typescript.service.memoryLimit.init&quot;: &quot;true&quot;,
     &quot;database.data.extractors.current.export.id&quot;: &quot;Comma-separated (CSV)_id&quot;,
     &quot;full.screen.before.presentation.mode&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;Discount&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;stagingMain&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
@@ -325,6 +327,7 @@
       <workItem from="1776780865023" duration="1761000" />
       <workItem from="1776794397911" duration="232000" />
       <workItem from="1776852419288" duration="11274000" />
+      <workItem from="1777223331961" duration="992000" />
     </task>
     <task id="LOCAL‎−۰۰۰۰۱" summary="edit getpayment method">
       <option name="closed" value="true" />
@@ -630,7 +633,23 @@
       <option name="project" value="LOCAL" />
       <updated>1776623248149</updated>
     </task>
-    <option name="localTasksCounter" value="41" />
+    <task id="LOCAL-00041" summary="fix merge">
+      <option name="closed" value="true" />
+      <created>1777223691494</created>
+      <option name="number" value="00041" />
+      <option name="presentableId" value="LOCAL-00041" />
+      <option name="project" value="LOCAL" />
+      <updated>1777223691494</updated>
+    </task>
+    <task id="LOCAL-00042" summary="edit Dockerfile">
+      <option name="closed" value="true" />
+      <created>1777223797575</created>
+      <option name="number" value="00042" />
+      <option name="presentableId" value="LOCAL-00042" />
+      <option name="project" value="LOCAL" />
+      <updated>1777223797575</updated>
+    </task>
+    <option name="localTasksCounter" value="43" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -659,7 +678,7 @@
                   <entry key="branch">
                     <value>
                       <list>
-                        <option value="server/stagingMain" />
+                        <option value="stagingMain" />
                       </list>
                     </value>
                   </entry>
@@ -673,8 +692,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
-    <MESSAGE value="remove Bio and Line" />
-    <MESSAGE value="add firstName And LastName to roleAndGender" />
     <MESSAGE value="edit ear method" />
     <MESSAGE value="edit ear" />
     <MESSAGE value="change responce off role method" />
@@ -698,7 +715,9 @@
     <MESSAGE value="edit endpoint" />
     <MESSAGE value="fix CoachRepository.cs" />
     <MESSAGE value="fix name" />
-    <option name="LAST_COMMIT_MESSAGE" value="fix name" />
+    <MESSAGE value="fix merge" />
+    <MESSAGE value="edit Dockerfile" />
+    <option name="LAST_COMMIT_MESSAGE" value="edit Dockerfile" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
