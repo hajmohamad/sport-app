@@ -25,10 +25,8 @@ namespace sport_app_backend.Interface.Coach
         Task<ApiResponse> AthleteReportForCoach(int athleteId);
         Task<ApiResponse> AthleteMonthlyActivityForCoach(int athleteId, int year, int month);
         Task<ApiResponse> GetFaq();
-        Task<ApiResponse> Test();
         Task<ApiResponse> GetWPkey(int workoutProgramId);
         Task<ApiResponse> GetWorkoutProgramFeedBack(string phoneNumber);
-        Task<ApiResponse> ChoseWorkoutProgramFeedBack(string phoneNumber, int id);
         Task<ApiResponse> CreateDiscountCode(string phoneNumber, int serviceId, DiscountCodeCreateDto discountCodeCreateDto);
         Task<ApiResponse> UpdateDiscountCode(string phoneNumber, int discountCodeId, DiscountCodeUpdateDto discountCodeUpdateDto);
         Task<ApiResponse> GetDiscountCodes(string phoneNumber);

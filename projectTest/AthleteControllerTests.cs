@@ -135,7 +135,7 @@ namespace sport_app_backend.Controller
                 CurrentWeight = 75,
                 WeightGoal = 70,
                 UserId = 1,
-                User = new User { PhoneNumber = "09121234567", FirstName = "John" }
+                User = new User { PhoneNumber = "09121234567", FirstName = "John" ,                 BirthDate = new DateTime(2000, 1, 1), }
             };
             athlete.WaterInTake = new WaterInTake { DailyCupOfWater = 8 };
 
@@ -145,7 +145,8 @@ namespace sport_app_backend.Controller
                 PhoneNumber = "09121234567",
                 FirstName = "John",
                 Athlete = athlete,
-                Gender = Gender.MALE
+                Gender = Gender.MALE,
+                BirthDate = new DateTime(2000, 1, 1),
             };
             athlete.User = user;
 
