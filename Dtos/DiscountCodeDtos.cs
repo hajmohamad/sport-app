@@ -8,7 +8,6 @@ public class DiscountCodeCreateDto
     public required string Code { get; set; }
     public required int DiscountPercent { get; set; }
     public int? UsageLimit { get; set; }
-    public DateTime? StartsAt { get; set; }
     public DateTime? ExpiresAt { get; set; }
 }
 

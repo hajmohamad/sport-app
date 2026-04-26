@@ -128,14 +128,14 @@ namespace sport_app_backend.Controller
 
         }
 
-        [HttpPost("coaching-services/{serviceId:int}/discount-codes")]
+        [HttpPost("coaching-services/discount-codes")]
         [Authorize(Roles = "Coach")]
-        public async Task<IActionResult> CreateDiscountCode([FromRoute] int serviceId,
+        public async Task<IActionResult> CreateDiscountCode(
             [FromBody] DiscountCodeCreateDto discountCodeCreateDto)
         {
             var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
             if (phoneNumber is null) return BadRequest(new ApiResponse { Action = false, Message = "PhoneNumber is null" });
-            var result = await coachRepository.CreateDiscountCode(phoneNumber, serviceId, discountCodeCreateDto);
+            var result = await coachRepository.CreateDiscountCode(phoneNumber, discountCodeCreateDto);
             if (!result.Action) return BadRequest(result);
             return Ok(result);
         }
