@@ -237,7 +237,7 @@ namespace sport_app_backend.Repository.CoachRepo
             };
         }
 
-        public async Task<ApiResponse> CreateDiscountCode(string phoneNumber, int serviceId,
+        public async Task<ApiResponse> CreateDiscountCode(string phoneNumber,
             DiscountCodeCreateDto discountCodeCreateDto)
         {
             var coach = await context.Coaches
@@ -248,12 +248,7 @@ namespace sport_app_backend.Repository.CoachRepo
                 return new ApiResponse { Action = false, Message = "User is not a coach" };
             }
 
-            var service = coach.CoachingServices.FirstOrDefault(x => x.Id == serviceId && !x.IsDeleted);
-            if (service is null)
-            {
-                return new ApiResponse { Action = false, Message = "سرویس کوچینگ یافت نشد." };
-            }
-
+        
             var validation = await ValidateDiscountCodeInput(discountCodeCreateDto.Code,
                 discountCodeCreateDto.DiscountPercent, discountCodeCreateDto.UsageLimit,
                 discountCodeCreateDto.ExpiresAt, null);

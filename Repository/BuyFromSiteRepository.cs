@@ -1025,7 +1025,7 @@ public class BuyFromSiteRepository(
         if (discountCodeValue is null)
         {
             publicDiscountAmount= coachService.CalculatePublicDiscountAmount();
-            publicDiscountPercent = (double)coachService.PublicDiscountPercent! ;
+            publicDiscountPercent = coachService.PublicDiscountPercent?? 0 ;
             finalPrice = originalPrice - publicDiscountAmount;
         }else{
             var discountCodeValidation =
