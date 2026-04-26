@@ -21,7 +21,8 @@ public interface IBuyFromSiteRepository
 
     public Task<ApiResponse> GetExercise(int exerciseId);
     public Task<ApiResponse> CreateWorkoutPdfAsync(string wPkey);
-    Task<ApiResponse> BuyCoachingService(string phoneNumber, int serviceId);
+    Task<ApiResponse> BuyCoachingService(string phoneNumber, int serviceId, CheckoutDiscountRequestDto? checkoutDiscountRequestDto);
+    Task<ApiResponse> PreviewCheckout(string phoneNumber, int serviceId, CheckoutDiscountRequestDto? checkoutDiscountRequestDto);
     public Task<ApiResponse> RemoveImageForAthleteQuestion(string wPkey, int id, string sideName);
     public Task<ApiResponse> GetImageForAthleteQuestion(string wPkey, int id);
 }

@@ -26,12 +26,5 @@
       </jdbc-additional-properties>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
-    <data-source source="LOCAL" name="MvcMovieContext-69c678d9-0976-406c-9d44-239ed1395d90" uuid="93ca2895-4e31-40f8-b389-56130b0bd528">
-      <driver-ref>sqlite.xerial</driver-ref>
-      <synchronize>true</synchronize>
-      <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
-      <jdbc-url>jdbc:sqlite:$PROJECT_DIR$/MvcMovieContext-69c678d9-0976-406c-9d44-239ed1395d90.db</jdbc-url>
-      <working-dir>$ProjectFileDir$</working-dir>
-    </data-source>
   </component>
 </project>

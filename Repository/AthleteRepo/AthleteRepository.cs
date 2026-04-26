@@ -1,4 +1,3 @@
-using System.Diagnostics;
 using System.Globalization;
 using Microsoft.EntityFrameworkCore;
 using sport_app_backend.Controller;
@@ -71,7 +70,7 @@ namespace sport_app_backend.Repository.AthleteRepo
                 
             }
             
-            var feedBack = new WorkoutProgramFeedback()
+            var feedBack = new WorkoutProgramFeedback
             {
                 AthleteId = athlete.Id,
                 CouchId = workoutProgram.CoachId,
@@ -86,6 +85,9 @@ namespace sport_app_backend.Repository.AthleteRepo
             await context.WorkoutProgramFeedback.AddAsync(feedBack);
             await context.SaveChangesAsync();
             
+            
+
+
             return new ApiResponse()
             {
                 Action = true,
@@ -156,9 +158,6 @@ namespace sport_app_backend.Repository.AthleteRepo
                     wp.Coach.WebSiteUrl
                 })
                 .ToListAsync();
-          
-
-        
 
             if (!paymentDtos.Any())
             {
@@ -734,7 +733,7 @@ namespace sport_app_backend.Repository.AthleteRepo
                 RestBetweenSetsSec = priorities.Average(p => TrainingGoalParameters.Parameters[p].RestBetweenSetsSec),
                 RestBetweenMovesSec = priorities.Average(p => TrainingGoalParameters.Parameters[p].RestBetweenMovesSec),
                 TimePerRepSec = priorities.Average(p => TrainingGoalParameters.Parameters[p].TimePerRepSec),
-                EpocPercentage = priorities.Average(p => TrainingGoalParameters.Parameters[p].EpocPercentage)
+                EpocPercent = priorities.Average(p => TrainingGoalParameters.Parameters[p].EpocPercent)
             };
 
             double totalCaloriesActiveAndRestSets = 0;
@@ -786,7 +785,7 @@ namespace sport_app_backend.Repository.AthleteRepo
             var totalCaloriesBeforeEpoc = totalCaloriesActiveAndRestSets + caloriesRestMoves;
 
 
-            var finalCalories = totalCaloriesBeforeEpoc * (1 + avgParams.EpocPercentage);
+            var finalCalories = totalCaloriesBeforeEpoc * (1 + avgParams.EpocPercent);
 
             return Math.Round(finalCalories, 2);
         }
