@@ -128,7 +128,7 @@ namespace sport_app_backend.Controller
 
         }
 
-        [HttpPost("coaching-services/discount-codes")]
+        [HttpPost("discount-codes/add-discount")]
         [Authorize(Roles = "Coach")]
         public async Task<IActionResult> CreateDiscountCode(
             [FromBody] DiscountCodeCreateDto discountCodeCreateDto)
