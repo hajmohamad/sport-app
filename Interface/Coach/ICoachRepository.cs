@@ -34,5 +34,17 @@ namespace sport_app_backend.Interface.Coach
         Task<ApiResponse> DisableDiscountCode(string phoneNumber, int discountCodeId);
         Task<ApiResponse> ChoseWorkoutProgramFeedBack(string phoneNumber,List<ChoseWorkoutProgramFeedBackDto> choseWorkoutProgramFeedBackDtOs);
 
+        Task<(IEnumerable<AllExerciseResponseDto> Exercises, int TotalCount)> GetExercisesWithFilterForCoach(string? level,
+            string? type,
+            string? mechanic,
+            string?[] equipment,
+            string? muscle,
+            string? place,
+            int page,
+            int pageSize, string? searchTerm,int? athleteId, int couchId);
+
+        Task<ApiResponse> AddPineExercise(int exerciseId, int coachId);
+        Task<ApiResponse> RemovePineExercise(int exerciseId, int coachId);
+
     }
 }
