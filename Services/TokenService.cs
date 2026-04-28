@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using sport_app_backend.Data;
+using sport_app_backend.Dtos;
 using sport_app_backend.Interface;
 using sport_app_backend.Models;
 using sport_app_backend.Models.Account;
@@ -69,7 +70,7 @@ public class TokenService: ITokenService
         return user.SiteRefreshToken;
     }
 
-    public string CreateToken(User user)
+    public string CreateTokenForApp(TokenUserDto user)
     {
         var claims = new List<Claim>
         {
@@ -78,18 +79,14 @@ public class TokenService: ITokenService
             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
         };
 
-        if (user.TypeOfUser == TypeOfUser.COACH)
+        if (user is { TypeOfUser: TypeOfUser.COACH, CoachId: not null })
         {
-            var coachId = _context.Coaches
-                .AsNoTracking()
-                .Where(c => c.UserId == user.Id)
-                .Select(c => c.Id)
-                .FirstOrDefault();
+            claims.Add(new Claim("coach_id", user.CoachId.Value.ToString()));
+        }
 
-            if (coachId > 0)
-            {
-                claims.Add(new Claim("coach_id", coachId.ToString()));
-            }
+        if (user is { TypeOfUser: TypeOfUser.ATHLETE, AthleteId: not null })
+        {
+            claims.Add(new Claim("athlete_id", user.AthleteId.Value.ToString()));
         }
 
         var userRoles = user.TypeOfUser switch
@@ -116,6 +113,41 @@ public class TokenService: ITokenService
         var token = tokenHandler.CreateToken(tokenDescriptor);
         return tokenHandler.WriteToken(token);
     }
+    public string CreateTokenForSite(User user)
+    {
+        var claims = new List<Claim>
+        {
+            new Claim(ClaimTypes.Name, user.PhoneNumber),
+            new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+        };
+
+        var userRoles = user.TypeOfUser switch
+        {
+            TypeOfUser.COACH => new[] { "Coach" },
+            TypeOfUser.ATHLETE => new[] { "Athlete" },
+            TypeOfUser.NONE => new[] { "None" },
+            TypeOfUser.ADMIN => throw new NotImplementedException(),
+            _ => throw new NotImplementedException(),
+        };
+        
+        
+        claims.AddRange(userRoles.Select(role => new Claim(ClaimTypes.Role, role)));
+        var tokenDescriptor = new SecurityTokenDescriptor
+        {
+            Subject = new ClaimsIdentity(claims),
+            Expires = DateTime.Now.AddMinutes(5),
+            SigningCredentials = new SigningCredentials(_key, SecurityAlgorithms.HmacSha512Signature),
+            Issuer = _config["JWT:Issuer"],
+            Audience = _config["JWT:Audience"]
+        };
+
+        var tokenHandler = new JwtSecurityTokenHandler();
+        var token = tokenHandler.CreateToken(tokenDescriptor);
+        return tokenHandler.WriteToken(token);
+    }
+
+
 
     
 

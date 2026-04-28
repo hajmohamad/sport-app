@@ -63,7 +63,13 @@ public class UserRepository(
                     Result = new AddRoleResponse()
                     {
                         RefreshToken = user.RefreshToken,
-                        AccessToken = tokenService.CreateToken(user),
+                        AccessToken = tokenService.CreateTokenForApp(new TokenUserDto()
+                        {
+                            CoachId = coach.Id,
+                            Id =  user.Id,
+                            PhoneNumber = user.PhoneNumber,
+                            TypeOfUser = TypeOfUser.COACH
+                        }),
                         TypeOfUser = user.TypeOfUser.ToString(),
                         Gender = user.Gender.ToString(),
                         Questions= true 
@@ -88,8 +94,13 @@ public class UserRepository(
                     Result = new AddRoleResponse()
                     {
                         RefreshToken = user.RefreshToken,
-                        AccessToken = tokenService.CreateToken(user),
-                        TypeOfUser = user.TypeOfUser.ToString(),
+                        AccessToken = tokenService.CreateTokenForApp(new TokenUserDto()
+                        {
+                            CoachId = user.Athlete.Id,
+                            Id =  user.Id,
+                            PhoneNumber = user.PhoneNumber,
+                            TypeOfUser = TypeOfUser.ATHLETE
+                        }),                        TypeOfUser = user.TypeOfUser.ToString(),
                         Gender = user.Gender.ToString(),
                         Questions= true 
                         }
@@ -164,30 +175,30 @@ public class UserRepository(
 
     public async Task<ApiResponse> CheckCode(CheckCodeRequestDto checkCodeRequestDto)
 {
-    var user = await dbContext.CodeVerifies.FirstOrDefaultAsync(x => x.PhoneNumber == checkCodeRequestDto.PhoneNumber);
-    if (user == null)
+    var code = await dbContext.CodeVerifies.FirstOrDefaultAsync(x => x.PhoneNumber == checkCodeRequestDto.PhoneNumber);
+    if (code == null)
     {
         return new ApiResponse { Action = false, Message = "CodeIsNotCorrect" };
     }
     
 
     
-    if (user.TimeCodeSend.AddMinutes(15) < DateTime.Now)
+    if (code.TimeCodeSend.AddMinutes(15) < DateTime.Now)
     {
-        dbContext.CodeVerifies.Remove(user);
+        dbContext.CodeVerifies.Remove(code);
         await dbContext.SaveChangesAsync();
         return new ApiResponse { Action = false, Message = "Code Expired" };
         
     }
     
-    if (user.Code != checkCodeRequestDto.Code)
+    if (code.Code != checkCodeRequestDto.Code)
     {
         return new ApiResponse { Action = false, Message = "CodeIsNotCorrect" };
     }
-    dbContext.CodeVerifies.Remove(user);
+    dbContext.CodeVerifies.Remove(code);
     await dbContext.SaveChangesAsync();
     
-    var userEntity = await dbContext.Users.FirstOrDefaultAsync(x => x.PhoneNumber == checkCodeRequestDto.PhoneNumber);
+    var userEntity = await dbContext.Users.Include(u=>u.Athlete).Include(u=>u.Coach).FirstOrDefaultAsync(x => x.PhoneNumber == checkCodeRequestDto.PhoneNumber);
     if (userEntity != null)
     {
         var questions = userEntity.FirstName  is not "";
@@ -209,7 +220,16 @@ private async Task<ApiResponse> GenerateSuccessResponse(User user,bool question)
         Result = new CheckCodeResponseDto
         {
             RefreshToken = await tokenService.CreateRefreshToken(user),
-            AccessToken = tokenService.CreateToken(user),
+            AccessToken = tokenService.CreateTokenForApp(new TokenUserDto()
+            {
+                Id = user.Id,
+                TypeOfUser = user.TypeOfUser,
+                AthleteId = user.Athlete?.Id,
+                CoachId = user.Coach?.Id,
+                PhoneNumber = user.PhoneNumber,
+                
+                
+            }),
             TypeOfUser = user.TypeOfUser.ToString(),
             Gender = user.Gender.ToString() ,
             Questions=question
@@ -293,9 +313,23 @@ private async Task<string> GenerateUniqueUsername()
 
     public async Task<ApiResponse> GenerateAccessToken(string refreshToken)
     {
-        var user = await dbContext.Users.FirstOrDefaultAsync(x => x.RefreshToken == refreshToken);
+        var user = await dbContext.Users
+            .AsNoTracking()
+            .Where(u => u.RefreshToken == refreshToken)
+            .Select(u => new TokenUserDto
+            {
+                Id = u.Id,
+                TypeOfUser = u.TypeOfUser,
+                AthleteId = u.Athlete != null ? (int?)u.Athlete.Id : null,
+                CoachId = u.Coach != null ? (int?)u.Coach.Id : null,
+                PhoneNumber = u.PhoneNumber,
+                LastLogin = u.LastLogin,
+                
+            })
+            .FirstOrDefaultAsync();
+
         if (user is null) return new ApiResponse() { Message = "Invalid refresh token", Action = false };
-        return user.LastLogin.AddDays(90) < DateTime.Now ? new ApiResponse() { Message = "Refresh token expired", Action = false } : new ApiResponse() { Message = "Success", Action = true, Result = new { AccessToken = tokenService.CreateToken(user) } };
+        return user.LastLogin.AddDays(180) < DateTime.Now ? new ApiResponse() { Message = "Refresh token expired", Action = false } : new ApiResponse() { Message = "Success", Action = true, Result = new { AccessToken = tokenService.CreateTokenForApp(user) } };
     }
 
     public async Task<ApiResponse> AddUsername(string phoneNumber, string username)
