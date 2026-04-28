@@ -6,6 +6,7 @@ using sport_app_backend.Models;
 using sport_app_backend.Models.Account;
 using sport_app_backend.Models.Account.Athlete;
 using sport_app_backend.Models.Actions;
+using sport_app_backend.Models.Actions.CouchExercise;
 using sport_app_backend.Models.Challenge_Achievement;
 using sport_app_backend.Models.Login_Sinup;
 using sport_app_backend.Models.Payments;
@@ -90,4 +91,6 @@ public class ApplicationDbContext : DbContext
     public DbSet<UserMessageStatus> UserMessageStatuses { get; set; }
     public DbSet<WorkoutProgramFeedback> WorkoutProgramFeedback { get; set; }
     public DbSet<DiscountCode> DiscountCodes { get; set; }
+    public DbSet<CoachPineExercise>  CoachPineExercises { get; set; }
+    public DbSet<LastWorkoutExercise>  LastWorkoutExercises { get; set; }
 }

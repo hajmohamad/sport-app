@@ -8,6 +8,7 @@ using sport_app_backend.Interface.Coach;
 using sport_app_backend.Mappers;
 using sport_app_backend.Models;
 using sport_app_backend.Models.Actions;
+using sport_app_backend.Models.Actions.CouchExercise;
 using sport_app_backend.Models.Payments;
 using sport_app_backend.Models.Program;
 
@@ -556,6 +557,10 @@ namespace sport_app_backend.Repository.CoachRepo
                             Message = "athlete not found"
                         };
                     }
+                    var exerciseIds = workoutProgramDto.Days
+                        .SelectMany(d => d.AllExerciseInDays)
+                        .Select(ex => ex.Id).ToList();
+
                     coach.Amount += (workoutProgram.Payment.Amount - workoutProgram.Payment.AppFee);              
                     var athleteImg = await context.AthleteImage
                         .Where(a => a.AthleteQuestionId == workoutProgram.Payment.AthleteQuestionId)
@@ -581,10 +586,18 @@ namespace sport_app_backend.Repository.CoachRepo
 
                     await smsService.WorkoutReadySms(athlete.PhoneNumber, athlete.User.FirstName, workoutProgram.Title,token.HashEncode(workoutProgram.Id));
 
+                    var workoutExercises = new LastWorkoutExercise()
+                    {
+                        CoachId = coach.Id,
+                        AthleteId = athlete.Id,
+                        WorkoutProgramId = workoutProgram.Id,
+                        ExerciseIds = exerciseIds
 
+                    }; 
+                    await context.LastWorkoutExercises.AddAsync(workoutExercises);
+                    
                     if (athlete.ActiveWorkoutProgramId is null)
                     {
-                        await context.SaveChangesAsync();
                         await AddTrainingSession(paymentId);
                         workoutProgram.Status = WorkoutProgramStatus.ACTIVE;
                         athlete.ActiveWorkoutProgramId = workoutProgram.Id;
@@ -1126,6 +1139,180 @@ namespace sport_app_backend.Repository.CoachRepo
                 Result = affectedRows
             };
         }
+
+        public async Task<(IEnumerable<AllExerciseResponseDto> Exercises, int TotalCount)>
+            GetExercisesWithFilterForCoach(
+                string? level, string? type, string? mechanic, string?[]? equipment, string? muscle,
+                string? place, int page, int pageSize, string? searchTerm, int? athleteId, int couchId)
+        {
+            var pinnedExerciseIds  = new List<int>();
+            if (muscle != null)
+            {
+
+               Enum.TryParse<BaseCategory>(muscle, true, out var baseCategory); 
+
+                pinnedExerciseIds  = await context.CoachPineExercises
+                    .Where(p => p.CoachId == couchId && p.BaseCategory==baseCategory)
+                    .SelectMany(p => p.ExerciseIds)
+                    .ToListAsync();
+            }
+
+       
+
+            var lastProgramExerciseIds = new List<int>();
+            if (athleteId.HasValue)
+            {
+                var lastWorkout = await context.LastWorkoutExercises
+                    .Where(w => w.CoachId == couchId && w.AthleteId == athleteId.Value)
+                    .OrderByDescending(w => w.Id) 
+                    .FirstOrDefaultAsync();
+
+                if (lastWorkout != null)
+                {
+                    lastProgramExerciseIds = lastWorkout.ExerciseIds.ToList();
+                }
+            }
+
+            var query = context.Exercises.AsQueryable();
+    
+            if (!string.IsNullOrWhiteSpace(searchTerm))
+            {
+                query = query.Where(e => e.PersianName.Contains(searchTerm) || 
+                                         e.EnglishName.Contains(searchTerm));
+            }
+
+            if (Enum.TryParse<ExerciseLevel>(level, true, out var levelEnum))
+                query = query.Where(e => e.ExerciseLevel == levelEnum);
+
+            if (Enum.TryParse<ExerciseType>(type, true, out var typeEnum))
+                query = query.Where(e => e.ExerciseType == typeEnum);
+        
+            if (Enum.TryParse<MechanicType>(mechanic, true, out var mechanicEnum))
+                query = query.Where(e => e.Mechanics == mechanicEnum);
+
+            if (equipment != null && equipment.Length != 0)
+            {
+                var validEquipments = new List<EquipmentType>();
+
+                foreach (var eq in equipment)
+                {
+                    if (Enum.TryParse<EquipmentType>(eq, true, out var equipEnum))
+                        validEquipments.Add(equipEnum);
+                }
+
+                if (validEquipments.Any())
+                    query = query.Where(e => validEquipments.Contains(e.Equipment));
+            }
+
+            if (Enum.TryParse<BaseCategory>(muscle, true, out var muscleEnum))
+                query = query.Where(e => e.BaseCategory == muscleEnum);
+    
+            if (!string.IsNullOrEmpty(place))
+                query = query.Where(e => EF.Functions.Like(e.Description, $"%{place}%"));
+
+            var totalCount = await query.CountAsync();
+
+            var exercises = await query
+                .Select(e => new 
+                {
+                    Exercise = e,
+                    IsPinned = pinnedExerciseIds.Contains(e.Id),
+                    IsInLastProgram = lastProgramExerciseIds.Contains(e.Id)
+                })
+                .OrderByDescending(x => x.IsPinned) 
+                .ThenByDescending(x => x.Exercise.Views) 
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .Select(x => new AllExerciseResponseDto
+                {
+                    Id = x.Exercise.Id,
+                    Name = x.Exercise.PersianName,
+                    ImageLink = x.Exercise.ImageLink,
+                    BaseCategory = x.Exercise.BaseCategory.ToString(),
+                    Equipment = x.Exercise.Equipment.ToString(),
+                    ExerciseType = x.Exercise.ExerciseType.ToString(),
+                    Level = x.Exercise.ExerciseLevel.ToString(),
+                    Mechanics = x.Exercise.Mechanics.ToString(),
+                    View = x.Exercise.Views,
+                    Met = x.Exercise.Met,
+                    IsPinned = x.IsPinned,
+                    IsInLastProgram = x.IsInLastProgram 
+                })
+                .ToListAsync();
+
+            return (exercises, totalCount);
+}
+
+        public async Task<ApiResponse> AddPineExercise(int exerciseId, int coachId)
+        {
+            var coach = await context.Coaches.FirstOrDefaultAsync(c => c.Id == coachId);
+            if (coach == null)
+                return new ApiResponse()
+                {
+                    Message = "coach not found",
+                    Action = false,
+                };
+            
+            var exercise = await context.Exercises.FirstOrDefaultAsync(e => e.Id == exerciseId);
+            if (exercise == null)
+                return new ApiResponse()
+                {
+                    Message = "exercise not found",
+                    Action = false,
+                };   
+            var oldPineExercises = await context.CoachPineExercises.FirstOrDefaultAsync(ex=>ex.CoachId==coach.Id&&ex.BaseCategory ==exercise.BaseCategory);
+            if (oldPineExercises == null)
+            {
+                var newPineCategory = new CoachPineExercise
+                {
+                    CoachId = coach.Id,
+                    BaseCategory = exercise.BaseCategory,
+                    ExerciseIds = [exerciseId],
+
+                };
+                await context.CoachPineExercises.AddAsync(newPineCategory);
+            }
+            else
+            {
+                oldPineExercises.ExerciseIds.Add(exercise.Id);
+            }
+
+            await context.SaveChangesAsync();
+            return new ApiResponse()
+            {
+                Message = "added",
+                Action = true,
+            };
+        }
+        public async Task<ApiResponse> RemovePineExercise(int exerciseId, int coachId)
+        {
+            var coach = await context.Coaches.FirstOrDefaultAsync(c => c.Id == coachId);
+            if (coach == null)
+                return new ApiResponse()
+                {
+                    Message = "coach not found",
+                    Action = false,
+                };
+            var oldPineExercises = await context.CoachPineExercises.FirstOrDefaultAsync(ex=>ex.CoachId==coach.Id&&ex.ExerciseIds.Contains(exerciseId));
+            if (oldPineExercises == null)
+            {
+                return new ApiResponse()
+                {
+                    Message = "exercise not found",
+                    Action = false,
+                };
+
+            }
+            oldPineExercises.ExerciseIds.Remove(exerciseId);
+            await context.SaveChangesAsync();
+            
+            return new ApiResponse()
+            {
+                Message = "remove pine",
+                Action = true,
+            };
+        }
+
 
 
         public async Task<ApiResponse> GetWorkoutProgramFeedBack(string phoneNumber)

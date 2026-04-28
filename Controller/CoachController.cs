@@ -3,12 +3,12 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using sport_app_backend.Data;
 using sport_app_backend.Dtos;
-using sport_app_backend.Interface;
 using sport_app_backend.Mappers;
 using sport_app_backend.Models;
 using System.Security.Claims;
 using sport_app_backend.Dtos.ProgramDto;
 using sport_app_backend.Interface.Coach;
+using sport_app_backend.Models.Actions.CouchExercise;
 
 
 namespace sport_app_backend.Controller
@@ -343,7 +343,7 @@ namespace sport_app_backend.Controller
         }
         
         [HttpGet("getwpkey")]
-        public async Task<IActionResult> getwpkey([FromQuery]int workoutProgramId)
+        public async Task<IActionResult> Getwpkey([FromQuery]int workoutProgramId)
         {
          
 
@@ -386,10 +386,107 @@ namespace sport_app_backend.Controller
             
             
         }
+        [HttpGet("GetExercisesWithFilterForCoach")]
+        public async Task<IActionResult> GetExercisesWithFilterForCoach(
+            [FromQuery] string? name,
+            [FromQuery] string? level,
+            [FromQuery] string? type,
+            [FromQuery] string? mechanic,
+            [FromQuery] string?[] equipment,
+            [FromQuery] string? muscle,
+            [FromQuery] string? place,
+            [FromQuery] int? athleteId,
+            [FromQuery] int page = 1,
+            [FromQuery] int pageSize = 20)
+        {
+            var coachId = await GetCoachIdAsync();
+            var (exercises, totalCount) = await coachRepository.GetExercisesWithFilterForCoach(
+                level, type,mechanic, equipment, muscle, place, page, pageSize, name,athleteId, coachId);
+
+            return Ok(new
+            {
+                totalCount,
+                page,
+                pageSize,
+                exercises
+            });
+        }
+        [HttpPost("addPineExercise")]
+        [Authorize(Roles = "Coach")]
+        public async Task<IActionResult> AddPineExercise([FromBody]int exerciseId)
+        {
+            var coachId = await GetCoachIdAsync();
+            var result = await coachRepository.AddPineExercise(exerciseId, coachId);
+
+            if (result.Action) return Ok(result);
+            return BadRequest(result);
+        }
+        [HttpDelete("RemovePineExercise")]
+        [Authorize(Roles = "Coach")]
+        public async Task<IActionResult> RemovePineExercise([FromBody]int exerciseId)
+        {
+            var coachId = await GetCoachIdAsync();
+            var result = await coachRepository.RemovePineExercise(exerciseId, coachId);
+
+            if (result.Action) return Ok(result);
+            return BadRequest(result);
+        }
+        [HttpPost("test")]
+        public async Task<IActionResult> Test()
+        {
+            
+            var oldPrograms = await dbContext.WorkoutPrograms
+                .Include(w => w.ProgramInDays)
+                .ThenInclude(d => d.AllExerciseInDays)
+                .Where(w => !dbContext.LastWorkoutExercises.Any(l => l.WorkoutProgramId == w.Id))
+                .ToListAsync();
+
+            var lastWorkouts = (from program in oldPrograms
+                let exerciseIds = program.ProgramInDays.SelectMany(d => d.AllExerciseInDays)
+                    .Select(ex => ex.Id).ToList()
+                select new LastWorkoutExercise
+                {
+                    CoachId = program.CoachId, // فرض بر اینکه این فیلد در برنامه وجود دارد
+                    AthleteId = program.AthleteId, // فرض بر اینکه این فیلد در برنامه وجود دارد
+                    WorkoutProgramId = program.Id,
+                    ExerciseIds = exerciseIds
+                }).ToList();
+
+            if (lastWorkouts.Count != 0)
+            {
+                await dbContext.LastWorkoutExercises.AddRangeAsync(lastWorkouts);
+                await dbContext.SaveChangesAsync();
+            }
+            return Ok();
+        }
+       
+        
+
         
         
+        private async Task<int> GetCoachIdAsync()
+        {
+            var coachIdClaim = User.FindFirst("coach_id")?.Value;
+            if (int.TryParse(coachIdClaim, out var coachId))
+            {
+                return coachId;
+            }
+            
+            var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
+            if (string.IsNullOrEmpty(phoneNumber))
+            {
+                return 0;
+            }
+            var id =  await dbContext.Coaches
+                .AsNoTracking()
+                .Where(c => c.PhoneNumber == phoneNumber)
+                .Select(c => c.Id)
+                .FirstOrDefaultAsync();
+            return id;
+            
+
+        }
         
-      
     }
 
   
