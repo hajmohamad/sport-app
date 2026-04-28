@@ -257,7 +257,7 @@ namespace sport_app_backend.Repository.AthleteRepo
                 WeightKg = paymentData.Athlete.CurrentWeight
             });
 
-            var paymentResponseDto = new PaymentResponseDto
+            var paymentResponseDto = new AthletePaymentResponseDto
             {
                 PaymentId = paymentData.Payment.Id,
                 TransactionId = paymentData.Payment.Authority,

@@ -406,7 +406,7 @@ namespace sport_app_backend.projectTest
 
             Assert.True(result.Action);
             Assert.Equal("Payment details found", result.Message);
-            var paymentDto = result.Result as PaymentResponseDto;
+            var paymentDto = result.Result as AthletePaymentResponseDto;
             Assert.NotNull(paymentDto);
             Assert.Equal(1, paymentDto.PaymentId);
         }

@@ -24,10 +24,11 @@ public static class PaymentMappers
         };
     }
     
-    public static PaymentResponseDto ToCoachPaymentResponseDto(this Payment payment,string wpkey,double ear)
+    public static CoachPaymentResponseDto ToCoachPaymentResponseDto(this Payment payment,string wpkey,double ear)
     {
-        return new PaymentResponseDto
+        return new CoachPaymentResponseDto
         {   PaymentId = payment.Id,
+            AthleteId =  payment.AthleteId,
             TransactionId = payment.Authority,
             PaymentStatus = payment.PaymentStatus.ToString(),
             Name = payment.Athlete.User?.FirstName + " " + payment.Athlete?.User?.LastName,
