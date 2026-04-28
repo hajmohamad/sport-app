@@ -32,7 +32,7 @@ public class BuyFromSiteRepository(
     {
         var user = await dbContext.Users.FirstOrDefaultAsync(x => x.SiteRefreshToken == refreshToken);
         if (user is null) return new ApiResponse() { Message = "Invalid refresh token", Action = false };
-        return user.LastLoginSite.AddDays(90) < DateTime.Now ? new ApiResponse() { Message = "Refresh token expired", Action = false } : new ApiResponse() { Message = "Success", Action = true, Result = new { AccessToken = tokenService.CreateToken(user) } };
+        return user.LastLoginSite.AddDays(90) < DateTime.Now ? new ApiResponse() { Message = "Refresh token expired", Action = false } : new ApiResponse() { Message = "Success", Action = true, Result = new { AccessToken = tokenService.CreateTokenForSite(user) } };
     }
 
     public async Task<ApiResponse> CreateWorkoutPdfAsync(string wpId)
@@ -500,7 +500,7 @@ public class BuyFromSiteRepository(
             Result = new 
             {
                 RefreshToken = await tokenService.CreateSiteRefreshToken(user),
-                AccessToken = tokenService.CreateToken(user),
+                AccessToken = tokenService.CreateTokenForSite(user),
                 
             }
         };
