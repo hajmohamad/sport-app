@@ -1151,10 +1151,10 @@ namespace sport_app_backend.Repository.CoachRepo
 
                Enum.TryParse<BaseCategory>(muscle, true, out var baseCategory); 
 
-                pinnedExerciseIds  = await context.CoachPineExercises
-                    .Where(p => p.CoachId == couchId && p.BaseCategory==baseCategory)
-                    .SelectMany(p => p.ExerciseIds)
-                    .ToListAsync();
+               var coachPins = await context.CoachPineExercises
+                                   .Where(p => p.CoachId == couchId && p.BaseCategory == baseCategory)
+                      .ToListAsync(); 
+               pinnedExerciseIds = coachPins.SelectMany(p => p.ExerciseIds).ToList();
             }
 
        
@@ -1286,30 +1286,42 @@ namespace sport_app_backend.Repository.CoachRepo
         }
         public async Task<ApiResponse> RemovePineExercise(int exerciseId, int coachId)
         {
-            var coach = await context.Coaches.FirstOrDefaultAsync(c => c.Id == coachId);
+            var coach = await context.Coaches
+                .FirstOrDefaultAsync(c => c.Id == coachId);
+
             if (coach == null)
-                return new ApiResponse()
+            {
+                return new ApiResponse
                 {
                     Message = "coach not found",
-                    Action = false,
+                    Action = false
                 };
-            var oldPineExercises = await context.CoachPineExercises.FirstOrDefaultAsync(ex=>ex.CoachId==coach.Id&&ex.ExerciseIds.Contains(exerciseId));
-            if (oldPineExercises == null)
+            }
+
+            var oldPineExercises = await context.CoachPineExercises
+                .Where(ex => ex.CoachId == coach.Id)
+                .ToListAsync();  
+
+            var target = oldPineExercises
+                .FirstOrDefault(ex => ex.ExerciseIds.Contains(exerciseId));
+
+            if (target == null)
             {
-                return new ApiResponse()
+                return new ApiResponse
                 {
                     Message = "exercise not found",
-                    Action = false,
+                    Action = false
                 };
-
             }
-            oldPineExercises.ExerciseIds.Remove(exerciseId);
+
+            target.ExerciseIds.Remove(exerciseId);
+
             await context.SaveChangesAsync();
-            
-            return new ApiResponse()
+
+            return new ApiResponse
             {
                 Message = "remove pine",
-                Action = true,
+                Action = true
             };
         }
 
