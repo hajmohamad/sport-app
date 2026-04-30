@@ -21,13 +21,11 @@ public class TokenService: ITokenService
         private readonly IConfiguration _config;
         private readonly SymmetricSecurityKey _key;
         private readonly ApplicationDbContext _context;
-        private readonly DbSet<User> _userManager;
         private readonly IHashids _hashids;
 
         public TokenService(IConfiguration config,ApplicationDbContext dbContext)
         {    
             _context = dbContext;
-            _userManager = dbContext.Users;
             _config = config;
             _key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["JWT:SigningKey"] ?? "string.Empty"));
             var salt = _config["JWT:SigningKey"];

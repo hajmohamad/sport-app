@@ -529,6 +529,32 @@ public class BuyFromSiteRepository(
             return pricingResult;
         }
 
+        var havLastAttempt = await dbContext.PaymentAttempts.Where(pa => pa.AthleteId == athleteId)
+            .OrderByDescending(p => p.DateTime).FirstOrDefaultAsync();
+        if (havLastAttempt is null)
+        {
+            var newPaymentAttempt = new PaymentAttempt()
+            {
+                AthleteId = athleteId,
+                CoachId = coachService.CoachId,
+                CoachServiceId = coachService.Id,
+                DateTime = DateTime.UtcNow
+
+            };
+            await dbContext.PaymentAttempts.AddAsync(newPaymentAttempt);
+            
+        }
+        else
+        {
+            havLastAttempt.DateTime = DateTime.UtcNow;
+            havLastAttempt.CoachId = coachService.CoachId;
+            havLastAttempt.CoachServiceId = coachService.Id;
+        }
+
+        await dbContext.SaveChangesAsync();
+
+       
+
         return new ApiResponse
         {
             Action = true,

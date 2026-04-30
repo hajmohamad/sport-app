@@ -93,4 +93,6 @@ public class ApplicationDbContext : DbContext
     public DbSet<DiscountCode> DiscountCodes { get; set; }
     public DbSet<CoachPineExercise>  CoachPineExercises { get; set; }
     public DbSet<LastWorkoutExercise>  LastWorkoutExercises { get; set; }
+    public DbSet<PaymentAttempt>  PaymentAttempts { get; set; }
+
 }
