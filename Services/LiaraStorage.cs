@@ -8,92 +8,88 @@ namespace sport_app_backend.Services;
 
 public class LiaraStorage(IConfiguration config) :ILiaraStorage
 {
-    private readonly string _accessKey = config["Liara:accessKey"] ?? "string.Empty";
-    private readonly string _secretKey = config["Liara:secretKey"] ?? "string.Empty";
-    private readonly string _bucketName = config["Liara:BucketName"] ?? "string.Empty";
-    private readonly string _endpoint = config["Liara:endPoint"] ?? "string.Empty";
-
-    public async Task<ApiResponse> UploadImage(IFormFile image, string url,string folderName)
+    // private readonly string _accessKey = config["Liara:accessKey"] ?? "string.Empty";
+    // private readonly string _secretKey = config["Liara:secretKey"] ?? "string.Empty";
+    // private readonly string _bucketName = config["Liara:BucketName"] ?? "string.Empty";
+    // private readonly string _endpoint = config["Liara:endPoint"] ?? "string.Empty";
+    public async Task<ApiResponse> UploadImage(IFormFile image, string url, string folderName)
     {
         var config = new AmazonS3Config
         {
-            ServiceURL = _endpoint,
+            ServiceURL = "https://s3.ir-thr-at1.arvanstorage.ir",
             ForcePathStyle = true,
-            SignatureVersion = "4"
+            SignatureVersion = "4",
+            AuthenticationRegion = "ir-thr-at1"
         };
 
         var credentials = new Amazon.Runtime.BasicAWSCredentials(
-            _accessKey,
-            _secretKey
+            "cc698a28-40d0-4708-af66-d01cdcc9b5d4","0e6542fcee37bf003f85f1b3c606284e00029ddba283297d7fb65a50a93aebf1"
         );
 
         using var client = new AmazonS3Client(credentials, config);
 
         var extension = Path.GetExtension(image.FileName);
 
-        folderName = folderName.Trim().TrimEnd('/');
+        folderName = folderName?.Trim().TrimEnd('/');
 
         var objectKey = string.IsNullOrEmpty(folderName)
             ? $"{Guid.NewGuid()}{extension}"
             : $"{folderName}/{Guid.NewGuid()}{extension}";
 
-
         try
         {
             using var memoryStream = new MemoryStream();
-            await image.CopyToAsync(memoryStream).ConfigureAwait(false);
+            await image.CopyToAsync(memoryStream);
             memoryStream.Position = 0;
 
             var request = new PutObjectRequest
             {
-                BucketName = _bucketName,
+                BucketName = "chaarset",
                 Key = objectKey,
                 InputStream = memoryStream,
-                ContentType = image.ContentType 
+                ContentType = image.ContentType,
+                CannedACL = S3CannedACL.PublicRead // اگر میخوای فایل public باشد
             };
 
             await client.PutObjectAsync(request);
 
-            var fileUrl = $"{_endpoint}/{_bucketName}/{objectKey}";
-            if (url.Length > 10)
+            var fileUrl = $"https://{"chaarsets"}.s3.ir-thr-at1.arvanstorage.ir/{objectKey}";
+
+            if (!string.IsNullOrEmpty(url) && url.Length > 10)
             {
                 await DeleteObjectAsync(client, url);
             }
 
-            return new ApiResponse()
+            return new ApiResponse
             {
                 Action = true,
-                Message = "imageUploaded successfully",
-                Result = fileUrl 
+                Message = "Image uploaded successfully",
+                Result = fileUrl
             };
-
-
         }
         catch (AmazonS3Exception e)
         {
-
-            return new ApiResponse()
+            return new ApiResponse
             {
                 Action = false,
-                Message = $"Error uploading to S3: {e.Message}",
-                
+                Message = $"Error uploading to Arvan S3: {e.Message}"
             };
         }
-
     }
+
     public async Task<ApiResponse> RemovePhoto(string url)
     {
    
         var config = new AmazonS3Config
         {
-            ServiceURL = _endpoint,
+            ServiceURL = "https://s3.ir-thr-at1.arvanstorage.ir",
             ForcePathStyle = true,
-            SignatureVersion = "4"
+            SignatureVersion = "4",
+            AuthenticationRegion = "ir-thr-at1"
         };
 
         var credentials = new Amazon.Runtime.BasicAWSCredentials(
-            _accessKey,
-            _secretKey
+            "cc698a28-40d0-4708-af66-d01cdcc9b5d4","0e6542fcee37bf003f85f1b3c606284e00029ddba283297d7fb65a50a93aebf1"
         );
 
         using var client = new AmazonS3Client(credentials, config);

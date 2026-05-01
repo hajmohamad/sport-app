@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using sport_app_backend.BackgroundServices;
 using sport_app_backend.Dtos;
 using sport_app_backend.Interface;
 using sport_app_backend.Models.Payments;
@@ -11,8 +12,9 @@ namespace sport_app_backend.Controller
     [ApiController]
     public class AdminController(
         IAdminRepository adminRepository,
-        IWebHostEnvironment webHostEnvironment, IConfiguration config) : ControllerBase
+        IWebHostEnvironment webHostEnvironment, IConfiguration config,ArvanMigrationService migrationService) : ControllerBase
     {
+      
         [HttpPut("Verified_coach/{coachPhoneNumber}")]
         public async Task<IActionResult> Verified_coach([FromRoute] string coachPhoneNumber, [FromBody] string siteUrl)
         {
@@ -128,6 +130,13 @@ namespace sport_app_backend.Controller
 
             return Ok(result);
         }
+            [HttpPost("migrate-exercises")]
+            public async Task<IActionResult> MigrateExercises()
+            {
+                await migrationService.MigrateExercises();
+                return Ok("Migration completed");
+            }
+
 
         
         
