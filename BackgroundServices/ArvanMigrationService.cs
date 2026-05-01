@@ -93,7 +93,7 @@ public class ArvanMigrationService
             "http://storage.chaarset.ir/"
         );
         url = url.Replace(
-            "https://charsets.storage.c2.liara.space",
+            "https://charsets.storage.c2.liara.space/",
             "http://storage.chaarset.ir/"
         );
         url = url.Replace(
@@ -111,7 +111,7 @@ public class ArvanMigrationService
     private async Task<string> UploadFromUrl(HttpClient http, string oldUrl, string folder)
     {
         oldUrl = NormalizeUrl(oldUrl);
-        oldUrl = Uri.EscapeUriString(oldUrl);
+        // oldUrl = Uri.EscapeUriString(oldUrl);
 
         var uri = new Uri(oldUrl);
         var fileName = Path.GetFileName(uri.LocalPath);
@@ -119,9 +119,14 @@ public class ArvanMigrationService
         var objectKey = $"{folder}/{fileName}"; // ✅ همان اسم قبلی
 
         // --- گرفتن Content-Length با HEAD ---
-        var headReq = new HttpRequestMessage(HttpMethod.Head, oldUrl);
-        var headRes = await http.SendAsync(headReq);
-        headRes.EnsureSuccessStatusCode();
+        var headReq = new HttpRequestMessage(HttpMethod.Get, oldUrl);
+        var headRes = await http.SendAsync(headReq, HttpCompletionOption.ResponseHeadersRead);
+
+        if (!headRes.IsSuccessStatusCode)
+        {
+            Console.WriteLine($"HEAD/GET failed for: {oldUrl} Status: {headRes.StatusCode}");
+            return null; // یا هر رفتار دلخواه
+        }
 
         var length = headRes.Content.Headers.ContentLength ?? 0;
         var contentType = GetContentType(extension);
