@@ -12,7 +12,7 @@ namespace sport_app_backend.Controller
     [ApiController]
     public class AdminController(
         IAdminRepository adminRepository,
-        IWebHostEnvironment webHostEnvironment, IConfiguration config,ArvanMigrationService migrationService) : ControllerBase
+        IWebHostEnvironment webHostEnvironment, IConfiguration config) : ControllerBase
     {
       
         [HttpPut("Verified_coach/{coachPhoneNumber}")]
@@ -130,13 +130,7 @@ namespace sport_app_backend.Controller
 
             return Ok(result);
         }
-            [HttpPost("migrate-exercises")]
-            public async Task<IActionResult> MigrateExercises()
-            {
-                await migrationService.MigrateExercises();
-                return Ok("Migration completed");
-            }
-
+        
 
         
         

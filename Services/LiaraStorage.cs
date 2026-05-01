@@ -53,7 +53,7 @@ public class LiaraStorage(IConfiguration config) :ILiaraStorage
 
             await client.PutObjectAsync(request);
 
-            var fileUrl = $"https://{"chaarsets"}.s3.ir-thr-at1.arvanstorage.ir/{objectKey}";
+            var fileUrl = $"https://{"chaarset"}.s3.ir-thr-at1.arvanstorage.ir/{objectKey}";
 
             if (!string.IsNullOrEmpty(url) && url.Length > 10)
             {
@@ -129,12 +129,11 @@ public class LiaraStorage(IConfiguration config) :ILiaraStorage
     private static async Task DeleteObjectAsync(IAmazonS3 client, string url)
     {
         var uri = new Uri(url);
-        var segments = uri.AbsolutePath.TrimStart('/').Split('/', 2);
 
-        if (segments.Length < 2)
-            throw new ArgumentException("URL does not contain a valid bucket and object key");
-        var bucketName = segments[0];
-        var objectKey = segments[1];
+        var hostParts = uri.Host.Split('.');
+        var bucketName = hostParts[0];
+
+        var objectKey = uri.AbsolutePath.TrimStart('/');
 
         try
         {
@@ -145,11 +144,11 @@ public class LiaraStorage(IConfiguration config) :ILiaraStorage
             };
 
             await client.DeleteObjectAsync(deleteRequest);
-            Console.WriteLine($"File '{objectKey}' deleted successfully.");
+            Console.WriteLine($"Deleted: {bucketName}/{objectKey}");
         }
         catch (AmazonS3Exception e)
         {
-            Console.WriteLine($"Error: {e.Message}");
+            Console.WriteLine($"Error deleting from S3: {e.Message}");
         }
     }
 }
