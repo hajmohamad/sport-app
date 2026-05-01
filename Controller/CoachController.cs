@@ -387,6 +387,7 @@ namespace sport_app_backend.Controller
             
         }
         [HttpGet("GetExercisesWithFilterForCoach")]
+        [Authorize(Roles = "Coach")]
         public async Task<IActionResult> GetExercisesWithFilterForCoach(
             [FromQuery] string? name,
             [FromQuery] string? level,
@@ -400,6 +401,10 @@ namespace sport_app_backend.Controller
             [FromQuery] int pageSize = 20)
         {
             var coachId = await GetCoachIdAsync();
+            if (coachId == 0)
+            {
+                return Unauthorized(new ApiResponse { Action = false, Message = "خطای احراز هویت." });
+            }
             var (exercises, totalCount) = await coachRepository.GetExercisesWithFilterForCoach(
                 level, type,mechanic, equipment, muscle, place, page, pageSize, name,athleteId, coachId);
 
@@ -416,6 +421,10 @@ namespace sport_app_backend.Controller
         public async Task<IActionResult> AddPineExercise([FromBody]int exerciseId)
         {
             var coachId = await GetCoachIdAsync();
+            if (coachId == 0)
+            {
+                return Unauthorized(new ApiResponse { Action = false, Message = "خطای احراز هویت." });
+            }
             var result = await coachRepository.AddPineExercise(exerciseId, coachId);
 
             if (result.Action) return Ok(result);
@@ -426,6 +435,12 @@ namespace sport_app_backend.Controller
         public async Task<IActionResult> RemovePineExercise([FromBody]int exerciseId)
         {
             var coachId = await GetCoachIdAsync();
+            if (coachId == 0)
+            {
+              
+             return Unauthorized(new ApiResponse { Action = false, Message = "خطای احراز هویت." });
+                
+            }
             var result = await coachRepository.RemovePineExercise(exerciseId, coachId);
 
             if (result.Action) return Ok(result);
@@ -437,21 +452,29 @@ namespace sport_app_backend.Controller
             
             var oldPrograms = await dbContext.WorkoutPrograms
                 .Include(w => w.ProgramInDays)
-                .ThenInclude(d => d.AllExerciseInDays)
+                .ThenInclude(d => d.AllExerciseInDays).ThenInclude(e=>e.Exercise)
                 .Where(w => !dbContext.LastWorkoutExercises.Any(l => l.WorkoutProgramId == w.Id))
                 .ToListAsync();
 
-            var lastWorkouts = (from program in oldPrograms
-                let exerciseIds = program.ProgramInDays.SelectMany(d => d.AllExerciseInDays)
-                    .Select(ex => ex.Id).ToList()
-                select new LastWorkoutExercise
+            var lastWorkouts = oldPrograms
+                .Select(program => new
                 {
-                    CoachId = program.CoachId, // فرض بر اینکه این فیلد در برنامه وجود دارد
-                    AthleteId = program.AthleteId, // فرض بر اینکه این فیلد در برنامه وجود دارد
-                    WorkoutProgramId = program.Id,
-                    ExerciseIds = exerciseIds
-                }).ToList();
-
+                    program,
+                    exerciseIds = program.ProgramInDays
+                        .SelectMany(d => d.AllExerciseInDays)
+                        .Select(ex => ex.ExerciseId)
+                        .ToList()
+                })
+                .Where(x => x.exerciseIds.Any())
+                .Select(x => new LastWorkoutExercise
+                {
+                    CoachId = x.program.CoachId,
+                    AthleteId = x.program.AthleteId,
+                    WorkoutProgramId = x.program.Id,
+                    ExerciseIds = x.exerciseIds
+                })
+                .ToList();
+            
             if (lastWorkouts.Count != 0)
             {
                 await dbContext.LastWorkoutExercises.AddRangeAsync(lastWorkouts);
