@@ -187,6 +187,7 @@ builder.Services.AddScoped<IWaterAndWeight, WaterAndWeightRepository>();
 builder.Services.AddScoped<IBuyProgramFromApplications, BuyProgramFromApplicationRepository>();
 builder.Services.AddScoped<IActivity, ActivityRepository>();
 builder.Services.AddScoped<IInAppMessageRepository, InAppMessageRepository>();
+builder.Services.AddScoped<ArvanMigrationService>();
 
 
 
