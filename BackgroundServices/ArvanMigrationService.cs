@@ -42,6 +42,10 @@ public class ArvanMigrationService
             try
             {
                 bool changed = false;
+                if (exercise.VideoLink.Contains("arvan")||exercise.ImageLink.Contains("muscleandstrength"))
+                {
+                    continue;
+                }
 
                 if (!string.IsNullOrWhiteSpace(exercise.VideoLink))
                 {
