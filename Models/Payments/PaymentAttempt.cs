@@ -18,6 +18,7 @@ public class PaymentAttempt
     public int AthleteId { get; set; }
     public Athlete Athlete { get; set; }
     public DateTime DateTime { get; set; }
+    public bool SmsIsSend { get; set; }
     
     
 

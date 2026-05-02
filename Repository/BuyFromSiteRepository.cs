@@ -529,7 +529,9 @@ public class BuyFromSiteRepository(
             return pricingResult;
         }
 
-        var havLastAttempt = await dbContext.PaymentAttempts.Where(pa => pa.AthleteId == athleteId)
+        var now = DateTime.Now;
+
+        var havLastAttempt = await dbContext.PaymentAttempts.Where(pa => pa.AthleteId == athleteId && pa.DateTime.Date==now.Date)
             .OrderByDescending(p => p.DateTime).FirstOrDefaultAsync();
         if (havLastAttempt is null)
         {
