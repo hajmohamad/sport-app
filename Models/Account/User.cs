@@ -37,7 +37,7 @@ public class User
     public string ImageProfile { get; set; } = "";
 
     public Athlete.Athlete? Athlete { get; set; }
-    public Coach? Coach { get; set; }
+    public Coach.Coach? Coach { get; set; }
     public TypeOfUser TypeOfUser { get; set; }
     public string? RefreshToken { get; set; }
     [DataType(DataType.DateTime)]

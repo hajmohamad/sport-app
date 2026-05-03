@@ -857,6 +857,8 @@ namespace sport_app_backend.Repository.CoachRepo
             coach.WhatsApp = socialMediaLinkDto.WhatsApp;
             coach.TelegramLink = socialMediaLinkDto.TelegramLink;
             coach.InstagramLink = socialMediaLinkDto.InstagramLink;
+            coach.BaleUserName = socialMediaLinkDto.BaleUserName;
+            coach.EitaaUserName = socialMediaLinkDto.EitaaUserName;
             await context.SaveChangesAsync();
 
             return new ApiResponse { Action = true, Message = "لینک ها تغییر پیدا کرد" };
@@ -869,7 +871,10 @@ namespace sport_app_backend.Repository.CoachRepo
                 {
                     coach.WhatsApp,
                     coach.TelegramLink,
-                    coach.InstagramLink
+                    coach.InstagramLink,
+                    coach.BaleUserName,
+                    coach.EitaaUserName
+                    
                 }).FirstOrDefaultAsync();
             if (coach == null)
             {
