@@ -176,6 +176,7 @@ builder.Services.AddScoped<IWebPushNotificationService, WebPushNotificationServi
 builder.Services.AddScoped<INotification,NotificationRepository>();
 // builder.Services.AddHostedService<TrainingReminderService>();
 builder.Services.AddHostedService<ProgramRenewalReminderService>();
+builder.Services.AddHostedService<PaymentAttemptSmsService>();
 builder.Services.AddHostedService<QuestionReminderService >();
 
 builder.Services.AddScoped<IAthleteRepository, AthleteRepository>();

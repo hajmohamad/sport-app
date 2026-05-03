@@ -494,6 +494,60 @@ namespace sport_app_backend.Repository.CoachRepo
                 Result = result
             };
         }
+        public async Task<ApiResponse> GetCoachPayments(int coachId, PaymentFilterDto filter) {
+   
+
+            var query = context.Payments
+                .Include(p => p.Athlete).ThenInclude(a => a.User)
+                .Include(p => p.WorkoutProgram)
+                .Include(p => p.CoachService)
+                .Where(p =>
+                    p.CoachId == coachId &&
+                    p.PaymentStatus == PaymentStatus.SUCCESS &&
+                    p.WorkoutProgram != null &&
+                    p.WorkoutProgram.Status != WorkoutProgramStatus.WRITING &&
+                    p.WorkoutProgram.Status != WorkoutProgramStatus.NOTSTARTED &&
+                    p.WorkoutProgram.Status != WorkoutProgramStatus.UNCOMPLETEDQUESTION
+                );
+
+           
+            query = filter.SortBy?.ToLower() switch
+            {
+                "date" => filter.SortDesc ? query.OrderByDescending(x => x.PaymentDate) : query.OrderBy(x => x.PaymentDate),
+                "service" => filter.SortDesc ? query.OrderByDescending(x => x.CoachService.Title) : query.OrderBy(x => x.CoachService.Title),
+                "amount" => filter.SortDesc ? query.OrderByDescending(x => x.Amount) : query.OrderBy(x => x.Amount),
+                "athlete" => filter.SortDesc ? query.OrderByDescending(x => x.Athlete.User.FirstName) : query.OrderBy(x => x.Athlete.User.FirstName),
+                _ => query.OrderByDescending(x => x.PaymentDate)
+            };
+
+           
+            int skip = (filter.Page - 1) * filter.PageSize;
+            int totalCount = await query.CountAsync();
+
+            var payments = await query
+                .Skip(skip)
+                .Take(filter.PageSize)
+                .ToListAsync();
+
+            var dto = payments.Select(p => p.ToCoachAllPaymentResponseDto()).ToList();
+
+            var result = new
+            {
+                Total = totalCount,
+                Page = filter.Page,
+                PageSize = filter.PageSize,
+                TotalPages = (int)Math.Ceiling(totalCount / (double)filter.PageSize),
+                Items = dto
+            };
+
+            return new ApiResponse
+            {
+                Action = true,
+                Message = "Payments fetched",
+                Result = result
+            };
+        }
+
 
     
         public async Task<ApiResponse> GetProfile(string phoneNumber)

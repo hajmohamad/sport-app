@@ -51,6 +51,32 @@ namespace sport_app_backend.Controller
             if (!result.Action) return BadRequest(result);
             return Ok(result);
         }
+        [HttpGet("coach/payments")]
+        [Authorize(Roles = "Coach")]
+
+        public async Task<IActionResult> GetCoachPayments(
+            [FromQuery] string? sortBy = "date",
+            [FromQuery] bool sortDesc = true,
+            [FromQuery] int page = 1,
+            [FromQuery] int pageSize = 20)
+        {
+            var filter = new PaymentFilterDto
+            {
+                SortBy = sortBy,
+                SortDesc = sortDesc,
+                Page = page,
+                PageSize = pageSize
+            };
+            var coachId = await GetCoachIdAsync();
+            if (coachId == 0)
+            {
+                return Unauthorized(new ApiResponse { Action = false, Message = "خطای احراز هویت." });
+            }
+            var result = await coachRepository.GetCoachPayments(coachId, filter);
+
+            return Ok(result);
+        }
+
 
         [HttpPost("add_coaching_Service")]
         [Authorize(Roles = "Coach")]
