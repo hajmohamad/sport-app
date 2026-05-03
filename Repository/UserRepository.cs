@@ -10,6 +10,7 @@ using Amazon.S3;
 using Amazon.S3.Model;
 using sport_app_backend.Mappers;
 using sport_app_backend.Models.Account.Athlete;
+using sport_app_backend.Models.Account.Coach;
 using sport_app_backend.Models.Actions;
 using sport_app_backend.Models.Payments;
 using sport_app_backend.Models.Program;

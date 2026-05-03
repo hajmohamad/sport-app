@@ -2,6 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using sport_app_backend.Models.Account.Athlete;
+using sport_app_backend.Models.Account.Coach;
 
 namespace sport_app_backend.Models.Program
 {

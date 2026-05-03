@@ -849,7 +849,9 @@ public class BuyFromSiteRepository(
                 {
                     wr.Coach.InstagramLink,
                     wr.Coach.TelegramLink,
-                    wr.Coach.WhatsApp
+                    wr.Coach.WhatsApp,
+                    wr.Coach.EitaaUserName,
+                    wr.Coach.BaleUserName
                 }
             })
             .FirstOrDefaultAsync();
@@ -886,7 +888,9 @@ public class BuyFromSiteRepository(
             {
                 InstagramLink = programData.CoachSocialMedia.InstagramLink ?? " ",
                 TelegramLink = programData.CoachSocialMedia.TelegramLink ?? " ",
-                WhatsAppLink = programData.CoachSocialMedia.WhatsApp ?? " "
+                WhatsAppLink = programData.CoachSocialMedia.WhatsApp ?? " ",
+                BaleUserName = programData.CoachSocialMedia.BaleUserName??" ",
+                EitaaUserName = programData.CoachSocialMedia.EitaaUserName
             }
         };
 

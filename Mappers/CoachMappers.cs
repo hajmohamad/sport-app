@@ -1,6 +1,7 @@
 using System.Globalization;
 using sport_app_backend.Dtos;
 using sport_app_backend.Models.Account;
+using sport_app_backend.Models.Account.Coach;
 using sport_app_backend.Models.Payments;
 using sport_app_backend.Models.TrainingPlan;
 
@@ -110,7 +111,9 @@ namespace sport_app_backend.Mappers
                 NumberOfProgram = numberOfProgram,
                 InstagramLink = coach.InstagramLink,
                 TelegramLink = coach.TelegramLink,
-                WhatsApp = coach.WhatsApp
+                WhatsApp = coach.WhatsApp,
+                BaleUserName = coach.BaleUserName,
+                EitaaUserName = coach.EitaaUserName
             };
         }
 

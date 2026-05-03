@@ -1,6 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using sport_app_backend.Models.Account;
+using sport_app_backend.Models.Account.Coach;
 using sport_app_backend.Models.TrainingPlan;
 
 namespace sport_app_backend.Models.Payments;

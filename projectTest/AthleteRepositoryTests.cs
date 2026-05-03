@@ -11,6 +11,7 @@ using sport_app_backend.Interface.Athlete;
 using sport_app_backend.Models;
 using sport_app_backend.Models.Account;
 using sport_app_backend.Models.Account.Athlete;
+using sport_app_backend.Models.Account.Coach;
 using sport_app_backend.Models.Actions;
 using sport_app_backend.Models.Program;
 using sport_app_backend.Models.Payments;

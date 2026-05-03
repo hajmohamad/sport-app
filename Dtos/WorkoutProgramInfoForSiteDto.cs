@@ -18,4 +18,7 @@ public  class CoachSocialMediaDto
     public string InstagramLink { get; set; }
     public string TelegramLink { get; set; }
     public string WhatsAppLink { get; set; }
+    public string BaleUserName { get; set; } = "";
+    public string EitaaUserName { get; set; } = "";
+    
 }
