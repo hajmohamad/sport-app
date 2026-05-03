@@ -46,5 +46,6 @@ namespace sport_app_backend.Interface.Coach
         Task<ApiResponse> AddPineExercise(int exerciseId, int coachId);
         Task<ApiResponse> RemovePineExercise(int exerciseId, int coachId);
 
+        Task<ApiResponse> GetCoachPayments(int coachId, PaymentFilterDto filter);
     }
 }
