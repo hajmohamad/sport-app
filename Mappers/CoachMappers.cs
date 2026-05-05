@@ -140,7 +140,7 @@ namespace sport_app_backend.Mappers
             };
         }
 
-        public static DiscountCodeListItemDto ToDiscountCodeListItemDto(this DiscountCode discountCode)
+        public static DiscountCodeListItemDto ToDiscountCodeListItemDto(this DiscountCode discountCode,List<ServiceForDiscountDto>? serviceForDiscountDto)
         {
             var status = discountCode.GetEffectiveStatus();
             return new DiscountCodeListItemDto
@@ -152,6 +152,7 @@ namespace sport_app_backend.Mappers
                 UsedCount = discountCode.UsedCount,
                 ExpiresAt = discountCode.ExpiresAt,
                 Status = status.ToString(),
+                ServiceForDiscountDtos = serviceForDiscountDto
             };
         }
 

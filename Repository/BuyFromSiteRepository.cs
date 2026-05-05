@@ -1061,7 +1061,7 @@ public class BuyFromSiteRepository(
             finalPrice = originalPrice - publicDiscountAmount;
         }else{
             var discountCodeValidation =
-                await ValidateDiscountCode(coachService.CoachId, NormalizeDiscountCode(discountCodeValue));
+                await ValidateDiscountCode(coachService.CoachId,coachService.Id, NormalizeDiscountCode(discountCodeValue));
             if (!discountCodeValidation.Action)
             {
                 return discountCodeValidation;
@@ -1098,7 +1098,7 @@ public class BuyFromSiteRepository(
         };
     }
 
-    private async Task<ApiResponse> ValidateDiscountCode(int coachId ,string normalizedCode)
+    private async Task<ApiResponse> ValidateDiscountCode(int coachId ,int coachServiceId,string normalizedCode)
     {
         var discountCode = await dbContext.DiscountCodes
             .FirstOrDefaultAsync(x => x.CoachId== coachId&& x.Code == normalizedCode && !x.IsDeleted);
@@ -1119,8 +1119,11 @@ public class BuyFromSiteRepository(
             return new ApiResponse { Action = false, Message = "کد تاریخش گذشته" };
         }
 
-    
-
+        if (discountCode.CoachServicesId is not null && !discountCode.CoachServicesId.Contains(coachServiceId))
+        {
+            return new ApiResponse { Action = false, Message =  "کد تخفیف برای این سرویس قابل استفاده نیست" };
+        }
+        
         if (discountCode.UsageLimit.HasValue && discountCode.UsedCount >= discountCode.UsageLimit.Value)
         {
             return new ApiResponse { Action = false, Message = "تعداد استفاده تمام شده" };
