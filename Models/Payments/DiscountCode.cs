@@ -30,4 +30,5 @@ public class DiscountCode
 
     public bool IsDeleted { get; set; } = false;
     public List<Payment> Payments { get; set; } = [];
+    public List<int>? CoachServicesId { get; set; } 
 }

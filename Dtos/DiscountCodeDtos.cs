@@ -9,6 +9,7 @@ public class DiscountCodeCreateDto
     public required int DiscountPercent { get; set; }
     public int? UsageLimit { get; set; }
     public DateTime? ExpiresAt { get; set; }
+    public List<int>? CoachServiceId { get; set; }
 }
 
 public class DiscountCodeUpdateDto
@@ -19,6 +20,8 @@ public class DiscountCodeUpdateDto
     public int? UsageLimit { get; set; }
     public DateTime? ExpiresAt { get; set; }
     public string? Status { get; set; }
+    public List<int>? CoachServiceId { get; set; }
+
 }
 
 public class DiscountCodeListItemDto
@@ -30,6 +33,8 @@ public class DiscountCodeListItemDto
     public int UsedCount { get; set; }
     public DateTime? ExpiresAt { get; set; }
     public required string Status { get; set; }
+    public List<ServiceForDiscountDto>? ServiceForDiscountDtos { get; set; }
+
 
 }
 

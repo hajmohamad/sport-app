@@ -27,11 +27,11 @@ namespace sport_app_backend.Interface.Coach
         Task<ApiResponse> GetFaq();
         Task<ApiResponse> GetWPkey(int workoutProgramId);
         Task<ApiResponse> GetWorkoutProgramFeedBack(string phoneNumber);
-        Task<ApiResponse> CreateDiscountCode(string phoneNumber, DiscountCodeCreateDto discountCodeCreateDto);
-        Task<ApiResponse> UpdateDiscountCode(string phoneNumber, int discountCodeId, DiscountCodeUpdateDto discountCodeUpdateDto);
-        Task<ApiResponse> GetDiscountCodes(string phoneNumber);
-        Task<ApiResponse> GetDiscountCodeById(string phoneNumber, int discountCodeId);
-        Task<ApiResponse> DisableDiscountCode(string phoneNumber, int discountCodeId);
+        Task<ApiResponse> CreateDiscountCode(int coachId, DiscountCodeCreateDto discountCodeCreateDto);
+        Task<ApiResponse> UpdateDiscountCode(int coachId, int discountCodeId, DiscountCodeUpdateDto discountCodeUpdateDto);
+        Task<ApiResponse> GetDiscountCodes(int coachId);
+        Task<ApiResponse> GetDiscountCodeById(int coachId, int discountCodeId);
+        Task<ApiResponse> DisableDiscountCode(int coachId, int discountCodeId);
         Task<ApiResponse> ChoseWorkoutProgramFeedBack(string phoneNumber,List<ChoseWorkoutProgramFeedBackDto> choseWorkoutProgramFeedBackDtOs);
 
         Task<(IEnumerable<AllExerciseResponseDto> Exercises, int TotalCount)> GetExercisesWithFilterForCoach(string? level,
@@ -47,5 +47,6 @@ namespace sport_app_backend.Interface.Coach
         Task<ApiResponse> RemovePineExercise(int exerciseId, int coachId);
 
         Task<ApiResponse> GetCoachPayments(int coachId, PaymentFilterDto filter);
+        Task<ApiResponse> GetServiceForDiscountCode(int coachId, int discountPercent);
     }
 }
