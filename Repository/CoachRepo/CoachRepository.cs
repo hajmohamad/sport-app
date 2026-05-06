@@ -416,7 +416,7 @@ namespace sport_app_backend.Repository.CoachRepo
             };
         }
 
-        public async Task<ApiResponse> DisableDiscountCode(int coachId, int discountCodeId)
+        public async Task<ApiResponse> ChangeStatusForDiscountCode(int coachId, int discountCodeId, string status)
         {
             var discountCode = await context.DiscountCodes
                 .Include(x => x.Coach)
@@ -425,15 +425,23 @@ namespace sport_app_backend.Repository.CoachRepo
             {
                 return new ApiResponse { Action = false, Message = "کد تخفیف یافت نشد." };
             }
+            if (!string.IsNullOrWhiteSpace(status))
+            {
+                if (!Enum.TryParse<DiscountCodeStatus>(status, true, out var statusEnum))
+                {
+                    return new ApiResponse { Action = false, Message = "وضعیت کد تخفیف نامعتبر است." };
+                }
 
-            discountCode.Status = DiscountCodeStatus.INACTIVE;
+                discountCode.Status =  statusEnum;
+            }
+
             discountCode.UpdatedAt = DateTime.UtcNow;
             await context.SaveChangesAsync();
 
             return new ApiResponse
             {
                 Action = true,
-                Message = "کد تخفیف غیرفعال شد.",
+                Message = $"وضعیت کد تخفیف به{discountCode.Status} تغییر کرد",
                 Result = discountCode.ToDiscountCodeListItemDto(null)
             };
         }

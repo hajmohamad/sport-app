@@ -231,16 +231,16 @@ namespace sport_app_backend.Controller
             return Ok(result);
         }
 
-        [HttpPut("discount-codes/{discountCodeId:int}/disable")]
+        [HttpPut("discount-codes/{discountCodeId:int}/changeStatus")]
         [Authorize(Roles = "Coach")]
-        public async Task<IActionResult> DisableDiscountCode([FromRoute] int discountCodeId)
+        public async Task<IActionResult> ChangeStatus([FromRoute] int discountCodeId,[FromBody]string status)
         {   
             var coachId = await GetCoachIdAsync();
             if (coachId == 0)
             {
                 return Unauthorized(new ApiResponse { Action = false, Message = "خطای احراز هویت." });
             }
-            var result = await coachRepository.DisableDiscountCode(coachId, discountCodeId);
+            var result = await coachRepository.ChangeStatusForDiscountCode(coachId, discountCodeId,status);
             if (!result.Action) return BadRequest(result);
             return Ok(result);
         }
