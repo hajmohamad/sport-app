@@ -47,6 +47,5 @@ namespace sport_app_backend.Interface.Coach
         Task<ApiResponse> RemovePineExercise(int exerciseId, int coachId);
 
         Task<ApiResponse> GetCoachPayments(int coachId, PaymentFilterDto filter);
-        Task<ApiResponse> GetServiceForDiscountCode(int coachId, int discountPercent);
     }
 }
