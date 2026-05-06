@@ -326,7 +326,7 @@ namespace sport_app_backend.Repository.CoachRepo
             discountCode.UsageLimit = discountCodeUpdateDto.UsageLimit;
             discountCode.ExpiresAt = discountCodeUpdateDto.ExpiresAt;
             discountCode.UpdatedAt = DateTime.UtcNow;
-            discountCode.CoachServicesId = discountCode.CoachServicesId;
+            discountCode.CoachServicesId = discountCodeUpdateDto.CoachServiceId;
 
             
             if (!string.IsNullOrWhiteSpace(discountCodeUpdateDto.Status))
@@ -355,7 +355,6 @@ namespace sport_app_backend.Repository.CoachRepo
         }
         public async Task<ApiResponse> GetDiscountCodes(int coachId)
         {
-       
             var coach = await context.Coaches.FirstOrDefaultAsync(x => x.Id == coachId);
             if (coach is null)
             {
@@ -363,15 +362,41 @@ namespace sport_app_backend.Repository.CoachRepo
             }
 
             var discountCodes = await context.DiscountCodes
-                .Where(x => x.CoachId == coach.Id  && !x.IsDeleted).ToListAsync();
+                .Where(x => x.CoachId == coach.Id && !x.IsDeleted)
+                .ToListAsync();
 
-   
+            await SyncExpiredDiscountCodes(discountCodes);
+
+            var result = new List<object>();
+
+            foreach (var discountCode in discountCodes)
+            {
+                List<ServiceForDiscountDto>? services = null;
+
+                if (discountCode.CoachServicesId != null)
+                {
+                    var coachServices = await context.CoachServices
+                        .Where(c => c.CoachId==coachId&&!c.IsDeleted && discountCode.CoachServicesId.Contains(c.Id))
+                        .ToListAsync();
+
+                    services = coachServices.Select(cs => new ServiceForDiscountDto
+                    {
+                        Id = cs.Id,
+                        Title = cs.Title,
+                        OriginalPrice = cs.Price,
+                        DiscountPrice = cs.Price - ((cs.Price * discountCode.DiscountPercent) / 100),
+                        IsActive = cs.IsActive
+                    }).ToList();
+                }
+
+                result.Add(discountCode.ToDiscountCodeListItemDto(services));
+            }
 
             return new ApiResponse
             {
                 Action = true,
                 Message = discountCodes.Count == 0 ? "هیچ کد تخفیفی موجود نیست" : "لیست کدهای تخفیف",
-                Result = discountCodes.Select(x => x.ToDiscountCodeListItemDto(null)).ToList()
+                Result = result
             };
         }
 
@@ -446,38 +471,6 @@ namespace sport_app_backend.Repository.CoachRepo
             };
         }
         
-        public async Task<ApiResponse> GetServiceForDiscountCode(int coachId, int discountPercent)
-        {
-            var coachService = await context.CoachServices.Where(cs => cs.CoachId == coachId && !cs.IsDeleted)
-                .ToListAsync();
-            if (coachService.Count == 0)
-            {
-                return new ApiResponse()
-                {
-                    Message = "service not found",
-                    Action = true,
-                };
-            }
-
-            var result = coachService.Select(cs => new ServiceForDiscountDto()
-            {
-                Id = cs.Id,
-                Title = cs.Title,
-                OriginalPrice = cs.Price,
-                DiscountPrice = cs.Price - ((cs.Price * discountPercent) / 100),
-                IsActive = cs.IsActive
-
-            }).ToList();
-            
-            return new ApiResponse()
-            {
-                Message = "service  found",
-                Action = true,
-                Result = result
-            };
-
-        }
-
         
 
         public async Task<ApiResponse> DeleteCoachingService(string phoneNumber, int id)
