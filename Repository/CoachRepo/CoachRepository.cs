@@ -622,6 +622,60 @@ namespace sport_app_backend.Repository.CoachRepo
             };
         }
 
+        #region Cardnumber
+
+        
+
+        public async Task<ApiResponse> AddCardNumber(int coachId, AddCardNumberDto addCardNumberDto)
+        {
+            var cardNumber = await context.CoachCardNumbers.Where(c => c.CoachId == coachId).FirstOrDefaultAsync();
+            if (cardNumber is null)
+            {
+                cardNumber = new CoachCardNumber()
+                {
+                    CardName = addCardNumberDto.CardName,
+                    ShebaNumber = addCardNumberDto.ShebaNumber,
+                    CoachId = coachId   
+
+                };
+                await context.CoachCardNumbers.AddAsync(cardNumber);
+                await context.SaveChangesAsync();
+                return new ApiResponse
+                {
+                    Action = true, Message = "اضافه شد"};
+            }
+
+            cardNumber.CardName = addCardNumberDto.CardName;
+            cardNumber.ShebaNumber = addCardNumberDto.ShebaNumber;
+            await context.SaveChangesAsync();
+            return new ApiResponse
+            {
+                Action = true, Message = "ادیت  شد"};
+        }
+
+        public async Task<ApiResponse> GetCardNumber(int coachId)
+        {
+            var cardNumber = await context.CoachCardNumbers.Where(c => c.CoachId == coachId).FirstOrDefaultAsync();
+            if (cardNumber is null)
+            {
+               
+                return new ApiResponse
+                {
+                    Action = true, Message = "اطلاعاتی موجود نیست"};
+            }
+
+           
+            return new ApiResponse
+            {
+                Action = true, Message = "اطلاعات پیدا شد"
+                ,
+                Result = cardNumber
+                
+            };
+            
+        }
+        #endregion
+
 
 
         public async Task<ApiResponse> GetProfile(string phoneNumber)
@@ -1095,6 +1149,7 @@ namespace sport_app_backend.Repository.CoachRepo
 
             var coachPayoutDto = coachPayout.Select(c => c.ToCoachPayoutDto()).ToList();
             var coachAmount = coach.Amount;
+            var coachCartNumber = await context.CoachCardNumbers.Where(c => c.CoachId == coach.Id).AnyAsync();
 
             var transactionDto = payments.Select(p =>
             {
@@ -1130,7 +1185,8 @@ namespace sport_app_backend.Repository.CoachRepo
                     coachAmount,
                     pendingPayout,
                     transactionDto,
-                    coachPayoutDto
+                    coachPayoutDto,
+                    CardNumberIsSet=coachCartNumber
                 }
             };
         }
