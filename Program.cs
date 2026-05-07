@@ -2,7 +2,7 @@ using AspNetCoreRateLimit;
 using DotNetEd.CoreAdmin;
 using Microsoft.EntityFrameworkCore;
 using sport_app_backend.Data;
-
+using Prometheus;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -103,15 +103,7 @@ if (string.IsNullOrEmpty(connectionString))
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
 
-    if (connectionString.Contains(".db", StringComparison.OrdinalIgnoreCase) || 
-        connectionString.Contains("sqlite", StringComparison.OrdinalIgnoreCase))
-    {
-        Console.WriteLine("Using SQLite database.");
-        options.UseSqlite(connectionString);
-    }
-    else
-    {
-        Console.WriteLine("Using MySQL database.");
+   
         var serverVersion = new MySqlServerVersion(new Version(9, 0, 1));
 
         var databaseSettings = builder.Configuration.GetSection("DatabaseSettings");
@@ -132,7 +124,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
             .LogTo(Console.WriteLine, LogLevel.Information)
             .EnableDetailedErrors()
             .EnableSensitiveDataLogging();
-    }
+    
 });
 
 
@@ -154,7 +146,7 @@ builder.Services.AddAuthentication(options =>
         ValidAudience = builder.Configuration["JWT:Audience"],
         ValidateIssuerSigningKey = true,
         IssuerSigningKey = new SymmetricSecurityKey(
-            System.Text.Encoding.UTF8.GetBytes(builder.Configuration["JWT:SigningKey"])
+            System.Text.Encoding.UTF8.GetBytes(builder.Configuration["JWT:SigningKey"] ?? string.Empty)
         )
     };
 });
@@ -224,6 +216,9 @@ app.MapDefaultControllerRoute();
             dbContext.Database.Migrate();
         }
     }
+    app.UseHttpMetrics();
+
+    app.MapMetrics();
 
 app.Run();
 

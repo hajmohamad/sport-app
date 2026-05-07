@@ -349,6 +349,39 @@ namespace sport_app_backend.Controller
 
             return Ok(result);
         }
+
+        #region CardNumber
+
+        [HttpPost("AddCardNumber")]
+        [Authorize(Roles = "Coach")]
+        public async Task<IActionResult> AddCardNumber(
+            [FromBody] AddCardNumberDto addCardNumberDto)
+        {
+            var coachId = await GetCoachIdAsync();
+            if (coachId == 0)
+            {
+                return Unauthorized(new ApiResponse { Action = false, Message = "خطای احراز هویت." });
+            }
+            var result = await coachRepository.AddCardNumber(coachId,addCardNumberDto);
+            if (!result.Action) return BadRequest(result);
+            return Ok(result);
+        }
+        [HttpGet("GetCardNumber")]
+        [Authorize(Roles = "Coach")]
+        public async Task<IActionResult> GetCardNumber()
+        {
+            var coachId = await GetCoachIdAsync();
+            if (coachId == 0)
+            {
+                return Unauthorized(new ApiResponse { Action = false, Message = "خطای احراز هویت." });
+            }
+            var result = await coachRepository.GetCardNumber(coachId);
+            if (!result.Action) return BadRequest(result);
+            return Ok(result);
+        }
+
+
+        #endregion
         [HttpGet("GetTransactionList")]
         [Authorize(Roles = "Coach")]
         public async Task<IActionResult> GetTransactionList()

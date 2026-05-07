@@ -33,6 +33,13 @@ public class ApplicationDbContext : DbContext
             .WithOne(w => w.Athlete)
             .HasForeignKey(w => w.AthleteId)
             .OnDelete(DeleteBehavior.Cascade);
+        
+        modelBuilder.Entity<Coach>()
+            .HasOne(c => c.CoachCardNumber)
+            .WithOne(cc => cc.Coach)
+            .HasForeignKey<CoachCardNumber>(cc => cc.CoachId)
+            .OnDelete(DeleteBehavior.Cascade);
+    
 
         modelBuilder.Entity<Athlete>()
             .HasOne(a => a.ActiveWorkoutProgram)
@@ -95,5 +102,7 @@ public class ApplicationDbContext : DbContext
     public DbSet<CoachPineExercise>  CoachPineExercises { get; set; }
     public DbSet<LastWorkoutExercise>  LastWorkoutExercises { get; set; }
     public DbSet<PaymentAttempt>  PaymentAttempts { get; set; }
+    public DbSet<CoachCardNumber>  CoachCardNumbers { get; set; }
+
 
 }
