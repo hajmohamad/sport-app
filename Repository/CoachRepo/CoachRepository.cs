@@ -1612,7 +1612,7 @@ namespace sport_app_backend.Repository.CoachRepo
             }
 
 
-            if ( expiresAt.HasValue && now < expiresAt.Value)
+            if ( expiresAt.HasValue && now > expiresAt.Value)
             {
                 return new ApiResponse { Action = false, Message = "تاریخ شروع باید قبل از تاریخ انقضا باشد." };
             }
