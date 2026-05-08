@@ -60,8 +60,8 @@ builder.Services.AddCors(options =>
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddProblemDetails();
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>(); 
+builder.Services.AddProblemDetails();
 
 
 
@@ -201,6 +201,7 @@ app.UseStaticFiles();
 app.UseIpRateLimiting(); 
 
 app.UseCors("AllowFrontend");
+app.UseMiddleware<ResponseLoggingMiddleware>();
 
 app.UseAuthentication();
 app.UseAuthorization();

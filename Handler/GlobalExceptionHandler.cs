@@ -14,14 +14,12 @@ public class GlobalExceptionHandler(ILogger<GlobalExceptionHandler> logger, ISms
     {
         var traceId = Activity.Current?.Id ?? httpContext.TraceIdentifier;
 
-        
         logger.LogError(
             exception,
-            "on handel error TraceId: {TraceId}, Path: {Path}",
+            "Unhandled exception | TraceId: {TraceId} | Path: {Path}",
             traceId,
             httpContext.Request.Path
         );
-
 
         try
         {
@@ -32,18 +30,20 @@ public class GlobalExceptionHandler(ILogger<GlobalExceptionHandler> logger, ISms
             logger.LogError(smsEx, "خطا در هنگام ارسال پیامک اضطراری.");
         }
 
+        if (httpContext.Response.HasStarted)
+            return false;
 
         httpContext.Response.StatusCode = StatusCodes.Status500InternalServerError;
+        httpContext.Response.ContentType = "application/json";
+
         await httpContext.Response.WriteAsJsonAsync(new
         {
             Title = "خطای داخلی سرور",
             Status = StatusCodes.Status500InternalServerError,
             Detail = "یک مشکل غیرمنتظره در سرور رخ داده است. لطفاً بعداً تلاش کنید.",
             TraceId = traceId
-            
         }, cancellationToken);
 
         return true;
     }
 }
-    
