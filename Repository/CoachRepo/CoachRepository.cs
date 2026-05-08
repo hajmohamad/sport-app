@@ -1331,85 +1331,91 @@ namespace sport_app_backend.Repository.CoachRepo
 
         public async Task<(IEnumerable<AllExerciseResponseDto> Exercises, int TotalCount)>
             GetExercisesWithFilterForCoach(
-                string? level, string? type, string? mechanic, string?[]? equipment, string? muscle,
-                string? place, int page, int pageSize, string? searchTerm, int? athleteId, int couchId)
+                string? level, string? type, string? mechanic, string?[]? equipment,
+                string? muscle, string? place, int page, int pageSize, 
+                string? searchTerm, int? athleteId, int coachId)
         {
-            var pinnedExerciseIds  = new List<int>();
-            if (muscle != null)
+            if (page < 1) page = 1;
+            if (pageSize <= 0) pageSize = 10;
+
+            bool hasLevel = Enum.TryParse(level, true, out ExerciseLevel levelEnum);
+            bool hasType = Enum.TryParse(type, true, out ExerciseType typeEnum);
+            bool hasMechanic = Enum.TryParse(mechanic, true, out MechanicType mechanicEnum);
+            bool hasMuscle = Enum.TryParse(muscle, true, out BaseCategory muscleEnum);
+
+            List<int> pinnedExerciseIds = new();
+            if (hasMuscle)
             {
+                var coachPins = await context.CoachPineExercises
+                    .Where(p => p.CoachId == coachId && p.BaseCategory == muscleEnum)
+                    .ToListAsync();
 
-               Enum.TryParse<BaseCategory>(muscle, true, out var baseCategory); 
-
-               var coachPins = await context.CoachPineExercises
-                                   .Where(p => p.CoachId == couchId && p.BaseCategory == baseCategory)
-                      .ToListAsync(); 
-               pinnedExerciseIds = coachPins.SelectMany(p => p.ExerciseIds).ToList();
+                pinnedExerciseIds = coachPins
+                    .SelectMany(p => p.ExerciseIds)
+                    .Distinct()
+                    .ToList();
             }
 
-       
-
-            var lastProgramExerciseIds = new List<int>();
+            List<int> lastProgramExerciseIds = new();
             if (athleteId.HasValue)
             {
                 var lastWorkout = await context.LastWorkoutExercises
-                    .Where(w => w.CoachId == couchId && w.AthleteId == athleteId.Value)
-                    .OrderByDescending(w => w.Id) 
+                    .Where(w => w.CoachId == coachId && w.AthleteId == athleteId.Value)
+                    .OrderByDescending(w => w.Id)
                     .FirstOrDefaultAsync();
 
                 if (lastWorkout != null)
-                {
                     lastProgramExerciseIds = lastWorkout.ExerciseIds.ToList();
-                }
             }
 
             var query = context.Exercises.AsQueryable();
-    
+
             if (!string.IsNullOrWhiteSpace(searchTerm))
             {
-                query = query.Where(e => e.PersianName.Contains(searchTerm) || 
-                                         e.EnglishName.Contains(searchTerm));
+                query = query.Where(e =>
+                    e.PersianName.Contains(searchTerm) ||
+                    e.EnglishName.Contains(searchTerm));
             }
 
-            if (Enum.TryParse<ExerciseLevel>(level, true, out var levelEnum))
+            if (hasLevel)
                 query = query.Where(e => e.ExerciseLevel == levelEnum);
 
-            if (Enum.TryParse<ExerciseType>(type, true, out var typeEnum))
+            if (hasType)
                 query = query.Where(e => e.ExerciseType == typeEnum);
-        
-            if (Enum.TryParse<MechanicType>(mechanic, true, out var mechanicEnum))
+
+            if (hasMechanic)
                 query = query.Where(e => e.Mechanics == mechanicEnum);
 
-            if (equipment != null && equipment.Length != 0)
+            if (hasMuscle)
+                query = query.Where(e => e.BaseCategory == muscleEnum);
+
+            if (equipment is { Length: > 0 })
             {
-                var validEquipments = new List<EquipmentType>();
+                var validEquipments = equipment
+                    .Where(e => Enum.TryParse(e, true, out EquipmentType _))
+                    .Select(e => Enum.Parse<EquipmentType>(e, true))
+                    .ToList();
 
-                foreach (var eq in equipment)
-                {
-                    if (Enum.TryParse<EquipmentType>(eq, true, out var equipEnum))
-                        validEquipments.Add(equipEnum);
-                }
-
-                if (validEquipments.Any())
+                if (validEquipments.Count > 0)
                     query = query.Where(e => validEquipments.Contains(e.Equipment));
             }
 
-            if (Enum.TryParse<BaseCategory>(muscle, true, out var muscleEnum))
-                query = query.Where(e => e.BaseCategory == muscleEnum);
-    
-            if (!string.IsNullOrEmpty(place))
+            if (!string.IsNullOrWhiteSpace(place))
+            {
                 query = query.Where(e => EF.Functions.Like(e.Description, $"%{place}%"));
+            }
 
             var totalCount = await query.CountAsync();
 
             var exercises = await query
-                .Select(e => new 
+                .Select(e => new
                 {
                     Exercise = e,
                     IsPinned = pinnedExerciseIds.Contains(e.Id),
                     IsInLastProgram = lastProgramExerciseIds.Contains(e.Id)
                 })
-                .OrderByDescending(x => x.IsPinned) 
-                .ThenByDescending(x => x.Exercise.Views) 
+                .OrderByDescending(x => x.IsPinned)
+                .ThenByDescending(x => x.Exercise.Views)
                 .Skip((page - 1) * pageSize)
                 .Take(pageSize)
                 .Select(x => new AllExerciseResponseDto
@@ -1425,12 +1431,12 @@ namespace sport_app_backend.Repository.CoachRepo
                     View = x.Exercise.Views,
                     Met = x.Exercise.Met,
                     IsPinned = x.IsPinned,
-                    IsInLastProgram = x.IsInLastProgram 
+                    IsInLastProgram = x.IsInLastProgram
                 })
                 .ToListAsync();
 
             return (exercises, totalCount);
-}
+        }
 
         public async Task<ApiResponse> AddPineExercise(int exerciseId, int coachId)
         {
