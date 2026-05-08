@@ -227,9 +227,11 @@ namespace sport_app_backend.Repository.CoachRepo
                 await context.CoachServices.AddAsync(newCoachService);
                 await context.SaveChangesAsync(); 
 
-                var discountCodes = await context.DiscountCodes
-                    .Where(c => !c.IsDeleted && c.CoachServicesId != null && c.CoachServicesId.Contains(id))
-                    .ToListAsync();
+                var discountCodes = (await context.DiscountCodes
+                        .Where(c => !c.IsDeleted&&c.CoachId==coach.Id)
+                        .ToListAsync())
+                    .Where(c => c.CoachServicesId != null && c.CoachServicesId.Contains(id))
+                    .ToList();
 
                 foreach (var dc in discountCodes)
                 {
