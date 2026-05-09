@@ -1349,6 +1349,7 @@ namespace sport_app_backend.Repository.CoachRepo
             if (hasMuscle)
             {
                 var coachPins = await context.CoachPineExercises
+                    .AsNoTracking()
                     .Where(p => p.CoachId == coachId && p.BaseCategory == muscleEnum)
                     .ToListAsync();
 
@@ -1362,6 +1363,7 @@ namespace sport_app_backend.Repository.CoachRepo
             if (athleteId.HasValue)
             {
                 var lastWorkout = await context.LastWorkoutExercises
+                    .AsNoTracking()
                     .Where(w => w.CoachId == coachId && w.AthleteId == athleteId.Value)
                     .OrderByDescending(w => w.Id)
                     .FirstOrDefaultAsync();
@@ -1370,7 +1372,7 @@ namespace sport_app_backend.Repository.CoachRepo
                     lastProgramExerciseIds = lastWorkout.ExerciseIds.ToList();
             }
 
-            var query = context.Exercises.AsQueryable();
+            var query = context.Exercises.AsNoTracking().AsQueryable();
 
             if (!string.IsNullOrWhiteSpace(searchTerm))
             {
@@ -1418,6 +1420,7 @@ namespace sport_app_backend.Repository.CoachRepo
                 })
                 .OrderByDescending(x => x.IsPinned)
                 .ThenByDescending(x => x.Exercise.Views)
+                .ThenBy(x => x.Exercise.Id)
                 .Skip((page - 1) * pageSize)
                 .Take(pageSize)
                 .Select(x => new AllExerciseResponseDto
