@@ -589,57 +589,54 @@ private async Task<string> GenerateUniqueUsername()
     }
 
   
-
-public async Task<(IEnumerable<AllExerciseResponseDto> Exercises, int TotalCount)> GetExercisesAsync(string? level,
+public async Task<(IEnumerable<AllExerciseResponseDto> Exercises, int TotalCount)> GetExercisesAsync(
+    string? level,
     string? type,
     string? mechanic,
     string?[] equipment,
     string? muscle,
     string? place,
     int page,
-    int pageSize, string? searchTerm)
+    int pageSize,
+    string? searchTerm)
 {
-    var query = dbContext.Exercises.AsQueryable();
+    IQueryable<Exercise> query = dbContext.Exercises.AsNoTracking();
+
     if (!string.IsNullOrWhiteSpace(searchTerm))
-    {
-        query = query.Where(e => e.PersianName.Contains(searchTerm) || 
-                                 e.EnglishName.Contains(searchTerm));
-    }
+        query = query.Where(e => e.PersianName.Contains(searchTerm) || e.EnglishName.Contains(searchTerm));
 
     if (Enum.TryParse<ExerciseLevel>(level, true, out var levelEnum))
         query = query.Where(e => e.ExerciseLevel == levelEnum);
 
     if (Enum.TryParse<ExerciseType>(type, true, out var typeEnum))
         query = query.Where(e => e.ExerciseType == typeEnum);
+
     if (Enum.TryParse<MechanicType>(mechanic, true, out var mechanicEnum))
-        query = query.Where(e=>e.Mechanics== mechanicEnum);
+        query = query.Where(e => e.Mechanics == mechanicEnum);
 
-    if (equipment != null && equipment.Any())
+    if (equipment is { Length: > 0 })
     {
-        var validEquipments = new List<EquipmentType>();
+        var validEquipments = equipment
+            .Select(eq => Enum.TryParse<EquipmentType>(eq, true, out var equipEnum) ? equipEnum : (EquipmentType?)null)
+            .Where(e => e.HasValue)
+            .Select(e => e!.Value)
+            .ToList();
 
-        foreach (var eq in equipment)
-        {
-            if (Enum.TryParse<EquipmentType>(eq, true, out var equipEnum))
-                validEquipments.Add(equipEnum);
-        }
-
-        if (validEquipments.Any())
+        if (validEquipments.Count > 0)
             query = query.Where(e => validEquipments.Contains(e.Equipment));
     }
 
-   
     if (Enum.TryParse<BaseCategory>(muscle, true, out var muscleEnum))
-        query = query.Where(e=>e.BaseCategory== muscleEnum);
-    
-    if (!string.IsNullOrEmpty(place))
+        query = query.Where(e => e.BaseCategory == muscleEnum);
+
+    if (!string.IsNullOrWhiteSpace(place))
         query = query.Where(e => EF.Functions.Like(e.Description, $"%{place}%"));
 
     var totalCount = await query.CountAsync();
 
-    // 🔹 تبدیل به DTO
     var exercises = await query
         .OrderByDescending(e => e.Views)
+        .ThenBy(e => e.Id) // ترتیب ثابت بین صفحات
         .Skip((page - 1) * pageSize)
         .Take(pageSize)
         .Select(e => new AllExerciseResponseDto
@@ -659,5 +656,6 @@ public async Task<(IEnumerable<AllExerciseResponseDto> Exercises, int TotalCount
 
     return (exercises, totalCount);
 }
+
 }
 
