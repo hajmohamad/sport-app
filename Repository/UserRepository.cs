@@ -626,56 +626,84 @@ private async Task<string> GenerateUniqueUsername()
 
   
 
-public async Task<(IEnumerable<AllExerciseResponseDto> Exercises, int TotalCount)> GetExercisesAsync(string? level,
+public async Task<(IEnumerable<AllExerciseResponseDto> Exercises, int TotalCount)> GetExercisesAsync(
+    string? level,
     string? type,
     string? mechanic,
-    string?[] equipment,
+    string?[]? equipment,
     string? muscle,
     string? place,
     int page,
-    int pageSize, string? searchTerm)
+    int pageSize,
+    string? searchTerm)
 {
-    var query = dbContext.Exercises.AsQueryable();
+    page = page <= 0 ? 1 : page;
+    pageSize = pageSize <= 0 ? 10 : pageSize;
+
+    IQueryable<Exercise> query = dbContext.Exercises.AsNoTracking();
+
+    // Search
     if (!string.IsNullOrWhiteSpace(searchTerm))
     {
-        query = query.Where(e => e.PersianName.Contains(searchTerm) || 
-                                 e.EnglishName.Contains(searchTerm));
+        searchTerm = searchTerm.Trim();
+        query = query.Where(e =>
+            EF.Functions.Like(e.PersianName!, $"%{searchTerm}%") ||
+            EF.Functions.Like(e.EnglishName!, $"%{searchTerm}%"));
     }
 
-    if (Enum.TryParse<ExerciseLevel>(level, true, out var levelEnum))
-        query = query.Where(e => e.ExerciseLevel == levelEnum);
-
-    if (Enum.TryParse<ExerciseType>(type, true, out var typeEnum))
-        query = query.Where(e => e.ExerciseType == typeEnum);
-    if (Enum.TryParse<MechanicType>(mechanic, true, out var mechanicEnum))
-        query = query.Where(e=>e.Mechanics== mechanicEnum);
-
-    if (equipment != null && equipment.Any())
+    // Level
+    if (!string.IsNullOrWhiteSpace(level) &&
+        Enum.TryParse<ExerciseLevel>(level, true, out var levelEnum))
     {
-        var validEquipments = new List<EquipmentType>();
+        query = query.Where(e => e.ExerciseLevel == levelEnum);
+    }
 
-        foreach (var eq in equipment)
-        {
-            if (Enum.TryParse<EquipmentType>(eq, true, out var equipEnum))
-                validEquipments.Add(equipEnum);
-        }
+    if (!string.IsNullOrWhiteSpace(type) &&
+        Enum.TryParse<ExerciseType>(type, true, out var typeEnum))
+    {
+        query = query.Where(e => e.ExerciseType == typeEnum);
+    }
 
-        if (validEquipments.Any())
+    if (!string.IsNullOrWhiteSpace(mechanic) &&
+        Enum.TryParse<MechanicType>(mechanic, true, out var mechanicEnum))
+    {
+        query = query.Where(e => e.Mechanics == mechanicEnum);
+    }
+
+    if (equipment != null && equipment.Length > 0)
+    {
+        var validEquipments = equipment
+            .Where(e => !string.IsNullOrWhiteSpace(e))
+            .Select(e =>
+            {
+                bool parsed = Enum.TryParse<EquipmentType>(e, true, out var result);
+                return new { parsed, result };
+            })
+            .Where(x => x.parsed)
+            .Select(x => x.result)
+            .ToList();
+
+        if (validEquipments.Count > 0)
             query = query.Where(e => validEquipments.Contains(e.Equipment));
     }
 
-   
-    if (Enum.TryParse<BaseCategory>(muscle, true, out var muscleEnum))
-        query = query.Where(e=>e.BaseCategory== muscleEnum);
-    
-    if (!string.IsNullOrEmpty(place))
-        query = query.Where(e => EF.Functions.Like(e.Description, $"%{place}%"));
+    if (!string.IsNullOrWhiteSpace(muscle) &&
+        Enum.TryParse<BaseCategory>(muscle, true, out var muscleEnum))
+    {
+        query = query.Where(e => e.BaseCategory == muscleEnum);
+    }
+
+    if (!string.IsNullOrWhiteSpace(place))
+    {
+        place = place.Trim();
+        query = query.Where(e => EF.Functions.Like(e.Description!, $"%{place}%"));
+    }
 
     var totalCount = await query.CountAsync();
 
-    // 🔹 تبدیل به DTO
     var exercises = await query
         .OrderByDescending(e => e.Views)
+        .ThenBy(e => e.Id)
         .Skip((page - 1) * pageSize)
         .Take(pageSize)
         .Select(e => new AllExerciseResponseDto
@@ -695,5 +723,6 @@ public async Task<(IEnumerable<AllExerciseResponseDto> Exercises, int TotalCount
 
     return (exercises, totalCount);
 }
+
 }
 
