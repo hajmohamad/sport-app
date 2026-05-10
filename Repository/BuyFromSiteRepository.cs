@@ -614,7 +614,7 @@ public class BuyFromSiteRepository(
             Authority = zarinPalResponse.Authority,
             Amount = pricing.FinalPrice,
             OriginalAmount = pricing.OriginalPrice,
-            PublicDiscountAmount = pricing.PublicDiscountAmount,
+            // PublicDiscountAmount = pricing.PublicDiscountAmount,
             CodeDiscountAmount = pricing.CodeDiscountAmount,
             DiscountCodeId = await GetDiscountCodeId(checkoutDiscountRequestDto?.DiscountCode),
         };
@@ -630,7 +630,7 @@ public class BuyFromSiteRepository(
             {
                 zarinPalResponse.PaymentUrl,
                 Price = pricing.OriginalPrice,
-                pricing.PublicDiscountAmount,
+                // pricing.PublicDiscountAmount,
                 pricing.CodeDiscountAmount,
                 pricing.FinalPrice,
 
@@ -1048,17 +1048,18 @@ public class BuyFromSiteRepository(
     private async Task<ApiResponse> CalculateCheckoutPricing(CoachService coachService, string? discountCodeValue)
     {
         var originalPrice = coachService.Price;
-        var publicDiscountAmount = 0.0 ;
+        // var publicDiscountAmount = 0.0 ;
         var codeDiscountPercent = 0.0;
-        var publicDiscountPercent = 0.0;
+        // var publicDiscountPercent = 0.0;
         var codeDiscountAmount =0.0;
         double finalPrice;
         
         if (discountCodeValue is null)
         {
-            publicDiscountAmount= coachService.CalculatePublicDiscountAmount();
-            publicDiscountPercent = coachService.PublicDiscountPercent?? 0 ;
-            finalPrice = originalPrice - publicDiscountAmount;
+            // publicDiscountAmount= coachService.CalculatePublicDiscountAmount();
+            // publicDiscountPercent = coachService.PublicDiscountPercent?? 0 ;
+            // finalPrice = originalPrice - publicDiscountAmount;
+            finalPrice = originalPrice;
         }else{
             var discountCodeValidation =
                 await ValidateDiscountCode(coachService.CoachId,coachService.Id, NormalizeDiscountCode(discountCodeValue));
@@ -1089,8 +1090,8 @@ public class BuyFromSiteRepository(
             Result = new DiscountPreviewDto
             {
                 OriginalPrice = originalPrice,
-                PublicDiscountAmount = publicDiscountAmount,
-                PublicDiscountPercent =  publicDiscountPercent,
+                // PublicDiscountAmount = publicDiscountAmount,
+                // PublicDiscountPercent =  publicDiscountPercent,
                 CodeDiscountAmount =  codeDiscountAmount,
                 CodeDiscountPercent =  codeDiscountPercent,
                 FinalPrice = finalPrice

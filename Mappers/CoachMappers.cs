@@ -47,10 +47,10 @@ namespace sport_app_backend.Mappers
                 Description = coachServiceDto.Description,
                 Price = coachServiceDto.Price,
                 IsActive = coachServiceDto.IsActive, 
-                PublicDiscountPercent = coachServiceDto.PublicDiscountPercent,
-                PublicDiscountExpiresAt = coachServiceDto.PublicDiscountExpiresAt,
-                UsageLimit = coachServiceDto.UsageLimit,
-                NumberOfSellWithDiscount = 0,
+                // PublicDiscountPercent = coachServiceDto.PublicDiscountPercent,
+                // PublicDiscountExpiresAt = coachServiceDto.PublicDiscountExpiresAt,
+                // UsageLimit = coachServiceDto.UsageLimit,
+                // NumberOfSellWithDiscount = 0,
                 NumberOfSell = 0
                 // CommunicateType = (CommunicateType)Enum.Parse(typeof(CommunicateType), coachServiceDto.CommunicateType.ToUpper()),
                 // TypeOfCoachingServices = (TypeOfCoachingServices)Enum.Parse(typeof(TypeOfCoachingServices), coachServiceDto.TypeOfCoachingServices)
@@ -63,11 +63,11 @@ namespace sport_app_backend.Mappers
             coachService.Description = coachServiceDto.Description;
             coachService.Price = coachServiceDto.Price;
             coachService.IsActive = coachServiceDto.IsActive;
-            coachService.PublicDiscountPercent = coachServiceDto.PublicDiscountPercent;
-            coachService.PublicDiscountExpiresAt = coachServiceDto.PublicDiscountExpiresAt;
-            coachService.PublicDiscountPercent = coachServiceDto.PublicDiscountPercent;
-            coachService.PublicDiscountExpiresAt = coachServiceDto.PublicDiscountExpiresAt;
-            coachService.UsageLimit = coachServiceDto.UsageLimit;
+            // coachService.PublicDiscountPercent = coachServiceDto.PublicDiscountPercent;
+            // coachService.PublicDiscountExpiresAt = coachServiceDto.PublicDiscountExpiresAt;
+            // coachService.PublicDiscountPercent = coachServiceDto.PublicDiscountPercent;
+            // coachService.PublicDiscountExpiresAt = coachServiceDto.PublicDiscountExpiresAt;
+            // coachService.UsageLimit = coachServiceDto.UsageLimit;
             
             // coachService.CommunicateType =
             //     (CommunicateType)Enum.Parse(typeof(CommunicateType), coachServiceDto.CommunicateType.ToUpper());
@@ -122,18 +122,18 @@ namespace sport_app_backend.Mappers
 
         public static CoachingServiceResponse ToCoachingServiceResponse(this CoachService coachService)
         {
-            var publicDiscountAmount = CalculatePublicDiscountAmount(coachService);
+            // var publicDiscountAmount = CalculatePublicDiscountAmount(coachService);
             return new CoachingServiceResponse
             {
                 Id = coachService.Id,
                 Title = coachService.Title,
                 Description = coachService.Description,
                 Price = coachService.Price,
-                FinalPrice = Math.Max(0, coachService.Price - publicDiscountAmount),
+                // FinalPrice = Math.Max(0, coachService.Price - publicDiscountAmount),
                 IsActive = coachService.IsActive,
-                HasPublicDiscount = publicDiscountAmount > 0,
-                PublicDiscountPercent = coachService.PublicDiscountPercent,
-                PublicDiscountExpiresAt = coachService.PublicDiscountExpiresAt,
+                // HasPublicDiscount = publicDiscountAmount > 0,
+                // PublicDiscountPercent = coachService.PublicDiscountPercent,
+                // PublicDiscountExpiresAt = coachService.PublicDiscountExpiresAt,
                 NumberOfSell = coachService.NumberOfSell
                 
                 
@@ -156,24 +156,24 @@ namespace sport_app_backend.Mappers
             };
         }
 
-        public static double CalculatePublicDiscountAmount(this CoachService coachService)
-        {
-            if (coachService.PublicDiscountPercent is null)
-            {
-                return 0;
-            }
-
-            var now = DateTime.UtcNow;
-         
-
-            if (coachService.PublicDiscountExpiresAt.HasValue && coachService.PublicDiscountExpiresAt.Value <= now)
-            {
-                return 0;
-            }
-
-            return CalculateDiscountAmount(coachService.Price,
-                coachService.PublicDiscountPercent.Value);
-        }
+        // public static double CalculatePublicDiscountAmount(this CoachService coachService)
+        // {
+        //     if (coachService.PublicDiscountPercent is null)
+        //     {
+        //         return 0;
+        //     }
+        //
+        //     var now = DateTime.UtcNow;
+        //  
+        //
+        //     if (coachService.PublicDiscountExpiresAt.HasValue && coachService.PublicDiscountExpiresAt.Value <= now)
+        //     {
+        //         return 0;
+        //     }
+        //
+        //     return CalculateDiscountAmount(coachService.Price,
+        //         coachService.PublicDiscountPercent.Value);
+        // }
 
         public static double CalculateDiscountAmount(double basePrice,double discountPercent)
         {
