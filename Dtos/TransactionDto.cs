@@ -12,7 +12,7 @@ public class TransactionDto
     public string? ProgramStatus { get; set; }
     public double OriginalAmount { get; set; }
     public double CodeDiscountAmount { get; set; }
-    public double PublicDiscountAmount { get; set; }
+    // public double PublicDiscountAmount { get; set; }
     
     
 }

@@ -136,12 +136,12 @@ namespace sport_app_backend.Repository.CoachRepo
                     Message = "مبلغ وارد شده نمیتواند کمتر از 50 هزار تومان باشد"
                 };
             }
-
-            var publicDiscountValidation = ValidatePublicDiscount(addCoachingServiceDto);
-            if (!publicDiscountValidation.Action)
-            {
-                return publicDiscountValidation;
-            }
+            //
+            // var publicDiscountValidation = ValidatePublicDiscount(addCoachingServiceDto);
+            // if (!publicDiscountValidation.Action)
+            // {
+            //     return publicDiscountValidation;
+            // }
 
             var coachingService = addCoachingServiceDto.ToCoachService(coach);
             coach.CoachingServices ??= [];
@@ -199,11 +199,11 @@ namespace sport_app_backend.Repository.CoachRepo
                 };
             }
 
-            var publicDiscountValidation = ValidatePublicDiscount(addCoachingServices);
-            if (!publicDiscountValidation.Action)
-            {
-                return publicDiscountValidation;
-            }
+            // var publicDiscountValidation = ValidatePublicDiscount(addCoachingServices);
+            // if (!publicDiscountValidation.Action)
+            // {
+            //     return publicDiscountValidation;
+            // }
 
             var coachingService = coach.CoachingServices
                 .FirstOrDefault(x => x.Id == id && !x.IsDeleted);
@@ -221,9 +221,9 @@ namespace sport_app_backend.Repository.CoachRepo
                 coachingService.IsDeleted = true;
                 var newCoachService = addCoachingServices.ToCoachService(coach);
                 newCoachService.NumberOfSell = coachingService.NumberOfSell;
-                newCoachService.UsageLimit = coachingService.UsageLimit;
-                newCoachService.NumberOfSellWithDiscount = coachingService.NumberOfSellWithDiscount;
-                coach.CoachingServices.Add(newCoachService);
+                // newCoachService.UsageLimit = coachingService.UsageLimit;
+                // newCoachService.NumberOfSellWithDiscount = coachingService.NumberOfSellWithDiscount;
+                // coach.CoachingServices.Add(newCoachService);
                 await context.CoachServices.AddAsync(newCoachService);
                 await context.SaveChangesAsync(); 
 
@@ -1174,7 +1174,7 @@ namespace sport_app_backend.Repository.CoachRepo
                     ProgramStatus = programStatus,
                     OriginalAmount = p.OriginalAmount,
                     CodeDiscountAmount = p.CodeDiscountAmount,
-                    PublicDiscountAmount = p.PublicDiscountAmount,
+                    // PublicDiscountAmount = p.PublicDiscountAmount,
                     AppFee = p.AppFee
 
                 };
@@ -1550,41 +1550,41 @@ namespace sport_app_backend.Repository.CoachRepo
             return today.AddDays(-diff);
         }
 
-        private ApiResponse ValidatePublicDiscount(AddCoachServiceDto dto)
-        {
-            if (dto.PublicDiscountPercent is null || dto.PublicDiscountPercent <= 0)
-            {
-                dto.UsageLimit = null;
-                dto.PublicDiscountExpiresAt = null;
-                dto.PublicDiscountPercent = null;
-                return new ApiResponse
-                {
-                    Action = true ,
-                    Message = "کد تخفیفی ایجاد نشده است"
-                };
-            }
-            var now = DateTime.Now;
-
-         
-
-            if (dto.PublicDiscountExpiresAt.HasValue && dto.PublicDiscountExpiresAt.HasValue &&
-                now >= dto.PublicDiscountExpiresAt.Value)
-            {
-                return new ApiResponse { Action = false, Message = "تاریخ انقضا قبل از تاریخ شروع است" };
-            }
-
-            var amount = CoachMappers.CalculateDiscountAmount(dto.Price, dto.PublicDiscountPercent.Value);
-            if (amount <= 0)
-            {
-                return new ApiResponse { Action = false, Message = "مقدار تخفیف عمومی نامعتبر است." };
-            }
-
-            return new ApiResponse
-            {
-                Action = true
-                , Message = "کد تخفیف درست است"
-            };
-        }
+        // private ApiResponse ValidatePublicDiscount(AddCoachServiceDto dto)
+        // {
+        //     if (dto.PublicDiscountPercent is null || dto.PublicDiscountPercent <= 0)
+        //     {
+        //         dto.UsageLimit = null;
+        //         dto.PublicDiscountExpiresAt = null;
+        //         dto.PublicDiscountPercent = null;
+        //         return new ApiResponse
+        //         {
+        //             Action = true ,
+        //             Message = "کد تخفیفی ایجاد نشده است"
+        //         };
+        //     }
+        //     var now = DateTime.Now;
+        //
+        //  
+        //
+        //     if (dto.PublicDiscountExpiresAt.HasValue && dto.PublicDiscountExpiresAt.HasValue &&
+        //         now >= dto.PublicDiscountExpiresAt.Value)
+        //     {
+        //         return new ApiResponse { Action = false, Message = "تاریخ انقضا قبل از تاریخ شروع است" };
+        //     }
+        //
+        //     var amount = CoachMappers.CalculateDiscountAmount(dto.Price, dto.PublicDiscountPercent.Value);
+        //     if (amount <= 0)
+        //     {
+        //         return new ApiResponse { Action = false, Message = "مقدار تخفیف عمومی نامعتبر است." };
+        //     }
+        //
+        //     return new ApiResponse
+        //     {
+        //         Action = true
+        //         , Message = "کد تخفیف درست است"
+        //     };
+        // }
 
         private async Task<ApiResponse> ValidateDiscountCodeInput(Coach coach,string code, double DiscountPercent,
             int? usageLimit, DateTime? expiresAt, int? currentDiscountCodeId,List<int>? coachServiceIdsDto)

@@ -48,10 +48,10 @@ public class CheckoutDiscountRequestDto
 public class DiscountPreviewDto
 {
     public double OriginalPrice { get; set; }
-    public double PublicDiscountAmount { get; set; }
+    // public double PublicDiscountAmount { get; set; }
     public double CodeDiscountAmount { get; set; }
     public double CodeDiscountPercent { get; set; }
-    public double PublicDiscountPercent { get; set; }
+    // public double PublicDiscountPercent { get; set; }
     public double FinalPrice { get; set; }
 
     

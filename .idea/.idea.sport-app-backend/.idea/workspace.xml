@@ -11,21 +11,16 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="11e104f8-869d-4d9d-9802-b48455f5eb31" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Dtos/AddCardNumberDto.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Models/Account/Coach/CoachCardNumber.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/dataSources.local.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/dataSources/b995594b-b1c6-4f7b-a3d8-4a5b1ad21ad7.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/dataSources/b995594b-b1c6-4f7b-a3d8-4a5b1ad21ad7.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Controller/CoachController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Controller/CoachController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Data/ApplicationDBContext.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Data/ApplicationDBContext.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Interface/Coach/ICoachRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Interface/Coach/ICoachRepository.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Migrations/ApplicationDbContextModelSnapshot.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Migrations/ApplicationDbContextModelSnapshot.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Models/Account/Coach/Coach.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/Account/Coach/Coach.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Program.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dtos/AddCoachServiceDto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Dtos/AddCoachServiceDto.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dtos/CoachingServiceResponse.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Dtos/CoachingServiceResponse.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dtos/DiscountCodeDtos.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Dtos/DiscountCodeDtos.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dtos/TransactionDto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Dtos/TransactionDto.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Mappers/CoachMappers.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Mappers/CoachMappers.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Models/Payments/Payment.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/Payments/Payment.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Models/TrainingPlan/CoachService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/TrainingPlan/CoachService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Repository/BuyFromSiteRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Repository/BuyFromSiteRepository.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Repository/CoachRepo/CoachRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Repository/CoachRepo/CoachRepository.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/appsettings.Development.json" beforeDir="false" afterPath="$PROJECT_DIR$/appsettings.Development.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sport-app-backend.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/sport-app-backend.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sport-app-backend.sln.DotSettings.user" beforeDir="false" afterPath="$PROJECT_DIR$/sport-app-backend.sln.DotSettings.user" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -154,7 +149,7 @@
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "com.tabnineCommon.userSettings.AppSettingsConfigurable",
+    "settings.editor.selected.configurable": "CSharpOtherInlayHintsOptions",
     "vue.rearranger.settings.migration": "true"
   },
   "keyToStringList": {
@@ -836,14 +831,7 @@
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Controller/AthleteController/AchievementController.cs</url>
           <line>27</line>
-          <properties documentPath="$PROJECT_DIR$/Controller/AchievementController.cs" containingFunctionPresentation="Method 'CompleteNewChallenge'">
-            <startOffsets>
-              <option value="903" />
-            </startOffsets>
-            <endOffsets>
-              <option value="904" />
-            </endOffsets>
-          </properties>
+          <properties documentPath="$PROJECT_DIR$/Controller/AchievementController.cs" containingFunctionPresentation="Method 'CompleteNewChallenge'" />
           <option name="timeStamp" value="10" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
@@ -877,10 +865,10 @@
           <line>161</line>
           <properties documentPath="$PROJECT_DIR$/Mappers/CoachMappers.cs" containingFunctionPresentation="Method 'CalculatePublicDiscountAmount'">
             <startOffsets>
-              <option value="7215" />
+              <option value="7269" />
             </startOffsets>
             <endOffsets>
-              <option value="7216" />
+              <option value="7270" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="23" />
@@ -903,23 +891,23 @@
           <line>312</line>
           <properties documentPath="$PROJECT_DIR$/Repository/CoachRepo/CoachRepository.cs" containingFunctionPresentation="Method 'UpdateDiscountCode'">
             <startOffsets>
-              <option value="13086" />
+              <option value="13125" />
             </startOffsets>
             <endOffsets>
-              <option value="13087" />
+              <option value="13126" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="31" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Repository/CoachRepo/CoachRepository.cs</url>
-          <line>314</line>
+          <line>313</line>
           <properties documentPath="$PROJECT_DIR$/Repository/CoachRepo/CoachRepository.cs" containingFunctionPresentation="Method 'UpdateDiscountCode'">
             <startOffsets>
-              <option value="13101" />
+              <option value="13143" />
             </startOffsets>
             <endOffsets>
-              <option value="13407" />
+              <option value="13217" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="32" />

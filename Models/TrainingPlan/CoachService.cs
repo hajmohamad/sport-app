@@ -26,8 +26,8 @@ public class CoachService
     // public TypeOfCoachingServices TypeOfCoachingServices { get; set; }
     public bool IsDeleted { get; set; } = false;
     public  int NumberOfSell { get; set; } = 0;
-    public int? PublicDiscountPercent { get; set; }
-    public DateTime? PublicDiscountExpiresAt { get; set; }
-    public int? UsageLimit { get; set; }
-    public int? NumberOfSellWithDiscount { get; set; }
+    // public int? PublicDiscountPercent { get; set; }
+    // public DateTime? PublicDiscountExpiresAt { get; set; }
+    // public int? UsageLimit { get; set; }
+    // public int? NumberOfSellWithDiscount { get; set; }
 }

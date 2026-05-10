@@ -31,7 +31,7 @@ public class Payment
     public double AppFee { get; set; }
     public long RefId { get; set; }
     public double OriginalAmount { get; set; }
-    public double PublicDiscountAmount { get; set; }
+    // public double PublicDiscountAmount { get; set; }
     public double CodeDiscountAmount { get; set; }
     public int? DiscountCodeId { get; set; }
     public DiscountCode? DiscountCode { get; set; }
