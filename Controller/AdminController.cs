@@ -39,7 +39,7 @@ namespace sport_app_backend.Controller
 
         [HttpPut("UpdateCoachPayoutStatus/{payoutId}")]
         public async Task<IActionResult> UpdateCoachPayoutStatus(int payoutId, [FromQuery] string newStatus,
-            [FromQuery] string? transactionReference,IFormFile file)
+            [FromQuery] string? transactionReference,IFormFile? file)
         {
             if (!Enum.TryParse<PayoutStatus>(newStatus, true, out var statusEnum))
             {
