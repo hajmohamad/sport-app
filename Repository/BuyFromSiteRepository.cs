@@ -1120,7 +1120,7 @@ public class BuyFromSiteRepository(
             return new ApiResponse { Action = false, Message = "کد تاریخش گذشته" };
         }
 
-        if (discountCode.CoachServicesId is not null && !discountCode.CoachServicesId.Contains(coachServiceId))
+        if (discountCode.CoachServicesId is not null && (!discountCode.CoachServicesId.Contains(coachServiceId)&&discountCode.CoachServicesId.Count!=0))
         {
             return new ApiResponse { Action = false, Message =  "کد تخفیف برای این سرویس قابل استفاده نیست" };
         }
