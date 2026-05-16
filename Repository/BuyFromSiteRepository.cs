@@ -1114,7 +1114,7 @@ public class BuyFromSiteRepository(
             return new ApiResponse { Action = false, Message = "کد اشتباه است" };
         }
 
-        if (discountCode.Status == DiscountCodeStatus.INACTIVE|| discountCode.Status== DiscountCodeStatus.EXPIRED)
+        if (discountCode.Status is DiscountCodeStatus.INACTIVE or DiscountCodeStatus.EXPIRED)
         {
             return new ApiResponse { Action = false, Message = "کد غیرفعال شده" };
         }
@@ -1127,9 +1127,7 @@ public class BuyFromSiteRepository(
         }
         
 
-        if (discountCode.CoachServicesId is not null && (!discountCode.CoachServicesId.Contains(coachServiceId)&&discountCode.CoachServicesId.Count!=0) ||
-            discountCode.CoachServicesId?.Any() == true &&
-            !discountCode.CoachServicesId.Contains(coachServiceId))
+        if ( !discountCode.CoachServicesId.Contains(coachServiceId) && discountCode.CoachServicesId.Count!=0)
         {
             return new ApiResponse { Action = false, Message =  "کد تخفیف برای این سرویس قابل استفاده نیست" };
         }
