@@ -253,6 +253,7 @@ namespace sport_app_backend.Repository
             var coachingServiceDto = await context.CoachServices
                 .Where(u =>u.IsDeleted!=true && u.Coach.PhoneNumber == phoneNumber)
                 .ToListAsync();
+            
             var workoutProgramFeedBack = await context.WorkoutProgramFeedback.Where(fb=>fb.IsChosen&&fb.CouchId==coachingServiceDto[0].CoachId).ToListAsync();
 
             return new ApiResponse
