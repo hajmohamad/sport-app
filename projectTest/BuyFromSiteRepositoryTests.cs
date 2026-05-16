@@ -141,6 +141,8 @@ namespace sport_app_backend.Tests.Repository
         [Fact]
         public async Task PreviewCheckout_ShouldReturnError_WhenDiscountCodeDoesNotExist()
         {
+           
+            
             // Arrange
             var phoneNumber = "09123456789";
             var coachServiceId = 1;
