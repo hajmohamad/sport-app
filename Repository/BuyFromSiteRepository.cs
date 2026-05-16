@@ -561,8 +561,8 @@ public class BuyFromSiteRepository(
         {
             Action = true,
             Message = "preview generated",
-            Result = new {pricingResult.Result
-                ,
+            Result = new {
+                pricingResult.Result,
                 CoachServieName = coachService.Title,
                 CoachName = coachService.Coach.User.FirstName + " " + coachService.Coach.User.LastName,
             }
@@ -834,6 +834,10 @@ public class BuyFromSiteRepository(
             {
                 wr.Status,
                 workoutProgramPrice = wr.Payment.Amount,
+                DiscountPercent = wr.Payment.DiscountCode == null 
+                    ? 0 
+                    : wr.Payment.DiscountCode.DiscountPercent,
+                CodeDiscountAmount = wr.Payment.CodeDiscountAmount ,
                 AhtleteFirstName = wr.Athlete.User.FirstName,
                 AthleteLastName = wr.Athlete.User.LastName,
                 CoachPhoneNumber = wr.Coach.PhoneNumber,
@@ -877,6 +881,8 @@ public class BuyFromSiteRepository(
         {
             Status = programData.Status.ToString(),
             WorkoutProgramPrice = programData.workoutProgramPrice.ToString(CultureInfo.InvariantCulture),
+            CodeDiscountAmount =  programData.CodeDiscountAmount,
+            CodeDiscountPercent = programData.DiscountPercent,
             AthleteName = programData.AhtleteFirstName + " " + programData.AthleteLastName,
             PaymentDate = persianDate,
             ProgramDuration = programData.ProgramDuration,

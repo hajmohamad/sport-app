@@ -5,6 +5,8 @@ public class WorkoutProgramInfoForSiteDto
     public string Status { get; set; }= "";
     public string WorkoutProgramPrice { get; set; } = "0";
     public string AthleteName { get; set; }= "";
+    public double CodeDiscountAmount { get; set; }
+    public double CodeDiscountPercent { get; set; }
     public string PaymentDate { get; set; }= "";
     public int ProgramDuration { get; set; }
     public string ProgramLevel { get; set; }= "";
