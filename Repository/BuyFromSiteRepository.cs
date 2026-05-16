@@ -1125,12 +1125,15 @@ public class BuyFromSiteRepository(
             await dbContext.SaveChangesAsync();
             return new ApiResponse { Action = false, Message = "کد تاریخش گذشته" };
         }
+        
 
-        if (discountCode.CoachServicesId is not null && (!discountCode.CoachServicesId.Contains(coachServiceId)&&discountCode.CoachServicesId.Count!=0))
+        if (discountCode.CoachServicesId is not null && (!discountCode.CoachServicesId.Contains(coachServiceId)&&discountCode.CoachServicesId.Count!=0) ||
+            discountCode.CoachServicesId?.Any() == true &&
+            !discountCode.CoachServicesId.Contains(coachServiceId))
         {
             return new ApiResponse { Action = false, Message =  "کد تخفیف برای این سرویس قابل استفاده نیست" };
         }
-        
+
         if (discountCode.UsageLimit.HasValue && discountCode.UsedCount >= discountCode.UsageLimit.Value)
         {
             return new ApiResponse { Action = false, Message = "تعداد استفاده تمام شده" };
