@@ -592,13 +592,13 @@ namespace sport_app_backend.Repository.CoachRepo
                 "date" => filter.SortDesc ? query.OrderByDescending(x => x.PaymentDate) : query.OrderBy(x => x.PaymentDate),
                 "service" => filter.SortDesc ? query.OrderByDescending(x => x.CoachService.Title) : query.OrderBy(x => x.CoachService.Title),
                 "amount" => filter.SortDesc ? query.OrderByDescending(x => x.Amount) : query.OrderBy(x => x.Amount),
-                "athlete" => filter.SortDesc ? query.OrderByDescending(x => x.Athlete.User.FirstName) : query.OrderBy(x => x.Athlete.User.FirstName),
+                "athlete" => filter.SortDesc ? query.OrderBy(x => x.Athlete.User.FirstName)  :  query.OrderByDescending(x => x.Athlete.User.FirstName),
                 _ => query.OrderByDescending(x => x.PaymentDate)
             };
 
            
-            int skip = (filter.Page - 1) * filter.PageSize;
-            int totalCount = await query.CountAsync();
+            var skip = (filter.Page - 1) * filter.PageSize;
+            var totalCount = await query.CountAsync();
 
             var payments = await query
                 .Skip(skip)
