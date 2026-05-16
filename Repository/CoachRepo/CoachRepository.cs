@@ -230,12 +230,11 @@ namespace sport_app_backend.Repository.CoachRepo
                 var discountCodes = (await context.DiscountCodes
                         .Where(c => !c.IsDeleted&&c.CoachId==coach.Id)
                         .ToListAsync())
-                    .Where(c => c.CoachServicesId != null && c.CoachServicesId.Contains(id))
+                    .Where(c => c.CoachServicesId.Count !=0 && c.CoachServicesId.Contains(id))
                     .ToList();
 
                 foreach (var dc in discountCodes)
                 {
-                    dc.CoachServicesId ??= [];
 
                     dc.CoachServicesId.RemoveAll(x => x == id);
 
@@ -289,7 +288,7 @@ namespace sport_app_backend.Repository.CoachRepo
                 Status = discountCodeCreateDto.ExpiresAt.HasValue && discountCodeCreateDto.ExpiresAt.Value <= DateTime.UtcNow
                     ? DiscountCodeStatus.EXPIRED
                     : DiscountCodeStatus.ACTIVE,
-                CoachServicesId = discountCodeCreateDto.CoachServiceId
+                CoachServicesId = discountCodeCreateDto.CoachServiceId??[]
             };
 
             await context.DiscountCodes.AddAsync(discountCode);
@@ -328,7 +327,7 @@ namespace sport_app_backend.Repository.CoachRepo
             discountCode.UsageLimit = discountCodeUpdateDto.UsageLimit;
             discountCode.ExpiresAt = discountCodeUpdateDto.ExpiresAt;
             discountCode.UpdatedAt = DateTime.UtcNow;
-            discountCode.CoachServicesId = discountCodeUpdateDto.CoachServiceId;
+            discountCode.CoachServicesId = discountCodeUpdateDto.CoachServiceId??[];
 
             
             if (!string.IsNullOrWhiteSpace(discountCodeUpdateDto.Status))
@@ -375,7 +374,7 @@ namespace sport_app_backend.Repository.CoachRepo
             {
                 List<ServiceForDiscountDto>? services = null;
 
-                if (discountCode.CoachServicesId != null)
+                if (discountCode.CoachServicesId.Count==0)
                 {
                     var coachServices = await context.CoachServices
                         .Where(c => c.CoachId==coachId&&!c.IsDeleted && discountCode.CoachServicesId.Contains(c.Id))
@@ -413,7 +412,7 @@ namespace sport_app_backend.Repository.CoachRepo
             }
 
             await SyncExpiredDiscountCodes([discountCode]);
-            if (discountCode.CoachServicesId == null)
+            if (discountCode.CoachServicesId.Count==0)
                 return new ApiResponse
                 {
                     Action = true,
@@ -421,7 +420,7 @@ namespace sport_app_backend.Repository.CoachRepo
                     Result = discountCode.ToDiscountCodeListItemDto(null)
                 };
             var coachService = await context.CoachServices.Where(c =>
-                    !c.IsDeleted && discountCode.CoachServicesId != null &&
+                    !c.IsDeleted &&
                     discountCode.CoachServicesId.Contains(c.Id))
                 .ToListAsync();
 
@@ -486,6 +485,18 @@ namespace sport_app_backend.Repository.CoachRepo
             if (coachingService is null)
                 return new ApiResponse() { Message = "Coaching Service not found", Action = false };
             coachingService.IsDeleted = true;
+            var discountCodes = (await context.DiscountCodes
+                    .Where(c => !c.IsDeleted&&c.CoachId==coach.Id)
+                    .ToListAsync())
+                .Where(c => c.CoachServicesId.Count !=0 && c.CoachServicesId.Contains(id))
+                .ToList();
+            if (discountCodes.Count > 0)
+            {
+                foreach (var discountCode in  discountCodes)
+                {
+                    discountCode.Status = DiscountCodeStatus.INACTIVE;
+                }
+            }
             await context.SaveChangesAsync();
             return new ApiResponse()
             {
