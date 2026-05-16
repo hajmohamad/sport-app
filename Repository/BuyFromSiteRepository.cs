@@ -1114,7 +1114,7 @@ public class BuyFromSiteRepository(
             return new ApiResponse { Action = false, Message = "کد اشتباه است" };
         }
 
-        if (discountCode.Status == DiscountCodeStatus.INACTIVE)
+        if (discountCode.Status == DiscountCodeStatus.INACTIVE|| discountCode.Status== DiscountCodeStatus.EXPIRED)
         {
             return new ApiResponse { Action = false, Message = "کد غیرفعال شده" };
         }
