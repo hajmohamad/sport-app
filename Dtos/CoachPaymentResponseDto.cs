@@ -1,9 +1,10 @@
-﻿using sport_app_backend.Models.Question.A_Question;
+using sport_app_backend.Models.Question.A_Question;
 
 namespace sport_app_backend.Dtos;
 
-public class PaymentResponseDto
+public class CoachPaymentResponseDto
 {   public required int PaymentId { get; set; }
+    public required int AthleteId { get; set; }
     public string TransactionId { get; set; } = string.Empty;
     public string Name { get; set; } = string.Empty;
     public required string ImageProfile { get; set; }= string.Empty;

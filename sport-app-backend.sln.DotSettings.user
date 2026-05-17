@@ -1,5 +1,6 @@
 ﻿<wpf:ResourceDictionary xml:space="preserve" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:ss="urn:shemas-jetbrains-com:settings-storage-xaml" xmlns:wpf="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
 	<s:String x:Key="/Default/CodeInspection/ExcludedFiles/FilesAndFoldersToSkip2/=7020124F_002D9FFC_002D4AC3_002D8F3D_002DAAB8E0240759_002Ff_003AActionMethodExecutor_002Ecs_002Fl_003AC_0021_003FUsers_003FMohamad_003FAppData_003FRoaming_003FJetBrains_003FRider2024_002E3_003Fresharper_002Dhost_003FSourcesCache_003F294078ecfce6fdb942ecfee089f09717de7a6fcfe5efd9fdb6f4f93c0fb4813_003FActionMethodExecutor_002Ecs/@EntryIndexedValue">ForceIncluded</s:String>
+	<s:String x:Key="/Default/CodeInspection/ExcludedFiles/FilesAndFoldersToSkip2/=7020124F_002D9FFC_002D4AC3_002D8F3D_002DAAB8E0240759_002Ff_003AActionMethodExecutor_002Ecs_002Fl_003A_002E_002E_003F_002E_002E_003FLibrary_003FApplication_0020Support_003FJetBrains_003FRider2025_002E3_003Fresharper_002Dhost_003FDecompilerCache_003Fdecompiler_003Fb8bc8de0156140769b359b2643b54ee1219600_003Fc6_003F3e755b82_003FActionMethodExecutor_002Ecs/@EntryIndexedValue">ForceIncluded</s:String>
 	<s:String x:Key="/Default/CodeInspection/ExcludedFiles/FilesAndFoldersToSkip2/=7020124F_002D9FFC_002D4AC3_002D8F3D_002DAAB8E0240759_002Ff_003AArgumentNullException_002Ecs_002Fl_003A_002E_002E_003F_002E_002E_003FLibrary_003FApplication_0020Support_003FJetBrains_003FRider2025_002E2_003Fresharper_002Dhost_003FDecompilerCache_003Fdecompiler_003Fc694c498917a4d9daa891180876e41b8d83a00_003F0d_003Fbeaf1246_003FArgumentNullException_002Ecs/@EntryIndexedValue">ForceIncluded</s:String>
 	<s:String x:Key="/Default/CodeInspection/ExcludedFiles/FilesAndFoldersToSkip2/=7020124F_002D9FFC_002D4AC3_002D8F3D_002DAAB8E0240759_002Ff_003AAsyncTaskMethodBuilderT_002Ecs_002Fl_003AC_0021_003FUsers_003FMohamad_003FAppData_003FRoaming_003FJetBrains_003FRider2024_002E3_003Fresharper_002Dhost_003FSourcesCache_003Ffb367341658aaedd7de424d4c9189db33c4387e268dcc4011918569442ab12_003FAsyncTaskMethodBuilderT_002Ecs/@EntryIndexedValue">ForceIncluded</s:String>
 	<s:String x:Key="/Default/CodeInspection/ExcludedFiles/FilesAndFoldersToSkip2/=7020124F_002D9FFC_002D4AC3_002D8F3D_002DAAB8E0240759_002Ff_003AClaimTypes_002Ecs_002Fl_003A_002E_002E_003F_002E_002E_003FLibrary_003FApplication_0020Support_003FJetBrains_003FRider2025_002E2_003Fresharper_002Dhost_003FDecompilerCache_003Fdecompiler_003F4055a7b0c36e4e599ca0c81d859102675600_003F41_003F33f5c29d_003FClaimTypes_002Ecs/@EntryIndexedValue">ForceIncluded</s:String>
@@ -27,7 +28,7 @@
   &lt;Assembly Path="C:\Users\Mohamad\.nuget\packages\coreadmin\3.0.0\lib\net8.0\DotNetEd.CoreAdmin.dll" /&gt;
   &lt;Assembly Path="/Users/mohamad/.nuget/packages/webpush/1.0.12/lib/net5.0/WebPush.dll" /&gt;
 &lt;/AssemblyExplorer&gt;</s:String>
-	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=4e03b139_002Dcf78_002D402c_002D9627_002D0f6b74735d14/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="AddFirstQuestions_WithValidData_ReturnsOkResult" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=4e03b139_002Dcf78_002D402c_002D9627_002D0f6b74735d14/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="AddFirstQuestions_WithValidData_ReturnsOkResult" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
   &lt;Or&gt;
     &lt;TestAncestor&gt;
       &lt;TestId&gt;xUnit::27B63680-A5B7-55C3-C88B-EBD5D7F12023::net8.0::sport_app_backend.Controller.AthleteControllerTests&lt;/TestId&gt;
@@ -36,6 +37,7 @@
       &lt;TestId&gt;xUnit::27B63680-A5B7-55C3-C88B-EBD5D7F12023::net8.0::sport_app_backend.Tests.BackgroundServices.TrainingReminderServiceTests&lt;/TestId&gt;
     &lt;/TestAncestor&gt;
     &lt;Project Location="/Users/mohamad/RiderProjects/sport-app/projectTest" Presentation="&amp;lt;projectTest&amp;gt;" /&gt;
+    &lt;Project Location="/Users/mohamadrahi/RiderProjects/sport-app/projectTest" Presentation="&amp;lt;projectTest&amp;gt;" /&gt;
   &lt;/Or&gt;
 &lt;/SessionState&gt;</s:String>
 	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=a96ffe3b_002Dfc64_002D412f_002D8c18_002D740928fa63a3/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="AthleteRepositoryTests" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
@@ -43,7 +45,7 @@
     &lt;TestId&gt;xUnit::13123267-E24A-4329-8C17-74FBFCDF564C::net8.0::Test_sport_app.UnitTest1.Test1&lt;/TestId&gt;
   &lt;/TestAncestor&gt;
 &lt;/SessionState&gt;</s:String>
-	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=ac12fa42_002D43cd_002D4af7_002Da0a7_002D275ccb218b72/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="All tests from &amp;lt;projectTest&amp;gt;" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=ac12fa42_002D43cd_002D4af7_002Da0a7_002D275ccb218b72/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="All tests from &amp;lt;projectTest&amp;gt;" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
   &lt;Project Location="/Users/mohamad/RiderProjects/sport-app/projectTest" Presentation="&amp;lt;projectTest&amp;gt;" /&gt;
 &lt;/SessionState&gt;</s:String>
 	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=b0162d81_002Db084_002D4338_002Dbbad_002Da320c9d6237b/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="All tests from Solution" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;

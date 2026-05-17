@@ -3,12 +3,12 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using sport_app_backend.Data;
 using sport_app_backend.Dtos;
-using sport_app_backend.Interface;
 using sport_app_backend.Mappers;
 using sport_app_backend.Models;
 using System.Security.Claims;
 using sport_app_backend.Dtos.ProgramDto;
 using sport_app_backend.Interface.Coach;
+using sport_app_backend.Models.Actions.CouchExercise;
 
 
 namespace sport_app_backend.Controller
@@ -51,6 +51,32 @@ namespace sport_app_backend.Controller
             if (!result.Action) return BadRequest(result);
             return Ok(result);
         }
+        [HttpGet("coach/payments")]
+        [Authorize(Roles = "Coach")]
+
+        public async Task<IActionResult> GetCoachPayments(
+            [FromQuery] string? sortBy = "date",
+            [FromQuery] bool sortDesc = true,
+            [FromQuery] int page = 1,
+            [FromQuery] int pageSize = 20)
+        {
+            var filter = new PaymentFilterDto
+            {
+                SortBy = sortBy,
+                SortDesc = sortDesc,
+                Page = page,
+                PageSize = pageSize
+            };
+            var coachId = await GetCoachIdAsync();
+            if (coachId == 0)
+            {
+                return Unauthorized(new ApiResponse { Action = false, Message = "خطای احراز هویت." });
+            }
+            var result = await coachRepository.GetCoachPayments(coachId, filter);
+
+            return Ok(result);
+        }
+
 
         [HttpPost("add_coaching_Service")]
         [Authorize(Roles = "Coach")]
@@ -113,6 +139,8 @@ namespace sport_app_backend.Controller
 
         }
 
+      
+
         /// get coaching Service
         [HttpGet("get_coaching_Service")]
         [Authorize(Roles = "Coach")]
@@ -127,7 +155,83 @@ namespace sport_app_backend.Controller
             return Ok(new ApiResponse { Action = true, Message = "Coaching Service found", Result = coachingServiceDto });
 
         }
+
+        #region discountCode
+
        
+
+        [HttpPost("discount-codes/add-discount")]
+        [Authorize(Roles = "Coach")]
+        public async Task<IActionResult> CreateDiscountCode(
+            [FromBody] DiscountCodeCreateDto discountCodeCreateDto)
+        {
+            var coachId = await GetCoachIdAsync();
+            if (coachId == 0)
+            {
+                return Unauthorized(new ApiResponse { Action = false, Message = "خطای احراز هویت." });
+            }
+            var result = await coachRepository.CreateDiscountCode(coachId, discountCodeCreateDto);
+            if (!result.Action) return BadRequest(result);
+            return Ok(result);
+        }
+
+        [HttpPut("discount-codes/{discountCodeId:int}")]
+        [Authorize(Roles = "Coach")]
+        public async Task<IActionResult> UpdateDiscountCode([FromRoute] int discountCodeId,
+            [FromBody] DiscountCodeUpdateDto discountCodeUpdateDto)
+        {
+            var coachId = await GetCoachIdAsync();
+            if (coachId == 0)
+            {
+                return Unauthorized(new ApiResponse { Action = false, Message = "خطای احراز هویت." });
+            }
+            var result = await coachRepository.UpdateDiscountCode(coachId, discountCodeId, discountCodeUpdateDto);
+            if (!result.Action) return BadRequest(result);
+            return Ok(result);
+        }
+
+        [HttpGet("discount-codes")]
+        [Authorize(Roles = "Coach")]
+        public async Task<IActionResult> GetDiscountCodes()
+        {   
+            var coachId = await GetCoachIdAsync();
+            if (coachId == 0)
+            {
+                return Unauthorized(new ApiResponse { Action = false, Message = "خطای احراز هویت." });
+            }
+            var result = await coachRepository.GetDiscountCodes(coachId);
+            if (!result.Action) return BadRequest(result);
+            return Ok(result);
+        }
+
+        [HttpGet("discount-codes/{discountCodeId:int}")]
+        [Authorize(Roles = "Coach")]
+        public async Task<IActionResult> GetDiscountCode([FromRoute] int discountCodeId)
+        {    var coachId = await GetCoachIdAsync();
+            if (coachId == 0)
+            {
+                return Unauthorized(new ApiResponse { Action = false, Message = "خطای احراز هویت." });
+            }
+            var result = await coachRepository.GetDiscountCodeById(coachId, discountCodeId);
+            if (!result.Action) return BadRequest(result);
+            return Ok(result);
+        }
+
+        [HttpPut("discount-codes/{discountCodeId:int}/changeStatus")]
+        [Authorize(Roles = "Coach")]
+        public async Task<IActionResult> ChangeStatus([FromRoute] int discountCodeId,[FromBody]string status)
+        {   
+            var coachId = await GetCoachIdAsync();
+            if (coachId == 0)
+            {
+                return Unauthorized(new ApiResponse { Action = false, Message = "خطای احراز هویت." });
+            }
+            var result = await coachRepository.ChangeStatusForDiscountCode(coachId, discountCodeId,status);
+            if (!result.Action) return BadRequest(result);
+            return Ok(result);
+        }
+
+        #endregion
 
         
         [HttpGet("get_all_payment")]
@@ -245,6 +349,39 @@ namespace sport_app_backend.Controller
 
             return Ok(result);
         }
+
+        #region CardNumber
+
+        [HttpPost("AddCardNumber")]
+        [Authorize(Roles = "Coach")]
+        public async Task<IActionResult> AddCardNumber(
+            [FromBody] AddCardNumberDto addCardNumberDto)
+        {
+            var coachId = await GetCoachIdAsync();
+            if (coachId == 0)
+            {
+                return Unauthorized(new ApiResponse { Action = false, Message = "خطای احراز هویت." });
+            }
+            var result = await coachRepository.AddCardNumber(coachId,addCardNumberDto);
+            if (!result.Action) return BadRequest(result);
+            return Ok(result);
+        }
+        [HttpGet("GetCardNumber")]
+        [Authorize(Roles = "Coach")]
+        public async Task<IActionResult> GetCardNumber()
+        {
+            var coachId = await GetCoachIdAsync();
+            if (coachId == 0)
+            {
+                return Unauthorized(new ApiResponse { Action = false, Message = "خطای احراز هویت." });
+            }
+            var result = await coachRepository.GetCardNumber(coachId);
+            if (!result.Action) return BadRequest(result);
+            return Ok(result);
+        }
+
+
+        #endregion
         [HttpGet("GetTransactionList")]
         [Authorize(Roles = "Coach")]
         public async Task<IActionResult> GetTransactionList()
@@ -283,22 +420,9 @@ namespace sport_app_backend.Controller
 
             return Ok(result);
         }
-        [HttpGet("test")]
-        public async Task<IActionResult> test()
-        {
-         
-
-            var result = await coachRepository.Test();
-
-            if (!result.Action)
-            {
-                return BadRequest(result);
-            }
-
-            return Ok(result);
-        }
+        
         [HttpGet("getwpkey")]
-        public async Task<IActionResult> getwpkey([FromQuery]int workoutProgramId)
+        public async Task<IActionResult> Getwpkey([FromQuery]int workoutProgramId)
         {
          
 
@@ -341,10 +465,130 @@ namespace sport_app_backend.Controller
             
             
         }
+        [HttpGet("GetExercisesWithFilterForCoach")]
+        [Authorize(Roles = "Coach")]
+        public async Task<IActionResult> GetExercisesWithFilterForCoach(
+            [FromQuery] string? name,
+            [FromQuery] string? level,
+            [FromQuery] string? type,
+            [FromQuery] string? mechanic,
+            [FromQuery] string?[] equipment,
+            [FromQuery] string? muscle,
+            [FromQuery] string? place,
+            [FromQuery] int? athleteId,
+            [FromQuery] int page = 1,
+            [FromQuery] int pageSize = 20)
+        {
+            var coachId = await GetCoachIdAsync();
+            if (coachId == 0)
+            {
+                return Unauthorized(new ApiResponse { Action = false, Message = "خطای احراز هویت." });
+            }
+            var (exercises, totalCount) = await coachRepository.GetExercisesWithFilterForCoach(
+                level, type,mechanic, equipment, muscle, place, page, pageSize, name,athleteId, coachId);
+
+            return Ok(new
+            {
+                totalCount,
+                page,
+                pageSize,
+                exercises
+            });
+        }
+        [HttpPost("addPineExercise")]
+        [Authorize(Roles = "Coach")]
+        public async Task<IActionResult> AddPineExercise([FromBody]int exerciseId)
+        {
+            var coachId = await GetCoachIdAsync();
+            if (coachId == 0)
+            {
+                return Unauthorized(new ApiResponse { Action = false, Message = "خطای احراز هویت." });
+            }
+            var result = await coachRepository.AddPineExercise(exerciseId, coachId);
+
+            if (result.Action) return Ok(result);
+            return BadRequest(result);
+        }
+        [HttpDelete("RemovePineExercise")]
+        [Authorize(Roles = "Coach")]
+        public async Task<IActionResult> RemovePineExercise([FromBody]int exerciseId)
+        {
+            var coachId = await GetCoachIdAsync();
+            if (coachId == 0)
+            {
+              
+             return Unauthorized(new ApiResponse { Action = false, Message = "خطای احراز هویت." });
+                
+            }
+            var result = await coachRepository.RemovePineExercise(exerciseId, coachId);
+
+            if (result.Action) return Ok(result);
+            return BadRequest(result);
+        }
+        [HttpPost("test")]
+        public async Task<IActionResult> Test()
+        {
+            
+            var oldPrograms = await dbContext.WorkoutPrograms
+                .Include(w => w.ProgramInDays)
+                .ThenInclude(d => d.AllExerciseInDays).ThenInclude(e=>e.Exercise)
+                .Where(w => !dbContext.LastWorkoutExercises.Any(l => l.WorkoutProgramId == w.Id))
+                .ToListAsync();
+
+            var lastWorkouts = oldPrograms
+                .Select(program => new
+                {
+                    program,
+                    exerciseIds = program.ProgramInDays
+                        .SelectMany(d => d.AllExerciseInDays)
+                        .Select(ex => ex.ExerciseId)
+                        .ToList()
+                })
+                .Where(x => x.exerciseIds.Any())
+                .Select(x => new LastWorkoutExercise
+                {
+                    CoachId = x.program.CoachId,
+                    AthleteId = x.program.AthleteId,
+                    WorkoutProgramId = x.program.Id,
+                    ExerciseIds = x.exerciseIds
+                })
+                .ToList();
+            
+            if (lastWorkouts.Count != 0)
+            {
+                await dbContext.LastWorkoutExercises.AddRangeAsync(lastWorkouts);
+                await dbContext.SaveChangesAsync();
+            }
+            return Ok();
+        }
+       
+        
+
         
         
+        private async Task<int> GetCoachIdAsync()
+        {
+            var coachIdClaim = User.FindFirst("coach_id")?.Value;
+            if (int.TryParse(coachIdClaim, out var coachId))
+            {
+                return coachId;
+            }
+            
+            var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
+            if (string.IsNullOrEmpty(phoneNumber))
+            {
+                return 0;
+            }
+            var id =  await dbContext.Coaches
+                .AsNoTracking()
+                .Where(c => c.PhoneNumber == phoneNumber)
+                .Select(c => c.Id)
+                .FirstOrDefaultAsync();
+            return id;
+            
+
+        }
         
-      
     }
 
   

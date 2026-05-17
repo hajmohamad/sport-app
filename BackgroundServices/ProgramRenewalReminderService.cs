@@ -73,14 +73,14 @@ public class ProgramRenewalReminderService(
 
             var remainingSessions = program.TotalSessionCount - program.CompletedSessionCount;
 
-            double completionPercentage = 0;
+            double completionPercent = 0;
             if (program.TotalSessionCount > 0)
             {
-                completionPercentage = (double)program.CompletedSessionCount / program.TotalSessionCount;
+                completionPercent = (double)program.CompletedSessionCount / program.TotalSessionCount;
             }
 
             bool isProgramExpired = now >= programEndDate;
-            bool isSeventyPercentCompleted = completionPercentage >= 0.70;
+            bool isSeventyPercentCompleted = completionPercent >= 0.70;
 
             string? message = null;
 
@@ -119,7 +119,7 @@ public class ProgramRenewalReminderService(
             logger.LogError(
                 "Renewal reminder sent to Athlete {AthleteId} for Program {ProgramId}. " +
                 "Expired: {IsExpired}, Completion: {Completion:P0}, RemainingSession: {Remaining}",
-                program.AthleteId, program.Id, isProgramExpired, completionPercentage, remainingSessions);
+                program.AthleteId, program.Id, isProgramExpired, completionPercent, remainingSessions);
         }
 
         await db.SaveChangesAsync(stoppingToken);

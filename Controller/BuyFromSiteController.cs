@@ -53,11 +53,24 @@ public class BuyFromSiteController(IBuyFromSiteRepository buyFromSiteRepository)
     }
     [HttpPost("buy_Service/{serviceId:int}")]
     [Authorize(Roles = "Athlete")]
-    public async Task<IActionResult> BuyCoachingService([FromRoute] int serviceId)
+    public async Task<IActionResult> BuyCoachingService([FromRoute] int serviceId,
+        [FromBody] CheckoutDiscountRequestDto? checkoutDiscountRequestDto)
     {
         var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
         if (phoneNumber is null) return BadRequest("PhoneNumber is null");
-        var result = await buyFromSiteRepository.BuyCoachingService(phoneNumber, serviceId);
+        var result = await buyFromSiteRepository.BuyCoachingService(phoneNumber, serviceId, checkoutDiscountRequestDto);
+        if (!result.Action) return BadRequest(result);
+        return Ok(result);
+    }
+
+    [HttpPost("preview-checkout/{serviceId:int}")]
+    [Authorize(Roles = "Athlete")]
+    public async Task<IActionResult> PreviewCheckout([FromRoute] int serviceId,
+        [FromBody] CheckoutDiscountRequestDto? checkoutDiscountRequestDto)
+    {
+        var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
+        if (phoneNumber is null) return BadRequest("PhoneNumber is null");
+        var result = await buyFromSiteRepository.PreviewCheckout(phoneNumber, serviceId, checkoutDiscountRequestDto);
         if (!result.Action) return BadRequest(result);
         return Ok(result);
     }

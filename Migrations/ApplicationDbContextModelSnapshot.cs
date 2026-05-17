@@ -83,7 +83,7 @@ namespace sport_app_backend.Migrations
                     b.ToTable("WeightEntries");
                 });
 
-            modelBuilder.Entity("sport_app_backend.Models.Account.Coach", b =>
+            modelBuilder.Entity("sport_app_backend.Models.Account.Coach.Coach", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -92,13 +92,23 @@ namespace sport_app_backend.Migrations
                     b.Property<double>("Amount")
                         .HasColumnType("double");
 
+                    b.Property<string>("BaleUserName")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("varchar(20)");
+
                     b.Property<int?>("CoachQuestionId")
                         .HasColumnType("int");
 
+                    b.Property<string>("EitaaUserName")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("varchar(20)");
+
                     b.Property<string>("InstagramLink")
                         .IsRequired()
-                        .HasMaxLength(51)
-                        .HasColumnType("varchar(51)");
+                        .HasMaxLength(20)
+                        .HasColumnType("varchar(20)");
 
                     b.Property<string>("PhoneNumber")
                         .IsRequired()
@@ -110,8 +120,8 @@ namespace sport_app_backend.Migrations
 
                     b.Property<string>("TelegramLink")
                         .IsRequired()
-                        .HasMaxLength(51)
-                        .HasColumnType("varchar(51)");
+                        .HasMaxLength(20)
+                        .HasColumnType("varchar(20)");
 
                     b.Property<int>("UserId")
                         .HasColumnType("int");
@@ -125,8 +135,8 @@ namespace sport_app_backend.Migrations
 
                     b.Property<string>("WhatsApp")
                         .IsRequired()
-                        .HasMaxLength(51)
-                        .HasColumnType("varchar(51)");
+                        .HasMaxLength(20)
+                        .HasColumnType("varchar(20)");
 
                     b.HasKey("Id");
 
@@ -138,45 +148,31 @@ namespace sport_app_backend.Migrations
                     b.ToTable("Coaches");
                 });
 
-            modelBuilder.Entity("sport_app_backend.Models.Account.CoachService", b =>
+            modelBuilder.Entity("sport_app_backend.Models.Account.Coach.CoachCardNumber", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
+                    b.Property<string>("CardName")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("varchar(20)");
+
                     b.Property<int>("CoachId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("date");
-
-                    b.Property<string>("Description")
+                    b.Property<string>("ShebaNumber")
                         .IsRequired()
-                        .HasMaxLength(500)
-                        .HasColumnType("varchar(500)");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<int>("NumberOfSell")
-                        .HasColumnType("int");
-
-                    b.Property<double>("Price")
-                        .HasColumnType("double");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("varchar(50)");
+                        .HasMaxLength(24)
+                        .HasColumnType("varchar(24)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CoachId");
+                    b.HasIndex("CoachId")
+                        .IsUnique();
 
-                    b.ToTable("CoachServices");
+                    b.ToTable("CoachCardNumbers");
                 });
 
             modelBuilder.Entity("sport_app_backend.Models.Account.User", b =>
@@ -269,6 +265,59 @@ namespace sport_app_backend.Migrations
                     b.HasIndex("AthleteId");
 
                     b.ToTable("Activities");
+                });
+
+            modelBuilder.Entity("sport_app_backend.Models.Actions.CouchExercise.CoachPineExercise", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<int>("BaseCategory")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CoachId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ExerciseIds")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CoachId");
+
+                    b.ToTable("CoachPineExercises");
+                });
+
+            modelBuilder.Entity("sport_app_backend.Models.Actions.CouchExercise.LastWorkoutExercise", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<int>("AthleteId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CoachId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ExerciseIds")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("WorkoutProgramId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AthleteId");
+
+                    b.HasIndex("CoachId");
+
+                    b.HasIndex("WorkoutProgramId");
+
+                    b.ToTable("LastWorkoutExercises");
                 });
 
             modelBuilder.Entity("sport_app_backend.Models.Actions.Exercise", b =>
@@ -577,6 +626,58 @@ namespace sport_app_backend.Migrations
                     b.ToTable("CoachPayouts");
                 });
 
+            modelBuilder.Entity("sport_app_backend.Models.Payments.DiscountCode", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<int>("CoachId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("CoachServicesId")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasMaxLength(32)
+                        .HasColumnType("varchar(32)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<int>("DiscountPercent")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("ExpiresAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<int?>("UsageLimit")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UsedCount")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CoachId");
+
+                    b.HasIndex("Code")
+                        .IsUnique();
+
+                    b.ToTable("DiscountCodes");
+                });
+
             modelBuilder.Entity("sport_app_backend.Models.Payments.Payment", b =>
                 {
                     b.Property<int>("Id")
@@ -606,6 +707,15 @@ namespace sport_app_backend.Migrations
                     b.Property<int>("CoachServiceId")
                         .HasColumnType("int");
 
+                    b.Property<double>("CodeDiscountAmount")
+                        .HasColumnType("double");
+
+                    b.Property<int?>("DiscountCodeId")
+                        .HasColumnType("int");
+
+                    b.Property<double>("OriginalAmount")
+                        .HasColumnType("double");
+
                     b.Property<DateTime>("PaymentDate")
                         .HasColumnType("datetime(6)");
 
@@ -625,7 +735,41 @@ namespace sport_app_backend.Migrations
 
                     b.HasIndex("CoachServiceId");
 
+                    b.HasIndex("DiscountCodeId");
+
                     b.ToTable("Payments");
+                });
+
+            modelBuilder.Entity("sport_app_backend.Models.Payments.PaymentAttempt", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<int>("AthleteId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CoachId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CoachServiceId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("DateTime")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<bool>("SmsIsSend")
+                        .HasColumnType("tinyint(1)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AthleteId");
+
+                    b.HasIndex("CoachId");
+
+                    b.HasIndex("CoachServiceId");
+
+                    b.ToTable("PaymentAttempts");
                 });
 
             modelBuilder.Entity("sport_app_backend.Models.Program.ExerciseChangeRequest", b =>
@@ -1050,6 +1194,47 @@ namespace sport_app_backend.Migrations
                     b.ToTable("SupportApp");
                 });
 
+            modelBuilder.Entity("sport_app_backend.Models.TrainingPlan.CoachService", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<int>("CoachId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("date");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("varchar(500)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<int>("NumberOfSell")
+                        .HasColumnType("int");
+
+                    b.Property<double>("Price")
+                        .HasColumnType("double");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CoachId");
+
+                    b.ToTable("CoachServices");
+                });
+
             modelBuilder.Entity("sport_app_backend.Models.UserMessageStatus", b =>
                 {
                     b.Property<int>("Id")
@@ -1151,7 +1336,7 @@ namespace sport_app_backend.Migrations
                     b.Navigation("Athlete");
                 });
 
-            modelBuilder.Entity("sport_app_backend.Models.Account.Coach", b =>
+            modelBuilder.Entity("sport_app_backend.Models.Account.Coach.Coach", b =>
                 {
                     b.HasOne("sport_app_backend.Models.CoachQuestion", "CoachQuestion")
                         .WithMany()
@@ -1159,7 +1344,7 @@ namespace sport_app_backend.Migrations
 
                     b.HasOne("sport_app_backend.Models.Account.User", "User")
                         .WithOne("Coach")
-                        .HasForeignKey("sport_app_backend.Models.Account.Coach", "UserId")
+                        .HasForeignKey("sport_app_backend.Models.Account.Coach.Coach", "UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -1168,11 +1353,11 @@ namespace sport_app_backend.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("sport_app_backend.Models.Account.CoachService", b =>
+            modelBuilder.Entity("sport_app_backend.Models.Account.Coach.CoachCardNumber", b =>
                 {
-                    b.HasOne("sport_app_backend.Models.Account.Coach", "Coach")
-                        .WithMany("CoachingServices")
-                        .HasForeignKey("CoachId")
+                    b.HasOne("sport_app_backend.Models.Account.Coach.Coach", "Coach")
+                        .WithOne("CoachCardNumber")
+                        .HasForeignKey("sport_app_backend.Models.Account.Coach.CoachCardNumber", "CoachId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -1188,6 +1373,44 @@ namespace sport_app_backend.Migrations
                         .IsRequired();
 
                     b.Navigation("Athlete");
+                });
+
+            modelBuilder.Entity("sport_app_backend.Models.Actions.CouchExercise.CoachPineExercise", b =>
+                {
+                    b.HasOne("sport_app_backend.Models.Account.Coach.Coach", "Coach")
+                        .WithMany()
+                        .HasForeignKey("CoachId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Coach");
+                });
+
+            modelBuilder.Entity("sport_app_backend.Models.Actions.CouchExercise.LastWorkoutExercise", b =>
+                {
+                    b.HasOne("sport_app_backend.Models.Account.Athlete.Athlete", "Athlete")
+                        .WithMany()
+                        .HasForeignKey("AthleteId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("sport_app_backend.Models.Account.Coach.Coach", "Coach")
+                        .WithMany()
+                        .HasForeignKey("CoachId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("sport_app_backend.Models.Program.WorkoutProgram", "WorkoutProgram")
+                        .WithMany()
+                        .HasForeignKey("WorkoutProgramId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Athlete");
+
+                    b.Navigation("Coach");
+
+                    b.Navigation("WorkoutProgram");
                 });
 
             modelBuilder.Entity("sport_app_backend.Models.Challenge_Achievement.Challenge", b =>
@@ -1225,8 +1448,19 @@ namespace sport_app_backend.Migrations
 
             modelBuilder.Entity("sport_app_backend.Models.Payments.CoachPayout", b =>
                 {
-                    b.HasOne("sport_app_backend.Models.Account.Coach", "Coach")
+                    b.HasOne("sport_app_backend.Models.Account.Coach.Coach", "Coach")
                         .WithMany()
+                        .HasForeignKey("CoachId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Coach");
+                });
+
+            modelBuilder.Entity("sport_app_backend.Models.Payments.DiscountCode", b =>
+                {
+                    b.HasOne("sport_app_backend.Models.Account.Coach.Coach", "Coach")
+                        .WithMany("DiscountCodes")
                         .HasForeignKey("CoachId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -1246,21 +1480,55 @@ namespace sport_app_backend.Migrations
                         .WithMany()
                         .HasForeignKey("AthleteQuestionId");
 
-                    b.HasOne("sport_app_backend.Models.Account.Coach", "Coach")
+                    b.HasOne("sport_app_backend.Models.Account.Coach.Coach", "Coach")
                         .WithMany("Payments")
                         .HasForeignKey("CoachId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("sport_app_backend.Models.Account.CoachService", "CoachService")
+                    b.HasOne("sport_app_backend.Models.TrainingPlan.CoachService", "CoachService")
+                        .WithMany()
+                        .HasForeignKey("CoachServiceId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("sport_app_backend.Models.Payments.DiscountCode", "DiscountCode")
+                        .WithMany("Payments")
+                        .HasForeignKey("DiscountCodeId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("Athlete");
+
+                    b.Navigation("AthleteQuestion");
+
+                    b.Navigation("Coach");
+
+                    b.Navigation("CoachService");
+
+                    b.Navigation("DiscountCode");
+                });
+
+            modelBuilder.Entity("sport_app_backend.Models.Payments.PaymentAttempt", b =>
+                {
+                    b.HasOne("sport_app_backend.Models.Account.Athlete.Athlete", "Athlete")
+                        .WithMany()
+                        .HasForeignKey("AthleteId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("sport_app_backend.Models.Account.Coach.Coach", "Coach")
+                        .WithMany()
+                        .HasForeignKey("CoachId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("sport_app_backend.Models.TrainingPlan.CoachService", "CoachService")
                         .WithMany()
                         .HasForeignKey("CoachServiceId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Athlete");
-
-                    b.Navigation("AthleteQuestion");
 
                     b.Navigation("Coach");
 
@@ -1275,7 +1543,7 @@ namespace sport_app_backend.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("sport_app_backend.Models.Account.Coach", "Coach")
+                    b.HasOne("sport_app_backend.Models.Account.Coach.Coach", "Coach")
                         .WithMany()
                         .HasForeignKey("CoachId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1310,7 +1578,7 @@ namespace sport_app_backend.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("sport_app_backend.Models.Account.Coach", "Coach")
+                    b.HasOne("sport_app_backend.Models.Account.Coach.Coach", "Coach")
                         .WithMany()
                         .HasForeignKey("CoachId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1394,7 +1662,7 @@ namespace sport_app_backend.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("sport_app_backend.Models.Account.Coach", "Coach")
+                    b.HasOne("sport_app_backend.Models.Account.Coach.Coach", "Coach")
                         .WithMany("WorkoutPrograms")
                         .HasForeignKey("CoachId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1466,6 +1734,17 @@ namespace sport_app_backend.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("sport_app_backend.Models.TrainingPlan.CoachService", b =>
+                {
+                    b.HasOne("sport_app_backend.Models.Account.Coach.Coach", "Coach")
+                        .WithMany("CoachingServices")
+                        .HasForeignKey("CoachId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Coach");
+                });
+
             modelBuilder.Entity("sport_app_backend.Models.UserMessageStatus", b =>
                 {
                     b.HasOne("sport_app_backend.Models.InAppMessage", "InAppMessage")
@@ -1524,9 +1803,13 @@ namespace sport_app_backend.Migrations
                     b.Navigation("WorkoutPrograms");
                 });
 
-            modelBuilder.Entity("sport_app_backend.Models.Account.Coach", b =>
+            modelBuilder.Entity("sport_app_backend.Models.Account.Coach.Coach", b =>
                 {
+                    b.Navigation("CoachCardNumber");
+
                     b.Navigation("CoachingServices");
+
+                    b.Navigation("DiscountCodes");
 
                     b.Navigation("Payments");
 
@@ -1538,6 +1821,11 @@ namespace sport_app_backend.Migrations
                     b.Navigation("Athlete");
 
                     b.Navigation("Coach");
+                });
+
+            modelBuilder.Entity("sport_app_backend.Models.Payments.DiscountCode", b =>
+                {
+                    b.Navigation("Payments");
                 });
 
             modelBuilder.Entity("sport_app_backend.Models.Payments.Payment", b =>
