@@ -374,7 +374,7 @@ namespace sport_app_backend.Repository.CoachRepo
             {
                 List<ServiceForDiscountDto>? services = null;
 
-                if (discountCode.CoachServicesId.Count==0)
+                if (discountCode.CoachServicesId.Count!=0)
                 {
                     var coachServices = await context.CoachServices
                         .Where(c => c.CoachId==coachId&&!c.IsDeleted && discountCode.CoachServicesId.Contains(c.Id))

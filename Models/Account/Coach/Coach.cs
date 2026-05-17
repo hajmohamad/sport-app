@@ -23,10 +23,10 @@ public class Coach
     public List<WorkoutProgram> WorkoutPrograms { get; set; } = [];
     public CoachQuestion? CoachQuestion { get; set; }
 
-    [StringLength(20)]
+    [StringLength(40)]
     public string InstagramLink { get; set; } = "";
 
-    [StringLength(20)]
+    [StringLength(40)]
     public string TelegramLink { get; set; } = "";
 
     [StringLength(20)]
