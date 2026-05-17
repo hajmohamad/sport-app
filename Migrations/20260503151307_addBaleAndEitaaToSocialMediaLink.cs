@@ -10,12 +10,7 @@ namespace sport_app_backend.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AddColumn<bool>(
-                name: "SmsIsSend",
-                table: "PaymentAttempts",
-                type: "tinyint(1)",
-                nullable: false,
-                defaultValue: false);
+          
 
             migrationBuilder.AlterColumn<string>(
                 name: "WhatsApp",
@@ -33,7 +28,7 @@ namespace sport_app_backend.Migrations
                 name: "TelegramLink",
                 table: "Coaches",
                 type: "varchar(20)",
-                maxLength: 20,
+                maxLength: 40,
                 nullable: false,
                 oldClrType: typeof(string),
                 oldType: "varchar(51)",
@@ -45,7 +40,7 @@ namespace sport_app_backend.Migrations
                 name: "InstagramLink",
                 table: "Coaches",
                 type: "varchar(20)",
-                maxLength: 20,
+                maxLength: 40,
                 nullable: false,
                 oldClrType: typeof(string),
                 oldType: "varchar(51)",
@@ -75,9 +70,7 @@ namespace sport_app_backend.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropColumn(
-                name: "SmsIsSend",
-                table: "PaymentAttempts");
+        
 
             migrationBuilder.DropColumn(
                 name: "BaleUserName",
