@@ -15,4 +15,6 @@ public class AllExerciseResponseDto
     public required int View {get; set; }
     public required double Met { get; set; }
     public string BaseMuscle { get; set; }
+    public bool IsPinned { get; set; }
+    public bool IsInLastProgram { get; set; }
 }

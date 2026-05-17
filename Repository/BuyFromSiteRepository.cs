@@ -15,6 +15,7 @@ using sport_app_backend.Models.Login_Sinup;
 using sport_app_backend.Models.Payments;
 using sport_app_backend.Models.Program;
 using sport_app_backend.Models.Question.A_Question;
+using sport_app_backend.Models.TrainingPlan;
 
 namespace sport_app_backend.Repository;
 
@@ -31,7 +32,7 @@ public class BuyFromSiteRepository(
     {
         var user = await dbContext.Users.FirstOrDefaultAsync(x => x.SiteRefreshToken == refreshToken);
         if (user is null) return new ApiResponse() { Message = "Invalid refresh token", Action = false };
-        return user.LastLoginSite.AddDays(90) < DateTime.Now ? new ApiResponse() { Message = "Refresh token expired", Action = false } : new ApiResponse() { Message = "Success", Action = true, Result = new { AccessToken = tokenService.CreateToken(user) } };
+        return user.LastLoginSite.AddDays(90) < DateTime.Now ? new ApiResponse() { Message = "Refresh token expired", Action = false } : new ApiResponse() { Message = "Success", Action = true, Result = new { AccessToken = tokenService.CreateTokenForSite(user) } };
     }
 
     public async Task<ApiResponse> CreateWorkoutPdfAsync(string wpId)
@@ -93,7 +94,7 @@ public class BuyFromSiteRepository(
             AthleteHeight = workoutData.AthleteHeight.ToString(),
             AthleteBmi = Math.Round(bmi, 2).ToString(),
             AthleteName=$"{workoutData.AthleteFirstName} {workoutData.AthleteLastName}",
-            AthleteFatPercentage = workoutData.AhtleteGender.GetFatPercentageRange(workoutData.AthleteCurrentBodyForm),
+            AthleteFatPercent = workoutData.AhtleteGender.GetFatPercentRange(workoutData.AthleteCurrentBodyForm),
             WorkoutDays = workoutData.ProgramInDays.Select(pd => new WorkoutDayModel
             {
                 DayNumber = pd.ForWhichDay,
@@ -499,34 +500,98 @@ public class BuyFromSiteRepository(
             Result = new 
             {
                 RefreshToken = await tokenService.CreateSiteRefreshToken(user),
-                AccessToken = tokenService.CreateToken(user),
+                AccessToken = tokenService.CreateTokenForSite(user),
                 
             }
         };
     }
 
-    public async Task<ApiResponse> BuyCoachingService(string phoneNumber, int coachingServiceId)
+    public async Task<ApiResponse> PreviewCheckout(string phoneNumber, int serviceId, CheckoutDiscountRequestDto? checkoutDiscountRequestDto)
+    {
+        var athleteId = await dbContext.Athletes.Where(x => x.PhoneNumber == phoneNumber).Select(a => a.Id)
+            .FirstOrDefaultAsync();
+        if (athleteId == 0)
+        {
+            return new ApiResponse { Action = false, Message = "User is not an athlete" };
+        }
+
+        var coachService = await dbContext.CoachServices.Include(coachService => coachService.Coach)
+            .ThenInclude(coach => coach.User)
+            .FirstOrDefaultAsync(x => x.Id == serviceId && x.IsActive && !x.IsDeleted);
+        if (coachService is null)
+        {
+            return new ApiResponse { Message = "CoachingService not found", Action = false };
+        }
+
+        var pricingResult = await CalculateCheckoutPricing(coachService, checkoutDiscountRequestDto?.DiscountCode);
+        if (!pricingResult.Action)
+        {
+            return pricingResult;
+        }
+
+        var now = DateTime.Now;
+
+        var havLastAttempt = await dbContext.PaymentAttempts.Where(pa => pa.AthleteId == athleteId && pa.DateTime.Date==now.Date)
+            .OrderByDescending(p => p.DateTime).FirstOrDefaultAsync();
+        if (havLastAttempt is null)
+        {
+            var newPaymentAttempt = new PaymentAttempt()
+            {
+                AthleteId = athleteId,
+                CoachId = coachService.CoachId,
+                CoachServiceId = coachService.Id,
+                DateTime = DateTime.UtcNow
+
+            };
+            await dbContext.PaymentAttempts.AddAsync(newPaymentAttempt);
+            
+        }
+        else
+        {
+            havLastAttempt.DateTime = DateTime.UtcNow;
+            havLastAttempt.CoachId = coachService.CoachId;
+            havLastAttempt.CoachServiceId = coachService.Id;
+        }
+
+        await dbContext.SaveChangesAsync();
+
+       
+
+        return new ApiResponse
+        {
+            Action = true,
+            Message = "preview generated",
+            Result = new {
+                pricingResult.Result,
+                CoachServieName = coachService.Title,
+                CoachName = coachService.Coach.User.FirstName + " " + coachService.Coach.User.LastName,
+            }
+        };
+    }
+
+    public async Task<ApiResponse> BuyCoachingService(string phoneNumber, int coachingServiceId, CheckoutDiscountRequestDto? checkoutDiscountRequestDto)
     {
         var athleteId = await dbContext.Athletes.Where(x=>x.PhoneNumber==phoneNumber).Select(a=>a.Id).FirstOrDefaultAsync();
         var coachService = await dbContext.CoachServices
-            .AsNoTracking()
-            .Where(x => x.Id == coachingServiceId && x.IsActive && !x.IsDeleted)
-            .Select(wr => new
-            {
-                wr.Price,
-                wr.CoachId,
-                wr.Title,
-                CoachFirstname = wr.Coach.User.FirstName,
-                CoachLastname = wr.Coach.User.LastName,
-            }).FirstOrDefaultAsync();
+            .FirstOrDefaultAsync(x => x.Id == coachingServiceId && x.IsActive && !x.IsDeleted);
 
         if (coachService == null)
             return new ApiResponse { Message = "CoachingService not found", Action = false };
 
+        var pricingResult = await CalculateCheckoutPricing(coachService, checkoutDiscountRequestDto?.DiscountCode);
+        if (!pricingResult.Action)
+        {
+            return pricingResult;
+        }
+
+        if (pricingResult.Result is not DiscountPreviewDto pricing || pricing.FinalPrice <= 0)
+        {
+            return new ApiResponse { Action = false, Message = "مبلغ نهایی پرداخت باید بیشتر از صفر باشد." };
+        }
 
         var zarinPalResponse = await zarinPal.RequestPaymentAsync(new ZarinPalPaymentRequestDto
         {
-            amount = (long)coachService.Price,
+            amount = (long)pricing.FinalPrice,
             callback_url = "https://chaarset.ir/verify-payment/",
             description = "خرید",
             Mobile = phoneNumber
@@ -547,7 +612,11 @@ public class BuyFromSiteRepository(
             CoachServiceId = coachingServiceId,
             CoachId = coachService.CoachId,
             Authority = zarinPalResponse.Authority,
-            Amount = coachService.Price,
+            Amount = pricing.FinalPrice,
+            OriginalAmount = pricing.OriginalPrice,
+            // PublicDiscountAmount = pricing.PublicDiscountAmount,
+            CodeDiscountAmount = pricing.CodeDiscountAmount,
+            DiscountCodeId = await GetDiscountCodeId(checkoutDiscountRequestDto?.DiscountCode),
         };
 
         await dbContext.Payments.AddAsync(payment);
@@ -560,9 +629,11 @@ public class BuyFromSiteRepository(
             Result = new
             {
                 zarinPalResponse.PaymentUrl,
-                CoachServieName = coachService.Title,
-                CoachName = coachService.CoachFirstname + " " + coachService.CoachLastname,
-                coachService.Price
+                Price = pricing.OriginalPrice,
+                // pricing.PublicDiscountAmount,
+                pricing.CodeDiscountAmount,
+                pricing.FinalPrice,
+
             }
         };
     }
@@ -763,6 +834,10 @@ public class BuyFromSiteRepository(
             {
                 wr.Status,
                 workoutProgramPrice = wr.Payment.Amount,
+                DiscountPercent = wr.Payment.DiscountCode == null 
+                    ? 0 
+                    : wr.Payment.DiscountCode.DiscountPercent,
+                CodeDiscountAmount = wr.Payment.CodeDiscountAmount ,
                 AhtleteFirstName = wr.Athlete.User.FirstName,
                 AthleteLastName = wr.Athlete.User.LastName,
                 CoachPhoneNumber = wr.Coach.PhoneNumber,
@@ -778,7 +853,9 @@ public class BuyFromSiteRepository(
                 {
                     wr.Coach.InstagramLink,
                     wr.Coach.TelegramLink,
-                    wr.Coach.WhatsApp
+                    wr.Coach.WhatsApp,
+                    wr.Coach.EitaaUserName,
+                    wr.Coach.BaleUserName
                 }
             })
             .FirstOrDefaultAsync();
@@ -804,6 +881,8 @@ public class BuyFromSiteRepository(
         {
             Status = programData.Status.ToString(),
             WorkoutProgramPrice = programData.workoutProgramPrice.ToString(CultureInfo.InvariantCulture),
+            CodeDiscountAmount =  programData.CodeDiscountAmount,
+            CodeDiscountPercent = programData.DiscountPercent,
             AthleteName = programData.AhtleteFirstName + " " + programData.AthleteLastName,
             PaymentDate = persianDate,
             ProgramDuration = programData.ProgramDuration,
@@ -815,7 +894,9 @@ public class BuyFromSiteRepository(
             {
                 InstagramLink = programData.CoachSocialMedia.InstagramLink ?? " ",
                 TelegramLink = programData.CoachSocialMedia.TelegramLink ?? " ",
-                WhatsAppLink = programData.CoachSocialMedia.WhatsApp ?? " "
+                WhatsAppLink = programData.CoachSocialMedia.WhatsApp ?? " ",
+                BaleUserName = programData.CoachSocialMedia.BaleUserName??" ",
+                EitaaUserName = programData.CoachSocialMedia.EitaaUserName
             }
         };
 
@@ -927,6 +1008,15 @@ public class BuyFromSiteRepository(
         {
             payment.CoachService.NumberOfSell += 1;
             payment.RefId = refId;
+            if (payment.DiscountCodeId.HasValue)
+            {
+                var discountCode = await dbContext.DiscountCodes.FirstOrDefaultAsync(x => x.Id == payment.DiscountCodeId.Value);
+                if (discountCode is not null)
+                {
+                    discountCode.UsedCount += 1;
+                    discountCode.UpdatedAt = DateTime.UtcNow;
+                }
+            }
 
             var workoutProgram = new WorkoutProgram
             {
@@ -936,7 +1026,7 @@ public class BuyFromSiteRepository(
                 PaymentId = payment.Id,
                 Status = WorkoutProgramStatus.UNCOMPLETEDQUESTION
             };
-            var appFee = (payment.Amount * payment.Coach.ServiceFee) < 50000 ? 50000 : (payment.Amount * payment.Coach.ServiceFee);
+            var appFee = (payment.OriginalAmount * payment.Coach.ServiceFee) < 50000 ? 50000 : (payment.OriginalAmount * payment.Coach.ServiceFee);
             payment.AppFee = appFee;
             payment.WorkoutProgram = workoutProgram;
             payment.PaymentStatus = PaymentStatus.SUCCESS;
@@ -959,5 +1049,115 @@ public class BuyFromSiteRepository(
                 Action = false
             };
         }
+    }
+
+    private async Task<ApiResponse> CalculateCheckoutPricing(CoachService coachService, string? discountCodeValue)
+    {
+        var originalPrice = coachService.Price;
+        // var publicDiscountAmount = 0.0 ;
+        var codeDiscountPercent = 0.0;
+        // var publicDiscountPercent = 0.0;
+        var codeDiscountAmount =0.0;
+        double finalPrice;
+        
+        if (discountCodeValue is null)
+        {
+            // publicDiscountAmount= coachService.CalculatePublicDiscountAmount();
+            // publicDiscountPercent = coachService.PublicDiscountPercent?? 0 ;
+            // finalPrice = originalPrice - publicDiscountAmount;
+            finalPrice = originalPrice;
+        }else{
+            var discountCodeValidation =
+                await ValidateDiscountCode(coachService.CoachId,coachService.Id, NormalizeDiscountCode(discountCodeValue));
+            if (!discountCodeValidation.Action)
+            {
+                return discountCodeValidation;
+            }
+
+            if (discountCodeValidation.Result is not DiscountCode discountCode)
+            {
+                return new ApiResponse { Action = false, Message = "کد اشتباه است" };
+            }
+
+            codeDiscountAmount = CoachMappers.CalculateDiscountAmount(coachService.Price, discountCode.DiscountPercent);
+            codeDiscountPercent = discountCode.DiscountPercent;
+            finalPrice = originalPrice - codeDiscountAmount;
+
+
+
+
+
+        }
+
+        return new ApiResponse
+        {
+            Action = true,
+            Message = "bla",
+            Result = new DiscountPreviewDto
+            {
+                OriginalPrice = originalPrice,
+                // PublicDiscountAmount = publicDiscountAmount,
+                // PublicDiscountPercent =  publicDiscountPercent,
+                CodeDiscountAmount =  codeDiscountAmount,
+                CodeDiscountPercent =  codeDiscountPercent,
+                FinalPrice = finalPrice
+            }
+        };
+    }
+
+    private async Task<ApiResponse> ValidateDiscountCode(int coachId ,int coachServiceId,string normalizedCode)
+    {
+        var discountCode = await dbContext.DiscountCodes
+            .FirstOrDefaultAsync(x => x.CoachId== coachId&& x.Code == normalizedCode && !x.IsDeleted);
+        if (discountCode is null)
+        {
+            return new ApiResponse { Action = false, Message = "کد اشتباه است" };
+        }
+
+        if (discountCode.Status is DiscountCodeStatus.INACTIVE or DiscountCodeStatus.EXPIRED)
+        {
+            return new ApiResponse { Action = false, Message = "کد غیرفعال شده" };
+        }
+
+        if (discountCode is { Status: DiscountCodeStatus.ACTIVE, ExpiresAt: not null } && discountCode.ExpiresAt.Value <= DateTime.UtcNow||(discountCode.UsageLimit.HasValue && discountCode.UsedCount >= discountCode.UsageLimit.Value))
+        {
+            discountCode.Status = DiscountCodeStatus.EXPIRED;
+            await dbContext.SaveChangesAsync();
+            return new ApiResponse { Action = false, Message = "کد تاریخش گذشته" };
+        }
+        
+
+        if ( !discountCode.CoachServicesId.Contains(coachServiceId) && discountCode.CoachServicesId.Count!=0)
+        {
+            return new ApiResponse { Action = false, Message =  "کد تخفیف برای این سرویس قابل استفاده نیست" };
+        }
+
+        if (discountCode.UsageLimit.HasValue && discountCode.UsedCount >= discountCode.UsageLimit.Value)
+        {
+            return new ApiResponse { Action = false, Message = "تعداد استفاده تمام شده" };
+        }
+
+        return new ApiResponse { 
+            Action = true,
+            Message = "کد تخفیف معتبر است",
+            Result = discountCode };
+    }
+
+    private async Task<int?> GetDiscountCodeId(string? code)
+    {
+        if (string.IsNullOrWhiteSpace(code))
+        {
+            return null;
+        }
+
+        return await dbContext.DiscountCodes
+            .Where(x =>  x.Code == code && !x.IsDeleted)
+            .Select(x => (int?)x.Id)
+            .FirstOrDefaultAsync();
+    }
+
+    private static string NormalizeDiscountCode(string code)
+    {
+        return code.Trim().Replace(" ", string.Empty).ToUpperInvariant();
     }
 }

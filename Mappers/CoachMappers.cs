@@ -1,6 +1,7 @@
 using System.Globalization;
 using sport_app_backend.Dtos;
 using sport_app_backend.Models.Account;
+using sport_app_backend.Models.Account.Coach;
 using sport_app_backend.Models.Payments;
 using sport_app_backend.Models.TrainingPlan;
 
@@ -46,8 +47,12 @@ namespace sport_app_backend.Mappers
                 Description = coachServiceDto.Description,
                 Price = coachServiceDto.Price,
                 IsActive = coachServiceDto.IsActive, 
-                // CommunicateType = (CommunicateType)Enum.Parse(typeof(CommunicateType), coachServiceDto.CommunicateType.ToUpper()),
+                // PublicDiscountPercent = coachServiceDto.PublicDiscountPercent,
+                // PublicDiscountExpiresAt = coachServiceDto.PublicDiscountExpiresAt,
+                // UsageLimit = coachServiceDto.UsageLimit,
+                // NumberOfSellWithDiscount = 0,
                 NumberOfSell = 0
+                // CommunicateType = (CommunicateType)Enum.Parse(typeof(CommunicateType), coachServiceDto.CommunicateType.ToUpper()),
                 // TypeOfCoachingServices = (TypeOfCoachingServices)Enum.Parse(typeof(TypeOfCoachingServices), coachServiceDto.TypeOfCoachingServices)
             };
         }
@@ -58,6 +63,12 @@ namespace sport_app_backend.Mappers
             coachService.Description = coachServiceDto.Description;
             coachService.Price = coachServiceDto.Price;
             coachService.IsActive = coachServiceDto.IsActive;
+            // coachService.PublicDiscountPercent = coachServiceDto.PublicDiscountPercent;
+            // coachService.PublicDiscountExpiresAt = coachServiceDto.PublicDiscountExpiresAt;
+            // coachService.PublicDiscountPercent = coachServiceDto.PublicDiscountPercent;
+            // coachService.PublicDiscountExpiresAt = coachServiceDto.PublicDiscountExpiresAt;
+            // coachService.UsageLimit = coachServiceDto.UsageLimit;
+            
             // coachService.CommunicateType =
             //     (CommunicateType)Enum.Parse(typeof(CommunicateType), coachServiceDto.CommunicateType.ToUpper());
             // //coachService.TypeOfCoachingServices =
@@ -100,7 +111,9 @@ namespace sport_app_backend.Mappers
                 NumberOfProgram = numberOfProgram,
                 InstagramLink = coach.InstagramLink,
                 TelegramLink = coach.TelegramLink,
-                WhatsApp = coach.WhatsApp
+                WhatsApp = coach.WhatsApp,
+                BaleUserName = coach.BaleUserName,
+                EitaaUserName = coach.EitaaUserName
             };
         }
 
@@ -109,18 +122,86 @@ namespace sport_app_backend.Mappers
 
         public static CoachingServiceResponse ToCoachingServiceResponse(this CoachService coachService)
         {
+            // var publicDiscountAmount = CalculatePublicDiscountAmount(coachService);
             return new CoachingServiceResponse
             {
                 Id = coachService.Id,
                 Title = coachService.Title,
                 Description = coachService.Description,
                 Price = coachService.Price,
+                // FinalPrice = Math.Max(0, coachService.Price - publicDiscountAmount),
                 IsActive = coachService.IsActive,
-                // CommunicateType = coachService.CommunicateType.ToString(),
+                // HasPublicDiscount = publicDiscountAmount > 0,
+                // PublicDiscountPercent = coachService.PublicDiscountPercent,
+                // PublicDiscountExpiresAt = coachService.PublicDiscountExpiresAt,
                 NumberOfSell = coachService.NumberOfSell
                 
                 
             };
+        }
+
+        public static DiscountCodeListItemDto ToDiscountCodeListItemDto(this DiscountCode discountCode,List<ServiceForDiscountDto>? serviceForDiscountDto)
+        {
+            var status = discountCode.GetEffectiveStatus();
+            return new DiscountCodeListItemDto
+            {
+                Id = discountCode.Id,
+                Code = discountCode.Code,
+                DiscountPercent = discountCode.DiscountPercent,
+                UsageLimit = discountCode.UsageLimit,
+                UsedCount = discountCode.UsedCount,
+                ExpiresAt = discountCode.ExpiresAt,
+                Status = status.ToString(),
+                ServiceForDiscountDtos = serviceForDiscountDto
+            };
+        }
+
+        // public static double CalculatePublicDiscountAmount(this CoachService coachService)
+        // {
+        //     if (coachService.PublicDiscountPercent is null)
+        //     {
+        //         return 0;
+        //     }
+        //
+        //     var now = DateTime.UtcNow;
+        //  
+        //
+        //     if (coachService.PublicDiscountExpiresAt.HasValue && coachService.PublicDiscountExpiresAt.Value <= now)
+        //     {
+        //         return 0;
+        //     }
+        //
+        //     return CalculateDiscountAmount(coachService.Price,
+        //         coachService.PublicDiscountPercent.Value);
+        // }
+
+        public static double CalculateDiscountAmount(double basePrice,double discountPercent)
+        {
+            if (basePrice <= 0 || discountPercent <= 0)
+            {
+                return 0;
+            }
+
+            var amount =
+                basePrice * (discountPercent / 100d);
+
+            return amount;
+        }
+
+
+        private static DiscountCodeStatus GetEffectiveStatus(this DiscountCode discountCode)
+        {
+            if (discountCode.Status == DiscountCodeStatus.INACTIVE)
+            {
+                return DiscountCodeStatus.INACTIVE;
+            }
+
+            if (discountCode.UsageLimit<=discountCode.UsedCount||(discountCode.ExpiresAt.HasValue && discountCode.ExpiresAt.Value <= DateTime.UtcNow))
+            {
+                return DiscountCodeStatus.EXPIRED;
+            }
+
+            return DiscountCodeStatus.ACTIVE;
         }
 
         public static CoachPayoutDto ToCoachPayoutDto(this CoachPayout coachPayout)

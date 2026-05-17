@@ -235,7 +235,7 @@ public static class ProgramMappers
             _ => level.ToString() // اگر ترجمه‌ای وجود نداشت، نام انگلیسی را برمی‌گرداند
         };
     }
-    public static string GetFatPercentageRange( this Gender gender ,int bodyFormNumber)
+    public static string GetFatPercentRange( this Gender gender ,int bodyFormNumber)
     {
         if (gender == Gender.MALE)
         {

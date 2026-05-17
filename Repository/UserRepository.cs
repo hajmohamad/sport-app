@@ -10,11 +10,13 @@ using Amazon.S3;
 using Amazon.S3.Model;
 using sport_app_backend.Mappers;
 using sport_app_backend.Models.Account.Athlete;
+using sport_app_backend.Models.Account.Coach;
 using sport_app_backend.Models.Actions;
 using sport_app_backend.Models.Payments;
 using sport_app_backend.Models.Program;
 using sport_app_backend.Models.Question.A_Question;
 using sport_app_backend.Models.SupportApp;
+using sport_app_backend.Models.TrainingPlan;
 
 namespace sport_app_backend.Repository;
 
@@ -62,7 +64,13 @@ public class UserRepository(
                     Result = new AddRoleResponse()
                     {
                         RefreshToken = user.RefreshToken,
-                        AccessToken = tokenService.CreateToken(user),
+                        AccessToken = tokenService.CreateTokenForApp(new TokenUserDto()
+                        {
+                            CoachId = coach.Id,
+                            Id =  user.Id,
+                            PhoneNumber = user.PhoneNumber,
+                            TypeOfUser = TypeOfUser.COACH
+                        }),
                         TypeOfUser = user.TypeOfUser.ToString(),
                         Gender = user.Gender.ToString(),
                         Questions= true 
@@ -87,8 +95,13 @@ public class UserRepository(
                     Result = new AddRoleResponse()
                     {
                         RefreshToken = user.RefreshToken,
-                        AccessToken = tokenService.CreateToken(user),
-                        TypeOfUser = user.TypeOfUser.ToString(),
+                        AccessToken = tokenService.CreateTokenForApp(new TokenUserDto()
+                        {
+                            CoachId = user.Athlete.Id,
+                            Id =  user.Id,
+                            PhoneNumber = user.PhoneNumber,
+                            TypeOfUser = TypeOfUser.ATHLETE
+                        }),                        TypeOfUser = user.TypeOfUser.ToString(),
                         Gender = user.Gender.ToString(),
                         Questions= true 
                         }
@@ -163,30 +176,30 @@ public class UserRepository(
 
     public async Task<ApiResponse> CheckCode(CheckCodeRequestDto checkCodeRequestDto)
 {
-    var user = await dbContext.CodeVerifies.FirstOrDefaultAsync(x => x.PhoneNumber == checkCodeRequestDto.PhoneNumber);
-    if (user == null)
+    var code = await dbContext.CodeVerifies.FirstOrDefaultAsync(x => x.PhoneNumber == checkCodeRequestDto.PhoneNumber);
+    if (code == null)
     {
         return new ApiResponse { Action = false, Message = "CodeIsNotCorrect" };
     }
     
 
     
-    if (user.TimeCodeSend.AddMinutes(15) < DateTime.Now)
+    if (code.TimeCodeSend.AddMinutes(15) < DateTime.Now)
     {
-        dbContext.CodeVerifies.Remove(user);
+        dbContext.CodeVerifies.Remove(code);
         await dbContext.SaveChangesAsync();
         return new ApiResponse { Action = false, Message = "Code Expired" };
         
     }
     
-    if (user.Code != checkCodeRequestDto.Code)
+    if (code.Code != checkCodeRequestDto.Code)
     {
         return new ApiResponse { Action = false, Message = "CodeIsNotCorrect" };
     }
-    dbContext.CodeVerifies.Remove(user);
+    dbContext.CodeVerifies.Remove(code);
     await dbContext.SaveChangesAsync();
     
-    var userEntity = await dbContext.Users.FirstOrDefaultAsync(x => x.PhoneNumber == checkCodeRequestDto.PhoneNumber);
+    var userEntity = await dbContext.Users.Include(u=>u.Athlete).Include(u=>u.Coach).FirstOrDefaultAsync(x => x.PhoneNumber == checkCodeRequestDto.PhoneNumber);
     if (userEntity != null)
     {
         var questions = userEntity.FirstName  is not "";
@@ -208,7 +221,16 @@ private async Task<ApiResponse> GenerateSuccessResponse(User user,bool question)
         Result = new CheckCodeResponseDto
         {
             RefreshToken = await tokenService.CreateRefreshToken(user),
-            AccessToken = tokenService.CreateToken(user),
+            AccessToken = tokenService.CreateTokenForApp(new TokenUserDto()
+            {
+                Id = user.Id,
+                TypeOfUser = user.TypeOfUser,
+                AthleteId = user.Athlete?.Id,
+                CoachId = user.Coach?.Id,
+                PhoneNumber = user.PhoneNumber,
+                
+                
+            }),
             TypeOfUser = user.TypeOfUser.ToString(),
             Gender = user.Gender.ToString() ,
             Questions=question
@@ -292,9 +314,23 @@ private async Task<string> GenerateUniqueUsername()
 
     public async Task<ApiResponse> GenerateAccessToken(string refreshToken)
     {
-        var user = await dbContext.Users.FirstOrDefaultAsync(x => x.RefreshToken == refreshToken);
+        var user = await dbContext.Users
+            .AsNoTracking()
+            .Where(u => u.RefreshToken == refreshToken)
+            .Select(u => new TokenUserDto
+            {
+                Id = u.Id,
+                TypeOfUser = u.TypeOfUser,
+                AthleteId = u.Athlete != null ? (int?)u.Athlete.Id : null,
+                CoachId = u.Coach != null ? (int?)u.Coach.Id : null,
+                PhoneNumber = u.PhoneNumber,
+                LastLogin = u.LastLogin,
+                
+            })
+            .FirstOrDefaultAsync();
+
         if (user is null) return new ApiResponse() { Message = "Invalid refresh token", Action = false };
-        return user.LastLogin.AddDays(90) < DateTime.Now ? new ApiResponse() { Message = "Refresh token expired", Action = false } : new ApiResponse() { Message = "Success", Action = true, Result = new { AccessToken = tokenService.CreateToken(user) } };
+        return user.LastLogin.AddDays(180) < DateTime.Now ? new ApiResponse() { Message = "Refresh token expired", Action = false } : new ApiResponse() { Message = "Success", Action = true, Result = new { AccessToken = tokenService.CreateTokenForApp(user) } };
     }
 
     public async Task<ApiResponse> AddUsername(string phoneNumber, string username)
@@ -495,7 +531,7 @@ private async Task<string> GenerateUniqueUsername()
         AthleteWeight = workoutData.AthleteCurrentWeight.ToString(),
         AthleteHeight = workoutData.AthleteHeight.ToString(),
         AthleteBmi = Math.Round(bmi, 2).ToString(), 
-        AthleteFatPercentage = workoutData.AhtleteGender.GetFatPercentageRange(workoutData.AthleteCurrentBodyForm),
+        AthleteFatPercent = workoutData.AhtleteGender.GetFatPercentRange(workoutData.AthleteCurrentBodyForm),
         WorkoutDays = workoutData.ProgramInDays.Select(pd => new WorkoutDayModel
         {
             DayNumber = pd.ForWhichDay,
@@ -589,54 +625,85 @@ private async Task<string> GenerateUniqueUsername()
     }
 
   
+
 public async Task<(IEnumerable<AllExerciseResponseDto> Exercises, int TotalCount)> GetExercisesAsync(
     string? level,
     string? type,
     string? mechanic,
-    string?[] equipment,
+    string?[]? equipment,
     string? muscle,
     string? place,
     int page,
     int pageSize,
     string? searchTerm)
 {
+    page = page <= 0 ? 1 : page;
+    pageSize = pageSize <= 0 ? 10 : pageSize;
+
     IQueryable<Exercise> query = dbContext.Exercises.AsNoTracking();
 
+    // Search
     if (!string.IsNullOrWhiteSpace(searchTerm))
-        query = query.Where(e => e.PersianName.Contains(searchTerm) || e.EnglishName.Contains(searchTerm));
+    {
+        searchTerm = searchTerm.Trim();
+        query = query.Where(e =>
+            EF.Functions.Like(e.PersianName!, $"%{searchTerm}%") ||
+            EF.Functions.Like(e.EnglishName!, $"%{searchTerm}%"));
+    }
 
-    if (Enum.TryParse<ExerciseLevel>(level, true, out var levelEnum))
+    // Level
+    if (!string.IsNullOrWhiteSpace(level) &&
+        Enum.TryParse<ExerciseLevel>(level, true, out var levelEnum))
+    {
         query = query.Where(e => e.ExerciseLevel == levelEnum);
+    }
 
-    if (Enum.TryParse<ExerciseType>(type, true, out var typeEnum))
+    if (!string.IsNullOrWhiteSpace(type) &&
+        Enum.TryParse<ExerciseType>(type, true, out var typeEnum))
+    {
         query = query.Where(e => e.ExerciseType == typeEnum);
+    }
 
-    if (Enum.TryParse<MechanicType>(mechanic, true, out var mechanicEnum))
+    if (!string.IsNullOrWhiteSpace(mechanic) &&
+        Enum.TryParse<MechanicType>(mechanic, true, out var mechanicEnum))
+    {
         query = query.Where(e => e.Mechanics == mechanicEnum);
+    }
 
-    if (equipment is { Length: > 0 })
+    if (equipment != null && equipment.Length > 0)
     {
         var validEquipments = equipment
-            .Select(eq => Enum.TryParse<EquipmentType>(eq, true, out var equipEnum) ? equipEnum : (EquipmentType?)null)
-            .Where(e => e.HasValue)
-            .Select(e => e!.Value)
+            .Where(e => !string.IsNullOrWhiteSpace(e))
+            .Select(e =>
+            {
+                bool parsed = Enum.TryParse<EquipmentType>(e, true, out var result);
+                return new { parsed, result };
+            })
+            .Where(x => x.parsed)
+            .Select(x => x.result)
             .ToList();
 
         if (validEquipments.Count > 0)
             query = query.Where(e => validEquipments.Contains(e.Equipment));
     }
 
-    if (Enum.TryParse<BaseCategory>(muscle, true, out var muscleEnum))
+    if (!string.IsNullOrWhiteSpace(muscle) &&
+        Enum.TryParse<BaseCategory>(muscle, true, out var muscleEnum))
+    {
         query = query.Where(e => e.BaseCategory == muscleEnum);
+    }
 
     if (!string.IsNullOrWhiteSpace(place))
-        query = query.Where(e => EF.Functions.Like(e.Description, $"%{place}%"));
+    {
+        place = place.Trim();
+        query = query.Where(e => EF.Functions.Like(e.Description!, $"%{place}%"));
+    }
 
     var totalCount = await query.CountAsync();
 
     var exercises = await query
         .OrderByDescending(e => e.Views)
-        .ThenBy(e => e.Id) // ترتیب ثابت بین صفحات
+        .ThenBy(e => e.Id)
         .Skip((page - 1) * pageSize)
         .Take(pageSize)
         .Select(e => new AllExerciseResponseDto

@@ -5,13 +5,16 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using sport_app_backend.Models;
 using sport_app_backend.Models.Account;
 using sport_app_backend.Models.Account.Athlete;
+using sport_app_backend.Models.Account.Coach;
 using sport_app_backend.Models.Actions;
+using sport_app_backend.Models.Actions.CouchExercise;
 using sport_app_backend.Models.Challenge_Achievement;
 using sport_app_backend.Models.Login_Sinup;
 using sport_app_backend.Models.Payments;
 using sport_app_backend.Models.Program;
 using sport_app_backend.Models.Question.A_Question;
 using sport_app_backend.Models.SupportApp;
+using sport_app_backend.Models.TrainingPlan;
 using WebPush;
 
 
@@ -30,6 +33,13 @@ public class ApplicationDbContext : DbContext
             .WithOne(w => w.Athlete)
             .HasForeignKey(w => w.AthleteId)
             .OnDelete(DeleteBehavior.Cascade);
+        
+        modelBuilder.Entity<Coach>()
+            .HasOne(c => c.CoachCardNumber)
+            .WithOne(cc => cc.Coach)
+            .HasForeignKey<CoachCardNumber>(cc => cc.CoachId)
+            .OnDelete(DeleteBehavior.Cascade);
+    
 
         modelBuilder.Entity<Athlete>()
             .HasOne(a => a.ActiveWorkoutProgram)
@@ -45,6 +55,16 @@ public class ApplicationDbContext : DbContext
          modelBuilder.Entity<User>()
         .Navigation(u => u.Athlete)
         .AutoInclude(); 
+
+        modelBuilder.Entity<DiscountCode>()
+            .HasIndex(x => x.Code)
+            .IsUnique();
+
+        modelBuilder.Entity<Payment>()
+            .HasOne(x => x.DiscountCode)
+            .WithMany(x => x.Payments)
+            .HasForeignKey(x => x.DiscountCodeId)
+            .OnDelete(DeleteBehavior.Restrict);
          
       
     }
@@ -78,4 +98,11 @@ public class ApplicationDbContext : DbContext
     public DbSet<InAppMessage> InAppMessages { get; set; }
     public DbSet<UserMessageStatus> UserMessageStatuses { get; set; }
     public DbSet<WorkoutProgramFeedback> WorkoutProgramFeedback { get; set; }
+    public DbSet<DiscountCode> DiscountCodes { get; set; }
+    public DbSet<CoachPineExercise>  CoachPineExercises { get; set; }
+    public DbSet<LastWorkoutExercise>  LastWorkoutExercises { get; set; }
+    public DbSet<PaymentAttempt>  PaymentAttempts { get; set; }
+    public DbSet<CoachCardNumber>  CoachCardNumbers { get; set; }
+
+
 }

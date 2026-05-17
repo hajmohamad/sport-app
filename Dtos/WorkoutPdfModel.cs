@@ -6,7 +6,7 @@ public class WorkoutPdfModel
     public string StartDate { get; set; }
     public string AthleteBmi { get; set; }
     public string AthleteWeight { get; set; }
-    public string AthleteFatPercentage { get; set; }
+    public string AthleteFatPercent { get; set; }
     public string AthleteHeight { get; set; }
     public string CoachName { get; set; }
     public string ProgramLevel { get; set; }

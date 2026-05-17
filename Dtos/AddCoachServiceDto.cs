@@ -13,9 +13,8 @@ namespace sport_app_backend.Dtos
     public required string Description { get; set; }
     public required double Price { get; set; }
     public bool IsActive { get; set; }
-    public bool HaveSupport{get; set;}
-    // public string CommunicateType{get; set;}
-
-    // public required string TypeOfCoachingServices { get; set; } 
+    // public int? PublicDiscountPercent { get; set; }
+    // public DateTime? PublicDiscountExpiresAt { get; set; }
+    public int? UsageLimit { get; set; }
     }
 }

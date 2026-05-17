@@ -11,10 +11,12 @@ using sport_app_backend.Interface.Athlete;
 using sport_app_backend.Models;
 using sport_app_backend.Models.Account;
 using sport_app_backend.Models.Account.Athlete;
+using sport_app_backend.Models.Account.Coach;
 using sport_app_backend.Models.Actions;
 using sport_app_backend.Models.Program;
 using sport_app_backend.Models.Payments;
 using sport_app_backend.Models.Question.A_Question;
+using sport_app_backend.Models.TrainingPlan;
 using sport_app_backend.Repository.AthleteRepo;
 using Xunit;
 
@@ -405,7 +407,7 @@ namespace sport_app_backend.projectTest
 
             Assert.True(result.Action);
             Assert.Equal("Payment details found", result.Message);
-            var paymentDto = result.Result as PaymentResponseDto;
+            var paymentDto = result.Result as AthletePaymentResponseDto;
             Assert.NotNull(paymentDto);
             Assert.Equal(1, paymentDto.PaymentId);
         }

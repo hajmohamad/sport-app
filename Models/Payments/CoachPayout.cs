@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using sport_app_backend.Models.Account;
+using sport_app_backend.Models.Account.Coach;
 
 namespace sport_app_backend.Models.Payments;
 
