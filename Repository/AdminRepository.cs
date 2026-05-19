@@ -250,24 +250,54 @@ namespace sport_app_backend.Repository
 
         public async Task<ApiResponse> GetCoachService(string phoneNumber)
         {
-            var coachingServiceDto = await context.CoachServices
-                .Where(u =>u.IsDeleted!=true && u.Coach.PhoneNumber == phoneNumber)
+         
+            var coach = await context.Coaches
+                .Include(c => c.CoachingServices)
+                .Include(c => c.User)
+                .FirstOrDefaultAsync(c => c.PhoneNumber == phoneNumber);
+
+            if (coach == null)
+            {
+                return new ApiResponse
+                {
+                    Action = false,
+                    Message = "Coach not found with the provided phone number.",
+                    Result = null
+                };
+            }
+
+          
+            var coachingServiceDtos = coach.CoachingServices.Where(c=>c is { IsDeleted: false, IsActive: true })
+                .Select(cs => cs.ToCoachingServiceResponse())
+                .ToList();
+            var socialMediaLink = new
+            {
+                coach.InstagramLink,
+                coach.BaleUserName,
+                coach.TelegramLink,
+                coach.EitaaUserName,
+                coach.WhatsApp
+            };
+
+      
+            var workoutProgramFeedBack = await context.WorkoutProgramFeedback
+                .Where(fb => fb.IsChosen && fb.CouchId == coach.Id)
                 .ToListAsync();
-            
-            var workoutProgramFeedBack = await context.WorkoutProgramFeedback.Where(fb=>fb.IsChosen&&fb.CouchId==coachingServiceDto[0].CoachId).ToListAsync();
 
             return new ApiResponse
             {
-                Action = true, Message = "Coach found",
+                Action = true,
+                Message = "Coach found successfully.",
                 Result = new
                 {
-                    coachingServiceDto = coachingServiceDto.Select(cs => cs.ToCoachingServiceResponse()).ToList(),
-                    workoutProgramFeedBack
+                    coachingServiceDto = coachingServiceDtos,
+                    workoutProgramFeedBack,
+                    socialMediaLink,
+                    coach.User.ImageProfile
                 }
             };
-                    
-
         }
+
 
         public async Task<SmsResponse> SendMassageToCoach( string phoneNumber, string message)
         {
