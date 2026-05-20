@@ -61,12 +61,11 @@ public class PaymentAttemptSmsService(
             .Include(pa => pa.Athlete)
             .ToListAsync(stoppingToken);
 
-
         foreach (var paymentAttempt in paymentAttempts)
         {
             var message =
                 $"فقط یک قدم باقی مونده!\n" +
-                $"{paymentAttempt.CoachService.Title} رو همین الان از {paymentAttempt.Coach.User.FirstName} دریافت کن تا به هدفت برسی:\n" +
+                $"{paymentAttempt.CoachService.Title} رو همین الان از {paymentAttempt.Coach.User.FirstName+" "+paymentAttempt.Coach.User.LastName} دریافت کن تا به هدفت برسی:\n" +
                 $"{paymentAttempt.Coach.WebSiteUrl}";
 
             await sms.SendSms(paymentAttempt.Athlete.PhoneNumber, message);
