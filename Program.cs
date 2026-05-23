@@ -159,7 +159,7 @@ builder.Services.AddAuthorization(options =>
     options.AddPolicy("None", policy => policy.RequireRole("None"));
 });
 builder.Services.AddScoped<IZarinPal, ZarinPal>();
-builder.Services.AddScoped<ILiaraStorage, LiaraStorage>();
+builder.Services.AddScoped<ILiaraStorage, Storage>();
 builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddSingleton<ISmsService, SmsService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
