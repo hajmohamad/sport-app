@@ -15,7 +15,12 @@ using sport_app_backend.Models.Program;
 
 namespace sport_app_backend.Repository.CoachRepo
 {
-    public class CoachRepository(ApplicationDbContext context, ISmsService smsService, ILiaraStorage liaraStorage,ITokenService token,ICalculator calculator) : ICoachRepository
+    public class CoachRepository(
+        ApplicationDbContext context,
+        ISmsService smsService,
+        ILiaraStorage liaraStorage,
+        ITokenService token,
+        ICalculator calculator) : ICoachRepository
     {
         public async Task<ApiResponse> AthleteReportForCoach(int athleteId)
         {
@@ -155,7 +160,109 @@ namespace sport_app_backend.Repository.CoachRepo
             };
         }
 
-      
+        public async Task<ApiResponse> DeleteCoachingService(string phoneNumber, int id)
+        {
+            var coach = await context.Coaches
+                .FirstOrDefaultAsync(x => x.PhoneNumber == phoneNumber);
+            if (coach is null)
+                return new ApiResponse { Message = "User is not a coach", Action = false };
+
+            var coachingService =
+                await context.CoachServices.FirstOrDefaultAsync(x => x.Id == id && x.CoachId == coach.Id);
+            if (coachingService is null)
+                return new ApiResponse { Message = "Coaching Service not found", Action = false };
+
+            coachingService.IsDeleted = true;
+
+        
+            var affectedDiscountCodes = await context.DiscountCodes
+                .Where(dc => !dc.IsDeleted &&
+                             dc.CoachId == coach.Id &&
+                             dc.DiscountCodeCoachServices.Any(dcs => dcs.CoachServiceId == id))
+                .ToListAsync();
+
+            if (affectedDiscountCodes.Any())
+            {
+                foreach (var discountCode in affectedDiscountCodes)
+                {
+                   
+                    discountCode.Status = DiscountCodeStatus.INACTIVE;
+                }
+            }
+
+            await context.SaveChangesAsync();
+
+            return new ApiResponse
+            {
+                Message = "Coaching Service deleted successfully",
+                Action = true,
+                Result = coachingService.ToCoachingServiceResponse()
+            };
+        }
+
+        public async Task<ApiResponse> UpdateCoachingService(string phoneNumber, int id,
+            AddCoachServiceDto addCoachingServices)
+        {
+            var coach = await context.Coaches.FirstOrDefaultAsync(x => x.PhoneNumber == phoneNumber);
+            if (coach is null)
+                return new ApiResponse { Message = "User is not a coach", Action = false };
+
+            if (addCoachingServices.Price < 50000)
+            {
+                return new ApiResponse
+                {
+                    Action = false,
+                    Message = "مبلغ وارد شده نمیتواند کمتر از 50 هزار تومان باشد"
+                };
+            }
+
+            var coachingService = await context.CoachServices
+                .FirstOrDefaultAsync(x => x.Id == id && x.CoachId == coach.Id && !x.IsDeleted);
+
+            if (coachingService is null)
+            {
+                return new ApiResponse { Message = "سرویس کوچینگ یافت نشد یا قبلاً حذف شده است.", Action = false };
+            }
+
+            var hasActivePayments = await context.Payments.AnyAsync(p => p.CoachServiceId == coachingService.Id);
+
+            if (hasActivePayments)
+            {
+                var discountLinksToMigrate = await context.DiscountCodeCoachServices
+                    .Where(dcs => dcs.CoachServiceId == id)
+                    .ToListAsync();
+
+                coachingService.IsDeleted = true;
+
+                var newCoachService = addCoachingServices.ToCoachService(coach);
+                newCoachService.NumberOfSell = coachingService.NumberOfSell;
+
+                await context.CoachServices.AddAsync(newCoachService);
+                await context.SaveChangesAsync();
+
+                if (discountLinksToMigrate.Any())
+                {
+                    foreach (var link in discountLinksToMigrate)
+                    {
+                        link.CoachServiceId = newCoachService.Id;
+                    }
+                }
+            }
+            else
+            {
+                coachingService.UpdateCoachServices(addCoachingServices);
+            }
+
+            await context.SaveChangesAsync();
+
+            return new ApiResponse
+            {
+                Message = "Coaching Service updated successfully",
+                Action = true,
+                Result = coachingService.ToCoachingServiceResponse() // همچنان سرویس قدیمی را برمی‌گردانیم
+            };
+        }
+
         public async Task<ApiResponse> SubmitCoachQuestions(string phoneNumber, CoachQuestionDto coachQuestionDto)
         {
             var user = await context.Users.FirstOrDefaultAsync(x => x.PhoneNumber == phoneNumber);
@@ -181,80 +288,8 @@ namespace sport_app_backend.Repository.CoachRepo
             };
         }
 
-        public async Task<ApiResponse> UpdateCoachingService(string phoneNumber, int id,
-            AddCoachServiceDto addCoachingServices)
-        {
-            
-            var coach = await context.Coaches.Include(x => x.CoachingServices)
-                .FirstOrDefaultAsync(x => x.PhoneNumber == phoneNumber);
-            if (coach is null)
-                return new ApiResponse()
-                    { Message = "User is not a coach", Action = false }; // Ensure the user is a coach
-            if (addCoachingServices.Price < 50000)
-            {
-                return new ApiResponse()
-                {
-                    Action = false,
-                    Message = "مبلغ وارد شده نمیتواند کمتر از 50 هزار تومان باشد"
-                };
-            }
 
-            // var publicDiscountValidation = ValidatePublicDiscount(addCoachingServices);
-            // if (!publicDiscountValidation.Action)
-            // {
-            //     return publicDiscountValidation;
-            // }
-
-            var coachingService = coach.CoachingServices
-                .FirstOrDefault(x => x.Id == id && !x.IsDeleted);
-
-            if (coachingService is null)
-            {
-                return new ApiResponse() { Message = "سرویس کوچینگ یافت نشد یا قبلاً حذف شده است.", Action = false };
-            }
-
-            var hasActivePayments = await context.Payments
-                .AnyAsync(p => p.CoachServiceId == coachingService.Id);
-
-            if (hasActivePayments)
-            {
-                coachingService.IsDeleted = true;
-                var newCoachService = addCoachingServices.ToCoachService(coach);
-                newCoachService.NumberOfSell = coachingService.NumberOfSell;
-                // newCoachService.UsageLimit = coachingService.UsageLimit;
-                // newCoachService.NumberOfSellWithDiscount = coachingService.NumberOfSellWithDiscount;
-                // coach.CoachingServices.Add(newCoachService);
-                await context.CoachServices.AddAsync(newCoachService);
-                await context.SaveChangesAsync(); 
-
-                var discountCodes = (await context.DiscountCodes
-                        .Where(c => !c.IsDeleted&&c.CoachId==coach.Id)
-                        .ToListAsync())
-                    .Where(c => c.CoachServicesId.Count !=0 && c.CoachServicesId.Contains(id))
-                    .ToList();
-
-                foreach (var dc in discountCodes)
-                {
-
-                    dc.CoachServicesId.RemoveAll(x => x == id);
-
-                    if (!dc.CoachServicesId.Contains(newCoachService.Id))
-                        dc.CoachServicesId.Add(newCoachService.Id);
-                }
-            }
-            else
-            {
-                coachingService.UpdateCoachServices(addCoachingServices);
-            }
-
-            await context.SaveChangesAsync();
-            return new ApiResponse()
-            {
-                Message = "Coaching Service updated successfully",
-                Action = true,
-                Result = coachingService.ToCoachingServiceResponse()
-            };
-        }
+        #region DiscountCode
 
         public async Task<ApiResponse> CreateDiscountCode(int coachId,
             DiscountCodeCreateDto discountCodeCreateDto)
@@ -267,38 +302,54 @@ namespace sport_app_backend.Repository.CoachRepo
                 return new ApiResponse { Action = false, Message = "User is not a coach" };
             }
 
-        
-            var validation = await ValidateDiscountCodeInput(coach,discountCodeCreateDto.Code,
+            var validation = await ValidateDiscountCodeInput(coach, discountCodeCreateDto.Code,
                 discountCodeCreateDto.DiscountPercent, discountCodeCreateDto.UsageLimit,
-                discountCodeCreateDto.ExpiresAt, null,discountCodeCreateDto.CoachServiceId);
+                discountCodeCreateDto.ExpiresAt, null, discountCodeCreateDto.CoachServiceId,discountCodeCreateDto.AppliesToAllServices);
             if (!validation.Action)
             {
                 return validation;
             }
 
-
             var discountCode = new DiscountCode
             {
                 CoachId = coach.Id,
-                Coach = coach,
                 Code = discountCodeCreateDto.Code,
                 DiscountPercent = discountCodeCreateDto.DiscountPercent,
                 UsageLimit = discountCodeCreateDto.UsageLimit,
                 ExpiresAt = discountCodeCreateDto.ExpiresAt,
-                Status = discountCodeCreateDto.ExpiresAt.HasValue && discountCodeCreateDto.ExpiresAt.Value <= DateTime.UtcNow
+                Status = discountCodeCreateDto.ExpiresAt.HasValue &&
+                         discountCodeCreateDto.ExpiresAt.Value <= DateTime.UtcNow
                     ? DiscountCodeStatus.EXPIRED
                     : DiscountCodeStatus.ACTIVE,
-                CoachServicesId = discountCodeCreateDto.CoachServiceId??[]
+                AppliesToAllServices = discountCodeCreateDto.AppliesToAllServices
             };
+
+            if (discountCodeCreateDto.CoachServiceId != null && discountCodeCreateDto.CoachServiceId.Count != 0)
+            {
+                foreach (var serviceId in discountCodeCreateDto.CoachServiceId)
+                {
+                    discountCode.DiscountCodeCoachServices.Add(new DiscountCodeCoachService
+                    {
+                        CoachServiceId = serviceId
+                    });
+                }
+            }
+            else
+            {
+                discountCode.AppliesToAllServices = true;
+            }
 
             await context.DiscountCodes.AddAsync(discountCode);
             await context.SaveChangesAsync();
+            
+
+           
+            
 
             return new ApiResponse
             {
                 Action = true,
-                Message = "کد تخفیف با موفقیت ساخته شد.",
-                Result = discountCode.ToDiscountCodeListItemDto(null)
+                Message = "کد تخفیف با موفقیت ساخته شد."
             };
         }
 
@@ -306,17 +357,19 @@ namespace sport_app_backend.Repository.CoachRepo
             DiscountCodeUpdateDto discountCodeUpdateDto)
         {
             var discountCode = await context.DiscountCodes
-                .Include(x => x.Coach).ThenInclude(c=>c.CoachingServices)
-                .FirstOrDefaultAsync(x => x.Id == discountCodeId && !x.IsDeleted && x.CoachId==coachId);
+                .Include(dc => dc.Coach)
+                .Include(dc => dc.DiscountCodeCoachServices) 
+                .FirstOrDefaultAsync(x => x.Id == discountCodeId && !x.IsDeleted && x.CoachId == coachId);
+
             if (discountCode is null)
             {
                 return new ApiResponse { Action = false, Message = "کد تخفیف یافت نشد." };
             }
 
-            var validation = await ValidateDiscountCodeInput(discountCode.Coach,discountCodeUpdateDto.Code, 
+            var validation = await ValidateDiscountCodeInput(discountCode.Coach, discountCodeUpdateDto.Code,
                 discountCodeUpdateDto.DiscountPercent, discountCodeUpdateDto.UsageLimit,
                 discountCodeUpdateDto.ExpiresAt, discountCode.Id,
-                discountCodeUpdateDto.CoachServiceId);
+                discountCodeUpdateDto.CoachServiceId,discountCode.AppliesToAllServices);
             if (!validation.Action)
             {
                 return validation;
@@ -327,9 +380,24 @@ namespace sport_app_backend.Repository.CoachRepo
             discountCode.UsageLimit = discountCodeUpdateDto.UsageLimit;
             discountCode.ExpiresAt = discountCodeUpdateDto.ExpiresAt;
             discountCode.UpdatedAt = DateTime.UtcNow;
-            discountCode.CoachServicesId = discountCodeUpdateDto.CoachServiceId??[];
 
-            
+            var existingServiceIds = discountCode.DiscountCodeCoachServices.Select(s => s.CoachServiceId).ToList();
+            var newServiceIds = discountCodeUpdateDto.CoachServiceId ?? new List<int>();
+
+            var servicesToRemove = discountCode.DiscountCodeCoachServices
+                .Where(s => !newServiceIds.Contains(s.CoachServiceId))
+                .ToList();
+            context.RemoveRange(servicesToRemove); 
+
+            var serviceIdsToAdd = newServiceIds.Except(existingServiceIds).ToList();
+            foreach (var serviceId in serviceIdsToAdd)
+            {
+                discountCode.DiscountCodeCoachServices.Add(new DiscountCodeCoachService
+                {
+                    CoachServiceId = serviceId
+                });
+            }
+
             if (!string.IsNullOrWhiteSpace(discountCodeUpdateDto.Status))
             {
                 if (!Enum.TryParse<DiscountCodeStatus>(discountCodeUpdateDto.Status, true, out var status))
@@ -347,51 +415,37 @@ namespace sport_app_backend.Repository.CoachRepo
 
             await context.SaveChangesAsync();
 
+          
+
             return new ApiResponse
             {
                 Action = true,
                 Message = "کد تخفیف با موفقیت ویرایش شد.",
-                Result = discountCode.ToDiscountCodeListItemDto(null)
             };
         }
+
         public async Task<ApiResponse> GetDiscountCodes(int coachId)
         {
-            var coach = await context.Coaches.FirstOrDefaultAsync(x => x.Id == coachId);
-            if (coach is null)
-            {
-                return new ApiResponse { Action = false, Message = "User is not a coach" };
-            }
-
-            var discountCodes = await context.DiscountCodes
-                .Where(x => x.CoachId == coach.Id && !x.IsDeleted)
+            var discountCodesData = await context.DiscountCodes
+                .Where(x => x.CoachId == coachId && !x.IsDeleted)
+                .Select(dc => new 
+                {
+                    DiscountCode = dc,
+                    ServiceNames = dc.DiscountCodeCoachServices
+                        .Select(dcs => new ServiceForDiscountDto()
+                        {
+                            Title = dcs.CoachService.Title
+                        })
+                        .ToList()
+                })
                 .ToListAsync();
 
+            var discountCodes = discountCodesData.Select(x => x.DiscountCode).ToList();
             await SyncExpiredDiscountCodes(discountCodes);
 
-            var result = new List<object>();
-
-            foreach (var discountCode in discountCodes)
-            {
-                List<ServiceForDiscountDto>? services = null;
-
-                if (discountCode.CoachServicesId.Count!=0)
-                {
-                    var coachServices = await context.CoachServices
-                        .Where(c => c.CoachId==coachId&&!c.IsDeleted && discountCode.CoachServicesId.Contains(c.Id))
-                        .ToListAsync();
-
-                    services = coachServices.Select(cs => new ServiceForDiscountDto
-                    {
-                        Id = cs.Id,
-                        Title = cs.Title,
-                        OriginalPrice = cs.Price,
-                        DiscountPrice = cs.Price - ((cs.Price * discountCode.DiscountPercent) / 100),
-                        IsActive = cs.IsActive
-                    }).ToList();
-                }
-
-                result.Add(discountCode.ToDiscountCodeListItemDto(services));
-            }
+            var result = discountCodesData.Select(x => 
+                x.DiscountCode.ToDiscountCodeListItemDto(x.ServiceNames.Count != 0 ? x.ServiceNames : null)
+            ).ToList();
 
             return new ApiResponse
             {
@@ -399,9 +453,92 @@ namespace sport_app_backend.Repository.CoachRepo
                 Message = discountCodes.Count == 0 ? "هیچ کد تخفیفی موجود نیست" : "لیست کدهای تخفیف",
                 Result = result
             };
+
+        }
+        public async Task<ApiResponse> GetAllServicesWithCalculatedDiscount(int coachId, int percent)
+        {
+            if (percent is < 0 or > 100)
+                return new ApiResponse { Action = false, Message = "درصد وارد شده باید بین 0 تا 100 باشد." };
+
+            var allCoachServices = await context.CoachServices
+                .Where(cs => cs.CoachId == coachId && !cs.IsDeleted)
+                .ToListAsync();
+
+            if (!allCoachServices.Any())
+            {
+                return new ApiResponse 
+                { 
+                    Action = true, 
+                    Message = "سرویسی برای این مربی یافت نشد.", 
+                    Result = new List<ServiceForDiscountDto>() 
+                };
+            }
+
+            var result = allCoachServices.Select(cs => new ServiceForDiscountDto
+            {
+                Id = cs.Id,
+                Title = cs.Title,
+                OriginalPrice = cs.Price,
+                DiscountPrice = cs.Price - ((cs.Price * percent) / 100),
+                IsActive = cs.IsActive,
+            }).ToList();
+
+            return new ApiResponse
+            {
+                Action = true,
+                Message = $"لیست سرویس‌ها با محاسبه تخفیف {percent} درصد",
+                Result = result
+            };
         }
 
+
         public async Task<ApiResponse> GetDiscountCodeById(int coachId, int discountCodeId)
+        {
+            var discountCode = await context.DiscountCodes
+                .Include(dc => dc.DiscountCodeCoachServices)
+                .FirstOrDefaultAsync(x => x.Id == discountCodeId && !x.IsDeleted && x.CoachId == coachId);
+
+            if (discountCode is null)
+            {
+                return new ApiResponse { Action = false, Message = "کد تخفیف یافت نشد." };
+            }
+
+            await SyncExpiredDiscountCodes([discountCode]);
+
+            var allCoachServices = await context.CoachServices
+                .Where(cs => cs.CoachId == coachId && !cs.IsDeleted)
+                .ToListAsync();
+
+            var selectedServiceIds = discountCode.DiscountCodeCoachServices
+                .Select(dcs => dcs.CoachServiceId)
+                .ToList();
+
+            var services = allCoachServices.Select(cs => 
+            {
+                var isSelected = selectedServiceIds.Contains(cs.Id);
+        
+                return new ServiceForDiscountDto
+                {
+                    Id = cs.Id,
+                    Title = cs.Title,
+                    OriginalPrice = cs.Price,
+                    DiscountPrice = isSelected 
+                        ? cs.Price - ((cs.Price * discountCode.DiscountPercent) / 100) 
+                        : cs.Price,
+                    IsActive = cs.IsActive,
+                    IsChoose = isSelected 
+                };
+            }).ToList();
+
+            return new ApiResponse
+            {
+                Action = true,
+                Message = "جزئیات کد تخفیف به همراه وضعیت تمامی سرویس‌ها",
+                Result = discountCode.ToDiscountCodeListItemDto(services)
+            };
+        }
+
+        public async Task<ApiResponse> ChangeStatusForDiscountCode(int coachId, int discountCodeId, string status)
         {
             var discountCode = await context.DiscountCodes
                 .Include(x => x.Coach)
@@ -411,46 +548,6 @@ namespace sport_app_backend.Repository.CoachRepo
                 return new ApiResponse { Action = false, Message = "کد تخفیف یافت نشد." };
             }
 
-            await SyncExpiredDiscountCodes([discountCode]);
-            if (discountCode.CoachServicesId.Count==0)
-                return new ApiResponse
-                {
-                    Action = true,
-                    Message = "کد تخفیف",
-                    Result = discountCode.ToDiscountCodeListItemDto(null)
-                };
-            var coachService = await context.CoachServices.Where(c =>
-                    !c.IsDeleted &&
-                    discountCode.CoachServicesId.Contains(c.Id))
-                .ToListAsync();
-
-            var result = coachService.Select(cs => new ServiceForDiscountDto()
-            {
-                Id = cs.Id,
-                Title = cs.Title,
-                OriginalPrice = cs.Price,
-                DiscountPrice = cs.Price - ((cs.Price * discountCode.DiscountPercent) / 100),
-                IsActive = cs.IsActive
-
-            }).ToList();
-
-            return new ApiResponse
-            {
-                Action = true,
-                Message = "کد تخفیف",
-                Result = discountCode.ToDiscountCodeListItemDto(result)
-            };
-        }
-
-        public async Task<ApiResponse> ChangeStatusForDiscountCode(int coachId, int discountCodeId, string status)
-        {
-            var discountCode = await context.DiscountCodes
-                .Include(x => x.Coach)
-                .FirstOrDefaultAsync(x => x.Id == discountCodeId && !x.IsDeleted && x.CoachId==coachId);
-            if (discountCode is null)
-            {
-                return new ApiResponse { Action = false, Message = "کد تخفیف یافت نشد." };
-            }
             if (!string.IsNullOrWhiteSpace(status))
             {
                 if (!Enum.TryParse<DiscountCodeStatus>(status, true, out var statusEnum))
@@ -458,7 +555,7 @@ namespace sport_app_backend.Repository.CoachRepo
                     return new ApiResponse { Action = false, Message = "وضعیت کد تخفیف نامعتبر است." };
                 }
 
-                discountCode.Status =  statusEnum;
+                discountCode.Status = statusEnum;
             }
 
             discountCode.UpdatedAt = DateTime.UtcNow;
@@ -467,44 +564,13 @@ namespace sport_app_backend.Repository.CoachRepo
             return new ApiResponse
             {
                 Action = true,
-                Message = $"وضعیت کد تخفیف به{discountCode.Status} تغییر کرد",
+                Message = $"وضعیت کد تخفیف به {discountCode.Status} تغییر کرد",
                 Result = discountCode.ToDiscountCodeListItemDto(null)
             };
         }
-        
-        
 
-        public async Task<ApiResponse> DeleteCoachingService(string phoneNumber, int id)
-        {
-            var coach = await context.Coaches.Include(x => x.CoachingServices)
-                .FirstOrDefaultAsync(x => x.PhoneNumber == phoneNumber);
-            if (coach is null)
-                return new ApiResponse()
-                    { Message = "User is not a coach", Action = false }; // Ensure the user is a coach
-            var coachingService = coach.CoachingServices.FirstOrDefault(x => x.Id == id);
-            if (coachingService is null)
-                return new ApiResponse() { Message = "Coaching Service not found", Action = false };
-            coachingService.IsDeleted = true;
-            var discountCodes = (await context.DiscountCodes
-                    .Where(c => !c.IsDeleted&&c.CoachId==coach.Id)
-                    .ToListAsync())
-                .Where(c => c.CoachServicesId.Count !=0 && c.CoachServicesId.Contains(id))
-                .ToList();
-            if (discountCodes.Count > 0)
-            {
-                foreach (var discountCode in  discountCodes)
-                {
-                    discountCode.Status = DiscountCodeStatus.INACTIVE;
-                }
-            }
-            await context.SaveChangesAsync();
-            return new ApiResponse()
-            {
-                Message = "Coaching Service deleted successfully",
-                Action = true,
-                Result = coachingService.ToCoachingServiceResponse()
-            };
-        }
+        #endregion
+
 
         public async Task<ApiResponse> GetAllPayment(string phoneNumber)
         {
@@ -536,35 +602,35 @@ namespace sport_app_backend.Repository.CoachRepo
             };
         }
 
-        public async Task<ApiResponse>  GetPayment(string phoneNumber, int paymentId)
+        public async Task<ApiResponse> GetPayment(string phoneNumber, int paymentId)
         {
             var payment = await context.Payments
                 .Include(p => p.Athlete) // بارگذاری Athlete
                 .ThenInclude(a => a!.User)
                 .Include(a => a.AthleteQuestion) // بارگذاری User داخل Athlete
                 .ThenInclude(I => I!.InjuryArea)
-                .Include(a=>a.AthleteQuestion.AthleteBodyImage)
+                .Include(a => a.AthleteQuestion.AthleteBodyImage)
                 .Include(w => w.WorkoutProgram)
                 .ThenInclude(z => z.ProgramInDays)
                 .ThenInclude(z => z.AllExerciseInDays)
                 .ThenInclude(e => e.Exercise)
                 .FirstOrDefaultAsync(p => p.Coach.PhoneNumber == phoneNumber && p.Id == paymentId);
             if (payment is null) return new ApiResponse() { Message = "Payment not found", Action = false };
-                var ear = calculator.BmrCalculator(new BmrRequestDto()
-                {
-                    ActivityLevel = payment.AthleteQuestion.ActivityLevel,
-                    Age = DateTime.Today.Year - payment.Athlete.User.BirthDate.Year
-                                              - (payment.Athlete.User.BirthDate.Date > DateTime.Today.AddYears(
-                                                  -(DateTime.Today.Year - payment.Athlete.User.BirthDate.Year))
-                                                  ? 1
-                                                  : 0),
-                    Gender = payment.Athlete.User.Gender,
-                    HeightCm = payment.Athlete.Height,
-                    WeightKg = payment.Athlete.CurrentWeight
-                });
-            
+            var ear = calculator.BmrCalculator(new BmrRequestDto()
+            {
+                ActivityLevel = payment.AthleteQuestion.ActivityLevel,
+                Age = DateTime.Today.Year - payment.Athlete.User.BirthDate.Year
+                                          - (payment.Athlete.User.BirthDate.Date > DateTime.Today.AddYears(
+                                              -(DateTime.Today.Year - payment.Athlete.User.BirthDate.Year))
+                                              ? 1
+                                              : 0),
+                Gender = payment.Athlete.User.Gender,
+                HeightCm = payment.Athlete.Height,
+                WeightKg = payment.Athlete.CurrentWeight
+            });
 
-            var result = payment.ToCoachPaymentResponseDto(token.HashEncode(payment.WorkoutProgram?.Id??0),ear);
+
+            var result = payment.ToCoachPaymentResponseDto(token.HashEncode(payment.WorkoutProgram?.Id ?? 0), ear);
             if (result.WorkoutProgram!.ProgramInDays is { Count: 0 })
             {
                 result.WorkoutProgram.ProgramInDays.Add(new ProgramInDayDto()
@@ -581,9 +647,9 @@ namespace sport_app_backend.Repository.CoachRepo
                 Result = result
             };
         }
-        public async Task<ApiResponse> GetCoachPayments(int coachId, PaymentFilterDto filter) {
-   
 
+        public async Task<ApiResponse> GetCoachPayments(int coachId, PaymentFilterDto filter)
+        {
             var query = context.Payments
                 .Include(p => p.Athlete).ThenInclude(a => a.User)
                 .Include(p => p.WorkoutProgram)
@@ -597,17 +663,23 @@ namespace sport_app_backend.Repository.CoachRepo
                     p.WorkoutProgram.Status != WorkoutProgramStatus.UNCOMPLETEDQUESTION
                 );
 
-           
+
             query = filter.SortBy?.ToLower() switch
             {
-                "date" => filter.SortDesc ? query.OrderByDescending(x => x.PaymentDate) : query.OrderBy(x => x.PaymentDate),
-                "service" => filter.SortDesc ? query.OrderByDescending(x => x.CoachService.Title) : query.OrderBy(x => x.CoachService.Title),
+                "date" => filter.SortDesc
+                    ? query.OrderByDescending(x => x.PaymentDate)
+                    : query.OrderBy(x => x.PaymentDate),
+                "service" => filter.SortDesc
+                    ? query.OrderByDescending(x => x.CoachService.Title)
+                    : query.OrderBy(x => x.CoachService.Title),
                 "amount" => filter.SortDesc ? query.OrderByDescending(x => x.Amount) : query.OrderBy(x => x.Amount),
-                "athlete" => filter.SortDesc ? query.OrderBy(x => x.Athlete.User.FirstName)  :  query.OrderByDescending(x => x.Athlete.User.FirstName),
+                "athlete" => filter.SortDesc
+                    ? query.OrderBy(x => x.Athlete.User.FirstName)
+                    : query.OrderByDescending(x => x.Athlete.User.FirstName),
                 _ => query.OrderByDescending(x => x.PaymentDate)
             };
 
-           
+
             var skip = (filter.Page - 1) * filter.PageSize;
             var totalCount = await query.CountAsync();
 
@@ -637,8 +709,6 @@ namespace sport_app_backend.Repository.CoachRepo
 
         #region Cardnumber
 
-        
-
         public async Task<ApiResponse> AddCardNumber(int coachId, AddCardNumberDto addCardNumberDto)
         {
             var cardNumber = await context.CoachCardNumbers.Where(c => c.CoachId == coachId).FirstOrDefaultAsync();
@@ -648,14 +718,14 @@ namespace sport_app_backend.Repository.CoachRepo
                 {
                     CardName = addCardNumberDto.CardName,
                     ShebaNumber = addCardNumberDto.ShebaNumber,
-                    CoachId = coachId   
-
+                    CoachId = coachId
                 };
                 await context.CoachCardNumbers.AddAsync(cardNumber);
                 await context.SaveChangesAsync();
                 return new ApiResponse
                 {
-                    Action = true, Message = "اضافه شد"};
+                    Action = true, Message = "اضافه شد"
+                };
             }
 
             cardNumber.CardName = addCardNumberDto.CardName;
@@ -663,7 +733,8 @@ namespace sport_app_backend.Repository.CoachRepo
             await context.SaveChangesAsync();
             return new ApiResponse
             {
-                Action = true, Message = "ادیت  شد"};
+                Action = true, Message = "ادیت  شد"
+            };
         }
 
         public async Task<ApiResponse> GetCardNumber(int coachId)
@@ -671,24 +742,21 @@ namespace sport_app_backend.Repository.CoachRepo
             var cardNumber = await context.CoachCardNumbers.Where(c => c.CoachId == coachId).FirstOrDefaultAsync();
             if (cardNumber is null)
             {
-               
                 return new ApiResponse
                 {
-                    Action = true, Message = "اطلاعاتی موجود نیست"};
+                    Action = true, Message = "اطلاعاتی موجود نیست"
+                };
             }
 
-           
+
             return new ApiResponse
             {
-                Action = true, Message = "اطلاعات پیدا شد"
-                ,
+                Action = true, Message = "اطلاعات پیدا شد",
                 Result = cardNumber
-                
             };
-            
         }
-        #endregion
 
+        #endregion
 
 
         public async Task<ApiResponse> GetProfile(string phoneNumber)
@@ -703,9 +771,10 @@ namespace sport_app_backend.Repository.CoachRepo
             var payments = await context.Payments.Include(p => p.Athlete).ThenInclude(u => u.User)
                 .OrderByDescending(c => c.PaymentDate)
                 .Include(p => p.WorkoutProgram).Where(p =>
-                    p.CoachId == user.Coach.Id && p.PaymentStatus == PaymentStatus.SUCCESS&& p.WorkoutProgram != null &&
+                    p.CoachId == user.Coach.Id && p.PaymentStatus == PaymentStatus.SUCCESS &&
+                    p.WorkoutProgram != null &&
                     p.WorkoutProgram.Status != WorkoutProgramStatus.WRITING &&
-                    p.WorkoutProgram.Status != WorkoutProgramStatus.NOTSTARTED&&
+                    p.WorkoutProgram.Status != WorkoutProgramStatus.NOTSTARTED &&
                     p.WorkoutProgram.Status != WorkoutProgramStatus.UNCOMPLETEDQUESTION)
                 .ToListAsync();
             return new ApiResponse
@@ -722,14 +791,15 @@ namespace sport_app_backend.Repository.CoachRepo
             {
                 var coach = await context.Coaches.FirstOrDefaultAsync(c => c.PhoneNumber == phoneNumber);
                 if (coach == null) return new ApiResponse { Action = false, Message = "Coach not found" };
-                var workoutProgram = await context.WorkoutPrograms.Include(p=>p.Payment).Include(x => x.ProgramInDays)
+                var workoutProgram = await context.WorkoutPrograms.Include(p => p.Payment).Include(x => x.ProgramInDays)
                     .ThenInclude(z => z.AllExerciseInDays)
                     .FirstOrDefaultAsync(p => p.PaymentId == paymentId && p.CoachId == coach.Id);
                 if (workoutProgram is null) return new ApiResponse { Action = false, Message = "Payment not found" };
                 workoutProgram.ProgramInDays = workoutProgramDto.Days.ToListOfProgramInDays();
                 workoutProgram.ProgramDuration = workoutProgramDto.Week;
-           
-                workoutProgram.ProgramLevel = (ProgramLevel)Enum.Parse(typeof(ProgramLevel),workoutProgramDto.ProgramLevel);
+
+                workoutProgram.ProgramLevel =
+                    (ProgramLevel)Enum.Parse(typeof(ProgramLevel), workoutProgramDto.ProgramLevel);
 
                 workoutProgram.ProgramPriorities = workoutProgramDto.ProgramPriority
                     .Select(x => (ProgramPriority)Enum.Parse(typeof(ProgramPriority), x.ToUpper())).ToList() ?? [];
@@ -752,22 +822,25 @@ namespace sport_app_backend.Repository.CoachRepo
                             Message = "athlete not found"
                         };
                     }
+
                     var exerciseIds = workoutProgramDto.Days
                         .SelectMany(d => d.AllExerciseInDays)
                         .Select(ex => ex.Id).ToList();
 
-                    coach.Amount += (workoutProgram.Payment.Amount - workoutProgram.Payment.AppFee);              
+                    coach.Amount += (workoutProgram.Payment.Amount - workoutProgram.Payment.AppFee);
                     var athleteImg = await context.AthleteImage
                         .Where(a => a.AthleteQuestionId == workoutProgram.Payment.AthleteQuestionId)
                         .FirstOrDefaultAsync();
                     if (athleteImg?.SideLink != null)
                     {
-                            await liaraStorage.RemovePhoto(athleteImg.SideLink);
+                        await liaraStorage.RemovePhoto(athleteImg.SideLink);
                     }
+
                     if (athleteImg?.BackLink != null)
                     {
                         await liaraStorage.RemovePhoto(athleteImg.BackLink);
                     }
+
                     if (athleteImg?.FrontLink != null)
                     {
                         await liaraStorage.RemovePhoto(athleteImg.FrontLink);
@@ -775,11 +848,12 @@ namespace sport_app_backend.Repository.CoachRepo
 
                     if (athleteImg is not null)
                     {
-                         context.AthleteImage.Remove(athleteImg);
+                        context.AthleteImage.Remove(athleteImg);
                     }
-                    
 
-                    await smsService.WorkoutReadySms(athlete.PhoneNumber, athlete.User.FirstName, workoutProgram.Title,token.HashEncode(workoutProgram.Id));
+
+                    await smsService.WorkoutReadySms(athlete.PhoneNumber, athlete.User.FirstName, workoutProgram.Title,
+                        token.HashEncode(workoutProgram.Id));
 
                     var workoutExercises = new LastWorkoutExercise()
                     {
@@ -787,10 +861,9 @@ namespace sport_app_backend.Repository.CoachRepo
                         AthleteId = athlete.Id,
                         WorkoutProgramId = workoutProgram.Id,
                         ExerciseIds = exerciseIds
-
-                    }; 
+                    };
                     await context.LastWorkoutExercises.AddAsync(workoutExercises);
-                    
+
                     if (athlete.ActiveWorkoutProgramId is null)
                     {
                         await AddTrainingSession(paymentId);
@@ -806,7 +879,7 @@ namespace sport_app_backend.Repository.CoachRepo
                     Message = "workout program saved",
                     Result = new
                     {
-                        pdfLink=$"chaarset.ir/program/{token.HashEncode(workoutProgram.Id)}"
+                        pdfLink = $"chaarset.ir/program/{token.HashEncode(workoutProgram.Id)}"
                     }
                 };
             }
@@ -859,9 +932,8 @@ namespace sport_app_backend.Repository.CoachRepo
             }
             catch (Exception e)
             {
-                Console.WriteLine("*+*" + paymentId+"------"+e.Message);
+                Console.WriteLine("*+*" + paymentId + "------" + e.Message);
             }
-
         }
 
         public async Task<ApiResponse> GetWorkoutProgram(string phoneNumber, int paymentId)
@@ -975,7 +1047,8 @@ namespace sport_app_backend.Repository.CoachRepo
 
 
                 var dashboardDto = new CoachDashboardDto
-                {   CoachAmount= coachAmount,
+                {
+                    CoachAmount = coachAmount,
                     TotalSales = totalSales,
                     TotalTransactions = totalTransactions,
                     MonthlyIncome = monthlyIncome,
@@ -1069,7 +1142,6 @@ namespace sport_app_backend.Repository.CoachRepo
                     coach.InstagramLink,
                     coach.BaleUserName,
                     coach.EitaaUserName
-                    
                 }).FirstOrDefaultAsync();
             if (coach == null)
             {
@@ -1187,7 +1259,6 @@ namespace sport_app_backend.Repository.CoachRepo
                     CodeDiscountAmount = p.CodeDiscountAmount,
                     // PublicDiscountAmount = p.PublicDiscountAmount,
                     AppFee = p.AppFee
-
                 };
             }).ToList();
 
@@ -1199,7 +1270,7 @@ namespace sport_app_backend.Repository.CoachRepo
                     pendingPayout,
                     transactionDto,
                     coachPayoutDto,
-                    CardNumberIsSet=coachCartNumber
+                    CardNumberIsSet = coachCartNumber
                 }
             };
         }
@@ -1277,7 +1348,6 @@ namespace sport_app_backend.Repository.CoachRepo
             };
         }
 
-       
 
         public Task<ApiResponse> GetWPkey(int workoutProgramId)
         {
@@ -1291,7 +1361,6 @@ namespace sport_app_backend.Repository.CoachRepo
                     {
                         wpkey = token.HashEncode(workoutProgramId)
                     }
-
                 });
             }
             catch (Exception exception)
@@ -1299,6 +1368,7 @@ namespace sport_app_backend.Repository.CoachRepo
                 return Task.FromException<ApiResponse>(exception);
             }
         }
+
         public async Task<ApiResponse> ChoseWorkoutProgramFeedBack(
             string phoneNumber,
             List<ChoseWorkoutProgramFeedBackDto> choseWorkoutProgramFeedBackDtos)
@@ -1329,7 +1399,6 @@ namespace sport_app_backend.Repository.CoachRepo
                 {
                     fb.IsChosen = shouldBeTrue;
                 }
-               
             }
 
             var affectedRows = await context.SaveChangesAsync();
@@ -1345,7 +1414,7 @@ namespace sport_app_backend.Repository.CoachRepo
         public async Task<(IEnumerable<AllExerciseResponseDto> Exercises, int TotalCount)>
             GetExercisesWithFilterForCoach(
                 string? level, string? type, string? mechanic, string?[]? equipment,
-                string? muscle, string? place, int page, int pageSize, 
+                string? muscle, string? place, int page, int pageSize,
                 string? searchTerm, int? athleteId, int coachId)
         {
             if (page < 1) page = 1;
@@ -1463,15 +1532,16 @@ namespace sport_app_backend.Repository.CoachRepo
                     Message = "coach not found",
                     Action = false,
                 };
-            
+
             var exercise = await context.Exercises.FirstOrDefaultAsync(e => e.Id == exerciseId);
             if (exercise == null)
                 return new ApiResponse()
                 {
                     Message = "exercise not found",
                     Action = false,
-                };   
-            var oldPineExercises = await context.CoachPineExercises.FirstOrDefaultAsync(ex=>ex.CoachId==coach.Id&&ex.BaseCategory ==exercise.BaseCategory);
+                };
+            var oldPineExercises = await context.CoachPineExercises.FirstOrDefaultAsync(ex =>
+                ex.CoachId == coach.Id && ex.BaseCategory == exercise.BaseCategory);
             if (oldPineExercises == null)
             {
                 var newPineCategory = new CoachPineExercise
@@ -1479,7 +1549,6 @@ namespace sport_app_backend.Repository.CoachRepo
                     CoachId = coach.Id,
                     BaseCategory = exercise.BaseCategory,
                     ExerciseIds = [exerciseId],
-
                 };
                 await context.CoachPineExercises.AddAsync(newPineCategory);
             }
@@ -1495,6 +1564,7 @@ namespace sport_app_backend.Repository.CoachRepo
                 Action = true,
             };
         }
+
         public async Task<ApiResponse> RemovePineExercise(int exerciseId, int coachId)
         {
             var coach = await context.Coaches
@@ -1511,7 +1581,7 @@ namespace sport_app_backend.Repository.CoachRepo
 
             var oldPineExercises = await context.CoachPineExercises
                 .Where(ex => ex.CoachId == coach.Id)
-                .ToListAsync();  
+                .ToListAsync();
 
             var target = oldPineExercises
                 .FirstOrDefault(ex => ex.ExerciseIds.Contains(exerciseId));
@@ -1537,7 +1607,6 @@ namespace sport_app_backend.Repository.CoachRepo
         }
 
 
-
         public async Task<ApiResponse> GetWorkoutProgramFeedBack(string phoneNumber)
         {
             var coach = await context.Coaches.FirstOrDefaultAsync(c => c.PhoneNumber == phoneNumber);
@@ -1546,7 +1615,7 @@ namespace sport_app_backend.Repository.CoachRepo
                 return new ApiResponse { Action = false, Message = "مربی یافت نشد." };
             }
 
-            var feedBack = await context.WorkoutProgramFeedback.Where(fb=>fb.CouchId==coach.Id).ToListAsync();
+            var feedBack = await context.WorkoutProgramFeedback.Where(fb => fb.CouchId == coach.Id).ToListAsync();
             return new ApiResponse()
             {
                 Action = true,
@@ -1597,11 +1666,11 @@ namespace sport_app_backend.Repository.CoachRepo
         //     };
         // }
 
-        private async Task<ApiResponse> ValidateDiscountCodeInput(Coach coach,string code, double DiscountPercent,
-            int? usageLimit, DateTime? expiresAt, int? currentDiscountCodeId,List<int>? coachServiceIdsDto)
+        private async Task<ApiResponse> ValidateDiscountCodeInput(Coach coach, string code, double DiscountPercent,
+            int? usageLimit, DateTime? expiresAt, int? currentDiscountCodeId, List<int>? coachServiceIdsDto,bool appliesToAllServices)
         {
-            var now  = DateTime.Now;
-            
+            var now = DateTime.Now;
+
             if (DiscountPercent <= 0)
             {
                 return new ApiResponse { Action = false, Message = "مقدار تخفیف باید بیشتر از صفر باشد." };
@@ -1612,7 +1681,7 @@ namespace sport_app_backend.Repository.CoachRepo
                 return new ApiResponse { Action = false, Message = "سقف استفاده باید بیشتر از صفر باشد." };
             }
 
-            if (coachServiceIdsDto is not null && coachServiceIdsDto.Any())
+            if (!appliesToAllServices&&coachServiceIdsDto is not null && coachServiceIdsDto.Count != 0)
             {
                 var existingCoachServiceIds = new HashSet<int>(
                     coach.CoachingServices
@@ -1634,27 +1703,27 @@ namespace sport_app_backend.Repository.CoachRepo
             }
 
 
-            if ( expiresAt.HasValue && now > expiresAt.Value)
+            if (expiresAt.HasValue && now > expiresAt.Value)
             {
                 return new ApiResponse { Action = false, Message = "تاریخ شروع باید قبل از تاریخ انقضا باشد." };
             }
-            
+
             var exists = await context.DiscountCodes
                 .AnyAsync(x => x.Code == code && !x.IsDeleted && x.Id != currentDiscountCodeId);
-        
+
             if (exists)
             {
                 return new ApiResponse { Action = false, Message = "این کد تخفیف قبلاً ثبت شده است." };
             }
 
-            return new ApiResponse { Action = true,
+            return new ApiResponse
+            {
+                Action = true,
                 Message = "کد تخفیف درست است ",
-                Result = code };
-            
+                Result = code
+            };
         }
 
-   
-       
 
         private async Task SyncExpiredDiscountCodes(IEnumerable<DiscountCode> discountCodes)
         {

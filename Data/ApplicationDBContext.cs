@@ -26,48 +26,77 @@ public class ApplicationDbContext : DbContext
         : base(dbContextOptions)
     { }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
-    {
-        base.OnModelCreating(modelBuilder);
-        modelBuilder.Entity<Athlete>()
-            .HasMany(a => a.WorkoutPrograms)
-            .WithOne(w => w.Athlete)
-            .HasForeignKey(w => w.AthleteId)
-            .OnDelete(DeleteBehavior.Cascade);
-        
-        modelBuilder.Entity<Coach>()
-            .HasOne(c => c.CoachCardNumber)
-            .WithOne(cc => cc.Coach)
-            .HasForeignKey<CoachCardNumber>(cc => cc.CoachId)
-            .OnDelete(DeleteBehavior.Cascade);
+{
+    base.OnModelCreating(modelBuilder);
+
+
+    modelBuilder.Entity<User>()
+        .HasOne(u => u.Athlete)
+        .WithOne(a => a.User)
+        .HasForeignKey<User>(u => u.AthleteId) 
+        .OnDelete(DeleteBehavior.SetNull);
+
+    modelBuilder.Entity<User>()
+        .HasOne(u => u.Coach)
+        .WithOne(c => c.User)
+        .HasForeignKey<User>(u => u.CoachId) // این خط خطا را حل می‌کند
+        .OnDelete(DeleteBehavior.SetNull);
+
+  
+    modelBuilder.Entity<User>()
+        .HasIndex(u => u.RefreshToken)
+        .HasDatabaseName("IX_User_RefreshToken"); 
+
+    modelBuilder.Entity<User>()
+        .HasIndex(u => u.SiteRefreshToken)
+        .HasDatabaseName("IX_User_SiteRefreshToken");
+
+    modelBuilder.Entity<User>()
+        .HasIndex(u => u.PhoneNumber)
+        .IsUnique(); 
+
+    modelBuilder.Entity<Athlete>()
+        .HasMany(a => a.WorkoutPrograms)
+        .WithOne(w => w.Athlete)
+        .HasForeignKey(w => w.AthleteId)
+        .OnDelete(DeleteBehavior.Cascade);
     
+    modelBuilder.Entity<Coach>()
+        .HasOne(c => c.CoachCardNumber)
+        .WithOne(cc => cc.Coach)
+        .HasForeignKey<CoachCardNumber>(cc => cc.CoachId)
+        .OnDelete(DeleteBehavior.Cascade);
 
-        modelBuilder.Entity<Athlete>()
-            .HasOne(a => a.ActiveWorkoutProgram)
-            .WithMany()
-            .HasForeignKey(a => a.ActiveWorkoutProgramId)
-            .OnDelete(DeleteBehavior.Restrict);
-        
-         modelBuilder.Entity<User>()
-        .Navigation(u => u.Coach)
-        .AutoInclude(); 
-         
+    modelBuilder.Entity<Athlete>()
+        .HasOne(a => a.ActiveWorkoutProgram)
+        .WithMany()
+        .HasForeignKey(a => a.ActiveWorkoutProgramId)
+        .OnDelete(DeleteBehavior.Restrict);
 
-         modelBuilder.Entity<User>()
-        .Navigation(u => u.Athlete)
-        .AutoInclude(); 
+    modelBuilder.Entity<DiscountCode>()
+        .HasIndex(x => x.Code)
+        .IsUnique();
 
-        modelBuilder.Entity<DiscountCode>()
-            .HasIndex(x => x.Code)
-            .IsUnique();
+    modelBuilder.Entity<Payment>()
+        .HasOne(x => x.DiscountCode)
+        .WithMany(x => x.Payments)
+        .HasForeignKey(x => x.DiscountCodeId)
+        .OnDelete(DeleteBehavior.Restrict);
 
-        modelBuilder.Entity<Payment>()
-            .HasOne(x => x.DiscountCode)
-            .WithMany(x => x.Payments)
-            .HasForeignKey(x => x.DiscountCodeId)
-            .OnDelete(DeleteBehavior.Restrict);
-         
-      
-    }
+    modelBuilder.Entity<DiscountCodeCoachService>()
+        .HasKey(dcs => new { dcs.DiscountCodeId, dcs.CoachServiceId });
+
+    modelBuilder.Entity<DiscountCodeCoachService>()
+        .HasOne(dcs => dcs.DiscountCode)
+        .WithMany(dc => dc.DiscountCodeCoachServices)
+        .HasForeignKey(dcs => dcs.DiscountCodeId);
+
+    modelBuilder.Entity<DiscountCodeCoachService>()
+        .HasOne(dcs => dcs.CoachService)
+        .WithMany(cs => cs.DiscountCodeCoachServices)
+        .HasForeignKey(dcs => dcs.CoachServiceId);
+}
+
     public DbSet<User> Users { get; set; }
     public DbSet<Coach> Coaches { get; set; }
     public DbSet<Athlete> Athletes { get; set; }
@@ -103,6 +132,7 @@ public class ApplicationDbContext : DbContext
     public DbSet<LastWorkoutExercise>  LastWorkoutExercises { get; set; }
     public DbSet<PaymentAttempt>  PaymentAttempts { get; set; }
     public DbSet<CoachCardNumber>  CoachCardNumbers { get; set; }
+    public DbSet<DiscountCodeCoachService> DiscountCodeCoachServices { get; set; }
 
 
 }

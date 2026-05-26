@@ -15,6 +15,7 @@ public class ExerciseDto
     public string ExerciseLevel { get; set; }= string.Empty;
     public string Mechanics { get; set; }= string.Empty;
     public required double Met { get; set; }
+    public string MuscleImage { get; set; }
 
 
 }
