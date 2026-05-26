@@ -157,7 +157,21 @@ namespace sport_app_backend.Controller
         }
 
         #region discountCode
+        [HttpGet("GetAllServicesWithCalculatedDiscount/{percent:int}")]
+        [Authorize(Roles = "Coach")]
+        public async Task<IActionResult> GetAllServicesWithCalculatedDiscount([FromRoute] int percent)
+        {
+       
+            var coachId = await GetCoachIdAsync();
+            if (coachId == 0)
+            {
+                return Unauthorized(new ApiResponse { Action = false, Message = "خطای احراز هویت." });
+            }
+            var result = await coachRepository.GetAllServicesWithCalculatedDiscount(coachId,percent);
+            if (!result.Action) return BadRequest(result);
+            return Ok(result);
 
+        }
        
 
         [HttpPost("discount-codes/add-discount")]

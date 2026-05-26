@@ -29,6 +29,7 @@ public class DiscountCode
     public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
 
     public bool IsDeleted { get; set; } = false;
+    public bool AppliesToAllServices { get; set; }
     public List<Payment> Payments { get; set; } = [];
-    public List<int> CoachServicesId { get; set; } = [];
+    public List<DiscountCodeCoachService> DiscountCodeCoachServices { get; set; } = [];
 }

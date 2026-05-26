@@ -2,7 +2,6 @@ using AspNetCoreRateLimit;
 using DotNetEd.CoreAdmin;
 using Microsoft.EntityFrameworkCore;
 using sport_app_backend.Data;
-using Prometheus;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -217,9 +216,6 @@ app.MapDefaultControllerRoute();
             dbContext.Database.Migrate();
         }
     }
-    app.UseHttpMetrics();
-
-    app.MapMetrics();
 
 app.Run();
 

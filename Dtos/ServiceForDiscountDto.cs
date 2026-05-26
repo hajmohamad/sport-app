@@ -7,4 +7,5 @@ public class ServiceForDiscountDto
     public double OriginalPrice { get; set; }
     public double DiscountPrice { get; set; }
     public bool IsActive { get; set; }
+    public bool? IsChoose { get; set; }
 }

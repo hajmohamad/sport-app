@@ -321,8 +321,8 @@ private async Task<string> GenerateUniqueUsername()
             {
                 Id = u.Id,
                 TypeOfUser = u.TypeOfUser,
-                AthleteId = u.Athlete != null ? (int?)u.Athlete.Id : null,
-                CoachId = u.Coach != null ? (int?)u.Coach.Id : null,
+                AthleteId = u.AthleteId, 
+                CoachId = u.CoachId,
                 PhoneNumber = u.PhoneNumber,
                 LastLogin = u.LastLogin,
                 

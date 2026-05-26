@@ -101,7 +101,7 @@ public class TokenService: ITokenService
         var tokenDescriptor = new SecurityTokenDescriptor
         {
             Subject = new ClaimsIdentity(claims),
-            Expires = DateTime.Now.AddMinutes(5),
+            Expires = DateTime.Now.AddMinutes(20),
             SigningCredentials = new SigningCredentials(_key, SecurityAlgorithms.HmacSha512Signature),
             Issuer = _config["JWT:Issuer"],
             Audience = _config["JWT:Audience"]
@@ -134,7 +134,7 @@ public class TokenService: ITokenService
         var tokenDescriptor = new SecurityTokenDescriptor
         {
             Subject = new ClaimsIdentity(claims),
-            Expires = DateTime.Now.AddMinutes(5),
+            Expires = DateTime.Now.AddMinutes(20),
             SigningCredentials = new SigningCredentials(_key, SecurityAlgorithms.HmacSha512Signature),
             Issuer = _config["JWT:Issuer"],
             Audience = _config["JWT:Audience"]

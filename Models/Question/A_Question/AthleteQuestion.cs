@@ -31,8 +31,8 @@ namespace sport_app_backend.Models.Question.A_Question
         public string? CompetitionHistory { get; set; }
         public string? CurrentMedications {get; set;}
         public SittingHour SittingHour {get; set;}
-        public string? YourJob {get; set;}
-        public string? YourCity {get; set;}
+        [MaxLength(1000)]
+        public string? NotesForCoach { get; set; }
         public required ActivityLevel ActivityLevel {get; set;}
 
 

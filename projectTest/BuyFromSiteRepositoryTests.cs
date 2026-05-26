@@ -157,7 +157,7 @@ namespace sport_app_backend.Tests.Repository
             var result = await _repository.PreviewCheckout(phoneNumber, coachServiceId,expiredCode );
 
             Assert.False(result.Action);
-            Assert.Equal("کد اشتباه است", result.Message); // فرض بر پیام خطای فارسی
+            Assert.Equal("کد تخفیف وارد شده معتبر نیست.", result.Message); // فرض بر پیام خطای فارسی
         }
 
         [Fact]
@@ -189,7 +189,7 @@ namespace sport_app_backend.Tests.Repository
 
             // Assert
             Assert.False(result.Action);
-            Assert.Contains("کد تاریخش گذشته", result.Message); 
+            Assert.Contains("این کد تخفیف منقضی شده است.", result.Message); 
         }
 
         [Fact]
@@ -223,23 +223,24 @@ namespace sport_app_backend.Tests.Repository
 
             // Assert
             Assert.False(result.Action);
-            Assert.Contains("کد تاریخش گذشته", result.Message); 
+            Assert.Contains("این کد تخفیف منقضی شده است.", result.Message); 
         }
 
         [Fact]
         public async Task PreviewCheckout_ShouldCalculateCorrectPrice_WhenDiscountCodeIsValid()
         {
+            // Arrange
             var phoneNumber = "09123456789";
-            var coachServiceId = 1;
+            var coachServiceId = 1; // سرویسی که می‌خواهیم تخفیف را روی آن اعمال کنیم
             var validCode = "OFF20";
-            var code =new CheckoutDiscountRequestDto
+            var code = new CheckoutDiscountRequestDto
             {
                 DiscountCode = validCode
             };
             var originalPrice = 100000;
 
             await SetupBaseCheckoutData(phoneNumber, coachServiceId, originalPrice);
-            
+    
             var discount = new DiscountCode 
             { 
                 Code = validCode, 
@@ -249,13 +250,24 @@ namespace sport_app_backend.Tests.Repository
                 UsageLimit = 100,
                 UsedCount = 0,
                 Status = DiscountCodeStatus.ACTIVE,
-                CoachServicesId = [1]
+                // --- شروع رفع اشکال: اتصال صحیح کد تخفیف به سرویس ---
+                DiscountCodeCoachServices = 
+                [
+                    new DiscountCodeCoachService
+                    {
+                        // اینجا مشخص می‌کنیم که این کد تخفیف برای سرویس با شناسه 1 معتبر است
+                        CoachServiceId = coachServiceId 
+                    }
+                ]
+                // --- پایان رفع اشکال ---
             };
             await _dbContext.DiscountCodes.AddAsync(discount);
             await _dbContext.SaveChangesAsync();
 
+            // Act
             var result = await _repository.PreviewCheckout(phoneNumber, coachServiceId, code);
-            
+    
+            // Assert
             Assert.True(result.Action);
 
             var jsonString = JsonSerializer.Serialize(result.Result);
@@ -271,7 +283,9 @@ namespace sport_app_backend.Tests.Repository
             
             Assert.Equal(80000, checkoutData.FinalPrice); 
             Assert.Equal(100000, checkoutData.OriginalPrice);
+            Assert.Equal(20000, checkoutData.CodeDiscountAmount);
         }
+
 
         #endregion
 
