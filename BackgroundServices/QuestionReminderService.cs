@@ -86,6 +86,7 @@ public class QuestionReminderService(
                 "by name {athleteName}, phone {phoneNumber}", program.AthleteId,
                 program.Athlete.User?.FirstName + " " + program.Athlete.PhoneNumber, program.Athlete.PhoneNumber);
         }
+        await db.SaveChangesAsync(stoppingToken);
 
     }
 }
