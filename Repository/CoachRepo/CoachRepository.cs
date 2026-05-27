@@ -358,6 +358,7 @@ namespace sport_app_backend.Repository.CoachRepo
         {
             var discountCode = await context.DiscountCodes
                 .Include(dc => dc.Coach)
+                .ThenInclude(dc=>dc.CoachingServices)
                 .Include(dc => dc.DiscountCodeCoachServices) 
                 .FirstOrDefaultAsync(x => x.Id == discountCodeId && !x.IsDeleted && x.CoachId == coachId);
 
