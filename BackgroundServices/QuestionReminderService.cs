@@ -79,14 +79,12 @@ public class QuestionReminderService(
                     program.AthleteId);
             }
 
-            program.RenewalReminderSent = true;
 
             logger.LogError(
                 "QuestionReminderService: New reminder sent {programId} ," +
                 "by name {athleteName}, phone {phoneNumber}", program.AthleteId,
                 program.Athlete.User?.FirstName + " " + program.Athlete.PhoneNumber, program.Athlete.PhoneNumber);
         }
-        await db.SaveChangesAsync(stoppingToken);
 
     }
 }
