@@ -635,34 +635,33 @@ namespace sport_app_backend.Controller
                 return Ok(result);
             }
 
+        
             [HttpPost("ChangePhotos")]
             [Authorize(Roles = "Coach")]
-            public async Task<IActionResult> AddChangePhoto([FromForm] AddAthleteChangePhotoDto dto, [FromForm] IFormFile file)
+            [Consumes("multipart/form-data")]
+            public async Task<IActionResult> AddChangePhoto([FromForm] AddAthleteChangePhotoDto dto)
             {
                 var coachId = await GetCoachIdAsync();
                 if (coachId == 0)
-                {
                     return Unauthorized(new ApiResponse { Action = false, Message = "خطای احراز هویت." });
-                }
 
-                var result = await coachRepository.AddChangePhoto(coachId, file, dto);
+                var result = await coachRepository.AddChangePhoto(coachId, dto.File, dto);
                 if (!result.Action) return BadRequest(result);
                 return Ok(result);
             }
 
             [HttpPut("ChangePhotos/{id:int}")]
             [Authorize(Roles = "Coach")]
-            public async Task<IActionResult> EditChangePhoto(int id, [FromForm] EditAthleteChangePhotoDto dto, [FromForm] IFormFile? file)
+            [Consumes("multipart/form-data")]
+            public async Task<IActionResult> EditChangePhoto(int id, [FromForm] EditAthleteChangePhotoDto dto)
             {
                 var coachId = await GetCoachIdAsync();
                 if (coachId == 0)
-                {
                     return Unauthorized(new ApiResponse { Action = false, Message = "خطای احراز هویت." });
-                }
 
                 dto.Id = id;
 
-                var result = await coachRepository.EditChangePhoto(coachId, file, dto);
+                var result = await coachRepository.EditChangePhoto(coachId, dto.File, dto);
                 if (!result.Action) return BadRequest(result);
                 return Ok(result);
             }
