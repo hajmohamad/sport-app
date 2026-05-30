@@ -11,39 +11,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="11e104f8-869d-4d9d-9802-b48455f5eb31" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Models/Payments/DiscountCodeCoachService.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/dataSources.local.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/dataSources/b995594b-b1c6-4f7b-a3d8-4a5b1ad21ad7.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/dataSources/b995594b-b1c6-4f7b-a3d8-4a5b1ad21ad7.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Controller/CoachController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Controller/CoachController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/D:\403-1\sport-app1\chaarset_dev.db" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Data/ApplicationDBContext.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Data/ApplicationDBContext.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dtos/AthleteQuestionBuyFromSiteDto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Dtos/AthleteQuestionBuyFromSiteDto.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dtos/AthleteQuestionDto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Dtos/AthleteQuestionDto.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dtos/AthleteQuestionResponseDto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Dtos/AthleteQuestionResponseDto.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dtos/DiscountCodeDtos.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Dtos/DiscountCodeDtos.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dtos/ExerciseDto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Dtos/ExerciseDto.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dtos/ServiceForDiscountDto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Dtos/ServiceForDiscountDto.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Interface/Coach/ICoachRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Interface/Coach/ICoachRepository.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Mappers/CoachMappers.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Mappers/CoachMappers.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Mappers/ExercisesMappers.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Mappers/ExercisesMappers.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Mappers/QuestionMapper.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Mappers/QuestionMapper.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Migrations/ApplicationDbContextModelSnapshot.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Migrations/ApplicationDbContextModelSnapshot.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Models/Account/Athlete/Athlete.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/Account/Athlete/Athlete.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Models/Account/User.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/Account/User.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Models/Payments/DiscountCode.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/Payments/DiscountCode.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Models/Question/A_Question/AthleteQuestion.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/Question/A_Question/AthleteQuestion.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Models/TrainingPlan/CoachService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/TrainingPlan/CoachService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Program.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Repository/BuyFromSiteRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Repository/BuyFromSiteRepository.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Repository/CoachRepo/CoachRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Repository/CoachRepo/CoachRepository.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Repository/UserRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Repository/UserRepository.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Services/LiaraStorage.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Services/TokenService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Services/TokenService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dtos/AddAthleteChangePhotoDto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Dtos/AddAthleteChangePhotoDto.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/appsettings.Development.json" beforeDir="false" afterPath="$PROJECT_DIR$/appsettings.Development.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/projectTest/BuyFromSiteRepositoryTests.cs" beforeDir="false" afterPath="$PROJECT_DIR$/projectTest/BuyFromSiteRepositoryTests.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sport-app-backend.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/sport-app-backend.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sport-app-backend.sln.DotSettings.user" beforeDir="false" afterPath="$PROJECT_DIR$/sport-app-backend.sln.DotSettings.user" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -135,6 +107,7 @@
     <setting file="file://$PROJECT_DIR$/Mappers/ProgramMappers.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Models/Account/Coach/CoachCardNumber.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Models/Actions/Exercise.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Models/AthleteChangePhoto.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Models/InAppMessage.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Models/NotificationSubscription.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Models/Payments/DiscountCodeCoachService.cs" root0="FORCE_HIGHLIGHTING" />
@@ -407,13 +380,8 @@
       <workItem from="1779652684842" duration="11166000" />
       <workItem from="1779712979347" duration="6523000" />
       <workItem from="1779787198669" duration="5911000" />
-    </task>
-    <task id="LOCAL‎−۰۰۰۰۵" summary="add phoennumber to getworkoutprogramstatus">
-      <option name="closed" value="true" />
-      <created>1759396683770</created>
-      <option name="number" value="LOCAL‎−۰۰۰۰۵" />
-      <option name="presentableId" value="LOCAL‎−۰۰۰۰۵" />
-      <updated>1759396683770</updated>
+      <workItem from="1780126610676" duration="4120000" />
+      <workItem from="1780165605062" duration="302000" />
     </task>
     <task id="LOCAL‎−۰۰۰۰۶" summary="add wpkey to sms">
       <option name="closed" value="true" />
@@ -788,7 +756,15 @@
       <option name="project" value="LOCAL" />
       <updated>1779574160545</updated>
     </task>
-    <option name="localTasksCounter" value="54" />
+    <task id="LOCAL-00054" summary="change update">
+      <option name="closed" value="true" />
+      <created>1780129182177</created>
+      <option name="number" value="00054" />
+      <option name="presentableId" value="LOCAL-00054" />
+      <option name="project" value="LOCAL" />
+      <updated>1780129182177</updated>
+    </task>
+    <option name="localTasksCounter" value="55" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -831,7 +807,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
-    <MESSAGE value="edit dto" />
     <MESSAGE value="edit for Notification" />
     <MESSAGE value="edit WebPushNotificationService" />
     <MESSAGE value="edit app setting" />
@@ -856,7 +831,8 @@
     <MESSAGE value="edit paymebt attempt message" />
     <MESSAGE value="edit Storage.cs" />
     <MESSAGE value="edit appsetting" />
-    <option name="LAST_COMMIT_MESSAGE" value="edit appsetting" />
+    <MESSAGE value="change update" />
+    <option name="LAST_COMMIT_MESSAGE" value="change update" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -939,42 +915,55 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Mappers/CoachMappers.cs</url>
-          <line>162</line>
+          <line>161</line>
           <properties documentPath="$PROJECT_DIR$/Mappers/CoachMappers.cs" containingFunctionPresentation="Method 'CalculatePublicDiscountAmount'">
             <startOffsets>
-              <option value="7343" />
+              <option value="7269" />
             </startOffsets>
             <endOffsets>
-              <option value="7344" />
+              <option value="7270" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="23" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Controller/CoachController.cs</url>
-          <line>530</line>
-          <properties documentPath="$PROJECT_DIR$/Controller/CoachController.cs" containingFunctionPresentation="Method 'RemovePineExercise'">
+          <line>516</line>
+          <properties documentPath="$PROJECT_DIR$/Controller/CoachController.cs" containingFunctionPresentation="Method 'AddPineExercise'">
             <startOffsets>
-              <option value="21632" />
+              <option value="21059" />
             </startOffsets>
             <endOffsets>
-              <option value="21649" />
+              <option value="21076" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="28" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/Repository/BuyFromSiteRepository.cs</url>
-          <line>555</line>
-          <properties documentPath="$PROJECT_DIR$/Repository/BuyFromSiteRepository.cs" containingFunctionPresentation="Method 'PreviewCheckout'">
+          <url>file://$PROJECT_DIR$/Repository/CoachRepo/CoachRepository.cs</url>
+          <line>445</line>
+          <properties documentPath="$PROJECT_DIR$/Repository/CoachRepo/CoachRepository.cs" containingFunctionPresentation="Method 'UpdateDiscountCode'">
             <startOffsets>
-              <option value="20106" />
+              <option value="17063" />
             </startOffsets>
             <endOffsets>
-              <option value="20141" />
+              <option value="17137" />
             </endOffsets>
           </properties>
-          <option name="timeStamp" value="41" />
+          <option name="timeStamp" value="31" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Repository/CoachRepo/CoachRepository.cs</url>
+          <line>446</line>
+          <properties documentPath="$PROJECT_DIR$/Repository/CoachRepo/CoachRepository.cs" containingFunctionPresentation="Method 'UpdateDiscountCode'">
+            <startOffsets>
+              <option value="17150" />
+            </startOffsets>
+            <endOffsets>
+              <option value="17151" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="32" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
