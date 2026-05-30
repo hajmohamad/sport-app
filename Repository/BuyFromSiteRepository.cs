@@ -23,7 +23,7 @@ public class BuyFromSiteRepository(
     ApplicationDbContext dbContext,
     ITokenService tokenService,
     ISmsService sms,
-    ILiaraStorage liaraStorage,
+    IStorage Storage,
     IZarinPal zarinPal,
     IConfiguration config)
     : IBuyFromSiteRepository
@@ -154,10 +154,10 @@ public class BuyFromSiteRepository(
                     var frontLink = athleteImage.FrontLink;
                     if (frontLink is { Length: > 1 })
                     {
-                        await liaraStorage.RemovePhoto(frontLink);
+                        await Storage.RemovePhoto(frontLink);
                     }
 
-                    var response = await liaraStorage.UploadImage(file, "","bodyImage");
+                    var response = await Storage.UploadImage(file, "","bodyImage");
                     if (response.Action)
                     {
                         athleteImage.FrontLink = response.Result as string;
@@ -174,10 +174,10 @@ public class BuyFromSiteRepository(
                     var frontLink = athleteImage.BackLink;
                     if (frontLink is { Length: > 1 })
                     {
-                        await liaraStorage.RemovePhoto(frontLink);
+                        await Storage.RemovePhoto(frontLink);
                     }
 
-                    var response = await liaraStorage.UploadImage(file, "","bodyImage");
+                    var response = await Storage.UploadImage(file, "","bodyImage");
                     if (response.Action)
                     {
                         athleteImage.BackLink = response.Result as string;
@@ -194,10 +194,10 @@ public class BuyFromSiteRepository(
                     var frontLink = athleteImage.SideLink;
                     if (frontLink is { Length: > 1 })
                     {
-                        await liaraStorage.RemovePhoto(frontLink);
+                        await Storage.RemovePhoto(frontLink);
                     }
 
-                    var response = await liaraStorage.UploadImage(file, "","bodyImage");
+                    var response = await Storage.UploadImage(file, "","bodyImage");
                     if (response.Action)
                     {
                         athleteImage.SideLink = response.Result as string;
@@ -221,7 +221,7 @@ public class BuyFromSiteRepository(
         }
         else
         {
-            var response = await liaraStorage.UploadImage(file, "","bodyImage");
+            var response = await Storage.UploadImage(file, "","bodyImage");
             if (!response.Action)
             {
                 return response;
@@ -291,7 +291,7 @@ public class BuyFromSiteRepository(
                     var frontLink = athleteImage.FrontLink;
                     if (frontLink is { Length: > 1 })
                     {
-                        var removeResponse = await liaraStorage.RemovePhoto(frontLink);
+                        var removeResponse = await Storage.RemovePhoto(frontLink);
                         if (!removeResponse.Action)
                         {
                             return removeResponse;
@@ -314,7 +314,7 @@ public class BuyFromSiteRepository(
                     var backLink = athleteImage.BackLink;
                     if (backLink is { Length: > 1 })
                     {
-                        var removeResponse = await liaraStorage.RemovePhoto(backLink);
+                        var removeResponse = await Storage.RemovePhoto(backLink);
                         if (!removeResponse.Action)
                         {
                             return removeResponse;
@@ -337,7 +337,7 @@ public class BuyFromSiteRepository(
                     var sideLink = athleteImage.SideLink;
                     if (sideLink is { Length: > 1 })
                     {
-                        var removeResponse = await liaraStorage.RemovePhoto(sideLink);
+                        var removeResponse = await Storage.RemovePhoto(sideLink);
                         if (!removeResponse.Action)
                         {
                             return removeResponse;

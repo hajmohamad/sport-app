@@ -27,7 +27,7 @@ namespace sport_app_backend.Tests.Repository
         private readonly ApplicationDbContext _dbContext;
         private readonly Mock<ITokenService> _mockTokenService;
         private readonly Mock<ISmsService> _mockSmsService;
-        private readonly Mock<ILiaraStorage> _mockLiaraStorage;
+        private readonly Mock<IStorage> _mockLiaraStorage;
         private readonly Mock<IZarinPal> _mockZarinPal;
         private readonly Mock<IConfiguration> _mockConfig;
         private readonly BuyFromSiteRepository _repository;
@@ -43,7 +43,7 @@ namespace sport_app_backend.Tests.Repository
 
             _mockTokenService = new Mock<ITokenService>();
             _mockSmsService = new Mock<ISmsService>();
-            _mockLiaraStorage = new Mock<ILiaraStorage>();
+            _mockLiaraStorage = new Mock<IStorage>();
             _mockZarinPal = new Mock<IZarinPal>();
             _mockConfig = new Mock<IConfiguration>();
 

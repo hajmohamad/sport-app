@@ -20,7 +20,7 @@
 //     ApplicationDbContext context,
 //     IZarinPal zarinPal,
 //     ISmsService smsService,
-//     ILiaraStorage liara) : IBuyProgramFromApplications
+//     IStorage ) : IBuyProgramFromApplications
 // {
 //     private async Task<ApiResponse> ConfirmTransactionId(Payment payment, long refId)
 //     {
@@ -207,7 +207,7 @@
 //                         var frontLink = athleteImage.FrontLink;
 //                         if (frontLink is { Length: > 1 })
 //                         {
-//                             await liara.RemovePhoto(frontLink);
+//                             await .RemovePhoto(frontLink);
 //                         }
 //
 //                         var response = await liara.UploadImage(file, "","bodyImage");

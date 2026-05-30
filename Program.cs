@@ -41,8 +41,8 @@ builder.Services.AddCors(options =>
     {
         policy.WithOrigins(
                 "http://localhost:21345",
-                "https://charsetpwa.liara.run",
-                "https://charset-pwa-staging.liara.run",
+                "https://charsetpwa..run",
+                "https://charset-pwa-staging..run",
                 "https://app.chaarset.ir",
                 "https://chaarset.ir",
                 "https://charset-i-os-pwa.vercel.app",
@@ -158,7 +158,7 @@ builder.Services.AddAuthorization(options =>
     options.AddPolicy("None", policy => policy.RequireRole("None"));
 });
 builder.Services.AddScoped<IZarinPal, ZarinPal>();
-builder.Services.AddScoped<ILiaraStorage, Storage>();
+builder.Services.AddScoped<IStorage, Storage>();
 builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddSingleton<ISmsService, SmsService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();

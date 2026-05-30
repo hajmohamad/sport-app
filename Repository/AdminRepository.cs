@@ -15,7 +15,7 @@ using sport_app_backend.Services;
 
 namespace sport_app_backend.Repository
 {
-    public class AdminRepository(ApplicationDbContext context, ISmsService sms,    ILiaraStorage liaraStorage) : IAdminRepository
+    public class AdminRepository(ApplicationDbContext context, ISmsService sms,    IStorage Storage) : IAdminRepository
     {
 
     
@@ -223,7 +223,7 @@ namespace sport_app_backend.Repository
             var imageLink = "";
             if (file != null)
             {
-                var urlLink = await liaraStorage.UploadImage(file, "","coachPayout");
+                var urlLink = await Storage.UploadImage(file, "","coachPayout");
                 if (urlLink.Action)
                 {
                     imageLink = (string)urlLink.Result!;
