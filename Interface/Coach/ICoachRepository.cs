@@ -51,5 +51,10 @@ namespace sport_app_backend.Interface.Coach
         Task<ApiResponse> GetCoachPayments(int coachId, PaymentFilterDto filter);
         Task<ApiResponse> AddCardNumber(int coachId, AddCardNumberDto addCardNumberDto);
         Task<ApiResponse>  GetCardNumber(int coachId);
+        Task<ApiResponse> GetAllChangePhotos(int coachId);
+        Task<ApiResponse> GetChangePhotoById(int coachId, int id);
+        Task<ApiResponse> AddChangePhoto(int coachId, IFormFile file, AddAthleteChangePhotoDto dto);
+        Task<ApiResponse> EditChangePhoto(int coachId, IFormFile? file, EditAthleteChangePhotoDto dto);
+        Task<ApiResponse> DeleteChangePhoto(int coachId, int id);
     }
 }

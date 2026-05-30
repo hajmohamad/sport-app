@@ -177,9 +177,7 @@ public class UserController(IUserRepository userRepository) : ControllerBase
         return Ok(result);
             
     }
-    private const string VapidPublicKey = "BFtaOg7TbbrtSgj87M8UIRyYoeZQP3JFoTuM84lR3VjAi3P4PsR5cuvQw8zgTPww5K71eklziLb0mjH-9gL_1R8";
-    private const string VapidPrivateKey = "BpndCrC7Y-Dn-Knh0by2FZ029uplKpco4RS4_tVhRVM";
- 
+   
     [HttpGet("CheckQuestionSubmitted")]
     [Authorize(Roles = "Athlete,Coach")]
 

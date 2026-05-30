@@ -133,6 +133,9 @@ public class ApplicationDbContext : DbContext
     public DbSet<PaymentAttempt>  PaymentAttempts { get; set; }
     public DbSet<CoachCardNumber>  CoachCardNumbers { get; set; }
     public DbSet<DiscountCodeCoachService> DiscountCodeCoachServices { get; set; }
+    public DbSet<AthleteChangePhoto> AthleteChangePhotos { get; set; }
+
+    
 
 
 }

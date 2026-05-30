@@ -26,7 +26,7 @@ namespace sport_app_backend.projectTest
     public class CoachRepositoryTests
     {
         private readonly Mock<ISmsService> _mockSmsService;
-        private readonly Mock<ILiaraStorage> _mockLiaraStorage;
+        private readonly Mock<IStorage> _mockStorage;
         private readonly Mock<ITokenService> _mockTokenService;
         private readonly Mock<ICalculator> _mockCalculator;
         private readonly ApplicationDbContext _context;
@@ -35,7 +35,7 @@ namespace sport_app_backend.projectTest
         public CoachRepositoryTests()
         {
             _mockSmsService = new Mock<ISmsService>();
-            _mockLiaraStorage = new Mock<ILiaraStorage>();
+            _mockStorage = new Mock<IStorage>();
             _mockTokenService = new Mock<ITokenService>();
             _mockCalculator = new Mock<ICalculator>();
 
@@ -47,7 +47,7 @@ namespace sport_app_backend.projectTest
             _repository = new CoachRepository(
                 _context,
                 _mockSmsService.Object,
-                _mockLiaraStorage.Object,
+                _mockStorage.Object,
                 _mockTokenService.Object,
                 _mockCalculator.Object
             );

@@ -8,7 +8,7 @@ using System.Net;
 
 namespace sport_app_backend.Services;
 
-public class Storage : ILiaraStorage
+public class Storage : IStorage
 {
     private readonly string _accessKey;
     private readonly string _secretKey;
@@ -54,10 +54,8 @@ public class Storage : ILiaraStorage
 
         using var client = CreateClient();
 
-        // فولدر
         folderName = NormalizeFolder(folderName);
 
-        // پسوند را درست و تضمینی بساز
         var extension = NormalizeExtension(Path.GetExtension(image.FileName));
         if (string.IsNullOrEmpty(extension))
         {
@@ -79,7 +77,7 @@ public class Storage : ILiaraStorage
             var request = new PutObjectRequest
             {
                 BucketName = _bucketName,
-                Key = objectKey,                 // اینجا پسوند حتماً هست
+                Key = objectKey,                 
                 InputStream = memoryStream,
                 ContentType = contentType,
                 CannedACL = S3CannedACL.PublicRead
@@ -87,10 +85,8 @@ public class Storage : ILiaraStorage
 
             await client.PutObjectAsync(request);
 
-            // URL صحیح و پایدار بساز (Path-style چون ForcePathStyle=true)
             var fileUrl = BuildPublicUrl(objectKey);
 
-            // اگر url قبلی وجود داشت، حذفش کن (اگر نبود ارور نده)
             if (IsValidUrlForDelete(url))
                 await DeleteObjectAsync(client, url);
 
@@ -98,7 +94,7 @@ public class Storage : ILiaraStorage
             {
                 Action = true,
                 Message = "Image uploaded successfully",
-                Result = fileUrl // همین را در DB ذخیره کنید (شامل پسوند)
+                Result = fileUrl 
             };
         }
         catch (AmazonS3Exception e)
