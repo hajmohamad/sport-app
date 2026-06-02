@@ -645,7 +645,7 @@ namespace sport_app_backend.Controller
                 if (coachId == 0)
                     return Unauthorized(new ApiResponse { Action = false, Message = "خطای احراز هویت." });
 
-                var result = await coachRepository.AddChangePhoto(coachId, dto.File, dto);
+                var result = await coachRepository.AddChangePhoto(coachId, dto.PhotoUrl, dto);
                 if (!result.Action) return BadRequest(result);
                 return Ok(result);
             }
@@ -661,7 +661,7 @@ namespace sport_app_backend.Controller
 
                 dto.Id = id;
 
-                var result = await coachRepository.EditChangePhoto(coachId, dto.File, dto);
+                var result = await coachRepository.EditChangePhoto(coachId, dto.PhotoUrl, dto);
                 if (!result.Action) return BadRequest(result);
                 return Ok(result);
             }
