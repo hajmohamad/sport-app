@@ -74,12 +74,12 @@ jobs:
               -e ASPNETCORE_ENVIRONMENT=${{ env.ENV }} \
               -e ConnectionStrings__DefaultConnection="${{ secrets[format('{0}_ConnectionStrings__DefaultConnection', env.ENV == 'staging' && 'STAGING' || 'PROD')] }}" \
               -e Zarinpal__MerchantId="${{ secrets[format('{0}_Zarinpal__MerchantId', env.ENV == 'staging' && 'STAGING' || 'PROD')] }}" \
-              -e Liara__accessKey="${{ secrets[format('{0}_Liara__accessKey', env.ENV == 'staging' && 'STAGING' || 'PROD')] }}" \
-              -e Liara__secretKey="${{ secrets[format('{0}_Liara__secretKey', env.ENV == 'staging' && 'STAGING' || 'PROD')] }}" \
+              -e Arvan__accessKey="${{ secrets[format('{0}_Liara__accessKey', env.ENV == 'staging' && 'STAGING' || 'PROD')] }}" \
+              -e Arvan__secretKey="${{ secrets[format('{0}_Liara__secretKey', env.ENV == 'staging' && 'STAGING' || 'PROD')] }}" \
               -e JWT__SigningKey="${{ secrets[format('{0}_JWT__SigningKey', env.ENV == 'staging' && 'STAGING' || 'PROD')] }}" \
               -e SMS__accessKey="${{ secrets[format('{0}_SMS__accessKey', env.ENV == 'staging' && 'STAGING' || 'PROD')] }}" \
-              -e Liara__endpoint="${{ secrets[format('{0}_Liara__endpoint', env.ENV == 'staging' && 'STAGING' || 'PROD')] }}" \
-              -e Liara__BucketName="${{ secrets[format('{0}_Liara__BucketName', env.ENV == 'staging' && 'STAGING' || 'PROD')] }}" \
+              -e Arvan__endpoint="${{ secrets[format('{0}_Liara__endpoint', env.ENV == 'staging' && 'STAGING' || 'PROD')] }}" \
+              -e Arvan__BucketName="${{ secrets[format('{0}_Liara__BucketName', env.ENV == 'staging' && 'STAGING' || 'PROD')] }}" \
               -e Zarinpal__endpoint="${{ secrets[format('{0}_Zarinpal__endpoint', env.ENV == 'staging' && 'STAGING' || 'PROD')] }}" \
               -e AllowedIps__0="${{ secrets[format('{0}_AllowedIps__0', env.ENV == 'staging' && 'STAGING' || 'PROD')] }}" \
               -e Vapid__PublicKey="${{ secrets[format('{0}_VAPID__PUBLICKEY', env.ENV == 'staging' && 'STAGING' || 'PROD')] }}" \
