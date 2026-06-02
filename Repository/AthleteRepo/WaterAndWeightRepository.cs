@@ -228,10 +228,18 @@ public class WaterAndWeightRepository(
                     Weight = x.Weight
                 })
                 .ToListAsync();
-            var heightInMeters = athlete.Height / 100.0;
 
-            var bmi = athlete.currentWeight / (heightInMeters * heightInMeters);
+            double? bmi = null;
 
+            if (athlete.Height > 0 && athlete.currentWeight > 0)
+            {
+                var heightInMeters = athlete.Height / 100.0;
+                var tempBmi = athlete.currentWeight / (heightInMeters * heightInMeters);
+
+                if (double.IsFinite(tempBmi))
+                    bmi = tempBmi;
+            }
+            
             return new ApiResponse()
             {
                 Message = "Weight report fetched successfully",
