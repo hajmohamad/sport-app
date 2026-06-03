@@ -14,6 +14,7 @@ FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
 
 ENV DOTNET_NUGET_SIGNATURE_VERIFICATION=false
+ENV DOTNET_NUGET_DISABLE_VULNERABILITY_AUDIT=true
 
 COPY nuget.config .
 COPY ["sport-app-backend.csproj", "./"]
