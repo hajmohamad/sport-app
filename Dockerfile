@@ -1,4 +1,4 @@
-FROM dotnet-aspnet-local:8.0 AS base
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
 
 RUN apt-get update && \
     apt-get install -y tzdata && \
@@ -10,10 +10,11 @@ WORKDIR /app
 ENV ASPNETCORE_URLS=http://+:8080
 EXPOSE 8080
 
-FROM dotnet-sdk-local:8.0 AS build
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
 
 ENV DOTNET_NUGET_SIGNATURE_VERIFICATION=false
+ENV DOTNET_NUGET_DISABLE_VULNERABILITY_AUDIT=true
 
 COPY nuget.config .
 COPY ["sport-app-backend.csproj", "./"]
