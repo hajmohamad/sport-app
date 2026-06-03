@@ -13,7 +13,9 @@ EXPOSE 8080
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
 
+ENV DOTNET_NUGET_SIGNATURE_VERIFICATION=false
 
+COPY nuget.config .
 COPY ["sport-app-backend.csproj", "./"]
 COPY ["projectTest/projectTest.csproj", "projectTest/"]
 
