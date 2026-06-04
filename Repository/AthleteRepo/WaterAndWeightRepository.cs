@@ -256,4 +256,47 @@ public class WaterAndWeightRepository(
             };
         }
 
+        public async Task<ApiResponse> GetWeightAndBmi(string phoneNumber)
+        {
+              var athlete = await context.Athletes
+                .AsNoTracking()
+                .Where(x => x.PhoneNumber == phoneNumber)
+                .Select(x => new
+                {
+                    currentWeight = x.CurrentWeight,
+                   x.Height
+                })
+                .FirstOrDefaultAsync();
+
+            if (athlete is null)
+            {
+                return new ApiResponse() { Message = "User is not an athlete", Action = false };
+            }
+
+           
+
+            double? bmi = null;
+
+            if (athlete.Height > 0 && athlete.currentWeight > 0)
+            {
+                var heightInMeters = athlete.Height / 100.0;
+                var tempBmi = athlete.currentWeight / (heightInMeters * heightInMeters);
+
+                if (double.IsFinite(tempBmi))
+                    bmi = tempBmi;
+            }
+            
+            return new ApiResponse()
+            {
+                Message = "Weight And Bmi",
+                Action = true,
+                Result =new
+                {
+                    athlete.currentWeight,
+                    athlete.Height,
+                    bmi
+                    
+                }
+            };
+        }
 }

@@ -66,7 +66,18 @@ public class WaterAndWeightController(IWaterAndWeight athleteRepository, Applica
             }
         });
     }
-            [HttpPost("add_water_drinking")]
+    [HttpGet("getWeightAndBmi")]
+    [Authorize(Roles = "Athlete")]
+    public async Task<IActionResult> GetWeightAndBmi()
+    {
+        var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
+        if (phoneNumber is null) return BadRequest("PhoneNumber is null");
+        var result = await athleteRepository.GetWeightAndBmi(phoneNumber);
+        if (!result.Action) return BadRequest(result);
+        return Ok(result);
+        
+    }
+        [HttpPost("add_water_drinking")]
         [Authorize(Roles = "Athlete")]
         public async Task<IActionResult> AddWaterInDay()
         {
