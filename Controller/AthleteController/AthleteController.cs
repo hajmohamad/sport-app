@@ -223,7 +223,7 @@ namespace sport_app_backend.Controller
             var result = await athleteRepository.FeedbackTrainingSession(phoneNumber, feedbackTrainingSessionDto);
             if (!result.Action) return BadRequest(result);
             return Ok(result);
-
+        
         }
         
         [HttpGet("CalculateCalories/{trainingSessionId}")]
