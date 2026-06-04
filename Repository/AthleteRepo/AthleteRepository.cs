@@ -606,7 +606,11 @@ namespace sport_app_backend.Repository.AthleteRepo
 
                 if (trainingSession is null)
                     return new ApiResponse() { Message = "trainingSession not found", Action = false };
-                var athleteWeight = athlete.CurrentWeight;
+            
+                if (trainingSession.TrainingSessionStatus != TrainingSessionStatus.COMPLETED)
+                    return new ApiResponse() { Message = "trainingSession not completed", Action = false };
+                trainingSession.ExerciseFeeling =
+                    Enum.Parse<ExerciseFeeling>(finishTrainingSessionDto.ExerciseFeeling ?? string.Empty);
 
                 // var finalCalories = _CalculateCaloriesInternal(trainingSession, athleteWeight, false);
 
