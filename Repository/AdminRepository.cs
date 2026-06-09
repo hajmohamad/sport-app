@@ -254,6 +254,7 @@ namespace sport_app_backend.Repository
             var coach = await context.Coaches
                 .Include(c => c.CoachingServices)
                 .Include(c => c.User)
+                .Include(c=>c.AthleteChangePhotos)
                 .FirstOrDefaultAsync(c => c.PhoneNumber == phoneNumber);
 
             if (coach == null)
@@ -278,6 +279,13 @@ namespace sport_app_backend.Repository
                 coach.EitaaUserName,
                 coach.WhatsApp
             };
+            var athleteChange = coach.AthleteChangePhotos.Select(x => new
+            {
+                x.Title,
+                x.Description,
+                x.PhotoUrl,
+
+            });
 
       
             var workoutProgramFeedBack = await context.WorkoutProgramFeedback
@@ -293,7 +301,8 @@ namespace sport_app_backend.Repository
                     coachingServiceDto = coachingServiceDtos,
                     workoutProgramFeedBack,
                     socialMediaLink,
-                    coach.User.ImageProfile
+                    coach.User.ImageProfile,
+                    athleteChange
                 }
             };
         }
