@@ -70,8 +70,8 @@ namespace sport_app_backend.Mappers
                 CompetitionHistory = dto.CompetitionHistory,
                 CurrentMedications = dto.CurrentMedications,
                 SittingHour = Enum.Parse<SittingHour>(dto.SittingHour ?? string.Empty),
-                YourJob = dto.YourJob,
-                YourCity = dto.YourCity,
+                NotesForCoach =  dto.NotesForCoach,
+
                 ActivityLevel = Enum.Parse<ActivityLevel>(dto.ActivityLevel),
 
             };
@@ -93,8 +93,7 @@ namespace sport_app_backend.Mappers
                 CompetitionHistory = dto.CompetitionHistory,
                 CurrentMedications = dto.CurrentMedications,
                 SittingHour = Enum.Parse<SittingHour>(dto.SittingHour ?? string.Empty),
-                YourJob = dto.YourJob,
-                YourCity = dto.YourCity,
+                NotesForCoach =  dto.NotesForCoach,
                 ActivityLevel = Enum.Parse<ActivityLevel>(dto.ActivityLevel),
 
             };
@@ -116,8 +115,7 @@ namespace sport_app_backend.Mappers
                 CompetitionHistory = question.CompetitionHistory??"",
                 CurrentMedications = question.CurrentMedications??"",
                 SittingHour = question.SittingHour.ToString() ?? "",
-                YourJob = question.YourJob??"",
-                YourCity = question.YourCity??"",
+                NotesForCoach =  question.NotesForCoach??"",
                 AthleteBodyImage = question.AthleteBodyImage?.ToAthleteBodyImageDto() ?? new AthleteBodyImageDto(),
                 ActivityLevel = question.ActivityLevel.ToString(),
                 Ear = ear
@@ -140,8 +138,7 @@ namespace sport_app_backend.Mappers
                 CompetitionHistory = question.CompetitionHistory ?? "",
                 CurrentMedications = question.CurrentMedications ?? "",
                 SittingHour = question.SittingHour.ToString() ?? "",
-                YourJob = question.YourJob ?? "",
-                YourCity = question.YourCity ?? "",
+                NotesForCoach =  question.NotesForCoach ?? "",
                 ComingCompetition = question.ComingCompetition?.ToString() ?? "",
                 ActivityLevel = question.ActivityLevel.ToString(),
                 Ear = ear

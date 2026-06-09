@@ -46,4 +46,5 @@ public class Coach
     public string? WebSiteUrl { get; set; } = "";
 
     public CoachCardNumber? CoachCardNumber { get; set; }
+    public List<AthleteChangePhoto> AthleteChangePhotos { get; set; } = [];
 }

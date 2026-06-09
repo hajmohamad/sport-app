@@ -787,9 +787,9 @@ namespace sport_app_backend.Controller
             _mockAthleteRepository
                 .Setup(r => r.FeedbackTrainingSession("09121234567", dto))
                 .ReturnsAsync(response);
-
+        
             var result = await _controller.FeedbackTrainingSession(dto);
-
+        
             var okResult = Assert.IsType<OkObjectResult>(result);
             Assert.Equal(response, okResult.Value);
         }

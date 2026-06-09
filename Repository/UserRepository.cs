@@ -24,7 +24,7 @@ public class UserRepository(
     ApplicationDbContext dbContext,
     ITokenService tokenService,
     ISmsService sms,
-    ILiaraStorage liaraStorage,
+    IStorage Storage,
     IConfiguration config)
     : IUserRepository
 {
@@ -321,8 +321,8 @@ private async Task<string> GenerateUniqueUsername()
             {
                 Id = u.Id,
                 TypeOfUser = u.TypeOfUser,
-                AthleteId = u.Athlete != null ? (int?)u.Athlete.Id : null,
-                CoachId = u.Coach != null ? (int?)u.Coach.Id : null,
+                AthleteId = u.AthleteId, 
+                CoachId = u.CoachId,
                 PhoneNumber = u.PhoneNumber,
                 LastLogin = u.LastLogin,
                 
@@ -443,7 +443,7 @@ private async Task<string> GenerateUniqueUsername()
         if (user is null) return new ApiResponse() { Message = "User not found", Action = false };
         var img = user.ImageProfile;
         if (img=="") return new ApiResponse() { Message = "now img found", Action = false };
-        var response = await liaraStorage.RemovePhoto(img);
+        var response = await Storage.RemovePhoto(img);
         if (!response.Action) return response;
         user.ImageProfile = "";
         await dbContext.SaveChangesAsync();
@@ -457,7 +457,7 @@ private async Task<string> GenerateUniqueUsername()
         if (user is null) return new ApiResponse() { Message = "User not found", Action = false };
         if (image.Length <= 0) return new ApiResponse() { Message = "image not receive", Action = false }; ;
 
-        var response = await liaraStorage.UploadImage(image, user.ImageProfile,"profileImage");
+        var response = await Storage.UploadImage(image, user.ImageProfile,"profileImage");
         if (!response.Action) return response;
         if (response.Result is not null)
         {

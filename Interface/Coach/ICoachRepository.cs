@@ -31,6 +31,8 @@ namespace sport_app_backend.Interface.Coach
         Task<ApiResponse> UpdateDiscountCode(int coachId, int discountCodeId, DiscountCodeUpdateDto discountCodeUpdateDto);
         Task<ApiResponse> GetDiscountCodes(int coachId);
         Task<ApiResponse> GetDiscountCodeById(int coachId, int discountCodeId);
+        Task<ApiResponse> GetAllServicesWithCalculatedDiscount(int coachId, int percent);
+
         Task<ApiResponse> ChangeStatusForDiscountCode(int coachId, int discountCodeId, string status);
         Task<ApiResponse> ChoseWorkoutProgramFeedBack(string phoneNumber,List<ChoseWorkoutProgramFeedBackDto> choseWorkoutProgramFeedBackDtOs);
 
@@ -49,5 +51,10 @@ namespace sport_app_backend.Interface.Coach
         Task<ApiResponse> GetCoachPayments(int coachId, PaymentFilterDto filter);
         Task<ApiResponse> AddCardNumber(int coachId, AddCardNumberDto addCardNumberDto);
         Task<ApiResponse>  GetCardNumber(int coachId);
+        Task<ApiResponse> GetAllChangePhotos(int coachId);
+        Task<ApiResponse> GetChangePhotoById(int coachId, int id);
+        Task<ApiResponse> AddChangePhoto(int coachId, IFormFile file, AddAthleteChangePhotoDto dto);
+        Task<ApiResponse> EditChangePhoto(int coachId, IFormFile? file, EditAthleteChangePhotoDto dto);
+        Task<ApiResponse> DeleteChangePhoto(int coachId, int id);
     }
 }

@@ -598,15 +598,15 @@ namespace sport_app_backend.Repository.AthleteRepo
                 if (athlete is null) return new ApiResponse() { Message = "Athlete not found", Action = false };
 
                 var trainingSession = await context.TrainingSessions
-                    .Include(ts => ts.WorkoutProgram)
-                    .Include(ts => ts.ProgramInDay)
-                    .ThenInclude(pid => pid.AllExerciseInDays)
-                    .ThenInclude(se => se.Exercise) // اطمینان از بارگذاری اطلاعات هر حرکت
+                    .Include(trainingSession => trainingSession.WorkoutProgram)
                     .FirstOrDefaultAsync(z => z.Id == finishTrainingSessionDto.TrainingSessionId);
 
                 if (trainingSession is null)
                     return new ApiResponse() { Message = "trainingSession not found", Action = false };
-                var athleteWeight = athlete.CurrentWeight;
+            
+             
+                trainingSession.ExerciseFeeling =
+                    Enum.Parse<ExerciseFeeling>(finishTrainingSessionDto.ExerciseFeeling ?? string.Empty);
 
                 // var finalCalories = _CalculateCaloriesInternal(trainingSession, athleteWeight, false);
 
