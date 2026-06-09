@@ -73,6 +73,29 @@ namespace sport_app_backend.Mappers
     //         return exercise;
     //     }
     //
+    public static readonly Dictionary<string, string> MuscleImageMap = new Dictionary<string, string>
+    {
+        { "BICEPS", "https://chaarset.s3.ir-thr-at1.arvanstorage.ir/exerciseImage/Body/Biceps.webp" },
+        { "TRICEPS", "https://chaarset.s3.ir-thr-at1.arvanstorage.ir/exerciseImage/Body/Triceps.webp" },
+        { "FOREARM", "https://chaarset.s3.ir-thr-at1.arvanstorage.ir/exerciseImage/Body/Forearms.webp" },
+        { "CALVES", "https://chaarset.s3.ir-thr-at1.arvanstorage.ir/exerciseImage/Body/Calves.webp" },
+        { "CHEST", "https://chaarset.s3.ir-thr-at1.arvanstorage.ir/exerciseImage/Body/Chest.webp" },
+        { "TRAPS", "https://chaarset.s3.ir-thr-at1.arvanstorage.ir/exerciseImage/Body/Traps.webp" },
+        { "QUADRICEPS", "https://chaarset.s3.ir-thr-at1.arvanstorage.ir/exerciseImage/Body/Quads.webp" },
+        { "HAMSTRINGS", "https://chaarset.s3.ir-thr-at1.arvanstorage.ir/exerciseImage/Body/Hamstrings.webp" },
+        { "SHOULDERS", "https://chaarset.s3.ir-thr-at1.arvanstorage.ir/exerciseImage/Body/Shoulders.webp" },
+        { "GLUTES", "https://chaarset.s3.ir-thr-at1.arvanstorage.ir/exerciseImage/Body/Glutes.webp" },
+        // نگاشت ترکیبی برای شکم و فیله
+        { "ABSLOWERBACK", "https://chaarset.s3.ir-thr-at1.arvanstorage.ir/exerciseImage/Body/Abs.webp" }, 
+        // نگاشت برای داخل و خارج ران (Abductors/Adductors)
+        { "ABDDUCTORS", "https://chaarset.s3.ir-thr-at1.arvanstorage.ir/exerciseImage/Body/Abductors.webp" },
+        // نگاشت برای زیربغل و بالای کمر
+        { "LATSUPPERBACK", "https://chaarset.s3.ir-thr-at1.arvanstorage.ir/exerciseImage/Body/Lats.webp" },
+        // موارد خاص که تصویر اختصاصی در لیست شما نداشتند (می‌توانید آدرس جایگزین قرار دهید)
+        { "CARDIO", "https://chaarset.s3.ir-thr-at1.arvanstorage.ir/exerciseImage%2FBody%2Ffullbody.webp" }, 
+        { "STRETCH", "https://chaarset.s3.ir-thr-at1.arvanstorage.ir/exerciseImage%2FBody%2Ffullbody.webp" }
+    };
+   
        public static AllExerciseResponseDto ToAllExerciseResponseDto(this Exercise exercise)
         {
             return new Dtos.AllExerciseResponseDto
@@ -93,6 +116,7 @@ namespace sport_app_backend.Mappers
             };
 
         }
+       
 
         public static ExerciseDto ToExerciseDto(this Exercise exercise)
         {
@@ -110,7 +134,8 @@ namespace sport_app_backend.Mappers
                 VideoLink = exercise.VideoLink,
                 BaseCategory = exercise.BaseMuscle.ToString(),
                 ExerciseLevel = exercise.ExerciseLevel.ToString(),
-                Met = exercise.Met
+                Met = exercise.Met,
+                MuscleImage=MuscleImageMap[exercise.BaseCategory.ToString().ToUpper()]
             };
         }
         

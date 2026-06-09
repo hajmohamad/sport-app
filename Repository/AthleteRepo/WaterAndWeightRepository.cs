@@ -193,13 +193,22 @@ public class WaterAndWeightRepository(
 
         public async Task<ApiResponse> GetLastMonthWeightReport(string phoneNumber)
         {
-            var athleteId = await context.Athletes
+            var athlete = await context.Athletes
                 .AsNoTracking()
                 .Where(x => x.PhoneNumber == phoneNumber)
-                .Select(x => (int?)x.Id)
+                .Select(x => new
+                {
+                    AthleteId = x.Id,
+                    currentWeight = x.CurrentWeight,
+                   x.WeightGoal,
+                   x.Height
+                    
+                    
+                    
+                })
                 .FirstOrDefaultAsync();
 
-            if (athleteId is null)
+            if (athlete is null)
             {
                 return new ApiResponse() { Message = "User is not an athlete", Action = false };
             }
@@ -211,7 +220,7 @@ public class WaterAndWeightRepository(
 
             var weightEntries = await context.WeightEntries
                 .AsNoTracking()
-                .Where(x => x.AthleteId == athleteId.Value && x.CurrentDate >= firstDayOfPersianMonth)
+                .Where(x => x.AthleteId == athlete.AthleteId && x.CurrentDate >= firstDayOfPersianMonth)
                 .OrderByDescending(x => x.CurrentDate)
                 .Select(x => new WeightReportDto()
                 {
@@ -220,12 +229,74 @@ public class WaterAndWeightRepository(
                 })
                 .ToListAsync();
 
+            double? bmi = null;
+
+            if (athlete.Height > 0 && athlete.currentWeight > 0)
+            {
+                var heightInMeters = athlete.Height / 100.0;
+                var tempBmi = athlete.currentWeight / (heightInMeters * heightInMeters);
+
+                if (double.IsFinite(tempBmi))
+                    bmi = tempBmi;
+            }
+            
             return new ApiResponse()
             {
                 Message = "Weight report fetched successfully",
                 Action = true,
-                Result = weightEntries
+                Result =new
+                {
+                    weightEntries,
+                    athlete.currentWeight,
+                    athlete.Height,
+                    athlete.WeightGoal,
+                    bmi
+                    
+                }
             };
         }
 
+        public async Task<ApiResponse> GetWeightAndBmi(string phoneNumber)
+        {
+              var athlete = await context.Athletes
+                .AsNoTracking()
+                .Where(x => x.PhoneNumber == phoneNumber)
+                .Select(x => new
+                {
+                    currentWeight = x.CurrentWeight,
+                   x.Height
+                })
+                .FirstOrDefaultAsync();
+
+            if (athlete is null)
+            {
+                return new ApiResponse() { Message = "User is not an athlete", Action = false };
+            }
+
+           
+
+            double? bmi = null;
+
+            if (athlete.Height > 0 && athlete.currentWeight > 0)
+            {
+                var heightInMeters = athlete.Height / 100.0;
+                var tempBmi = athlete.currentWeight / (heightInMeters * heightInMeters);
+
+                if (double.IsFinite(tempBmi))
+                    bmi = tempBmi;
+            }
+            
+            return new ApiResponse()
+            {
+                Message = "Weight And Bmi",
+                Action = true,
+                Result =new
+                {
+                    athlete.currentWeight,
+                    athlete.Height,
+                    bmi
+                    
+                }
+            };
+        }
 }

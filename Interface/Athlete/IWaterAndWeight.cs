@@ -11,4 +11,5 @@ public interface IWaterAndWeight
     public Task<ApiResponse> UpdateWeight(string phoneNumber, double weight);
     public Task<ApiResponse> UpdateHeightWeight(string phoneNumber, double weight, int height);
     public Task<ApiResponse> GetLastMonthWeightReport(string phoneNumber);
+    public Task<ApiResponse>  GetWeightAndBmi(string phoneNumber);
 }

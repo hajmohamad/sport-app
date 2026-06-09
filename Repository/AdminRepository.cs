@@ -15,7 +15,7 @@ using sport_app_backend.Services;
 
 namespace sport_app_backend.Repository
 {
-    public class AdminRepository(ApplicationDbContext context, ISmsService sms,    ILiaraStorage liaraStorage) : IAdminRepository
+    public class AdminRepository(ApplicationDbContext context, ISmsService sms,    IStorage Storage) : IAdminRepository
     {
 
     
@@ -223,7 +223,7 @@ namespace sport_app_backend.Repository
             var imageLink = "";
             if (file != null)
             {
-                var urlLink = await liaraStorage.UploadImage(file, "","coachPayout");
+                var urlLink = await Storage.UploadImage(file, "","coachPayout");
                 if (urlLink.Action)
                 {
                     imageLink = (string)urlLink.Result!;
@@ -254,6 +254,7 @@ namespace sport_app_backend.Repository
             var coach = await context.Coaches
                 .Include(c => c.CoachingServices)
                 .Include(c => c.User)
+                .Include(c=>c.AthleteChangePhotos)
                 .FirstOrDefaultAsync(c => c.PhoneNumber == phoneNumber);
 
             if (coach == null)
@@ -278,6 +279,13 @@ namespace sport_app_backend.Repository
                 coach.EitaaUserName,
                 coach.WhatsApp
             };
+            var athleteChange = coach.AthleteChangePhotos.Select(x => new
+            {
+                x.Title,
+                x.Description,
+                x.PhotoUrl,
+
+            });
 
       
             var workoutProgramFeedBack = await context.WorkoutProgramFeedback
@@ -293,7 +301,8 @@ namespace sport_app_backend.Repository
                     coachingServiceDto = coachingServiceDtos,
                     workoutProgramFeedBack,
                     socialMediaLink,
-                    coach.User.ImageProfile
+                    coach.User.ImageProfile,
+                    athleteChange
                 }
             };
         }

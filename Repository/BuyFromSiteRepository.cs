@@ -23,7 +23,7 @@ public class BuyFromSiteRepository(
     ApplicationDbContext dbContext,
     ITokenService tokenService,
     ISmsService sms,
-    ILiaraStorage liaraStorage,
+    IStorage Storage,
     IZarinPal zarinPal,
     IConfiguration config)
     : IBuyFromSiteRepository
@@ -154,10 +154,10 @@ public class BuyFromSiteRepository(
                     var frontLink = athleteImage.FrontLink;
                     if (frontLink is { Length: > 1 })
                     {
-                        await liaraStorage.RemovePhoto(frontLink);
+                        await Storage.RemovePhoto(frontLink);
                     }
 
-                    var response = await liaraStorage.UploadImage(file, "","bodyImage");
+                    var response = await Storage.UploadImage(file, "","bodyImage");
                     if (response.Action)
                     {
                         athleteImage.FrontLink = response.Result as string;
@@ -174,10 +174,10 @@ public class BuyFromSiteRepository(
                     var frontLink = athleteImage.BackLink;
                     if (frontLink is { Length: > 1 })
                     {
-                        await liaraStorage.RemovePhoto(frontLink);
+                        await Storage.RemovePhoto(frontLink);
                     }
 
-                    var response = await liaraStorage.UploadImage(file, "","bodyImage");
+                    var response = await Storage.UploadImage(file, "","bodyImage");
                     if (response.Action)
                     {
                         athleteImage.BackLink = response.Result as string;
@@ -194,10 +194,10 @@ public class BuyFromSiteRepository(
                     var frontLink = athleteImage.SideLink;
                     if (frontLink is { Length: > 1 })
                     {
-                        await liaraStorage.RemovePhoto(frontLink);
+                        await Storage.RemovePhoto(frontLink);
                     }
 
-                    var response = await liaraStorage.UploadImage(file, "","bodyImage");
+                    var response = await Storage.UploadImage(file, "","bodyImage");
                     if (response.Action)
                     {
                         athleteImage.SideLink = response.Result as string;
@@ -221,7 +221,7 @@ public class BuyFromSiteRepository(
         }
         else
         {
-            var response = await liaraStorage.UploadImage(file, "","bodyImage");
+            var response = await Storage.UploadImage(file, "","bodyImage");
             if (!response.Action)
             {
                 return response;
@@ -291,7 +291,7 @@ public class BuyFromSiteRepository(
                     var frontLink = athleteImage.FrontLink;
                     if (frontLink is { Length: > 1 })
                     {
-                        var removeResponse = await liaraStorage.RemovePhoto(frontLink);
+                        var removeResponse = await Storage.RemovePhoto(frontLink);
                         if (!removeResponse.Action)
                         {
                             return removeResponse;
@@ -314,7 +314,7 @@ public class BuyFromSiteRepository(
                     var backLink = athleteImage.BackLink;
                     if (backLink is { Length: > 1 })
                     {
-                        var removeResponse = await liaraStorage.RemovePhoto(backLink);
+                        var removeResponse = await Storage.RemovePhoto(backLink);
                         if (!removeResponse.Action)
                         {
                             return removeResponse;
@@ -337,7 +337,7 @@ public class BuyFromSiteRepository(
                     var sideLink = athleteImage.SideLink;
                     if (sideLink is { Length: > 1 })
                     {
-                        var removeResponse = await liaraStorage.RemovePhoto(sideLink);
+                        var removeResponse = await Storage.RemovePhoto(sideLink);
                         if (!removeResponse.Action)
                         {
                             return removeResponse;
@@ -1105,43 +1105,49 @@ public class BuyFromSiteRepository(
         };
     }
 
-    private async Task<ApiResponse> ValidateDiscountCode(int coachId ,int coachServiceId,string normalizedCode)
+    private async Task<ApiResponse> ValidateDiscountCode(int coachId, int coachServiceId, string normalizedCode)
+{
+    var discountCode = await dbContext.DiscountCodes
+        .Include(dc => dc.DiscountCodeCoachServices)
+        .FirstOrDefaultAsync(x => x.CoachId == coachId && x.Code == normalizedCode && !x.IsDeleted);
+
+    if (discountCode is null)
     {
-        var discountCode = await dbContext.DiscountCodes
-            .FirstOrDefaultAsync(x => x.CoachId== coachId&& x.Code == normalizedCode && !x.IsDeleted);
-        if (discountCode is null)
-        {
-            return new ApiResponse { Action = false, Message = "کد اشتباه است" };
-        }
+        return new ApiResponse { Action = false, Message = "کد تخفیف وارد شده معتبر نیست." };
+    }
 
-        if (discountCode.Status is DiscountCodeStatus.INACTIVE or DiscountCodeStatus.EXPIRED)
-        {
-            return new ApiResponse { Action = false, Message = "کد غیرفعال شده" };
-        }
+    if (discountCode.Status == DiscountCodeStatus.INACTIVE)
+    {
+        return new ApiResponse { Action = false, Message = "این کد تخفیف غیرفعال است." };
+    }
+    
+    bool isExpiredByDate = discountCode.ExpiresAt.HasValue && discountCode.ExpiresAt.Value <= DateTime.UtcNow;
+    bool isExpiredByUsage = discountCode.UsageLimit.HasValue && discountCode.UsedCount >= discountCode.UsageLimit.Value;
 
-        if (discountCode is { Status: DiscountCodeStatus.ACTIVE, ExpiresAt: not null } && discountCode.ExpiresAt.Value <= DateTime.UtcNow||(discountCode.UsageLimit.HasValue && discountCode.UsedCount >= discountCode.UsageLimit.Value))
+    if (discountCode.Status == DiscountCodeStatus.EXPIRED || isExpiredByDate || isExpiredByUsage)
+    {
+        if (discountCode.Status != DiscountCodeStatus.EXPIRED)
         {
             discountCode.Status = DiscountCodeStatus.EXPIRED;
             await dbContext.SaveChangesAsync();
-            return new ApiResponse { Action = false, Message = "کد تاریخش گذشته" };
         }
-        
-
-        if ( !discountCode.CoachServicesId.Contains(coachServiceId) && discountCode.CoachServicesId.Count!=0)
-        {
-            return new ApiResponse { Action = false, Message =  "کد تخفیف برای این سرویس قابل استفاده نیست" };
-        }
-
-        if (discountCode.UsageLimit.HasValue && discountCode.UsedCount >= discountCode.UsageLimit.Value)
-        {
-            return new ApiResponse { Action = false, Message = "تعداد استفاده تمام شده" };
-        }
-
-        return new ApiResponse { 
-            Action = true,
-            Message = "کد تخفیف معتبر است",
-            Result = discountCode };
+        return new ApiResponse { Action = false, Message = "این کد تخفیف منقضی شده است." };
     }
+
+
+    if (!discountCode.AppliesToAllServices&& discountCode.DiscountCodeCoachServices.All(dcs => dcs.CoachServiceId != coachServiceId))
+    {
+        return new ApiResponse { Action = false, Message = "کد تخفیف برای این سرویس قابل استفاده نیست." };
+    }
+   
+
+    return new ApiResponse 
+    { 
+        Action = true,
+        Message = "کد تخفیف معتبر است",
+        Result = discountCode 
+    };
+}
 
     private async Task<int?> GetDiscountCodeId(string? code)
     {

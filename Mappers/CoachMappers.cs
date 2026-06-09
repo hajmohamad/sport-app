@@ -152,7 +152,8 @@ namespace sport_app_backend.Mappers
                 UsedCount = discountCode.UsedCount,
                 ExpiresAt = discountCode.ExpiresAt,
                 Status = status.ToString(),
-                ServiceForDiscountDtos = serviceForDiscountDto
+                ServiceForDiscountDtos = serviceForDiscountDto,
+                AppliesToAllServices = discountCode.AppliesToAllServices
             };
         }
 
