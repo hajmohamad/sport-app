@@ -116,7 +116,15 @@ namespace sport_app_backend.Repository.AthleteRepo
                 CurrentDate = DateTime.Now,
                 Weight = athleteFirstQuestionsDto.CurrentWeight
             };
+            var weightEntryBefore = new WeightEntry()
+            {
+                Athlete = athlete,
+                AthleteId = athlete.Id,
+                CurrentDate = DateTime.Now.AddDays(-1),
+                Weight = athleteFirstQuestionsDto.CurrentWeight
+            };
             await context.WeightEntries.AddAsync(weightEntry);
+            await context.WeightEntries.AddAsync(weightEntryBefore);
             user.LastName = athleteFirstQuestionsDto.LastName;
             user.FirstName = athleteFirstQuestionsDto.FirstName;
             await context.SaveChangesAsync();
@@ -366,7 +374,7 @@ namespace sport_app_backend.Repository.AthleteRepo
 
             for (var day = 1; day <= numberOfDay; day++)
             {
-                var index = day % programInDayCount;
+                var index = (day - 1) % programInDayCount;
                 sessions.Add(new TrainingSession
                 {
                     ProgramInDayId = programInDayList[index].Id,

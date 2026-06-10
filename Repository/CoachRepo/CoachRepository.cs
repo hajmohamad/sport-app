@@ -918,22 +918,21 @@ namespace sport_app_backend.Repository.CoachRepo
             };
         }
 
-        public async Task<ApiResponse> SaveWorkoutProgram(string phoneNumber, int paymentId,
+     public async Task<ApiResponse> SaveWorkoutProgram(string phoneNumber, int paymentId,
             WorkoutProgramDto workoutProgramDto)
         {
             try
             {
                 var coach = await context.Coaches.FirstOrDefaultAsync(c => c.PhoneNumber == phoneNumber);
                 if (coach == null) return new ApiResponse { Action = false, Message = "Coach not found" };
-                var workoutProgram = await context.WorkoutPrograms.Include(p => p.Payment).Include(x => x.ProgramInDays)
+                var workoutProgram = await context.WorkoutPrograms.Include(p=>p.Payment).Include(x => x.ProgramInDays)
                     .ThenInclude(z => z.AllExerciseInDays)
                     .FirstOrDefaultAsync(p => p.PaymentId == paymentId && p.CoachId == coach.Id);
                 if (workoutProgram is null) return new ApiResponse { Action = false, Message = "Payment not found" };
                 workoutProgram.ProgramInDays = workoutProgramDto.Days.ToListOfProgramInDays();
                 workoutProgram.ProgramDuration = workoutProgramDto.Week;
-
-                workoutProgram.ProgramLevel =
-                    (ProgramLevel)Enum.Parse(typeof(ProgramLevel), workoutProgramDto.ProgramLevel);
+           
+                workoutProgram.ProgramLevel = (ProgramLevel)Enum.Parse(typeof(ProgramLevel),workoutProgramDto.ProgramLevel);
 
                 workoutProgram.ProgramPriorities = workoutProgramDto.ProgramPriority
                     .Select(x => (ProgramPriority)Enum.Parse(typeof(ProgramPriority), x.ToUpper())).ToList() ?? [];
@@ -941,7 +940,8 @@ namespace sport_app_backend.Repository.CoachRepo
                 {
                     workoutProgram.Status = WorkoutProgramStatus.WRITING;
                 }
-
+                await context.SaveChangesAsync();
+                
                 if (workoutProgramDto.Publish)
                 {
                     workoutProgram.Status = WorkoutProgramStatus.NOTACTIVE;
@@ -957,24 +957,28 @@ namespace sport_app_backend.Repository.CoachRepo
                         };
                     }
 
-                    var exerciseIds = workoutProgramDto.Days
-                        .SelectMany(d => d.AllExerciseInDays)
-                        .Select(ex => ex.Id).ToList();
+                    if (workoutProgram.ProgramInDays.Count == 0)
+                    {
+                        return new ApiResponse()
+                        {
+                            Action = false,
+                            Message = "list is empty"
+                        };
+                    }
+                   
 
-                    coach.Amount += (workoutProgram.Payment.Amount - workoutProgram.Payment.AppFee);
+                    coach.Amount += (workoutProgram.Payment.Amount - workoutProgram.Payment.AppFee);              
                     var athleteImg = await context.AthleteImage
                         .Where(a => a.AthleteQuestionId == workoutProgram.Payment.AthleteQuestionId)
                         .FirstOrDefaultAsync();
                     if (athleteImg?.SideLink != null)
                     {
-                        await Storage.RemovePhoto(athleteImg.SideLink);
+                            await Storage.RemovePhoto(athleteImg.SideLink);
                     }
-
                     if (athleteImg?.BackLink != null)
                     {
                         await Storage.RemovePhoto(athleteImg.BackLink);
                     }
-
                     if (athleteImg?.FrontLink != null)
                     {
                         await Storage.RemovePhoto(athleteImg.FrontLink);
@@ -982,30 +986,33 @@ namespace sport_app_backend.Repository.CoachRepo
 
                     if (athleteImg is not null)
                     {
-                        context.AthleteImage.Remove(athleteImg);
+                         context.AthleteImage.Remove(athleteImg);
                     }
+                    
 
-
-                    await smsService.WorkoutReadySms(athlete.PhoneNumber, athlete.User.FirstName, workoutProgram.Title,
-                        token.HashEncode(workoutProgram.Id));
-
+                    await smsService.WorkoutReadySms(athlete.PhoneNumber, athlete.User.FirstName, workoutProgram.Title,token.HashEncode(workoutProgram.Id));
+                    var exerciseIds = workoutProgramDto.Days
+                        .SelectMany(d => d.AllExerciseInDays)
+                        .Select(ex => ex.Id).ToList();
                     var workoutExercises = new LastWorkoutExercise()
                     {
                         CoachId = coach.Id,
                         AthleteId = athlete.Id,
                         WorkoutProgramId = workoutProgram.Id,
                         ExerciseIds = exerciseIds
-                    };
-                    await context.LastWorkoutExercises.AddAsync(workoutExercises);
 
+                    }; 
+                    await context.LastWorkoutExercises.AddAsync(workoutExercises);
+                    await context.SaveChangesAsync();
+                    
                     if (athlete.ActiveWorkoutProgramId is null)
                     {
+                     
                         await AddTrainingSession(paymentId);
                         workoutProgram.Status = WorkoutProgramStatus.ACTIVE;
                         athlete.ActiveWorkoutProgramId = workoutProgram.Id;
                     }
                 }
-
                 await context.SaveChangesAsync();
                 return new ApiResponse()
                 {
@@ -1013,7 +1020,7 @@ namespace sport_app_backend.Repository.CoachRepo
                     Message = "workout program saved",
                     Result = new
                     {
-                        pdfLink = $"chaarset.ir/program/{token.HashEncode(workoutProgram.Id)}"
+                        pdfLink=$"chaarset.ir/program/{token.HashEncode(workoutProgram.Id)}"
                     }
                 };
             }
@@ -1050,7 +1057,7 @@ namespace sport_app_backend.Repository.CoachRepo
 
                     for (var day = 1; day <= numberOfDay; day++)
                     {
-                        var index = day % programInDayCount;
+                        var index = (day - 1) % programInDayCount;
                         await context.TrainingSessions.AddAsync(new TrainingSession
                         {
                             ProgramInDayId = programInDayList[index].Id,
@@ -1066,8 +1073,9 @@ namespace sport_app_backend.Repository.CoachRepo
             }
             catch (Exception e)
             {
-                Console.WriteLine("*+*" + paymentId + "------" + e.Message);
+                Console.WriteLine("*+*" + paymentId+"------"+e.Message);
             }
+
         }
 
         public async Task<ApiResponse> GetWorkoutProgram(string phoneNumber, int paymentId)

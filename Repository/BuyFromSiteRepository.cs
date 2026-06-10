@@ -973,6 +973,22 @@ public class BuyFromSiteRepository(
         athlete.User.LastName = athleteQuestionBuyFromSiteDto.LastName;
         athlete.Height = athleteQuestionBuyFromSiteDto.Height;
         athlete.CurrentWeight = athleteQuestionBuyFromSiteDto.CurrentWeight;
+        var weightEntry = new WeightEntry()
+        {
+            Athlete = athlete,
+            AthleteId = athlete.Id,
+            CurrentDate = DateTime.Now,
+            Weight = athleteQuestionBuyFromSiteDto.CurrentWeight
+        };
+        var weightEntryBefore = new WeightEntry()
+        {
+            Athlete = athlete,
+            AthleteId = athlete.Id,
+            CurrentDate = DateTime.Now.AddDays(-1),
+            Weight = athleteQuestionBuyFromSiteDto.CurrentWeight
+        };
+        await dbContext.WeightEntries.AddAsync(weightEntry);
+        await dbContext.WeightEntries.AddAsync(weightEntryBefore);
         var athleteQuestion = athleteQuestionBuyFromSiteDto.ToAthleteQuestionBuyFromSite(athlete);
 
         if (athleteQuestionBuyFromSiteDto.AthleteBodyImageId > 0)
