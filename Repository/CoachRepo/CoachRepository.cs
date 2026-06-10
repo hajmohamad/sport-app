@@ -993,7 +993,7 @@ namespace sport_app_backend.Repository.CoachRepo
                     await smsService.WorkoutReadySms(athlete.PhoneNumber, athlete.User.FirstName, workoutProgram.Title,token.HashEncode(workoutProgram.Id));
                     var exerciseIds = workoutProgramDto.Days
                         .SelectMany(d => d.AllExerciseInDays)
-                        .Select(ex => ex.Id).ToList();
+                        .Select(ex => ex.ExerciseId).ToList();
                     var workoutExercises = new LastWorkoutExercise()
                     {
                         CoachId = coach.Id,
