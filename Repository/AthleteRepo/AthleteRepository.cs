@@ -481,6 +481,7 @@ namespace sport_app_backend.Repository.AthleteRepo
             wp.ProgramDuration,
             wp.TotalSessionCount,
             wp.CompletedSessionCount,
+            wp.PaymentId,
             CoachWebsite = wp.Coach.WebSiteUrl ?? "chaarset.ir",
             wp.WorkoutProgramFeedback,
             TrainingSessions = wp.TrainingSessions.Select(ts => new AllTrainingSessionDto
@@ -502,11 +503,15 @@ namespace sport_app_backend.Repository.AthleteRepo
     {
         completionPercentage = (double)resultData.CompletedSessionCount / resultData.TotalSessionCount;
     }
+    var now = DateTime.Now;
 
-    var shouldGetFeedback = completionPercentage >= 0.30 && resultData.WorkoutProgramFeedback == null;
+    var passFiveDay = false;
+    if (resultData.StartDate is not null)
+        passFiveDay = resultData.StartDate.Value.AddDays(5) < now.Date;
+
+    var shouldGetFeedback = (completionPercentage >= 0.30||passFiveDay) && resultData.WorkoutProgramFeedback is null;
 
     string? renewalMessage = null;
-    var now = DateTime.Now;
 
     if (resultData.StartDate != null)
     {
@@ -539,7 +544,8 @@ namespace sport_app_backend.Repository.AthleteRepo
             resultData.ProgramName,
             RenewalMessage = renewalMessage,
             resultData.CoachWebsite,
-            shouldGetFeedback
+            shouldGetFeedback,
+            resultData.PaymentId
         }
     };
 }
