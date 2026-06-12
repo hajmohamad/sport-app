@@ -41,10 +41,12 @@ public class Coach
     public double Amount { get; set; } = 0;
     public double ServiceFee { get; set; } = 0.1;
     public List<DiscountCode> DiscountCodes { get; set; } = [];
-
     [StringLength(51)]
     public string? WebSiteUrl { get; set; } = "";
 
     public CoachCardNumber? CoachCardNumber { get; set; }
     public List<AthleteChangePhoto> AthleteChangePhotos { get; set; } = [];
+    public string Slogan { get; set; } = "";
+    public string SiteDescription { get; set; } = "";
+
 }

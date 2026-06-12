@@ -12,6 +12,7 @@ public class SupportApp
     public int UserId {get; set;}
     public required User User{get; set;}
     public required SupportAppCategory Category{get; set;}
+   // public DateTime CreateDate { get; set; }=DateTime.Now;
     [MaxLength(300)]
     public required string Description{get; set;}=string.Empty;
 

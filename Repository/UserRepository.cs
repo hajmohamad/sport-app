@@ -407,7 +407,8 @@ private async Task<string> GenerateUniqueUsername()
         {   User = user,
             UserId = user.Id,
             Category = Enum.Parse<SupportAppCategory>(reportAppDto.Category),
-            Description = reportAppDto.Description
+            Description = reportAppDto.Description,
+           // CreateDate =  DateTime.Now,
         });
         await dbContext.SaveChangesAsync();
         return new ApiResponse() { Message = "Success", Action = true };

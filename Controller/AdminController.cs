@@ -16,7 +16,7 @@ namespace sport_app_backend.Controller
     {
       
         [HttpPut("Verified_coach/{coachPhoneNumber}")]
-        public async Task<IActionResult> Verified_coach([FromRoute] string coachPhoneNumber, [FromBody] string siteUrl)
+        public async Task<IActionResult> Verified_coach([FromRoute] string coachPhoneNumber, [FromBody] string? siteUrl)
         {
             var result = await adminRepository.VerifiedCoach(coachPhoneNumber,siteUrl);
             if (result.Action == false) return BadRequest(result);
@@ -29,6 +29,13 @@ namespace sport_app_backend.Controller
             if (result.Action == false) return BadRequest(result);
             return Ok(result);
         }
+        [HttpGet("GetVerifiedCoaches")]
+        public async Task<IActionResult> GetVerifiedCoaches()
+        {
+            var result = await adminRepository.GetVerifiedCoaches();
+            return Ok(result);
+        }
+
 
         
 
@@ -56,24 +63,24 @@ namespace sport_app_backend.Controller
 
             return Ok(result);
         }
-        [HttpPut("setCoachWebsiteUrl")]
-        public async Task<IActionResult> SetCoachWebsiteUrl([FromQuery] string phoneNumber, [FromQuery] string webSiteUrl)
+        // [HttpPut("setCoachWebsiteUrl")]
+        // public async Task<IActionResult> SetCoachWebsiteUrl([FromQuery] string phoneNumber, [FromQuery] string webSiteUrl)
+        // {
+        //     
+        //
+        //     var result = await adminRepository.SetCoachWebsiteUrl(phoneNumber,webSiteUrl);
+        //     if (!result.Action)
+        //     {
+        //         return BadRequest(result);
+        //     }
+        //
+        //     return Ok(result);
+        // }
+
+        [HttpGet("GetCoachService/{coachWebSiteUrl}")]
+        public async Task<IActionResult> GetCoachService(string coachWebSiteUrl)
         {
-            
-
-            var result = await adminRepository.SetCoachWebsiteUrl(phoneNumber,webSiteUrl);
-            if (!result.Action)
-            {
-                return BadRequest(result);
-            }
-
-            return Ok(result);
-        }
-
-        [HttpGet("GetCoachService/{phoneNumber}")]
-        public async Task<IActionResult> GetCoachService(string phoneNumber)
-        {
-            var result = await adminRepository.GetCoachService(phoneNumber);
+            var result = await adminRepository.GetCoachService(coachWebSiteUrl);
             if (!result.Action)
             {
                 return BadRequest(result);
@@ -119,18 +126,18 @@ namespace sport_app_backend.Controller
 
             return Ok(result);
         } 
-            [HttpPost("addExercise")]
-            public async Task<IActionResult> addExercise([FromBody] AddExercisesRequestDto addExercisesRequestDto)
-            {
-            var result = await adminRepository.AddExercises(addExercisesRequestDto);
-            if (!result.Action)
-            {
-                return BadRequest(result);
-            }
-
-            return Ok(result);
-        }
-        
+        //     [HttpPost("addExercise")]
+        //     public async Task<IActionResult> addExercise([FromBody] AddExercisesRequestDto addExercisesRequestDto)
+        //     {
+        //     var result = await adminRepository.AddExercises(addExercisesRequestDto);
+        //     if (!result.Action)
+        //     {
+        //         return BadRequest(result);
+        //     }
+        //
+        //     return Ok(result);
+        // }
+        //
 
         
         

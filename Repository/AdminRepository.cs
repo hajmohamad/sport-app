@@ -15,7 +15,7 @@ using sport_app_backend.Services;
 
 namespace sport_app_backend.Repository
 {
-    public class AdminRepository(ApplicationDbContext context, ISmsService sms,    IStorage Storage) : IAdminRepository
+    public class AdminRepository(ApplicationDbContext context, ISmsService sms,    IStorage storage) : IAdminRepository
     {
 
     
@@ -106,69 +106,21 @@ namespace sport_app_backend.Repository
             };
         }
 
-        public async Task<ApiResponse> VerifiedCoach(string coachPhoneNumber, string siteUrl)
+        public async Task<ApiResponse> VerifiedCoach(string coachPhoneNumber, string? siteUrl)
         {
             var coach = await context.Coaches.FirstOrDefaultAsync(c => c.PhoneNumber == coachPhoneNumber);
             if (coach is null)
                 return new ApiResponse() { Message = "coach not found", Action = false };
 
             coach.Verified = true;
-            coach.WebSiteUrl = siteUrl;
-
-            var athlete = await context.Athletes.FirstOrDefaultAsync(a => a.PhoneNumber == "09395327229");
-            if (athlete is null)
-                return new ApiResponse() { Message = "athlete not found", Action = false };
-            var athleteQuestion = await context.AthleteQuestions.FirstOrDefaultAsync(a=>a.AthleteId == athlete.Id);
-            if (athleteQuestion is null)
-                return new ApiResponse() { Message = "athlete not found", Action = false };
-
-            var coachService = new CoachService
+            if (siteUrl is not null)
             {
-                Coach = coach,
-                Title = "برنامه ورزشی تستی",
-                Description = "این یک برنامه ورزشی تستی هست",
-                Price = 0,
-                IsActive = false,
-                IsDeleted = true
-            };
+                coach.WebSiteUrl = siteUrl;
+            }
+            await  context.SaveChangesAsync();
 
-            context.CoachServices.Add(coachService);
-            await context.SaveChangesAsync();
-
-
-            var payment = new Payment
-            {
-                Coach = coach,
-                Athlete = athlete,
-                AthleteId = athlete.Id,
-                CoachId = coach.Id,
-                CoachServiceId = coachService.Id,
-                PaymentStatus = PaymentStatus.SUCCESS,
-                Amount = 0,
-                Authority = "nothing",
-                AppFee = 0,
-                AthleteQuestionId = athleteQuestion.Id,
-                
-            };
-
-            context.Payments.Add(payment);
-            await context.SaveChangesAsync(); // حالا Id ساخته میشه ✅
-
-
-            var workoutProgram = new WorkoutProgram
-            {
-                Title = coachService.Title,
-                Coach = coach,
-                Athlete = athlete,
-                AthleteId = athlete.Id,
-                CoachId = coach.Id,
-                PaymentId = payment.Id,
-                Status = WorkoutProgramStatus.NOTSTARTED,
-            };
-
-            context.WorkoutPrograms.Add(workoutProgram);
-            await context.SaveChangesAsync();
-
+            
+            
             return new ApiResponse()
             {
                 Message = "coach verified successfully",
@@ -223,7 +175,7 @@ namespace sport_app_backend.Repository
             var imageLink = "";
             if (file != null)
             {
-                var urlLink = await Storage.UploadImage(file, "","coachPayout");
+                var urlLink = await storage.UploadImage(file, "","coachPayout");
                 if (urlLink.Action)
                 {
                     imageLink = (string)urlLink.Result!;
@@ -248,14 +200,14 @@ namespace sport_app_backend.Repository
             return new ApiResponse { Action = true, Message = "وضعیت تسویه با موفقیت به روز رسانی شد" };
         }
 
-        public async Task<ApiResponse> GetCoachService(string phoneNumber)
+        public async Task<ApiResponse> GetCoachService(string coachWebSiteUrl)
         {
          
             var coach = await context.Coaches
                 .Include(c => c.CoachingServices)
                 .Include(c => c.User)
                 .Include(c=>c.AthleteChangePhotos)
-                .FirstOrDefaultAsync(c => c.PhoneNumber == phoneNumber);
+                .FirstOrDefaultAsync(c => c.WebSiteUrl == coachWebSiteUrl);
 
             if (coach == null)
             {
@@ -302,7 +254,11 @@ namespace sport_app_backend.Repository
                     workoutProgramFeedBack,
                     socialMediaLink,
                     coach.User.ImageProfile,
-                    athleteChange
+                    athleteChange,
+                    coach.Slogan,
+                    coach.SiteDescription,
+                    coach.User.FirstName,
+                    coach.User.LastName,
                 }
             };
         }
@@ -393,6 +349,34 @@ namespace sport_app_backend.Repository
                 Action = true,
                 Message = "success"
             };
+        }
+
+        public async Task<ApiResponse> GetVerifiedCoaches()
+        {
+            var coaches = await context.Coaches.Include(c=>c.User)
+                .Select(c=>new
+                {
+                    c.User.FirstName,
+                    c.User.LastName,
+                    c.User.ImageProfile,
+                    c.Verified
+                }).Where(c=>c.Verified).ToListAsync();
+            if (coaches.Count==0)
+            {
+                return new ApiResponse()
+                {
+                    Action = false,
+                    Message = "coaches Not Found"
+                };
+            }
+
+            return new ApiResponse()
+            {
+                Action = true,
+                Message = "success",
+                Result = coaches
+            };
+
         }
     }
     
