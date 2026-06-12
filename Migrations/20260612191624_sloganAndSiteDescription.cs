@@ -5,17 +5,23 @@
 namespace sport_app_backend.Migrations
 {
     /// <inheritdoc />
-    public partial class addWebsiteUrl : Migration
+    public partial class sloganAndSiteDescription : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AddColumn<string>(
-                name: "WebSiteUrl",
+                name: "SiteDescription",
                 table: "Coaches",
-                type: "varchar(51)",
-                maxLength: 51,
-                nullable: true)
+                type: "longtext",
+                nullable: false)
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.AddColumn<string>(
+                name: "Slogan",
+                table: "Coaches",
+                type: "longtext",
+                nullable: false)
                 .Annotation("MySql:CharSet", "utf8mb4");
         }
 
@@ -23,7 +29,11 @@ namespace sport_app_backend.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropColumn(
-                name: "WebSiteUrl",
+                name: "SiteDescription",
+                table: "Coaches");
+
+            migrationBuilder.DropColumn(
+                name: "Slogan",
                 table: "Coaches");
         }
     }

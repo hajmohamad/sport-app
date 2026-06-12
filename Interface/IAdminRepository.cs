@@ -16,16 +16,17 @@ namespace sport_app_backend.Interface
         Task<ApiResponse> ConfirmTransactionId(string TransactionId);
         Task<ApiResponse> EditTotalSessionCount();
 
-        Task<ApiResponse> VerifiedCoach(string coachPhoneNumber, string siteUrl);
+        Task<ApiResponse> VerifiedCoach(string coachPhoneNumber, string? siteUrl);
          Task<ApiResponse> GetAllCoachPayouts();
          Task<ApiResponse> UpdateCoachPayoutStatus(int payoutId, PayoutStatus newStatus, string? transactionReference,
              IFormFile file);
 
-         Task<ApiResponse> GetCoachService(string phoneNumber);
+         Task<ApiResponse> GetCoachService(string coachWebSiteUrl);
          Task<SmsResponse> SendMassageToCoach( string phoneNumber, string message);
          Task<ApiResponse> GetSupportApp();
          Task<ApiResponse> AddSlug(string engName, string slug);
          Task<ApiResponse> AnswerSupportApp(int id);
          Task<ApiResponse> SetCoachWebsiteUrl(string phoneNumber, string webSiteUrl);
+         Task<ApiResponse> GetVerifiedCoaches();
     }
 }
