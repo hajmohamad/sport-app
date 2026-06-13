@@ -641,30 +641,29 @@ public class BuyFromSiteRepository(
 
     private async Task<User> CreateNewAthleteUser(string phoneNumber)
     {
+        var athlete = new Athlete
+        {
+            PhoneNumber = phoneNumber
+        };
+
+        await dbContext.Athletes.AddAsync(athlete);
+        await dbContext.SaveChangesAsync();
+
         var newUser = new User
         {
             UserName = await GenerateUniqueUsername(),
             PhoneNumber = phoneNumber,
             TypeOfUser = TypeOfUser.ATHLETE,
             LastLoginSite = DateTime.Now,
+            AthleteId = athlete.Id  
         };
-        
-
-
-        newUser.Athlete = new Athlete()
-        {
-            User = newUser,
-            PhoneNumber = phoneNumber
-        };
-
-        await tokenService.CreateSiteRefreshToken(newUser);
 
         await dbContext.Users.AddAsync(newUser);
-
         await dbContext.SaveChangesAsync();
 
         return newUser;
     }
+
 
     private async Task<string> GenerateUniqueUsername()
     {
