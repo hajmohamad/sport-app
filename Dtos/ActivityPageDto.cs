@@ -16,4 +16,5 @@ public class ActivityPageDto
     public double? Height { get; set; }
     public double? Bmi { get; set; }
     public List<WeightReportDto> LastMonthWeights { get; set; }= [];
+    public double Progress { get; set; } = 0;
 }
