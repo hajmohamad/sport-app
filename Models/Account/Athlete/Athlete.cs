@@ -21,6 +21,10 @@ public class Athlete
     [Range(1, 300)] public double CurrentWeight { get; set; }
 
     [Range(1, 300)] public double WeightGoal { get; set; }
+    public int TotalActivities { get; set; }
+    public double  TotalCalories { get; set; }
+
+    
 
     public int TimeBeforeWorkout { get; set; } = 10;
     public int RestTime { get; set; } = 30;

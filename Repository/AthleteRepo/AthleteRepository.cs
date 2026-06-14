@@ -638,6 +638,8 @@ namespace sport_app_backend.Repository.AthleteRepo
                     Name = finishTrainingSessionDto.TrainingSessionName,
                     Date = DateTime.Now.Date
                 };
+                athlete.TotalActivities += 1;
+                athlete.TotalCalories += finishTrainingSessionDto.CaloriesLost;
 
                 await context.Activities.AddAsync(activity);
                 await context.SaveChangesAsync();
