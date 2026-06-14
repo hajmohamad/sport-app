@@ -232,6 +232,9 @@ namespace sport_app_backend.Migrations
                     b.Property<int>("TypeOfUser")
                         .HasColumnType("int");
 
+                    b.Property<bool>("UserIsBan")
+                        .HasColumnType("tinyint(1)");
+
                     b.Property<string>("UserName")
                         .HasMaxLength(15)
                         .HasColumnType("varchar(15)");
