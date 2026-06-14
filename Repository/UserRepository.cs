@@ -332,7 +332,7 @@ private async Task<string> GenerateUniqueUsername()
     {
         var user = await dbContext.Users
             .AsNoTracking()
-            .Where(u => u.RefreshToken == refreshToken)
+            .Where(u => u.RefreshToken == refreshToken&&!u.UserIsBan)
             .Select(u => new TokenUserDto
             {
                 Id = u.Id,
