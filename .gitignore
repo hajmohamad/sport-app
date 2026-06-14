@@ -8,3 +8,5 @@ bin/
 **/obj
 appsettings.Development.json
 /.idea
+/.idea/
+.env

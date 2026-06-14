@@ -56,7 +56,7 @@ public class UserRepository(
                 user.TypeOfUser = TypeOfUser.COACH;
                 await dbContext.Coaches.AddAsync(user.Coach);
                 await dbContext.SaveChangesAsync();
-                await  AddTemplateProgramForNewCouch(user.Coach,user.Gender);
+                // await  AddTemplateProgramForNewCouch(user.Coach,user.Gender);
                 return new ApiResponse()
                 {
                     Message = "Coach added successfully",
@@ -270,6 +270,22 @@ private async Task<string> GenerateUniqueUsername()
 
     public async Task<ApiResponse> Login(string userPhoneNumber)
     {
+        var userIsBan =  await dbContext.Users.Select(u=>new
+        {
+            u.PhoneNumber,
+            u.UserIsBan
+            
+        }).Where(u=>u.UserIsBan&&u.PhoneNumber == userPhoneNumber).AnyAsync();
+        if (userIsBan)
+        {
+            return new ApiResponse()
+            {
+                Action = false,
+                Message = "user is ban"
+            };
+            
+        }
+        
         var user = await dbContext.CodeVerifies.FirstOrDefaultAsync(x => x.PhoneNumber == userPhoneNumber);
         if (user is null)
         {
@@ -316,7 +332,7 @@ private async Task<string> GenerateUniqueUsername()
     {
         var user = await dbContext.Users
             .AsNoTracking()
-            .Where(u => u.RefreshToken == refreshToken)
+            .Where(u => u.RefreshToken == refreshToken&&!u.UserIsBan)
             .Select(u => new TokenUserDto
             {
                 Id = u.Id,
