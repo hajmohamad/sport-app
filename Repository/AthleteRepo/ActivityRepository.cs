@@ -217,6 +217,14 @@ public class ActivityRepository(
                 {
                     IsAthleteFound = true,
                     a.CurrentWeight,
+                    CompletedSessionCount = a.ActiveWorkoutProgram != null
+                        ? a.ActiveWorkoutProgram.CompletedSessionCount
+                        : 0,
+
+                    TotalSessionCount = a.ActiveWorkoutProgram != null
+                        ? a.ActiveWorkoutProgram.TotalSessionCount
+                        : 0,
+
                     GoalWeight = a.WeightGoal,
                     Name = a.User.FirstName + " " + a.User.LastName,
                     a.Height,
@@ -278,7 +286,13 @@ public class ActivityRepository(
                 if (double.IsFinite(tempBmi))
                     bmi = tempBmi;
             }
+         
+            var progress = activityPageData.TotalSessionCount > 0
+                ? (int)((double)activityPageData.CompletedSessionCount / activityPageData.TotalSessionCount * 100)
+                : 0;
 
+
+         
 
             return new ApiResponse
             {
@@ -294,7 +308,8 @@ public class ActivityRepository(
                     CurrentWeight = activityPageData.CurrentWeight,
                     GoalWeight = activityPageData.GoalWeight,
                     LastMonthWeights = activityPageData.LastMonthWeights,
-                    Bmi = bmi
+                    Bmi = bmi,
+                    Progress = progress
                     // NumberOfCupsDrinked = activityPageData.NumberOfCupsDrinked,
                     // DailyCupOfWater = activityPageData.DailyCupOfWater,
                     // Reminder = activityPageData.Reminder,
