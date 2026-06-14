@@ -77,10 +77,10 @@ namespace sport_app_backend.Controller
         //     return Ok(result);
         // }
 
-        [HttpGet("GetCoachService/{coachWebSiteUrl}")]
-        public async Task<IActionResult> GetCoachService(string coachWebSiteUrl)
+        [HttpGet("GetCoachService/{phoneNumber}")]
+        public async Task<IActionResult> GetCoachService(string phoneNumber)
         {
-            var result = await adminRepository.GetCoachService(coachWebSiteUrl);
+            var result = await adminRepository.GetCoachService(phoneNumber);
             if (!result.Action)
             {
                 return BadRequest(result);
