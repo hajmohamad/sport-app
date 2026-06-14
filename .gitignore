@@ -9,3 +9,4 @@ bin/
 appsettings.Development.json
 /.idea
 /.idea/
+.env
