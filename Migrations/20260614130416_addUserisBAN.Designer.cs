@@ -11,8 +11,8 @@ using sport_app_backend.Data;
 namespace sport_app_backend.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20260614124542_addUserIsBan")]
-    partial class addUserIsBan
+    [Migration("20260614130416_addUserisBAN")]
+    partial class addUserisBAN
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
