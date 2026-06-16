@@ -11,11 +11,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="11e104f8-869d-4d9d-9802-b48455f5eb31" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/dataSources.local.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dtos/ActivityPageDto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Dtos/ActivityPageDto.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Migrations/ApplicationDbContextModelSnapshot.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Migrations/ApplicationDbContextModelSnapshot.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Models/Account/Athlete/Athlete.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/Account/Athlete/Athlete.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Repository/AthleteRepo/ActivityRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Repository/AthleteRepo/ActivityRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BackgroundServices/PaymentAttemptSmsService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/BackgroundServices/PaymentAttemptSmsService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BackgroundServices/ProgramRenewalReminderService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/BackgroundServices/ProgramRenewalReminderService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Controller/AdminController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Controller/AdminController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Mappers/CoachMappers.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Mappers/CoachMappers.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Repository/AthleteRepo/AthleteRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Repository/AthleteRepo/AthleteRepository.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -397,27 +398,6 @@
       <workItem from="1780165605062" duration="302000" />
       <workItem from="1781287465525" duration="4061000" />
     </task>
-    <task id="LOCAL‎−۰۰۰۰۸" summary="add new BaseCategory enum">
-      <option name="closed" value="true" />
-      <created>1764184888508</created>
-      <option name="number" value="LOCAL‎−۰۰۰۰۸" />
-      <option name="presentableId" value="LOCAL‎−۰۰۰۰۸" />
-      <updated>1764184888508</updated>
-    </task>
-    <task id="LOCAL‎−۰۰۰۰۹" summary="add new enum ExerciseGoal">
-      <option name="closed" value="true" />
-      <created>1764407426197</created>
-      <option name="number" value="LOCAL‎−۰۰۰۰۹" />
-      <option name="presentableId" value="LOCAL‎−۰۰۰۰۹" />
-      <updated>1764407426197</updated>
-    </task>
-    <task id="LOCAL‎−۰۰۰۱۰" summary="edit cors">
-      <option name="closed" value="true" />
-      <created>1764408664901</created>
-      <option name="number" value="LOCAL‎−۰۰۰۱۰" />
-      <option name="presentableId" value="LOCAL‎−۰۰۰۱۰" />
-      <updated>1764408664901</updated>
-    </task>
     <task id="LOCAL‎−۰۰۰۱۱" summary="add new question to AthleteQuestion.cs">
       <option name="closed" value="true" />
       <created>1764413055241</created>
@@ -780,7 +760,31 @@
       <option name="project" value="LOCAL" />
       <updated>1781444042065</updated>
     </task>
-    <option name="localTasksCounter" value="57" />
+    <task id="LOCAL-00057" summary="add coachWebSiteUrl for url">
+      <option name="closed" value="true" />
+      <created>1781615111272</created>
+      <option name="number" value="00057" />
+      <option name="presentableId" value="LOCAL-00057" />
+      <option name="project" value="LOCAL" />
+      <updated>1781615111273</updated>
+    </task>
+    <task id="LOCAL-00058">
+      <option name="closed" value="true" />
+      <created>1781615766426</created>
+      <option name="number" value="00058" />
+      <option name="presentableId" value="LOCAL-00058" />
+      <option name="project" value="LOCAL" />
+      <updated>1781615766426</updated>
+    </task>
+    <task id="LOCAL-00059" summary="edit endpoint">
+      <option name="closed" value="true" />
+      <created>1781615934586</created>
+      <option name="number" value="00059" />
+      <option name="presentableId" value="LOCAL-00059" />
+      <option name="project" value="LOCAL" />
+      <updated>1781615934586</updated>
+    </task>
+    <option name="localTasksCounter" value="60" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -809,7 +813,7 @@
                   <entry key="branch">
                     <value>
                       <list>
-                        <option value="master" />
+                        <option value="stagingMain" />
                       </list>
                     </value>
                   </entry>
@@ -823,13 +827,11 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
-    <MESSAGE value="edit app setting" />
     <MESSAGE value="add migrations for ProgramRenewalReminderService" />
     <MESSAGE value="edit log for ProgramRenewalReminderService.cs" />
     <MESSAGE value="edit send time" />
     <MESSAGE value="edit GetAllTrainingSession and add message for buy new program" />
     <MESSAGE value="add WorkoutProgramFeedback" />
-    <MESSAGE value="edit endpoint" />
     <MESSAGE value="fix CoachRepository.cs" />
     <MESSAGE value="fix name" />
     <MESSAGE value="fix merge" />
@@ -848,7 +850,9 @@
     <MESSAGE value="change update" />
     <MESSAGE value="add paymentid To get all training section" />
     <MESSAGE value="remove" />
-    <option name="LAST_COMMIT_MESSAGE" value="remove" />
+    <MESSAGE value="add coachWebSiteUrl for url" />
+    <MESSAGE value="edit endpoint" />
+    <option name="LAST_COMMIT_MESSAGE" value="edit endpoint" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -924,13 +928,13 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Mappers/CoachMappers.cs</url>
-          <line>161</line>
+          <line>165</line>
           <properties documentPath="$PROJECT_DIR$/Mappers/CoachMappers.cs" containingFunctionPresentation="Method 'CalculatePublicDiscountAmount'">
             <startOffsets>
-              <option value="7269" />
+              <option value="7477" />
             </startOffsets>
             <endOffsets>
-              <option value="7270" />
+              <option value="7478" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="23" />

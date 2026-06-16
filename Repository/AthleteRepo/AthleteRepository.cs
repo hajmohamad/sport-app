@@ -190,6 +190,9 @@ namespace sport_app_backend.Repository.AthleteRepo
 
 
                 var shouldGetFeedback = (completionPercentage >= 0.30||passFiveDay) && wp.WorkoutProgramFeedback is null && workoutStatus;
+                var coachUrl = !string.IsNullOrWhiteSpace(wp.WebSiteUrl)
+                    ? $"https://chaarset.ir/coach/{wp.WebSiteUrl}/"
+                    : "https://chaarset.ir";
 
                 return new AllPaymentResponseDto
                 {
@@ -203,8 +206,8 @@ namespace sport_app_backend.Repository.AthleteRepo
                     WorkoutProgramStatus = wp.WorkoutProgramStatus.ToString(),
                     WpKey = wp.WpKey,
                     ShouldGetFeedback = shouldGetFeedback,
-                    CouchUrlSite = wp.WebSiteUrl ?? ""
-                    
+                    CouchUrlSite = coachUrl
+
                 };
             }).ToList();
             
@@ -340,6 +343,7 @@ namespace sport_app_backend.Repository.AthleteRepo
                 case WorkoutProgramStatus.STOPPED:
                 case WorkoutProgramStatus.FINISHED:
                     allTrainingSessions.ForEach(resetTrainingSession);
+                    targetProgram.CompletedSessionCount = 0;
                     break;
 
                 case WorkoutProgramStatus.NOTACTIVE:
@@ -534,6 +538,10 @@ namespace sport_app_backend.Repository.AthleteRepo
         }
     }
 
+    var coachWebsite = !string.IsNullOrEmpty(resultData.CoachWebsite)
+        ? $"https://chaarset.ir/coach/{resultData.CoachWebsite}/"
+        : "https://chaarset.ir";
+
     return new ApiResponse()
     {
         Action = true,
@@ -543,7 +551,7 @@ namespace sport_app_backend.Repository.AthleteRepo
             ToAllTrainingSession = resultData.TrainingSessions,
             resultData.ProgramName,
             RenewalMessage = renewalMessage,
-            resultData.CoachWebsite,
+            coachWebsite,
             shouldGetFeedback,
             resultData.PaymentId
         }
