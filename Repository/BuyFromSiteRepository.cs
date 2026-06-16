@@ -565,6 +565,7 @@ public class BuyFromSiteRepository(
                 pricingResult.Result,
                 CoachServieName = coachService.Title,
                 CoachName = coachService.Coach.User.FirstName + " " + coachService.Coach.User.LastName,
+                coachSlug= coachService.Coach.WebSiteUrl
             }
         };
     }
@@ -718,7 +719,8 @@ public class BuyFromSiteRepository(
                     Message = "پرداخت ناموفق",
                     Result = new
                     {
-                        CoachPhoneNumber = payment.Coach.PhoneNumber
+                        CoachPhoneNumber = payment.Coach.PhoneNumber,
+                        coachSlug= payment.Coach.WebSiteUrl
                     }
                 };
             case PaymentStatus.SUCCESS:
@@ -730,7 +732,9 @@ public class BuyFromSiteRepository(
                     {
                         WpKey = tokenService.HashEncode(payment.WorkoutProgram!.Id),
                         payment.RefId,
-                        CoachPhoneNumber = payment.Coach.PhoneNumber
+                        CoachPhoneNumber = payment.Coach.PhoneNumber,
+                        coachSlug= payment.Coach.WebSiteUrl
+
                     }
                 };
 
@@ -768,7 +772,8 @@ public class BuyFromSiteRepository(
                         {
                             WpKey = wpKey,
                             RefId = result.Data.Ref_id,
-                            CoachPhoneNumber = payment.Coach.PhoneNumber
+                            CoachPhoneNumber = payment.Coach.PhoneNumber,
+                            coachSlug= payment.Coach.WebSiteUrl
                         }
                     };
                 }
@@ -782,7 +787,8 @@ public class BuyFromSiteRepository(
                         {
                             WpKey = tokenService.HashEncode(payment.WorkoutProgram!.Id),
                             payment.RefId,
-                            CoachPhoneNumber = payment.Coach.PhoneNumber
+                            CoachPhoneNumber = payment.Coach.PhoneNumber,
+                            coachSlug= payment.Coach.WebSiteUrl
                         }
                     };
             }
@@ -849,6 +855,7 @@ public class BuyFromSiteRepository(
                 wr.Title,
                 CoachFirstname = wr.Coach.User.FirstName,
                 CoachLastname = wr.Coach.User.LastName,
+                wr.Coach.WebSiteUrl,
                 CoachSocialMedia = new
                 {
                     wr.Coach.InstagramLink,
@@ -909,7 +916,8 @@ public class BuyFromSiteRepository(
                     code = 201,
                     wPkey,
                     athority = programData.Authority,
-                    programData.CoachPhoneNumber
+                    programData.CoachPhoneNumber,
+                      coachSlug= programData.WebSiteUrl
                 }
             },
             WorkoutProgramStatus.NOTSTARTED => new ApiResponse()
@@ -919,7 +927,8 @@ public class BuyFromSiteRepository(
                     code = 202,
                     wPkey,
                     workoutProgramInfo,
-                    programData.CoachPhoneNumber
+                    programData.CoachPhoneNumber,
+                    coachSlug= programData.WebSiteUrl
                 }
             },
             WorkoutProgramStatus.WRITING => new ApiResponse()
@@ -929,7 +938,8 @@ public class BuyFromSiteRepository(
                     code = 203,
                     wPkey,
                     workoutProgramInfo,
-                    programData.CoachPhoneNumber
+                    programData.CoachPhoneNumber,
+                    coachSlug= programData.WebSiteUrl
                 }
             },
             _ => new ApiResponse()
@@ -939,7 +949,8 @@ public class BuyFromSiteRepository(
                     code = 204,
                     wPkey,
                     workoutProgramInfo,
-                    programData.CoachPhoneNumber
+                    programData.CoachPhoneNumber,
+                    coachSlug= programData.WebSiteUrl
                 }
             }
         };
