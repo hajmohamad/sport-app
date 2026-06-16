@@ -140,13 +140,11 @@ public class ActivityRepository(
 
         public async Task<ApiResponse> AddActivity(string phoneNumber, AddActivityDto addSportDto)
         {
-            var athleteId = await context.Athletes
-                .AsNoTracking()
+            var athlete = await context.Athletes
                 .Where(x => x.PhoneNumber == phoneNumber)
-                .Select(x => (int?)x.Id)
                 .FirstOrDefaultAsync();
 
-            if (athleteId is null)
+            if (athlete is null)
             {
                 return new ApiResponse() { Message = "User is not an athlete", Action = false };
             }
@@ -158,13 +156,15 @@ public class ActivityRepository(
 
             var sport = new Activity()
             {
-                AthleteId = athleteId.Value,
+                AthleteId = athlete.Id,
                 ActivityCategory = activityCategory,
                 CaloriesLost = addSportDto.CaloriesLost,
                 Distance = addSportDto.Distance,
                 Duration = addSportDto.Duration,
                 Date = Convert.ToDateTime(addSportDto.Date)
             };
+            athlete.TotalActivities += 1;
+            athlete.TotalCalories += addSportDto.CaloriesLost;
 
             await context.Activities.AddAsync(sport);
             await context.SaveChangesAsync();
@@ -211,37 +211,25 @@ public class ActivityRepository(
 
 
             var activityPageData = await context.Athletes
-                .AsNoTracking() //
+                .AsNoTracking() 
                 .Where(a => a.PhoneNumber == phoneNumber)
                 .Select(a => new
                 {
                     IsAthleteFound = true,
-                    CurrentWeight = a.CurrentWeight,
+                    a.CurrentWeight,
+                    CompletedSessionCount = a.ActiveWorkoutProgram != null
+                        ? a.ActiveWorkoutProgram.CompletedSessionCount
+                        : 0,
+
+                    TotalSessionCount = a.ActiveWorkoutProgram != null
+                        ? a.ActiveWorkoutProgram.TotalSessionCount
+                        : 0,
+
                     GoalWeight = a.WeightGoal,
-
-                    DailyCupOfWater = a.WaterInTake != null ? a.WaterInTake.DailyCupOfWater : 0,
-                    Reminder = a.WaterInTake != null ? a.WaterInTake.Reminder : 0,
-
                     Name = a.User.FirstName + " " + a.User.LastName,
-                    Height = a.Height,
-
-                    TotalActivities = a.Activities.Count(),
-
-                    TotalTime = a.Activities.Sum(act => (double?)act.Duration) ?? 0,
-                    TotalCalories = a.Activities.Sum(act => (double?)act.CaloriesLost) ?? 0,
-
-                    TodayActivities = a.Activities
-                        .Where(act => act.Date == today)
-                        .Select(act => new ActivityDto
-                        {
-                            Id = act.Id,
-                            Date = act.Date.ToString("yyyy-MM-dd"),
-                            CaloriesLost = act.CaloriesLost,
-                            Duration = act.Duration,
-                            ActivityCategory = act.ActivityCategory.ToString(),
-                            Name = act.Name ?? ""
-                        }).ToList(),
-
+                    a.Height,
+                    a.TotalActivities,
+                    a.TotalCalories,
                     LastMonthWeights = a.WeightEntries
                         .Where(w => w.CurrentDate >= firstDayOfPersianMonth)
                         .OrderByDescending(w => w.CurrentDate)
@@ -255,11 +243,24 @@ public class ActivityRepository(
                         .Where(act => act.Date >= lastSaturday && act.Date <= today)
                         .Select(act => act.Date)
                         .ToList(),
-
-                    NumberOfCupsDrinked = a.WaterInDays
-                        .Where(w => w.Date == today)
-                        .Select(w => w.NumberOfCupsDrinked)
-                        .FirstOrDefault() // مقدار ۰ به صورت پیش‌فرض برمی‌گرداند
+                    // DailyCupOfWater = a.WaterInTake != null ? a.WaterInTake.DailyCupOfWater : 0,
+                    // Reminder = a.WaterInTake != null ? a.WaterInTake.Reminder : 0,
+                    // TotalTime = a.Activities.Sum(act => (double?)act.Duration) ?? 0,
+                    // TodayActivities = a.Activities
+                    //     .Where(act => act.Date == today)
+                    //     .Select(act => new ActivityDto
+                    //     {
+                    //         Id = act.Id,
+                    //         Date = act.Date.ToString("yyyy-MM-dd"),
+                    //         CaloriesLost = act.CaloriesLost,
+                    //         Duration = act.Duration,
+                    //         ActivityCategory = act.ActivityCategory.ToString(),
+                    //         Name = act.Name ?? ""
+                    //     }).ToList(),
+                    // NumberOfCupsDrinked = a.WaterInDays
+                    //     .Where(w => w.Date == today)
+                    //     .Select(w => w.NumberOfCupsDrinked)
+                    //     .FirstOrDefault() // مقدار ۰ به صورت پیش‌فرض برمی‌گرداند
                 })
                 .FirstOrDefaultAsync();
 
@@ -275,6 +276,23 @@ public class ActivityRepository(
                     return activityPageData.LastWeekActivityDates.Any(d => d.Date == date) ? 1 : 0;
                 })
                 .ToList();
+            double? bmi = null;
+
+            if (activityPageData.Height > 0 && activityPageData.CurrentWeight > 0)
+            {
+                var heightInMeters = activityPageData.Height / 100.0;
+                var tempBmi = activityPageData.CurrentWeight / (heightInMeters * heightInMeters);
+
+                if (double.IsFinite(tempBmi))
+                    bmi = tempBmi;
+            }
+         
+            var progress = activityPageData.TotalSessionCount > 0
+                ? (int)((double)activityPageData.CompletedSessionCount / activityPageData.TotalSessionCount * 100)
+                : 0;
+
+
+         
 
             return new ApiResponse
             {
@@ -285,16 +303,20 @@ public class ActivityRepository(
                     Name = activityPageData.Name,
                     Height = activityPageData.Height,
                     TotalActivities = activityPageData.TotalActivities,
-                    TotalTime = activityPageData.TotalTime,
                     TotalCalories = activityPageData.TotalCalories,
                     LastWeekActivities = lastWeekActivitiesBitmap,
-                    NumberOfCupsDrinked = activityPageData.NumberOfCupsDrinked,
-                    DailyCupOfWater = activityPageData.DailyCupOfWater,
-                    Reminder = activityPageData.Reminder,
-                    TodayActivities = activityPageData.TodayActivities,
                     CurrentWeight = activityPageData.CurrentWeight,
                     GoalWeight = activityPageData.GoalWeight,
                     LastMonthWeights = activityPageData.LastMonthWeights,
+                    Bmi = bmi,
+                    Progress = progress
+                    // NumberOfCupsDrinked = activityPageData.NumberOfCupsDrinked,
+                    // DailyCupOfWater = activityPageData.DailyCupOfWater,
+                    // Reminder = activityPageData.Reminder,
+                    // TodayActivities = activityPageData.TodayActivities,
+                    // TotalTime = activityPageData.TotalTime,
+                    
+                   
                 }
             };
         }

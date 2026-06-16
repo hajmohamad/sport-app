@@ -97,7 +97,7 @@ public class UserRepository(
                         RefreshToken = user.RefreshToken,
                         AccessToken = tokenService.CreateTokenForApp(new TokenUserDto()
                         {
-                            CoachId = user.Athlete.Id,
+                            AthleteId = user.AthleteId,
                             Id =  user.Id,
                             PhoneNumber = user.PhoneNumber,
                             TypeOfUser = TypeOfUser.ATHLETE

@@ -648,23 +648,23 @@ public class BuyFromSiteRepository(
             TypeOfUser = TypeOfUser.ATHLETE,
             LastLoginSite = DateTime.Now,
         };
+        await dbContext.Users.AddAsync(newUser);
+        await dbContext.SaveChangesAsync();
         
-
-
-        newUser.Athlete = new Athlete()
+        var athlete = new Athlete()
         {
             User = newUser,
+            UserId = newUser.Id,
             PhoneNumber = phoneNumber
         };
-
-        await tokenService.CreateSiteRefreshToken(newUser);
-
-        await dbContext.Users.AddAsync(newUser);
-
+        newUser.Athlete = athlete;
+        
+        await dbContext.Athletes.AddAsync(athlete);
         await dbContext.SaveChangesAsync();
 
         return newUser;
     }
+
 
     private async Task<string> GenerateUniqueUsername()
     {
