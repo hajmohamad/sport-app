@@ -34,87 +34,91 @@ public class BuyFromSiteRepository(
         if (user is null) return new ApiResponse() { Message = "Invalid refresh token", Action = false };
         return user.LastLoginSite.AddDays(90) < DateTime.Now ? new ApiResponse() { Message = "Refresh token expired", Action = false } : new ApiResponse() { Message = "Success", Action = true, Result = new { AccessToken = tokenService.CreateTokenForSite(user) } };
     }
-
     public async Task<ApiResponse> CreateWorkoutPdfAsync(string wpId)
-    {
-        var id = tokenService.DecodeHash(wpId);
-        // --- ۱. واکشی داده‌های خام از دیتابیس ---
-        var workoutData = await dbContext.WorkoutPrograms
-            .AsNoTracking()
-            .Where(wp => wp.Id == id)
-            .Select(wp => new // واکشی به یک شیء بی‌نام
-            {
-                wp.Title,
-                wp.StartDate,
-                CoachFirstName = wp.Coach.User.FirstName,
-                CoachLastName = wp.Coach.User.LastName,
-                AthleteFirstName = wp.Athlete.User.FirstName,
-                AthleteLastName = wp.Athlete.User.LastName,
-                AthleteCurrentBodyForm = wp.Payment.AthleteQuestion.CurrentBodyForm,
-                wp.ProgramLevel,
-                wp.ProgramDuration,
-                wp.ProgramPriorities, // <-- واکشی لیست خام Enum ها
-                AthleteCurrentWeight = wp.Payment.AthleteQuestion.Weight,
-                AthleteHeight = wp.Athlete.Height,
-                AhtleteGender = wp.Athlete.User.Gender,
-                ProgramInDays = wp.ProgramInDays.Select(pd => new
-                {
-                    pd.ForWhichDay,
-                    Exercises = pd.AllExerciseInDays.Select(se => new
-                    {
-                        se.Exercise.Id,
-                        se.Exercise.PersianName,
-                        se.RepType,
-                        se.Description,
-                        se.RepsJson,
-                        se.Exercise.Slug
-                    }).ToList()
-                }).ToList()
-            })
-            .FirstOrDefaultAsync();
-
-        if (workoutData == null) return null;
-
-
-        var heightInMeters = workoutData.AthleteHeight / 100.0;
-
-        var bmi = workoutData.AthleteCurrentWeight / (heightInMeters * heightInMeters);
-        var pc = new PersianCalendar();
-
-
-        var pdfModel = new WorkoutPdfModel
+{
+    var id = tokenService.DecodeHash(wpId);
+    
+    var workoutData = await dbContext.WorkoutPrograms
+        .AsNoTracking()
+        .Where(wp => wp.Id == id)
+        .Select(wp => new 
         {
-            ProgramTitle = workoutData.Title,
-            StartDate = workoutData.StartDate?.ToShamsiDateString()!,
-            CoachName = $"{workoutData.CoachFirstName} {workoutData.CoachLastName}",
-            ProgramLevel = workoutData.ProgramLevel.ToPersianString(),
-            ProgramDuration = workoutData.ProgramDuration.ToString(),
-            ProgramPriorities = string.Join(" - ", workoutData.ProgramPriorities.Select(p => p.ToPersianString())),
-            AthleteWeight = workoutData.AthleteCurrentWeight.ToString(),
-            AthleteHeight = workoutData.AthleteHeight.ToString(),
-            AthleteBmi = Math.Round(bmi, 2).ToString(),
-            AthleteName=$"{workoutData.AthleteFirstName} {workoutData.AthleteLastName}",
-            AthleteFatPercent = workoutData.AhtleteGender.GetFatPercentRange(workoutData.AthleteCurrentBodyForm),
-            WorkoutDays = workoutData.ProgramInDays.Select(pd => new WorkoutDayModel
+            wp.Title,
+            wp.StartDate,
+            CoachFirstName = wp.Coach.User.FirstName,
+            CoachLastName = wp.Coach.User.LastName,
+            AthleteFirstName = wp.Athlete.User.FirstName,
+            AthleteLastName = wp.Athlete.User.LastName,
+            AthleteCurrentBodyForm = wp.Payment.AthleteQuestion.CurrentBodyForm,
+            wp.ProgramLevel,
+            wp.ProgramDuration,
+            wp.ProgramPriorities,
+            AthleteCurrentWeight = (double?)wp.Payment.AthleteQuestion.Weight ?? 0.0,
+            AthleteHeight = (double?)wp.Athlete.Height ?? 0.0,
+            AhtleteGender = wp.Athlete.User.Gender,
+            coachSlug = wp.Coach.WebSiteUrl ?? "",
+            ProgramInDays = wp.ProgramInDays.Select(pd => new
             {
-                DayNumber = pd.ForWhichDay,
-                Exercises = pd.Exercises.Select(se => new ExerciseModel
+                pd.ForWhichDay,
+                Exercises = pd.AllExerciseInDays.Select(se => new
                 {
-                    Name = se.PersianName,
-                    Reps = se.RepsJson.ToReps(),
-                    Description = se.Description,
-                    RepType = se.RepType.ToString(),
-                    slug = se.Slug
+                    se.Exercise.Id,
+                    se.Exercise.PersianName,
+                    se.RepType,
+                    se.Description,
+                    se.RepsJson,
+                    se.Exercise.Slug
                 }).ToList()
             }).ToList()
-        };
-        return new ApiResponse()
+        })
+        .FirstOrDefaultAsync();
+
+    if (workoutData == null) return null;
+
+    var heightInMeters = workoutData.AthleteHeight > 0 ? workoutData.AthleteHeight / 100.0 : 1.75;
+    var bmi = heightInMeters > 0 ? (workoutData.AthleteCurrentWeight / (heightInMeters * heightInMeters)) : 0;
+
+    var pdfModel = new WorkoutPdfModel
+    {
+        ProgramTitle = workoutData.Title ?? "برنامه ورزشی",
+        StartDate = workoutData.StartDate?.ToShamsiDateString() ?? "ثبت نشده",
+        CoachName = $"{workoutData.CoachFirstName} {workoutData.CoachLastName}".Trim(),
+        ProgramLevel = workoutData.ProgramLevel.ToPersianString(),
+        ProgramDuration = workoutData.ProgramDuration.ToString(),
+        ProgramPriorities = workoutData.ProgramPriorities != null 
+            ? string.Join(" - ", workoutData.ProgramPriorities.Select(p => p.ToPersianString())) 
+            : "",
+        AthleteWeight = workoutData.AthleteCurrentWeight > 0 ? workoutData.AthleteCurrentWeight.ToString() : "ثبت نشده",
+        AthleteHeight = workoutData.AthleteHeight > 0 ? workoutData.AthleteHeight.ToString() : "ثبت نشده",
+        AthleteBmi = bmi > 0 ? Math.Round(bmi, 2).ToString() : "نامشخص",
+        CoachSlug = workoutData.coachSlug,
+        AthleteName = $"{workoutData.AthleteFirstName} {workoutData.AthleteLastName}".Trim(),
+        AthleteFatPercent = workoutData.AthleteCurrentBodyForm != null 
+            ? workoutData.AhtleteGender.GetFatPercentRange(workoutData.AthleteCurrentBodyForm) 
+            : "نامشخص",
+        WorkoutDays = workoutData.ProgramInDays.Select(pd => new WorkoutDayModel
         {
-            Action = true,
-            Message = "get program",
-            Result = pdfModel
-        };
-    }
+            DayNumber = pd.ForWhichDay,
+            Exercises = pd.Exercises.Select(se => new ExerciseModel
+            {
+                Name = se.PersianName,
+                Reps = se.RepsJson.ToReps(),
+                Description = se.Description ?? "",
+                RepType = se.RepType.ToString(),
+                slug = se.Slug
+            }).ToList()
+        }).ToList()
+    };
+
+    return new ApiResponse()
+    {
+        Action = true,
+        Message = "get program",
+        Result = pdfModel
+    };
+}
+
+
     public async Task<ApiResponse> UploadImageForAthleteQuestion(string wpKey, int id, string sideName, IFormFile file)
     {
         var workoutProgramId = tokenService.DecodeHash(wpKey);
