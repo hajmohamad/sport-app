@@ -1,7 +1,9 @@
 ﻿using System.Globalization;
+using System.Text.RegularExpressions;
 using Microsoft.EntityFrameworkCore;
 using sport_app_backend.Data;
 using sport_app_backend.Dtos;
+using sport_app_backend.Dtos.Coach;
 using sport_app_backend.Dtos.ProgramDto;
 using sport_app_backend.Interface;
 using sport_app_backend.Interface.Coach;
@@ -18,10 +20,133 @@ namespace sport_app_backend.Repository.CoachRepo
     public class CoachRepository(
         ApplicationDbContext context,
         ISmsService smsService,
-        IStorage Storage,
+        IStorage storage,
         ITokenService token,
         ICalculator calculator) : ICoachRepository
     {
+        #region websiteurl
+        public async Task<ApiResponse> GetWebSiteUrlStatusAsync(int coachId)
+    {
+        var coach = await context.Coaches
+            .AsNoTracking()
+            .Where(c => c.Id == coachId)
+            .Select(c => new { c.WebSiteUrl, c.WebSiteUrlUpDateTime })
+            .FirstOrDefaultAsync();
+
+        if (coach == null)
+        {
+            return new ApiResponse
+            {
+                Action = false,
+                Message = "مربی یافت نشد."
+            };
+        }
+
+        var status = new CoachWebSiteUrlStatusDto
+        {
+            WebSiteUrl = coach.WebSiteUrl
+        };
+
+        var timePassed = DateTime.UtcNow - coach.WebSiteUrlUpDateTime;
+        var daysPassed = timePassed.Days;
+
+        if (string.IsNullOrEmpty(coach.WebSiteUrl))
+        {
+            status.CanChange = true;
+            status.DaysRemaining = 0;
+            status.Message = "شما می‌توانید آدرس خود را ثبت کنید.";
+        }
+        else if (daysPassed >= 14)
+        {
+            status.CanChange = true;
+            status.DaysRemaining = 0;
+            status.Message = "امکان تغییر آدرس برای شما فعال است.";
+        }
+        else
+        {
+            status.CanChange = false;
+            status.DaysRemaining = 14 - daysPassed;
+            status.Message = $"شما {status.DaysRemaining} روز دیگر می‌توانید آدرس خود را تغییر دهید.";
+        }
+
+        return new ApiResponse
+        {
+            Action = true,
+            Message = "اضافه شد",
+            Result = status
+        };
+    }
+
+        public async Task<ApiResponse> UpdateWebSiteUrlAsync(int coachId, string newUrl)
+    {
+        newUrl = newUrl.Trim().ToLower();
+
+        if (newUrl.Length < 3 || newUrl.Length > 20)
+        {
+            return new ApiResponse 
+            { 
+                Action = false, 
+                Message = "آدرس وب‌سایت باید بین ۳ تا ۲۰ کاراکتر باشد." 
+            };
+        }
+
+        var regex = new Regex("^[a-zA-Z0-9-]+$");
+        if (!regex.IsMatch(newUrl))
+        {
+            return new ApiResponse 
+            { 
+                Action = false, 
+                Message = "فقط حروف انگلیسی، اعداد و خط تیره مجاز هستند." 
+            };
+        }
+
+        var isDuplicate = await context.Coaches
+            .AnyAsync(c => c.WebSiteUrl == newUrl && c.Id != coachId);
+
+        if (isDuplicate)
+        {
+            return new ApiResponse 
+            { 
+                Action = false, 
+                Message = "این آدرس قبلاً توسط مربی دیگری ثبت شده است. لطفاً نام دیگری انتخاب کنید." 
+            };
+        }
+
+        var coach = await context.Coaches
+            .FirstOrDefaultAsync(c => c.Id == coachId);
+
+        if (coach == null)
+        {
+            return new ApiResponse { Action = false, Message = "مربی یافت نشد." };
+        }
+
+        if (!string.IsNullOrEmpty(coach.WebSiteUrl))
+        {
+            var timePassed = DateTime.UtcNow - coach.WebSiteUrlUpDateTime;
+            if (timePassed.Days < 14)
+            {
+                var daysRemaining = 14 - timePassed.Days;
+                return new ApiResponse 
+                { 
+                    Action = false, 
+                    Message = $"شما {daysRemaining} روز دیگر می‌توانید آدرس خود را تغییر دهید." 
+                };
+            }
+        }
+
+        coach.WebSiteUrl = newUrl;
+        coach.WebSiteUrlUpDateTime = DateTime.UtcNow;
+
+        context.Coaches.Update(coach);
+        await context.SaveChangesAsync();
+
+        return new ApiResponse 
+        { 
+            Action = true, 
+            Message = "آدرس وب‌سایت شما با موفقیت ثبت و تغییر یافت." 
+        };
+    }
+         #endregion
         #region changePhoto
         public async Task<ApiResponse> GetAllChangePhotos(int coachId)
     {
@@ -66,7 +191,7 @@ namespace sport_app_backend.Repository.CoachRepo
 
         
 
-        var upload = await Storage.UploadImage(file, "","change-photos"); 
+        var upload = await storage.UploadImage(file, "","change-photos"); 
         // upload.Url
         if (!upload.Action)
         {
@@ -111,7 +236,7 @@ namespace sport_app_backend.Repository.CoachRepo
         if (file != null && file.Length > 0)
         {
             
-            var upload = await Storage.UploadImage(file,entity.PhotoUrl, "change-photos");
+            var upload = await storage.UploadImage(file,entity.PhotoUrl, "change-photos");
             if (!upload.Action)
             {
                 return new ApiResponse()
@@ -141,7 +266,7 @@ namespace sport_app_backend.Repository.CoachRepo
             .FirstOrDefaultAsync(x => x.CoachId == coachId && x.Id == id);
 
         if (entity is null) return new ApiResponse { Message = "Change photo not found", Action = false };
-        await Storage.RemovePhoto(entity.PhotoUrl);
+        await storage.RemovePhoto(entity.PhotoUrl);
 
         context.AthleteChangePhotos.Remove(entity);
         await context.SaveChangesAsync();
@@ -973,15 +1098,15 @@ namespace sport_app_backend.Repository.CoachRepo
                         .FirstOrDefaultAsync();
                     if (athleteImg?.SideLink != null)
                     {
-                            await Storage.RemovePhoto(athleteImg.SideLink);
+                            await storage.RemovePhoto(athleteImg.SideLink);
                     }
                     if (athleteImg?.BackLink != null)
                     {
-                        await Storage.RemovePhoto(athleteImg.BackLink);
+                        await storage.RemovePhoto(athleteImg.BackLink);
                     }
                     if (athleteImg?.FrontLink != null)
                     {
-                        await Storage.RemovePhoto(athleteImg.FrontLink);
+                        await storage.RemovePhoto(athleteImg.FrontLink);
                     }
 
                     if (athleteImg is not null)

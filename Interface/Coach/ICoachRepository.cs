@@ -1,4 +1,5 @@
 ﻿using sport_app_backend.Dtos;
+using sport_app_backend.Dtos.Coach;
 using sport_app_backend.Dtos.ProgramDto;
 using sport_app_backend.Models;
 
@@ -56,5 +57,7 @@ namespace sport_app_backend.Interface.Coach
         Task<ApiResponse> AddChangePhoto(int coachId, IFormFile file, AddAthleteChangePhotoDto dto);
         Task<ApiResponse> EditChangePhoto(int coachId, IFormFile? file, EditAthleteChangePhotoDto dto);
         Task<ApiResponse> DeleteChangePhoto(int coachId, int id);
+        Task<ApiResponse> GetWebSiteUrlStatusAsync(int coachId);
+        Task<ApiResponse> UpdateWebSiteUrlAsync(int coachId, string newUrl);
     }
 }
