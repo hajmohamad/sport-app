@@ -59,5 +59,7 @@ namespace sport_app_backend.Interface.Coach
         Task<ApiResponse> DeleteChangePhoto(int coachId, int id);
         Task<ApiResponse> GetWebSiteUrlStatusAsync(int coachId);
         Task<ApiResponse> UpdateWebSiteUrlAsync(int coachId, string newUrl);
+        Task<ApiResponse> CheckWebSiteUrlAvailabilityAsync(int coachId, string url);
+
     }
 }

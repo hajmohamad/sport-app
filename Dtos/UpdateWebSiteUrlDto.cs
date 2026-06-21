@@ -12,4 +12,9 @@ namespace sport_app_backend.Dtos.Coach
         public int DaysRemaining { get; set; }
         public string? Message { get; set; }
     }
+    public class WebSiteUrlCheckResultDto
+    {
+        public bool IsAvailable { get; set; }
+        public string Message { get; set; } = string.Empty;
+    }
 }

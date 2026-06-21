@@ -25,127 +25,197 @@ namespace sport_app_backend.Repository.CoachRepo
         ICalculator calculator) : ICoachRepository
     {
         #region websiteurl
-        public async Task<ApiResponse> GetWebSiteUrlStatusAsync(int coachId)
-    {
-        var coach = await context.Coaches
-            .AsNoTracking()
-            .Where(c => c.Id == coachId)
-            .Select(c => new { c.WebSiteUrl, c.WebSiteUrlUpDateTime })
-            .FirstOrDefaultAsync();
-
-        if (coach == null)
+        public async Task<ApiResponse> CheckWebSiteUrlAvailabilityAsync(int coachId, string url)
         {
+            var checkResult = new WebSiteUrlCheckResultDto();
+
+            if (string.IsNullOrWhiteSpace(url))
+            {
+                checkResult.IsAvailable = false;
+                checkResult.Message = "آدرس وب‌سایت نمی‌تواند خالی باشد.";
+                return new ApiResponse
+                {
+                    Action = false,
+                    Result = checkResult,
+                    Message = checkResult.Message
+                };
+            }
+
+            var sanitizedUrl = url.Trim().ToLower();
+
+            if (sanitizedUrl.Length < 3 || sanitizedUrl.Length > 20)
+            {
+                checkResult.IsAvailable = false;
+                checkResult.Message = "آدرس وب‌سایت باید بین ۳ تا ۲۰ کاراکتر باشد.";
+                return new ApiResponse
+                {
+                    Action = false,
+                    Result = checkResult,
+                    Message = checkResult.Message
+                };
+            }
+
+            if (!Regex.IsMatch(sanitizedUrl, "^[a-zA-Z0-9-]+$"))
+            {
+                checkResult.IsAvailable = false;
+                checkResult.Message = "فقط حروف انگلیسی، اعداد و خط تیره مجاز هستند.";
+                return new ApiResponse
+                {
+                    Action = false,
+                    Result = checkResult,
+                    Message = checkResult.Message
+                };
+            }
+
+            var isDuplicate = await context.Coaches
+                .AsNoTracking()
+                .AnyAsync(c => c.WebSiteUrl == sanitizedUrl && c.Id != coachId);
+
+            if (isDuplicate)
+            {
+                checkResult.IsAvailable = false;
+                checkResult.Message = "این آدرس قبلاً ثبت شده است.";
+                return new ApiResponse
+                {
+                    Action = false,
+                    Result = checkResult,
+                    Message = checkResult.Message
+                };
+            }
+
+            checkResult.IsAvailable = true;
+            checkResult.Message = "آدرس آزاد و قابل استفاده است.";
+
             return new ApiResponse
             {
-                Action = false,
-                Message = "مربی یافت نشد."
+                Action = true,
+                Result = checkResult,
+                Message = checkResult.Message
             };
         }
 
-        var status = new CoachWebSiteUrlStatusDto
+        
+            public async Task<ApiResponse> GetWebSiteUrlStatusAsync(int coachId)
         {
-            WebSiteUrl = coach.WebSiteUrl
-        };
+            var coach = await context.Coaches
+                .AsNoTracking()
+                .Where(c => c.Id == coachId)
+                .Select(c => new { c.WebSiteUrl, c.WebSiteUrlUpDateTime })
+                .FirstOrDefaultAsync();
 
-        var timePassed = DateTime.UtcNow - coach.WebSiteUrlUpDateTime;
-        var daysPassed = timePassed.Days;
+            if (coach == null)
+            {
+                return new ApiResponse
+                {
+                    Action = false,
+                    Message = "مربی یافت نشد."
+                };
+            }
 
-        if (string.IsNullOrEmpty(coach.WebSiteUrl))
-        {
-            status.CanChange = true;
-            status.DaysRemaining = 0;
-            status.Message = "شما می‌توانید آدرس خود را ثبت کنید.";
-        }
-        else if (daysPassed >= 14)
-        {
-            status.CanChange = true;
-            status.DaysRemaining = 0;
-            status.Message = "امکان تغییر آدرس برای شما فعال است.";
-        }
-        else
-        {
-            status.CanChange = false;
-            status.DaysRemaining = 14 - daysPassed;
-            status.Message = $"شما {status.DaysRemaining} روز دیگر می‌توانید آدرس خود را تغییر دهید.";
-        }
+            var status = new CoachWebSiteUrlStatusDto
+            {
+                WebSiteUrl = coach.WebSiteUrl
+            };
 
-        return new ApiResponse
-        {
-            Action = true,
-            Message = "اضافه شد",
-            Result = status
-        };
-    }
+            var timePassed = DateTime.UtcNow - coach.WebSiteUrlUpDateTime;
+            var daysPassed = timePassed.Days;
+
+            if (string.IsNullOrEmpty(coach.WebSiteUrl))
+            {
+                status.CanChange = true;
+                status.DaysRemaining = 0;
+                status.Message = "شما می‌توانید آدرس خود را ثبت کنید.";
+            }
+            else if (daysPassed >= 14)
+            {
+                status.CanChange = true;
+                status.DaysRemaining = 0;
+                status.Message = "امکان تغییر آدرس برای شما فعال است.";
+            }
+            else
+            {
+                status.CanChange = false;
+                status.DaysRemaining = 14 - daysPassed;
+                status.Message = $"شما {status.DaysRemaining} روز دیگر می‌توانید آدرس خود را تغییر دهید.";
+            }
+
+            return new ApiResponse
+            {
+                Action = true,
+                Message = "اضافه شد",
+                Result = status
+            };
+        }
 
         public async Task<ApiResponse> UpdateWebSiteUrlAsync(int coachId, string newUrl)
-    {
-        newUrl = newUrl.Trim().ToLower();
-
-        if (newUrl.Length < 3 || newUrl.Length > 20)
         {
-            return new ApiResponse 
-            { 
-                Action = false, 
-                Message = "آدرس وب‌سایت باید بین ۳ تا ۲۰ کاراکتر باشد." 
-            };
-        }
+            newUrl = newUrl.Trim().ToLower();
 
-        var regex = new Regex("^[a-zA-Z0-9-]+$");
-        if (!regex.IsMatch(newUrl))
-        {
-            return new ApiResponse 
-            { 
-                Action = false, 
-                Message = "فقط حروف انگلیسی، اعداد و خط تیره مجاز هستند." 
-            };
-        }
-
-        var isDuplicate = await context.Coaches
-            .AnyAsync(c => c.WebSiteUrl == newUrl && c.Id != coachId);
-
-        if (isDuplicate)
-        {
-            return new ApiResponse 
-            { 
-                Action = false, 
-                Message = "این آدرس قبلاً توسط مربی دیگری ثبت شده است. لطفاً نام دیگری انتخاب کنید." 
-            };
-        }
-
-        var coach = await context.Coaches
-            .FirstOrDefaultAsync(c => c.Id == coachId);
-
-        if (coach == null)
-        {
-            return new ApiResponse { Action = false, Message = "مربی یافت نشد." };
-        }
-
-        if (!string.IsNullOrEmpty(coach.WebSiteUrl))
-        {
-            var timePassed = DateTime.UtcNow - coach.WebSiteUrlUpDateTime;
-            if (timePassed.Days < 14)
+            if (newUrl.Length < 3 || newUrl.Length > 20)
             {
-                var daysRemaining = 14 - timePassed.Days;
                 return new ApiResponse 
                 { 
                     Action = false, 
-                    Message = $"شما {daysRemaining} روز دیگر می‌توانید آدرس خود را تغییر دهید." 
+                    Message = "آدرس وب‌سایت باید بین ۳ تا ۲۰ کاراکتر باشد." 
                 };
             }
+
+            var regex = new Regex("^[a-zA-Z0-9-]+$");
+            if (!regex.IsMatch(newUrl))
+            {
+                return new ApiResponse 
+                { 
+                    Action = false, 
+                    Message = "فقط حروف انگلیسی، اعداد و خط تیره مجاز هستند." 
+                };
+            }
+
+            var isDuplicate = await context.Coaches
+                .AnyAsync(c => c.WebSiteUrl == newUrl && c.Id != coachId);
+
+            if (isDuplicate)
+            {
+                return new ApiResponse 
+                { 
+                    Action = false, 
+                    Message = "این آدرس قبلاً توسط مربی دیگری ثبت شده است. لطفاً نام دیگری انتخاب کنید." 
+                };
+            }
+
+            var coach = await context.Coaches
+                .FirstOrDefaultAsync(c => c.Id == coachId);
+
+            if (coach == null)
+            {
+                return new ApiResponse { Action = false, Message = "مربی یافت نشد." };
+            }
+
+            if (!string.IsNullOrEmpty(coach.WebSiteUrl))
+            {
+                var timePassed = DateTime.UtcNow - coach.WebSiteUrlUpDateTime;
+                if (timePassed.Days < 14)
+                {
+                    var daysRemaining = 14 - timePassed.Days;
+                    return new ApiResponse 
+                    { 
+                        Action = false, 
+                        Message = $"شما {daysRemaining} روز دیگر می‌توانید آدرس خود را تغییر دهید." 
+                    };
+                }
+            }
+
+            coach.WebSiteUrl = newUrl;
+            coach.WebSiteUrlUpDateTime = DateTime.UtcNow;
+
+            context.Coaches.Update(coach);
+            await context.SaveChangesAsync();
+
+            return new ApiResponse 
+            { 
+                Action = true, 
+                Message = "آدرس وب‌سایت شما با موفقیت ثبت و تغییر یافت." 
+            };
         }
-
-        coach.WebSiteUrl = newUrl;
-        coach.WebSiteUrlUpDateTime = DateTime.UtcNow;
-
-        context.Coaches.Update(coach);
-        await context.SaveChangesAsync();
-
-        return new ApiResponse 
-        { 
-            Action = true, 
-            Message = "آدرس وب‌سایت شما با موفقیت ثبت و تغییر یافت." 
-        };
-    }
          #endregion
         #region changePhoto
         public async Task<ApiResponse> GetAllChangePhotos(int coachId)

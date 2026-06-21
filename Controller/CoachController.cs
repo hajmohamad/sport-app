@@ -639,6 +639,22 @@ namespace sport_app_backend.Controller
             if (!result.Action) return BadRequest(result);
             return Ok(result);
         }
+        [HttpPut("CheckWebSiteUrl")]
+        [Authorize(Roles = "Coach")]
+        public async Task<IActionResult> CheckWebSiteUrl([FromQuery] string url)
+        {
+            var coachId = await GetCoachIdAsync();
+            if (coachId == 0)
+            {
+                return Unauthorized(new ApiResponse { Action = false, Message = "خطای احراز هویت." });
+            }
+
+            var result = await coachRepository.CheckWebSiteUrlAvailabilityAsync(coachId, url);
+            if (!result.Action) return BadRequest(result);
+
+            return Ok(result);
+        }
+
 
         #endregion
         
