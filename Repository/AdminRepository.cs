@@ -106,17 +106,14 @@ namespace sport_app_backend.Repository
             };
         }
 
-        public async Task<ApiResponse> VerifiedCoach(string coachPhoneNumber, string? siteUrl)
+        public async Task<ApiResponse> VerifiedCoach(string coachPhoneNumber)
         {
             var coach = await context.Coaches.FirstOrDefaultAsync(c => c.PhoneNumber == coachPhoneNumber);
             if (coach is null)
                 return new ApiResponse() { Message = "coach not found", Action = false };
 
             coach.Verified = true;
-            if (siteUrl is not null)
-            {
-                coach.WebSiteUrl = siteUrl;
-            }
+         
             await  context.SaveChangesAsync();
 
             

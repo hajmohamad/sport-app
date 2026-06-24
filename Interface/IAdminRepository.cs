@@ -16,7 +16,7 @@ namespace sport_app_backend.Interface
         Task<ApiResponse> ConfirmTransactionId(string TransactionId);
         Task<ApiResponse> EditTotalSessionCount();
 
-        Task<ApiResponse> VerifiedCoach(string coachPhoneNumber, string? siteUrl);
+        Task<ApiResponse> VerifiedCoach(string coachPhoneNumber);
          Task<ApiResponse> GetAllCoachPayouts();
          Task<ApiResponse> UpdateCoachPayoutStatus(int payoutId, PayoutStatus newStatus, string? transactionReference,
              IFormFile file);
