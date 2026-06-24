@@ -359,7 +359,8 @@ namespace sport_app_backend.Repository
                     c.User.FirstName,
                     c.User.LastName,
                     c.User.ImageProfile,
-                    c.Verified
+                    c.Verified,
+                    coachSlug= c.WebSiteUrl
                 }).Where(c=>c.Verified).ToListAsync();
             if (coaches.Count==0)
             {
