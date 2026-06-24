@@ -190,7 +190,6 @@ public class WaterAndWeightRepository(
                 Action = true
             };
         }
-
         public async Task<ApiResponse> GetLastMonthWeightReport(string phoneNumber)
         {
             var athlete = await context.Athletes
@@ -200,11 +199,8 @@ public class WaterAndWeightRepository(
                 {
                     AthleteId = x.Id,
                     currentWeight = x.CurrentWeight,
-                   x.WeightGoal,
-                   x.Height
-                    
-                    
-                    
+                    x.WeightGoal,
+                    x.Height
                 })
                 .FirstOrDefaultAsync();
 
@@ -216,18 +212,51 @@ public class WaterAndWeightRepository(
             var pc = new PersianCalendar();
             var today = DateTime.Now.Date;
             var firstDayOfPersianMonth = pc.ToDateTime(pc.GetYear(today), pc.GetMonth(today), 1, 0, 0, 0, 0);
-
+            var endDate = today;
 
             var weightEntries = await context.WeightEntries
                 .AsNoTracking()
-                .Where(x => x.AthleteId == athlete.AthleteId && x.CurrentDate >= firstDayOfPersianMonth)
-                .OrderByDescending(x => x.CurrentDate)
-                .Select(x => new WeightReportDto()
+                .Where(x => x.AthleteId == athlete.AthleteId
+                            && x.CurrentDate >= firstDayOfPersianMonth
+                            && x.CurrentDate <= endDate)
+                .OrderBy(x => x.CurrentDate)
+                .Select(x => new
                 {
-                    Date = x.CurrentDate.ToString("yyyy-MM-dd"),
-                    Weight = x.Weight
+                    x.CurrentDate,
+                    x.Weight
                 })
                 .ToListAsync();
+
+            var dailyWeights = new List<WeightReportDto>();
+            double? lastKnownWeight = null;
+
+            for (var date = firstDayOfPersianMonth; date <= endDate; date = date.AddDays(1))
+            {
+                var entry = weightEntries
+                    .LastOrDefault(x => x.CurrentDate.Date <= date.Date);
+
+                if (entry != null)
+                {
+                    lastKnownWeight = entry.Weight;
+                }
+
+                if (lastKnownWeight.HasValue)
+                {
+                    dailyWeights.Add(new WeightReportDto
+                    {
+                        Date = date.ToString("yyyy-MM-dd"),
+                        Weight = lastKnownWeight.Value
+                    });
+                }
+                else
+                {
+                    dailyWeights.Add(new WeightReportDto
+                    {
+                        Date = date.ToString("yyyy-MM-dd"),
+                        Weight = 0
+                    });
+                }
+            }
 
             double? bmi = null;
 
@@ -239,22 +268,22 @@ public class WaterAndWeightRepository(
                 if (double.IsFinite(tempBmi))
                     bmi = tempBmi;
             }
-            
+
             return new ApiResponse()
             {
                 Message = "Weight report fetched successfully",
                 Action = true,
-                Result =new
+                Result = new
                 {
-                    weightEntries,
+                    weightEntries = dailyWeights,
                     athlete.currentWeight,
                     athlete.Height,
                     athlete.WeightGoal,
                     bmi
-                    
                 }
             };
         }
+
 
         public async Task<ApiResponse> GetWeightAndBmi(string phoneNumber)
         {
