@@ -22,6 +22,13 @@ namespace sport_app_backend.Controller
             if (result.Action == false) return BadRequest(result);
             return Ok(result);
         }
+        [HttpPut("ActiveShowWebsiteCoach/{coachPhoneNumber}")]
+        public async Task<IActionResult> ShowWebsite_coach([FromRoute] string coachPhoneNumber)
+        {
+            var result = await adminRepository.ActiveShowWebsiteCoach(coachPhoneNumber);
+            if (result.Action == false) return BadRequest(result);
+            return Ok(result);
+        }
         [HttpPut("EditTotalSessionCount")]
         public async Task<IActionResult> EditTotalSessionCount()
         {

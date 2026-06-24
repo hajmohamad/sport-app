@@ -28,5 +28,6 @@ namespace sport_app_backend.Interface
          Task<ApiResponse> AnswerSupportApp(int id);
          Task<ApiResponse> SetCoachWebsiteUrl(string phoneNumber, string webSiteUrl);
          Task<ApiResponse> GetVerifiedCoaches();
+         Task<ApiResponse> ActiveShowWebsiteCoach(string coachPhoneNumber);
     }
 }

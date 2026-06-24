@@ -389,6 +389,19 @@ namespace sport_app_backend.Repository
             };
 
         }
+
+        public async Task<ApiResponse> ActiveShowWebsiteCoach(string coachPhoneNumber)
+        {
+            var coach = await context.Coaches.FirstOrDefaultAsync(c => c.PhoneNumber == coachPhoneNumber);
+            if (coach is null)
+                return new ApiResponse() { Message = "coach not found", Action = false };
+            coach.ShowWebsite = true;
+            await  context.SaveChangesAsync();
+            return new ApiResponse()
+            {
+                Message = "coach verified successfully",
+                Action = true
+            };        }
     }
     
 }
