@@ -12,11 +12,6 @@
   <component name="ChangeListManager">
     <list default="true" id="11e104f8-869d-4d9d-9802-b48455f5eb31" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dtos/ActivityPageDto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Dtos/ActivityPageDto.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Migrations/ApplicationDbContextModelSnapshot.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Migrations/ApplicationDbContextModelSnapshot.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Models/Account/Athlete/Athlete.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/Account/Athlete/Athlete.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Repository/AthleteRepo/ActivityRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Repository/AthleteRepo/ActivityRepository.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Repository/AthleteRepo/AthleteRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Repository/AthleteRepo/AthleteRepository.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -97,6 +92,7 @@
     <setting file="file://$PROJECT_DIR$/Dtos/PaymentFilterDto.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Dtos/ProgramDto/ExerciseForTrainingSessionDto.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Dtos/ServiceForDiscountDto.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Dtos/UpdateWebSiteUrlDto.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Interface/Athlete/IAchievements.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Interface/Athlete/IActivity.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Interface/Athlete/IBuyProgramFromApplications.cs" root0="FORCE_HIGHLIGHTING" />
@@ -145,39 +141,39 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    ".NET Launch Settings Profile.sport-app-backend: http.executor": "Run",
-    ".NET Launch Settings Profile.sport-app-backend: https.executor": "Run",
-    "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "Docker.Dockerfile.executor": "Run",
-    "HTTP Request.sport-app-backend | #1.executor": "Run",
-    "ModuleVcsDetector.initialDetectionPerformed": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
-    "database.data.extractors.current.export.id": "Comma-separated (CSV)_id",
-    "database.data.extractors.current.id": "Comma-separated (CSV)_id",
-    "full.screen.before.presentation.mode": "true",
-    "git-widget-placeholder": "stagingMain",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "CSharpOtherInlayHintsOptions",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;.NET Launch Settings Profile.sport-app-backend: http.executor&quot;: &quot;Run&quot;,
+    &quot;.NET Launch Settings Profile.sport-app-backend: https.executor&quot;: &quot;Run&quot;,
+    &quot;ASKED_SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;Docker.Dockerfile.executor&quot;: &quot;Run&quot;,
+    &quot;HTTP Request.sport-app-backend | #1.executor&quot;: &quot;Run&quot;,
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.typescript.service.memoryLimit.init&quot;: &quot;true&quot;,
+    &quot;database.data.extractors.current.export.id&quot;: &quot;Comma-separated (CSV)_id&quot;,
+    &quot;database.data.extractors.current.id&quot;: &quot;Comma-separated (CSV)_id&quot;,
+    &quot;full.screen.before.presentation.mode&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;stagingMain&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;CSharpOtherInlayHintsOptions&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   },
-  "keyToStringList": {
-    "ChangesTree.GroupingKeys": [
-      "repository"
+  &quot;keyToStringList&quot;: {
+    &quot;ChangesTree.GroupingKeys&quot;: [
+      &quot;repository&quot;
     ],
-    "DatabaseDriversLRU": [
-      "mysql"
+    &quot;DatabaseDriversLRU&quot;: [
+      &quot;mysql&quot;
     ]
   }
-}]]></component>
+}</component>
   <component name="RunManager" selected=".NET Launch Settings Profile.sport-app-backend: https">
     <configuration name="sport-app-backend | #1" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" temporary="true" nameIsGenerated="true" path="$PROJECT_DIR$/sport-app-backend.http" executionIdentifier="#1" runType="Run single request">
       <method v="2" />
@@ -396,69 +392,9 @@
       <workItem from="1780126610676" duration="4120000" />
       <workItem from="1780165605062" duration="302000" />
       <workItem from="1781287465525" duration="4061000" />
-    </task>
-    <task id="LOCAL‎−۰۰۰۰۸" summary="add new BaseCategory enum">
-      <option name="closed" value="true" />
-      <created>1764184888508</created>
-      <option name="number" value="LOCAL‎−۰۰۰۰۸" />
-      <option name="presentableId" value="LOCAL‎−۰۰۰۰۸" />
-      <updated>1764184888508</updated>
-    </task>
-    <task id="LOCAL‎−۰۰۰۰۹" summary="add new enum ExerciseGoal">
-      <option name="closed" value="true" />
-      <created>1764407426197</created>
-      <option name="number" value="LOCAL‎−۰۰۰۰۹" />
-      <option name="presentableId" value="LOCAL‎−۰۰۰۰۹" />
-      <updated>1764407426197</updated>
-    </task>
-    <task id="LOCAL‎−۰۰۰۱۰" summary="edit cors">
-      <option name="closed" value="true" />
-      <created>1764408664901</created>
-      <option name="number" value="LOCAL‎−۰۰۰۱۰" />
-      <option name="presentableId" value="LOCAL‎−۰۰۰۱۰" />
-      <updated>1764408664901</updated>
-    </task>
-    <task id="LOCAL‎−۰۰۰۱۱" summary="add new question to AthleteQuestion.cs">
-      <option name="closed" value="true" />
-      <created>1764413055241</created>
-      <option name="number" value="LOCAL‎−۰۰۰۱۱" />
-      <option name="presentableId" value="LOCAL‎−۰۰۰۱۱" />
-      <updated>1764413055241</updated>
-    </task>
-    <task id="LOCAL‎−۰۰۰۱۲" summary="migration for new athleteQuestion">
-      <option name="closed" value="true" />
-      <created>1764525010504</created>
-      <option name="number" value="LOCAL‎−۰۰۰۱۲" />
-      <option name="presentableId" value="LOCAL‎−۰۰۰۱۲" />
-      <updated>1764525010504</updated>
-    </task>
-    <task id="LOCAL‎−۰۰۰۱۳" summary="addd new callBackurl for staging">
-      <option name="closed" value="true" />
-      <created>1764613099769</created>
-      <option name="number" value="LOCAL‎−۰۰۰۱۳" />
-      <option name="presentableId" value="LOCAL‎−۰۰۰۱۳" />
-      <updated>1764613099769</updated>
-    </task>
-    <task id="LOCAL‎−۰۰۰۱۴" summary="addd new callBackurl for staging">
-      <option name="closed" value="true" />
-      <created>1764613511169</created>
-      <option name="number" value="LOCAL‎−۰۰۰۱۴" />
-      <option name="presentableId" value="LOCAL‎−۰۰۰۱۴" />
-      <updated>1764613511169</updated>
-    </task>
-    <task id="LOCAL‎−۰۰۰۱۵" summary="change callBakcUrl">
-      <option name="closed" value="true" />
-      <created>1764614195776</created>
-      <option name="number" value="LOCAL‎−۰۰۰۱۵" />
-      <option name="presentableId" value="LOCAL‎−۰۰۰۱۵" />
-      <updated>1764614195776</updated>
-    </task>
-    <task id="LOCAL‎−۰۰۰۱۶" summary="remove Bio and Line">
-      <option name="closed" value="true" />
-      <created>1764674986021</created>
-      <option name="number" value="LOCAL‎−۰۰۰۱۶" />
-      <option name="presentableId" value="LOCAL‎−۰۰۰۱۶" />
-      <updated>1764674986021</updated>
+      <workItem from="1781719193182" duration="7900000" />
+      <workItem from="1781777583490" duration="7680000" />
+      <workItem from="1782051886764" duration="1893000" />
     </task>
     <task id="LOCAL-00017" summary="add firstName And LastName to roleAndGender">
       <option name="closed" value="true" />
@@ -780,7 +716,79 @@
       <option name="project" value="LOCAL" />
       <updated>1781444042065</updated>
     </task>
-    <option name="localTasksCounter" value="57" />
+    <task id="LOCAL-00057" summary="add coachWebSiteUrl for url">
+      <option name="closed" value="true" />
+      <created>1781615111272</created>
+      <option name="number" value="00057" />
+      <option name="presentableId" value="LOCAL-00057" />
+      <option name="project" value="LOCAL" />
+      <updated>1781615111273</updated>
+    </task>
+    <task id="LOCAL-00058">
+      <option name="closed" value="true" />
+      <created>1781615766426</created>
+      <option name="number" value="00058" />
+      <option name="presentableId" value="LOCAL-00058" />
+      <option name="project" value="LOCAL" />
+      <updated>1781615766426</updated>
+    </task>
+    <task id="LOCAL-00059" summary="edit endpoint">
+      <option name="closed" value="true" />
+      <created>1781615934586</created>
+      <option name="number" value="00059" />
+      <option name="presentableId" value="LOCAL-00059" />
+      <option name="project" value="LOCAL" />
+      <updated>1781615934586</updated>
+    </task>
+    <task id="LOCAL-00060" summary="edit website url ind point and edit coach website">
+      <option name="closed" value="true" />
+      <created>1781627489755</created>
+      <option name="number" value="00060" />
+      <option name="presentableId" value="LOCAL-00060" />
+      <option name="project" value="LOCAL" />
+      <updated>1781627489755</updated>
+    </task>
+    <task id="LOCAL-00061" summary="edit ProgramRenewalReminderService.cs">
+      <option name="closed" value="true" />
+      <created>1781627500407</created>
+      <option name="number" value="00061" />
+      <option name="presentableId" value="LOCAL-00061" />
+      <option name="project" value="LOCAL" />
+      <updated>1781627500407</updated>
+    </task>
+    <task id="LOCAL-00062" summary="add coachSlug">
+      <option name="closed" value="true" />
+      <created>1781631691589</created>
+      <option name="number" value="00062" />
+      <option name="presentableId" value="LOCAL-00062" />
+      <option name="project" value="LOCAL" />
+      <updated>1781631691589</updated>
+    </task>
+    <task id="LOCAL-00063" summary="add slug and name to verify payment and get workout program">
+      <option name="closed" value="true" />
+      <created>1781868091058</created>
+      <option name="number" value="00063" />
+      <option name="presentableId" value="LOCAL-00063" />
+      <option name="project" value="LOCAL" />
+      <updated>1781868091058</updated>
+    </task>
+    <task id="LOCAL-00064" summary="edit pdf">
+      <option name="closed" value="true" />
+      <created>1781957344605</created>
+      <option name="number" value="00064" />
+      <option name="presentableId" value="LOCAL-00064" />
+      <option name="project" value="LOCAL" />
+      <updated>1781957344605</updated>
+    </task>
+    <task id="LOCAL-00065" summary="add time to webSite">
+      <option name="closed" value="true" />
+      <created>1782053231632</created>
+      <option name="number" value="00065" />
+      <option name="presentableId" value="LOCAL-00065" />
+      <option name="project" value="LOCAL" />
+      <updated>1782053231632</updated>
+    </task>
+    <option name="localTasksCounter" value="66" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -809,7 +817,7 @@
                   <entry key="branch">
                     <value>
                       <list>
-                        <option value="master" />
+                        <option value="stagingMain" />
                       </list>
                     </value>
                   </entry>
@@ -823,14 +831,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
-    <MESSAGE value="edit app setting" />
-    <MESSAGE value="add migrations for ProgramRenewalReminderService" />
-    <MESSAGE value="edit log for ProgramRenewalReminderService.cs" />
-    <MESSAGE value="edit send time" />
-    <MESSAGE value="edit GetAllTrainingSession and add message for buy new program" />
-    <MESSAGE value="add WorkoutProgramFeedback" />
-    <MESSAGE value="edit endpoint" />
-    <MESSAGE value="fix CoachRepository.cs" />
     <MESSAGE value="fix name" />
     <MESSAGE value="fix merge" />
     <MESSAGE value="edit Dockerfile" />
@@ -848,7 +848,15 @@
     <MESSAGE value="change update" />
     <MESSAGE value="add paymentid To get all training section" />
     <MESSAGE value="remove" />
-    <option name="LAST_COMMIT_MESSAGE" value="remove" />
+    <MESSAGE value="add coachWebSiteUrl for url" />
+    <MESSAGE value="edit endpoint" />
+    <MESSAGE value="edit website url ind point and edit coach website" />
+    <MESSAGE value="edit ProgramRenewalReminderService.cs" />
+    <MESSAGE value="add coachSlug" />
+    <MESSAGE value="add slug and name to verify payment and get workout program" />
+    <MESSAGE value="edit pdf" />
+    <MESSAGE value="add time to webSite" />
+    <option name="LAST_COMMIT_MESSAGE" value="add time to webSite" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -893,7 +901,14 @@
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Controller/AthleteController/AchievementController.cs</url>
           <line>27</line>
-          <properties documentPath="$PROJECT_DIR$/Controller/AchievementController.cs" containingFunctionPresentation="Method 'CompleteNewChallenge'" />
+          <properties documentPath="$PROJECT_DIR$/Controller/AchievementController.cs" containingFunctionPresentation="Method 'CompleteNewChallenge'">
+            <startOffsets>
+              <option value="903" />
+            </startOffsets>
+            <endOffsets>
+              <option value="904" />
+            </endOffsets>
+          </properties>
           <option name="timeStamp" value="10" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
@@ -924,52 +939,52 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Mappers/CoachMappers.cs</url>
-          <line>161</line>
+          <line>165</line>
           <properties documentPath="$PROJECT_DIR$/Mappers/CoachMappers.cs" containingFunctionPresentation="Method 'CalculatePublicDiscountAmount'">
             <startOffsets>
-              <option value="7269" />
+              <option value="7477" />
             </startOffsets>
             <endOffsets>
-              <option value="7270" />
+              <option value="7478" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="23" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Controller/CoachController.cs</url>
-          <line>516</line>
+          <line>517</line>
           <properties documentPath="$PROJECT_DIR$/Controller/CoachController.cs" containingFunctionPresentation="Method 'AddPineExercise'">
             <startOffsets>
-              <option value="21059" />
+              <option value="21095" />
             </startOffsets>
             <endOffsets>
-              <option value="21076" />
+              <option value="21112" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="28" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Repository/CoachRepo/CoachRepository.cs</url>
-          <line>445</line>
+          <line>570</line>
           <properties documentPath="$PROJECT_DIR$/Repository/CoachRepo/CoachRepository.cs" containingFunctionPresentation="Method 'UpdateDiscountCode'">
             <startOffsets>
-              <option value="17063" />
+              <option value="20766" />
             </startOffsets>
             <endOffsets>
-              <option value="17137" />
+              <option value="20840" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="31" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Repository/CoachRepo/CoachRepository.cs</url>
-          <line>446</line>
+          <line>571</line>
           <properties documentPath="$PROJECT_DIR$/Repository/CoachRepo/CoachRepository.cs" containingFunctionPresentation="Method 'UpdateDiscountCode'">
             <startOffsets>
-              <option value="17150" />
+              <option value="20853" />
             </startOffsets>
             <endOffsets>
-              <option value="17151" />
+              <option value="20854" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="32" />

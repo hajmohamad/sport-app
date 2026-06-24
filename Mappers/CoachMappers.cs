@@ -14,6 +14,10 @@ namespace sport_app_backend.Mappers
         {   
              var numberOfProgram = payments.Count(p => p.WorkoutProgram != null);
               var numberOfAthlete = payments.Select(x=>x.AthleteId).Distinct().Count();
+              const string baseUrl = "https://chaarset.ir/coach/";
+              var websiteUrl = !string.IsNullOrEmpty(user.Coach?.WebSiteUrl) 
+                  ? $"{baseUrl}{user.Coach.WebSiteUrl}/" 
+                  : null;
             
             return new CoachProfileResponse
             {
@@ -30,7 +34,7 @@ namespace sport_app_backend.Mappers
                     .ToList(),
                 NumberOfAthlete = numberOfAthlete,
                 NumberOfProgram = numberOfProgram,
-                WebsiteUrl = user.Coach?.WebSiteUrl ?? null
+                WebsiteUrl =websiteUrl
             };
 
 

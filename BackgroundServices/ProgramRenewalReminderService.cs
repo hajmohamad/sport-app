@@ -66,8 +66,10 @@ public class ProgramRenewalReminderService(
         {
             var athleteName = program.Athlete.User?.FirstName ?? "";
             var phoneNumber = program.Athlete.PhoneNumber;
-            var coachWebsite = program.Coach?.WebSiteUrl ?? "chaarset.ir";
-
+            var coachWebsite = !string.IsNullOrWhiteSpace(program.Coach?.WebSiteUrl)
+                ? $"https://chaarset.ir/coach/{program.Coach.WebSiteUrl}/"
+                : "https://chaarset.ir";
+            
             var programEndDate = program.StartDate!.Value.AddDays(program.ProgramDuration * 7);
             var daysSinceEnd = (programEndDate - program.StartDate.Value).Days;
 

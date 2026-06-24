@@ -41,21 +41,19 @@ public class PaymentAttemptSmsService(
             }
         }
     }
-
-    private async Task SendSmsPaymentAttempt(CancellationToken stoppingToken)
+      private async Task SendSmsPaymentAttempt(CancellationToken stoppingToken)
     {
         using var scope = scopeFactory.CreateScope();
         var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-        var push = scope.ServiceProvider.GetRequiredService<IWebPushNotificationService>();
         var sms = scope.ServiceProvider.GetRequiredService<ISmsService>();
 
-        var now = DateTime.Now;
-        var targetDate = now.Date.AddHours(20);
+        // استفاده از تاریخ امروز
+        var today = DateTime.Today;
+
         var paymentAttempts = await db.PaymentAttempts
-            .Where(pa => pa.DateTime < targetDate && !pa.SmsIsSend &&
-                         !pa.Athlete.Payments.Any(p =>
-                             p.PaymentDate.Date == now.Date &&
-                             p.PaymentStatus != PaymentStatus.SUCCESS))
+            .Where(pa => !pa.SmsIsSend && 
+                         pa.DateTime < DateTime.Now.AddHours(-1) && // فقط موارد قدیمی‌تر از 1 ساعت
+                         !pa.Athlete.Payments.Any(p => p.PaymentDate.Date == today && p.PaymentStatus == PaymentStatus.SUCCESS))
             .Include(pa => pa.CoachService)
             .Include(pa => pa.Coach).ThenInclude(c => c.User)
             .Include(pa => pa.Athlete)
@@ -63,24 +61,31 @@ public class PaymentAttemptSmsService(
 
         foreach (var paymentAttempt in paymentAttempts)
         {
-            var message =
-                $"فقط یک قدم باقی مونده!\n" +
-                $"{paymentAttempt.CoachService.Title} رو همین الان از {paymentAttempt.Coach.User.FirstName+" "+paymentAttempt.Coach.User.LastName} دریافت کن تا به هدفت برسی:\n" +
-                $"{paymentAttempt.Coach.WebSiteUrl}";
+            try
+            {
+                var phone = paymentAttempt.Athlete?.PhoneNumber;
+                if (string.IsNullOrWhiteSpace(phone)) continue;
 
-            await sms.SendSms(paymentAttempt.Athlete.PhoneNumber, message);
+                var coachName = $"{paymentAttempt.Coach?.User?.FirstName} {paymentAttempt.Coach?.User?.LastName}".Trim();
+                var websiteUrl = $"https://chaarset.ir/coach/{paymentAttempt.Coach?.WebSiteUrl}/";
 
-            paymentAttempt.SmsIsSend = true;
-        
+                var message = $"فقط یک قدم باقی مونده!\n" +
+                              $"{paymentAttempt.CoachService?.Title} رو همین الان از {coachName} دریافت کن تا به هدفت برسی:\n" +
+                              $"{websiteUrl}";
 
+                await sms.SendSms(phone, message);
 
-            logger.LogInformation(
-                "Payment attempt SMS sent to {Phone} for PaymentAttempt {PaymentAttemptId}",
-                paymentAttempt.Athlete.PhoneNumber,
-                paymentAttempt.Id);
-
+                paymentAttempt.SmsIsSend = true;
+                
+                logger.LogInformation("SMS sent to {Phone} for Attempt {Id}", phone, paymentAttempt.Id);
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, "Failed to send SMS for PaymentAttempt {Id}", paymentAttempt.Id);
+            }
         }
 
         await db.SaveChangesAsync(stoppingToken);
     }
+
 }

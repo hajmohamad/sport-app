@@ -34,87 +34,91 @@ public class BuyFromSiteRepository(
         if (user is null) return new ApiResponse() { Message = "Invalid refresh token", Action = false };
         return user.LastLoginSite.AddDays(90) < DateTime.Now ? new ApiResponse() { Message = "Refresh token expired", Action = false } : new ApiResponse() { Message = "Success", Action = true, Result = new { AccessToken = tokenService.CreateTokenForSite(user) } };
     }
-
     public async Task<ApiResponse> CreateWorkoutPdfAsync(string wpId)
-    {
-        var id = tokenService.DecodeHash(wpId);
-        // --- ۱. واکشی داده‌های خام از دیتابیس ---
-        var workoutData = await dbContext.WorkoutPrograms
-            .AsNoTracking()
-            .Where(wp => wp.Id == id)
-            .Select(wp => new // واکشی به یک شیء بی‌نام
-            {
-                wp.Title,
-                wp.StartDate,
-                CoachFirstName = wp.Coach.User.FirstName,
-                CoachLastName = wp.Coach.User.LastName,
-                AthleteFirstName = wp.Athlete.User.FirstName,
-                AthleteLastName = wp.Athlete.User.LastName,
-                AthleteCurrentBodyForm = wp.Payment.AthleteQuestion.CurrentBodyForm,
-                wp.ProgramLevel,
-                wp.ProgramDuration,
-                wp.ProgramPriorities, // <-- واکشی لیست خام Enum ها
-                AthleteCurrentWeight = wp.Payment.AthleteQuestion.Weight,
-                AthleteHeight = wp.Athlete.Height,
-                AhtleteGender = wp.Athlete.User.Gender,
-                ProgramInDays = wp.ProgramInDays.Select(pd => new
-                {
-                    pd.ForWhichDay,
-                    Exercises = pd.AllExerciseInDays.Select(se => new
-                    {
-                        se.Exercise.Id,
-                        se.Exercise.PersianName,
-                        se.RepType,
-                        se.Description,
-                        se.RepsJson,
-                        se.Exercise.Slug
-                    }).ToList()
-                }).ToList()
-            })
-            .FirstOrDefaultAsync();
-
-        if (workoutData == null) return null;
-
-
-        var heightInMeters = workoutData.AthleteHeight / 100.0;
-
-        var bmi = workoutData.AthleteCurrentWeight / (heightInMeters * heightInMeters);
-        var pc = new PersianCalendar();
-
-
-        var pdfModel = new WorkoutPdfModel
+{
+    var id = tokenService.DecodeHash(wpId);
+    
+    var workoutData = await dbContext.WorkoutPrograms
+        .AsNoTracking()
+        .Where(wp => wp.Id == id)
+        .Select(wp => new 
         {
-            ProgramTitle = workoutData.Title,
-            StartDate = workoutData.StartDate?.ToShamsiDateString()!,
-            CoachName = $"{workoutData.CoachFirstName} {workoutData.CoachLastName}",
-            ProgramLevel = workoutData.ProgramLevel.ToPersianString(),
-            ProgramDuration = workoutData.ProgramDuration.ToString(),
-            ProgramPriorities = string.Join(" - ", workoutData.ProgramPriorities.Select(p => p.ToPersianString())),
-            AthleteWeight = workoutData.AthleteCurrentWeight.ToString(),
-            AthleteHeight = workoutData.AthleteHeight.ToString(),
-            AthleteBmi = Math.Round(bmi, 2).ToString(),
-            AthleteName=$"{workoutData.AthleteFirstName} {workoutData.AthleteLastName}",
-            AthleteFatPercent = workoutData.AhtleteGender.GetFatPercentRange(workoutData.AthleteCurrentBodyForm),
-            WorkoutDays = workoutData.ProgramInDays.Select(pd => new WorkoutDayModel
+            wp.Title,
+            wp.StartDate,
+            CoachFirstName = wp.Coach.User.FirstName,
+            CoachLastName = wp.Coach.User.LastName,
+            AthleteFirstName = wp.Athlete.User.FirstName,
+            AthleteLastName = wp.Athlete.User.LastName,
+            AthleteCurrentBodyForm = wp.Payment.AthleteQuestion.CurrentBodyForm,
+            wp.ProgramLevel,
+            wp.ProgramDuration,
+            wp.ProgramPriorities,
+            AthleteCurrentWeight = (double?)wp.Payment.AthleteQuestion.Weight ?? 0.0,
+            AthleteHeight = (double?)wp.Athlete.Height ?? 0.0,
+            AhtleteGender = wp.Athlete.User.Gender,
+            coachSlug = wp.Coach.WebSiteUrl ?? "",
+            ProgramInDays = wp.ProgramInDays.Select(pd => new
             {
-                DayNumber = pd.ForWhichDay,
-                Exercises = pd.Exercises.Select(se => new ExerciseModel
+                pd.ForWhichDay,
+                Exercises = pd.AllExerciseInDays.Select(se => new
                 {
-                    Name = se.PersianName,
-                    Reps = se.RepsJson.ToReps(),
-                    Description = se.Description,
-                    RepType = se.RepType.ToString(),
-                    slug = se.Slug
+                    se.Exercise.Id,
+                    se.Exercise.PersianName,
+                    se.RepType,
+                    se.Description,
+                    se.RepsJson,
+                    se.Exercise.Slug
                 }).ToList()
             }).ToList()
-        };
-        return new ApiResponse()
+        })
+        .FirstOrDefaultAsync();
+
+    if (workoutData == null) return null;
+
+    var heightInMeters = workoutData.AthleteHeight > 0 ? workoutData.AthleteHeight / 100.0 : 1.75;
+    var bmi = heightInMeters > 0 ? (workoutData.AthleteCurrentWeight / (heightInMeters * heightInMeters)) : 0;
+
+    var pdfModel = new WorkoutPdfModel
+    {
+        ProgramTitle = workoutData.Title ?? "برنامه ورزشی",
+        StartDate = workoutData.StartDate?.ToShamsiDateString() ?? "ثبت نشده",
+        CoachName = $"{workoutData.CoachFirstName} {workoutData.CoachLastName}".Trim(),
+        ProgramLevel = workoutData.ProgramLevel.ToPersianString(),
+        ProgramDuration = workoutData.ProgramDuration.ToString(),
+        ProgramPriorities = workoutData.ProgramPriorities != null 
+            ? string.Join(" - ", workoutData.ProgramPriorities.Select(p => p.ToPersianString())) 
+            : "",
+        AthleteWeight = workoutData.AthleteCurrentWeight > 0 ? workoutData.AthleteCurrentWeight.ToString() : "ثبت نشده",
+        AthleteHeight = workoutData.AthleteHeight > 0 ? workoutData.AthleteHeight.ToString() : "ثبت نشده",
+        AthleteBmi = bmi > 0 ? Math.Round(bmi, 2).ToString() : "نامشخص",
+        CoachSlug = workoutData.coachSlug,
+        AthleteName = $"{workoutData.AthleteFirstName} {workoutData.AthleteLastName}".Trim(),
+        AthleteFatPercent = workoutData.AthleteCurrentBodyForm != null 
+            ? workoutData.AhtleteGender.GetFatPercentRange(workoutData.AthleteCurrentBodyForm) 
+            : "نامشخص",
+        WorkoutDays = workoutData.ProgramInDays.Select(pd => new WorkoutDayModel
         {
-            Action = true,
-            Message = "get program",
-            Result = pdfModel
-        };
-    }
+            DayNumber = pd.ForWhichDay,
+            Exercises = pd.Exercises.Select(se => new ExerciseModel
+            {
+                Name = se.PersianName,
+                Reps = se.RepsJson.ToReps(),
+                Description = se.Description ?? "",
+                RepType = se.RepType.ToString(),
+                slug = se.Slug
+            }).ToList()
+        }).ToList()
+    };
+
+    return new ApiResponse()
+    {
+        Action = true,
+        Message = "get program",
+        Result = pdfModel
+    };
+}
+
+
     public async Task<ApiResponse> UploadImageForAthleteQuestion(string wpKey, int id, string sideName, IFormFile file)
     {
         var workoutProgramId = tokenService.DecodeHash(wpKey);
@@ -565,6 +569,7 @@ public class BuyFromSiteRepository(
                 pricingResult.Result,
                 CoachServieName = coachService.Title,
                 CoachName = coachService.Coach.User.FirstName + " " + coachService.Coach.User.LastName,
+                coachSlug= coachService.Coach.WebSiteUrl
             }
         };
     }
@@ -676,143 +681,161 @@ public class BuyFromSiteRepository(
 
         return username;
     }
-
     public async Task<ApiResponse> VerifyPaymentAsync(ZarinPalVerifyRequestDto request, string status)
-    {
-        var payment = await dbContext.Payments
-            .Include(p => p.CoachService)
-            .Include(p => p.Athlete).ThenInclude(athlete => athlete.User)
-            .Include(p => p.WorkoutProgram).Include(payment => payment.Coach).ThenInclude(coach => coach.User)
-            .FirstOrDefaultAsync(x => x.Authority == request.Authority);
+{
+    var payment = await dbContext.Payments
+        .Include(p => p.CoachService)
+        .Include(p => p.Athlete).ThenInclude(a => a.User)
+        .Include(p => p.WorkoutProgram)
+        .Include(p => p.Coach).ThenInclude(c => c.User)
+        .FirstOrDefaultAsync(x => x.Authority == request.Authority);
 
-        if (payment == null)
+    if (payment == null)
+    {
+        return new ApiResponse
         {
+            Action = false,
+            Message = "تراکنشی یافت نشد",
+            Result = new { coachSlug = "", coachName = "" }
+        };
+    }
+
+    var coachPhone = payment.Coach?.PhoneNumber;
+    var coachSlug = payment.Coach?.WebSiteUrl;
+    var coachName = $"{payment.Coach?.User?.FirstName} {payment.Coach?.User?.LastName}";
+
+    if (!string.Equals(status, "ok", StringComparison.OrdinalIgnoreCase))
+    {
+        payment.PaymentStatus = PaymentStatus.FAILED;
+        await dbContext.SaveChangesAsync();
+
+        return new ApiResponse
+        {
+            Action = false,
+            Message = "پرداخت توسط کاربر لغو شد.",
+            Result = new
+            {
+                CoachPhoneNumber = coachPhone,
+                coachSlug,
+                coachName
+            }
+        };
+    }
+
+    if (payment.PaymentStatus == PaymentStatus.FAILED)
+    {
+        return new ApiResponse
+        {
+            Action = false,
+            Message = "پرداخت ناموفق",
+            Result = new
+            {
+                CoachPhoneNumber = coachPhone,
+                coachSlug,
+                coachName
+            }
+        };
+    }
+
+    if (payment.PaymentStatus == PaymentStatus.SUCCESS)
+    {
+        return new ApiResponse
+        {
+            Action = true,
+            Message = "پرداخت قبلاً تایید شده است",
+            Result = new
+            {
+                WpKey = tokenService.HashEncode(payment.WorkoutProgram!.Id),
+                payment.RefId,
+                CoachPhoneNumber = coachPhone,
+                coachSlug,
+                coachName
+            }
+        };
+    }
+
+    request.Amount = payment.Amount;
+
+    try
+    {
+        var result = await zarinPal.VerifyPaymentAsync(request);
+
+        if (result?.Data?.Code == 100)
+        {
+            var confirmResult = await ConfirmTransactionId(payment, result.Data.Ref_id);
+            if (!confirmResult.Action)
+                return confirmResult;
+
+            var wpKey = tokenService.HashEncode(payment.WorkoutProgram!.Id);
+
+            await sms.AthleteSuccessfullySmsNotificationForBuyFromSite(
+                payment.Athlete.PhoneNumber,
+                wpKey,
+                payment.CoachService.Title
+            );
+
             return new ApiResponse
             {
-                Action = false,
-                Message = "تراکنشی یافت نشد",
-            };
-        }
-
-        if (!status.Equals("ok", StringComparison.CurrentCultureIgnoreCase))
-        {
-            payment.PaymentStatus = PaymentStatus.FAILED;
-            await dbContext.SaveChangesAsync();
-            return new ApiResponse()
-            {
-                Action = false,
-                Message = "پرداخت توسط کاربر لغو شد.",
+                Action = true,
+                Message = "پرداخت با موفقیت انجام شد",
                 Result = new
                 {
-                    CoachPhoneNumber = payment.Coach.PhoneNumber
+                    WpKey = wpKey,
+                    RefId = result.Data.Ref_id,
+                    CoachPhoneNumber = coachPhone,
+                    coachSlug,
+                    coachName
                 }
             };
         }
 
-        switch (payment.PaymentStatus)
+        if (result?.Data?.Code == 101)
         {
-            case PaymentStatus.FAILED:
-                return new ApiResponse()
+            return new ApiResponse
+            {
+                Action = true,
+                Message = "پرداخت قبلاً تایید شده است",
+                Result = new
                 {
-                    Action = false,
-                    Message = "پرداخت ناموفق",
-                    Result = new
-                    {
-                        CoachPhoneNumber = payment.Coach.PhoneNumber
-                    }
-                };
-            case PaymentStatus.SUCCESS:
-                return new ApiResponse()
-                {
-                    Action = true,
-                    Message = "پرداخت با موفقیت انجام شد و قبلا تایید شده است  ",
-                    Result = new
-                    {
-                        WpKey = tokenService.HashEncode(payment.WorkoutProgram!.Id),
-                        payment.RefId,
-                        CoachPhoneNumber = payment.Coach.PhoneNumber
-                    }
-                };
-
-            case PaymentStatus.INPROGRESS:
-                break;
+                    WpKey = tokenService.HashEncode(payment.WorkoutProgram!.Id),
+                    payment.RefId,
+                    CoachPhoneNumber = coachPhone,
+                    coachSlug,
+                    coachName
+                }
+            };
         }
 
-        request.Amount = payment.Amount;
+        payment.PaymentStatus = PaymentStatus.FAILED;
+        await dbContext.SaveChangesAsync();
 
-        try
+        return new ApiResponse
         {
-            var result = await zarinPal.VerifyPaymentAsync(request);
-            switch (result?.Data)
+            Action = false,
+            Message = "پرداخت ناموفق",
+            Result = new
             {
-                case { Code: 100 }:
-                {
-                    var confirmResult = await ConfirmTransactionId(payment, result.Data.Ref_id);
-                    if (!confirmResult.Action)
-                    {
-                        return confirmResult;
-                    }
-
-                    var wpKey = tokenService.HashEncode(payment.WorkoutProgram!.Id);
-
-                    await sms.AthleteSuccessfullySmsNotificationForBuyFromSite(
-                        payment.Athlete.PhoneNumber,
-                        wpKey, payment.CoachService.Title);
-
-
-                    return new ApiResponse
-                    {
-                        Action = true,
-                        Message = "پرداخت با موفقیت انجام شد ",
-                        Result = new
-                        {
-                            WpKey = wpKey,
-                            RefId = result.Data.Ref_id,
-                            CoachPhoneNumber = payment.Coach.PhoneNumber
-                        }
-                    };
-                }
-                case { Code: 101 }:
-
-                    return new ApiResponse
-                    {
-                        Action = true,
-                        Message = "پرداخت با موفقیت انجام شد و قبلا تایید شده است  ",
-                        Result = new
-                        {
-                            WpKey = tokenService.HashEncode(payment.WorkoutProgram!.Id),
-                            payment.RefId,
-                            CoachPhoneNumber = payment.Coach.PhoneNumber
-                        }
-                    };
+                CoachPhoneNumber = coachPhone,
+                coachSlug,
+                coachName
             }
-
-            if (result?.Errors is null)
-                return new ApiResponse
-                {
-                    Action = false,
-                    Message = "خطا ناشناخته",
-                };
-            payment.PaymentStatus = PaymentStatus.FAILED;
-            await dbContext.SaveChangesAsync();
-
-
-            return new ApiResponse
-            {
-                Action = false,
-                Message = "پرداخت ناموفق",
-            };
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"Error verifying payment: {ex.Message}");
-            return new ApiResponse
-            {
-                Action = false,
-                Message = $"Error verifying payment: {ex.Message}"
-            };
-        }
+        };
     }
+    catch (Exception)
+    {
+        return new ApiResponse
+        {
+            Action = false,
+            Message = "خطا در تایید پرداخت",
+            Result = new
+            {
+                CoachPhoneNumber = coachPhone,
+                coachSlug,
+                coachName
+            }
+        };
+    }
+}
 
 
     public async Task<ApiResponse> GetWorkoutProgram(string wPkey)
@@ -849,6 +872,7 @@ public class BuyFromSiteRepository(
                 wr.Title,
                 CoachFirstname = wr.Coach.User.FirstName,
                 CoachLastname = wr.Coach.User.LastName,
+                wr.Coach.WebSiteUrl,
                 CoachSocialMedia = new
                 {
                     wr.Coach.InstagramLink,
@@ -909,7 +933,9 @@ public class BuyFromSiteRepository(
                     code = 201,
                     wPkey,
                     athority = programData.Authority,
-                    programData.CoachPhoneNumber
+                    programData.CoachPhoneNumber,
+                    coachSlug= programData.WebSiteUrl,
+                    workoutProgramInfo.CoachName
                 }
             },
             WorkoutProgramStatus.NOTSTARTED => new ApiResponse()
@@ -919,7 +945,9 @@ public class BuyFromSiteRepository(
                     code = 202,
                     wPkey,
                     workoutProgramInfo,
-                    programData.CoachPhoneNumber
+                    programData.CoachPhoneNumber,
+                    coachSlug= programData.WebSiteUrl,
+                    workoutProgramInfo.CoachName
                 }
             },
             WorkoutProgramStatus.WRITING => new ApiResponse()
@@ -929,7 +957,9 @@ public class BuyFromSiteRepository(
                     code = 203,
                     wPkey,
                     workoutProgramInfo,
-                    programData.CoachPhoneNumber
+                    programData.CoachPhoneNumber,
+                    coachSlug= programData.WebSiteUrl,
+                    workoutProgramInfo.CoachName
                 }
             },
             _ => new ApiResponse()
@@ -939,7 +969,9 @@ public class BuyFromSiteRepository(
                     code = 204,
                     wPkey,
                     workoutProgramInfo,
-                    programData.CoachPhoneNumber
+                    programData.CoachPhoneNumber,
+                    coachSlug= programData.WebSiteUrl,
+                    workoutProgramInfo.CoachName
                 }
             }
         };

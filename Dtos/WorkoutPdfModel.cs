@@ -12,6 +12,7 @@ public class WorkoutPdfModel
     public string ProgramLevel { get; set; }
     public string ProgramDuration { get; set; }
     public string ProgramPriorities { get; set; }
+    public string CoachSlug { get; set; }
     public List<WorkoutDayModel> WorkoutDays { get; set; } = new();
     public string AthleteName { get; set; }
 }

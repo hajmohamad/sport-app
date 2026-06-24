@@ -6,6 +6,7 @@ using sport_app_backend.Dtos;
 using sport_app_backend.Mappers;
 using sport_app_backend.Models;
 using System.Security.Claims;
+using sport_app_backend.Dtos.Coach;
 using sport_app_backend.Dtos.ProgramDto;
 using sport_app_backend.Interface.Coach;
 using sport_app_backend.Models.Actions.CouchExercise;
@@ -602,6 +603,61 @@ namespace sport_app_backend.Controller
             
 
         }
+        #region WebSiteUrl Management
+
+        [HttpGet("WebSiteUrl")]
+        [Authorize(Roles = "Coach")]
+        public async Task<IActionResult> GetWebSiteUrlStatus()
+        {
+            var coachId = await GetCoachIdAsync();
+            if (coachId == 0)
+            {
+                return Unauthorized(new ApiResponse { Action = false, Message = "خطای احراز هویت." });
+            }
+
+            var result = await coachRepository.GetWebSiteUrlStatusAsync(coachId);
+            if (!result.Action) return NotFound(result);
+            return Ok(result);
+        }
+
+        [HttpPost("WebSiteUrl")]
+        [Authorize(Roles = "Coach")]
+        public async Task<IActionResult> UpdateWebSiteUrl([FromBody] UpdateWebSiteUrlDto model)
+        {
+            var coachId = await GetCoachIdAsync();
+            if (coachId == 0)
+            {
+                return Unauthorized(new ApiResponse { Action = false, Message = "خطای احراز هویت." });
+            }
+
+            if (model == null || string.IsNullOrWhiteSpace(model.WebSiteUrl))
+            {
+                return BadRequest(new ApiResponse { Action = false, Message = "لطفاً آدرس معتبری وارد کنید." });
+            }
+
+            var result = await coachRepository.UpdateWebSiteUrlAsync(coachId, model.WebSiteUrl);
+            if (!result.Action) return BadRequest(result);
+            return Ok(result);
+        }
+        [HttpPut("CheckWebSiteUrl")]
+        [Authorize(Roles = "Coach")]
+        public async Task<IActionResult> CheckWebSiteUrl([FromQuery] string url)
+        {
+            var coachId = await GetCoachIdAsync();
+            if (coachId == 0)
+            {
+                return Unauthorized(new ApiResponse { Action = false, Message = "خطای احراز هویت." });
+            }
+
+            var result = await coachRepository.CheckWebSiteUrlAvailabilityAsync(coachId, url);
+            if (!result.Action) return BadRequest(result);
+
+            return Ok(result);
+        }
+
+
+        #endregion
+        
 
         #region changePhoto
 
