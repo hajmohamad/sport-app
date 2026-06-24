@@ -205,68 +205,53 @@ public class WaterAndWeightRepository(
                 .FirstOrDefaultAsync();
 
             if (athlete is null)
-            {
                 return new ApiResponse() { Message = "User is not an athlete", Action = false };
-            }
 
             var pc = new PersianCalendar();
             var today = DateTime.Now.Date;
             var firstDayOfPersianMonth = pc.ToDateTime(pc.GetYear(today), pc.GetMonth(today), 1, 0, 0, 0, 0);
-            var endDate = today;
 
-            var weightEntries = await context.WeightEntries
+            var lastWeightBeforeMonth = await context.WeightEntries
                 .AsNoTracking()
-                .Where(x => x.AthleteId == athlete.AthleteId
-                            && x.CurrentDate >= firstDayOfPersianMonth
-                            && x.CurrentDate <= endDate)
+                .Where(x => x.AthleteId == athlete.AthleteId && x.CurrentDate < firstDayOfPersianMonth)
+                .OrderByDescending(x => x.CurrentDate)
+                .Select(x => (double?)x.Weight)
+                .FirstOrDefaultAsync();
+
+            var monthlyEntries = await context.WeightEntries
+                .AsNoTracking()
+                .Where(x => x.AthleteId == athlete.AthleteId && x.CurrentDate >= firstDayOfPersianMonth && x.CurrentDate <= today)
                 .OrderBy(x => x.CurrentDate)
-                .Select(x => new
-                {
-                    x.CurrentDate,
-                    x.Weight
-                })
+                .Select(x => new { x.CurrentDate, x.Weight })
                 .ToListAsync();
 
             var dailyWeights = new List<WeightReportDto>();
-            double? lastKnownWeight = null;
+            
+            double currentRunningWeight = lastWeightBeforeMonth ?? athlete.currentWeight ;
 
-            for (var date = firstDayOfPersianMonth; date <= endDate; date = date.AddDays(1))
+            int entryIndex = 0;
+            for (var date = firstDayOfPersianMonth; date <= today; date = date.AddDays(1))
             {
-                var entry = weightEntries
-                    .LastOrDefault(x => x.CurrentDate.Date <= date.Date);
-
-                if (entry != null)
+      
+                while (entryIndex < monthlyEntries.Count && monthlyEntries[entryIndex].CurrentDate.Date == date.Date)
                 {
-                    lastKnownWeight = entry.Weight;
+                    currentRunningWeight = monthlyEntries[entryIndex].Weight;
+                    entryIndex++;
                 }
 
-                if (lastKnownWeight.HasValue)
+                dailyWeights.Add(new WeightReportDto
                 {
-                    dailyWeights.Add(new WeightReportDto
-                    {
-                        Date = date.ToString("yyyy-MM-dd"),
-                        Weight = lastKnownWeight.Value
-                    });
-                }
-                else
-                {
-                    dailyWeights.Add(new WeightReportDto
-                    {
-                        Date = date.ToString("yyyy-MM-dd"),
-                        Weight = 0
-                    });
-                }
+                    Date = date.ToString("yyyy-MM-dd"),
+                    Weight = currentRunningWeight
+                });
             }
 
             double? bmi = null;
-
             if (athlete.Height > 0 && athlete.currentWeight > 0)
             {
                 var heightInMeters = athlete.Height / 100.0;
-                var tempBmi = athlete.currentWeight / (heightInMeters * heightInMeters);
-
-                if (double.IsFinite(tempBmi))
-                    bmi = tempBmi;
+                bmi = athlete.currentWeight / (heightInMeters * heightInMeters);
+                if (!double.IsFinite(bmi.Value)) bmi = null;
             }
 
             return new ApiResponse()
