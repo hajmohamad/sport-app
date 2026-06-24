@@ -207,7 +207,7 @@ namespace sport_app_backend.Repository
                 .Include(c => c.CoachingServices)
                 .Include(c => c.User)
                 .Include(c=>c.AthleteChangePhotos)
-                .FirstOrDefaultAsync(c => c.PhoneNumber == coachWebSiteUrl);
+                .FirstOrDefaultAsync(c => c.WebSiteUrl == coachWebSiteUrl);
 
             if (coach == null)
             {
