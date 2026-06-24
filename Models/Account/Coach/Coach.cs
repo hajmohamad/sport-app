@@ -38,6 +38,7 @@ public class Coach
     [StringLength(20)]
     public string EitaaUserName { get; set; } = "";
     public bool Verified { get; set; } = false;
+    public bool ShowWebsite { get; set; } = false;
     public double Amount { get; set; } = 0;
     public double ServiceFee { get; set; } = 0.1;
     public List<DiscountCode> DiscountCodes { get; set; } = [];

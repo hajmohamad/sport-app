@@ -219,6 +219,16 @@ namespace sport_app_backend.Repository
                 };
             }
 
+            if (!coach.ShowWebsite)
+            {
+                return new ApiResponse
+                {
+                    Action = false,
+                    Message = "وبسایت شما تایید نشده است.",
+                    Result = null
+                };
+            }
+
           
             var coachingServiceDtos = coach.CoachingServices.Where(c=>c is { IsDeleted: false, IsActive: true })
                 .Select(cs => cs.ToCoachingServiceResponse())
