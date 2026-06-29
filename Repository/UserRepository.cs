@@ -15,9 +15,8 @@ using sport_app_backend.Models.Actions;
 using sport_app_backend.Models.Payments;
 using sport_app_backend.Models.Program;
 using sport_app_backend.Models.Question.A_Question;
-using sport_app_backend.Models.SupportApp;
+using sport_app_backend.Models.Support;
 using sport_app_backend.Models.TrainingPlan;
-
 namespace sport_app_backend.Repository;
 
 public class UserRepository(
@@ -414,22 +413,7 @@ private async Task<string> GenerateUniqueUsername()
         await dbContext.SaveChangesAsync();
         return new ApiResponse() { Message = "Success", Action = true };
     }
-
-    public async Task<ApiResponse> AppSupport(string phoneNumber, ReportAppDto reportAppDto)
-    {
-        var user = await dbContext.Users.FirstOrDefaultAsync(x => x.PhoneNumber == phoneNumber);
-        if (user is null) return new ApiResponse() { Message = "User not found", Action = false };
-        await dbContext.SupportApp.AddAsync(new SupportApp()
-        {   User = user,
-            UserId = user.Id,
-            Category = Enum.Parse<SupportAppCategory>(reportAppDto.Category),
-            Description = reportAppDto.Description,
-           // CreateDate =  DateTime.Now,
-        });
-        await dbContext.SaveChangesAsync();
-        return new ApiResponse() { Message = "Success", Action = true };
-        
-    }
+    
     public async Task<ApiResponse> GetAllExercise()
     {
             var exercisesDto = await dbContext.Exercises
@@ -740,6 +724,158 @@ public async Task<(IEnumerable<AllExerciseResponseDto> Exercises, int TotalCount
 
     return (exercises, totalCount);
 }
+
+#region SupportApp
+
+
+public async Task<ApiResponse> CreateSupportTicket(int userId, CreateTicketDto dto)
+{
+    var userExists = await dbContext.Users.AnyAsync(u => u.Id == userId);
+    if (!userExists) return new ApiResponse { Message = "User not found", Action = false };
+
+    if (!Enum.TryParse<TicketCategory>(dto.Category, true, out var categoryEnum))
+    {
+        return new ApiResponse { Message = "دسته بندی نامعتبر است", Action = false };
+    }
+
+    var ticket = new SupportTicket
+    {
+        Subject = dto.Subject,
+        Category = categoryEnum,
+        UserId = userId
+    };
+
+    await dbContext.SupportTickets.AddAsync(ticket);
+    await dbContext.SaveChangesAsync();
+
+    var firstMessage = new TicketMessage
+    {
+        TicketId = ticket.Id,
+        MessageText = dto.MessageText,
+        SenderId = userId
+    };
+
+    await dbContext.TicketMessages.AddAsync(firstMessage);
+    await dbContext.SaveChangesAsync();
+
+    return new ApiResponse
+    {
+        Action = true,
+        Message = "تیکت با موفقیت ایجاد شد.",
+        Result = ticket.Id
+    };
+}
+
+public async Task<ApiResponse> GetSupportTickets(int userId)
+{
+    var tickets = await dbContext.SupportTickets
+        .AsNoTracking()
+        .Where(t => t.UserId == userId)
+        .OrderByDescending(t => t.UpdatedAt)
+        .Select(t => new TicketListDto
+        {
+            Id = t.Id,
+            Subject = t.Subject,
+            Category = t.Category,       // مپ کردن مستقیم enum
+            Status = t.Status,           // مپ کردن مستقیم enum
+            LastUpdatedAt = t.UpdatedAt  // مپ کردن مستقیم DateTime
+        })
+        .ToListAsync();
+
+    return new ApiResponse
+    {
+        Action = true,
+        Message = "لیست تیکت‌ها با موفقیت دریافت شد.",
+        Result = tickets
+    };
+}
+
+public async Task<ApiResponse> GetSupportTicketDetails(int userId, int ticketId)
+{
+    var ticket = await dbContext.SupportTickets
+        .Include(t => t.Messages)
+            .ThenInclude(m => m.Sender)
+        .FirstOrDefaultAsync(t => t.Id == ticketId && t.UserId == userId);
+
+    if (ticket is null) return new ApiResponse { Message = "تیکت یافت نشد", Action = false };
+
+    var messagesDto = ticket.Messages
+        .OrderBy(m => m.CreatedAt)
+        .Select(m => new TicketMessageDto
+        {
+            Id = m.Id,
+            MessageText = m.MessageText,
+            CreatedAt = m.CreatedAt, 
+            IsFromSupport = m.IsFromSupport,
+            SenderName = m.IsFromSupport ? "پشتیبان نرم‌افزار" : $"{m.Sender.FirstName} {m.Sender.LastName}".Trim(),
+            SenderImage = m.IsFromSupport ? "" : m.Sender.ImageProfile
+        })
+        .ToList();
+
+    var result = new TicketDetailsDto
+    {
+        Id = ticket.Id,
+        Subject = ticket.Subject,
+        Category = ticket.Category, // مپ کردن مستقیم enum
+        Status = ticket.Status,     // مپ کردن مستقیم enum
+        Messages = messagesDto
+    };
+
+    return new ApiResponse
+    {
+        Action = true,
+        Message = "جزئیات تیکت دریافت شد.",
+        Result = result
+    };
+}
+
+public async Task<ApiResponse> ReplyToSupportTicket(int userId, int ticketId, ReplyTicketDto dto)
+{
+    var user = await dbContext.Users
+        .Where(u => u.Id == userId)
+        .Select(u => new { u.FirstName, u.LastName, u.ImageProfile })
+        .FirstOrDefaultAsync();
+
+    if (user is null) return new ApiResponse { Message = "User not found", Action = false };
+
+    var ticket = await dbContext.SupportTickets.FirstOrDefaultAsync(t => t.Id == ticketId && t.UserId == userId);
+    if (ticket is null) return new ApiResponse { Message = "تیکت یافت نشد", Action = false };
+
+    if (ticket.Status == TicketStatus.Closed)
+    {
+        return new ApiResponse { Message = "این تیکت بسته شده است و امکان ارسال پاسخ وجود ندارد.", Action = false };
+    }
+
+    var newMessage = new TicketMessage
+    {
+        TicketId = ticket.Id,
+        MessageText = dto.MessageText,
+        SenderId = userId
+    };
+
+    ticket.Status = TicketStatus.Pending;
+    ticket.UpdatedAt = DateTime.UtcNow;
+
+    await dbContext.TicketMessages.AddAsync(newMessage);
+    await dbContext.SaveChangesAsync();
+
+    return new ApiResponse
+    {
+        Action = true,
+        Message = "پاسخ شما با موفقیت ثبت شد.",
+        Result = new TicketMessageDto
+        {
+            Id = newMessage.Id,
+            MessageText = newMessage.MessageText,
+            CreatedAt = newMessage.CreatedAt, // مپ کردن مستقیم DateTime
+            IsFromSupport = false,
+            SenderName = $"{user.FirstName} {user.LastName}".Trim(),
+            SenderImage = user.ImageProfile
+        }
+    };
+}
+
+#endregion
 
 }
 

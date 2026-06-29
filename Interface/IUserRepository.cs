@@ -11,11 +11,9 @@ public interface IUserRepository
     public Task<ApiResponse> CheckCode(CheckCodeRequestDto checkCodeRequestDto);
     public Task<ApiResponse> AddRoleGender(string phoneNumber, RoleGenderDto roleGenderDto);
     public  Task<ApiResponse> GenerateAccessToken(string refreshToken);
-   
     public Task<ApiResponse> EditUserProfile(string phoneNumber, EditUserProfileDto editUserProfileDto);
     public Task<ApiResponse> GetUserProfileForEdit(string phoneNumber);
     public Task<ApiResponse> Logout(string phoneNumber);
-    public Task<ApiResponse> AppSupport(string phoneNumber, ReportAppDto reportAppDto);
     public Task<ApiResponse> SaveImageAsync(string phoneNumber,IFormFile file);
     public Task<ApiResponse> GetAllExercise();
     public Task<ApiResponse> GetExercise(int exerciseId);
@@ -32,4 +30,9 @@ public interface IUserRepository
         string? place,
         int page,
         int pageSize, string? searchTerm);
+    Task<ApiResponse> CreateSupportTicket(int userId, CreateTicketDto dto);
+    Task<ApiResponse> GetSupportTickets(int userId);
+    Task<ApiResponse> GetSupportTicketDetails(int userId, int ticketId);
+    Task<ApiResponse> ReplyToSupportTicket(int userId, int ticketId, ReplyTicketDto dto);
 }
+  
