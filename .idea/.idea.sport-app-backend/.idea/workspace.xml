@@ -17,25 +17,84 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="11e104f8-869d-4d9d-9802-b48455f5eb31" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Dtos/SupportDtos.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Models/Support/SupportTicket.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Models/Support/TicketEnums.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Models/Support/TicketMessage.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/dataSources.local.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/dataSources/3e138e79-63f8-4f1b-a97d-8b1a569a4f0c.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/dataSources/3e138e79-63f8-4f1b-a97d-8b1a569a4f0c.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/dataSources/b995594b-b1c6-4f7b-a3d8-4a5b1ad21ad7.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/dataSources/b995594b-b1c6-4f7b-a3d8-4a5b1ad21ad7.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/db-forest-config.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/db-forest-config.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Controller/AdminController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Controller/AdminController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Controller/UserController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Controller/UserController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Data/ApplicationDBContext.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Data/ApplicationDBContext.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Interface/IAdminRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Interface/IAdminRepository.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Interface/IUserRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Interface/IUserRepository.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Migrations/ApplicationDbContextModelSnapshot.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Migrations/ApplicationDbContextModelSnapshot.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Models/SupportApp/SupportApp.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Models/SupportApp/SupportAppCategory.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Repository/AdminRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Repository/AdminRepository.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Repository/UserRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Repository/UserRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dtos/ActivityDto.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dtos/ActivityPageDto.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dtos/AddActivityDto.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dtos/AddAthleteChangePhotoDto.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dtos/AddCardNumberDto.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dtos/AddCoachServiceDto.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dtos/AddExercisesRequestDto.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dtos/AddRoleResponse.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dtos/AllExerciseResponseDto.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dtos/AllPaymentResponseDto.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dtos/AllTrainingSessionDto.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dtos/AthleteBodyImageDto.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dtos/AthleteFirstQuestionsDto.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dtos/AthletePaymentResponseDto.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dtos/AthleteProfileResponse.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dtos/AthleteQuestionBuyFromSiteDto.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dtos/AthleteQuestionDto.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dtos/AthleteQuestionResponseDto.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dtos/AthleteStatsDto.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dtos/AthleteStatusDto.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dtos/CheckCodeRequestDto.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dtos/CheckCodeRequestFromSiteBuyDto.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dtos/CheckCodeResponseDto.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dtos/CheckCodeResponseFromSiteBuyDto.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dtos/ChoseWorkoutProgramFeedBackDto.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dtos/CoachDashboardDto.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dtos/CoachForSearch.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dtos/CoachNameSearchDto.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dtos/CoachPaymentResponseDto.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dtos/CoachPayoutDto.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dtos/CoachProfileForAthleteDto.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dtos/CoachProfileResponse.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dtos/CoachQuestionDto.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dtos/CoachesProfileSearch.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dtos/CoachingServiceResponse.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dtos/CreateInAppMessageDto.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dtos/DailyIncomeDto.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dtos/DailySessionCountDto.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dtos/DiscountCodeDtos.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dtos/EditAthleteProfileDto.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dtos/ExerciseDto.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dtos/FeedbackTrainingSessionDto.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dtos/FeedbackWorkoutProgramDto.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dtos/FinishTrainingSessionDto.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dtos/InAppMessageDto.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dtos/InjuryAreaDto.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dtos/NotificationSubscriptionDto.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dtos/PaymentFilterDto.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dtos/ProgramDto/ExerciseChangeDto.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dtos/ProgramDto/ExerciseFeedbackDto.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dtos/ProgramDto/ExerciseForTrainingSessionDto.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dtos/ProgramDto/ProgramInDayDto.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dtos/ProgramDto/SingelExerciseDto.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dtos/ProgramDto/WorkoutProgramDto.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dtos/ProgramInDayDto.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dtos/ReportAppDto.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dtos/RoleGenderDto.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dtos/ServiceForDiscountDto.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dtos/SocialMediaLinkDto.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dtos/SupportDtos.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dtos/TokenUserDto.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dtos/TrainingSessionDto.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dtos/TrainingSessionSingleExerciseDto.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dtos/TransactionDto.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dtos/UpdateWebSiteUrlDto.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dtos/WaterInDayDto.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dtos/WaterInTakeDto.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dtos/WeightReportDto.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dtos/WorkoutPdfModel.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dtos/WorkoutProgramInfoForSiteDto.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dtos/WorkoutProgramResponseDto.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dtos/ZarinPal/Verify/ZarinPalVerifyRequestDto.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dtos/ZarinPal/Verify/ZarinPalVerifyResponseDto.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dtos/ZarinPal/ZarinPalPaymentRequestDto.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dtos/ZarinPal/ZarinPalPaymentResponseDto.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dtos/ZarinPal/ZarinpalError.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dtos/ZarinPal/ZarinpalVerifyApiResponseDto.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dtos/ZarinPal/ZarinpalVerifyData.cs" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/appsettings.Development.json" beforeDir="false" afterPath="$PROJECT_DIR$/appsettings.Development.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -433,15 +492,7 @@
       <workItem from="1782316936363" duration="819000" />
       <workItem from="1782409163137" duration="1460000" />
       <workItem from="1782566824650" duration="95000" />
-      <workItem from="1782586410712" duration="6167000" />
-    </task>
-    <task id="LOCAL-00023" summary="refactor: remove unused ExerciseInDay.cs and update project structure">
-      <option name="closed" value="true" />
-      <created>1766624477507</created>
-      <option name="number" value="00023" />
-      <option name="presentableId" value="LOCAL-00023" />
-      <option name="project" value="LOCAL" />
-      <updated>1766624477507</updated>
+      <workItem from="1782586410712" duration="8141000" />
     </task>
     <task id="LOCAL-00024" summary="add ci-cd">
       <option name="closed" value="true" />
@@ -827,7 +878,15 @@
       <option name="project" value="LOCAL" />
       <updated>1782309649679</updated>
     </task>
-    <option name="localTasksCounter" value="72" />
+    <task id="LOCAL-00072" summary="add support new version">
+      <option name="closed" value="true" />
+      <created>1782730339397</created>
+      <option name="number" value="00072" />
+      <option name="presentableId" value="LOCAL-00072" />
+      <option name="project" value="LOCAL" />
+      <updated>1782730339398</updated>
+    </task>
+    <option name="localTasksCounter" value="73" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -870,7 +929,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
-    <MESSAGE value="add ServiceForDiscountDto.cs" />
     <MESSAGE value="edit disable discountcode to change discountcode" />
     <MESSAGE value="change end point" />
     <MESSAGE value="fix bugs" />
@@ -895,7 +953,8 @@
     <MESSAGE value="add show website" />
     <MESSAGE value="ADD ActiveShowWebsiteCoach" />
     <MESSAGE value="remove urlsite fron verifi coach" />
-    <option name="LAST_COMMIT_MESSAGE" value="remove urlsite fron verifi coach" />
+    <MESSAGE value="add support new version" />
+    <option name="LAST_COMMIT_MESSAGE" value="add support new version" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
