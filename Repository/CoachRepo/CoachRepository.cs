@@ -1094,24 +1094,48 @@ namespace sport_app_backend.Repository.CoachRepo
                 .Include(u => u.Coach)
                 .ThenInclude(c => c.CoachingServices)
                 .FirstOrDefaultAsync(u => u.PhoneNumber == phoneNumber);
-            if (user?.Coach == null) return new ApiResponse { Action = false, Message = "Coach not found" };
-            var coachingService = user.Coach.CoachingServices.Where(x => !x.IsDeleted).ToList();
-            var coachingServiceDto = coachingService.Select(x => x.ToCoachingServiceResponse()).ToList();
-            var payments = await context.Payments.Include(p => p.Athlete).ThenInclude(u => u.User)
-                .OrderByDescending(c => c.PaymentDate)
-                .Include(p => p.WorkoutProgram).Where(p =>
-                    p.CoachId == user.Coach.Id && p.PaymentStatus == PaymentStatus.SUCCESS &&
+
+            if (user?.Coach == null)
+                return new ApiResponse { Action = false, Message = "Coach not found" };
+
+            var coachingService = user.Coach.CoachingServices
+                .Where(x => !x.IsDeleted)
+                .ToList();
+
+            var coachingServiceDto = coachingService
+                .Select(x => x.ToCoachingServiceResponse())
+                .ToList();
+
+            var numberOfProgram = await context.Payments
+                .Where(p =>
+                    p.CoachId == user.Coach.Id &&
+                    p.PaymentStatus == PaymentStatus.SUCCESS &&
                     p.WorkoutProgram != null &&
                     p.WorkoutProgram.Status != WorkoutProgramStatus.WRITING &&
                     p.WorkoutProgram.Status != WorkoutProgramStatus.NOTSTARTED &&
                     p.WorkoutProgram.Status != WorkoutProgramStatus.UNCOMPLETEDQUESTION)
-                .ToListAsync();
+                .CountAsync();
+
+            var numberOfAthlete = await context.Payments
+                .Where(p =>
+                    p.CoachId == user.Coach.Id &&
+                    p.PaymentStatus == PaymentStatus.SUCCESS)
+                .Select(p => p.AthleteId)
+                .Distinct()
+                .CountAsync();
+
             return new ApiResponse
             {
-                Action = true, Message = "Coach found",
-                Result = user.ToCoachProfileResponseDto(coachingServiceDto, payments)
+                Action = true,
+                Message = "Coach found",
+                Result = user.ToCoachProfileResponseDto(
+                    coachingServiceDto,
+                    numberOfProgram,
+                    numberOfAthlete
+                )
             };
         }
+
 
      public async Task<ApiResponse> SaveWorkoutProgram(string phoneNumber, int paymentId,
             WorkoutProgramDto workoutProgramDto)
@@ -1859,6 +1883,7 @@ namespace sport_app_backend.Repository.CoachRepo
 
             return (exercises, totalCount);
         }
+
 
         public async Task<ApiResponse> AddPineExercise(int exerciseId, int coachId)
         {

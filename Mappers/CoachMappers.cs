@@ -9,16 +9,16 @@ namespace sport_app_backend.Mappers
 {
     public static class CoachMappers
     {
-        public static CoachProfileResponse ToCoachProfileResponseDto(this User user,List<CoachingServiceResponse> coachingServicesResponse
-            ,List<Payment> payments)
-        {   
-             var numberOfProgram = payments.Count(p => p.WorkoutProgram != null);
-              var numberOfAthlete = payments.Select(x=>x.AthleteId).Distinct().Count();
-              const string baseUrl = "https://chaarset.ir/coach/";
-              var websiteUrl = !string.IsNullOrEmpty(user.Coach?.WebSiteUrl) 
-                  ? $"{baseUrl}{user.Coach.WebSiteUrl}/" 
-                  : null;
-            
+        public static CoachProfileResponse ToCoachProfileResponseDto(this User user,
+            List<CoachingServiceResponse> coachingServicesResponse,
+            int numberOfProgram,
+            int numberOfAthlete)
+        {
+            const string baseUrl = "https://chaarset.ir/coach/";
+            var websiteUrl = !string.IsNullOrEmpty(user.Coach?.WebSiteUrl) 
+                ? $"{baseUrl}{user.Coach.WebSiteUrl}/" 
+                : null;
+
             return new CoachProfileResponse
             {
                 FirstName = user.FirstName ?? string.Empty,
@@ -30,15 +30,14 @@ namespace sport_app_backend.Mappers
                 Gender = user.Gender.ToString(),
                 ImageProfile = user.ImageProfile,
                 CoachingServices = coachingServicesResponse,
-                Payments = payments.Select(p => p.ToCoachAllPaymentResponseDto())
-                    .ToList(),
                 NumberOfAthlete = numberOfAthlete,
                 NumberOfProgram = numberOfProgram,
-                WebsiteUrl =websiteUrl
+                WebsiteUrl = websiteUrl,
+                SiteDescription = user.Coach?.SiteDescription,
+                Slogan = user.Coach?.Slogan
+                
+                
             };
-
-
-
         }
 
       

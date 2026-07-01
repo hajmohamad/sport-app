@@ -540,46 +540,6 @@ namespace sport_app_backend.Controller
             if (result.Action) return Ok(result);
             return BadRequest(result);
         }
-        [HttpPost("test")]
-        public async Task<IActionResult> Test()
-        {
-            
-            var oldPrograms = await dbContext.WorkoutPrograms
-                .Include(w => w.ProgramInDays)
-                .ThenInclude(d => d.AllExerciseInDays).ThenInclude(e=>e.Exercise)
-                .Where(w => !dbContext.LastWorkoutExercises.Any(l => l.WorkoutProgramId == w.Id))
-                .ToListAsync();
-
-            var lastWorkouts = oldPrograms
-                .Select(program => new
-                {
-                    program,
-                    exerciseIds = program.ProgramInDays
-                        .SelectMany(d => d.AllExerciseInDays)
-                        .Select(ex => ex.ExerciseId)
-                        .ToList()
-                })
-                .Where(x => x.exerciseIds.Any())
-                .Select(x => new LastWorkoutExercise
-                {
-                    CoachId = x.program.CoachId,
-                    AthleteId = x.program.AthleteId,
-                    WorkoutProgramId = x.program.Id,
-                    ExerciseIds = x.exerciseIds
-                })
-                .ToList();
-            
-            if (lastWorkouts.Count != 0)
-            {
-                await dbContext.LastWorkoutExercises.AddRangeAsync(lastWorkouts);
-                await dbContext.SaveChangesAsync();
-            }
-            return Ok();
-        }
-       
-        
-
-        
         
         private async Task<int> GetCoachIdAsync()
         {
@@ -657,11 +617,8 @@ namespace sport_app_backend.Controller
 
 
         #endregion
-        
-
         #region changePhoto
-
-            [HttpGet("ChangePhotos")]
+        [HttpGet("ChangePhotos")]
             [Authorize(Roles = "Coach")]
             public async Task<IActionResult> GetAllChangePhotos()
             {
@@ -735,8 +692,8 @@ namespace sport_app_backend.Controller
                 if (!result.Action) return BadRequest(result);
                 return Ok(result);
             }
+            #endregion
         }
-        #endregion
         
 }
 
