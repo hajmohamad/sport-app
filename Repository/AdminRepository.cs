@@ -115,7 +115,7 @@ namespace sport_app_backend.Repository
 
         public async Task<ApiResponse> ReplyToSupportTicketAsync(int ticketId, ReplyTicketDto dto)
         {
-            var ticket = await context.SupportTickets.FirstOrDefaultAsync(t => t.Id == ticketId);
+            var ticket = await context.SupportTickets.Include(st=>st.User).FirstOrDefaultAsync(t => t.Id == ticketId);
             
             if (ticket == null)
             {
@@ -149,6 +149,7 @@ namespace sport_app_backend.Repository
 
             await context.TicketMessages.AddAsync(newMessage);
             await context.SaveChangesAsync();
+            await sms.SupportTicketAnsweredSms(ticket.User.PhoneNumber, ticket.Subject);
 
             return new ApiResponse
             {

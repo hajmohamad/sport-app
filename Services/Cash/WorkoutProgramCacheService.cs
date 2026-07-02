@@ -38,6 +38,7 @@ public class WorkoutProgramCacheService(
                     .AsNoTracking()
                     .Include(w => w.Coach)
                     .Include(w => w.TrainingSessions)
+                    .Include(w=>w.WorkoutProgramFeedback)
                     .FirstOrDefaultAsync(w =>
                         w.AthleteId == athleteId &&
                         w.Status ==

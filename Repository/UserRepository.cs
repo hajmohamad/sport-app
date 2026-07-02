@@ -370,30 +370,49 @@ private async Task<string> GenerateUniqueUsername()
     }
     public async Task<ApiResponse> EditUserProfile(string phoneNumber, EditUserProfileDto editUserProfileDto)
     {
-        var user= await dbContext.Users.Include(q=>q.Coach).FirstOrDefaultAsync(x => x.PhoneNumber == phoneNumber);
-        if (user is null) return new ApiResponse() { Message = "User not found", Action = false };
-        var findUserName= await dbContext.Users.FirstOrDefaultAsync(x => x.UserName == editUserProfileDto.UserName);
-        if(findUserName is not null&& findUserName!=user) return new ApiResponse() { Message = "Username already exists", Action = false };// Ensure the user is an athlete
-        user.UserName = editUserProfileDto.UserName; user.FirstName = editUserProfileDto.FirstName;
+        var user = await dbContext.Users
+            .Include(q => q.Coach)
+            .FirstOrDefaultAsync(x => x.PhoneNumber == phoneNumber);
+
+        if (user is null)
+            return new ApiResponse { Message = "User not found", Action = false };
+
+        var findUserName = await dbContext.Users
+            .FirstOrDefaultAsync(x => x.UserName == editUserProfileDto.UserName && x.Id != user.Id);
+
+        if (findUserName is not null)
+            return new ApiResponse { Message = "Username already exists", Action = false };
+
+        user.UserName = editUserProfileDto.UserName;
+        user.FirstName = editUserProfileDto.FirstName;
         user.LastName = editUserProfileDto.LastName;
         user.BirthDate = Convert.ToDateTime(editUserProfileDto.BirthDate);
-       
+
+        if (user.Coach is not null)
+        {
+            user.Coach.Slogan = editUserProfileDto.Slogan;
+            user.Coach.SiteDescription = editUserProfileDto.SiteDescription;
+        }
+
         await dbContext.SaveChangesAsync();
-        return new ApiResponse()
+
+        return new ApiResponse
         {
             Message = "user profile edited successfully",
             Action = true
         };
     }
 
-    public async  Task<ApiResponse> GetUserProfileForEdit(string phoneNumber)
+    public async Task<ApiResponse> GetUserProfileForEdit(string phoneNumber)
     {
-        var user= await dbContext.Users.Include(q=>q.Coach).FirstOrDefaultAsync(x => x.PhoneNumber == phoneNumber);
-        if (user is null) return new ApiResponse() { Message = "User not found", Action = false };
-        
-       
+        var user = await dbContext.Users
+            .Include(q => q.Coach)
+            .FirstOrDefaultAsync(x => x.PhoneNumber == phoneNumber);
 
-        return new ApiResponse()
+        if (user is null)
+            return new ApiResponse { Message = "User not found", Action = false };
+
+        return new ApiResponse
         {
             Message = "user profile fetched successfully",
             Action = true,
@@ -405,6 +424,9 @@ private async Task<string> GenerateUniqueUsername()
                 user.BirthDate,
                 user.ImageProfile,
                 user.PhoneNumber,
+                Role = user.TypeOfUser.ToString(),
+                user.Coach?.Slogan,
+                user.Coach?.SiteDescription
             }
         };
     }
@@ -737,8 +759,12 @@ GetExercisesAsync(
 
 public async Task<ApiResponse> CreateSupportTicket(int userId, CreateTicketDto dto)
 {
-    var userExists = await dbContext.Users.AnyAsync(u => u.Id == userId);
-    if (!userExists) return new ApiResponse { Message = "User not found", Action = false };
+    var userExists = await dbContext.Users.Select(u=>new
+    {
+        u.PhoneNumber,
+        u.Id
+    }).FirstOrDefaultAsync(u => u.Id == userId);
+    if (userExists is null) return new ApiResponse { Message = "User not found", Action = false };
 
     if (!Enum.TryParse<TicketCategory>(dto.Category, true, out var categoryEnum))
     {
@@ -764,6 +790,7 @@ public async Task<ApiResponse> CreateSupportTicket(int userId, CreateTicketDto d
 
     await dbContext.TicketMessages.AddAsync(firstMessage);
     await dbContext.SaveChangesAsync();
+    await sms.SupportTicketCreatedSms(userExists.PhoneNumber, dto.Subject);
 
     return new ApiResponse
     {

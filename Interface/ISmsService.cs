@@ -6,7 +6,7 @@ namespace sport_app_backend.Interface;
 
 public interface ISmsService
 {
-    public Task<string> SendCode(string PhoneNumber);
+    public Task<string> SendCode(string phoneNumber);
     public Task<string> SiteLogin(string phoneNumber);
 
     public Task<string> SendErrorSms(string message);
@@ -21,5 +21,8 @@ public interface ISmsService
     public Task<SmsResponse> NotifyAthleteOfProgramLinkSms(string mobileNumber, string athleteName, string programLink);
 
     public Task<SmsResponse> SendSms(string phoneNumber, string message);
+    public Task<SmsResponse> SupportTicketCreatedSms(string mobileNumber, string ticketTitle);
+
+    public Task<SmsResponse> SupportTicketAnsweredSms(string mobileNumber, string ticketTitle);
 
 }

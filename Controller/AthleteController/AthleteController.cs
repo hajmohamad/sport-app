@@ -1,4 +1,3 @@
-
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -6,16 +5,11 @@ using Microsoft.EntityFrameworkCore;
 using sport_app_backend.Data;
 using sport_app_backend.Dtos;
 using sport_app_backend.Dtos.ProgramDto;
-using sport_app_backend.Dtos.ZarinPal.Verify;
-using sport_app_backend.Interface;
 using sport_app_backend.Interface.Athlete;
 using sport_app_backend.Mappers;
 using sport_app_backend.Models;
-using sport_app_backend.Models.Account;
-using sport_app_backend.Models.Program;
 
-
-namespace sport_app_backend.Controller
+namespace sport_app_backend.Controller.AthleteController
 {
 
     [Route("api/[controller]")]
