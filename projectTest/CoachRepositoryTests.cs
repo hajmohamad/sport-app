@@ -31,6 +31,7 @@ namespace sport_app_backend.projectTest
         private readonly Mock<ICalculator> _mockCalculator;
         private readonly ApplicationDbContext _context;
         private readonly CoachRepository _repository;
+        private readonly  Mock<IExerciseCacheService> _mockExerciseCache;
 
         public CoachRepositoryTests()
         {
@@ -38,6 +39,8 @@ namespace sport_app_backend.projectTest
             _mockStorage = new Mock<IStorage>();
             _mockTokenService = new Mock<ITokenService>();
             _mockCalculator = new Mock<ICalculator>();
+            _mockExerciseCache = new Mock<IExerciseCacheService>();
+
 
             var options = new DbContextOptionsBuilder<ApplicationDbContext>()
                 .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
@@ -49,7 +52,8 @@ namespace sport_app_backend.projectTest
                 _mockSmsService.Object,
                 _mockStorage.Object,
                 _mockTokenService.Object,
-                _mockCalculator.Object
+                _mockCalculator.Object,
+                _mockExerciseCache.Object
             );
         }
 
@@ -1153,7 +1157,21 @@ namespace sport_app_backend.projectTest
 
             var dto = new WorkoutProgramDto
             {
-                Days = new List<ProgramInDayDto>(),
+                Days = new List<ProgramInDayDto>()
+                {
+                    new ProgramInDayDto()
+                    {
+                        ForWhichDay =1,
+                        AllExerciseInDays = new List<SingleExerciseDto>()
+                        {
+                            new SingleExerciseDto
+                            {
+                                Reps = [10,10],
+                                RepType = "Count"
+                            }
+                        }
+                    }
+                },
                 Week = 4,
                 ProgramLevel = "Beginner",
                 ProgramPriority = [nameof(ProgramPriority.RECOVERY)],

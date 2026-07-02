@@ -15,7 +15,6 @@ public interface IUserRepository
     public Task<ApiResponse> GetUserProfileForEdit(string phoneNumber);
     public Task<ApiResponse> Logout(string phoneNumber);
     public Task<ApiResponse> SaveImageAsync(string phoneNumber,IFormFile file);
-    public Task<ApiResponse> GetAllExercise();
     public Task<ApiResponse> GetExercise(int exerciseId);
 
     public Task<ApiResponse> RemoveProfilePhoto(string phoneNumber);

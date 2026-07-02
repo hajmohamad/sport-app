@@ -8,6 +8,7 @@ using sport_app_backend.Models.Account;
 using sport_app_backend.Models.Login_Sinup;
 using Amazon.S3;
 using Amazon.S3.Model;
+using Microsoft.Extensions.Caching.Memory;
 using sport_app_backend.Mappers;
 using sport_app_backend.Models.Account.Athlete;
 using sport_app_backend.Models.Account.Coach;
@@ -24,7 +25,9 @@ public class UserRepository(
     ITokenService tokenService,
     ISmsService sms,
     IStorage Storage,
-    IConfiguration config)
+    IConfiguration config,
+    IExerciseCacheService exerciseCache
+    )
     : IUserRepository
 {
     public async Task<ApiResponse> AddRoleGender(string phoneNumber, RoleGenderDto roleGenderDto)
@@ -414,28 +417,30 @@ private async Task<string> GenerateUniqueUsername()
         return new ApiResponse() { Message = "Success", Action = true };
     }
     
-    public async Task<ApiResponse> GetAllExercise()
+
+
+
+    public async Task<ApiResponse> GetExercise(int exerciseId)
     {
-            var exercisesDto = await dbContext.Exercises
-                .AsNoTracking() 
-                .OrderByDescending(x => x.Views)
-                .Select(x => x.ToAllExerciseResponseDto()) 
-                .ToListAsync();
-        return new ApiResponse()
+        var exercises = await exerciseCache.GetAllExercisesAsync();
+
+        var exercise = exercises.FirstOrDefault(x => x.Id == exerciseId);
+
+        if (exercise is null)
         {
-            Message = "Exercises found",
+            return new ApiResponse
+            {
+                Message = "Exercise not found",
+                Action = false
+            };
+        }
+
+        return new ApiResponse
+        {
+            Message = "Success",
             Action = true,
-            Result = exercisesDto
+            Result = exercise.ToExerciseDto()
         };
-    }
-
-
-    public Task<ApiResponse> GetExercise(int exerciseId)
-    {
-        var exercise = dbContext.Exercises.FirstOrDefault(x => x.Id == exerciseId);
-        if (exercise is null) return Task.FromResult(new ApiResponse() { Message = "Exercise not found", Action = false });
-        return Task.FromResult(new ApiResponse()
-            { Message = "Success", Action = true, Result = exercise.ToExerciseDto() });
     }
 
     public async Task<ApiResponse> RemoveProfilePhoto(string phoneNumber)
@@ -625,9 +630,9 @@ private async Task<string> GenerateUniqueUsername()
 
     }
 
-  
 
-public async Task<(IEnumerable<AllExerciseResponseDto> Exercises, int TotalCount)> GetExercisesAsync(
+    public async Task<(IEnumerable<AllExerciseResponseDto> Exercises, int TotalCount)>
+GetExercisesAsync(
     string? level,
     string? type,
     string? mechanic,
@@ -641,18 +646,19 @@ public async Task<(IEnumerable<AllExerciseResponseDto> Exercises, int TotalCount
     page = page <= 0 ? 1 : page;
     pageSize = pageSize <= 0 ? 10 : pageSize;
 
-    IQueryable<Exercise> query = dbContext.Exercises.AsNoTracking();
+    var allExercises = await exerciseCache.GetAllExercisesAsync();
 
-    // Search
+    IEnumerable<Exercise> query = allExercises;
+
     if (!string.IsNullOrWhiteSpace(searchTerm))
     {
         searchTerm = searchTerm.Trim();
+
         query = query.Where(e =>
-            EF.Functions.Like(e.PersianName!, $"%{searchTerm}%") ||
-            EF.Functions.Like(e.EnglishName!, $"%{searchTerm}%"));
+            (e.PersianName != null && e.PersianName.Contains(searchTerm)) ||
+            (e.EnglishName != null && e.EnglishName.Contains(searchTerm)));
     }
 
-    // Level
     if (!string.IsNullOrWhiteSpace(level) &&
         Enum.TryParse<ExerciseLevel>(level, true, out var levelEnum))
     {
@@ -671,21 +677,22 @@ public async Task<(IEnumerable<AllExerciseResponseDto> Exercises, int TotalCount
         query = query.Where(e => e.Mechanics == mechanicEnum);
     }
 
-    if (equipment != null && equipment.Length > 0)
+    if (equipment is not null && equipment.Length > 0)
     {
         var validEquipments = equipment
             .Where(e => !string.IsNullOrWhiteSpace(e))
             .Select(e =>
-            {
-                bool parsed = Enum.TryParse<EquipmentType>(e, true, out var result);
-                return new { parsed, result };
-            })
-            .Where(x => x.parsed)
-            .Select(x => x.result)
+                Enum.TryParse<EquipmentType>(e, true, out var parsed)
+                    ? parsed
+                    : (EquipmentType?)null)
+            .Where(e => e != null)
+            .Select(e => e!.Value)
             .ToList();
 
-        if (validEquipments.Count > 0)
+        if (validEquipments.Any())
+        {
             query = query.Where(e => validEquipments.Contains(e.Equipment));
+        }
     }
 
     if (!string.IsNullOrWhiteSpace(muscle) &&
@@ -696,13 +703,14 @@ public async Task<(IEnumerable<AllExerciseResponseDto> Exercises, int TotalCount
 
     if (!string.IsNullOrWhiteSpace(place))
     {
-        place = place.Trim();
-        query = query.Where(e => EF.Functions.Like(e.Description!, $"%{place}%"));
+        query = query.Where(e =>
+            e.Description != null &&
+            e.Description.Contains(place));
     }
 
-    var totalCount = await query.CountAsync();
+    var totalCount = query.Count();
 
-    var exercises = await query
+    var exercises = query
         .OrderByDescending(e => e.Views)
         .ThenBy(e => e.Id)
         .Skip((page - 1) * pageSize)
@@ -719,8 +727,7 @@ public async Task<(IEnumerable<AllExerciseResponseDto> Exercises, int TotalCount
             Mechanics = e.Mechanics.ToString(),
             View = e.Views,
             Met = e.Met
-        })
-        .ToListAsync();
+        });
 
     return (exercises, totalCount);
 }

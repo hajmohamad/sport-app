@@ -1006,7 +1006,7 @@ sys|schema||mysql.sys|localhost|TRIGGER|G</Grants>
     <schema id="289" parent="1" name="RepairShop">
       <AutoIntrospectionLevel>3</AutoIntrospectionLevel>
       <LastIntrospectionLevel>3</LastIntrospectionLevel>
-      <LastIntrospectionLocalTimestamp>2026-06-18.11:03:51</LastIntrospectionLocalTimestamp>
+      <LastIntrospectionLocalTimestamp>2026-07-01.13:45:03</LastIntrospectionLocalTimestamp>
       <CollationName>utf8mb4_0900_ai_ci</CollationName>
     </schema>
     <schema id="290" parent="1" name="information_schema">
@@ -1021,7 +1021,7 @@ sys|schema||mysql.sys|localhost|TRIGGER|G</Grants>
     <schema id="293" parent="1" name="sport_app">
       <AutoIntrospectionLevel>3</AutoIntrospectionLevel>
       <LastIntrospectionLevel>3</LastIntrospectionLevel>
-      <LastIntrospectionLocalTimestamp>2026-06-18.10:39:41</LastIntrospectionLocalTimestamp>
+      <LastIntrospectionLocalTimestamp>2026-07-01.13:45:03</LastIntrospectionLocalTimestamp>
       <CollationName>utf8mb4_0900_ai_ci</CollationName>
     </schema>
     <schema id="294" parent="1" name="sys">

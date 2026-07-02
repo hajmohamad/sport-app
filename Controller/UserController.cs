@@ -137,24 +137,7 @@ public class UserController(IUserRepository userRepository) : ControllerBase
         return Ok(result);
     }
     
-    [HttpGet("get_AllExercise")]
-    [Authorize(Roles = "Athlete,Coach")]
-    public async Task<IActionResult> GetAllExercise()
-    {
-        var result = await userRepository.GetAllExercise();
-        if (result.Action != true) return BadRequest(result);
-        return Ok(result);
-            
-    }
-    [HttpGet("get_Exercise/{exerciseId}")]
-    [Authorize(Roles = "Athlete,Coach")]
-    public async Task<IActionResult> GetExercise([FromRoute] int exerciseId)
-    {
-        var result = await userRepository.GetExercise(exerciseId);
-        if (result.Action != true) return BadRequest(result);
-        return Ok(result);
-            
-    }
+   
     
     [HttpDelete("removeProfilePhoto")]
     [Authorize(Roles = "Athlete,Coach")]
@@ -202,14 +185,17 @@ public class UserController(IUserRepository userRepository) : ControllerBase
             exercises
         });
     }
+    [HttpGet("get_Exercise/{exerciseId}")]
+    [Authorize(Roles = "Athlete,Coach")]
+    public async Task<IActionResult> GetExercise([FromRoute] int exerciseId)
+    {
+        var result = await userRepository.GetExercise(exerciseId);
+        if (result.Action != true) return BadRequest(result);
+        return Ok(result);
+            
+    }
 
     #region supportApp
-        // متد کمکی برای استخراج UserId از توکن
-    private int GetUserId()
-    {
-        var userIdClaim = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
-        return int.TryParse(userIdClaim, out var userId) ? userId : 0;
-    }
 
     [HttpPost("CreateSupportTicket")]
     [Authorize(Roles = "Athlete,Coach")]
@@ -259,6 +245,12 @@ public class UserController(IUserRepository userRepository) : ControllerBase
         return Ok(result);
     }
     #endregion
+    private int GetUserId()
+    {
+        var userIdClaim = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+        return int.TryParse(userIdClaim, out var userId) ? userId : 0;
+    }
+
  
 
 
