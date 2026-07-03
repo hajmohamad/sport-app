@@ -811,7 +811,8 @@ public async Task<ApiResponse> GetSupportTickets(int userId)
             Id = t.Id,
             Subject = t.Subject,
             Category = t.Category,       // مپ کردن مستقیم enum
-            Status = t.Status,           // مپ کردن مستقیم enum
+            Status = t.Status, // مپ کردن مستقیم enum
+            CreatedAt=t.CreatedAt,
             LastUpdatedAt = t.UpdatedAt  // مپ کردن مستقیم DateTime
         })
         .ToListAsync();

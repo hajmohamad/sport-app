@@ -30,6 +30,7 @@ public class TicketListDto
     public TicketStatus Status { get; set; }     // بازگشت نوع اصلی Enum
     public string StatusRaw => Status.ToString(); // نام انگلیسی Enum برای راحتی کلاینت
     public DateTime LastUpdatedAt { get; set; }  // بازگشت شیء DateTime
+    public DateTime CreatedAt { get; set; }
 }
 
 public class TicketMessageDto
