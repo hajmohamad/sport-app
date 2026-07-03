@@ -1750,7 +1750,7 @@ namespace sport_app_backend.Repository.CoachRepo
                 .ToDictionary(x => x.Id, x => x.IsShouldBeTrue);
 
             var feedbacks = await context.WorkoutProgramFeedback
-                .Where(e => e.CouchId == coach.Id)
+                .Where(e => e.CoachId == coach.Id)
                 .ToListAsync();
 
             if (!feedbacks.Any())
@@ -2017,7 +2017,7 @@ public async Task<ApiResponse> AddPineExercise(int exerciseId, int coachId)
                 return new ApiResponse { Action = false, Message = "مربی یافت نشد." };
             }
 
-            var feedBack = await context.WorkoutProgramFeedback.Where(fb => fb.CouchId == coach.Id).ToListAsync();
+            var feedBack = await context.WorkoutProgramFeedback.Where(fb => fb.CoachId == coach.Id).ToListAsync();
             return new ApiResponse()
             {
                 Action = true,

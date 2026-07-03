@@ -79,7 +79,7 @@ namespace sport_app_backend.Repository.AthleteRepo
             var feedBack = new WorkoutProgramFeedback
             {
                 AthleteId = athlete.Id,
-                CouchId = workoutProgram.CoachId,
+                CoachId = workoutProgram.CoachId,
                 AthleteName = athlete.User.FirstName + " " + athlete.User.LastName,
                 WorkoutProgramId = workoutProgram.Id,
                 WorkoutProgramName = workoutProgram.Title,

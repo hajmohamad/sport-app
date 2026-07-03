@@ -626,7 +626,7 @@ private async Task<string> GenerateUniqueUsername()
                 }
             };
         var couchId =await  dbContext.Coaches.AsNoTracking().Where(c => c.PhoneNumber == phoneNumber).Select(c=>c.Id).FirstOrDefaultAsync();
-        var numberOfFeedBack =  dbContext.WorkoutProgramFeedback.Count(e => e.CouchId == couchId);
+        var numberOfFeedBack =  dbContext.WorkoutProgramFeedback.Count(e => e.CoachId == couchId);
 
 
         return new ApiResponse()

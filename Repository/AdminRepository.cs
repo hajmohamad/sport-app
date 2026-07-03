@@ -370,7 +370,7 @@ namespace sport_app_backend.Repository
 
       
             var workoutProgramFeedBack = await context.WorkoutProgramFeedback
-                .Where(fb => fb.IsChosen && fb.CouchId == coach.Id)
+                .Where(fb => fb.IsChosen && fb.CoachId == coach.Id)
                 .ToListAsync();
 
             return new ApiResponse

@@ -1091,7 +1091,7 @@ namespace sport_app_backend.Migrations
                         .HasMaxLength(30)
                         .HasColumnType("varchar(30)");
 
-                    b.Property<int>("CouchId")
+                    b.Property<int>("CoachId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("Date")
@@ -1117,6 +1117,8 @@ namespace sport_app_backend.Migrations
                         .HasColumnType("varchar(200)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CoachId");
 
                     b.HasIndex("WorkoutProgramId")
                         .IsUnique();
@@ -1832,6 +1834,12 @@ namespace sport_app_backend.Migrations
 
             modelBuilder.Entity("sport_app_backend.Models.Program.WorkoutProgramFeedback", b =>
                 {
+                    b.HasOne("sport_app_backend.Models.Account.Coach.Coach", null)
+                        .WithMany("WorkoutProgramFeedbacks")
+                        .HasForeignKey("CoachId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("sport_app_backend.Models.Program.WorkoutProgram", "WorkoutProgram")
                         .WithOne("WorkoutProgramFeedback")
                         .HasForeignKey("sport_app_backend.Models.Program.WorkoutProgramFeedback", "WorkoutProgramId")
@@ -1986,6 +1994,8 @@ namespace sport_app_backend.Migrations
 
                     b.Navigation("User")
                         .IsRequired();
+
+                    b.Navigation("WorkoutProgramFeedbacks");
 
                     b.Navigation("WorkoutPrograms");
                 });
