@@ -268,65 +268,42 @@ private async Task<string> GenerateUniqueUsername()
 
 
 
-    public async Task<ApiResponse> Login(string userPhoneNumber)
+public async Task<ApiResponse> Login(string userPhoneNumber)
+{
+    var isBan = await dbContext.Users
+        .AnyAsync(u => u.PhoneNumber == userPhoneNumber && u.UserIsBan);
+    
+    if (isBan) return new ApiResponse { Action = false, Message = "user is ban" };
+
+    var codeVerify = await dbContext.CodeVerifies
+        .FirstOrDefaultAsync(x => x.PhoneNumber == userPhoneNumber);
+
+    // ۳. بررسی محدودیت ۲ دقیقه
+    if (codeVerify != null && codeVerify.TimeCodeSend.AddMinutes(2) > DateTime.Now)
     {
-        var userIsBan =  await dbContext.Users.Select(u=>new
-        {
-            u.PhoneNumber,
-            u.UserIsBan
-            
-        }).Where(u=>u.UserIsBan&&u.PhoneNumber == userPhoneNumber).AnyAsync();
-        if (userIsBan)
-        {
-            return new ApiResponse()
-            {
-                Action = false,
-                Message = "user is ban"
-            };
-            
-        }
-        
-        var user = await dbContext.CodeVerifies.FirstOrDefaultAsync(x => x.PhoneNumber == userPhoneNumber);
-        if (user is null)
-        {
-            await dbContext.CodeVerifies.AddAsync(new CodeVerify()
-            {
-                PhoneNumber = userPhoneNumber,
-                Code = await sms.SendCode(userPhoneNumber),
-                TimeCodeSend = DateTime.Now
-            });
-            await dbContext.SaveChangesAsync();
+        return new ApiResponse { Action = false, Message = "you should wait 2 minutes" };
+    }
 
+    var code = await sms.SendCode(userPhoneNumber);
 
-            return new ApiResponse()
-            {
-                Action = true,
-                Message = "CodeIsSuccessFullySend"
-            };
-        }
-
-        if (user.TimeCodeSend.AddMinutes(2) >= DateTime.Now)
-            return new ApiResponse()
-            {
-                Action = false,
-                Message = "you should wait 2 minutes"
-            };
-        dbContext.CodeVerifies.Remove(user);
-        await dbContext.SaveChangesAsync();
-        await dbContext.CodeVerifies.AddAsync(new CodeVerify()
-        {
+    if (codeVerify == null)
+    {
+        await dbContext.CodeVerifies.AddAsync(new CodeVerify {
             PhoneNumber = userPhoneNumber,
-            Code = await sms.SendCode(userPhoneNumber),
+            Code = code,
             TimeCodeSend = DateTime.Now
         });
-        await dbContext.SaveChangesAsync();
-        return new ApiResponse()
-        {
-            Action = true,
-            Message = "CodeIsSuccessFullySend"
-        };
-
     }
+    else
+    {
+        codeVerify.Code = code;
+        codeVerify.TimeCodeSend = DateTime.Now;
+    }
+
+    await dbContext.SaveChangesAsync(); // فقط یکبار SaveChanges
+
+    return new ApiResponse { Action = true, Message = "CodeIsSuccessFullySend" };
+}
 
     public async Task<ApiResponse> GenerateAccessToken(string refreshToken)
     {
