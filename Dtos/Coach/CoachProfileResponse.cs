@@ -28,8 +28,13 @@ namespace sport_app_backend.Dtos.Coach
         public bool HasAthleteChange { get; set; }
 
         public int CompletionPercentage { get; set; }
-        public bool NeedsCompletion { get; set; }  
-        public bool PendingApproval { get; set; } 
-        public bool IsVerified { get; set; }  
+        public CoachProfileStatus Status { get; set; }
+
+    }
+    public enum CoachProfileStatus
+    {
+        NeedsCompletion,
+        PendingApproval,
+        Verified
     }
 }

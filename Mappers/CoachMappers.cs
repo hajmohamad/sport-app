@@ -10,6 +10,18 @@ namespace sport_app_backend.Mappers
 {
     public static class CoachMappers
     {
+        private static CoachProfileStatus GetCoachProfileStatus(
+            bool needsCompletion,
+            bool pendingApproval,
+            bool isVerified)
+        {
+
+            if (pendingApproval)
+                return CoachProfileStatus.PendingApproval;
+
+            return isVerified ? CoachProfileStatus.Verified : CoachProfileStatus.NeedsCompletion;
+        }
+
         public static CoachProfileResponse ToCoachProfileResponseDto(
     this User user,
     List<CoachingServiceResponse> coachingServicesResponse,
@@ -43,7 +55,7 @@ namespace sport_app_backend.Mappers
 
     var showWebSite = user.Coach?.ShowWebsite ?? false;
     var hasAthleteChange = user.Coach !=null && user.Coach.AthleteChangePhotos.Count != 0;
-    var isVerified =user.Coach is { Verified: true };
+    var isVerified =user.Coach != null&&( user.Coach.Verified || user.Coach.ShowWebsite);
 
     int completionPercentage = 0;
     if (hasPersonalDetails) completionPercentage += 20;
@@ -57,7 +69,12 @@ namespace sport_app_backend.Mappers
     
 
     bool needsCompletion = !hasCommunication || !hasWebsite||!hasCoachingService;
-    bool pendingApproval = hasCommunication && hasWebsite && !showWebSite;
+    bool pendingApproval = !showWebSite;
+    var status = GetCoachProfileStatus(
+        needsCompletion,
+        pendingApproval,
+        isVerified
+    );
 
     return new CoachProfileResponse
     {
@@ -84,10 +101,10 @@ namespace sport_app_backend.Mappers
         HasUserReviews = hasReviews,
         HasAthleteChange=hasAthleteChange,
         CompletionPercentage = completionPercentage,
+        
+        Status = status
 
-        NeedsCompletion = needsCompletion,
-        PendingApproval = pendingApproval,
-        IsVerified = isVerified
+        
     };
 }
 
