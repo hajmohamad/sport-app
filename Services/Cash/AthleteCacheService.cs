@@ -10,6 +10,8 @@ public class AthleteCacheService(
     IMemoryCache cache,
     ApplicationDbContext context)
 {
+
+
     private MemoryCacheEntryOptions CacheOptions =>
         new()
         {

@@ -6,20 +6,10 @@ using sport_app_backend.Models.Program;
 
 namespace sport_app_backend.Services.Cash;
 
-public class TrainingSessionCacheService
+public class TrainingSessionCacheService(
+    IMemoryCache cache,
+    ApplicationDbContext context)
 {
-    private readonly IMemoryCache _cache;
-
-    private readonly ApplicationDbContext _context;
-
-    public TrainingSessionCacheService(
-        IMemoryCache cache,
-        ApplicationDbContext context)
-    {
-        _cache = cache;
-        _context = context;
-    }
-
     private MemoryCacheEntryOptions CacheOptions =>
         new MemoryCacheEntryOptions
         {
@@ -37,14 +27,14 @@ public class TrainingSessionCacheService
         GetTrainingSessionAsync(
             int trainingSessionId)
     {
-        return await _cache.GetOrCreateAsync(
+        return await cache.GetOrCreateAsync(
             CacheKeys.TrainingSession(
                 trainingSessionId),
             async entry =>
             {
                 entry.SetOptions(CacheOptions);
 
-                return await _context.TrainingSessions
+                return await context.TrainingSessions
                     .Include(ts =>
                         ts.WorkoutProgram)
 
@@ -66,7 +56,7 @@ public class TrainingSessionCacheService
     public void RemoveTrainingSession(
         int trainingSessionId)
     {
-        _cache.Remove(
+        cache.Remove(
             CacheKeys.TrainingSession(
                 trainingSessionId));
     }

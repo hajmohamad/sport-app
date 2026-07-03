@@ -18,31 +18,53 @@
 // using sport_app_backend.Models.Question.A_Question;
 // using sport_app_backend.Models.TrainingPlan;
 // using sport_app_backend.Repository.AthleteRepo;
+// using sport_app_backend.Services.Cash;
 // using Xunit;
 //
 // namespace sport_app_backend.projectTest
 // {
-//     public class AthleteRepositoryTests
+//     public class AthleteRepositoryTests : IDisposable
 //     {
 //         private readonly Mock<ITokenService> _mockTokenService;
 //         private readonly Mock<ICalculator> _mockCalculator;
+//
+//         private readonly Mock<AthleteCacheService> _mockAthleteCache;
+//         private readonly Mock<WorkoutProgramCacheService> _mockWorkoutCache;
+//         private readonly Mock<TrainingSessionCacheService> _mockTrainingSessionCache;
+//
 //         private readonly ApplicationDbContext _context;
 //         private readonly IAthleteRepository _repository;
-//         
 //
 //         public AthleteRepositoryTests()
 //         {
 //             _mockTokenService = new Mock<ITokenService>();
 //             _mockCalculator = new Mock<ICalculator>();
 //
+//             _mockAthleteCache = new Mock<AthleteCacheService>();
+//             _mockWorkoutCache = new Mock<WorkoutProgramCacheService>();
+//             _mockTrainingSessionCache = new Mock<TrainingSessionCacheService>();
+//
 //             var options = new DbContextOptionsBuilder<ApplicationDbContext>()
-//                 .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
+//                 .UseInMemoryDatabase(Guid.NewGuid().ToString())
 //                 .Options;
 //
 //             _context = new ApplicationDbContext(options);
-//             _repository = new AthleteRepository(_context, _mockTokenService.Object, _mockCalculator.Object);
+//
+//             _repository = new AthleteRepository(
+//                 _context,
+//                 _mockTokenService.Object,
+//                 _mockCalculator.Object,
+//                 _mockAthleteCache.Object,
+//                 _mockWorkoutCache.Object,
+//                 _mockTrainingSessionCache.Object
+//             );
 //         }
 //
+//         public void Dispose()
+//         {
+//             _context.Database.EnsureDeleted();
+//             _context.Dispose();
+//         }
 //         #region GetFaq
 //
 //         [Fact]
