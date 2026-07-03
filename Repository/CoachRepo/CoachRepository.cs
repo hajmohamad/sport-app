@@ -1964,21 +1964,32 @@ public async Task<ApiResponse> AddPineExercise(int exerciseId, int coachId)
                 Action = true
             };
         }
-        public async Task<ApiResponse> GetCoachChecklist(string phoneNumber)
+        public async Task<ApiResponse> GetCoachChecklist(int coachId)
         {
             var user = await context.Users
                 .Include(u => u.Coach)
                 .ThenInclude(c => c.AthleteChangePhotos)
                 .Include(u => u.Coach)
                 .ThenInclude(c => c.WorkoutProgramFeedbacks)
-                .FirstOrDefaultAsync(u => u.PhoneNumber == phoneNumber);
+                .FirstOrDefaultAsync(u => u.CoachId == coachId);
 
-            if (user.Coach == null)
+            if (user == null)
+            {
                 return new ApiResponse
                 {
-                    Message = "coach not found",
+                    Message = "User not found",
                     Action = false
                 };
+            }
+
+            if (user.Coach == null)
+            {
+                return new ApiResponse
+                {
+                    Message = "Coach profile not found",
+                    Action = false
+                };
+            }
             var hasPersonalDetails = !string.IsNullOrWhiteSpace(user.FirstName) && !string.IsNullOrWhiteSpace(user.LastName) && !string.IsNullOrWhiteSpace(user.ImageProfile);
     
             var hasCommunication = !string.IsNullOrWhiteSpace(user.Coach.InstagramLink) || !string.IsNullOrWhiteSpace(user.Coach.TelegramLink) || !string.IsNullOrWhiteSpace(user.Coach.WhatsApp) || !string.IsNullOrWhiteSpace(user.Coach.BaleUserName) || !string.IsNullOrWhiteSpace(user.Coach.EitaaUserName);

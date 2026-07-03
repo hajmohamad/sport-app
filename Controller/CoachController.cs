@@ -44,10 +44,12 @@ namespace sport_app_backend.Controller
         [HttpGet("ProfileChecklist")]
         public async Task<IActionResult> GetProfileChecklist()
         {
-            var phoneNumber = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (string.IsNullOrEmpty(phoneNumber)) return Unauthorized();
-
-            var result = await coachRepository.GetCoachChecklist(phoneNumber);
+            var coachId = await GetCoachIdAsync();
+            if (coachId == 0)
+            {
+                return Unauthorized(new ApiResponse { Action = false, Message = "خطای احراز هویت." });
+            }
+            var result = await coachRepository.GetCoachChecklist(coachId);
     
             return Ok(new ApiResponse 
             { 
