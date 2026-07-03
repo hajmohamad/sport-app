@@ -82,6 +82,7 @@ namespace sport_app_backend.Mappers
         HasCommunicationChannels = hasCommunication,
         HasWebsiteAddress = hasWebsite,
         HasUserReviews = hasReviews,
+        HasAthleteChange=hasAthleteChange,
         CompletionPercentage = completionPercentage,
 
         NeedsCompletion = needsCompletion,

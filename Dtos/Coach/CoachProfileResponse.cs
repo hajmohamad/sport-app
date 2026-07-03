@@ -25,6 +25,8 @@ namespace sport_app_backend.Dtos.Coach
         public bool HasCommunicationChannels { get; set; }
         public bool HasWebsiteAddress { get; set; }
         public bool HasUserReviews { get; set; }
+        public bool HasAthleteChange { get; set; }
+
         public int CompletionPercentage { get; set; }
         public bool NeedsCompletion { get; set; }  
         public bool PendingApproval { get; set; } 
