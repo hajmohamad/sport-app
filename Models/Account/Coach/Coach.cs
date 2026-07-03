@@ -44,11 +44,10 @@ public class Coach
     public List<DiscountCode> DiscountCodes { get; set; } = [];
     [StringLength(51)]
     public string? WebSiteUrl { get; set; } = "";
-    
     public DateTime WebSiteUrlUpDateTime { get; set; } = DateTime.UtcNow;
-
     public CoachCardNumber? CoachCardNumber { get; set; }
     public List<AthleteChangePhoto> AthleteChangePhotos { get; set; } = [];
+    public List<WorkoutProgramFeedback> WorkoutProgramFeedbacks { get; set; } = [];
     public string Slogan { get; set; } = "";
     public string SiteDescription { get; set; } = "";
 

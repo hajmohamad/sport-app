@@ -40,6 +40,22 @@ namespace sport_app_backend.Controller
             if (!result.Action) return BadRequest(result);
             return Ok(result);
         }
+        [Authorize]
+        [HttpGet("ProfileChecklist")]
+        public async Task<IActionResult> GetProfileChecklist()
+        {
+            var phoneNumber = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (string.IsNullOrEmpty(phoneNumber)) return Unauthorized();
+
+            var result = await coachRepository.GetCoachChecklist(phoneNumber);
+    
+            return Ok(new ApiResponse 
+            { 
+                Action = true, 
+                Message = "Checklist status retrieved", 
+                Result = result 
+            });
+        }
 
 
         [HttpGet("get_coach_profile")]

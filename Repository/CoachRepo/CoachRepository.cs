@@ -1095,6 +1095,8 @@ namespace sport_app_backend.Repository.CoachRepo
             var user = await context.Users
                 .Include(u => u.Coach)
                 .ThenInclude(c => c.CoachingServices)
+                .Include(c=>c.Coach.AthleteChangePhotos)
+                .Include(u=>u.Coach.WorkoutProgramFeedbacks)
                 .FirstOrDefaultAsync(u => u.PhoneNumber == phoneNumber);
 
             if (user?.Coach == null)
@@ -1962,6 +1964,49 @@ public async Task<ApiResponse> AddPineExercise(int exerciseId, int coachId)
                 Action = true
             };
         }
+        public async Task<ApiResponse> GetCoachChecklist(string phoneNumber)
+        {
+            var user = await context.Users
+                .Include(u => u.Coach)
+                .ThenInclude(c => c.AthleteChangePhotos)
+                .Include(u => u.Coach)
+                .ThenInclude(c => c.WorkoutProgramFeedbacks)
+                .FirstOrDefaultAsync(u => u.PhoneNumber == phoneNumber);
+
+            if (user.Coach == null)
+                return new ApiResponse
+                {
+                    Message = "coach not found",
+                    Action = false
+                };
+            var hasPersonalDetails = !string.IsNullOrWhiteSpace(user.FirstName) && !string.IsNullOrWhiteSpace(user.LastName) && !string.IsNullOrWhiteSpace(user.ImageProfile);
+    
+            var hasCommunication = !string.IsNullOrWhiteSpace(user.Coach.InstagramLink) || !string.IsNullOrWhiteSpace(user.Coach.TelegramLink) || !string.IsNullOrWhiteSpace(user.Coach.WhatsApp) || !string.IsNullOrWhiteSpace(user.Coach.BaleUserName) || !string.IsNullOrWhiteSpace(user.Coach.EitaaUserName);
+    
+            var hasWebsite = !string.IsNullOrWhiteSpace(user.Coach.WebSiteUrl);
+    
+            var hasAthleteChange = user.Coach.AthleteChangePhotos?.Any() == true;
+    
+            var hasReviews = user.Coach.WorkoutProgramFeedbacks?.Any() == true;
+
+      
+
+            var response = new ProfileChecklistResponse
+            {
+                HasPersonalDetails = hasPersonalDetails,
+                HasCommunicationChannels = hasCommunication,
+                HasWebsiteAddress = hasWebsite,
+                HasAthleteChange = hasAthleteChange,
+                HasUserReviews = hasReviews,
+            };
+            return new ApiResponse()
+            {
+                Action = true,
+                Message = "data",
+                Result = response
+            };
+        }
+
 
 
         public async Task<ApiResponse> GetWorkoutProgramFeedBack(string phoneNumber)
@@ -2111,4 +2156,5 @@ public async Task<ApiResponse> AddPineExercise(int exerciseId, int coachId)
             return pc.ToDateTime(year, month, 1, 0, 0, 0, 0);
         }
     }
+    
 }

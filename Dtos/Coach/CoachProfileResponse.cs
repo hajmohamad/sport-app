@@ -1,9 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace sport_app_backend.Dtos
+namespace sport_app_backend.Dtos.Coach
 {
     public class CoachProfileResponse
     {
@@ -26,6 +21,13 @@ namespace sport_app_backend.Dtos
         public string? WebsiteUrl { get; set; } = "";
         public string? Slogan { get; set; } = "";
         public string? SiteDescription { get; set; } = "";
-
+        public bool HasPersonalDetails { get; set; }
+        public bool HasCommunicationChannels { get; set; }
+        public bool HasWebsiteAddress { get; set; }
+        public bool HasUserReviews { get; set; }
+        public int CompletionPercentage { get; set; }
+        public bool NeedsCompletion { get; set; }  
+        public bool PendingApproval { get; set; } 
+        public bool IsVerified { get; set; }  
     }
 }
