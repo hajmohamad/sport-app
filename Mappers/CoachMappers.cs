@@ -15,6 +15,10 @@ namespace sport_app_backend.Mappers
             bool pendingApproval,
             bool isVerified)
         {
+            if (needsCompletion)
+            {
+                return CoachProfileStatus.NeedsCompletion;
+            }
 
             if (pendingApproval)
                 return CoachProfileStatus.PendingApproval;
@@ -47,11 +51,11 @@ namespace sport_app_backend.Mappers
         !string.IsNullOrWhiteSpace(user.Coach.EitaaUserName)
     );
 
-    var hasCoachingService = user.Coach != null && user.Coach.CoachingServices.Count != 0;
+    var hasCoachingService = coachingServicesResponse.Count!=0;
 
     var hasWebsite = !string.IsNullOrWhiteSpace(user.Coach?.WebSiteUrl);
 
-    var hasReviews = user.Coach?.WorkoutProgramFeedbacks.Count != 0;
+    var hasReviews = user.Coach?.WorkoutProgramFeedbacks.Where(wf=>wf.IsChosen).ToList().Count != 0;
 
     var showWebSite = user.Coach?.ShowWebsite ?? false;
     var hasAthleteChange = user.Coach !=null && user.Coach.AthleteChangePhotos.Count != 0;

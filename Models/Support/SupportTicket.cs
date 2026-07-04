@@ -21,10 +21,10 @@ public class SupportTicket
     public User User { get; set; } = null!;
 
     [DataType(DataType.DateTime)]
-    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+    public DateTime CreatedAt { get; set; } = DateTime.Now;
 
     [DataType(DataType.DateTime)]
-    public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
+    public DateTime UpdatedAt { get; set; } = DateTime.Now;
 
     public List<TicketMessage> Messages { get; set; } = [];
 }
