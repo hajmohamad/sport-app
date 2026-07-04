@@ -26,6 +26,8 @@ namespace sport_app_backend.Dtos.Coach
         public bool HasWebsiteAddress { get; set; }
         public bool HasUserReviews { get; set; }
         public bool HasAthleteChange { get; set; }
+        
+        public bool ShowWebsite { get; set; }
 
         public int CompletionPercentage { get; set; }
         public CoachProfileStatus Status { get; set; }

@@ -105,6 +105,7 @@ namespace sport_app_backend.Mappers
         HasUserReviews = hasReviews,
         HasAthleteChange=hasAthleteChange,
         CompletionPercentage = completionPercentage,
+        ShowWebsite=user.Coach.ShowWebsite,
         
         Status = status
 
