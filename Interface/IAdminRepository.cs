@@ -19,7 +19,7 @@ namespace sport_app_backend.Interface
          Task<ApiResponse> UpdateCoachPayoutStatus(int payoutId, PayoutStatus newStatus, string? transactionReference,
              IFormFile file);
          Task<ApiResponse> GetCoachService(string coachWebSiteUrl);
-         Task<SmsResponse> SendMassageToCoach( string phoneNumber, string message);
+         // Task<SmsResponse> SendMassageToCoach( string phoneNumber, string message);
          Task<ApiResponse> GetVerifiedCoaches();
          Task<ApiResponse> ActiveShowWebsiteCoach(string coachPhoneNumber);
          Task<ApiResponse> GetAllSupportTicketsAsync(TicketStatus? status = null);

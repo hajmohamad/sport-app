@@ -1148,7 +1148,7 @@ namespace sport_app_backend.projectTest
             _context.ProgramInDays.Add(programInDay);
             _context.SaveChanges();
 
-        _mockSmsService.Setup(s => s.WorkoutReadySms(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).Returns(Task.FromResult(new SmsResponse
+        _mockSmsService.Setup(s => s.WorkoutReadySms(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).Returns(Task.FromResult(new SmsResponse()
             {
                 IsSuccess = false,
                 Message = "SMS sent successfully"

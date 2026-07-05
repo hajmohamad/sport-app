@@ -31,7 +31,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Host.UseSerilog((context, configuration) =>
 {
     configuration
-        .MinimumLevel.Is(LogEventLevel.Error) 
+        .MinimumLevel.Is(LogEventLevel.Information) 
         .Enrich.FromLogContext()
         .WriteTo.Console(); 
 });
@@ -121,7 +121,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
                         );
                     }
                 })
-            .LogTo(Console.WriteLine, LogLevel.Information)
+            .LogTo(Console.WriteLine, LogLevel.Error)
             .EnableDetailedErrors()
             .EnableSensitiveDataLogging();
     

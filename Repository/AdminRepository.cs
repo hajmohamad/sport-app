@@ -393,13 +393,13 @@ namespace sport_app_backend.Repository
         }
 
 
-        public async Task<SmsResponse> SendMassageToCoach( string phoneNumber, string message)
-        {
-         
-      
-            var result = sms.SendSms(phoneNumber, message);
-            return await result;
-        }
+        // public async Task<SmsResponse> SendMassageToCoach( string phoneNumber, string message)
+        // {
+        //  
+        //
+        //     var result = sms.SendSms(phoneNumber, message);
+        //     return await result;
+        // }
 
        
 

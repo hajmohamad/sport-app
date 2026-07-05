@@ -79,21 +79,21 @@ namespace sport_app_backend.Controller
             return Ok(result);
         }
         
- 
-        [HttpPost("sendMassageToCoach")]
-        [TypeFilter(typeof(IpAddressFilter))]
-
-        public async Task<IActionResult> SendMassageToCoach([FromQuery] string phoneNumber,
-            [FromQuery] string message)
-        {
-            var result = await adminRepository.SendMassageToCoach(phoneNumber, message);
-            if (!result.IsSuccess)
-            {
-                return BadRequest(result);
-            }
-
-            return Ok(result);
-        } 
+        //
+        // [HttpPost("sendMassageToCoach")]
+        // [TypeFilter(typeof(IpAddressFilter))]
+        //
+        // public async Task<IActionResult> SendMassageToCoach([FromQuery] string phoneNumber,
+        //     [FromQuery] string message)
+        // {
+        //     var result = await adminRepository.SendMassageToCoach(phoneNumber, message);
+        //     if (!result.IsSuccess)
+        //     {
+        //         return BadRequest(result);
+        //     }
+        //
+        //     return Ok(result);
+        // } 
           [HttpGet("SupportTickets")]
         public async Task<IActionResult> GetSupportTickets([FromQuery] TicketStatus? status)
         {

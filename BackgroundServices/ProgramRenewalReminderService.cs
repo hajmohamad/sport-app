@@ -84,30 +84,30 @@ public class ProgramRenewalReminderService(
             bool isProgramExpired = now >= programEndDate;
             bool isSeventyPercentCompleted = completionPercent >= 0.70;
 
-            string? message = null;
 
-            if (isProgramExpired)
-            {
-                message =
-                    $"{athleteName} عزیز\n" +
-                    $"{daysSinceEnd} روز از آخرین برنامه تمرینی که دریافت کردی گذشته. " +
-                    $"برای دریافت برنامه جدیدت از لینک زیر به مربی خودت درخواست بده\n\n" +
-                    coachWebsite;
-            }
-            else if (isSeventyPercentCompleted)
-            {
-                message =
-                    $"{athleteName} عزیز\n" +
-                    $"کمتر از {remainingSessions} جلسه از برنامه تمرینیت باقی مونده. " +
-                    $"برای دریافت برنامه جدیدت از لینک زیر به مربی خودت درخواست بده\n\n" +
-                    coachWebsite;
-            }
-
-            if (message == null) continue;
-
+         
             try
             {
-                 await sms.SendSms(phoneNumber, message);
+                if (isProgramExpired)
+                {
+                    await sms.SendProgramExpiredReminderSms(
+                        phoneNumber,
+                        athleteName,
+                        daysSinceEnd,
+                        coachWebsite);
+                }
+                else if (isSeventyPercentCompleted)
+                {
+                    await sms.SendProgramSessionsReminderSms(
+                        phoneNumber,
+                        athleteName,
+                        remainingSessions,
+                        coachWebsite);
+                }
+                else
+                {
+                    continue;
+                }
             }
             catch (Exception ex)
             {

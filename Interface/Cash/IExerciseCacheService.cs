@@ -7,7 +7,7 @@ public interface IExerciseCacheService
 
     Task<Dictionary<BaseCategory, List<int>>> GetCoachPinsAsync(int coachId);
 
-    Task<Dictionary<int, List<int>>> GetCoachLastWorkoutsAsync(int coachId);
+    Task<List<int>> GetLastWorkoutsForAthleteAsync(int coachId, int athleteId);
 
     Task UpdateCoachPinsAsync(int coachId, BaseCategory category, int exerciseId);
 

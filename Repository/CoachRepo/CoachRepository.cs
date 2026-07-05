@@ -1795,7 +1795,13 @@ GetExercisesWithFilterForCoach(
 
     var exercises = await exerciseCache.GetAllExercisesAsync();
     var pins = await exerciseCache.GetCoachPinsAsync(coachId);
-    var lastWorkouts = await exerciseCache.GetCoachLastWorkoutsAsync(coachId);
+    Dictionary<int, List<int>> lastWorkouts; 
+    List<int> lastIds = new List<int>();
+
+    if (athleteId.HasValue)
+    {
+        lastIds = await exerciseCache.GetLastWorkoutsForAthleteAsync(coachId, athleteId.Value);
+    }
 
     IEnumerable<Exercise> query = exercises;
 
@@ -1822,10 +1828,7 @@ GetExercisesWithFilterForCoach(
         .SelectMany(x => x.Value)
         .ToHashSet();
 
-    var lastIds = athleteId.HasValue &&
-                  lastWorkouts.ContainsKey(athleteId.Value)
-        ? lastWorkouts[athleteId.Value]
-        : new List<int>();
+ 
 
     var total = query.Count();
 

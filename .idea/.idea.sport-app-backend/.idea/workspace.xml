@@ -17,85 +17,21 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="11e104f8-869d-4d9d-9802-b48455f5eb31" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/Dtos/ActivityDto.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dtos/ActivityPageDto.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dtos/AddActivityDto.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dtos/AddAthleteChangePhotoDto.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dtos/AddCardNumberDto.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dtos/AddCoachServiceDto.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dtos/AddExercisesRequestDto.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dtos/AddRoleResponse.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dtos/AllExerciseResponseDto.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dtos/AllPaymentResponseDto.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dtos/AllTrainingSessionDto.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dtos/AthleteBodyImageDto.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dtos/AthleteFirstQuestionsDto.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dtos/AthletePaymentResponseDto.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dtos/AthleteProfileResponse.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dtos/AthleteQuestionBuyFromSiteDto.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dtos/AthleteQuestionDto.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dtos/AthleteQuestionResponseDto.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dtos/AthleteStatsDto.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dtos/AthleteStatusDto.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dtos/CheckCodeRequestDto.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dtos/CheckCodeRequestFromSiteBuyDto.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dtos/CheckCodeResponseDto.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dtos/CheckCodeResponseFromSiteBuyDto.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dtos/ChoseWorkoutProgramFeedBackDto.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dtos/CoachDashboardDto.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dtos/CoachForSearch.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dtos/CoachNameSearchDto.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dtos/CoachPaymentResponseDto.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dtos/CoachPayoutDto.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dtos/CoachProfileForAthleteDto.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dtos/CoachProfileResponse.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dtos/CoachQuestionDto.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dtos/CoachesProfileSearch.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dtos/CoachingServiceResponse.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dtos/CreateInAppMessageDto.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dtos/DailyIncomeDto.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dtos/DailySessionCountDto.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dtos/DiscountCodeDtos.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dtos/EditAthleteProfileDto.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dtos/ExerciseDto.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dtos/FeedbackTrainingSessionDto.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dtos/FeedbackWorkoutProgramDto.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dtos/FinishTrainingSessionDto.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dtos/InAppMessageDto.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dtos/InjuryAreaDto.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dtos/NotificationSubscriptionDto.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dtos/PaymentFilterDto.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dtos/ProgramDto/ExerciseChangeDto.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dtos/ProgramDto/ExerciseFeedbackDto.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dtos/ProgramDto/ExerciseForTrainingSessionDto.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dtos/ProgramDto/ProgramInDayDto.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dtos/ProgramDto/SingelExerciseDto.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dtos/ProgramDto/WorkoutProgramDto.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dtos/ProgramInDayDto.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dtos/ReportAppDto.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dtos/RoleGenderDto.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dtos/ServiceForDiscountDto.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dtos/SocialMediaLinkDto.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dtos/SupportDtos.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dtos/TokenUserDto.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dtos/TrainingSessionDto.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dtos/TrainingSessionSingleExerciseDto.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dtos/TransactionDto.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dtos/UpdateWebSiteUrlDto.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dtos/WaterInDayDto.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dtos/WaterInTakeDto.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dtos/WeightReportDto.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dtos/WorkoutPdfModel.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dtos/WorkoutProgramInfoForSiteDto.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dtos/WorkoutProgramResponseDto.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dtos/ZarinPal/Verify/ZarinPalVerifyRequestDto.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dtos/ZarinPal/Verify/ZarinPalVerifyResponseDto.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dtos/ZarinPal/ZarinPalPaymentRequestDto.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dtos/ZarinPal/ZarinPalPaymentResponseDto.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dtos/ZarinPal/ZarinpalError.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dtos/ZarinPal/ZarinpalVerifyApiResponseDto.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dtos/ZarinPal/ZarinpalVerifyData.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/appsettings.Development.json" beforeDir="false" afterPath="$PROJECT_DIR$/appsettings.Development.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/dataSources.local.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BackgroundServices/PaymentAttemptSmsService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/BackgroundServices/PaymentAttemptSmsService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BackgroundServices/ProgramRenewalReminderService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/BackgroundServices/ProgramRenewalReminderService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BackgroundServices/QuestionReminderService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/BackgroundServices/QuestionReminderService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Controller/AdminController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Controller/AdminController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Interface/Cash/IExerciseCacheService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Interface/Cash/IExerciseCacheService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Interface/IAdminRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Interface/IAdminRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Interface/ISmsService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Interface/ISmsService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Program.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Repository/AdminRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Repository/AdminRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Repository/CoachRepo/CoachRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Repository/CoachRepo/CoachRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Services/Cash/ExerciseCacheService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Services/Cash/ExerciseCacheService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Services/SmsService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Services/SmsService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/projectTest/CoachRepositoryTests.cs" beforeDir="false" afterPath="$PROJECT_DIR$/projectTest/CoachRepositoryTests.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -159,6 +95,7 @@
 }</component>
   <component name="HighlightingSettingsPerFile">
     <setting file="file://$USER_HOME$/.nuget/packages/microsoft.net.test.sdk/17.14.1/build/net8.0/Microsoft.NET.Test.Sdk.Program.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/71e52421c6904ee8851944a0b013698923200/1c/bf2e6586/ILogger`1.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/BackgroundServices/ProgramRenewalReminderService.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/BackgroundServices/TrainingReminderService.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Controller/AdminController.cs" root0="FORCE_HIGHLIGHTING" />
@@ -168,15 +105,6 @@
     <setting file="file://$PROJECT_DIR$/Controller/AthleteController/WaterAndWeightController.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Controller/InAppMessageController.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Controller/NotificationController.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Dtos/CreateInAppMessageDto.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Dtos/ExerciseDto.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Dtos/FeedbackWorkoutProgramDto.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Dtos/InAppMessageDto.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Dtos/PaymentFilterDto.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Dtos/ProgramDto/ExerciseForTrainingSessionDto.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Dtos/ServiceForDiscountDto.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Dtos/SupportDtos.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Dtos/UpdateWebSiteUrlDto.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Interface/Athlete/IAchievements.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Interface/Athlete/IActivity.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Interface/Athlete/IBuyProgramFromApplications.cs" root0="FORCE_HIGHLIGHTING" />
@@ -227,43 +155,43 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;.NET Launch Settings Profile.sport-app-backend: http.executor&quot;: &quot;Run&quot;,
-    &quot;.NET Launch Settings Profile.sport-app-backend: https.executor&quot;: &quot;Run&quot;,
-    &quot;ASKED_SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;Docker.Dockerfile.executor&quot;: &quot;Run&quot;,
-    &quot;HTTP Request.sport-app-backend | #1.executor&quot;: &quot;Run&quot;,
-    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.cidr.known.project.marker&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.readMode.enableVisualFormatting&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.typescript.service.memoryLimit.init&quot;: &quot;true&quot;,
-    &quot;cidr.known.project.marker&quot;: &quot;true&quot;,
-    &quot;codeWithMe.voiceChat.enabledByDefault&quot;: &quot;false&quot;,
-    &quot;database.data.extractors.current.export.id&quot;: &quot;Comma-separated (CSV)_id&quot;,
-    &quot;database.data.extractors.current.id&quot;: &quot;Comma-separated (CSV)_id&quot;,
-    &quot;full.screen.before.presentation.mode&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;stagingMain&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;CSharpOtherInlayHintsOptions&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    ".NET Launch Settings Profile.sport-app-backend: http.executor": "Run",
+    ".NET Launch Settings Profile.sport-app-backend: https.executor": "Run",
+    "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "Docker.Dockerfile.executor": "Run",
+    "HTTP Request.sport-app-backend | #1.executor": "Run",
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
+    "RunOnceActivity.cidr.known.project.marker": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "RunOnceActivity.readMode.enableVisualFormatting": "true",
+    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
+    "cidr.known.project.marker": "true",
+    "codeWithMe.voiceChat.enabledByDefault": "false",
+    "database.data.extractors.current.export.id": "Comma-separated (CSV)_id",
+    "database.data.extractors.current.id": "Comma-separated (CSV)_id",
+    "full.screen.before.presentation.mode": "true",
+    "git-widget-placeholder": "stagingMain",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "CSharpOtherInlayHintsOptions",
+    "vue.rearranger.settings.migration": "true"
   },
-  &quot;keyToStringList&quot;: {
-    &quot;ChangesTree.GroupingKeys&quot;: [
-      &quot;repository&quot;
+  "keyToStringList": {
+    "ChangesTree.GroupingKeys": [
+      "repository"
     ],
-    &quot;DatabaseDriversLRU&quot;: [
-      &quot;mysql&quot;
+    "DatabaseDriversLRU": [
+      "mysql"
     ]
   }
-}</component>
+}]]></component>
   <component name="RunManager" selected=".NET Launch Settings Profile.sport-app-backend: https">
     <configuration name="sport-app-backend | #1" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" temporary="true" nameIsGenerated="true" path="$PROJECT_DIR$/sport-app-backend.http" executionIdentifier="#1" runType="Run single request">
       <method v="2" />
@@ -493,46 +421,10 @@
       <workItem from="1782409163137" duration="1460000" />
       <workItem from="1782566824650" duration="95000" />
       <workItem from="1782586410712" duration="8141000" />
-    </task>
-    <task id="LOCAL-00024" summary="add ci-cd">
-      <option name="closed" value="true" />
-      <created>1766625275563</created>
-      <option name="number" value="00024" />
-      <option name="presentableId" value="LOCAL-00024" />
-      <option name="project" value="LOCAL" />
-      <updated>1766625275563</updated>
-    </task>
-    <task id="LOCAL-00025" summary="add new yml">
-      <option name="closed" value="true" />
-      <created>1766656145506</created>
-      <option name="number" value="00025" />
-      <option name="presentableId" value="LOCAL-00025" />
-      <option name="project" value="LOCAL" />
-      <updated>1766656145506</updated>
-    </task>
-    <task id="LOCAL-00026" summary="edit yml">
-      <option name="closed" value="true" />
-      <created>1766662432515</created>
-      <option name="number" value="00026" />
-      <option name="presentableId" value="LOCAL-00026" />
-      <option name="project" value="LOCAL" />
-      <updated>1766662432515</updated>
-    </task>
-    <task id="LOCAL-00027" summary="add pushNotifications">
-      <option name="closed" value="true" />
-      <created>1767129682374</created>
-      <option name="number" value="00027" />
-      <option name="presentableId" value="LOCAL-00027" />
-      <option name="project" value="LOCAL" />
-      <updated>1767129682374</updated>
-    </task>
-    <task id="LOCAL-00028" summary="edit notifications dto">
-      <option name="closed" value="true" />
-      <created>1767212140278</created>
-      <option name="number" value="00028" />
-      <option name="presentableId" value="LOCAL-00028" />
-      <option name="project" value="LOCAL" />
-      <updated>1767212140278</updated>
+      <workItem from="1783158106140" duration="4182000" />
+      <workItem from="1783195273369" duration="4517000" />
+      <workItem from="1783246337888" duration="63000" />
+      <workItem from="1783246549409" duration="4453000" />
     </task>
     <task id="LOCAL-00029" summary="edit dto">
       <option name="closed" value="true" />
@@ -886,7 +778,47 @@
       <option name="project" value="LOCAL" />
       <updated>1782730339398</updated>
     </task>
-    <option name="localTasksCounter" value="73" />
+    <task id="LOCAL-00073" summary="apply local unstaged changes">
+      <option name="closed" value="true" />
+      <created>1783096731281</created>
+      <option name="number" value="00073" />
+      <option name="presentableId" value="LOCAL-00073" />
+      <option name="project" value="LOCAL" />
+      <updated>1783096731281</updated>
+    </task>
+    <task id="LOCAL-00074" summary="add enum for CoachProfileStatus">
+      <option name="closed" value="true" />
+      <created>1783098068559</created>
+      <option name="number" value="00074" />
+      <option name="presentableId" value="LOCAL-00074" />
+      <option name="project" value="LOCAL" />
+      <updated>1783098068559</updated>
+    </task>
+    <task id="LOCAL-00075" summary="edit GetCoachChecklist">
+      <option name="closed" value="true" />
+      <created>1783113822754</created>
+      <option name="number" value="00075" />
+      <option name="presentableId" value="LOCAL-00075" />
+      <option name="project" value="LOCAL" />
+      <updated>1783113822754</updated>
+    </task>
+    <task id="LOCAL-00076" summary="edit support time and fix bugs in get coachProfile">
+      <option name="closed" value="true" />
+      <created>1783196908729</created>
+      <option name="number" value="00076" />
+      <option name="presentableId" value="LOCAL-00076" />
+      <option name="project" value="LOCAL" />
+      <updated>1783196908729</updated>
+    </task>
+    <task id="LOCAL-00077" summary="add show website to profile response">
+      <option name="closed" value="true" />
+      <created>1783198046618</created>
+      <option name="number" value="00077" />
+      <option name="presentableId" value="LOCAL-00077" />
+      <option name="project" value="LOCAL" />
+      <updated>1783198046618</updated>
+    </task>
+    <option name="localTasksCounter" value="78" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -929,11 +861,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
-    <MESSAGE value="edit disable discountcode to change discountcode" />
-    <MESSAGE value="change end point" />
-    <MESSAGE value="fix bugs" />
-    <MESSAGE value="add image and socialMediaLink to website" />
-    <MESSAGE value="edit paymebt attempt message" />
     <MESSAGE value="edit Storage.cs" />
     <MESSAGE value="edit appsetting" />
     <MESSAGE value="change update" />
@@ -954,7 +881,12 @@
     <MESSAGE value="ADD ActiveShowWebsiteCoach" />
     <MESSAGE value="remove urlsite fron verifi coach" />
     <MESSAGE value="add support new version" />
-    <option name="LAST_COMMIT_MESSAGE" value="add support new version" />
+    <MESSAGE value="apply local unstaged changes" />
+    <MESSAGE value="add enum for CoachProfileStatus" />
+    <MESSAGE value="edit GetCoachChecklist" />
+    <MESSAGE value="edit support time and fix bugs in get coachProfile" />
+    <MESSAGE value="add show website to profile response" />
+    <option name="LAST_COMMIT_MESSAGE" value="add show website to profile response" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -999,7 +931,14 @@
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Controller/AthleteController/AchievementController.cs</url>
           <line>27</line>
-          <properties documentPath="$PROJECT_DIR$/Controller/AchievementController.cs" containingFunctionPresentation="Method 'CompleteNewChallenge'" />
+          <properties documentPath="$PROJECT_DIR$/Controller/AchievementController.cs" containingFunctionPresentation="Method 'CompleteNewChallenge'">
+            <startOffsets>
+              <option value="903" />
+            </startOffsets>
+            <endOffsets>
+              <option value="904" />
+            </endOffsets>
+          </properties>
           <option name="timeStamp" value="10" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
@@ -1030,26 +969,26 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Mappers/CoachMappers.cs</url>
-          <line>165</line>
+          <line>187</line>
           <properties documentPath="$PROJECT_DIR$/Mappers/CoachMappers.cs" containingFunctionPresentation="Method 'CalculatePublicDiscountAmount'">
             <startOffsets>
-              <option value="7477" />
+              <option value="8063" />
             </startOffsets>
             <endOffsets>
-              <option value="7478" />
+              <option value="8064" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="23" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Controller/CoachController.cs</url>
-          <line>517</line>
-          <properties documentPath="$PROJECT_DIR$/Controller/CoachController.cs" containingFunctionPresentation="Method 'AddPineExercise'">
+          <line>519</line>
+          <properties documentPath="$PROJECT_DIR$/Controller/CoachController.cs" containingFunctionPresentation="Method 'GetExercisesWithFilterForCoach'">
             <startOffsets>
-              <option value="21095" />
+              <option value="21130" />
             </startOffsets>
             <endOffsets>
-              <option value="21112" />
+              <option value="21319" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="28" />
@@ -1079,6 +1018,45 @@
             </endOffsets>
           </properties>
           <option name="timeStamp" value="32" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Repository/CoachRepo/CoachRepository.cs</url>
+          <line>1970</line>
+          <properties documentPath="$PROJECT_DIR$/Repository/CoachRepo/CoachRepository.cs" containingFunctionPresentation="Method 'GetCoachChecklist'">
+            <startOffsets>
+              <option value="74399" />
+            </startOffsets>
+            <endOffsets>
+              <option value="74400" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="40" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Repository/CoachRepo/CoachRepository.cs</url>
+          <line>1093</line>
+          <properties documentPath="$PROJECT_DIR$/Repository/CoachRepo/CoachRepository.cs" containingFunctionPresentation="Method 'GetProfile'">
+            <startOffsets>
+              <option value="40593" />
+            </startOffsets>
+            <endOffsets>
+              <option value="40594" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="41" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Mappers/CoachMappers.cs</url>
+          <line>40</line>
+          <properties documentPath="$PROJECT_DIR$/Mappers/CoachMappers.cs" containingFunctionPresentation="Method 'ToCoachProfileResponseDto'">
+            <startOffsets>
+              <option value="1265" />
+            </startOffsets>
+            <endOffsets>
+              <option value="1451" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="42" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

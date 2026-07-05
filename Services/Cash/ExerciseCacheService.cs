@@ -38,22 +38,31 @@ public class ExerciseCacheService(IMemoryCache cache, ApplicationDbContext conte
         }) ?? [];
     }
 
-    public async Task<Dictionary<int, List<int>>> GetCoachLastWorkoutsAsync(int coachId)
+    public async Task<List<int>> GetLastWorkoutsForAthleteAsync(int coachId, int athleteId)
     {
         var key = CacheKeys.CoachLastWorkout(coachId);
 
-        return await cache.GetOrCreateAsync(key, async entry =>
+        var allWorkoutsCache = await cache.GetOrCreateAsync(key, async entry =>
         {
             entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromDays(7);
-
             var workouts = await context.LastWorkoutExercises
                 .Where(w => w.CoachId == coachId)
                 .ToListAsync();
 
-            return workouts.ToDictionary(
-                w => w.AthleteId,
-                w => w.ExerciseIds.ToList());
+            return workouts
+                .GroupBy(w => w.AthleteId)
+                .ToDictionary(
+                    g => g.Key,
+                    g => g.SelectMany(w => w.ExerciseIds).ToList()
+                );
         }) ?? [];
+
+        if (allWorkoutsCache.TryGetValue(athleteId, out var exerciseIds))
+        {
+            return exerciseIds;
+        }
+
+        return new List<int>();
     }
  
     
