@@ -32,7 +32,6 @@ namespace sport_app_backend.Mappers
     int numberOfProgram,
     int numberOfAthlete)
 {
-    if(user.Coach is null);
     const string baseUrl = "https://chaarset.ir/coach/";
     var websiteUrl = !string.IsNullOrEmpty(user.Coach?.WebSiteUrl)
         ? $"{baseUrl}{user.Coach.WebSiteUrl}/"
@@ -41,7 +40,9 @@ namespace sport_app_backend.Mappers
     var hasPersonalDetails =
         !string.IsNullOrWhiteSpace(user.FirstName) &&
         !string.IsNullOrWhiteSpace(user.LastName) &&
-        !string.IsNullOrWhiteSpace(user.ImageProfile);
+        !string.IsNullOrWhiteSpace(user.ImageProfile)&&
+        !string.IsNullOrWhiteSpace(user.Coach?.Slogan)&&
+        !string.IsNullOrWhiteSpace(user.Coach.SiteDescription);
 
     var hasCommunication = user.Coach != null && (
         !string.IsNullOrWhiteSpace(user.Coach.InstagramLink) ||

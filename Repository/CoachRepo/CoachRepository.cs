@@ -1614,7 +1614,7 @@ namespace sport_app_backend.Repository.CoachRepo
                     Amount = p.Amount,
                     Type = "افزایش",
                     Date = p.PaymentDate.ToString(CultureInfo.CurrentCulture),
-                    Description = $"خرید سرویس {p.CoachService.Title}",
+                    Description = $"فروش سرویس {p.CoachService.Title}",
                     BuyerName = p.Athlete?.User != null
                         ? $"{p.Athlete.User.FirstName} {p.Athlete.User.LastName}"
                         : "نامشخص",
