@@ -203,123 +203,125 @@ public class ActivityRepository(
             };
         }
 
-        public async Task<ApiResponse> GetActivityPage(string phoneNumber)
+public async Task<ApiResponse> GetActivityPage(string phoneNumber)
+{
+    var today = DateTime.Today;
+    var lastSaturday = GetLastSaturday(today);
+    var firstDayOfPersianMonth = GetFirstDayOfPersianMonth(today);
+
+    var athleteData = await context.Athletes
+        .AsNoTracking()
+        .Where(a => a.PhoneNumber == phoneNumber)
+        .Select(a => new
         {
-            var today = DateTime.Today;
-            var lastSaturday = GetLastSaturday(today);
-            var firstDayOfPersianMonth = GetFirstDayOfPersianMonth(today);
+            IsAthleteFound = true,
+            AthleteId = a.Id,
+            a.CurrentWeight,
+            CompletedSessionCount = a.ActiveWorkoutProgram != null
+                ? a.ActiveWorkoutProgram.CompletedSessionCount
+                : 0,
 
+            TotalSessionCount = a.ActiveWorkoutProgram != null
+                ? a.ActiveWorkoutProgram.TotalSessionCount
+                : 0,
 
-            var activityPageData = await context.Athletes
-                .AsNoTracking() 
-                .Where(a => a.PhoneNumber == phoneNumber)
-                .Select(a => new
-                {
-                    IsAthleteFound = true,
-                    a.CurrentWeight,
-                    CompletedSessionCount = a.ActiveWorkoutProgram != null
-                        ? a.ActiveWorkoutProgram.CompletedSessionCount
-                        : 0,
+            GoalWeight = a.WeightGoal,
+            Name = a.User.FirstName + " " + a.User.LastName,
+            a.Height,
+            a.TotalActivities,
+            a.TotalCalories,
 
-                    TotalSessionCount = a.ActiveWorkoutProgram != null
-                        ? a.ActiveWorkoutProgram.TotalSessionCount
-                        : 0,
+            // دریافت ثبت‌های وزن ماه جاری برای پردازش در حافظه
+            RawMonthlyEntries = a.WeightEntries
+                .Where(w => w.CurrentDate >= firstDayOfPersianMonth && w.CurrentDate <= today)
+                .OrderBy(w => w.CurrentDate)
+                .Select(w => new { w.CurrentDate, w.Weight })
+                .ToList(),
 
-                    GoalWeight = a.WeightGoal,
-                    Name = a.User.FirstName + " " + a.User.LastName,
-                    a.Height,
-                    a.TotalActivities,
-                    a.TotalCalories,
-                    LastMonthWeights = a.WeightEntries
-                        .Where(w => w.CurrentDate >= firstDayOfPersianMonth)
-                        .OrderByDescending(w => w.CurrentDate)
-                        .Select(w => new WeightReportDto
-                        {
-                            Date = w.CurrentDate.ToString("yyyy-MM-dd"),
-                            Weight = w.Weight
-                        }).ToList(),
+            LastWeekActivityDates = a.Activities
+                .Where(act => act.Date >= lastSaturday && act.Date <= today)
+                .Select(act => act.Date)
+                .ToList()
+        })
+        .FirstOrDefaultAsync();
 
-                    LastWeekActivityDates = a.Activities
-                        .Where(act => act.Date >= lastSaturday && act.Date <= today)
-                        .Select(act => act.Date)
-                        .ToList(),
-                    // DailyCupOfWater = a.WaterInTake != null ? a.WaterInTake.DailyCupOfWater : 0,
-                    // Reminder = a.WaterInTake != null ? a.WaterInTake.Reminder : 0,
-                    // TotalTime = a.Activities.Sum(act => (double?)act.Duration) ?? 0,
-                    // TodayActivities = a.Activities
-                    //     .Where(act => act.Date == today)
-                    //     .Select(act => new ActivityDto
-                    //     {
-                    //         Id = act.Id,
-                    //         Date = act.Date.ToString("yyyy-MM-dd"),
-                    //         CaloriesLost = act.CaloriesLost,
-                    //         Duration = act.Duration,
-                    //         ActivityCategory = act.ActivityCategory.ToString(),
-                    //         Name = act.Name ?? ""
-                    //     }).ToList(),
-                    // NumberOfCupsDrinked = a.WaterInDays
-                    //     .Where(w => w.Date == today)
-                    //     .Select(w => w.NumberOfCupsDrinked)
-                    //     .FirstOrDefault() // مقدار ۰ به صورت پیش‌فرض برمی‌گرداند
-                })
-                .FirstOrDefaultAsync();
+    if (athleteData is null || !athleteData.IsAthleteFound)
+    {
+        return new ApiResponse { Message = "Athlete not found", Action = false };
+    }
 
-            if (activityPageData is null || !activityPageData.IsAthleteFound)
-            {
-                return new ApiResponse { Message = "Athlete not found", Action = false };
-            }
+    // ۲. دریافت آخرین وزن ثبت شده قبل از ماه جاری
+    var lastWeightBeforeMonth = await context.WeightEntries
+        .AsNoTracking()
+        .Where(x => x.AthleteId == athleteData.AthleteId && x.CurrentDate < firstDayOfPersianMonth)
+        .OrderByDescending(x => x.CurrentDate)
+        .Select(x => (double?)x.Weight)
+        .FirstOrDefaultAsync();
 
-            var lastWeekActivitiesBitmap = Enumerable.Range(0, 7)
-                .Select(offset =>
-                {
-                    var date = lastSaturday.AddDays(offset);
-                    return activityPageData.LastWeekActivityDates.Any(d => d.Date == date) ? 1 : 0;
-                })
-                .ToList();
-            double? bmi = null;
+    var dailyWeights = new List<WeightReportDto>();
+    double currentRunningWeight = lastWeightBeforeMonth ?? athleteData.CurrentWeight;
 
-            if (activityPageData.Height > 0 && activityPageData.CurrentWeight > 0)
-            {
-                var heightInMeters = activityPageData.Height / 100.0;
-                var tempBmi = activityPageData.CurrentWeight / (heightInMeters * heightInMeters);
-
-                if (double.IsFinite(tempBmi))
-                    bmi = tempBmi;
-            }
-         
-            var progress = activityPageData.TotalSessionCount > 0
-                ? (int)((double)activityPageData.CompletedSessionCount / activityPageData.TotalSessionCount * 100)
-                : 0;
-
-
-         
-
-            return new ApiResponse
-            {
-                Message = "Activities found",
-                Action = true,
-                Result = new ActivityPageDto()
-                {
-                    Name = activityPageData.Name,
-                    Height = activityPageData.Height,
-                    TotalActivities = activityPageData.TotalActivities,
-                    TotalCalories = activityPageData.TotalCalories,
-                    LastWeekActivities = lastWeekActivitiesBitmap,
-                    CurrentWeight = activityPageData.CurrentWeight,
-                    GoalWeight = activityPageData.GoalWeight,
-                    LastMonthWeights = activityPageData.LastMonthWeights,
-                    Bmi = bmi,
-                    Progress = progress
-                    // NumberOfCupsDrinked = activityPageData.NumberOfCupsDrinked,
-                    // DailyCupOfWater = activityPageData.DailyCupOfWater,
-                    // Reminder = activityPageData.Reminder,
-                    // TodayActivities = activityPageData.TodayActivities,
-                    // TotalTime = activityPageData.TotalTime,
-                    
-                   
-                }
-            };
+    int entryIndex = 0;
+    for (var date = firstDayOfPersianMonth; date <= today; date = date.AddDays(1))
+    {
+        while (entryIndex < athleteData.RawMonthlyEntries.Count && 
+               athleteData.RawMonthlyEntries[entryIndex].CurrentDate.Date == date.Date)
+        {
+            currentRunningWeight = athleteData.RawMonthlyEntries[entryIndex].Weight;
+            entryIndex++;
         }
+
+        dailyWeights.Add(new WeightReportDto
+        {
+            Date = date.ToString("yyyy-MM-dd"),
+            Weight = currentRunningWeight
+        });
+    }
+
+    // محاسبه بیت‌مپ فعالیت‌های هفته گذشته
+    var lastWeekActivitiesBitmap = Enumerable.Range(0, 7)
+        .Select(offset =>
+        {
+            var date = lastSaturday.AddDays(offset);
+            return athleteData.LastWeekActivityDates.Any(d => d.Date == date) ? 1 : 0;
+        })
+        .ToList();
+
+    // محاسبه BMI
+    double? bmi = null;
+    if (athleteData.Height > 0 && athleteData.CurrentWeight > 0)
+    {
+        var heightInMeters = athleteData.Height / 100.0;
+        var tempBmi = athleteData.CurrentWeight / (heightInMeters * heightInMeters);
+
+        if (double.IsFinite(tempBmi))
+            bmi = tempBmi;
+    }
+
+    // محاسبه درصد پیشرفت برنامه ورزشی
+    var progress = athleteData.TotalSessionCount > 0
+        ? (int)((double)athleteData.CompletedSessionCount / athleteData.TotalSessionCount * 100)
+        : 0;
+
+    return new ApiResponse
+    {
+        Message = "Activities found",
+        Action = true,
+        Result = new ActivityPageDto()
+        {
+            Name = athleteData.Name,
+            Height = athleteData.Height,
+            TotalActivities = athleteData.TotalActivities,
+            TotalCalories = athleteData.TotalCalories,
+            LastWeekActivities = lastWeekActivitiesBitmap,
+            CurrentWeight = athleteData.CurrentWeight,
+            GoalWeight = athleteData.GoalWeight,
+            LastMonthWeights = dailyWeights, // خروجی وزن اصلاح شده و پیوسته
+            Bmi = bmi,
+            Progress = progress
+        }
+    };
+}
         private DateTime GetLastSaturday(DateTime today)
         {
             var diff = ((int)today.DayOfWeek - (int)DayOfWeek.Saturday + 7) % 7;
