@@ -20,6 +20,7 @@ using sport_app_backend.Interface.Athlete;
 using sport_app_backend.Interface.Coach;
 using sport_app_backend.Repository.AthleteRepo;
 using sport_app_backend.Repository.CoachRepo;
+using sport_app_backend.Services.Cash;
 
 Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()
@@ -30,7 +31,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Host.UseSerilog((context, configuration) =>
 {
     configuration
-        .MinimumLevel.Is(LogEventLevel.Error) 
+        .MinimumLevel.Is(LogEventLevel.Information) 
         .Enrich.FromLogContext()
         .WriteTo.Console(); 
 });
@@ -120,7 +121,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
                         );
                     }
                 })
-            .LogTo(Console.WriteLine, LogLevel.Information)
+            .LogTo(Console.WriteLine, LogLevel.Error)
             .EnableDetailedErrors()
             .EnableSensitiveDataLogging();
     
@@ -178,6 +179,12 @@ builder.Services.AddScoped<IAchievements, AchievementsRepository>();
 builder.Services.AddScoped<IWaterAndWeight, WaterAndWeightRepository>();
 builder.Services.AddScoped<IActivity, ActivityRepository>();
 builder.Services.AddScoped<IInAppMessageRepository, InAppMessageRepository>();
+//cash service
+builder.Services.AddScoped<IExerciseCacheService, ExerciseCacheService>();
+builder.Services.AddScoped<AthleteCacheService>();
+builder.Services.AddScoped<WorkoutProgramCacheService>();
+builder.Services.AddScoped<TrainingSessionCacheService>();
+
 
 
 

@@ -8,6 +8,7 @@ using sport_app_backend.Models.Account;
 using sport_app_backend.Models.Login_Sinup;
 using Amazon.S3;
 using Amazon.S3.Model;
+using Microsoft.Extensions.Caching.Memory;
 using sport_app_backend.Mappers;
 using sport_app_backend.Models.Account.Athlete;
 using sport_app_backend.Models.Account.Coach;
@@ -15,9 +16,8 @@ using sport_app_backend.Models.Actions;
 using sport_app_backend.Models.Payments;
 using sport_app_backend.Models.Program;
 using sport_app_backend.Models.Question.A_Question;
-using sport_app_backend.Models.SupportApp;
+using sport_app_backend.Models.Support;
 using sport_app_backend.Models.TrainingPlan;
-
 namespace sport_app_backend.Repository;
 
 public class UserRepository(
@@ -25,7 +25,9 @@ public class UserRepository(
     ITokenService tokenService,
     ISmsService sms,
     IStorage Storage,
-    IConfiguration config)
+    IConfiguration config,
+    IExerciseCacheService exerciseCache
+    )
     : IUserRepository
 {
     public async Task<ApiResponse> AddRoleGender(string phoneNumber, RoleGenderDto roleGenderDto)
@@ -345,30 +347,49 @@ public async Task<ApiResponse> Login(string userPhoneNumber)
     }
     public async Task<ApiResponse> EditUserProfile(string phoneNumber, EditUserProfileDto editUserProfileDto)
     {
-        var user= await dbContext.Users.Include(q=>q.Coach).FirstOrDefaultAsync(x => x.PhoneNumber == phoneNumber);
-        if (user is null) return new ApiResponse() { Message = "User not found", Action = false };
-        var findUserName= await dbContext.Users.FirstOrDefaultAsync(x => x.UserName == editUserProfileDto.UserName);
-        if(findUserName is not null&& findUserName!=user) return new ApiResponse() { Message = "Username already exists", Action = false };// Ensure the user is an athlete
-        user.UserName = editUserProfileDto.UserName; user.FirstName = editUserProfileDto.FirstName;
+        var user = await dbContext.Users
+            .Include(q => q.Coach)
+            .FirstOrDefaultAsync(x => x.PhoneNumber == phoneNumber);
+
+        if (user is null)
+            return new ApiResponse { Message = "User not found", Action = false };
+
+        var findUserName = await dbContext.Users
+            .FirstOrDefaultAsync(x => x.UserName == editUserProfileDto.UserName && x.Id != user.Id);
+
+        if (findUserName is not null)
+            return new ApiResponse { Message = "Username already exists", Action = false };
+
+        user.UserName = editUserProfileDto.UserName;
+        user.FirstName = editUserProfileDto.FirstName;
         user.LastName = editUserProfileDto.LastName;
         user.BirthDate = Convert.ToDateTime(editUserProfileDto.BirthDate);
-       
+
+        if (user.Coach is not null)
+        {
+            user.Coach.Slogan = editUserProfileDto.Slogan;
+            user.Coach.SiteDescription = editUserProfileDto.SiteDescription;
+        }
+
         await dbContext.SaveChangesAsync();
-        return new ApiResponse()
+
+        return new ApiResponse
         {
             Message = "user profile edited successfully",
             Action = true
         };
     }
 
-    public async  Task<ApiResponse> GetUserProfileForEdit(string phoneNumber)
+    public async Task<ApiResponse> GetUserProfileForEdit(string phoneNumber)
     {
-        var user= await dbContext.Users.Include(q=>q.Coach).FirstOrDefaultAsync(x => x.PhoneNumber == phoneNumber);
-        if (user is null) return new ApiResponse() { Message = "User not found", Action = false };
-        
-       
+        var user = await dbContext.Users
+            .Include(q => q.Coach)
+            .FirstOrDefaultAsync(x => x.PhoneNumber == phoneNumber);
 
-        return new ApiResponse()
+        if (user is null)
+            return new ApiResponse { Message = "User not found", Action = false };
+
+        return new ApiResponse
         {
             Message = "user profile fetched successfully",
             Action = true,
@@ -380,6 +401,9 @@ public async Task<ApiResponse> Login(string userPhoneNumber)
                 user.BirthDate,
                 user.ImageProfile,
                 user.PhoneNumber,
+                Role = user.TypeOfUser.ToString(),
+                user.Coach?.Slogan,
+                user.Coach?.SiteDescription
             }
         };
     }
@@ -391,44 +415,31 @@ public async Task<ApiResponse> Login(string userPhoneNumber)
         await dbContext.SaveChangesAsync();
         return new ApiResponse() { Message = "Success", Action = true };
     }
+    
 
-    public async Task<ApiResponse> AppSupport(string phoneNumber, ReportAppDto reportAppDto)
+
+
+    public async Task<ApiResponse> GetExercise(int exerciseId)
     {
-        var user = await dbContext.Users.FirstOrDefaultAsync(x => x.PhoneNumber == phoneNumber);
-        if (user is null) return new ApiResponse() { Message = "User not found", Action = false };
-        await dbContext.SupportApp.AddAsync(new SupportApp()
-        {   User = user,
-            UserId = user.Id,
-            Category = Enum.Parse<SupportAppCategory>(reportAppDto.Category),
-            Description = reportAppDto.Description,
-           // CreateDate =  DateTime.Now,
-        });
-        await dbContext.SaveChangesAsync();
-        return new ApiResponse() { Message = "Success", Action = true };
-        
-    }
-    public async Task<ApiResponse> GetAllExercise()
-    {
-            var exercisesDto = await dbContext.Exercises
-                .AsNoTracking() 
-                .OrderByDescending(x => x.Views)
-                .Select(x => x.ToAllExerciseResponseDto()) 
-                .ToListAsync();
-        return new ApiResponse()
+        var exercises = await exerciseCache.GetAllExercisesAsync();
+
+        var exercise = exercises.FirstOrDefault(x => x.Id == exerciseId);
+
+        if (exercise is null)
         {
-            Message = "Exercises found",
+            return new ApiResponse
+            {
+                Message = "Exercise not found",
+                Action = false
+            };
+        }
+
+        return new ApiResponse
+        {
+            Message = "Success",
             Action = true,
-            Result = exercisesDto
+            Result = exercise.ToExerciseDto()
         };
-    }
-
-
-    public Task<ApiResponse> GetExercise(int exerciseId)
-    {
-        var exercise = dbContext.Exercises.FirstOrDefault(x => x.Id == exerciseId);
-        if (exercise is null) return Task.FromResult(new ApiResponse() { Message = "Exercise not found", Action = false });
-        return Task.FromResult(new ApiResponse()
-            { Message = "Success", Action = true, Result = exercise.ToExerciseDto() });
     }
 
     public async Task<ApiResponse> RemoveProfilePhoto(string phoneNumber)
@@ -592,7 +603,7 @@ public async Task<ApiResponse> Login(string userPhoneNumber)
                 }
             };
         var couchId =await  dbContext.Coaches.AsNoTracking().Where(c => c.PhoneNumber == phoneNumber).Select(c=>c.Id).FirstOrDefaultAsync();
-        var numberOfFeedBack =  dbContext.WorkoutProgramFeedback.Count(e => e.CouchId == couchId);
+        var numberOfFeedBack =  dbContext.WorkoutProgramFeedback.Count(e => e.CoachId == couchId);
 
 
         return new ApiResponse()
@@ -618,9 +629,9 @@ public async Task<ApiResponse> Login(string userPhoneNumber)
 
     }
 
-  
 
-public async Task<(IEnumerable<AllExerciseResponseDto> Exercises, int TotalCount)> GetExercisesAsync(
+    public async Task<(IEnumerable<AllExerciseResponseDto> Exercises, int TotalCount)>
+GetExercisesAsync(
     string? level,
     string? type,
     string? mechanic,
@@ -634,18 +645,19 @@ public async Task<(IEnumerable<AllExerciseResponseDto> Exercises, int TotalCount
     page = page <= 0 ? 1 : page;
     pageSize = pageSize <= 0 ? 10 : pageSize;
 
-    IQueryable<Exercise> query = dbContext.Exercises.AsNoTracking();
+    var allExercises = await exerciseCache.GetAllExercisesAsync();
 
-    // Search
+    IEnumerable<Exercise> query = allExercises;
+
     if (!string.IsNullOrWhiteSpace(searchTerm))
     {
         searchTerm = searchTerm.Trim();
+
         query = query.Where(e =>
-            EF.Functions.Like(e.PersianName!, $"%{searchTerm}%") ||
-            EF.Functions.Like(e.EnglishName!, $"%{searchTerm}%"));
+            (e.PersianName != null && e.PersianName.Contains(searchTerm)) ||
+            (e.EnglishName != null && e.EnglishName.Contains(searchTerm)));
     }
 
-    // Level
     if (!string.IsNullOrWhiteSpace(level) &&
         Enum.TryParse<ExerciseLevel>(level, true, out var levelEnum))
     {
@@ -664,21 +676,22 @@ public async Task<(IEnumerable<AllExerciseResponseDto> Exercises, int TotalCount
         query = query.Where(e => e.Mechanics == mechanicEnum);
     }
 
-    if (equipment != null && equipment.Length > 0)
+    if (equipment is not null && equipment.Length > 0)
     {
         var validEquipments = equipment
             .Where(e => !string.IsNullOrWhiteSpace(e))
             .Select(e =>
-            {
-                bool parsed = Enum.TryParse<EquipmentType>(e, true, out var result);
-                return new { parsed, result };
-            })
-            .Where(x => x.parsed)
-            .Select(x => x.result)
+                Enum.TryParse<EquipmentType>(e, true, out var parsed)
+                    ? parsed
+                    : (EquipmentType?)null)
+            .Where(e => e != null)
+            .Select(e => e!.Value)
             .ToList();
 
-        if (validEquipments.Count > 0)
+        if (validEquipments.Any())
+        {
             query = query.Where(e => validEquipments.Contains(e.Equipment));
+        }
     }
 
     if (!string.IsNullOrWhiteSpace(muscle) &&
@@ -689,13 +702,14 @@ public async Task<(IEnumerable<AllExerciseResponseDto> Exercises, int TotalCount
 
     if (!string.IsNullOrWhiteSpace(place))
     {
-        place = place.Trim();
-        query = query.Where(e => EF.Functions.Like(e.Description!, $"%{place}%"));
+        query = query.Where(e =>
+            e.Description != null &&
+            e.Description.Contains(place));
     }
 
-    var totalCount = await query.CountAsync();
+    var totalCount = query.Count();
 
-    var exercises = await query
+    var exercises = query
         .OrderByDescending(e => e.Views)
         .ThenBy(e => e.Id)
         .Skip((page - 1) * pageSize)
@@ -712,11 +726,168 @@ public async Task<(IEnumerable<AllExerciseResponseDto> Exercises, int TotalCount
             Mechanics = e.Mechanics.ToString(),
             View = e.Views,
             Met = e.Met
-        })
-        .ToListAsync();
+        });
 
     return (exercises, totalCount);
 }
+
+#region SupportApp
+
+
+public async Task<ApiResponse> CreateSupportTicket(int userId, CreateTicketDto dto)
+{
+    var userExists = await dbContext.Users.Select(u=>new
+    {
+        u.PhoneNumber,
+        u.Id
+    }).FirstOrDefaultAsync(u => u.Id == userId);
+    if (userExists is null) return new ApiResponse { Message = "User not found", Action = false };
+
+    if (!Enum.TryParse<TicketCategory>(dto.Category, true, out var categoryEnum))
+    {
+        return new ApiResponse { Message = "دسته بندی نامعتبر است", Action = false };
+    }
+
+    var ticket = new SupportTicket
+    {
+        Subject = dto.Subject,
+        Category = categoryEnum,
+        UserId = userId
+    };
+
+    await dbContext.SupportTickets.AddAsync(ticket);
+    await dbContext.SaveChangesAsync();
+
+    var firstMessage = new TicketMessage
+    {
+        TicketId = ticket.Id,
+        MessageText = dto.MessageText,
+        SenderId = userId
+    };
+
+    await dbContext.TicketMessages.AddAsync(firstMessage);
+    await dbContext.SaveChangesAsync();
+    await sms.SupportTicketCreatedSms(userExists.PhoneNumber, dto.Subject);
+
+    return new ApiResponse
+    {
+        Action = true,
+        Message = "تیکت با موفقیت ایجاد شد.",
+        Result = ticket.Id
+    };
+}
+
+public async Task<ApiResponse> GetSupportTickets(int userId)
+{
+    var tickets = await dbContext.SupportTickets
+        .AsNoTracking()
+        .Where(t => t.UserId == userId)
+        .OrderByDescending(t => t.UpdatedAt)
+        .Select(t => new TicketListDto
+        {
+            Id = t.Id,
+            Subject = t.Subject,
+            Category = t.Category,       // مپ کردن مستقیم enum
+            Status = t.Status, // مپ کردن مستقیم enum
+            CreatedAt=t.CreatedAt,
+            LastUpdatedAt = t.UpdatedAt  // مپ کردن مستقیم DateTime
+        })
+        .ToListAsync();
+
+    return new ApiResponse
+    {
+        Action = true,
+        Message = "لیست تیکت‌ها با موفقیت دریافت شد.",
+        Result = tickets
+    };
+}
+
+public async Task<ApiResponse> GetSupportTicketDetails(int userId, int ticketId)
+{
+    var ticket = await dbContext.SupportTickets
+        .Include(t => t.Messages)
+            .ThenInclude(m => m.Sender)
+        .FirstOrDefaultAsync(t => t.Id == ticketId && t.UserId == userId);
+
+    if (ticket is null) return new ApiResponse { Message = "تیکت یافت نشد", Action = false };
+
+    var messagesDto = ticket.Messages
+        .OrderBy(m => m.CreatedAt)
+        .Select(m => new TicketMessageDto
+        {
+            Id = m.Id,
+            MessageText = m.MessageText,
+            CreatedAt = m.CreatedAt, 
+            IsFromSupport = m.IsFromSupport,
+            SenderName = m.IsFromSupport ? "پشتیبان نرم‌افزار" : $"{m.Sender.FirstName} {m.Sender.LastName}".Trim(),
+            SenderImage = m.IsFromSupport ? "" : m.Sender.ImageProfile
+        })
+        .ToList();
+
+    var result = new TicketDetailsDto
+    {
+        Id = ticket.Id,
+        Subject = ticket.Subject,
+        Category = ticket.Category, // مپ کردن مستقیم enum
+        Status = ticket.Status,     // مپ کردن مستقیم enum
+        Messages = messagesDto
+    };
+
+    return new ApiResponse
+    {
+        Action = true,
+        Message = "جزئیات تیکت دریافت شد.",
+        Result = result
+    };
+}
+
+public async Task<ApiResponse> ReplyToSupportTicket(int userId, int ticketId, ReplyTicketDto dto)
+{
+    var user = await dbContext.Users
+        .Where(u => u.Id == userId)
+        .Select(u => new { u.FirstName, u.LastName, u.ImageProfile })
+        .FirstOrDefaultAsync();
+
+    if (user is null) return new ApiResponse { Message = "User not found", Action = false };
+
+    var ticket = await dbContext.SupportTickets.FirstOrDefaultAsync(t => t.Id == ticketId && t.UserId == userId);
+    if (ticket is null) return new ApiResponse { Message = "تیکت یافت نشد", Action = false };
+
+    if (ticket.Status == TicketStatus.Closed)
+    {
+        return new ApiResponse { Message = "این تیکت بسته شده است و امکان ارسال پاسخ وجود ندارد.", Action = false };
+    }
+
+    var newMessage = new TicketMessage
+    {
+        TicketId = ticket.Id,
+        MessageText = dto.MessageText,
+        SenderId = userId
+    };
+
+    ticket.Status = TicketStatus.Pending;
+    ticket.UpdatedAt = DateTime.UtcNow;
+
+    await dbContext.TicketMessages.AddAsync(newMessage);
+    await dbContext.SaveChangesAsync();
+
+    return new ApiResponse
+    {
+        Action = true,
+        Message = "پاسخ شما با موفقیت ثبت شد.",
+        Result = new TicketMessageDto
+        {
+            Id = newMessage.Id,
+            MessageText = newMessage.MessageText,
+            CreatedAt = newMessage.CreatedAt, // مپ کردن مستقیم DateTime
+            IsFromSupport = false,
+            SenderName = $"{user.FirstName} {user.LastName}".Trim(),
+            SenderImage = user.ImageProfile
+        }
+    };
+}
+
+#endregion
 
 }
 

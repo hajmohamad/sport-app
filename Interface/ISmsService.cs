@@ -1,25 +1,28 @@
 using System.Threading.Tasks;
-using sport_app_backend.Models;
 using sport_app_backend.Services;
 
 namespace sport_app_backend.Interface;
 
 public interface ISmsService
 {
-    public Task<string> SendCode(string PhoneNumber);
-    public Task<string> SiteLogin(string phoneNumber);
+    Task<string> SendCode(string phoneNumber);
+    Task<string> SiteLogin(string phoneNumber);
 
-    public Task<string> SendErrorSms(string message);
-    public Task<SmsResponse> CoachServiceBuySmsNotification(string phoneNumber, string name, string nameService,
-        string price);
-    public Task<SmsResponse> AthleteSuccessfullySmsNotification(string mobileNumber, string athleteName, string serviceName);
-    public Task<SmsResponse> WorkoutReadySms(string mobileNumber, string athleteName, string serviceName,string wpKey);
+    Task<SmsResponse> SupportTicketCreatedSms(string mobileNumber, string ticketTitle);
+    Task<SmsResponse> SupportTicketAnsweredSms(string mobileNumber, string ticketTitle);
 
-    public Task<SmsResponse> AthleteSuccessfullySmsNotificationForBuyFromSite(string mobileNumber, string wpKey,
-        string serviceName);
+    Task<SmsResponse> CoachServiceBuySmsNotification(string phoneNumber, string coachName, string serviceName, string price);
+    Task<SmsResponse> AthleteSuccessfullySmsNotification(string mobileNumber, string athleteName, string serviceName);
+    Task<SmsResponse> NotifyAthleteOfProgramLinkSms(string mobileNumber, string athleteName, string link);
 
-    public Task<SmsResponse> NotifyAthleteOfProgramLinkSms(string mobileNumber, string athleteName, string programLink);
+    Task<SmsResponse> AthleteSuccessfullySmsNotificationForBuyFromSite(string mobileNumber, string serviceName, string link);
 
-    public Task<SmsResponse> SendSms(string phoneNumber, string message);
+    Task<SmsResponse> WorkoutReadySms(string mobileNumber, string athleteName, string serviceName, string link);
 
+    Task<SmsResponse> SendPaymentAttemptSms(string phoneNumber, string serviceTitle, string coachName, string websiteUrl);
+    Task<SmsResponse> SendProgramExpiredReminderSms(string phoneNumber, string athleteName, int daysSinceEnd, string websiteUrl);
+    Task<SmsResponse> SendProgramSessionsReminderSms(string phoneNumber, string athleteName, int remainingSessions, string websiteUrl);
+    Task<SmsResponse> SendQuestionReminderSms(string phoneNumber, string athleteName, string link);
+
+    Task<string> SendErrorSms(string message);
 }

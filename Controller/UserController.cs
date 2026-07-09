@@ -111,16 +111,6 @@ public class UserController(IUserRepository userRepository) : ControllerBase
         if (!result.Action) return NotFound(result);
         return Ok(result);
     }
-    [HttpPost("AppSupport")]
-    [Authorize(Roles = "Athlete,Coach")]
-    public async Task<IActionResult> AppSupport([FromBody] ReportAppDto reportAppDto)
-    {
-        var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
-        if (phoneNumber is null) return BadRequest("PhoneNumber is null");
-        var result = await userRepository.AppSupport(phoneNumber, reportAppDto);
-        if (!result.Action) return BadRequest(result);
-        return Ok(result);
-    }
     
     //logout
     [HttpDelete("logout")]
@@ -147,24 +137,7 @@ public class UserController(IUserRepository userRepository) : ControllerBase
         return Ok(result);
     }
     
-    [HttpGet("get_AllExercise")]
-    [Authorize(Roles = "Athlete,Coach")]
-    public async Task<IActionResult> GetAllExercise()
-    {
-        var result = await userRepository.GetAllExercise();
-        if (result.Action != true) return BadRequest(result);
-        return Ok(result);
-            
-    }
-    [HttpGet("get_Exercise/{exerciseId}")]
-    [Authorize(Roles = "Athlete,Coach")]
-    public async Task<IActionResult> GetExercise([FromRoute] int exerciseId)
-    {
-        var result = await userRepository.GetExercise(exerciseId);
-        if (result.Action != true) return BadRequest(result);
-        return Ok(result);
-            
-    }
+   
     
     [HttpDelete("removeProfilePhoto")]
     [Authorize(Roles = "Athlete,Coach")]
@@ -212,6 +185,72 @@ public class UserController(IUserRepository userRepository) : ControllerBase
             exercises
         });
     }
+    [HttpGet("get_Exercise/{exerciseId}")]
+    [Authorize(Roles = "Athlete,Coach")]
+    public async Task<IActionResult> GetExercise([FromRoute] int exerciseId)
+    {
+        var result = await userRepository.GetExercise(exerciseId);
+        if (result.Action != true) return BadRequest(result);
+        return Ok(result);
+            
+    }
+
+    #region supportApp
+
+    [HttpPost("CreateSupportTicket")]
+    [Authorize(Roles = "Athlete,Coach")]
+    public async Task<IActionResult> CreateSupportTicket([FromBody] CreateTicketDto createTicketDto)
+    {
+        var userId = GetUserId();
+        if (userId == 0) return BadRequest("کاربر احراز هویت نشده یا شناسه نامعتبر است.");
+        
+        var result = await userRepository.CreateSupportTicket(userId, createTicketDto);
+        if (!result.Action) return BadRequest(result);
+        return Ok(result);
+    }
+
+    [HttpGet("GetSupportTickets")]
+    [Authorize(Roles = "Athlete,Coach")]
+    public async Task<IActionResult> GetSupportTickets()
+    {
+        var userId = GetUserId();
+        if (userId == 0) return BadRequest("کاربر احراز هویت نشده یا شناسه نامعتبر است.");
+        
+        var result = await userRepository.GetSupportTickets(userId);
+        if (!result.Action) return BadRequest(result);
+        return Ok(result);
+    }
+
+    [HttpGet("GetSupportTicketDetails/{ticketId}")]
+    [Authorize(Roles = "Athlete,Coach")]
+    public async Task<IActionResult> GetSupportTicketDetails([FromRoute] int ticketId)
+    {
+        var userId = GetUserId();
+        if (userId == 0) return BadRequest("کاربر احراز هویت نشده یا شناسه نامعتبر است.");
+        
+        var result = await userRepository.GetSupportTicketDetails(userId, ticketId);
+        if (!result.Action) return BadRequest(result);
+        return Ok(result);
+    }
+
+    [HttpPost("ReplyToSupportTicket/{ticketId}")]
+    [Authorize(Roles = "Athlete,Coach")]
+    public async Task<IActionResult> ReplyToSupportTicket([FromRoute] int ticketId, [FromBody] ReplyTicketDto replyTicketDto)
+    {
+        var userId = GetUserId();
+        if (userId == 0) return BadRequest("کاربر احراز هویت نشده یا شناسه نامعتبر است.");
+        
+        var result = await userRepository.ReplyToSupportTicket(userId, ticketId, replyTicketDto);
+        if (!result.Action) return BadRequest(result);
+        return Ok(result);
+    }
+    #endregion
+    private int GetUserId()
+    {
+        var userIdClaim = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+        return int.TryParse(userIdClaim, out var userId) ? userId : 0;
+    }
+
  
 
 

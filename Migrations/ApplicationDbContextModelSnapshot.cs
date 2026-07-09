@@ -1091,7 +1091,7 @@ namespace sport_app_backend.Migrations
                         .HasMaxLength(30)
                         .HasColumnType("varchar(30)");
 
-                    b.Property<int>("CouchId")
+                    b.Property<int>("CoachId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("Date")
@@ -1117,6 +1117,8 @@ namespace sport_app_backend.Migrations
                         .HasColumnType("varchar(200)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CoachId");
 
                     b.HasIndex("WorkoutProgramId")
                         .IsUnique();
@@ -1248,7 +1250,7 @@ namespace sport_app_backend.Migrations
                     b.ToTable("InjuryAreas");
                 });
 
-            modelBuilder.Entity("sport_app_backend.Models.SupportApp.SupportApp", b =>
+            modelBuilder.Entity("sport_app_backend.Models.Support.SupportTicket", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -1257,13 +1259,19 @@ namespace sport_app_backend.Migrations
                     b.Property<int>("Category")
                         .HasColumnType("int");
 
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasMaxLength(300)
-                        .HasColumnType("varchar(300)");
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime(6)");
 
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("tinyint(1)");
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Subject")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime(6)");
 
                     b.Property<int>("UserId")
                         .HasColumnType("int");
@@ -1272,7 +1280,38 @@ namespace sport_app_backend.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("SupportApp");
+                    b.ToTable("SupportTickets");
+                });
+
+            modelBuilder.Entity("sport_app_backend.Models.Support.TicketMessage", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<bool>("IsFromSupport")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<string>("MessageText")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<int?>("SenderId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TicketId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SenderId");
+
+                    b.HasIndex("TicketId");
+
+                    b.ToTable("TicketMessages");
                 });
 
             modelBuilder.Entity("sport_app_backend.Models.TrainingPlan.CoachService", b =>
@@ -1795,6 +1834,12 @@ namespace sport_app_backend.Migrations
 
             modelBuilder.Entity("sport_app_backend.Models.Program.WorkoutProgramFeedback", b =>
                 {
+                    b.HasOne("sport_app_backend.Models.Account.Coach.Coach", null)
+                        .WithMany("WorkoutProgramFeedbacks")
+                        .HasForeignKey("CoachId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("sport_app_backend.Models.Program.WorkoutProgram", "WorkoutProgram")
                         .WithOne("WorkoutProgramFeedback")
                         .HasForeignKey("sport_app_backend.Models.Program.WorkoutProgramFeedback", "WorkoutProgramId")
@@ -1835,7 +1880,7 @@ namespace sport_app_backend.Migrations
                     b.Navigation("AthleteQuestion");
                 });
 
-            modelBuilder.Entity("sport_app_backend.Models.SupportApp.SupportApp", b =>
+            modelBuilder.Entity("sport_app_backend.Models.Support.SupportTicket", b =>
                 {
                     b.HasOne("sport_app_backend.Models.Account.User", "User")
                         .WithMany()
@@ -1844,6 +1889,23 @@ namespace sport_app_backend.Migrations
                         .IsRequired();
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("sport_app_backend.Models.Support.TicketMessage", b =>
+                {
+                    b.HasOne("sport_app_backend.Models.Account.User", "Sender")
+                        .WithMany()
+                        .HasForeignKey("SenderId");
+
+                    b.HasOne("sport_app_backend.Models.Support.SupportTicket", "Ticket")
+                        .WithMany("Messages")
+                        .HasForeignKey("TicketId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Sender");
+
+                    b.Navigation("Ticket");
                 });
 
             modelBuilder.Entity("sport_app_backend.Models.TrainingPlan.CoachService", b =>
@@ -1933,6 +1995,8 @@ namespace sport_app_backend.Migrations
                     b.Navigation("User")
                         .IsRequired();
 
+                    b.Navigation("WorkoutProgramFeedbacks");
+
                     b.Navigation("WorkoutPrograms");
                 });
 
@@ -1967,6 +2031,11 @@ namespace sport_app_backend.Migrations
                     b.Navigation("AthleteBodyImage");
 
                     b.Navigation("InjuryArea");
+                });
+
+            modelBuilder.Entity("sport_app_backend.Models.Support.SupportTicket", b =>
+                {
+                    b.Navigation("Messages");
                 });
 
             modelBuilder.Entity("sport_app_backend.Models.TrainingPlan.CoachService", b =>

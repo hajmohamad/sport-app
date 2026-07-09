@@ -1,5 +1,6 @@
 using System.Globalization;
 using sport_app_backend.Dtos;
+using sport_app_backend.Dtos.Coach;
 using sport_app_backend.Models.Account;
 using sport_app_backend.Models.Account.Coach;
 using sport_app_backend.Models.Payments;
@@ -9,37 +10,110 @@ namespace sport_app_backend.Mappers
 {
     public static class CoachMappers
     {
-        public static CoachProfileResponse ToCoachProfileResponseDto(this User user,List<CoachingServiceResponse> coachingServicesResponse
-            ,List<Payment> payments)
-        {   
-             var numberOfProgram = payments.Count(p => p.WorkoutProgram != null);
-              var numberOfAthlete = payments.Select(x=>x.AthleteId).Distinct().Count();
-              const string baseUrl = "https://chaarset.ir/coach/";
-              var websiteUrl = !string.IsNullOrEmpty(user.Coach?.WebSiteUrl) 
-                  ? $"{baseUrl}{user.Coach.WebSiteUrl}/" 
-                  : null;
-            
-            return new CoachProfileResponse
+        private static CoachProfileStatus GetCoachProfileStatus(
+            bool needsCompletion,
+            bool pendingApproval,
+            bool isVerified)
+        {
+            if (needsCompletion)
             {
-                FirstName = user.FirstName ?? string.Empty,
-                LastName = user.LastName ?? string.Empty,
-                BirthDate = user.BirthDate.ToString("yyyy-MM-dd"),
-                PhoneNumber = user.PhoneNumber,
-                UserName = user.UserName ?? string.Empty,
-                Id = user.Id,
-                Gender = user.Gender.ToString(),
-                ImageProfile = user.ImageProfile,
-                CoachingServices = coachingServicesResponse,
-                Payments = payments.Select(p => p.ToCoachAllPaymentResponseDto())
-                    .ToList(),
-                NumberOfAthlete = numberOfAthlete,
-                NumberOfProgram = numberOfProgram,
-                WebsiteUrl =websiteUrl
-            };
+                return CoachProfileStatus.NeedsCompletion;
+            }
 
+            if (pendingApproval)
+                return CoachProfileStatus.PendingApproval;
 
-
+            return isVerified ? CoachProfileStatus.Verified : CoachProfileStatus.NeedsCompletion;
         }
+
+        public static CoachProfileResponse ToCoachProfileResponseDto(
+    this User user,
+    List<CoachingServiceResponse> coachingServicesResponse,
+    int numberOfProgram,
+    int numberOfAthlete)
+{
+    const string baseUrl = "https://chaarset.ir/coach/";
+    var websiteUrl = !string.IsNullOrEmpty(user.Coach?.WebSiteUrl)
+        ? $"{baseUrl}{user.Coach.WebSiteUrl}/"
+        : null;
+
+    var hasPersonalDetails =
+        !string.IsNullOrWhiteSpace(user.FirstName) &&
+        !string.IsNullOrWhiteSpace(user.LastName) &&
+        !string.IsNullOrWhiteSpace(user.ImageProfile)&&
+        !string.IsNullOrWhiteSpace(user.Coach?.Slogan)&&
+        !string.IsNullOrWhiteSpace(user.Coach.SiteDescription);
+
+    var hasCommunication = user.Coach != null && (
+        !string.IsNullOrWhiteSpace(user.Coach.InstagramLink) ||
+        !string.IsNullOrWhiteSpace(user.Coach.TelegramLink) ||
+        !string.IsNullOrWhiteSpace(user.Coach.WhatsApp) ||
+        !string.IsNullOrWhiteSpace(user.Coach.BaleUserName) ||
+        !string.IsNullOrWhiteSpace(user.Coach.EitaaUserName)
+    );
+
+    var hasCoachingService = coachingServicesResponse.Count!=0;
+
+    var hasWebsite = !string.IsNullOrWhiteSpace(user.Coach?.WebSiteUrl);
+
+    var hasReviews = user.Coach?.WorkoutProgramFeedbacks.Where(wf=>wf.IsChosen).ToList().Count != 0;
+
+    var showWebSite = user.Coach?.ShowWebsite ?? false;
+    var hasAthleteChange = user.Coach !=null && user.Coach.AthleteChangePhotos.Count != 0;
+    var isVerified =user.Coach != null&&( user.Coach.Verified || user.Coach.ShowWebsite);
+
+    int completionPercentage = 0;
+    if (hasPersonalDetails) completionPercentage += 20;
+    if (hasCommunication) completionPercentage += 20;
+    if (hasCoachingService) completionPercentage += 25;
+    if (hasWebsite) completionPercentage += 15;
+    if (hasReviews) completionPercentage += 10;
+    if (hasAthleteChange) completionPercentage += 10;
+
+    
+    
+
+    bool needsCompletion = !hasCommunication || !hasWebsite||!hasCoachingService;
+    bool pendingApproval = !showWebSite;
+    var status = GetCoachProfileStatus(
+        needsCompletion,
+        pendingApproval,
+        isVerified
+    );
+
+    return new CoachProfileResponse
+    {
+        FirstName = user.FirstName ?? string.Empty,
+        LastName = user.LastName ?? string.Empty,
+        BirthDate = user.BirthDate.ToString("yyyy-MM-dd"),
+        PhoneNumber = user.PhoneNumber,
+        UserName = user.UserName ?? string.Empty,
+        Id = user.Id,
+        Gender = user.Gender.ToString(),
+        ImageProfile = user.ImageProfile,
+
+        CoachingServices = coachingServicesResponse,
+        NumberOfAthlete = numberOfAthlete,
+        NumberOfProgram = numberOfProgram,
+
+        WebsiteUrl = websiteUrl,
+        SiteDescription = user.Coach?.SiteDescription,
+        Slogan = user.Coach?.Slogan,
+
+        HasPersonalDetails = hasPersonalDetails,
+        HasCommunicationChannels = hasCommunication,
+        HasWebsiteAddress = hasWebsite,
+        HasUserReviews = hasReviews,
+        HasAthleteChange=hasAthleteChange,
+        CompletionPercentage = completionPercentage,
+        ShowWebsite=user.Coach.ShowWebsite,
+        
+        Status = status
+
+        
+    };
+}
+
 
       
         public static CoachService ToCoachService(this AddCoachServiceDto coachServiceDto,Coach coach)

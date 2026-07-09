@@ -1,62 +1,103 @@
+using System;
+using System.Net.Http;
 using System.Text;
-using Newtonsoft.Json;
+using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using sport_app_backend.Interface;
-using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace sport_app_backend.Services;
 
+public class SmsResponse
+{
+    public bool IsSuccess { get; set; }
+    public string Message { get; set; }
+}
+
 public class SmsService(IConfiguration config, ILogger<SmsService> logger) : ISmsService
 {
-    private readonly string _accessKey = config["SMS:accessKey"] ?? "deployMode";
-    private readonly ILogger<SmsService> _logger = logger;
+    private readonly string _accessToken = config["SMS:accessKey"] ?? "deployMode";
+    private readonly bool _isDeployMode = (config["SMS:accessKey"] ?? "deployMode") == "deployMode";
 
     private const string LineNumber = "9981802897";
     private const string LikeToLikeUrl = "https://api.sms.ir/v1/send/likeToLike";
     private const string VerifyUrl = "https://api.sms.ir/v1/send/verify";
-
-    private static readonly HttpClient HttpClient = new();
+    private readonly HttpClient _httpClient = new();
 
     private async Task<SmsResponse> SendLikeToLikeSms(string phoneNumber, string message)
     {
-        if (_accessKey == "deployMode")
+        logger.LogInformation(
+            "Starting LikeToLike SMS send. PhoneNumber: {PhoneNumber}, DeployMode: {DeployMode}",
+            phoneNumber,
+            _isDeployMode);
+
+        if (_isDeployMode)
         {
-            _logger.LogInformation("SMS Send bypassed (Deploy Mode): Mobile={Mobile}, Message={Message}", phoneNumber, message);
-            return new SmsResponse { IsSuccess = true, Message = "deploy mode" };
+            logger.LogInformation(
+                "SMS send skipped because application is in deploy mode. PhoneNumber: {PhoneNumber}",
+                phoneNumber);
+
+            return new SmsResponse
+            {
+                IsSuccess = true,
+                Message = "deploy mode"
+            };
         }
-
-        var payload = new
-        {
-            LineNumber,
-            MessageTexts = new[] { message },
-            Mobiles = new[] { phoneNumber }
-        };
-
-        var jsonPayload = JsonConvert.SerializeObject(payload);
-        var content = new StringContent(jsonPayload, Encoding.UTF8, "application/json");
-
-        // تعریف ساختار درخواست مجزا برای جلوگیری از تداخل هدرها در هم‌زمانی (Thread-Safety)
-        using var request = new HttpRequestMessage(HttpMethod.Post, LikeToLikeUrl);
-        request.Headers.Add("x-api-key", _accessKey);
-        request.Content = content;
 
         try
         {
-            var response = await HttpClient.SendAsync(request);
+            _httpClient.DefaultRequestHeaders.Clear();
+            _httpClient.DefaultRequestHeaders.Add("x-api-key", _accessToken);
+
+            var payload = new
+            {
+                LineNumber,
+                MessageTexts = new[] { message },
+                Mobiles = new[] { phoneNumber }
+            };
+
+            var jsonPayload = JsonConvert.SerializeObject(payload);
+            var content = new StringContent(jsonPayload, Encoding.UTF8, "application/json");
+
+            logger.LogInformation(
+                "Sending LikeToLike SMS request to provider. PhoneNumber: {PhoneNumber}, Url: {Url}",
+                phoneNumber,
+                LikeToLikeUrl);
+
+            var response = await _httpClient.PostAsync(LikeToLikeUrl, content);
             var result = await response.Content.ReadAsStringAsync();
 
             if (response.IsSuccessStatusCode)
             {
-                _logger.LogInformation("SMS sent successfully to {Mobile}.", phoneNumber);
-                return new SmsResponse { IsSuccess = true, Message = result };
+                logger.LogInformation(
+                    "LikeToLike SMS sent successfully. PhoneNumber: {PhoneNumber}, StatusCode: {StatusCode}, Response: {Response}",
+                    phoneNumber,
+                    (int)response.StatusCode,
+                    result);
             }
-            
-            _logger.LogWarning("SMS API returned non-success code. Status: {StatusCode}, Body: {Body}", response.StatusCode, result);
-            return new SmsResponse { IsSuccess = false, Message = result };
+            else
+            {
+                logger.LogWarning(
+                    "LikeToLike SMS send failed. PhoneNumber: {PhoneNumber}, StatusCode: {StatusCode}, Response: {Response}",
+                    phoneNumber,
+                    (int)response.StatusCode,
+                    result);
+            }
+
+            return new SmsResponse
+            {
+                IsSuccess = response.IsSuccessStatusCode,
+                Message = result
+            };
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "An error occurred while sending SMS to {Mobile}. Error: {Message}", phoneNumber, ex.Message);
+            logger.LogError(
+                ex,
+                "Exception occurred while sending LikeToLike SMS. PhoneNumber: {PhoneNumber}",
+                phoneNumber);
+
             return new SmsResponse
             {
                 IsSuccess = false,
@@ -67,45 +108,77 @@ public class SmsService(IConfiguration config, ILogger<SmsService> logger) : ISm
 
     public async Task<string> SendCode(string phoneNumber)
     {
-        if (_accessKey == "deployMode")
+        logger.LogInformation(
+            "Starting verification code send. PhoneNumber: {PhoneNumber}, DeployMode: {DeployMode}",
+            phoneNumber,
+            _isDeployMode);
+
+        if (_isDeployMode)
+        {
+            logger.LogInformation(
+                "Verification code send skipped because application is in deploy mode. PhoneNumber: {PhoneNumber}",
+                phoneNumber);
+
             return "12345";
+        }
 
         var random = new Random();
         var code = random.Next(10000, 100000).ToString();
 
-        var model = new VerifySendModel
-        {
-            Mobile = phoneNumber,
-            TemplateId = 980201,
-            Parameters =
-            [
-                new VerifySendParameterModel
-                {
-                    Name = "CODE",
-                    Value = code
-                }
-            ]
-        };
-
-        var payload = JsonSerializer.Serialize(model);
-        var content = new StringContent(payload, Encoding.UTF8, "application/json");
-
-        using var request = new HttpRequestMessage(HttpMethod.Post, VerifyUrl);
-        request.Headers.Add("x-api-key", _accessKey);
-        request.Content = content;
-
         try
         {
-            var response = await HttpClient.SendAsync(request);
-            if (!response.IsSuccessStatusCode)
+            _httpClient.DefaultRequestHeaders.Clear();
+            _httpClient.DefaultRequestHeaders.Add("x-api-key", _accessToken);
+
+            var model = new VerifySendModel
             {
-                var responseBody = await response.Content.ReadAsStringAsync();
-                _logger.LogWarning("SendCode API returned non-success code. Status: {StatusCode}, Body: {Body}", response.StatusCode, responseBody);
+                Mobile = phoneNumber,
+                TemplateId = 980201,
+                Parameters = new[]
+                {
+                    new VerifySendParameterModel
+                    {
+                        Name = "CODE",
+                        Value = code
+                    }
+                }
+            };
+
+            var payload = JsonConvert.SerializeObject(model);
+            var content = new StringContent(payload, Encoding.UTF8, "application/json");
+
+            logger.LogInformation(
+                "Sending verify SMS request. PhoneNumber: {PhoneNumber}, TemplateId: {TemplateId}, Url: {Url}",
+                phoneNumber,
+                model.TemplateId,
+                VerifyUrl);
+
+            var response = await _httpClient.PostAsync(VerifyUrl, content);
+            var result = await response.Content.ReadAsStringAsync();
+
+            if (response.IsSuccessStatusCode)
+            {
+                logger.LogInformation(
+                    "Verify SMS sent successfully. PhoneNumber: {PhoneNumber}, StatusCode: {StatusCode}, Response: {Response}",
+                    phoneNumber,
+                    (int)response.StatusCode,
+                    result);
+            }
+            else
+            {
+                logger.LogWarning(
+                    "Verify SMS send failed. PhoneNumber: {PhoneNumber}, StatusCode: {StatusCode}, Response: {Response}",
+                    phoneNumber,
+                    (int)response.StatusCode,
+                    result);
             }
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Failed to send verification code to {Mobile}.", phoneNumber);
+            logger.LogError(
+                ex,
+                "Exception occurred while sending verify SMS. PhoneNumber: {PhoneNumber}",
+                phoneNumber);
         }
 
         return code;
@@ -113,8 +186,19 @@ public class SmsService(IConfiguration config, ILogger<SmsService> logger) : ISm
 
     public async Task<string> SiteLogin(string phoneNumber)
     {
-        if (_accessKey == "deployMode")
+        logger.LogInformation(
+            "Starting site login SMS send. PhoneNumber: {PhoneNumber}, DeployMode: {DeployMode}",
+            phoneNumber,
+            _isDeployMode);
+
+        if (_isDeployMode)
+        {
+            logger.LogInformation(
+                "Site login SMS skipped because application is in deploy mode. PhoneNumber: {PhoneNumber}",
+                phoneNumber);
+
             return "12345";
+        }
 
         var random = new Random();
         var code = random.Next(10000, 100000).ToString();
@@ -124,36 +208,57 @@ public class SmsService(IConfiguration config, ILogger<SmsService> logger) : ISm
             $"Code:{code}\n" +
             "Chaarset.ir";
 
-        await SendLikeToLikeSms(phoneNumber, message);
+        var response = await SendLikeToLikeSms(phoneNumber, message);
+
+        if (response.IsSuccess)
+        {
+            logger.LogInformation(
+                "Site login SMS sent successfully. PhoneNumber: {PhoneNumber}",
+                phoneNumber);
+        }
+        else
+        {
+            logger.LogWarning(
+                "Site login SMS failed. PhoneNumber: {PhoneNumber}, ProviderMessage: {ProviderMessage}",
+                phoneNumber,
+                response.Message);
+        }
 
         return code;
     }
 
-    public async Task<SmsResponse> SendSms(string phoneNumber, string message)
-    {
-        return await SendLikeToLikeSms(phoneNumber, message);
-    }
-
     public async Task<SmsResponse> SupportTicketCreatedSms(string mobileNumber, string ticketTitle)
     {
-        var message =
-            $"کاربر گرامی، تیکت شما با موضوع «{ticketTitle}» در چارسِت ایجاد شد.";
+        logger.LogInformation(
+            "Preparing SupportTicketCreatedSms. PhoneNumber: {PhoneNumber}, TicketTitle: {TicketTitle}",
+            mobileNumber,
+            ticketTitle);
 
+        var message = $"کاربر گرامی، تیکت شما با موضوع «{ticketTitle}» در چارسِت ایجاد شد.";
         return await SendLikeToLikeSms(mobileNumber, message);
     }
 
     public async Task<SmsResponse> SupportTicketAnsweredSms(string mobileNumber, string ticketTitle)
     {
-        var message =
-            $"کاربر گرامی، تیکت شما با موضوع «{ticketTitle}» در چارسِت پاسخ داده شد.";
+        logger.LogInformation(
+            "Preparing SupportTicketAnsweredSms. PhoneNumber: {PhoneNumber}, TicketTitle: {TicketTitle}",
+            mobileNumber,
+            ticketTitle);
 
+        var message = $"کاربر گرامی، تیکت شما با موضوع «{ticketTitle}» در چارسِت پاسخ داده شد.";
         return await SendLikeToLikeSms(mobileNumber, message);
     }
 
-    public async Task<SmsResponse> CoachServiceBuySmsNotification(string phoneNumber, string name, string nameService, string price)
+    public async Task<SmsResponse> CoachServiceBuySmsNotification(string phoneNumber, string coachName, string serviceName, string price)
     {
+        logger.LogInformation(
+            "Preparing CoachServiceBuySmsNotification. PhoneNumber: {PhoneNumber}, CoachName: {CoachName}, ServiceName: {ServiceName}",
+            phoneNumber,
+            coachName,
+            serviceName);
+
         var message =
-            $"{name} عزیز، یک نفر {nameService} رو ازت خریداری کرد.\n" +
+            $"{coachName} عزیز، یک نفر {serviceName} رو ازت خریداری کرد.\n" +
             $"مبلغ {price} تومان به زودی دریافت می‌کنی.\n\n" +
             "chaarset.ir";
 
@@ -162,6 +267,12 @@ public class SmsService(IConfiguration config, ILogger<SmsService> logger) : ISm
 
     public async Task<SmsResponse> AthleteSuccessfullySmsNotification(string mobileNumber, string athleteName, string serviceName)
     {
+        logger.LogInformation(
+            "Preparing AthleteSuccessfullySmsNotification. PhoneNumber: {PhoneNumber}, AthleteName: {AthleteName}, ServiceName: {ServiceName}",
+            mobileNumber,
+            athleteName,
+            serviceName);
+
         var message =
             $"{athleteName} عزیز، درخواستت برای برنامه {serviceName} با موفقیت برای مربی ارسال شد.\n" +
             "برای مشاهده وضعیت برنامه وارد اپلیکیشن چارسِت شو.\n\n" +
@@ -170,71 +281,172 @@ public class SmsService(IConfiguration config, ILogger<SmsService> logger) : ISm
         return await SendLikeToLikeSms(mobileNumber, message);
     }
 
-    public async Task<SmsResponse> NotifyAthleteOfProgramLinkSms(string mobileNumber, string athleteName, string wpkey)
+    public async Task<SmsResponse> NotifyAthleteOfProgramLinkSms(string mobileNumber, string athleteName, string link)
     {
+        logger.LogInformation(
+            "Preparing NotifyAthleteOfProgramLinkSms. PhoneNumber: {PhoneNumber}, AthleteName: {AthleteName}",
+            mobileNumber,
+            athleteName);
+
         var message =
             $"{athleteName} عزیز، درخواست شما برای مربی ارسال شد.\n" +
-            $"chaarset.ir/program/{wpkey}";
+            $"{link}";
 
         return await SendLikeToLikeSms(mobileNumber, message);
     }
 
-    public async Task<SmsResponse> AthleteSuccessfullySmsNotificationForBuyFromSite(string mobileNumber, string wpKey, string serviceName)
+    public async Task<SmsResponse> AthleteSuccessfullySmsNotificationForBuyFromSite(string mobileNumber, string serviceName, string link)
     {
+        logger.LogInformation(
+            "Preparing AthleteSuccessfullySmsNotificationForBuyFromSite. PhoneNumber: {PhoneNumber}, ServiceName: {ServiceName}",
+            mobileNumber,
+            serviceName);
+
         var message =
             $"پرداخت شما برای سرویس «{serviceName}» با موفقیت انجام شد.\n\n" +
-            $"chaarset.ir/program/{wpKey}/";
+            $"{link}";
 
         return await SendLikeToLikeSms(mobileNumber, message);
     }
 
-    public async Task<SmsResponse> WorkoutReadySms(string mobileNumber, string athleteName, string serviceName, string wpKey)
+    public async Task<SmsResponse> WorkoutReadySms(string mobileNumber, string athleteName, string serviceName, string link)
     {
+        logger.LogInformation(
+            "Preparing WorkoutReadySms. PhoneNumber: {PhoneNumber}, AthleteName: {AthleteName}, ServiceName: {ServiceName}",
+            mobileNumber,
+            athleteName,
+            serviceName);
+
         var message =
             $"{athleteName} عزیز، برنامه {serviceName} آماده شد.\n\n" +
-            $"chaarset.ir/program/{wpKey}/";
+            $"{link}";
 
         return await SendLikeToLikeSms(mobileNumber, message);
+    }
+
+    public async Task<SmsResponse> SendPaymentAttemptSms(string phoneNumber, string serviceTitle, string coachName, string websiteUrl)
+    {
+        logger.LogInformation(
+            "Preparing SendPaymentAttemptSms. PhoneNumber: {PhoneNumber}, ServiceTitle: {ServiceTitle}, CoachName: {CoachName}",
+            phoneNumber,
+            serviceTitle,
+            coachName);
+
+        var message =
+            $"فقط یک قدم تا دریافت {serviceTitle} از {coachName} باقی مونده!\n" +
+            $"برای نهایی کردن درخواستت، از اینجا ادامه بده:\n" +
+            $"{websiteUrl}";
+
+        return await SendLikeToLikeSms(phoneNumber, message);
+    }
+
+    public async Task<SmsResponse> SendProgramExpiredReminderSms(string phoneNumber, string athleteName, int daysSinceEnd, string websiteUrl)
+    {
+        logger.LogInformation(
+            "Preparing SendProgramExpiredReminderSms. PhoneNumber: {PhoneNumber}, AthleteName: {AthleteName}, DaysSinceEnd: {DaysSinceEnd}",
+            phoneNumber,
+            athleteName,
+            daysSinceEnd);
+
+        var message =
+            $"{athleteName} عزیز، {daysSinceEnd} روز از آخرین برنامه تمرینی که دریافت کردی گذشته.\n" +
+            $"برای دریافت برنامه جدیدت از لینک زیر به مربی خودت درخواست بده:\n" +
+            $"{websiteUrl}";
+
+        return await SendLikeToLikeSms(phoneNumber, message);
+    }
+
+    public async Task<SmsResponse> SendProgramSessionsReminderSms(string phoneNumber, string athleteName, int remainingSessions, string websiteUrl)
+    {
+        logger.LogInformation(
+            "Preparing SendProgramSessionsReminderSms. PhoneNumber: {PhoneNumber}, AthleteName: {AthleteName}, RemainingSessions: {RemainingSessions}",
+            phoneNumber,
+            athleteName,
+            remainingSessions);
+
+        var message =
+            $"{athleteName} عزیز، کمتر از {remainingSessions} جلسه از برنامه تمرینیت باقی مونده.\n" +
+            $"برای دریافت برنامه جدیدت از لینک زیر به مربی خودت درخواست بده:\n" +
+            $"{websiteUrl}";
+
+        return await SendLikeToLikeSms(phoneNumber, message);
+    }
+
+    public async Task<SmsResponse> SendQuestionReminderSms(string phoneNumber, string athleteName, string link)
+    {
+        logger.LogInformation(
+            "Preparing SendQuestionReminderSms. PhoneNumber: {PhoneNumber}, AthleteName: {AthleteName}",
+            phoneNumber,
+            athleteName);
+
+        var message =
+            $"{athleteName} عزیز، فرم اطلاعات اولیه‌ای که برای دریافت برنامه خریده بودی هنوز تکمیل نشده.\n" +
+            $"لطفا از طریق لینک زیر فرم رو کامل کن:\n" +
+            $"{link}";
+
+        return await SendLikeToLikeSms(phoneNumber, message);
     }
 
     public async Task<string> SendErrorSms(string message)
     {
-        if (_accessKey == "deployMode")
-            return "00000";
+        logger.LogInformation(
+            "Starting SendErrorSms. DeployMode: {DeployMode}",
+            _isDeployMode);
 
-        var model = new VerifySendModel
+        if (_isDeployMode)
         {
-            Mobile = "09395327229",
-            TemplateId = 980201,
-            Parameters =
-            [
-                new VerifySendParameterModel
-                {
-                    Name = "CODE",
-                    Value = message
-                }
-            ]
-        };
-
-        var payload = JsonSerializer.Serialize(model);
-        var content = new StringContent(payload, Encoding.UTF8, "application/json");
-
-        using var request = new HttpRequestMessage(HttpMethod.Post, VerifyUrl);
-        request.Headers.Add("x-api-key", _accessKey);
-        request.Content = content;
+            logger.LogInformation("SendErrorSms skipped because application is in deploy mode.");
+            return "00000";
+        }
 
         try
         {
-            var response = await HttpClient.SendAsync(request);
-            if (!response.IsSuccessStatusCode)
+            _httpClient.DefaultRequestHeaders.Clear();
+            _httpClient.DefaultRequestHeaders.Add("x-api-key", _accessToken);
+
+            var model = new VerifySendModel
             {
-                var responseBody = await response.Content.ReadAsStringAsync();
-                _logger.LogWarning("SendErrorSms API returned non-success code. Status: {StatusCode}, Body: {Body}", response.StatusCode, responseBody);
+                Mobile = "09395327229",
+                TemplateId = 980201,
+                Parameters = new[]
+                {
+                    new VerifySendParameterModel
+                    {
+                        Name = "CODE",
+                        Value = message
+                    }
+                }
+            };
+
+            var payload = JsonConvert.SerializeObject(model);
+            var content = new StringContent(payload, Encoding.UTF8, "application/json");
+
+            logger.LogInformation(
+                "Sending error SMS to admin. TemplateId: {TemplateId}, Url: {Url}",
+                model.TemplateId,
+                VerifyUrl);
+
+            var response = await _httpClient.PostAsync(VerifyUrl, content);
+            var result = await response.Content.ReadAsStringAsync();
+
+            if (response.IsSuccessStatusCode)
+            {
+                logger.LogInformation(
+                    "Error SMS sent successfully. StatusCode: {StatusCode}, Response: {Response}",
+                    (int)response.StatusCode,
+                    result);
+            }
+            else
+            {
+                logger.LogWarning(
+                    "Error SMS send failed. StatusCode: {StatusCode}, Response: {Response}",
+                    (int)response.StatusCode,
+                    result);
             }
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Failed to send error SMS notification.");
+            logger.LogError(ex, "Exception occurred while sending error SMS.");
         }
 
         return "00000";
@@ -243,19 +455,13 @@ public class SmsService(IConfiguration config, ILogger<SmsService> logger) : ISm
 
 public class VerifySendParameterModel
 {
-    public string Name { get; set; } = null!;
-    public string Value { get; set; } = null!;
+    public string Name { get; set; }
+    public string Value { get; set; }
 }
 
 public class VerifySendModel
 {
-    public string Mobile { get; set; } = null!;
+    public string Mobile { get; set; }
     public int TemplateId { get; set; }
-    public VerifySendParameterModel[] Parameters { get; set; } = null!;
-}
-
-public class SmsResponse
-{
-    public bool IsSuccess { get; set; }
-    public string Message { get; set; } = null!;
+    public VerifySendParameterModel[] Parameters { get; set; }
 }

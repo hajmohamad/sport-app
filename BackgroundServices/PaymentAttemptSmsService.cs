@@ -69,11 +69,10 @@ public class PaymentAttemptSmsService(
                 var coachName = $"{paymentAttempt.Coach?.User?.FirstName} {paymentAttempt.Coach?.User?.LastName}".Trim();
                 var websiteUrl = $"https://chaarset.ir/coach/{paymentAttempt.Coach?.WebSiteUrl}/";
 
-                var message = $"فقط یک قدم باقی مونده!\n" +
-                              $"{paymentAttempt.CoachService?.Title} رو همین الان از {coachName} دریافت کن تا به هدفت برسی:\n" +
-                              $"{websiteUrl}";
-
-                await sms.SendSms(phone, message);
+                await sms.SendPaymentAttemptSms(phone,
+                    paymentAttempt.CoachService?.Title ?? "سرویس",
+                    coachName,
+                    websiteUrl);
 
                 paymentAttempt.SmsIsSend = true;
                 

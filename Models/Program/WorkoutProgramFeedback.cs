@@ -9,7 +9,7 @@ public class WorkoutProgramFeedback
     [Key]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int Id { get; set; }
-    public int CouchId { get; set; }
+    public int CoachId { get; set; }
     public int AthleteId { get; set; }
     public int WorkoutProgramId { get; set; }
     public required WorkoutProgram WorkoutProgram { get; set; }

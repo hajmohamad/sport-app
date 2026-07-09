@@ -13,7 +13,7 @@ using sport_app_backend.Models.Login_Sinup;
 using sport_app_backend.Models.Payments;
 using sport_app_backend.Models.Program;
 using sport_app_backend.Models.Question.A_Question;
-using sport_app_backend.Models.SupportApp;
+using sport_app_backend.Models.Support;
 using sport_app_backend.Models.TrainingPlan;
 using WebPush;
 
@@ -113,7 +113,9 @@ public class ApplicationDbContext : DbContext
     public DbSet<WaterInDay> WaterInDays { get; set; }
     public DbSet<CoachService> CoachServices { get; set; }
     public DbSet<Activity> Activities { get; set; }
-    public DbSet<SupportApp> SupportApp { get; set; }
+    public DbSet<SupportTicket> SupportTickets { get; set; }
+    public DbSet<TicketMessage> TicketMessages { get; set; }
+
     public DbSet<InjuryArea> InjuryAreas { get; set; }
     public DbSet<Challenge> Challenges { get; set; }
     public DbSet<TrainingSession> TrainingSessions  { get; set; }

@@ -18,6 +18,7 @@ using sport_app_backend.Models.Payments;
 using sport_app_backend.Models.Program;
 using sport_app_backend.Models.Question.A_Question;
 using sport_app_backend.Models.TrainingPlan;
+using sport_app_backend.Services.Cash;
 using Activity = sport_app_backend.Models.Actions.Activity;
 
 namespace sport_app_backend.Repository.AthleteRepo
@@ -27,8 +28,13 @@ namespace sport_app_backend.Repository.AthleteRepo
         ApplicationDbContext context,
      
         ITokenService tokenService,
-        ICalculator calculator) : IAthleteRepository
+        ICalculator calculator
+        ,AthleteCacheService athleteCache,
+        WorkoutProgramCacheService workoutCache,
+        TrainingSessionCacheService trainingSessionCache) : IAthleteRepository
     {
+     
+
         public async Task<ApiResponse> GetFaq()
         {
             var getFaq = await context.AthleteFaq.AsNoTracking().ToListAsync();
@@ -73,7 +79,7 @@ namespace sport_app_backend.Repository.AthleteRepo
             var feedBack = new WorkoutProgramFeedback
             {
                 AthleteId = athlete.Id,
-                CouchId = workoutProgram.CoachId,
+                CoachId = workoutProgram.CoachId,
                 AthleteName = athlete.User.FirstName + " " + athlete.User.LastName,
                 WorkoutProgramId = workoutProgram.Id,
                 WorkoutProgramName = workoutProgram.Title,
@@ -472,204 +478,304 @@ namespace sport_app_backend.Repository.AthleteRepo
             };
         }
 
-
-        public async Task<ApiResponse> GetAllTrainingSession(string phoneNumber)
-{
-    var resultData = await context.WorkoutPrograms
-        .AsNoTracking()
-        .Where(wp => wp.Athlete.PhoneNumber == phoneNumber && wp.Status == WorkoutProgramStatus.ACTIVE)
-        .Select(wp => new
+        public async Task<ApiResponse> GetAllTrainingSession(int athleteId)
         {
-            ProgramName = wp.Title,
-            wp.StartDate,
-            wp.ProgramDuration,
-            wp.TotalSessionCount,
-            wp.CompletedSessionCount,
-            wp.PaymentId,
-            CoachWebsite = wp.Coach.WebSiteUrl ?? "chaarset.ir",
-            wp.WorkoutProgramFeedback,
-            TrainingSessions = wp.TrainingSessions.Select(ts => new AllTrainingSessionDto
+            var workoutProgram =
+                await workoutCache
+                    .GetActiveWorkoutProgramAsync(athleteId);
+
+            if (workoutProgram == null)
             {
-                Id = ts.Id,
-                DayNumber = ts.DayNumber,
-                TrainingSessionStatus = ts.TrainingSessionStatus.ToString(),
-                ExersiceCount = ts.ExerciseCompletionBitmap.GetExerciseStatusArray().Length
-            }).ToList()
-        })
-        .FirstOrDefaultAsync();
-
-    if (resultData == null)
-    {
-        return new ApiResponse() { Message = "Active workout program not found", Action = true, Result = null };
-    }
-    double completionPercentage = 0;
-    if (resultData.TotalSessionCount > 0)
-    {
-        completionPercentage = (double)resultData.CompletedSessionCount / resultData.TotalSessionCount;
-    }
-    var now = DateTime.Now;
-
-    var passFiveDay = false;
-    if (resultData.StartDate is not null)
-        passFiveDay = resultData.StartDate.Value.AddDays(5) < now.Date;
-
-    var shouldGetFeedback = (completionPercentage >= 0.30||passFiveDay) && resultData.WorkoutProgramFeedback is null;
-
-    string? renewalMessage = null;
-
-    if (resultData.StartDate != null)
-    {
-        var programEndDate = resultData.StartDate.Value.AddDays(resultData.ProgramDuration * 7);
-        var daysSinceEnd = (now - programEndDate).Days;
-
-        var remainingSessions = resultData.TotalSessionCount - resultData.CompletedSessionCount;
-        var isProgramExpired = now >= programEndDate;
-        var isSeventyPercentCompleted = completionPercentage >= 0.70;
-
-        if (isProgramExpired)
-        {
-            renewalMessage =
-                $"{daysSinceEnd} روز از آخرین برنامه تمرینی که دریافت کردی گذشته. ";
-        }
-        else if (isSeventyPercentCompleted)
-        {
-            renewalMessage =
-                $"کمتر از {remainingSessions} جلسه از برنامه تمرینیت باقی مونده. ";
-        }
-    }
-
-    var coachWebsite = !string.IsNullOrEmpty(resultData.CoachWebsite)
-        ? $"https://chaarset.ir/coach/{resultData.CoachWebsite}/"
-        : "https://chaarset.ir";
-
-    return new ApiResponse()
-    {
-        Action = true,
-        Message = "Training sessions retrieved successfully",
-        Result = new
-        {
-            ToAllTrainingSession = resultData.TrainingSessions,
-            resultData.ProgramName,
-            RenewalMessage = renewalMessage,
-            coachWebsite,
-            shouldGetFeedback,
-            resultData.PaymentId
-        }
-    };
-}
-        public async Task<ApiResponse> GetTrainingSession(string phoneNumber, int trainingSessionId)
-        {
-            var athlete = await context.Athletes.FirstOrDefaultAsync(a => a.PhoneNumber == phoneNumber);
-            if (athlete is null) return new ApiResponse() { Message = "Athlete not found", Action = false };
-
-            var trainingSession = await context.TrainingSessions
-                .Include(ts => ts.WorkoutProgram)
-                .Include(p => p.ProgramInDay)
-                .ThenInclude(a => a.AllExerciseInDays).ThenInclude(e => e.Exercise)
-                .FirstOrDefaultAsync(z => z.Id == trainingSessionId);
-
-            if (trainingSession is null)
-                return new ApiResponse() { Message = "trainingSession not found", Action = false };
-
-            var finalCalories = _CalculateCaloriesInternal(trainingSession, athlete.CurrentWeight, false);
-            var time = trainingSession.ProgramInDay.AllExerciseInDays.Sum(st => st.Reps.Count)*60;
-            
-            
-
-
-            return new ApiResponse()
-            {
-                Action = true,
-                Message = "get TrainingSession",
-                Result = trainingSession.ToTrainingSessionDto(finalCalories,time)
-            };
-        }
-
-        public async Task<ApiResponse> DoTrainingSession(string phoneNumber, int trainingSessionId, int exerciseNumber)
-        {
-            var trainingSession = await context.TrainingSessions
-                .FirstOrDefaultAsync(z => z.Id == trainingSessionId);
-            if (trainingSession is null)
-                return new ApiResponse() { Message = "trainingSession not found", Action = false };
-
-            trainingSession.TrainingSessionStatus = TrainingSessionStatus.INPROGRESS;
-
-            var bitmap = trainingSession.ExerciseCompletionBitmap.ToArray();
-            bitmap[exerciseNumber] = 0xFF;
-            trainingSession.ExerciseCompletionBitmap = bitmap;
-            var allCompleted = trainingSession.ExerciseCompletionBitmap.All(b => b == 0xFF);
-            trainingSession.TrainingSessionStatus =
-                allCompleted ? TrainingSessionStatus.COMPLETED : TrainingSessionStatus.INPROGRESS;
-
-            await context.SaveChangesAsync();
-
-            return new ApiResponse()
-            {
-                Action = true,
-                Message = "Do Training session",
-                Result = trainingSession.ToAllTrainingSessionDto()
-            };
-        }
-
-        public async Task<ApiResponse> FinishTrainingSession(string phoneNumber,
-            FinishTrainingSessionDto finishTrainingSessionDto)
-        {
-            try
-            {
-                var athlete = await context.Athletes.FirstOrDefaultAsync(x => x.PhoneNumber == phoneNumber);
-                if (athlete is null) return new ApiResponse() { Message = "Athlete not found", Action = false };
-
-                var trainingSession = await context.TrainingSessions
-                    .Include(trainingSession => trainingSession.WorkoutProgram)
-                    .FirstOrDefaultAsync(z => z.Id == finishTrainingSessionDto.TrainingSessionId);
-
-                if (trainingSession is null)
-                    return new ApiResponse() { Message = "trainingSession not found", Action = false };
-            
-             
-                trainingSession.ExerciseFeeling =
-                    Enum.Parse<ExerciseFeeling>(finishTrainingSessionDto.ExerciseFeeling ?? string.Empty);
-
-                // var finalCalories = _CalculateCaloriesInternal(trainingSession, athleteWeight, false);
-
-
-                trainingSession.TrainingSessionStatus = TrainingSessionStatus.COMPLETED;
-                trainingSession.WorkoutProgram.LastExerciseDate = DateTime.Now;
-                trainingSession.WorkoutProgram.CompletedSessionCount++;
-
-                var activity = new Activity()
-                {
-                    AthleteId = athlete.Id,
-                    Duration = finishTrainingSessionDto.Duration,
-                    CaloriesLost = finishTrainingSessionDto.CaloriesLost,
-                    ActivityCategory = ActivityCategory.EXERCISE,
-                    Name = finishTrainingSessionDto.TrainingSessionName,
-                    Date = DateTime.Now.Date
-                };
-                athlete.TotalActivities += 1;
-                athlete.TotalCalories += finishTrainingSessionDto.CaloriesLost;
-
-                await context.Activities.AddAsync(activity);
-                await context.SaveChangesAsync();
-
                 return new ApiResponse()
                 {
+                    Message = "Active workout program not found",
                     Action = true,
-                    Message = "Finish Training session",
-                    Result = activity.ToActivityDto()
+                    Result = null
                 };
             }
-            catch (Exception ex)
+
+            var resultData = new
             {
-                return new ApiResponse
+                ProgramName = workoutProgram.Title,
+
+                workoutProgram.StartDate,
+
+                workoutProgram.ProgramDuration,
+
+                workoutProgram.TotalSessionCount,
+
+                workoutProgram.CompletedSessionCount,
+
+                workoutProgram.PaymentId,
+
+                CoachWebsite =
+                    workoutProgram.Coach?.WebSiteUrl ??
+                    "chaarset.ir",
+
+                workoutProgram.WorkoutProgramFeedback,
+
+                TrainingSessions =
+                    workoutProgram.TrainingSessions
+                        .Select(ts => new AllTrainingSessionDto
+                        {
+                            Id = ts.Id,
+
+                            DayNumber = ts.DayNumber,
+
+                            TrainingSessionStatus =
+                                ts.TrainingSessionStatus.ToString(),
+
+                            ExersiceCount =
+                                ts.ExerciseCompletionBitmap
+                                    .GetExerciseStatusArray()
+                                    .Length
+                        }).ToList()
+            };
+
+            double completionPercentage = 0;
+
+            if (resultData.TotalSessionCount > 0)
+            {
+                completionPercentage =
+                    (double)resultData.CompletedSessionCount /
+                    resultData.TotalSessionCount;
+            }
+
+            var now = DateTime.Now;
+
+            var passFiveDay = false;
+
+            if (resultData.StartDate is not null)
+            {
+                passFiveDay =
+                    resultData.StartDate.Value.AddDays(5)
+                    < now.Date;
+            }
+
+            var shouldGetFeedback =
+                (completionPercentage >= 0.30 || passFiveDay)
+                && resultData.WorkoutProgramFeedback is null;
+
+            string? renewalMessage = null;
+
+            if (resultData.StartDate != null)
+            {
+                var programEndDate =
+                    resultData.StartDate.Value
+                        .AddDays(resultData.ProgramDuration * 7);
+
+                var daysSinceEnd =
+                    (now - programEndDate).Days;
+
+                var remainingSessions =
+                    resultData.TotalSessionCount -
+                    resultData.CompletedSessionCount;
+
+                var isProgramExpired =
+                    now >= programEndDate;
+
+                var isSeventyPercentCompleted =
+                    completionPercentage >= 0.70;
+
+                if (isProgramExpired)
                 {
-                    Action = false,
-                    Message = $"Error finishing: {ex.Message}"
+                    renewalMessage =
+                        $"{daysSinceEnd} روز از آخرین برنامه تمرینی که دریافت کردی گذشته.";
+                }
+                else if (isSeventyPercentCompleted)
+                {
+                    renewalMessage =
+                        $"کمتر از {remainingSessions} جلسه از برنامه تمرینیت باقی مونده.";
+                }
+            }
+
+            var coachWebsite =
+                !string.IsNullOrEmpty(resultData.CoachWebsite)
+                ? $"https://chaarset.ir/coach/{resultData.CoachWebsite}/"
+                : "https://chaarset.ir";
+
+            return new ApiResponse()
+            {
+                Action = true,
+
+                Message =
+                    "Training sessions retrieved successfully",
+
+                Result = new
+                {
+                    ToAllTrainingSession =
+                        resultData.TrainingSessions,
+
+                    resultData.ProgramName,
+
+                    RenewalMessage = renewalMessage,
+
+                    coachWebsite,
+
+                    shouldGetFeedback,
+
+                    resultData.PaymentId
+                }
+            };
+        }
+        public async Task<ApiResponse> GetTrainingSession(
+            int athleteId,
+            int trainingSessionId)
+        {
+            var athlete =
+                await athleteCache
+                    .GetAthleteByIdAsync(athleteId);
+
+            if (athlete is null)
+            {
+                return new ApiResponse()
+                {
+                    Message = "Athlete not found",
+                    Action = false
                 };
             }
+
+            var trainingSession =
+                await trainingSessionCache
+                    .GetTrainingSessionAsync(trainingSessionId);
+
+            if (trainingSession is null)
+            {
+                return new ApiResponse()
+                {
+                    Message = "trainingSession not found",
+                    Action = false
+                };
+            }
+
+            var finalCalories =
+                _CalculateCaloriesInternal(
+                    trainingSession,
+                    athlete.CurrentWeight,
+                    false);
+
+            var time =
+                trainingSession.ProgramInDay
+                    .AllExerciseInDays
+                    .Sum(st => st.Reps.Count) * 60;
+
+            return new ApiResponse()
+            {
+                Action = true,
+
+                Message = "get TrainingSession",
+
+                Result =
+                    trainingSession
+                        .ToTrainingSessionDto(
+                            finalCalories,
+                            time)
+            };
+        }
+        public async Task<ApiResponse> FinishTrainingSession(int athleteId, FinishTrainingSessionDto dto)
+{
+    try
+    {
+        var athlete =
+            await context.Athletes
+                .FirstOrDefaultAsync(x =>
+                    x.Id == athleteId);
+
+        if (athlete is null)
+        {
+            return new ApiResponse()
+            {
+                Message = "Athlete not found",
+                Action = false
+            };
         }
 
+        var trainingSession =
+            await context.TrainingSessions
+                .Include(ts => ts.WorkoutProgram)
+                .FirstOrDefaultAsync(z =>
+                    z.Id == dto.TrainingSessionId);
 
+        if (trainingSession is null)
+        {
+            return new ApiResponse()
+            {
+                Message = "trainingSession not found",
+                Action = false
+            };
+        }
+
+        trainingSession.ExerciseFeeling =
+            Enum.Parse<ExerciseFeeling>(
+                dto.ExerciseFeeling ?? string.Empty);
+
+        trainingSession.TrainingSessionStatus =
+            TrainingSessionStatus.COMPLETED;
+
+        trainingSession.WorkoutProgram.LastExerciseDate =
+            DateTime.Now;
+
+        trainingSession.WorkoutProgram.CompletedSessionCount++;
+
+        var activity = new Activity()
+        {
+            AthleteId = athlete.Id,
+
+            Duration = dto.Duration,
+
+            CaloriesLost = dto.CaloriesLost,
+
+            ActivityCategory =
+                ActivityCategory.EXERCISE,
+
+            Name = dto.TrainingSessionName,
+
+            Date = DateTime.Now.Date
+        };
+
+        athlete.TotalActivities += 1;
+
+        athlete.TotalCalories += dto.CaloriesLost;
+
+        await context.Activities.AddAsync(activity);
+
+        await context.SaveChangesAsync();
+
+        trainingSessionCache
+            .RemoveTrainingSession(
+                dto.TrainingSessionId);
+
+        workoutCache
+            .RemoveActiveWorkoutProgram(
+                athleteId);
+
+        athleteCache
+            .UpdateAthlete(athlete);
+
+        return new ApiResponse()
+        {
+            Action = true,
+
+            Message = "Finish Training session",
+
+            Result = activity.ToActivityDto()
+        };
+    }
+    catch (Exception ex)
+    {
+        return new ApiResponse
+        {
+            Action = false,
+
+            Message = $"Error finishing: {ex.Message}"
+        };
+    }
+}
+
+
+
+
+        
         public async Task<ApiResponse> FeedbackTrainingSession(string phoneNumber,
             FeedbackTrainingSessionDto feedbackTrainingSessionDto)
         {
@@ -813,5 +919,66 @@ namespace sport_app_backend.Repository.AthleteRepo
 
             return Math.Round(finalCalories, 2);
         }
+        // public async Task<ApiResponse> DoTrainingSession(
+        //     int athleteId,
+        //     int trainingSessionId,
+        //     int exerciseNumber)
+        // {
+        //     var trainingSession =
+        //         await context.TrainingSessions
+        //             .FirstOrDefaultAsync(z =>
+        //                 z.Id == trainingSessionId);
+        //
+        //     if (trainingSession is null)
+        //     {
+        //         return new ApiResponse()
+        //         {
+        //             Message = "trainingSession not found",
+        //             Action = false
+        //         };
+        //     }
+        //
+        //     trainingSession.TrainingSessionStatus =
+        //         TrainingSessionStatus.INPROGRESS;
+        //
+        //     var bitmap =
+        //         trainingSession
+        //             .ExerciseCompletionBitmap
+        //             .ToArray();
+        //
+        //     bitmap[exerciseNumber] = 0xFF;
+        //
+        //     trainingSession.ExerciseCompletionBitmap =
+        //         bitmap;
+        //
+        //     var allCompleted =
+        //         trainingSession
+        //             .ExerciseCompletionBitmap
+        //             .All(b => b == 0xFF);
+        //
+        //     trainingSession.TrainingSessionStatus =
+        //         allCompleted
+        //             ? TrainingSessionStatus.COMPLETED
+        //             : TrainingSessionStatus.INPROGRESS;
+        //
+        //     await context.SaveChangesAsync();
+        //
+        //     _trainingSessionCache
+        //         .RemoveTrainingSession(trainingSessionId);
+        //
+        //     _workoutCache
+        //         .RemoveActiveWorkoutProgram(athleteId);
+        //
+        //     return new ApiResponse()
+        //     {
+        //         Action = true,
+        //
+        //         Message = "Do Training session",
+        //
+        //         Result =
+        //             trainingSession
+        //                 .ToAllTrainingSessionDto()
+        //     };
+        // }
     }
 }

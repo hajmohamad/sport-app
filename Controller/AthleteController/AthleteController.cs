@@ -1,4 +1,3 @@
-
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -6,16 +5,11 @@ using Microsoft.EntityFrameworkCore;
 using sport_app_backend.Data;
 using sport_app_backend.Dtos;
 using sport_app_backend.Dtos.ProgramDto;
-using sport_app_backend.Dtos.ZarinPal.Verify;
-using sport_app_backend.Interface;
 using sport_app_backend.Interface.Athlete;
 using sport_app_backend.Mappers;
 using sport_app_backend.Models;
-using sport_app_backend.Models.Account;
-using sport_app_backend.Models.Program;
 
-
-namespace sport_app_backend.Controller
+namespace sport_app_backend.Controller.AthleteController
 {
 
     [Route("api/[controller]")]
@@ -163,54 +157,73 @@ namespace sport_app_backend.Controller
             if (!result.Action) return BadRequest(result);
             return Ok(result);
         }
-
         [HttpGet("Get_AllTrainingSession")]
         [Authorize(Roles = "Athlete")]
         public async Task<IActionResult> GetAllTrainingSession()
         {
-            var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
-            if (phoneNumber is null) return BadRequest("PhoneNumber is null");
-            var result = await athleteRepository.GetAllTrainingSession(phoneNumber);
-            if (!result.Action) return BadRequest(result);
-            
+            var athleteId = await GetAthleteIdAsync();
+
+            if (athleteId == 0)
+                return BadRequest("Athlete not found");
+
+            var result =
+                await athleteRepository
+                    .GetAllTrainingSession(athleteId);
+
+            if (!result.Action)
+                return BadRequest(result);
+
             return Ok(result);
         }
-
         [HttpGet("TrainingSession/{trainingSessionId}")]
         [Authorize(Roles = "Athlete")]
-        public async Task<IActionResult> GetTrainingSession([FromRoute] int trainingSessionId)
+        public async Task<IActionResult> GetTrainingSession(
+            [FromRoute] int trainingSessionId)
         {
-            var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
-            if (phoneNumber is null) return BadRequest("PhoneNumber is null");
-            var result = await athleteRepository.GetTrainingSession(phoneNumber, trainingSessionId);
-            if (!result.Action) return BadRequest(result);
+            var athleteId = await GetAthleteIdAsync();
+
+            if (athleteId == 0)
+                return BadRequest("Athlete not found");
+
+            var result =
+                await athleteRepository
+                    .GetTrainingSession(
+                        athleteId,
+                        trainingSessionId);
+
+            if (!result.Action)
+                return BadRequest(result);
+
             return Ok(result);
         }
-
-        [HttpPut("DoTrainingSession/{trainingSessionId}/{exerciseNumber}")]
-        [Authorize(Roles = "Athlete")]
-        public async Task<IActionResult> DoTrainingSession([FromRoute] int trainingSessionId,
-            [FromRoute] int exerciseNumber)
-        {
-            var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
-            if (phoneNumber is null) return BadRequest("PhoneNumber is null");
-            var result = await athleteRepository.DoTrainingSession(phoneNumber, trainingSessionId, exerciseNumber);
-            if (!result.Action) return BadRequest(result);
-            return Ok(result);
-        }
-
+   
         [HttpPost("FinishTrainingSession")]
         [Authorize(Roles = "Athlete")]
         public async Task<IActionResult> FinishTrainingSession(
-            [FromBody] FinishTrainingSessionDto finishTrainingSessionDto)
+            [FromBody] FinishTrainingSessionDto dto)
         {
-            var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
-            if (phoneNumber is null) return BadRequest("PhoneNumber is null");
-            var result = await athleteRepository.FinishTrainingSession(phoneNumber, finishTrainingSessionDto);
-            if (!result.Action) return BadRequest(result);
-            return Ok(result);
+            var athleteId = await GetAthleteIdAsync();
 
+            if (athleteId == 0)
+                return BadRequest("Athlete not found");
+
+            var result =
+                await athleteRepository
+                    .FinishTrainingSession(
+                        athleteId,
+                        dto);
+
+            if (!result.Action)
+                return BadRequest(result);
+
+            return Ok(result);
         }
+
+        
+
+        
+
+
 
 
         [HttpPost("FeedbackTrainingSession")]
@@ -267,7 +280,51 @@ namespace sport_app_backend.Controller
 
             return Ok(result);
         }
-        
+        private async Task<int> GetAthleteIdAsync()
+        {
+            var athleteClaim = User.FindFirst("athlete_id")?.Value;
+            if (int.TryParse(athleteClaim, out var athleteId))
+            {
+                return athleteId;
+            }
+            
+            var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
+            if (string.IsNullOrEmpty(phoneNumber))
+            {
+                return 0;
+            }
+            var id =  await context.Athletes
+                .AsNoTracking()
+                .Where(c => c.PhoneNumber == phoneNumber)
+                .Select(c => c.Id)
+                .FirstOrDefaultAsync();
+            return id;
+            
+
+        }
+        // [HttpPut("DoTrainingSession/{trainingSessionId}/{exerciseNumber}")]
+        // [Authorize(Roles = "Athlete")]
+        // public async Task<IActionResult> DoTrainingSession(
+        //     [FromRoute] int trainingSessionId,
+        //     [FromRoute] int exerciseNumber)
+        // {
+        //     var athleteId = await GetAthleteIdAsync();
+        //
+        //     if (athleteId == 0)
+        //         return BadRequest("Athlete not found");
+        //
+        //     var result =
+        //         await athleteRepository
+        //             .DoTrainingSession(
+        //                 athleteId,
+        //                 trainingSessionId,
+        //                 exerciseNumber);
+        //
+        //     if (!result.Action)
+        //         return BadRequest(result);
+        //
+        //     return Ok(result);
+        // }
         
     }
 }

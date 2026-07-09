@@ -1,8 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
-using sport_app_backend.BackgroundServices;
 using sport_app_backend.Dtos;
 using sport_app_backend.Interface;
+using sport_app_backend.Models;
 using sport_app_backend.Models.Payments;
+using sport_app_backend.Models.Support;
 using sport_app_backend.Services;
 
 namespace sport_app_backend.Controller
@@ -29,13 +30,7 @@ namespace sport_app_backend.Controller
             if (result.Action == false) return BadRequest(result);
             return Ok(result);
         }
-        [HttpPut("EditTotalSessionCount")]
-        public async Task<IActionResult> EditTotalSessionCount()
-        {
-            var result = await adminRepository.EditTotalSessionCount();
-            if (result.Action == false) return BadRequest(result);
-            return Ok(result);
-        }
+      
         [HttpGet("GetVerifiedCoaches")]
         public async Task<IActionResult> GetVerifiedCoaches()
         {
@@ -70,19 +65,7 @@ namespace sport_app_backend.Controller
 
             return Ok(result);
         }
-        // [HttpPut("setCoachWebsiteUrl")]
-        // public async Task<IActionResult> SetCoachWebsiteUrl([FromQuery] string phoneNumber, [FromQuery] string webSiteUrl)
-        // {
-        //     
-        //
-        //     var result = await adminRepository.SetCoachWebsiteUrl(phoneNumber,webSiteUrl);
-        //     if (!result.Action)
-        //     {
-        //         return BadRequest(result);
-        //     }
-        //
-        //     return Ok(result);
-        // }
+        
 
         [HttpGet("GetCoachService/{coachSlug}")]
         public async Task<IActionResult> GetCoachService([FromRoute]string coachSlug)
@@ -96,59 +79,75 @@ namespace sport_app_backend.Controller
             return Ok(result);
         }
         
-        [HttpGet("supportApp")]
-        public async Task<IActionResult> GetSupportApp( )
-        {
-            var result = await adminRepository.GetSupportApp();
-            if (!result.Action)
-            {
-                return BadRequest(result);
-            }
-
-            return Ok(result);
-        }
-        [HttpPost("AnswerSupportApp/{id:int}")]
-        public async Task<IActionResult> AnswerSupportApp([FromRoute] int id )
-        {
-            var result = await adminRepository.AnswerSupportApp(id);
-            if (!result.Action)
-            {
-                return BadRequest(result);
-            }
-
-            return Ok(result);
-        }
- 
-        [HttpPost("sendMassageToCoach")]
-        [TypeFilter(typeof(IpAddressFilter))]
-
-        public async Task<IActionResult> SendMassageToCoach([FromQuery] string phoneNumber,
-            [FromQuery] string message)
-        {
-            var result = await adminRepository.SendMassageToCoach(phoneNumber, message);
-            if (!result.IsSuccess)
-            {
-                return BadRequest(result);
-            }
-
-            return Ok(result);
-        } 
-        //     [HttpPost("addExercise")]
-        //     public async Task<IActionResult> addExercise([FromBody] AddExercisesRequestDto addExercisesRequestDto)
-        //     {
-        //     var result = await adminRepository.AddExercises(addExercisesRequestDto);
-        //     if (!result.Action)
+        //
+        // [HttpPost("sendMassageToCoach")]
+        // [TypeFilter(typeof(IpAddressFilter))]
+        //
+        // public async Task<IActionResult> SendMassageToCoach([FromQuery] string phoneNumber,
+        //     [FromQuery] string message)
+        // {
+        //     var result = await adminRepository.SendMassageToCoach(phoneNumber, message);
+        //     if (!result.IsSuccess)
         //     {
         //         return BadRequest(result);
         //     }
         //
         //     return Ok(result);
-        // }
-        //
+        // } 
+          [HttpGet("SupportTickets")]
+        public async Task<IActionResult> GetSupportTickets([FromQuery] TicketStatus? status)
+        {
+            var response = await adminRepository.GetAllSupportTicketsAsync(status);
+            if (!response.Action)
+            {
+                return BadRequest(response);
+            }
+            return Ok(response);
+        }
+
+
+        [HttpGet("SupportTickets/{ticketId}")]
+        public async Task<IActionResult> GetSupportTicketDetails(int ticketId)
+        {
+            var response = await adminRepository.GetSupportTicketDetailsAsync(ticketId);
+            if (!response.Action)
+            {
+                return NotFound(response);
+            }
+            return Ok(response);
+        }
+
+  
+        [HttpPost("SupportTickets/{ticketId}/Reply")]
+        public async Task<IActionResult> ReplyToTicket(int ticketId, [FromBody] ReplyTicketDto replyDto)
+        {
+            if (replyDto == null || string.IsNullOrWhiteSpace(replyDto.MessageText))
+            {
+                return BadRequest(new ApiResponse { Action = false, Message = "متن پیام نمی‌تواند خالی باشد." });
+            }
+
+            var response = await adminRepository.ReplyToSupportTicketAsync(ticketId, replyDto);
+            if (!response.Action)
+            {
+                return BadRequest(response);
+            }
+            return Ok(response);
+        }
 
         
-        
+        [HttpPost("SupportTickets/{ticketId}/Close")]
+        public async Task<IActionResult> CloseTicket(int ticketId)
+        {
+            var response = await adminRepository.CloseSupportTicketAsync(ticketId);
+            if (!response.Action)
+            {
+                return BadRequest(response);
+            }
+            return Ok(response);
+        }
+    }
+  
 
        
-    }
+    
 }

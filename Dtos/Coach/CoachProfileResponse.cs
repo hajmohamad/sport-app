@@ -1,9 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace sport_app_backend.Dtos
+namespace sport_app_backend.Dtos.Coach
 {
     public class CoachProfileResponse
     {
@@ -21,10 +16,27 @@ namespace sport_app_backend.Dtos
       
         
         public required List<CoachingServiceResponse> CoachingServices{ get; set; }
-        public required List<AllPaymentResponseDto> Payments { get; set; }
         public required int NumberOfAthlete { get; set; }
         public required int NumberOfProgram { get; set; }
         public string? WebsiteUrl { get; set; } = "";
+        public string? Slogan { get; set; } = "";
+        public string? SiteDescription { get; set; } = "";
+        public bool HasPersonalDetails { get; set; }
+        public bool HasCommunicationChannels { get; set; }
+        public bool HasWebsiteAddress { get; set; }
+        public bool HasUserReviews { get; set; }
+        public bool HasAthleteChange { get; set; }
+        
+        public bool ShowWebsite { get; set; }
 
+        public int CompletionPercentage { get; set; }
+        public CoachProfileStatus Status { get; set; }
+
+    }
+    public enum CoachProfileStatus
+    {
+        NeedsCompletion,
+        PendingApproval,
+        Verified
     }
 }

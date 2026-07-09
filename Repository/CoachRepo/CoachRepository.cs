@@ -22,7 +22,9 @@ namespace sport_app_backend.Repository.CoachRepo
         ISmsService smsService,
         IStorage storage,
         ITokenService token,
-        ICalculator calculator) : ICoachRepository
+        ICalculator calculator,
+        IExerciseCacheService exerciseCache
+        ) : ICoachRepository
     {
         #region websiteurl
         public async Task<ApiResponse> CheckWebSiteUrlAvailabilityAsync(int coachId, string url)
@@ -1093,25 +1095,51 @@ namespace sport_app_backend.Repository.CoachRepo
             var user = await context.Users
                 .Include(u => u.Coach)
                 .ThenInclude(c => c.CoachingServices)
+                .Include(c=>c.Coach.AthleteChangePhotos)
+                .Include(u=>u.Coach.WorkoutProgramFeedbacks)
                 .FirstOrDefaultAsync(u => u.PhoneNumber == phoneNumber);
-            if (user?.Coach == null) return new ApiResponse { Action = false, Message = "Coach not found" };
-            var coachingService = user.Coach.CoachingServices.Where(x => !x.IsDeleted).ToList();
-            var coachingServiceDto = coachingService.Select(x => x.ToCoachingServiceResponse()).ToList();
-            var payments = await context.Payments.Include(p => p.Athlete).ThenInclude(u => u.User)
-                .OrderByDescending(c => c.PaymentDate)
-                .Include(p => p.WorkoutProgram).Where(p =>
-                    p.CoachId == user.Coach.Id && p.PaymentStatus == PaymentStatus.SUCCESS &&
+
+            if (user?.Coach == null)
+                return new ApiResponse { Action = false, Message = "Coach not found" };
+
+            var coachingService = user.Coach.CoachingServices
+                .Where(x => !x.IsDeleted)
+                .ToList();
+
+            var coachingServiceDto = coachingService
+                .Select(x => x.ToCoachingServiceResponse())
+                .ToList();
+
+            var numberOfProgram = await context.Payments
+                .Where(p =>
+                    p.CoachId == user.Coach.Id &&
+                    p.PaymentStatus == PaymentStatus.SUCCESS &&
                     p.WorkoutProgram != null &&
                     p.WorkoutProgram.Status != WorkoutProgramStatus.WRITING &&
                     p.WorkoutProgram.Status != WorkoutProgramStatus.NOTSTARTED &&
                     p.WorkoutProgram.Status != WorkoutProgramStatus.UNCOMPLETEDQUESTION)
-                .ToListAsync();
+                .CountAsync();
+
+            var numberOfAthlete = await context.Payments
+                .Where(p =>
+                    p.CoachId == user.Coach.Id &&
+                    p.PaymentStatus == PaymentStatus.SUCCESS)
+                .Select(p => p.AthleteId)
+                .Distinct()
+                .CountAsync();
+
             return new ApiResponse
             {
-                Action = true, Message = "Coach found",
-                Result = user.ToCoachProfileResponseDto(coachingServiceDto, payments)
+                Action = true,
+                Message = "Coach found",
+                Result = user.ToCoachProfileResponseDto(
+                    coachingServiceDto,
+                    numberOfProgram,
+                    numberOfAthlete
+                )
             };
         }
+
 
      public async Task<ApiResponse> SaveWorkoutProgram(string phoneNumber, int paymentId,
             WorkoutProgramDto workoutProgramDto)
@@ -1586,7 +1614,7 @@ namespace sport_app_backend.Repository.CoachRepo
                     Amount = p.Amount,
                     Type = "افزایش",
                     Date = p.PaymentDate.ToString(CultureInfo.CurrentCulture),
-                    Description = $"خرید سرویس {p.CoachService.Title}",
+                    Description = $"فروش سرویس {p.CoachService.Title}",
                     BuyerName = p.Athlete?.User != null
                         ? $"{p.Athlete.User.FirstName} {p.Athlete.User.LastName}"
                         : "نامشخص",
@@ -1722,7 +1750,7 @@ namespace sport_app_backend.Repository.CoachRepo
                 .ToDictionary(x => x.Id, x => x.IsShouldBeTrue);
 
             var feedbacks = await context.WorkoutProgramFeedback
-                .Where(e => e.CouchId == coach.Id)
+                .Where(e => e.CoachId == coach.Id)
                 .ToListAsync();
 
             if (!feedbacks.Any())
@@ -1748,159 +1776,158 @@ namespace sport_app_backend.Repository.CoachRepo
             };
         }
 
-        public async Task<(IEnumerable<AllExerciseResponseDto> Exercises, int TotalCount)>
-            GetExercisesWithFilterForCoach(
-                string? level, string? type, string? mechanic, string?[]? equipment,
-                string? muscle, string? place, int page, int pageSize,
-                string? searchTerm, int? athleteId, int coachId)
+     public async Task<(IEnumerable<AllExerciseResponseDto>, int)>
+GetExercisesWithFilterForCoach(
+    string? level,
+    string? type,
+    string? mechanic,
+    string?[]? equipment,
+    string? muscle,
+    string? place,
+    int page,
+    int pageSize,
+    string? searchTerm,
+    int? athleteId,
+    int coachId)
+{
+    if (page < 1) page = 1;
+    if (pageSize <= 0) pageSize = 10;
+
+    var exercises = await exerciseCache.GetAllExercisesAsync();
+    var pins = await exerciseCache.GetCoachPinsAsync(coachId);
+    Dictionary<int, List<int>> lastWorkouts; 
+    List<int> lastIds = new List<int>();
+
+    if (athleteId.HasValue)
+    {
+        lastIds = await exerciseCache.GetLastWorkoutsForAthleteAsync(coachId, athleteId.Value);
+    }
+
+    IEnumerable<Exercise> query = exercises;
+
+    if (!string.IsNullOrWhiteSpace(searchTerm))
+    {
+        query = query.Where(e =>
+            e.PersianName.Contains(searchTerm) ||
+            e.EnglishName.Contains(searchTerm));
+    }
+
+    if (Enum.TryParse(level, true, out ExerciseLevel levelEnum))
+        query = query.Where(e => e.ExerciseLevel == levelEnum);
+
+    if (Enum.TryParse(type, true, out ExerciseType typeEnum))
+        query = query.Where(e => e.ExerciseType == typeEnum);
+
+    if (Enum.TryParse(mechanic, true, out MechanicType mechanicEnum))
+        query = query.Where(e => e.Mechanics == mechanicEnum);
+
+    if (Enum.TryParse(muscle, true, out BaseCategory muscleEnum))
+        query = query.Where(e => e.BaseCategory == muscleEnum);
+
+    var pinnedIds = pins
+        .SelectMany(x => x.Value)
+        .ToHashSet();
+
+ 
+
+    var total = query.Count();
+
+    var result = query
+        .Select(e => new
         {
-            if (page < 1) page = 1;
-            if (pageSize <= 0) pageSize = 10;
-
-            bool hasLevel = Enum.TryParse(level, true, out ExerciseLevel levelEnum);
-            bool hasType = Enum.TryParse(type, true, out ExerciseType typeEnum);
-            bool hasMechanic = Enum.TryParse(mechanic, true, out MechanicType mechanicEnum);
-            bool hasMuscle = Enum.TryParse(muscle, true, out BaseCategory muscleEnum);
-
-            List<int> pinnedExerciseIds = new();
-            if (hasMuscle)
-            {
-                var coachPins = await context.CoachPineExercises
-                    .AsNoTracking()
-                    .Where(p => p.CoachId == coachId && p.BaseCategory == muscleEnum)
-                    .ToListAsync();
-
-                pinnedExerciseIds = coachPins
-                    .SelectMany(p => p.ExerciseIds)
-                    .Distinct()
-                    .ToList();
-            }
-
-            List<int> lastProgramExerciseIds = new();
-            if (athleteId.HasValue)
-            {
-                var lastWorkout = await context.LastWorkoutExercises
-                    .AsNoTracking()
-                    .Where(w => w.CoachId == coachId && w.AthleteId == athleteId.Value)
-                    .OrderByDescending(w => w.Id)
-                    .FirstOrDefaultAsync();
-
-                if (lastWorkout != null)
-                    lastProgramExerciseIds = lastWorkout.ExerciseIds.ToList();
-            }
-
-            var query = context.Exercises.AsNoTracking().AsQueryable();
-
-            if (!string.IsNullOrWhiteSpace(searchTerm))
-            {
-                query = query.Where(e =>
-                    e.PersianName.Contains(searchTerm) ||
-                    e.EnglishName.Contains(searchTerm));
-            }
-
-            if (hasLevel)
-                query = query.Where(e => e.ExerciseLevel == levelEnum);
-
-            if (hasType)
-                query = query.Where(e => e.ExerciseType == typeEnum);
-
-            if (hasMechanic)
-                query = query.Where(e => e.Mechanics == mechanicEnum);
-
-            if (hasMuscle)
-                query = query.Where(e => e.BaseCategory == muscleEnum);
-
-            if (equipment is { Length: > 0 })
-            {
-                var validEquipments = equipment
-                    .Where(e => Enum.TryParse(e, true, out EquipmentType _))
-                    .Select(e => Enum.Parse<EquipmentType>(e, true))
-                    .ToList();
-
-                if (validEquipments.Count > 0)
-                    query = query.Where(e => validEquipments.Contains(e.Equipment));
-            }
-
-            if (!string.IsNullOrWhiteSpace(place))
-            {
-                query = query.Where(e => EF.Functions.Like(e.Description, $"%{place}%"));
-            }
-
-            var totalCount = await query.CountAsync();
-
-            var exercises = await query
-                .Select(e => new
-                {
-                    Exercise = e,
-                    IsPinned = pinnedExerciseIds.Contains(e.Id),
-                    IsInLastProgram = lastProgramExerciseIds.Contains(e.Id)
-                })
-                .OrderByDescending(x => x.IsPinned)
-                .ThenByDescending(x => x.Exercise.Views)
-                .ThenBy(x => x.Exercise.Id)
-                .Skip((page - 1) * pageSize)
-                .Take(pageSize)
-                .Select(x => new AllExerciseResponseDto
-                {
-                    Id = x.Exercise.Id,
-                    Name = x.Exercise.PersianName,
-                    ImageLink = x.Exercise.ImageLink,
-                    BaseCategory = x.Exercise.BaseCategory.ToString(),
-                    Equipment = x.Exercise.Equipment.ToString(),
-                    ExerciseType = x.Exercise.ExerciseType.ToString(),
-                    Level = x.Exercise.ExerciseLevel.ToString(),
-                    Mechanics = x.Exercise.Mechanics.ToString(),
-                    View = x.Exercise.Views,
-                    Met = x.Exercise.Met,
-                    IsPinned = x.IsPinned,
-                    IsInLastProgram = x.IsInLastProgram
-                })
-                .ToListAsync();
-
-            return (exercises, totalCount);
-        }
-
-        public async Task<ApiResponse> AddPineExercise(int exerciseId, int coachId)
+            Exercise = e,
+            IsPinned = pinnedIds.Contains(e.Id),
+            IsLast = lastIds.Contains(e.Id)
+        })
+        .OrderByDescending(x => x.IsPinned)
+        .ThenByDescending(x => x.Exercise.Views)
+        .Skip((page - 1) * pageSize)
+        .Take(pageSize)
+        .Select(x => new AllExerciseResponseDto
         {
-            var coach = await context.Coaches.FirstOrDefaultAsync(c => c.Id == coachId);
-            if (coach == null)
-                return new ApiResponse()
-                {
-                    Message = "coach not found",
-                    Action = false,
-                };
+            Id = x.Exercise.Id,
+            Name = x.Exercise.PersianName,
+            ImageLink = x.Exercise.ImageLink,
+            BaseCategory = x.Exercise.BaseCategory.ToString(),
+            Equipment = x.Exercise.Equipment.ToString(),
+            ExerciseType = x.Exercise.ExerciseType.ToString(),
+            Level = x.Exercise.ExerciseLevel.ToString(),
+            Mechanics = x.Exercise.Mechanics.ToString(),
+            View = x.Exercise.Views,
+            Met = x.Exercise.Met,
+            IsPinned = x.IsPinned,
+            IsInLastProgram = x.IsLast
+        });
 
-            var exercise = await context.Exercises.FirstOrDefaultAsync(e => e.Id == exerciseId);
-            if (exercise == null)
-                return new ApiResponse()
-                {
-                    Message = "exercise not found",
-                    Action = false,
-                };
-            var oldPineExercises = await context.CoachPineExercises.FirstOrDefaultAsync(ex =>
-                ex.CoachId == coach.Id && ex.BaseCategory == exercise.BaseCategory);
-            if (oldPineExercises == null)
-            {
-                var newPineCategory = new CoachPineExercise
-                {
-                    CoachId = coach.Id,
-                    BaseCategory = exercise.BaseCategory,
-                    ExerciseIds = [exerciseId],
-                };
-                await context.CoachPineExercises.AddAsync(newPineCategory);
-            }
-            else
-            {
-                oldPineExercises.ExerciseIds.Add(exercise.Id);
-            }
+    return (result, total);
+}
 
-            await context.SaveChangesAsync();
-            return new ApiResponse()
-            {
-                Message = "added",
-                Action = true,
-            };
+
+
+public async Task<ApiResponse> AddPineExercise(int exerciseId, int coachId)
+{
+    var coach = await context.Coaches
+        .FirstOrDefaultAsync(c => c.Id == coachId);
+
+    if (coach == null)
+    {
+        return new ApiResponse
+        {
+            Message = "coach not found",
+            Action = false
+        };
+    }
+
+    var exercises = await exerciseCache.GetAllExercisesAsync();
+
+    var exercise = exercises.FirstOrDefault(e => e.Id == exerciseId);
+
+    if (exercise == null)
+    {
+        return new ApiResponse
+        {
+            Message = "exercise not found",
+            Action = false
+        };
+    }
+
+    var oldPineExercises = await context.CoachPineExercises
+        .FirstOrDefaultAsync(ex =>
+            ex.CoachId == coach.Id &&
+            ex.BaseCategory == exercise.BaseCategory);
+
+    if (oldPineExercises == null)
+    {
+        var newCategory = new CoachPineExercise
+        {
+            CoachId = coach.Id,
+            BaseCategory = exercise.BaseCategory,
+            ExerciseIds = new List<int> { exerciseId }
+        };
+
+        await context.CoachPineExercises.AddAsync(newCategory);
+    }
+    else
+    {
+        if (!oldPineExercises.ExerciseIds.Contains(exerciseId))
+        {
+            oldPineExercises.ExerciseIds.Add(exerciseId);
         }
+    }
+
+    await context.SaveChangesAsync();
+
+    await exerciseCache.UpdateCoachPinsAsync(
+        coachId,
+        exercise.BaseCategory,
+        exerciseId);
+
+    return new ApiResponse
+    {
+        Message = "added",
+        Action = true
+    };
+}
 
         public async Task<ApiResponse> RemovePineExercise(int exerciseId, int coachId)
         {
@@ -1908,33 +1935,31 @@ namespace sport_app_backend.Repository.CoachRepo
                 .FirstOrDefaultAsync(c => c.Id == coachId);
 
             if (coach == null)
-            {
                 return new ApiResponse
                 {
                     Message = "coach not found",
                     Action = false
                 };
-            }
 
-            var oldPineExercises = await context.CoachPineExercises
+            var pins = await context.CoachPineExercises
                 .Where(ex => ex.CoachId == coach.Id)
                 .ToListAsync();
 
-            var target = oldPineExercises
+            var target = pins
                 .FirstOrDefault(ex => ex.ExerciseIds.Contains(exerciseId));
 
             if (target == null)
-            {
                 return new ApiResponse
                 {
                     Message = "exercise not found",
                     Action = false
                 };
-            }
 
             target.ExerciseIds.Remove(exerciseId);
 
             await context.SaveChangesAsync();
+
+            await exerciseCache.RemoveCoachPinAsync(coachId, exerciseId);
 
             return new ApiResponse
             {
@@ -1942,6 +1967,60 @@ namespace sport_app_backend.Repository.CoachRepo
                 Action = true
             };
         }
+        public async Task<ApiResponse> GetCoachChecklist(int coachId)
+        {
+            var user = await context.Users
+                .Include(u => u.Coach)
+                .ThenInclude(c => c.AthleteChangePhotos)
+                .Include(u => u.Coach)
+                .ThenInclude(c => c.WorkoutProgramFeedbacks)
+                .FirstOrDefaultAsync(u => u.CoachId == coachId);
+
+            if (user == null)
+            {
+                return new ApiResponse
+                {
+                    Message = "User not found",
+                    Action = false
+                };
+            }
+
+            if (user.Coach == null)
+            {
+                return new ApiResponse
+                {
+                    Message = "Coach profile not found",
+                    Action = false
+                };
+            }
+            var hasPersonalDetails = !string.IsNullOrWhiteSpace(user.FirstName) && !string.IsNullOrWhiteSpace(user.LastName) && !string.IsNullOrWhiteSpace(user.ImageProfile);
+    
+            var hasCommunication = !string.IsNullOrWhiteSpace(user.Coach.InstagramLink) || !string.IsNullOrWhiteSpace(user.Coach.TelegramLink) || !string.IsNullOrWhiteSpace(user.Coach.WhatsApp) || !string.IsNullOrWhiteSpace(user.Coach.BaleUserName) || !string.IsNullOrWhiteSpace(user.Coach.EitaaUserName);
+    
+            var hasWebsite = !string.IsNullOrWhiteSpace(user.Coach.WebSiteUrl);
+    
+            var hasAthleteChange = user.Coach.AthleteChangePhotos?.Any() == true;
+    
+            var hasReviews = user.Coach.WorkoutProgramFeedbacks?.Any() == true;
+
+      
+
+            var response = new ProfileChecklistResponse
+            {
+                HasPersonalDetails = hasPersonalDetails,
+                HasCommunicationChannels = hasCommunication,
+                HasWebsiteAddress = hasWebsite,
+                HasAthleteChange = hasAthleteChange,
+                HasUserReviews = hasReviews,
+            };
+            return new ApiResponse()
+            {
+                Action = true,
+                Message = "data",
+                Result = response
+            };
+        }
+
 
 
         public async Task<ApiResponse> GetWorkoutProgramFeedBack(string phoneNumber)
@@ -1952,7 +2031,7 @@ namespace sport_app_backend.Repository.CoachRepo
                 return new ApiResponse { Action = false, Message = "مربی یافت نشد." };
             }
 
-            var feedBack = await context.WorkoutProgramFeedback.Where(fb => fb.CouchId == coach.Id).ToListAsync();
+            var feedBack = await context.WorkoutProgramFeedback.Where(fb => fb.CoachId == coach.Id).ToListAsync();
             return new ApiResponse()
             {
                 Action = true,
@@ -2091,4 +2170,5 @@ namespace sport_app_backend.Repository.CoachRepo
             return pc.ToDateTime(year, month, 1, 0, 0, 0, 0);
         }
     }
+    
 }

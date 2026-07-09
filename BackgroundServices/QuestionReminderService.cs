@@ -64,13 +64,12 @@ public class QuestionReminderService(
             var athleteName = program.Athlete.User?.FirstName ?? "ورزشکار";
             var phoneNumber = program.Athlete.PhoneNumber;
             var wpKey = tokenService.HashEncode(program.Id);
-            var message = $"{athleteName}"+
-                          "عزیز، فرم اطلاعات اولیه شما هنوز تکمیل نشده. لطفاً از طریق لینک زیر اقدام کنید تا برنامه تمرینی شما آماده شود:"+
-                          "\n"+$"chaarset.ir/program/{wpKey}/";
-
+           
             try
             {
-                await sms.SendSms(phoneNumber, message);
+                await sms.SendQuestionReminderSms(phoneNumber,
+                    athleteName,
+                    $"https://chaarset.ir/program/{wpKey}/");
             }
             catch (Exception ex)
             {

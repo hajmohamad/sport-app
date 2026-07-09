@@ -61,5 +61,6 @@ namespace sport_app_backend.Interface.Coach
         Task<ApiResponse> UpdateWebSiteUrlAsync(int coachId, string newUrl);
         Task<ApiResponse> CheckWebSiteUrlAvailabilityAsync(int coachId, string url);
 
+        Task<ApiResponse> GetCoachChecklist(int phoneNumber);
     }
 }

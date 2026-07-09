@@ -12,40 +12,190 @@ using sport_app_backend.Models.Program;
 using sport_app_backend.Models.Question.A_Question;
 using sport_app_backend.Models.TrainingPlan;
 using sport_app_backend.Services;
+using Microsoft.EntityFrameworkCore;
+using sport_app_backend.Data;
+using sport_app_backend.Dtos;
+using sport_app_backend.Interface;
+using sport_app_backend.Models;
+using sport_app_backend.Models.Support;
+
 
 namespace sport_app_backend.Repository
 {
     public class AdminRepository(ApplicationDbContext context, ISmsService sms,    IStorage storage) : IAdminRepository
     {
-
-    
-
-        public async Task<ApiResponse> AddExercises(AddExercisesRequestDto exercises)
+          // دریافت لیست تیکت‌ها همراه با فیلتر اختیاری بر اساس وضعیت
+        public async Task<ApiResponse> GetAllSupportTicketsAsync(TicketStatus? status = null)
         {
-            try
+            var query = context.SupportTickets
+                .Include(t => t.User)
+                .AsQueryable();
+
+            if (status.HasValue)
             {
-                var exe = await context.Exercises.AddAsync(exercises.ToExercise());
-                
-                await context.SaveChangesAsync();
-                return new ApiResponse()
-                {
-                    Action = true,
-                    Message = "Exercises added",
-                };
+                query = query.Where(t => t.Status == status.Value);
             }
-            catch (Exception e)
+
+            var tickets = await query
+                .OrderByDescending(t => t.UpdatedAt)
+                .Select(t => new AdminTicketListDto
+                {
+                    Id = t.Id,
+                    Title = t.Subject,
+                    Status = t.Status,
+                    Category = t.Category,
+                    CreatedAt = t.CreatedAt,
+                    UpdatedAt = t.UpdatedAt,
+                    UserId = t.UserId,
+                    UserFullName = t.User != null ? (t.User.FirstName + " " + t.User.LastName).Trim() : "کاربر بدون نام",
+                    UserPhoneNumber = t.User != null ? t.User.PhoneNumber : string.Empty
+                })
+                .ToListAsync();
+
+            return new ApiResponse
             {
-                Console.WriteLine(e);
-                return new ApiResponse()
+                Action = true,
+                Message = "لیست تیکت‌ها با موفقیت دریافت شد.",
+                Result = tickets
+            };
+        }
+
+        // دریافت جزئیات تیکت به همراه تمامی پیام‌های ثبت شده
+        public async Task<ApiResponse> GetSupportTicketDetailsAsync(int ticketId)
+        {
+            var ticket = await context.SupportTickets
+                .Include(t => t.User)
+                .Include(t => t.Messages)
+                    .ThenInclude(m => m.Sender)
+                .FirstOrDefaultAsync(t => t.Id == ticketId);
+
+            if (ticket == null)
+            {
+                return new ApiResponse
                 {
                     Action = false,
-                    Message = e.Message + exercises.PersianName,
+                    Message = "تیکت مورد نظر یافت نشد."
                 };
-
             }
 
+            var messagesDto = ticket.Messages
+                .OrderBy(m => m.CreatedAt)
+                .Select(m => new TicketMessageDto
+                {
+                    Id = m.Id,
+                    MessageText = m.MessageText,
+                    CreatedAt = m.CreatedAt,
+                    IsFromSupport = m.IsFromSupport,
+                    SenderName = m.IsFromSupport ? "پشتیبان نرم‌افزار" : (m.Sender != null ? (m.Sender.FirstName + " " + m.Sender.LastName).Trim() : "کاربر"),
+                    SenderImage = m.IsFromSupport ? string.Empty : (m.Sender != null ? m.Sender.ImageProfile : string.Empty)
+                })
+                .ToList();
 
+            var ticketDetails = new AdminTicketDetailsDto
+            {
+                Id = ticket.Id,
+                Title = ticket.Subject,
+                Status = ticket.Status,
+                Category = ticket.Category,
+                CreatedAt = ticket.CreatedAt,
+                UpdatedAt = ticket.UpdatedAt,
+                UserId = ticket.UserId,
+                UserFullName = ticket.User != null ? (ticket.User.FirstName + " " + ticket.User.LastName).Trim() : "کاربر بدون نام",
+                UserPhoneNumber = ticket.User != null ? ticket.User.PhoneNumber : string.Empty,
+                Messages = messagesDto
+            };
+
+            return new ApiResponse
+            {
+                Action = true,
+                Message = "جزئیات تیکت با موفقیت دریافت شد.",
+                Result = ticketDetails
+            };
         }
+
+        public async Task<ApiResponse> ReplyToSupportTicketAsync(int ticketId, ReplyTicketDto dto)
+        {
+            var ticket = await context.SupportTickets.Include(st=>st.User).FirstOrDefaultAsync(t => t.Id == ticketId);
+            
+            if (ticket == null)
+            {
+                return new ApiResponse
+                {
+                    Action = false,
+                    Message = "تیکت یافت نشد."
+                };
+            }
+
+            if (ticket.Status == TicketStatus.Closed)
+            {
+                return new ApiResponse
+                {
+                    Action = false,
+                    Message = "این تیکت قبلا بسته شده است و امکان ثبت پاسخ وجود ندارد."
+                };
+            }
+
+            var newMessage = new TicketMessage
+            {
+                TicketId = ticketId,
+                MessageText = dto.MessageText,
+                CreatedAt = DateTime.UtcNow,
+                IsFromSupport = true,
+                SenderId = null // فرستنده ادمین است و ایدی در دیتابیس null ثبت می‌شود
+            };
+
+            ticket.Status = TicketStatus.Answered;
+            ticket.UpdatedAt = DateTime.UtcNow;
+
+            await context.TicketMessages.AddAsync(newMessage);
+            await context.SaveChangesAsync();
+            await sms.SupportTicketAnsweredSms(ticket.User.PhoneNumber, ticket.Subject);
+
+            return new ApiResponse
+            {
+                Action = true,
+                Message = "پاسخ پشتیبانی با موفقیت ثبت شد.",
+                Result = new TicketMessageDto
+                {
+                    Id = newMessage.Id,
+                    MessageText = newMessage.MessageText,
+                    CreatedAt = newMessage.CreatedAt,
+                    IsFromSupport = true,
+                    SenderName = "پشتیبان نرم‌افزار",
+                    SenderImage = string.Empty
+                }
+            };
+        }
+
+        // بستن تیکت پشتیبانی
+        public async Task<ApiResponse> CloseSupportTicketAsync(int ticketId)
+        {
+            var ticket = await context.SupportTickets.FirstOrDefaultAsync(t => t.Id == ticketId);
+
+            if (ticket == null)
+            {
+                return new ApiResponse
+                {
+                    Action = false,
+                    Message = "تیکت یافت نشد."
+                };
+            }
+
+            ticket.Status = TicketStatus.Closed;
+            ticket.UpdatedAt = DateTime.UtcNow;
+
+            await context.SaveChangesAsync();
+
+            return new ApiResponse
+            {
+                Action = true,
+                Message = "تیکت با موفقیت بسته شد."
+            };
+        }
+    
+
+
+
 
         public async Task<ApiResponse> ConfirmTransactionId(string transactionId)
         {
@@ -76,34 +226,6 @@ namespace sport_app_backend.Repository
             };
 
           
-        }
-        public async Task<ApiResponse> EditTotalSessionCount()
-        {
-            var allPrograms = await context.WorkoutPrograms
-                .Include(p => p.TrainingSessions)
-                .Where(wp => wp.TotalSessionCount==0&&wp.Status==WorkoutProgramStatus.ACTIVE)
-                .ToListAsync();
-
-            int updatedProgramsCount = 0;
-
-            foreach (var program in allPrograms)
-            {
-                program.TotalSessionCount = program.TrainingSessions.Count;
-
-                program.CompletedSessionCount = program.TrainingSessions
-                    .Count(ts => ts.TrainingSessionStatus == TrainingSessionStatus.COMPLETED);
-
-              
-                updatedProgramsCount++;
-            }
-
-            await context.SaveChangesAsync();
-
-            return new ApiResponse
-            {
-                Action = true,
-                Message = $"{updatedProgramsCount} برنامه تمرینی با موفقیت به‌روزرسانی و پر شد."
-            };
         }
 
         public async Task<ApiResponse> VerifiedCoach(string coachPhoneNumber)
@@ -248,7 +370,7 @@ namespace sport_app_backend.Repository
 
       
             var workoutProgramFeedBack = await context.WorkoutProgramFeedback
-                .Where(fb => fb.IsChosen && fb.CouchId == coach.Id)
+                .Where(fb => fb.IsChosen && fb.CoachId == coach.Id)
                 .ToListAsync();
 
             return new ApiResponse
@@ -271,72 +393,15 @@ namespace sport_app_backend.Repository
         }
 
 
-        public async Task<SmsResponse> SendMassageToCoach( string phoneNumber, string message)
-        {
-         
-      
-            var result = sms.SendSms(phoneNumber, message);
-            return await result;
-        }
+        // public async Task<SmsResponse> SendMassageToCoach( string phoneNumber, string message)
+        // {
+        //  
+        //
+        //     var result = sms.SendSms(phoneNumber, message);
+        //     return await result;
+        // }
 
-        public async Task<ApiResponse> GetSupportApp()
-        {
-            var result = await context.SupportApp.AsNoTracking().Where(ap=>ap.IsActive).Select(rp=>new {
-                rp.Id,
-                rp.User.FirstName,
-                rp.User.LastName,
-                rp.User.TypeOfUser,
-                rp.User.PhoneNumber,
-                rp.Category,
-                rp.Description
-                
-            }).ToListAsync();
-            return new ApiResponse()
-            {
-                Action = true,
-                Message = "نمدونم برات چی بنویسم ولی بدون کار میکنه",
-                Result = result.Select(rp=>new
-                {
-                    rp.Id,
-                    Name = rp.FirstName+" "+rp.LastName,
-                    rp.PhoneNumber,
-                    Category = rp.Category.ToString(),
-                    rp.Description,
-                    TypeOfUser = rp.TypeOfUser.ToString()
-                }).ToList()
-            };
-
-        }
-
-        public async Task<ApiResponse> AddSlug(string engName, string slug)
-        {
-            var result =  await context.Exercises.FirstOrDefaultAsync(c => c.ImageLink == engName);
-            if (result is null)
-                return new ApiResponse()
-                {
-                    Action = false,
-                    Message = engName
-                };
-            result.Slug =  slug;
-            await context.SaveChangesAsync();
-            return new ApiResponse()
-            {
-                Action = true,
-                Message = "true"
-            };
-        }
-
-        public async Task<ApiResponse> AnswerSupportApp(int id)
-        {
-            var supportApp = await context.SupportApp.FirstOrDefaultAsync(ap=>ap.Id==id);
-            if (supportApp != null) supportApp.IsActive = false;
-            await context.SaveChangesAsync();
-            return new ApiResponse
-            {
-                Action = true,
-                Message = "پاسخ داده شد"
-            };
-        }
+       
 
         public async Task<ApiResponse> SetCoachWebsiteUrl(string phoneNumber, string webSiteUrl)
         {
