@@ -49,5 +49,7 @@ public class User
     public DateTime LastLoginSite { get; set; } 
     public string? SiteRefreshToken { get; set; }
     public bool UserIsBan { get; set; } = false;
+    public ICollection<UserExternalAccount.UserExternalAccount> ExternalAccounts { get; set; } =[];
+
 
 }

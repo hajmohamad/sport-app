@@ -15,6 +15,7 @@ using sport_app_backend.Models.Program;
 using sport_app_backend.Models.Question.A_Question;
 using sport_app_backend.Models.Support;
 using sport_app_backend.Models.TrainingPlan;
+using sport_app_backend.Models.UserExternalAccount;
 using WebPush;
 
 
@@ -95,6 +96,20 @@ public class ApplicationDbContext : DbContext
         .HasOne(dcs => dcs.CoachService)
         .WithMany(cs => cs.DiscountCodeCoachServices)
         .HasForeignKey(dcs => dcs.CoachServiceId);
+    modelBuilder.Entity<UserExternalAccount>()
+        .HasIndex(x => new { x.Provider, x.ProviderUserId })
+        .IsUnique();
+
+
+    modelBuilder.Entity<EitaaLoginSession>()
+        .HasIndex(x => x.TokenHash)
+        .IsUnique();
+
+    modelBuilder.Entity<UserExternalAccount>()
+        .HasOne(x => x.User)
+        .WithMany(x => x.ExternalAccounts)
+        .HasForeignKey(x => x.UserId)
+        .OnDelete(DeleteBehavior.Cascade);
 }
 
     public DbSet<User> Users { get; set; }
@@ -136,6 +151,10 @@ public class ApplicationDbContext : DbContext
     public DbSet<CoachCardNumber>  CoachCardNumbers { get; set; }
     public DbSet<DiscountCodeCoachService> DiscountCodeCoachServices { get; set; }
     public DbSet<AthleteChangePhoto> AthleteChangePhotos { get; set; }
+    
+    public DbSet<UserExternalAccount> UserExternalAccounts => Set<UserExternalAccount>();
+
+    public DbSet<EitaaLoginSession> EitaaLoginSessions => Set<EitaaLoginSession>();
 
     
 

@@ -185,6 +185,11 @@ builder.Services.AddScoped<AthleteCacheService>();
 builder.Services.AddScoped<WorkoutProgramCacheService>();
 builder.Services.AddScoped<TrainingSessionCacheService>();
 
+builder.Services.AddScoped<IDataValidator, DataValidator>();
+builder.Services.AddScoped<IEitaaAuthService, EitaaAuthService>();
+builder.Services.AddScoped<IEitaaAuthService, EitaaAuthService>();
+
+
 
 
 

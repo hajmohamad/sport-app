@@ -5,6 +5,7 @@ using System.Security.Cryptography;
 using System.Text;
 using HashidsNet;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using sport_app_backend.Data;
@@ -143,6 +144,18 @@ public class TokenService: ITokenService
         var tokenHandler = new JwtSecurityTokenHandler();
         var token = tokenHandler.CreateToken(tokenDescriptor);
         return tokenHandler.WriteToken(token);
+    }
+    public  string GenerateSecureToken()
+    {
+        var bytes = RandomNumberGenerator.GetBytes(32);
+        return WebEncoders.Base64UrlEncode(bytes);
+    }
+
+    public  string Sha256Hex(string input)
+    {
+        var bytes = System.Text.Encoding.UTF8.GetBytes(input);
+        var hash = SHA256.HashData(bytes);
+        return Convert.ToHexString(hash).ToLowerInvariant();
     }
 
 
