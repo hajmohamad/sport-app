@@ -28,6 +28,7 @@ public class Payment
     public AthleteQuestion? AthleteQuestion { get; set; } 
     public  int? AthleteQuestionId { get; set; } 
     public  WorkoutProgram? WorkoutProgram { get; set; }
+    public PaymentType PaymentType { get; set; } = PaymentType.GATEWAY;
     public double AppFee { get; set; }
     public long RefId { get; set; }
     public double OriginalAmount { get; set; }
@@ -35,4 +36,9 @@ public class Payment
     public double CodeDiscountAmount { get; set; }
     public int? DiscountCodeId { get; set; }
     public DiscountCode? DiscountCode { get; set; }
+}
+public enum PaymentType
+{
+    GATEWAY, // پرداخت آنلاین توسط ورزشکار
+    WALLET   // پرداخت از کیف پول توسط مربی
 }

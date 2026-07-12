@@ -62,5 +62,9 @@ namespace sport_app_backend.Interface.Coach
         Task<ApiResponse> CheckWebSiteUrlAvailabilityAsync(int coachId, string url);
 
         Task<ApiResponse> GetCoachChecklist(int phoneNumber);
+        Task<ApiResponse> RequestWalletChargeAsync(int coachId, double price);
+        Task<ApiResponse> VerifyWalletChargeAsync(string authority, string status);
+        Task<ApiResponse>  GetCoachAmount(int coachId);
+        Task<ApiResponse> BuyServiceByCoachFromWallet(int coachId,  CoachBuyRequestDto dto);
     }
 }

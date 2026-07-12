@@ -1,5 +1,6 @@
 using System.Globalization;
 using sport_app_backend.Dtos;
+using sport_app_backend.Dtos.Payment;
 using sport_app_backend.Dtos.ProgramDto;
 using sport_app_backend.Models.Account;
 using sport_app_backend.Models.Actions;

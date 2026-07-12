@@ -5,10 +5,14 @@ using sport_app_backend.Data;
 using sport_app_backend.Dtos;
 using sport_app_backend.Dtos.Coach;
 using sport_app_backend.Dtos.ProgramDto;
+using sport_app_backend.Dtos.ZarinPal;
+using sport_app_backend.Dtos.ZarinPal.Verify;
 using sport_app_backend.Interface;
 using sport_app_backend.Interface.Coach;
 using sport_app_backend.Mappers;
 using sport_app_backend.Models;
+using sport_app_backend.Models.Account;
+using sport_app_backend.Models.Account.Athlete;
 using sport_app_backend.Models.Account.Coach;
 using sport_app_backend.Models.Actions;
 using sport_app_backend.Models.Actions.CouchExercise;
@@ -23,9 +27,339 @@ namespace sport_app_backend.Repository.CoachRepo
         IStorage storage,
         ITokenService token,
         ICalculator calculator,
-        IExerciseCacheService exerciseCache
+        IExerciseCacheService exerciseCache,
+        IZarinPal zarinPal
         ) : ICoachRepository
     {
+        #region buildProgram
+                public async Task<ApiResponse> BuyServiceByCoachFromWallet(int coachId,  CoachBuyRequestDto dto)   
+        {
+            var coach = await context.Coaches
+                .FirstOrDefaultAsync(c => c.Id==coachId);
+            
+            if (coach == null) 
+                return new ApiResponse { Action = false, Message = "مربی یافت نشد" };
+            var checkAthleteNotCoach = await context.Coaches.AnyAsync(c=>c.PhoneNumber == dto.AthletePhoneNumber);
+            if (checkAthleteNotCoach)
+            {
+                return new ApiResponse()
+                {
+                    Action = false,
+                    Message = "این شماره تلفن برای مربی است"
+                };
+            }
+
+            var athleteId = await GetOrCreateAthleteId(dto);
+            if (athleteId == 0)
+            {
+                return new ApiResponse()
+                {
+                    Action = false,
+                    Message = "athlete Cant add"
+                };
+            }
+
+            var coachService = await context.CoachServices
+                .FirstOrDefaultAsync(x => x.Id == dto.ServiceId && x.IsActive && !x.IsDeleted);
+
+            if (coachService == null)
+                return new ApiResponse { Action = false, Message = "سرویس مورد نظر یافت نشد" };
+            var price = 50000;
+            
+            
+            if ((double)coach.Amount < price)
+            {
+                return new ApiResponse { 
+                    Action = false, 
+                    Message = "موجود کافی نیست. لطفا ابتدا کیف پول خود را شارژ کنید." 
+                };
+            }
+
+            var strategy = context.Database.CreateExecutionStrategy();
+
+            return await strategy.ExecuteAsync(async () =>
+            {
+                using var transaction = await context.Database.BeginTransactionAsync();
+                try
+                {
+                    // کسر از موجودی مربی
+                    coach.Amount -= price;
+
+                    // ثبت رکورد پرداخت با وضعیت موفق (چون از کیف پول کسر شده)
+                    var payment = new Payment
+                    {
+                        AthleteId = athleteId,
+                        CoachId = coach.Id,
+                        CoachServiceId = coachService.Id,
+                        Amount = 0,
+                        OriginalAmount = 0,
+                        PaymentStatus = PaymentStatus.SUCCESS, // مستقیم تایید شده
+                        PaymentType = PaymentType.WALLET,    // از نوع کیف پول
+                        PaymentDate = DateTime.Now,
+                        AppFee = price,
+                        Authority = "WALLET_PAYMENT_" + Guid.NewGuid().ToString("N").Substring(0, 10),
+                        RefId = 0 // یا یک شماره سریال داخلی
+                    };
+
+                    await context.Payments.AddAsync(payment);
+                
+          
+                    var workoutProgram = new WorkoutProgram
+                    {
+                        Title = coachService.Title,
+                        AthleteId = athleteId,
+                        CoachId = coach.Id,
+                        Status = WorkoutProgramStatus.NOTSTARTED,
+                        Payment = payment,
+                        PaymentId = payment.Id
+                    };
+                    await context.WorkoutPrograms.AddAsync(workoutProgram);
+                
+                    payment.WorkoutProgram = workoutProgram;
+
+                    await context.SaveChangesAsync();
+                    await transaction.CommitAsync();
+
+                    return new ApiResponse
+                    {
+                        Action = true,
+                        Message = "برنامه با موفقیت خریداری شد. می‌توانید طراحی را شروع کنید.",
+                    };
+                }
+                catch (Exception ex)
+                {
+                    await transaction.RollbackAsync();
+                    return new ApiResponse { Action = false, Message = "خطا در ثبت تراکنش: " + ex.Message };
+                }
+            });
+            
+        }
+
+
+        private async Task<int> GetOrCreateAthleteId(CoachBuyRequestDto dto)
+        {
+            var athlete = await context.Athletes
+                .FirstOrDefaultAsync(x => x.PhoneNumber == dto.AthletePhoneNumber);
+
+            if (athlete != null) return athlete.Id;
+
+            var newUser = await CreateNewAthleteUser(dto);
+            return newUser.Athlete?.Id ?? 0;
+        }
+        private async Task<string> GenerateUniqueUsername()
+        {
+            string username;
+            do
+            {
+                username = Guid.NewGuid().ToString("N").Substring(0, 8);
+            } while (await context.Users.AnyAsync(x => x.UserName == username));
+
+            return username;
+        }
+        private async Task<User> CreateNewAthleteUser(CoachBuyRequestDto dto)
+        {
+            var newUser = new User
+            {
+                UserName = await GenerateUniqueUsername(),
+                PhoneNumber = dto.AthletePhoneNumber,
+                FirstName = dto.FirstName,
+                LastName = dto.LastName,
+                Gender = Enum.Parse<Gender>(dto.Gender.ToUpper()),
+                TypeOfUser = TypeOfUser.ATHLETE,
+                LastLoginSite = DateTime.Now,
+            };
+            await context.Users.AddAsync(newUser);
+            await context.SaveChangesAsync();
+        
+            var athlete = new Athlete()
+            {
+                User = newUser,
+                UserId = newUser.Id,
+                PhoneNumber = dto.AthletePhoneNumber,
+            };
+            newUser.Athlete = athlete;
+        
+            await context.Athletes.AddAsync(athlete);
+            await context.SaveChangesAsync();
+
+            return newUser;
+        }
+
+
+        #endregion
+        #region wallet
+        public async Task<ApiResponse> RequestWalletChargeAsync(int coachId, double price)
+        {
+            if (price<= 0)
+                return new ApiResponse { Action = false, Message = "مبلغ باید بیشتر از صفر باشد." };
+
+            var coach = await context.Coaches
+                .FirstOrDefaultAsync(c => c.Id==coachId);
+
+            if (coach == null)
+                return new ApiResponse { Action = false, Message = "مربی یافت نشد." };
+
+            var zarinPalResponse = await zarinPal.RequestPaymentAsync(new ZarinPalPaymentRequestDto
+            {
+                amount = (long)price,
+                callback_url = "dto.CallbackUrl",
+                description =  "افزایش موجودی کیف پول",
+                Mobile = coach.PhoneNumber
+            });
+
+            if (!zarinPalResponse.IsSuccessful)
+            {
+                return new ApiResponse
+                {
+                    Action = false,
+                    Message = zarinPalResponse.ErrorMessage
+                };
+            }
+
+            var tx = new WalletTransaction
+            {
+                CoachId = coach.Id,
+                Authority = zarinPalResponse.Authority,
+                Amount = price,
+                TransactionStatus = WalletTransactionStatus.INPROGRESS,
+                CreatedAt = DateTime.Now
+            };
+
+            await context.WalletTransactions.AddAsync(tx);
+            await context.SaveChangesAsync();
+
+            return new ApiResponse
+            {
+                Action = true,
+                Message = "get url successfully",
+                Result = new
+                {
+                    zarinPalResponse.PaymentUrl,
+                    tx.Amount,
+                    tx.Authority
+                }
+            };
+        }
+        public async Task<ApiResponse> VerifyWalletChargeAsync(string authority, string status)
+{
+    var tx = await context.WalletTransactions
+        .Include(x => x.Coach)
+        .FirstOrDefaultAsync(x => x.Authority == authority);
+
+    if (tx == null)
+    {
+        return new ApiResponse { Action = false, Message = "تراکنشی یافت نشد" };
+    }
+
+    // کاربر لغو کرده
+    if (!string.Equals(status, "ok", StringComparison.OrdinalIgnoreCase))
+    {
+        tx.TransactionStatus = WalletTransactionStatus.FAILED;
+        await context.SaveChangesAsync();
+
+        return new ApiResponse { Action = false, Message = "پرداخت توسط کاربر لغو شد." };
+    }
+
+    // قبلاً fail شده
+    if (tx.TransactionStatus == WalletTransactionStatus.FAILED)
+    {
+        return new ApiResponse { Action = false, Message = "پرداخت ناموفق" };
+    }
+
+    // قبلاً موفق شده
+    if (tx.TransactionStatus == WalletTransactionStatus.SUCCESS)
+    {
+        return new ApiResponse { Action = true, Message = "پرداخت قبلاً تایید شده است" };
+    }
+
+    var verifyDto = new ZarinPalVerifyRequestDto
+    {
+        Authority = authority,
+        Amount = tx.Amount
+    };
+
+    try
+    {
+        var result = await zarinPal.VerifyPaymentAsync(verifyDto);
+
+        // کد ۱۰۰ = موفق
+        if (result?.Data?.Code == 100)
+        {
+            var refId = result.Data.Ref_id.ToString();
+
+            var strategy = context.Database.CreateExecutionStrategy();
+
+            await strategy.ExecuteAsync(async () =>
+            {
+                using var dbTx = await context.Database.BeginTransactionAsync();
+                try
+                {
+                    var coach = await context.Coaches.FirstAsync(c => c.Id == tx.CoachId);
+
+                    tx.TransactionStatus = WalletTransactionStatus.SUCCESS;
+                    tx.ReferenceId = refId;
+
+                    coach.Amount += tx.Amount;
+
+                    await context.SaveChangesAsync();
+                    await dbTx.CommitAsync();
+                }
+                catch
+                {
+                    await dbTx.RollbackAsync();
+                    throw;
+                }
+            });
+
+            return new ApiResponse
+            {
+                Action = true,
+                Message = "شارژ کیف پول با موفقیت انجام شد"
+            };
+        }
+
+        if (result?.Data?.Code == 101)
+        {
+            return new ApiResponse { Action = true, Message = "پرداخت قبلاً تایید شده است" };
+        }
+
+        tx.TransactionStatus = WalletTransactionStatus.FAILED;
+        await context.SaveChangesAsync();
+
+        return new ApiResponse { Action = false, Message = "پرداخت ناموفق" };
+    }
+    catch (Exception)
+    {
+        return new ApiResponse { Action = false, Message = "خطا در تایید پرداخت" };
+    }
+}
+
+        public async Task<ApiResponse> GetCoachAmount(int coachId)
+        {
+            var coach = await context.Coaches.Select(x=>new
+            {
+                x.Id,
+                x.Amount
+            }).FirstOrDefaultAsync(x => x.Id == coachId);
+            if (coach is null)
+            {
+                return new ApiResponse()
+                {
+                    Action = false,
+                    Message = "no coach found"
+                };
+
+            }
+
+            return new ApiResponse()
+            {
+                Action = true,
+                Message = "coach found",
+                Result = coach.Amount
+            };
+        }
+
+        #endregion
         #region websiteurl
         public async Task<ApiResponse> CheckWebSiteUrlAvailabilityAsync(int coachId, string url)
         {
@@ -97,7 +431,7 @@ namespace sport_app_backend.Repository.CoachRepo
         }
 
         
-            public async Task<ApiResponse> GetWebSiteUrlStatusAsync(int coachId)
+        public async Task<ApiResponse> GetWebSiteUrlStatusAsync(int coachId)
         {
             var coach = await context.Coaches
                 .AsNoTracking()
@@ -218,97 +552,53 @@ namespace sport_app_backend.Repository.CoachRepo
                 Message = "آدرس وب‌سایت شما با موفقیت ثبت و تغییر یافت." 
             };
         }
-         #endregion
+        #endregion
         #region changePhoto
         public async Task<ApiResponse> GetAllChangePhotos(int coachId)
-    {
+        {
         
-        var photos = await context.AthleteChangePhotos
-            .Where(x => x.CoachId == coachId)
-            .OrderByDescending(x => x.CreatedAt)
-            .Select(x => new { x.Id, x.Title, x.Description, x.PhotoUrl, x.CreatedAt })
-            .ToListAsync();
+            var photos = await context.AthleteChangePhotos
+                .Where(x => x.CoachId == coachId)
+                .OrderByDescending(x => x.CreatedAt)
+                .Select(x => new { x.Id, x.Title, x.Description, x.PhotoUrl, x.CreatedAt })
+                .ToListAsync();
 
-        return new ApiResponse
-        {
-            Action = true,
-            Message = "Change photos fetched successfully",
-            Result = photos
-        };
-    }
-
-    public async Task<ApiResponse> GetChangePhotoById(int coachId, int id)
-    {
-       
-
-        var photo = await context.AthleteChangePhotos
-            .Where(x => x.CoachId == coachId && x.Id == id)
-            .Select(x => new { x.Id, x.Title, x.Description, x.PhotoUrl, x.CreatedAt })
-            .FirstOrDefaultAsync();
-
-        if (photo is null) return new ApiResponse { Message = "Change photo not found", Action = false };
-
-        return new ApiResponse
-        {
-            Action = true,
-            Message = "Change photo fetched successfully",
-            Result = photo
-        };
-    }
-
-    public async Task<ApiResponse> AddChangePhoto(int coachId, IFormFile file, AddAthleteChangePhotoDto dto)
-    {
-        if (file.Length == 0)
-            return new ApiResponse { Message = "File is required", Action = false };
-
-        
-
-        var upload = await storage.UploadImage(file, "","change-photos"); 
-        // upload.Url
-        if (!upload.Action)
-        {
-            return new ApiResponse()
+            return new ApiResponse
             {
-                Action = false,
-                Message = "File upload failed",
+                Action = true,
+                Message = "Change photos fetched successfully",
+                Result = photos
             };
-
         }
 
-        var entity = new AthleteChangePhoto
+        public async Task<ApiResponse> GetChangePhotoById(int coachId, int id)
         {
-            Title = dto.Title,
-            Description = dto.Description,
-            PhotoUrl = upload.Result.ToString(),
-            CoachId = coachId
-        };
+       
 
-        await context.AthleteChangePhotos.AddAsync(entity);
-        await context.SaveChangesAsync();
+            var photo = await context.AthleteChangePhotos
+                .Where(x => x.CoachId == coachId && x.Id == id)
+                .Select(x => new { x.Id, x.Title, x.Description, x.PhotoUrl, x.CreatedAt })
+                .FirstOrDefaultAsync();
 
-        return new ApiResponse
+            if (photo is null) return new ApiResponse { Message = "Change photo not found", Action = false };
+
+            return new ApiResponse
+            {
+                Action = true,
+                Message = "Change photo fetched successfully",
+                Result = photo
+            };
+        }
+
+        public async Task<ApiResponse> AddChangePhoto(int coachId, IFormFile file, AddAthleteChangePhotoDto dto)
         {
-            Action = true,
-            Message = "Change photo added successfully",
-            Result = new { entity.Id }
-        };
-    }
+            if (file.Length == 0)
+                return new ApiResponse { Message = "File is required", Action = false };
 
-    public async Task<ApiResponse> EditChangePhoto(int coachId, IFormFile? file, EditAthleteChangePhotoDto dto)
-    {
         
-        var entity = await context.AthleteChangePhotos
-            .FirstOrDefaultAsync(x => x.CoachId == coachId && x.Id == dto.Id);
 
-        if (entity is null) return new ApiResponse { Message = "Change photo not found", Action = false };
-
-        entity.Title = dto.Title;
-        entity.Description = dto.Description;
-
-        if (file != null && file.Length > 0)
-        {
-            
-            var upload = await storage.UploadImage(file,entity.PhotoUrl, "change-photos");
+            var upload = await storage.UploadImage(file, "","change-photos"); 
+            // upload.Url
             if (!upload.Action)
             {
                 return new ApiResponse()
@@ -318,37 +608,81 @@ namespace sport_app_backend.Repository.CoachRepo
                 };
 
             }
-            entity.PhotoUrl = upload.Result.ToString();
 
+            var entity = new AthleteChangePhoto
+            {
+                Title = dto.Title,
+                Description = dto.Description,
+                PhotoUrl = upload.Result.ToString(),
+                CoachId = coachId
+            };
+
+            await context.AthleteChangePhotos.AddAsync(entity);
+            await context.SaveChangesAsync();
+
+            return new ApiResponse
+            {
+                Action = true,
+                Message = "Change photo added successfully",
+                Result = new { entity.Id }
+            };
         }
 
-        await context.SaveChangesAsync();
-
-        return new ApiResponse
+        public async Task<ApiResponse> EditChangePhoto(int coachId, IFormFile? file, EditAthleteChangePhotoDto dto)
         {
-            Action = true,
-            Message = "Change photo updated successfully",
-            Result = new { entity.Id }
-        };
-    }
+        
+            var entity = await context.AthleteChangePhotos
+                .FirstOrDefaultAsync(x => x.CoachId == coachId && x.Id == dto.Id);
 
-    public async Task<ApiResponse> DeleteChangePhoto(int coachId, int id)
-    {
-        var entity = await context.AthleteChangePhotos
-            .FirstOrDefaultAsync(x => x.CoachId == coachId && x.Id == id);
+            if (entity is null) return new ApiResponse { Message = "Change photo not found", Action = false };
 
-        if (entity is null) return new ApiResponse { Message = "Change photo not found", Action = false };
-        await storage.RemovePhoto(entity.PhotoUrl);
+            entity.Title = dto.Title;
+            entity.Description = dto.Description;
 
-        context.AthleteChangePhotos.Remove(entity);
-        await context.SaveChangesAsync();
+            if (file != null && file.Length > 0)
+            {
+            
+                var upload = await storage.UploadImage(file,entity.PhotoUrl, "change-photos");
+                if (!upload.Action)
+                {
+                    return new ApiResponse()
+                    {
+                        Action = false,
+                        Message = "File upload failed",
+                    };
 
-        return new ApiResponse
+                }
+                entity.PhotoUrl = upload.Result.ToString();
+
+            }
+
+            await context.SaveChangesAsync();
+
+            return new ApiResponse
+            {
+                Action = true,
+                Message = "Change photo updated successfully",
+                Result = new { entity.Id }
+            };
+        }
+
+        public async Task<ApiResponse> DeleteChangePhoto(int coachId, int id)
         {
-            Action = true,
-            Message = "Change photo deleted successfully"
-        };
-    }
+            var entity = await context.AthleteChangePhotos
+                .FirstOrDefaultAsync(x => x.CoachId == coachId && x.Id == id);
+
+            if (entity is null) return new ApiResponse { Message = "Change photo not found", Action = false };
+            await storage.RemovePhoto(entity.PhotoUrl);
+
+            context.AthleteChangePhotos.Remove(entity);
+            await context.SaveChangesAsync();
+
+            return new ApiResponse
+            {
+                Action = true,
+                Message = "Change photo deleted successfully"
+            };
+        }
         
 
         #endregion
@@ -456,6 +790,7 @@ namespace sport_app_backend.Repository.CoachRepo
             }
         }
 
+        #region CoachingService
         public async Task<ApiResponse> AddCoachingServices(string phoneNumber, AddCoachServiceDto addCoachingServiceDto)
         {
             var coach = await context.Coaches.Include(c => c.CoachingServices)
@@ -592,6 +927,7 @@ namespace sport_app_backend.Repository.CoachRepo
                 Result = coachingService.ToCoachingServiceResponse() // همچنان سرویس قدیمی را برمی‌گردانیم
             };
         }
+        #endregion
 
         public async Task<ApiResponse> SubmitCoachQuestions(string phoneNumber, CoachQuestionDto coachQuestionDto)
         {
@@ -947,19 +1283,22 @@ namespace sport_app_backend.Repository.CoachRepo
                 .ThenInclude(e => e.Exercise)
                 .FirstOrDefaultAsync(p => p.Coach.PhoneNumber == phoneNumber && p.Id == paymentId);
             if (payment is null) return new ApiResponse() { Message = "Payment not found", Action = false };
-            var ear = calculator.BmrCalculator(new BmrRequestDto()
+            var ear = 0.0; // مقدار پیش‌فرض
+            if (payment.AthleteQuestion != null)
             {
-                ActivityLevel = payment.AthleteQuestion.ActivityLevel,
-                Age = DateTime.Today.Year - payment.Athlete.User.BirthDate.Year
-                                          - (payment.Athlete.User.BirthDate.Date > DateTime.Today.AddYears(
-                                              -(DateTime.Today.Year - payment.Athlete.User.BirthDate.Year))
-                                              ? 1
-                                              : 0),
-                Gender = payment.Athlete.User.Gender,
-                HeightCm = payment.Athlete.Height,
-                WeightKg = payment.Athlete.CurrentWeight
-            });
-
+                ear = calculator.BmrCalculator(new BmrRequestDto()
+                {
+                    ActivityLevel = payment.AthleteQuestion.ActivityLevel,
+                    Age = DateTime.Today.Year - payment.Athlete.User.BirthDate.Year
+                                              - (payment.Athlete.User.BirthDate.Date > DateTime.Today.AddYears(
+                                                  -(DateTime.Today.Year - payment.Athlete.User.BirthDate.Year))
+                                                  ? 1
+                                                  : 0),
+                    Gender = payment.Athlete.User.Gender,
+                    HeightCm = payment.Athlete.Height,
+                    WeightKg = payment.Athlete.CurrentWeight
+                });
+            }
 
             var result = payment.ToCoachPaymentResponseDto(token.HashEncode(payment.WorkoutProgram?.Id ?? 0), ear);
             if (result.WorkoutProgram!.ProgramInDays is { Count: 0 })
@@ -1141,7 +1480,7 @@ namespace sport_app_backend.Repository.CoachRepo
         }
 
 
-     public async Task<ApiResponse> SaveWorkoutProgram(string phoneNumber, int paymentId,
+        public async Task<ApiResponse> SaveWorkoutProgram(string phoneNumber, int paymentId,
             WorkoutProgramDto workoutProgramDto)
         {
             try
@@ -1188,30 +1527,35 @@ namespace sport_app_backend.Repository.CoachRepo
                             Message = "list is empty"
                         };
                     }
-                   
 
-                    coach.Amount += (workoutProgram.Payment.Amount - workoutProgram.Payment.AppFee);              
-                    var athleteImg = await context.AthleteImage
-                        .Where(a => a.AthleteQuestionId == workoutProgram.Payment.AthleteQuestionId)
-                        .FirstOrDefaultAsync();
-                    if (athleteImg?.SideLink != null)
+                    if (workoutProgram.Payment.PaymentType == PaymentType.GATEWAY)
                     {
+                        coach.Amount += (workoutProgram.Payment.Amount - workoutProgram.Payment.AppFee);
+
+                        var athleteImg = await context.AthleteImage
+                            .Where(a => a.AthleteQuestionId == workoutProgram.Payment.AthleteQuestionId)
+                            .FirstOrDefaultAsync();
+                        if (athleteImg?.SideLink != null)
+                        {
                             await storage.RemovePhoto(athleteImg.SideLink);
-                    }
-                    if (athleteImg?.BackLink != null)
-                    {
-                        await storage.RemovePhoto(athleteImg.BackLink);
-                    }
-                    if (athleteImg?.FrontLink != null)
-                    {
-                        await storage.RemovePhoto(athleteImg.FrontLink);
+                        }
+
+                        if (athleteImg?.BackLink != null)
+                        {
+                            await storage.RemovePhoto(athleteImg.BackLink);
+                        }
+
+                        if (athleteImg?.FrontLink != null)
+                        {
+                            await storage.RemovePhoto(athleteImg.FrontLink);
+                        }
+
+                        if (athleteImg is not null)
+                        {
+                            context.AthleteImage.Remove(athleteImg);
+                        }
                     }
 
-                    if (athleteImg is not null)
-                    {
-                         context.AthleteImage.Remove(athleteImg);
-                    }
-                    
 
                     await smsService.WorkoutReadySms(athlete.PhoneNumber, athlete.User.FirstName, workoutProgram.Title,token.HashEncode(workoutProgram.Id));
                     var exerciseIds = workoutProgramDto.Days
@@ -1268,11 +1612,9 @@ namespace sport_app_backend.Repository.CoachRepo
                     .Include(p => p.ProgramInDays)
                     .ThenInclude(d => d.AllExerciseInDays)
                     .FirstAsync(p => p.PaymentId == paymentId);
-
-                if (workoutProgram.Payment.AthleteQuestion != null)
-                {
+                var daysPerWeekToExercise= workoutProgram.Payment.AthleteQuestion?.DaysPerWeekToExercise ?? workoutProgram.ProgramInDays.Count;
                     var numberOfDay = workoutProgram.ProgramDuration *
-                                      workoutProgram.Payment.AthleteQuestion.DaysPerWeekToExercise;
+                                      daysPerWeekToExercise;
                     var programInDayList = workoutProgram.ProgramInDays;
                     var programInDayCount = programInDayList.Count;
                     workoutProgram.TotalSessionCount = numberOfDay;
@@ -1292,7 +1634,7 @@ namespace sport_app_backend.Repository.CoachRepo
                             WorkoutProgramId = workoutProgram.Id
                         });
                     }
-                }
+                
             }
             catch (Exception e)
             {
@@ -1590,6 +1932,9 @@ namespace sport_app_backend.Repository.CoachRepo
                 .Include(p => p.CoachService)
                 .OrderByDescending(p => p.PaymentDate)
                 .ToListAsync();
+            var walletTransactions = await context.WalletTransactions
+                .Where(p => p.CoachId == coach.Id && p.TransactionStatus == WalletTransactionStatus.SUCCESS)
+                .ToListAsync();
 
             var coachPayout = await context.CoachPayouts.Where(p => p.CoachId == coach.Id)
                 .OrderByDescending(p => p.RequestDate).ToListAsync();
@@ -1626,6 +1971,19 @@ namespace sport_app_backend.Repository.CoachRepo
                     AppFee = p.AppFee
                 };
             }).ToList();
+            var walletTransactionsDto = walletTransactions.Select(wt => new TransactionDto
+            {
+                Amount = wt.Amount,
+                Type = "افزایش",
+                Date = wt.CreatedAt.ToString(CultureInfo.CurrentCulture),
+                Description = "افزایش موجودی حساب",
+                ProgramStatus = "",
+                BuyerName = "",
+                ReferenceId = wt.ReferenceId
+            }).ToList();
+            transactionDto.AddRange(walletTransactionsDto);
+            
+            
 
             return new ApiResponse
             {
@@ -1776,158 +2134,158 @@ namespace sport_app_backend.Repository.CoachRepo
             };
         }
 
-     public async Task<(IEnumerable<AllExerciseResponseDto>, int)>
-GetExercisesWithFilterForCoach(
-    string? level,
-    string? type,
-    string? mechanic,
-    string?[]? equipment,
-    string? muscle,
-    string? place,
-    int page,
-    int pageSize,
-    string? searchTerm,
-    int? athleteId,
-    int coachId)
-{
-    if (page < 1) page = 1;
-    if (pageSize <= 0) pageSize = 10;
+        public async Task<(IEnumerable<AllExerciseResponseDto>, int)>
+            GetExercisesWithFilterForCoach(
+                string? level,
+                string? type,
+                string? mechanic,
+                string?[]? equipment,
+                string? muscle,
+                string? place,
+                int page,
+                int pageSize,
+                string? searchTerm,
+                int? athleteId,
+                int coachId)
+        {
+            if (page < 1) page = 1;
+            if (pageSize <= 0) pageSize = 10;
 
-    var exercises = await exerciseCache.GetAllExercisesAsync();
-    var pins = await exerciseCache.GetCoachPinsAsync(coachId);
-    Dictionary<int, List<int>> lastWorkouts; 
-    List<int> lastIds = new List<int>();
+            var exercises = await exerciseCache.GetAllExercisesAsync();
+            var pins = await exerciseCache.GetCoachPinsAsync(coachId);
+            Dictionary<int, List<int>> lastWorkouts; 
+            List<int> lastIds = new List<int>();
 
-    if (athleteId.HasValue)
-    {
-        lastIds = await exerciseCache.GetLastWorkoutsForAthleteAsync(coachId, athleteId.Value);
-    }
+            if (athleteId.HasValue)
+            {
+                lastIds = await exerciseCache.GetLastWorkoutsForAthleteAsync(coachId, athleteId.Value);
+            }
 
-    IEnumerable<Exercise> query = exercises;
+            IEnumerable<Exercise> query = exercises;
 
-    if (!string.IsNullOrWhiteSpace(searchTerm))
-    {
-        query = query.Where(e =>
-            e.PersianName.Contains(searchTerm) ||
-            e.EnglishName.Contains(searchTerm));
-    }
+            if (!string.IsNullOrWhiteSpace(searchTerm))
+            {
+                query = query.Where(e =>
+                    e.PersianName.Contains(searchTerm) ||
+                    e.EnglishName.Contains(searchTerm));
+            }
 
-    if (Enum.TryParse(level, true, out ExerciseLevel levelEnum))
-        query = query.Where(e => e.ExerciseLevel == levelEnum);
+            if (Enum.TryParse(level, true, out ExerciseLevel levelEnum))
+                query = query.Where(e => e.ExerciseLevel == levelEnum);
 
-    if (Enum.TryParse(type, true, out ExerciseType typeEnum))
-        query = query.Where(e => e.ExerciseType == typeEnum);
+            if (Enum.TryParse(type, true, out ExerciseType typeEnum))
+                query = query.Where(e => e.ExerciseType == typeEnum);
 
-    if (Enum.TryParse(mechanic, true, out MechanicType mechanicEnum))
-        query = query.Where(e => e.Mechanics == mechanicEnum);
+            if (Enum.TryParse(mechanic, true, out MechanicType mechanicEnum))
+                query = query.Where(e => e.Mechanics == mechanicEnum);
 
-    if (Enum.TryParse(muscle, true, out BaseCategory muscleEnum))
-        query = query.Where(e => e.BaseCategory == muscleEnum);
+            if (Enum.TryParse(muscle, true, out BaseCategory muscleEnum))
+                query = query.Where(e => e.BaseCategory == muscleEnum);
 
-    var pinnedIds = pins
-        .SelectMany(x => x.Value)
-        .ToHashSet();
+            var pinnedIds = pins
+                .SelectMany(x => x.Value)
+                .ToHashSet();
 
  
 
-    var total = query.Count();
+            var total = query.Count();
 
-    var result = query
-        .Select(e => new
-        {
-            Exercise = e,
-            IsPinned = pinnedIds.Contains(e.Id),
-            IsLast = lastIds.Contains(e.Id)
-        })
-        .OrderByDescending(x => x.IsPinned)
-        .ThenByDescending(x => x.Exercise.Views)
-        .Skip((page - 1) * pageSize)
-        .Take(pageSize)
-        .Select(x => new AllExerciseResponseDto
-        {
-            Id = x.Exercise.Id,
-            Name = x.Exercise.PersianName,
-            ImageLink = x.Exercise.ImageLink,
-            BaseCategory = x.Exercise.BaseCategory.ToString(),
-            Equipment = x.Exercise.Equipment.ToString(),
-            ExerciseType = x.Exercise.ExerciseType.ToString(),
-            Level = x.Exercise.ExerciseLevel.ToString(),
-            Mechanics = x.Exercise.Mechanics.ToString(),
-            View = x.Exercise.Views,
-            Met = x.Exercise.Met,
-            IsPinned = x.IsPinned,
-            IsInLastProgram = x.IsLast
-        });
+            var result = query
+                .Select(e => new
+                {
+                    Exercise = e,
+                    IsPinned = pinnedIds.Contains(e.Id),
+                    IsLast = lastIds.Contains(e.Id)
+                })
+                .OrderByDescending(x => x.IsPinned)
+                .ThenByDescending(x => x.Exercise.Views)
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .Select(x => new AllExerciseResponseDto
+                {
+                    Id = x.Exercise.Id,
+                    Name = x.Exercise.PersianName,
+                    ImageLink = x.Exercise.ImageLink,
+                    BaseCategory = x.Exercise.BaseCategory.ToString(),
+                    Equipment = x.Exercise.Equipment.ToString(),
+                    ExerciseType = x.Exercise.ExerciseType.ToString(),
+                    Level = x.Exercise.ExerciseLevel.ToString(),
+                    Mechanics = x.Exercise.Mechanics.ToString(),
+                    View = x.Exercise.Views,
+                    Met = x.Exercise.Met,
+                    IsPinned = x.IsPinned,
+                    IsInLastProgram = x.IsLast
+                });
 
-    return (result, total);
-}
-
-
-
-public async Task<ApiResponse> AddPineExercise(int exerciseId, int coachId)
-{
-    var coach = await context.Coaches
-        .FirstOrDefaultAsync(c => c.Id == coachId);
-
-    if (coach == null)
-    {
-        return new ApiResponse
-        {
-            Message = "coach not found",
-            Action = false
-        };
-    }
-
-    var exercises = await exerciseCache.GetAllExercisesAsync();
-
-    var exercise = exercises.FirstOrDefault(e => e.Id == exerciseId);
-
-    if (exercise == null)
-    {
-        return new ApiResponse
-        {
-            Message = "exercise not found",
-            Action = false
-        };
-    }
-
-    var oldPineExercises = await context.CoachPineExercises
-        .FirstOrDefaultAsync(ex =>
-            ex.CoachId == coach.Id &&
-            ex.BaseCategory == exercise.BaseCategory);
-
-    if (oldPineExercises == null)
-    {
-        var newCategory = new CoachPineExercise
-        {
-            CoachId = coach.Id,
-            BaseCategory = exercise.BaseCategory,
-            ExerciseIds = new List<int> { exerciseId }
-        };
-
-        await context.CoachPineExercises.AddAsync(newCategory);
-    }
-    else
-    {
-        if (!oldPineExercises.ExerciseIds.Contains(exerciseId))
-        {
-            oldPineExercises.ExerciseIds.Add(exerciseId);
+            return (result, total);
         }
-    }
 
-    await context.SaveChangesAsync();
 
-    await exerciseCache.UpdateCoachPinsAsync(
-        coachId,
-        exercise.BaseCategory,
-        exerciseId);
 
-    return new ApiResponse
-    {
-        Message = "added",
-        Action = true
-    };
-}
+        public async Task<ApiResponse> AddPineExercise(int exerciseId, int coachId)
+        {
+            var coach = await context.Coaches
+                .FirstOrDefaultAsync(c => c.Id == coachId);
+
+            if (coach == null)
+            {
+                return new ApiResponse
+                {
+                    Message = "coach not found",
+                    Action = false
+                };
+            }
+
+            var exercises = await exerciseCache.GetAllExercisesAsync();
+
+            var exercise = exercises.FirstOrDefault(e => e.Id == exerciseId);
+
+            if (exercise == null)
+            {
+                return new ApiResponse
+                {
+                    Message = "exercise not found",
+                    Action = false
+                };
+            }
+
+            var oldPineExercises = await context.CoachPineExercises
+                .FirstOrDefaultAsync(ex =>
+                    ex.CoachId == coach.Id &&
+                    ex.BaseCategory == exercise.BaseCategory);
+
+            if (oldPineExercises == null)
+            {
+                var newCategory = new CoachPineExercise
+                {
+                    CoachId = coach.Id,
+                    BaseCategory = exercise.BaseCategory,
+                    ExerciseIds = new List<int> { exerciseId }
+                };
+
+                await context.CoachPineExercises.AddAsync(newCategory);
+            }
+            else
+            {
+                if (!oldPineExercises.ExerciseIds.Contains(exerciseId))
+                {
+                    oldPineExercises.ExerciseIds.Add(exerciseId);
+                }
+            }
+
+            await context.SaveChangesAsync();
+
+            await exerciseCache.UpdateCoachPinsAsync(
+                coachId,
+                exercise.BaseCategory,
+                exerciseId);
+
+            return new ApiResponse
+            {
+                Message = "added",
+                Action = true
+            };
+        }
 
         public async Task<ApiResponse> RemovePineExercise(int exerciseId, int coachId)
         {

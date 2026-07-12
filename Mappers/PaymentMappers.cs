@@ -1,5 +1,6 @@
 ﻿using System.Globalization;
 using sport_app_backend.Dtos;
+using sport_app_backend.Dtos.Payment;
 using sport_app_backend.Models.Payments;
 using sport_app_backend.Models.Program;
 
@@ -19,7 +20,9 @@ public static class PaymentMappers
                 CultureInfo.InvariantCulture),
             CoachServiceTitle = payment.CoachService.Title,
             WorkoutProgramStatus = payment.WorkoutProgram!.Status.ToString(),
-            ImageProfile = payment.Athlete?.User?.ImageProfile ??""
+            ImageProfile = payment.Athlete?.User?.ImageProfile ??"",
+            PaymentType = payment.PaymentType.ToString()
+            
 
         };
     }
@@ -27,21 +30,26 @@ public static class PaymentMappers
     public static CoachPaymentResponseDto ToCoachPaymentResponseDto(this Payment payment,string wpkey,double ear)
     {
         return new CoachPaymentResponseDto
-        {   PaymentId = payment.Id,
+        {   
+            PaymentId = payment.Id,
             AthleteId =  payment.AthleteId,
             TransactionId = payment.Authority,
             PaymentStatus = payment.PaymentStatus.ToString(),
             Name = payment.Athlete.User?.FirstName + " " + payment.Athlete?.User?.LastName,
             Amount = payment.Amount.ToString(CultureInfo.CurrentCulture),
             DateTime = payment.PaymentDate.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture),
-            AthleteQuestion = payment.AthleteQuestion?.AthleteQuestionResponseDto(ear),
+            AthleteQuestion = payment.AthleteQuestion != null 
+                ? payment.AthleteQuestion.AthleteQuestionResponseDto(ear) 
+                : new AthleteQuestionResponseDto(), // DTO خالی
             Height = payment.Athlete!.Height,
             ImageProfile = payment.Athlete.User?.ImageProfile ??"",
             WorkoutProgram = payment.WorkoutProgram?.ToProgramResponseDto()??new WorkoutProgramResponseDto(),
             Gender = payment.Athlete.User?.Gender.ToString(),
-            BirthDate = payment.Athlete.User?.BirthDate.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture),
+            BirthDate = payment.Athlete.User?.BirthDate.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture) ?? "",
             PdfLink =   $"chaarset.ir/program/{wpkey}",
-            WpKey = wpkey
+            WpKey = wpkey,
+            PaymentType =  payment.PaymentType.ToString()
+            
         };
         
     }

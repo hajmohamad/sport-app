@@ -155,6 +155,9 @@ public class ApplicationDbContext : DbContext
     public DbSet<UserExternalAccount> UserExternalAccounts => Set<UserExternalAccount>();
 
     public DbSet<EitaaLoginSession> EitaaLoginSessions => Set<EitaaLoginSession>();
+    public DbSet<WalletTransaction> WalletTransactions { get; set; }
+
+    
 
     
 

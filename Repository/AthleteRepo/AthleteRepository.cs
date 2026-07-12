@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using sport_app_backend.Controller;
 using sport_app_backend.Data;
 using sport_app_backend.Dtos;
+using sport_app_backend.Dtos.Payment;
 using sport_app_backend.Dtos.ProgramDto;
 using sport_app_backend.Dtos.ZarinPal;
 using sport_app_backend.Dtos.ZarinPal.Verify;
@@ -252,27 +253,29 @@ namespace sport_app_backend.Repository.AthleteRepo
                 .ThenInclude(z => z.AllExerciseInDays)
                 .ThenInclude(e => e.Exercise)
                 .FirstOrDefaultAsync();
-            if (athleteQuestion == null)
-            {
-                return new ApiResponse { Message = "athleteQuestion not found for this user", Action = false };
-            }
+           
 
             if (workoutProgram == null)
             {
                 return new ApiResponse { Message = "workoutProgram not found for this user", Action = false };
             }
-            var Ear = calculator.BmrCalculator(new BmrRequestDto()
+
+            var ear = 0;
+            if (athleteQuestion != null)
             {
-                ActivityLevel = athleteQuestion.ActivityLevel,
-                Age = DateTime.Today.Year - paymentData.AthleteUser.BirthDate.Year
-                                          - (paymentData.AthleteUser.BirthDate.Date > DateTime.Today.AddYears(
-                                              -(DateTime.Today.Year - paymentData.AthleteUser.BirthDate.Year))
-                                              ? 1
-                                              : 0),
-                Gender = paymentData.AthleteUser.Gender,
-                HeightCm = paymentData.Athlete.Height,
-                WeightKg = paymentData.Athlete.CurrentWeight
-            });
+                calculator.BmrCalculator(new BmrRequestDto()
+                {
+                    ActivityLevel = athleteQuestion.ActivityLevel,
+                    Age = DateTime.Today.Year - paymentData.AthleteUser.BirthDate.Year
+                                              - (paymentData.AthleteUser.BirthDate.Date > DateTime.Today.AddYears(
+                                                  -(DateTime.Today.Year - paymentData.AthleteUser.BirthDate.Year))
+                                                  ? 1
+                                                  : 0),
+                    Gender = paymentData.AthleteUser.Gender,
+                    HeightCm = paymentData.Athlete.Height,
+                    WeightKg = paymentData.Athlete.CurrentWeight
+                });
+            }
 
             var paymentResponseDto = new AthletePaymentResponseDto
             {
@@ -286,10 +289,12 @@ namespace sport_app_backend.Repository.AthleteRepo
                 ImageProfile = paymentData.CoachUser.ImageProfile ?? "",
                 Gender = paymentData.AthleteUser.Gender.ToString(),
                 BirthDate = paymentData.AthleteUser.BirthDate.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture),
-                AthleteQuestion = athleteQuestion?.AthleteQuestionResponseWithBirthdayDto( paymentData.AthleteUser.BirthDate.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture),Ear)?? new AthleteQuestionResponseDto(),
+                AthleteQuestion = athleteQuestion?.AthleteQuestionResponseWithBirthdayDto( paymentData.AthleteUser.BirthDate.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture),ear)?? null,
                 WorkoutProgram = workoutProgram.ToProgramResponseDto(),
                 PdfLink= $"chaarset.ir/program/{tokenService.HashEncode(workoutProgram.Id)}",
                 WpKey = tokenService.HashEncode(workoutProgram.Id),
+                PaymentType =  paymentData.Payment.PaymentType.ToString()
+
             };
 
             return new ApiResponse { Message = "Payment details found", Action = true, Result = paymentResponseDto };
@@ -374,8 +379,9 @@ namespace sport_app_backend.Repository.AthleteRepo
                 .ThenInclude(d => d.AllExerciseInDays)
                 .FirstAsync(p => p.PaymentId == paymentId);
 
+            var daysPerWeekToExercise= workoutProgram.Payment.AthleteQuestion?.DaysPerWeekToExercise ?? workoutProgram.ProgramInDays.Count;
             var numberOfDay = workoutProgram.ProgramDuration *
-                              workoutProgram.Payment.AthleteQuestion.DaysPerWeekToExercise;
+                              daysPerWeekToExercise;
             var programInDayList = workoutProgram.ProgramInDays;
             var programInDayCount = programInDayList.Count;
             workoutProgram.TotalSessionCount = numberOfDay;

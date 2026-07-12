@@ -581,6 +581,63 @@ namespace sport_app_backend.Controller
             
 
         }
+        [Authorize(Roles = "Coach")] // فقط مربی دسترسی داشته باشد
+        [HttpPost("buyForAthlete")]
+        public async Task<IActionResult> BuyForAthlete([FromBody] CoachBuyRequestDto dto)
+        {
+            var coachId = await GetCoachIdAsync();
+            if (coachId == 0)
+            {
+              
+                return Unauthorized(new ApiResponse { Action = false, Message = "خطای احراز هویت." });
+                
+            }
+            var result = await coachRepository.BuyServiceByCoachFromWallet(coachId, dto);
+    
+            if (result.Action) return Ok(result);
+            return BadRequest(result);
+        }
+        #region Wallet
+        [HttpPost("charge")]
+        [Authorize(Roles = "Coach")]
+        public async Task<IActionResult> RequestCharge([FromBody] double price)
+        {
+            var coachId = await GetCoachIdAsync();
+            if (coachId == 0)
+            {
+                return Unauthorized(new ApiResponse { Action = false, Message = "خطای احراز هویت." });
+            }
+            var res = await coachRepository.RequestWalletChargeAsync(coachId, price);
+            return Ok(res);
+        }
+
+        [HttpGet("verify")]
+
+        public async Task<IActionResult> Verify([FromQuery] string authority, [FromQuery] string status)
+        {
+            var res = await coachRepository.VerifyWalletChargeAsync(
+             authority,
+             status
+            );
+            return Ok(res);
+        }
+        [HttpGet("amount")]
+
+        public async Task<IActionResult> GetCoachAmount()
+        {
+            var coachId = await GetCoachIdAsync();
+            if (coachId == 0)
+            {
+                return Unauthorized(new ApiResponse { Action = false, Message = "خطای احراز هویت." });
+            }
+            var res = await coachRepository.GetCoachAmount(
+            coachId
+            );
+            return Ok(res);
+        }
+        
+
+        #endregion
         #region WebSiteUrl Management
 
         [HttpGet("WebSiteUrl")]

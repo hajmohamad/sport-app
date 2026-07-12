@@ -1,4 +1,4 @@
-﻿namespace sport_app_backend.Dtos;
+﻿namespace sport_app_backend.Dtos.Payment;
 
 public class AllPaymentResponseDto
 {
@@ -13,4 +13,5 @@ public class AllPaymentResponseDto
     public string WpKey { get; set; }
     public bool ShouldGetFeedback{ get; set; }
     public string CouchUrlSite { get; set; }
+    public string? PaymentType { get; set; }
 }

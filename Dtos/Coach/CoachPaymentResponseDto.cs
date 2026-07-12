@@ -19,4 +19,5 @@ public class CoachPaymentResponseDto
     public required string BirthDate { get; set; }= string.Empty;
     public string PdfLink { get; set; } = "";
     public string WpKey {get; set;}= string.Empty;
+    public string PaymentType { get; set; }
 }

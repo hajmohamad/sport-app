@@ -29,6 +29,7 @@ namespace sport_app_backend.projectTest
         private readonly Mock<IStorage> _mockStorage;
         private readonly Mock<ITokenService> _mockTokenService;
         private readonly Mock<ICalculator> _mockCalculator;
+        private readonly Mock<IZarinPal> _mockZarinpal;
         private readonly ApplicationDbContext _context;
         private readonly CoachRepository _repository;
         private readonly  Mock<IExerciseCacheService> _mockExerciseCache;
@@ -40,6 +41,8 @@ namespace sport_app_backend.projectTest
             _mockTokenService = new Mock<ITokenService>();
             _mockCalculator = new Mock<ICalculator>();
             _mockExerciseCache = new Mock<IExerciseCacheService>();
+            _mockZarinpal = new Mock<IZarinPal>();
+
 
 
             var options = new DbContextOptionsBuilder<ApplicationDbContext>()
@@ -53,7 +56,8 @@ namespace sport_app_backend.projectTest
                 _mockStorage.Object,
                 _mockTokenService.Object,
                 _mockCalculator.Object,
-                _mockExerciseCache.Object
+                _mockExerciseCache.Object,
+                _mockZarinpal.Object
             );
         }
 
