@@ -12,6 +12,7 @@ using sport_app_backend.Models.Challenge_Achievement;
 using sport_app_backend.Models.Login_Sinup;
 using sport_app_backend.Models.Payments;
 using sport_app_backend.Models.Program;
+using sport_app_backend.Models.Program.WorkoutProgramTemplate;
 using sport_app_backend.Models.Question.A_Question;
 using sport_app_backend.Models.Support;
 using sport_app_backend.Models.TrainingPlan;
@@ -110,6 +111,25 @@ public class ApplicationDbContext : DbContext
         .WithMany(x => x.ExternalAccounts)
         .HasForeignKey(x => x.UserId)
         .OnDelete(DeleteBehavior.Cascade);
+    
+    modelBuilder.Entity<WorkoutProgramTemplate>()
+        .HasOne(x => x.Coach)
+        .WithMany()
+        .HasForeignKey(x => x.CoachId)
+        .OnDelete(DeleteBehavior.Cascade);
+
+    modelBuilder.Entity<TemplateProgramInDay>()
+        .HasOne(x => x.WorkoutProgramTemplate)
+        .WithMany(x => x.ProgramInDays)
+        .HasForeignKey(x => x.WorkoutProgramTemplateId)
+        .OnDelete(DeleteBehavior.Cascade);
+
+    modelBuilder.Entity<TemplateSingleExercise>()
+        .HasOne(x => x.TemplateProgramInDay)
+        .WithMany(x => x.AllExerciseInDays)
+        .HasForeignKey(x => x.TemplateProgramInDayId)
+        .OnDelete(DeleteBehavior.Cascade);
+
 }
 
     public DbSet<User> Users { get; set; }
@@ -156,6 +176,9 @@ public class ApplicationDbContext : DbContext
 
     public DbSet<EitaaLoginSession> EitaaLoginSessions => Set<EitaaLoginSession>();
     public DbSet<WalletTransaction> WalletTransactions { get; set; }
+    public DbSet<WorkoutProgramTemplate> WorkoutProgramTemplates { get; set; }
+    public DbSet<TemplateProgramInDay> TemplateProgramInDays { get; set; }
+    public DbSet<TemplateSingleExercise> TemplateSingleExercises { get; set; }
 
     
 

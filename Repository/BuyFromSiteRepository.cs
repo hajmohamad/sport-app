@@ -86,7 +86,7 @@ public class BuyFromSiteRepository(
         ProgramLevel = workoutData.ProgramLevel.ToPersianString(),
         ProgramDuration = workoutData.ProgramDuration.ToString(),
         ProgramPriorities = workoutData.ProgramPriorities != null 
-            ? string.Join(" - ", workoutData.ProgramPriorities.Select(p => p.ToPersianString())) 
+            ? string.Join(" - ", workoutData.ProgramPriorities.ToPersianString()) 
             : "",
         AthleteWeight = workoutData.AthleteCurrentWeight > 0 ? workoutData.AthleteCurrentWeight.ToString() : "ثبت نشده",
         AthleteHeight = workoutData.AthleteHeight > 0 ? workoutData.AthleteHeight.ToString() : "ثبت نشده",
@@ -911,7 +911,7 @@ public class BuyFromSiteRepository(
             PaymentDate = persianDate,
             ProgramDuration = programData.ProgramDuration,
             ProgramLevel = programData.ProgramLevel.ToString(),
-            ProgramPriorities = programData.ProgramPriorities.Select(x => x.ToString()).ToList(),
+            ProgramPriorities = [programData.ProgramPriorities.ToString()],
             Title = programData.Title,
             CoachName = programData.CoachFirstname + " " + programData.CoachLastname,
             CoachSocialMedia = new CoachSocialMediaDto

@@ -22,7 +22,7 @@ public class WorkoutProgram
     public DateTime? StartDate { get; set; }
     public int ProgramDuration { get; set; } 
     public ProgramLevel ProgramLevel { get; set; } 
-    public List<ProgramPriority> ProgramPriorities { get; set; } = [];
+    public ProgramPriority ProgramPriorities { get; set; } 
     // public List<GeneralWarmUp>? GeneralWarmUp { get; set; } = [];
     // public DedicatedWarmUp? DedicatedWarmUp { get; set; } 
     public WorkoutProgramStatus Status { get; set; } = WorkoutProgramStatus.NOTSTARTED;

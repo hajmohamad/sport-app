@@ -10,5 +10,5 @@ public class WorkoutProgramDto
     // public  string? DedicatedWarmUp { get; set; } 
     public required string ProgramLevel { get; set; }
     public required List<ProgramInDayDto> Days { get; set; }
-    public required List<string> ProgramPriority { get; set; }
+    public required string ProgramPriority { get; set; }
 }

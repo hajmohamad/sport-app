@@ -179,6 +179,8 @@ builder.Services.AddScoped<IAchievements, AchievementsRepository>();
 builder.Services.AddScoped<IWaterAndWeight, WaterAndWeightRepository>();
 builder.Services.AddScoped<IActivity, ActivityRepository>();
 builder.Services.AddScoped<IInAppMessageRepository, InAppMessageRepository>();
+builder.Services.AddScoped<IWorkoutProgramTemplateRepository, WorkoutProgramTemplateRepository>();
+
 //cash service
 builder.Services.AddScoped<IExerciseCacheService, ExerciseCacheService>();
 builder.Services.AddScoped<AthleteCacheService>();

@@ -1033,7 +1033,7 @@ namespace sport_app_backend.projectTest
                 Days = new List<ProgramInDayDto>(),
                 Week = 12,
                 ProgramLevel = nameof(ProgramLevel.Intermediate) ,
-                ProgramPriority = [nameof(ProgramPriority.RECOVERY)],
+                ProgramPriority = nameof(ProgramPriority.RECOVERY),
                 Publish = false
             };
 
@@ -1178,7 +1178,7 @@ namespace sport_app_backend.projectTest
                 },
                 Week = 4,
                 ProgramLevel = "Beginner",
-                ProgramPriority = [nameof(ProgramPriority.RECOVERY)],
+                ProgramPriority = nameof(ProgramPriority.RECOVERY),
                 Publish = true
             };
 

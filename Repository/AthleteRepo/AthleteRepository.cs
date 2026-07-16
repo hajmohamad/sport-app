@@ -866,10 +866,10 @@ namespace sport_app_backend.Repository.AthleteRepo
             var priorities = trainingSession.WorkoutProgram.ProgramPriorities;
             var avgParams = new TrainingGoalParameter
             {
-                RestBetweenSetsSec = priorities.Average(p => TrainingGoalParameters.Parameters[p].RestBetweenSetsSec),
-                RestBetweenMovesSec = priorities.Average(p => TrainingGoalParameters.Parameters[p].RestBetweenMovesSec),
-                TimePerRepSec = priorities.Average(p => TrainingGoalParameters.Parameters[p].TimePerRepSec),
-                EpocPercent = priorities.Average(p => TrainingGoalParameters.Parameters[p].EpocPercent)
+                RestBetweenSetsSec = TrainingGoalParameters.Parameters[priorities].RestBetweenSetsSec,
+                RestBetweenMovesSec = TrainingGoalParameters.Parameters[priorities].RestBetweenMovesSec,
+                TimePerRepSec = TrainingGoalParameters.Parameters[priorities].TimePerRepSec,
+                EpocPercent = TrainingGoalParameters.Parameters[priorities].EpocPercent
             };
 
             double totalCaloriesActiveAndRestSets = 0;

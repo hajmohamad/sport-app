@@ -532,7 +532,7 @@ public async Task<ApiResponse> Login(string userPhoneNumber)
         CoachName = $"{workoutData.CoachFirstName} {workoutData.CoachLastName}",
         ProgramLevel = workoutData.ProgramLevel.ToPersianString(),
         ProgramDuration = workoutData.ProgramDuration.ToString() ,
-        ProgramPriorities = string.Join(" - ", workoutData.ProgramPriorities.Select(p => p.ToPersianString())),
+        ProgramPriorities = string.Join(" - ", workoutData.ProgramPriorities.ToPersianString()),
         AthleteWeight = workoutData.AthleteCurrentWeight.ToString(),
         AthleteHeight = workoutData.AthleteHeight.ToString(),
         AthleteBmi = Math.Round(bmi, 2).ToString(), 

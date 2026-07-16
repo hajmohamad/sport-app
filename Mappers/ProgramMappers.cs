@@ -35,21 +35,13 @@ public static class ProgramMappers
             StartDate = workoutProgram.StartDate,
             ProgramDuration = workoutProgram.ProgramDuration,
             ProgramLevel = workoutProgram.ProgramLevel.ToString() ,
-            ProgramPriorities = workoutProgram.ProgramPriorities.Select(x => x.ToString()).ToList(),
+            ProgramPriorities = workoutProgram.ProgramPriorities.ToString(),
             Status = workoutProgram.Status.ToString(),
             Description = workoutProgram.Description,
             ProgramInDays = workoutProgram.ProgramInDays.ToProgramInDayDto()
 
         };
     }
-
-    public static List<ProgramInDay> ToListOfProgramInDays(this List<ProgramInDayDto> programInDays)
-    {
-        return programInDays.Select(x => x.ToProgramInDay()).ToList();
-        
-        
-    }
-
     public static AllPaymentResponseDto ToAllWorkoutProgramResponseDto(this WorkoutProgram workoutProgram)
     {
         return new AllPaymentResponseDto
@@ -64,6 +56,14 @@ public static class ProgramMappers
         };
 
     }
+
+    public static List<ProgramInDay> ToListOfProgramInDays(this List<ProgramInDayDto> programInDays)
+    {
+        return programInDays.Select(x => x.ToProgramInDay()).ToList();
+        
+        
+    }
+    
 
     private static ProgramInDay ToProgramInDay(this ProgramInDayDto programInDayDto)
     {
