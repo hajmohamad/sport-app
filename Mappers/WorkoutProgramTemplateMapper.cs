@@ -36,7 +36,9 @@ public static class TemplateMappers
                 ExerciseId = e.ExerciseId,
                 RepType = e.RepType.ToString(),
                 Description = e.Description,
-                Reps = e.Reps
+                Reps = e.Reps,
+                PersianName = e.Exercise.PersianName.ToString(),
+                BaseCategory = e.Exercise.BaseCategory.ToString(),
             }).ToList()
         }).ToList();
     }
