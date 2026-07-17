@@ -7,7 +7,7 @@ using sport_app_backend.Dtos.WorkoutProgramTemplateDto;
 using sport_app_backend.Interface.Coach;
 using sport_app_backend.Models;
 
-namespace sport_app_backend.Controller;
+namespace sport_app_backend.Controller.CoachController;
 
 [Authorize(Roles = "Coach")]
 [Route("api/coach/program-templates")]

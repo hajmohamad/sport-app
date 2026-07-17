@@ -28,13 +28,9 @@ namespace sport_app_backend.Interface.Coach
         Task<ApiResponse> GetFaq();
         Task<ApiResponse> GetWPkey(int workoutProgramId);
         Task<ApiResponse> GetWorkoutProgramFeedBack(string phoneNumber);
-        Task<ApiResponse> CreateDiscountCode(int coachId, DiscountCodeCreateDto discountCodeCreateDto);
-        Task<ApiResponse> UpdateDiscountCode(int coachId, int discountCodeId, DiscountCodeUpdateDto discountCodeUpdateDto);
-        Task<ApiResponse> GetDiscountCodes(int coachId);
-        Task<ApiResponse> GetDiscountCodeById(int coachId, int discountCodeId);
+
         Task<ApiResponse> GetAllServicesWithCalculatedDiscount(int coachId, int percent);
 
-        Task<ApiResponse> ChangeStatusForDiscountCode(int coachId, int discountCodeId, string status);
         Task<ApiResponse> ChoseWorkoutProgramFeedBack(string phoneNumber,List<ChoseWorkoutProgramFeedBackDto> choseWorkoutProgramFeedBackDtOs);
 
         Task<(IEnumerable<AllExerciseResponseDto> Exercises, int TotalCount)> GetExercisesWithFilterForCoach(string? level,
@@ -52,12 +48,7 @@ namespace sport_app_backend.Interface.Coach
         Task<ApiResponse> GetCoachPayments(int coachId, PaymentFilterDto filter);
         Task<ApiResponse> AddCardNumber(int coachId, AddCardNumberDto addCardNumberDto);
         Task<ApiResponse>  GetCardNumber(int coachId);
-        Task<ApiResponse> GetAllChangePhotos(int coachId);
-        Task<ApiResponse> GetChangePhotoById(int coachId, int id);
-        Task<ApiResponse> AddChangePhoto(int coachId, IFormFile file, AddAthleteChangePhotoDto dto);
-        Task<ApiResponse> EditChangePhoto(int coachId, IFormFile? file, EditAthleteChangePhotoDto dto);
-        Task<ApiResponse> DeleteChangePhoto(int coachId, int id);
-        Task<ApiResponse> GetWebSiteUrlStatusAsync(int coachId);
+          Task<ApiResponse> GetWebSiteUrlStatusAsync(int coachId);
         Task<ApiResponse> UpdateWebSiteUrlAsync(int coachId, string newUrl);
         Task<ApiResponse> CheckWebSiteUrlAvailabilityAsync(int coachId, string url);
 

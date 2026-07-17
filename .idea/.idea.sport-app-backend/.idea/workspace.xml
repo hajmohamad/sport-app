@@ -17,29 +17,18 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="11e104f8-869d-4d9d-9802-b48455f5eb31" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Controller/WorkoutProgramTemplateController.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Dtos/WorkoutProgramTemplateDto/WorkoutProgramTemplateCreateDto.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Interface/Coach/IWorkoutProgramTemplateRepository.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Mappers/WorkoutProgramTemplateMapper.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Models/Program/WorkoutProgramTemplate/TemplateProgramInDay.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Models/Program/WorkoutProgramTemplate/WorkoutProgramTemplate.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Models/Program/WorkoutProgramTemplate/WorkoutProgramTemplateExercise.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Repository/WorkoutProgramTemplateRepository.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/dataSources.local.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Controller/CoachController/ChangePhotosController.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Controller/CoachController/DiscountCodeController.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Interface/Coach/IChangePhotosRepository.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Interface/Coach/IDiscountCodeRepository.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Repository/CoachRepo/ChangePhotosRepository.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Repository/CoachRepo/DiscountCodeRepository.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Data/ApplicationDBContext.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Data/ApplicationDBContext.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dtos/Training/ProgramDto/WorkoutProgramDto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Dtos/Training/ProgramDto/WorkoutProgramDto.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dtos/Training/WorkoutProgramResponseDto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Dtos/Training/WorkoutProgramResponseDto.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Mappers/ProgramMappers.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Mappers/ProgramMappers.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Migrations/ApplicationDbContextModelSnapshot.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Migrations/ApplicationDbContextModelSnapshot.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Models/Program/WorkoutProgram.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/Program/WorkoutProgram.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Program.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Repository/AthleteRepo/AthleteRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Repository/AthleteRepo/AthleteRepository.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Repository/BuyFromSiteRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Repository/BuyFromSiteRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Controller/CoachController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Controller/CoachController/CoachController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Controller/WorkoutProgramTemplateController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Controller/CoachController/WorkoutProgramTemplateController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Interface/Coach/ICoachRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Interface/Coach/ICoachRepository.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Repository/CoachRepo/CoachRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Repository/CoachRepo/CoachRepository.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Repository/UserRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Repository/UserRepository.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/appsettings.Development.json" beforeDir="false" afterPath="$PROJECT_DIR$/appsettings.Development.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/projectTest/CoachRepositoryTests.cs" beforeDir="false" afterPath="$PROJECT_DIR$/projectTest/CoachRepositoryTests.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -111,10 +100,10 @@
     <setting file="file://$PROJECT_DIR$/Controller/AthleteController/AthleteActivityController.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Controller/AthleteController/BuyProgramFromApplicationController.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Controller/AthleteController/WaterAndWeightController.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Controller/CoachController/DiscountCodeController.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Controller/EitaaAuthController.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Controller/InAppMessageController.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Controller/NotificationController.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Controller/WorkoutProgramTemplateController.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Dtos/Coach/CoachBuyRequestDto.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Dtos/Eitaa/EitaaCompleteLoginRequestDto.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Dtos/Eitaa/EitaaContactDto.cs" root0="FORCE_HIGHLIGHTING" />
@@ -126,6 +115,7 @@
     <setting file="file://$PROJECT_DIR$/Interface/Athlete/IActivity.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Interface/Athlete/IBuyProgramFromApplications.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Interface/Athlete/IWaterAndWeight.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Interface/Coach/IChangePhotosRepository.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Interface/Coach/IWorkoutProgramTemplateRepository.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Interface/ICalculator.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Interface/IDataValidator.cs" root0="FORCE_HIGHLIGHTING" />
@@ -157,6 +147,7 @@
     <setting file="file://$PROJECT_DIR$/Repository/AthleteRepo/AthleteRepository.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Repository/AthleteRepo/BuyProgramFromApplicationRepository.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Repository/AthleteRepo/WaterAndWeightRepository.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Repository/CoachRepo/DiscountCodeRepository.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Repository/InAppMessageRepository.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Repository/NotificationRepository.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Repository/UserRepository.cs" root0="FORCE_HIGHLIGHTING" />
@@ -458,31 +449,10 @@
       <workItem from="1783683647082" duration="1533000" />
       <workItem from="1783704447680" duration="13103000" />
       <workItem from="1783847551469" duration="14419000" />
-      <workItem from="1784148068871" duration="6027000" />
-    </task>
-    <task id="LOCAL-00032" summary="edit app setting">
-      <option name="closed" value="true" />
-      <created>1767218921395</created>
-      <option name="number" value="00032" />
-      <option name="presentableId" value="LOCAL-00032" />
-      <option name="project" value="LOCAL" />
-      <updated>1767218921395</updated>
-    </task>
-    <task id="LOCAL-00033" summary="add migrations for ProgramRenewalReminderService">
-      <option name="closed" value="true" />
-      <created>1771106252905</created>
-      <option name="number" value="00033" />
-      <option name="presentableId" value="LOCAL-00033" />
-      <option name="project" value="LOCAL" />
-      <updated>1771106252905</updated>
-    </task>
-    <task id="LOCAL-00034" summary="edit log for ProgramRenewalReminderService.cs">
-      <option name="closed" value="true" />
-      <created>1771186308790</created>
-      <option name="number" value="00034" />
-      <option name="presentableId" value="LOCAL-00034" />
-      <option name="project" value="LOCAL" />
-      <updated>1771186308790</updated>
+      <workItem from="1784148068871" duration="6774000" />
+      <workItem from="1784232806405" duration="1064000" />
+      <workItem from="1784288351588" duration="2152000" />
+      <workItem from="1784290514637" duration="1326000" />
     </task>
     <task id="LOCAL-00035" summary="edit send time">
       <option name="closed" value="true" />
@@ -852,7 +822,31 @@
       <option name="project" value="LOCAL" />
       <updated>1783889630793</updated>
     </task>
-    <option name="localTasksCounter" value="81" />
+    <task id="LOCAL-00081" summary="workoutProgramTemplate">
+      <option name="closed" value="true" />
+      <created>1784231911500</created>
+      <option name="number" value="00081" />
+      <option name="presentableId" value="LOCAL-00081" />
+      <option name="project" value="LOCAL" />
+      <updated>1784231911501</updated>
+    </task>
+    <task id="LOCAL-00082" summary="edit git ignore">
+      <option name="closed" value="true" />
+      <created>1784231946296</created>
+      <option name="number" value="00082" />
+      <option name="presentableId" value="LOCAL-00082" />
+      <option name="project" value="LOCAL" />
+      <updated>1784231946296</updated>
+    </task>
+    <task id="LOCAL-00083" summary="edit endpoint and migrations">
+      <option name="closed" value="true" />
+      <created>1784288548639</created>
+      <option name="number" value="00083" />
+      <option name="presentableId" value="LOCAL-00083" />
+      <option name="project" value="LOCAL" />
+      <updated>1784288548639</updated>
+    </task>
+    <option name="localTasksCounter" value="84" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -895,9 +889,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
-    <MESSAGE value="add paymentid To get all training section" />
-    <MESSAGE value="remove" />
-    <MESSAGE value="add coachWebSiteUrl for url" />
     <MESSAGE value="edit endpoint" />
     <MESSAGE value="edit website url ind point and edit coach website" />
     <MESSAGE value="edit ProgramRenewalReminderService.cs" />
@@ -920,7 +911,10 @@
     <MESSAGE value="add eita feature for login and build all mini app" />
     <MESSAGE value="add migrations for eitaa" />
     <MESSAGE value="add feature for coach can add build program without Payment.cs" />
-    <option name="LAST_COMMIT_MESSAGE" value="add feature for coach can add build program without Payment.cs" />
+    <MESSAGE value="workoutProgramTemplate" />
+    <MESSAGE value="edit git ignore" />
+    <MESSAGE value="edit endpoint and migrations" />
+    <option name="LAST_COMMIT_MESSAGE" value="edit endpoint and migrations" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1015,53 +1009,53 @@
           <option name="timeStamp" value="23" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/Controller/CoachController.cs</url>
+          <url>file://$PROJECT_DIR$/Controller/CoachController/CoachController.cs</url>
           <line>519</line>
           <properties documentPath="$PROJECT_DIR$/Controller/CoachController.cs" containingFunctionPresentation="Method 'GetExercisesWithFilterForCoach'">
             <startOffsets>
-              <option value="21130" />
+              <option value="17987" />
             </startOffsets>
             <endOffsets>
-              <option value="21319" />
+              <option value="18176" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="28" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Repository/CoachRepo/CoachRepository.cs</url>
-          <line>891</line>
+          <line>759</line>
           <properties documentPath="$PROJECT_DIR$/Repository/CoachRepo/CoachRepository.cs" containingFunctionPresentation="Method 'UpdateDiscountCode'">
             <startOffsets>
-              <option value="26000" />
+              <option value="21641" />
             </startOffsets>
             <endOffsets>
-              <option value="26074" />
+              <option value="21715" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="31" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Repository/CoachRepo/CoachRepository.cs</url>
-          <line>906</line>
+          <line>774</line>
           <properties documentPath="$PROJECT_DIR$/Repository/CoachRepo/CoachRepository.cs" containingFunctionPresentation="Method 'UpdateDiscountCode'">
             <startOffsets>
-              <option value="26087" />
+              <option value="21728" />
             </startOffsets>
             <endOffsets>
-              <option value="26088" />
+              <option value="21729" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="32" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Repository/CoachRepo/CoachRepository.cs</url>
-          <line>2327</line>
+          <line>1951</line>
           <properties documentPath="$PROJECT_DIR$/Repository/CoachRepo/CoachRepository.cs" containingFunctionPresentation="Method 'GetCoachChecklist'">
             <startOffsets>
-              <option value="88169" />
+              <option value="74124" />
             </startOffsets>
             <endOffsets>
-              <option value="88170" />
+              <option value="74125" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="40" />
@@ -1078,19 +1072,6 @@
             </endOffsets>
           </properties>
           <option name="timeStamp" value="42" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/Repository/CoachRepo/CoachRepository.cs</url>
-          <line>561</line>
-          <properties documentPath="$PROJECT_DIR$/Repository/CoachRepo/CoachRepository.cs" containingFunctionPresentation="Lambda expression inside Method 'GetAllChangePhotos'">
-            <startOffsets>
-              <option value="18855" />
-            </startOffsets>
-            <endOffsets>
-              <option value="18866" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="43" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
