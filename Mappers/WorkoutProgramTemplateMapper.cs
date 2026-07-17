@@ -50,7 +50,7 @@ public static class TemplateMappers
             Description = template.Description,
             ProgramDuration = template.ProgramDuration,
             ProgramLevel = template.ProgramLevel.ToString(),
-            ProgramPriorities = template.ProgramPriorities.ToString(),
+            ProgramPriority = template.ProgramPriority.ToString(),
             IsCompleted = template.IsCompleted,
             DaysCount = template.ProgramInDays?.Count ?? 0
         };
@@ -65,7 +65,7 @@ public static class TemplateMappers
             Description = template.Description,
             ProgramDuration = template.ProgramDuration,
             ProgramLevel = template.ProgramLevel.ToString(),
-            ProgramPriorities = template.ProgramPriorities.ToString(),
+            ProgramPriority = template.ProgramPriority.ToString(),
             IsCompleted = template.IsCompleted,
             Days = template.ProgramInDays.ToProgramInDayDtos()
         };

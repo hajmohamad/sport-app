@@ -17,18 +17,21 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="11e104f8-869d-4d9d-9802-b48455f5eb31" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Controller/CoachController/ChangePhotosController.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Controller/CoachController/DiscountCodeController.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Interface/Coach/IChangePhotosRepository.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Interface/Coach/IDiscountCodeRepository.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Repository/CoachRepo/ChangePhotosRepository.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Repository/CoachRepo/DiscountCodeRepository.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Controller/CoachController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Controller/CoachController/CoachController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Controller/WorkoutProgramTemplateController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Controller/CoachController/WorkoutProgramTemplateController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Interface/Coach/ICoachRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Interface/Coach/ICoachRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dtos/Training/WorkoutProgramResponseDto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Dtos/Training/WorkoutProgramResponseDto.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dtos/WorkoutProgramTemplateDto/WorkoutProgramTemplateCreateDto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Dtos/WorkoutProgramTemplateDto/WorkoutProgramTemplateCreateDto.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Mappers/ProgramMappers.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Mappers/ProgramMappers.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Mappers/WorkoutProgramTemplateMapper.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Mappers/WorkoutProgramTemplateMapper.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Migrations/ApplicationDbContextModelSnapshot.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Migrations/ApplicationDbContextModelSnapshot.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Models/Program/WorkoutProgram.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/Program/WorkoutProgram.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Models/Program/WorkoutProgramTemplate/WorkoutProgramTemplate.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/Program/WorkoutProgramTemplate/WorkoutProgramTemplate.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Repository/AthleteRepo/AthleteRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Repository/AthleteRepo/AthleteRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Repository/BuyFromSiteRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Repository/BuyFromSiteRepository.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Repository/CoachRepo/CoachRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Repository/CoachRepo/CoachRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Repository/UserRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Repository/UserRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Repository/WorkoutProgramTemplateRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Repository/WorkoutProgramTemplateRepository.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/appsettings.Development.json" beforeDir="false" afterPath="$PROJECT_DIR$/appsettings.Development.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/projectTest/AthleteRepositoryTests.cs" beforeDir="false" afterPath="$PROJECT_DIR$/projectTest/AthleteRepositoryTests.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -452,23 +455,9 @@
       <workItem from="1784148068871" duration="6774000" />
       <workItem from="1784232806405" duration="1064000" />
       <workItem from="1784288351588" duration="2152000" />
-      <workItem from="1784290514637" duration="1326000" />
-    </task>
-    <task id="LOCAL-00035" summary="edit send time">
-      <option name="closed" value="true" />
-      <created>1771269355429</created>
-      <option name="number" value="00035" />
-      <option name="presentableId" value="LOCAL-00035" />
-      <option name="project" value="LOCAL" />
-      <updated>1771269355429</updated>
-    </task>
-    <task id="LOCAL-00036" summary="edit GetAllTrainingSession and add message for buy new program">
-      <option name="closed" value="true" />
-      <created>1771516982903</created>
-      <option name="number" value="00036" />
-      <option name="presentableId" value="LOCAL-00036" />
-      <option name="project" value="LOCAL" />
-      <updated>1771516982903</updated>
+      <workItem from="1784290514637" duration="2703000" />
+      <workItem from="1784293275451" duration="316000" />
+      <workItem from="1784304746871" duration="1006000" />
     </task>
     <task id="LOCAL-00037" summary="add WorkoutProgramFeedback">
       <option name="closed" value="true" />
@@ -846,7 +835,23 @@
       <option name="project" value="LOCAL" />
       <updated>1784288548639</updated>
     </task>
-    <option name="localTasksCounter" value="84" />
+    <task id="LOCAL-00084" summary="editCoachReoisitory">
+      <option name="closed" value="true" />
+      <created>1784291915654</created>
+      <option name="number" value="00084" />
+      <option name="presentableId" value="LOCAL-00084" />
+      <option name="project" value="LOCAL" />
+      <updated>1784291915654</updated>
+    </task>
+    <task id="LOCAL-00085" summary="fix bug in new repository">
+      <option name="closed" value="true" />
+      <created>1784292834447</created>
+      <option name="number" value="00085" />
+      <option name="presentableId" value="LOCAL-00085" />
+      <option name="project" value="LOCAL" />
+      <updated>1784292834447</updated>
+    </task>
+    <option name="localTasksCounter" value="86" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -865,6 +870,11 @@
   <component name="UnityCheckinConfiguration" checkUnsavedScenes="true" />
   <component name="UnityProjectConfiguration" hasMinimizedUI="false" />
   <component name="Vcs.Log.Tabs.Properties">
+    <option name="OPEN_GENERIC_TABS">
+      <map>
+        <entry key="b5d6b5bd-2628-4314-a7ce-d9c78b433f4f" value="TOOL_WINDOW" />
+      </map>
+    </option>
     <option name="TAB_STATES">
       <map>
         <entry key="MAIN">
@@ -884,13 +894,16 @@
             </State>
           </value>
         </entry>
+        <entry key="b5d6b5bd-2628-4314-a7ce-d9c78b433f4f">
+          <value>
+            <State />
+          </value>
+        </entry>
       </map>
     </option>
   </component>
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
-    <MESSAGE value="edit endpoint" />
-    <MESSAGE value="edit website url ind point and edit coach website" />
     <MESSAGE value="edit ProgramRenewalReminderService.cs" />
     <MESSAGE value="add coachSlug" />
     <MESSAGE value="add slug and name to verify payment and get workout program" />
@@ -914,7 +927,9 @@
     <MESSAGE value="workoutProgramTemplate" />
     <MESSAGE value="edit git ignore" />
     <MESSAGE value="edit endpoint and migrations" />
-    <option name="LAST_COMMIT_MESSAGE" value="edit endpoint and migrations" />
+    <MESSAGE value="editCoachReoisitory" />
+    <MESSAGE value="fix bug in new repository" />
+    <option name="LAST_COMMIT_MESSAGE" value="fix bug in new repository" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1011,12 +1026,12 @@
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Controller/CoachController/CoachController.cs</url>
           <line>519</line>
-          <properties documentPath="$PROJECT_DIR$/Controller/CoachController.cs" containingFunctionPresentation="Method 'GetExercisesWithFilterForCoach'">
+          <properties documentPath="$PROJECT_DIR$/Controller/CoachController.cs" containingFunctionPresentation="Method 'RemovePineExercise'">
             <startOffsets>
-              <option value="17987" />
+              <option value="19349" />
             </startOffsets>
             <endOffsets>
-              <option value="18176" />
+              <option value="19350" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="28" />
@@ -1052,10 +1067,10 @@
           <line>1951</line>
           <properties documentPath="$PROJECT_DIR$/Repository/CoachRepo/CoachRepository.cs" containingFunctionPresentation="Method 'GetCoachChecklist'">
             <startOffsets>
-              <option value="74124" />
+              <option value="74122" />
             </startOffsets>
             <endOffsets>
-              <option value="74125" />
+              <option value="74123" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="40" />
@@ -1072,6 +1087,19 @@
             </endOffsets>
           </properties>
           <option name="timeStamp" value="42" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Models/Program/WorkoutProgram.cs</url>
+          <line>23</line>
+          <properties documentPath="$PROJECT_DIR$/Models/Program/WorkoutProgram.cs" containingFunctionPresentation="Property 'ProgramLevel'">
+            <startOffsets>
+              <option value="922" />
+            </startOffsets>
+            <endOffsets>
+              <option value="926" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="43" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

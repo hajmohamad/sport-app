@@ -35,7 +35,7 @@ public static class ProgramMappers
             StartDate = workoutProgram.StartDate,
             ProgramDuration = workoutProgram.ProgramDuration,
             ProgramLevel = workoutProgram.ProgramLevel.ToString() ,
-            ProgramPriorities = workoutProgram.ProgramPriorities.ToString(),
+            ProgramPriority = workoutProgram.ProgramPriority.ToString(),
             Status = workoutProgram.Status.ToString(),
             Description = workoutProgram.Description,
             ProgramInDays = workoutProgram.ProgramInDays.ToProgramInDayDto()

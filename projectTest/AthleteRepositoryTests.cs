@@ -794,7 +794,7 @@
 //         //         Payment = payment,
 //         //         PaymentId = payment.Id,
 //         //         ProgramInDays = new List<ProgramInDay> { programInDay },
-//         //         ProgramPriorities = new List<ProgramPriority>() { ProgramPriority.RECOVERY }
+//         //         ProgramPriority = new List<ProgramPriority>() { ProgramPriority.RECOVERY }
 //         //     };
 //         //     var trainingSession = new TrainingSession
 //         //     {
@@ -1213,7 +1213,7 @@
 //                 Payment = payment,
 //                 PaymentId = payment.Id,
 //                 ProgramInDays = new List<ProgramInDay> { programInDay },
-//                 ProgramPriorities = new List<ProgramPriority>() { ProgramPriority.RECOVERY }
+//                 ProgramPriority = new List<ProgramPriority>() { ProgramPriority.RECOVERY }
 //             };
 //             var trainingSession = new TrainingSession
 //             {
@@ -1275,7 +1275,7 @@
 //                 Payment = payment,
 //                 PaymentId = payment.Id,
 //                 ProgramInDays = new List<ProgramInDay> { programInDay },
-//                 ProgramPriorities = new List<ProgramPriority>() { ProgramPriority.RECOVERY }
+//                 ProgramPriority = new List<ProgramPriority>() { ProgramPriority.RECOVERY }
 //             };
 //             var trainingSession = new TrainingSession
 //             {

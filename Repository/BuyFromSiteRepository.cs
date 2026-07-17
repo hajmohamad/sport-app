@@ -52,7 +52,7 @@ public class BuyFromSiteRepository(
             AthleteCurrentBodyForm = wp.Payment.AthleteQuestion.CurrentBodyForm,
             wp.ProgramLevel,
             wp.ProgramDuration,
-            wp.ProgramPriorities,
+            wp.ProgramPriority,
             AthleteCurrentWeight = (double?)wp.Payment.AthleteQuestion.Weight ?? 0.0,
             AthleteHeight = (double?)wp.Athlete.Height ?? 0.0,
             AhtleteGender = wp.Athlete.User.Gender,
@@ -85,8 +85,8 @@ public class BuyFromSiteRepository(
         CoachName = $"{workoutData.CoachFirstName} {workoutData.CoachLastName}".Trim(),
         ProgramLevel = workoutData.ProgramLevel.ToPersianString(),
         ProgramDuration = workoutData.ProgramDuration.ToString(),
-        ProgramPriorities = workoutData.ProgramPriorities != null 
-            ? string.Join(" - ", workoutData.ProgramPriorities.ToPersianString()) 
+        ProgramPriorities = workoutData.ProgramPriority != null 
+            ? string.Join(" - ", workoutData.ProgramPriority.ToPersianString()) 
             : "",
         AthleteWeight = workoutData.AthleteCurrentWeight > 0 ? workoutData.AthleteCurrentWeight.ToString() : "ثبت نشده",
         AthleteHeight = workoutData.AthleteHeight > 0 ? workoutData.AthleteHeight.ToString() : "ثبت نشده",
@@ -868,7 +868,7 @@ public class BuyFromSiteRepository(
                 wr.Payment.Authority,
                 wr.ProgramDuration,
                 wr.ProgramLevel,
-                wr.ProgramPriorities,
+                wr.ProgramPriority,
                 wr.Title,
                 CoachFirstname = wr.Coach.User.FirstName,
                 CoachLastname = wr.Coach.User.LastName,
@@ -911,7 +911,7 @@ public class BuyFromSiteRepository(
             PaymentDate = persianDate,
             ProgramDuration = programData.ProgramDuration,
             ProgramLevel = programData.ProgramLevel.ToString(),
-            ProgramPriorities = [programData.ProgramPriorities.ToString()],
+            ProgramPriorities = [programData.ProgramPriority.ToString()],
             Title = programData.Title,
             CoachName = programData.CoachFirstname + " " + programData.CoachLastname,
             CoachSocialMedia = new CoachSocialMediaDto

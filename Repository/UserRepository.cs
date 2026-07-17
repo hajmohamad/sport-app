@@ -497,7 +497,7 @@ public async Task<ApiResponse> Login(string userPhoneNumber)
             AthleteCurrentBodyForm = wp.Payment.AthleteQuestion.CurrentBodyForm,
             wp.ProgramLevel,
             wp.ProgramDuration,
-            wp.ProgramPriorities, // <-- واکشی لیست خام Enum ها
+            wp.ProgramPriority, // <-- واکشی لیست خام Enum ها
             AthleteCurrentWeight = wp.Athlete.CurrentWeight,
             AthleteHeight = wp.Athlete.Height,
             AhtleteGender= wp.Athlete.User.Gender,
@@ -532,7 +532,7 @@ public async Task<ApiResponse> Login(string userPhoneNumber)
         CoachName = $"{workoutData.CoachFirstName} {workoutData.CoachLastName}",
         ProgramLevel = workoutData.ProgramLevel.ToPersianString(),
         ProgramDuration = workoutData.ProgramDuration.ToString() ,
-        ProgramPriorities = string.Join(" - ", workoutData.ProgramPriorities.ToPersianString()),
+        ProgramPriorities = string.Join(" - ", workoutData.ProgramPriority.ToPersianString()),
         AthleteWeight = workoutData.AthleteCurrentWeight.ToString(),
         AthleteHeight = workoutData.AthleteHeight.ToString(),
         AthleteBmi = Math.Round(bmi, 2).ToString(), 

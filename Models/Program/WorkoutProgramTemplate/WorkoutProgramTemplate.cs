@@ -20,7 +20,7 @@ public class WorkoutProgramTemplate
 
     public int ProgramDuration { get; set; }
     public ProgramLevel ProgramLevel { get; set; }
-    public ProgramPriority ProgramPriorities { get; set; }
+    public ProgramPriority ProgramPriority { get; set; }
 
     public bool IsCompleted { get; set; } = false;
 

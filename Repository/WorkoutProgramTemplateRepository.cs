@@ -79,7 +79,7 @@ public class WorkoutProgramTemplateRepository(ApplicationDbContext context) : IW
             template.Description = dto.Description.Trim();
             template.ProgramDuration = dto.ProgramDuration;
             template.ProgramLevel = Enum.Parse<ProgramLevel>(dto.ProgramLevel, ignoreCase: true);
-            template.ProgramPriorities = Enum.Parse<ProgramPriority>(dto.ProgramPriorities, ignoreCase: true);
+            template.ProgramPriority = Enum.Parse<ProgramPriority>(dto.ProgramPriority, ignoreCase: true);
             template.IsCompleted = dto.IsCompleted;
             template.ProgramInDays = dto.Days.ToTemplateDays();
 
@@ -257,7 +257,7 @@ public class WorkoutProgramTemplateRepository(ApplicationDbContext context) : IW
             program.Description = template.Description;
             program.ProgramDuration = template.ProgramDuration;
             program.ProgramLevel = template.ProgramLevel;
-            program.ProgramPriorities = template.ProgramPriorities;
+            program.ProgramPriority = template.ProgramPriority;
             program.ProgramInDays = template.ProgramInDays.Select(day => new ProgramInDay
             {
                 ForWhichDay = day.ForWhichDay,

@@ -863,7 +863,7 @@ namespace sport_app_backend.Repository.AthleteRepo
 
 
             // 1. میانگین‌گیری از پارامترها بر اساس اهداف برنامه
-            var priorities = trainingSession.WorkoutProgram.ProgramPriorities;
+            var priorities = trainingSession.WorkoutProgram.ProgramPriority;
             var avgParams = new TrainingGoalParameter
             {
                 RestBetweenSetsSec = TrainingGoalParameters.Parameters[priorities].RestBetweenSetsSec,

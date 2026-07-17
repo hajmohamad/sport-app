@@ -1083,7 +1083,7 @@ namespace sport_app_backend.Repository.CoachRepo
            
                 workoutProgram.ProgramLevel = (ProgramLevel)Enum.Parse(typeof(ProgramLevel),workoutProgramDto.ProgramLevel);
 
-                workoutProgram.ProgramPriorities=(ProgramPriority)Enum.Parse(typeof(ProgramPriority), workoutProgramDto.ProgramPriority.ToUpper());
+                workoutProgram.ProgramPriority=(ProgramPriority)Enum.Parse(typeof(ProgramPriority), workoutProgramDto.ProgramPriority.ToUpper());
                 if (workoutProgram.Status == WorkoutProgramStatus.NOTSTARTED)
                 {
                     workoutProgram.Status = WorkoutProgramStatus.WRITING;

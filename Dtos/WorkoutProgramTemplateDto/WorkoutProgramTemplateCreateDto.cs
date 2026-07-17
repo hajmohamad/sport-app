@@ -12,7 +12,7 @@ public class WorkoutProgramTemplateUpdateDto
     public string Description { get; set; } = "";
     public int ProgramDuration { get; set; }
     public string ProgramLevel { get; set; } = "";
-    public string ProgramPriorities { get; set; } 
+    public string ProgramPriority { get; set; } 
     public bool IsCompleted { get; set; } = false;
     public List<ProgramInDayDto> Days { get; set; } = [];
 }
@@ -23,7 +23,7 @@ public class WorkoutProgramTemplateListDto
     public string Description { get; set; } = "";
     public int ProgramDuration { get; set; }
     public string ProgramLevel { get; set; } = "";
-    public string ProgramPriorities { get; set; } 
+    public string ProgramPriority { get; set; } 
     public bool IsCompleted { get; set; }
     public int DaysCount { get; set; }
 }
@@ -35,7 +35,7 @@ public class WorkoutProgramTemplateDetailDto
     public string Description { get; set; } = "";
     public int ProgramDuration { get; set; }
     public string ProgramLevel { get; set; } = "";
-    public string ProgramPriorities { get; set; } 
+    public string ProgramPriority { get; set; } 
     public bool IsCompleted { get; set; }
     public List<ProgramInDayDto> Days { get; set; } 
 }
