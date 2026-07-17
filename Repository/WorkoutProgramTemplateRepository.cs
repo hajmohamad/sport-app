@@ -151,7 +151,7 @@ public class WorkoutProgramTemplateRepository(ApplicationDbContext context) : IW
             var template = await context.WorkoutProgramTemplates
                 .AsNoTracking()
                 .Include(x => x.ProgramInDays)
-                    .ThenInclude(x => x.AllExerciseInDays)
+                    .ThenInclude(x => x.AllExerciseInDays).ThenInclude(e=>e.Exercise)
                 .FirstOrDefaultAsync(x => x.Id == templateId && x.CoachId == coachId);
 
             if (template is null)
