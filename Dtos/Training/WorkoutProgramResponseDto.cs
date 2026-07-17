@@ -19,5 +19,5 @@ public class WorkoutProgramResponseDto
     public string Status { get; set; }= "";
     public int Duration { get; set; }
     public string Description { get; set; } = "";
-    public List<ProgramInDayDto>? ProgramInDays { get; set; } = [];
+    public List<ProgramInDayDto>? Days { get; set; } = [];
 }

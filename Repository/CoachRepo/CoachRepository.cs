@@ -888,9 +888,9 @@ namespace sport_app_backend.Repository.CoachRepo
             }
 
             var result = payment.ToCoachPaymentResponseDto(token.HashEncode(payment.WorkoutProgram?.Id ?? 0), ear);
-            if (result.WorkoutProgram!.ProgramInDays is { Count: 0 })
+            if (result.WorkoutProgram!.Days is { Count: 0 })
             {
-                result.WorkoutProgram.ProgramInDays.Add(new ProgramInDayDto()
+                result.WorkoutProgram.Days.Add(new ProgramInDayDto()
                 {
                     ForWhichDay = 1,
                     AllExerciseInDays = []
