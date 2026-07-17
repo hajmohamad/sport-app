@@ -38,7 +38,7 @@ public static class ProgramMappers
             ProgramPriority = workoutProgram.ProgramPriority.ToString(),
             Status = workoutProgram.Status.ToString(),
             Description = workoutProgram.Description,
-            ProgramInDays = workoutProgram.ProgramInDays.ToProgramInDayDto()
+            Days = workoutProgram.ProgramInDays.ToProgramInDayDto()
 
         };
     }
