@@ -28,6 +28,7 @@ public class WorkoutProgramTemplateRepository(ApplicationDbContext context) : IW
             var template = new WorkoutProgramTemplate
             {
                 CoachId = coachId,
+                Title = dto.Title
             };
 
             await context.WorkoutProgramTemplates.AddAsync(template);
