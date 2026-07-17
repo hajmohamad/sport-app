@@ -180,6 +180,9 @@ builder.Services.AddScoped<IWaterAndWeight, WaterAndWeightRepository>();
 builder.Services.AddScoped<IActivity, ActivityRepository>();
 builder.Services.AddScoped<IInAppMessageRepository, InAppMessageRepository>();
 builder.Services.AddScoped<IWorkoutProgramTemplateRepository, WorkoutProgramTemplateRepository>();
+builder.Services.AddScoped<IDiscountCodeRepository, DiscountCodeRepository>();
+builder.Services.AddScoped<IChangePhotosRepository, ChangePhotosRepository>();
+
 
 //cash service
 builder.Services.AddScoped<IExerciseCacheService, ExerciseCacheService>();
