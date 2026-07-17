@@ -11,6 +11,18 @@ namespace sport_app_backend.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.Sql(@"
+                UPDATE WorkoutPrograms
+                SET ProgramPriorities =
+                    CASE
+                        WHEN ProgramPriorities IS NULL OR TRIM(ProgramPriorities) = '' THEN '0'
+                        WHEN JSON_VALID(ProgramPriorities) THEN
+                            COALESCE(JSON_UNQUOTE(JSON_EXTRACT(ProgramPriorities, '$[0]')), '0')
+                        WHEN ProgramPriorities REGEXP '^[0-9]+$' THEN ProgramPriorities
+                        ELSE '0'
+                    END;
+            ");
+
             migrationBuilder.AlterColumn<int>(
                 name: "ProgramPriorities",
                 table: "WorkoutPrograms",
