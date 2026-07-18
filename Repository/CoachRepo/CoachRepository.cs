@@ -18,6 +18,7 @@ using sport_app_backend.Models.Actions;
 using sport_app_backend.Models.Actions.CouchExercise;
 using sport_app_backend.Models.Payments;
 using sport_app_backend.Models.Program;
+using sport_app_backend.Models.Program.WorkoutProgramTemplate;
 
 namespace sport_app_backend.Repository.CoachRepo
 {
@@ -84,6 +85,26 @@ namespace sport_app_backend.Repository.CoachRepo
                 {
                     // کسر از موجودی مربی
                     coach.Amount -= price;
+                    WorkoutProgramTemplate? template = null;
+                    
+                    if (dto.TemplateId is not null)
+                    {
+                         template = await context.WorkoutProgramTemplates
+                            .Include(x => x.ProgramInDays)
+                            .ThenInclude(x => x.AllExerciseInDays)
+                            .FirstOrDefaultAsync(x => x.Id == dto.TemplateId && x.CoachId == coachId);
+
+                        if (template is null)
+                        {
+                            return new ApiResponse
+                            {
+                                Action = false,
+                                Message = "قالب یافت نشد."
+                            };
+                        }
+               
+                    }
+
 
                     // ثبت رکورد پرداخت با وضعیت موفق (چون از کیف پول کسر شده)
                     var payment = new Payment
@@ -113,6 +134,26 @@ namespace sport_app_backend.Repository.CoachRepo
                         Payment = payment,
                         PaymentId = payment.Id
                     };
+                    if (template is not null)
+                    {
+                        workoutProgram.Title = template.Title;
+                        workoutProgram.Description = template.Description;
+                        workoutProgram.ProgramDuration = template.ProgramDuration;
+                        workoutProgram.ProgramLevel = template.ProgramLevel;
+                        workoutProgram.ProgramPriority = template.ProgramPriority;
+                        workoutProgram.ProgramInDays = template.ProgramInDays.Select(day => new ProgramInDay
+                        {
+                            ForWhichDay = day.ForWhichDay,
+                            AllExerciseInDays = day.AllExerciseInDays.Select(ex => new SingleExercise
+                            {
+                                ExerciseId = ex.ExerciseId,
+                                RepType = ex.RepType,
+                                Description = ex.Description,
+                                Reps = ex.Reps.ToList()
+                            }).ToList()
+                        }).ToList();
+                    }
+
                     await context.WorkoutPrograms.AddAsync(workoutProgram);
                 
                     payment.WorkoutProgram = workoutProgram;
@@ -124,6 +165,7 @@ namespace sport_app_backend.Repository.CoachRepo
                     {
                         Action = true,
                         Message = "برنامه با موفقیت خریداری شد. می‌توانید طراحی را شروع کنید.",
+                        Result = payment.Id
                     };
                 }
                 catch (Exception ex)

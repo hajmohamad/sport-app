@@ -6,4 +6,5 @@ public class CoachBuyRequestDto {
     public required string Gender { get; set; }
     public required string AthletePhoneNumber { get; set; }
     public int ServiceId { get; set; }
+    public int? TemplateId { get; set; }
 }
