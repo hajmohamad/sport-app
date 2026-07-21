@@ -293,6 +293,7 @@ namespace sport_app_backend.Mappers
                 PaidDate = coachPayout.PaidDate.ToString() ?? "",
                 TransactionReference = coachPayout.TransactionReference??"",
                 IsDirectProgram = false,
+                Descriptions = "تسویه"
                 
             };
         }
