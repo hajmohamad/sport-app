@@ -1556,7 +1556,7 @@ namespace sport_app_backend.Repository.CoachRepo
 
     var payments = await context.Payments
         .AsNoTracking()
-        .Where(p => p.CoachId == coach.Id && p.PaymentStatus == PaymentStatus.SUCCESS && p.PaymentType != PaymentType.WALLET)
+        .Where(p => p.CoachId == coach.Id && p.PaymentStatus == PaymentStatus.SUCCESS)
         .Include(p => p.Athlete).ThenInclude(a => a.User)
         .Include(p => p.WorkoutProgram)
         .Include(p => p.CoachService)
