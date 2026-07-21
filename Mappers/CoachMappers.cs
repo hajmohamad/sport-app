@@ -283,17 +283,36 @@ namespace sport_app_backend.Mappers
             return DiscountCodeStatus.ACTIVE;
         }
 
-        public static CoachPayoutDto ToCoachPayoutDto(this CoachPayout coachPayout)
+        public static CoachDecreaseDto ToCoachPayoutDto(this CoachPayout coachPayout)
         {
-            return new CoachPayoutDto()
+            return new CoachDecreaseDto()
             {
                 Amount = coachPayout.Amount,
                 RequestDate = coachPayout.RequestDate.ToString(CultureInfo.InvariantCulture),
                 Status = coachPayout.Status.ToString(),
                 PaidDate = coachPayout.PaidDate.ToString() ?? "",
-                TransactionReference = coachPayout.TransactionReference??""
+                TransactionReference = coachPayout.TransactionReference??"",
+                IsDirectProgram = false,
+                
             };
         }
+        public static CoachDecreaseDto ToDirectProgramDto(this Payment payment)
+        {
+            var athleteName = payment.Athlete?.User != null
+                ? $"{payment.Athlete.User.FirstName} {payment.Athlete.User.LastName}"
+                : "نامشخص";
+            return new CoachDecreaseDto()
+            {
+                Amount = payment.AppFee,
+                RequestDate = payment.PaymentDate.ToString(CultureInfo.InvariantCulture),
+                Status = "Paid",
+                PaidDate = payment.PaymentDate.ToString(CultureInfo.InvariantCulture) ?? "",
+                TransactionReference = payment.RefId.ToString(),
+                Descriptions = $"طراحی برنامه ورزشی برای {athleteName}",
+                IsDirectProgram = true,
+            };
+        }
+        
 
   
 

@@ -244,7 +244,7 @@ namespace sport_app_backend.Repository.CoachRepo
             var zarinPalResponse = await zarinPal.RequestPaymentAsync(new ZarinPalPaymentRequestDto
             {
                 amount = (long)price,
-                callback_url = "dto.CallbackUrl",
+                callback_url = "https://chaarset.ir/payment/verify/",
                 description =  "افزایش موجودی کیف پول",
                 Mobile = coach.PhoneNumber
             });
@@ -1546,85 +1546,109 @@ namespace sport_app_backend.Repository.CoachRepo
         }
 
         public async Task<ApiResponse> GetTransactions(string coachPhoneNumber)
+{
+    var coach = await context.Coaches
+        .AsNoTracking()
+        .FirstOrDefaultAsync(c => c.PhoneNumber == coachPhoneNumber);
+
+    if (coach == null)
+        return new ApiResponse { Action = false, Message = "مربی یافت نشد." };
+
+    var payments = await context.Payments
+        .AsNoTracking()
+        .Where(p => p.CoachId == coach.Id && p.PaymentStatus == PaymentStatus.SUCCESS && p.PaymentType != PaymentType.WALLET)
+        .Include(p => p.Athlete).ThenInclude(a => a.User)
+        .Include(p => p.WorkoutProgram)
+        .Include(p => p.CoachService)
+        .OrderByDescending(p => p.PaymentDate)
+        .ToListAsync();
+
+    var walletTransactions = await context.WalletTransactions
+        .AsNoTracking()
+        .Where(p => p.CoachId == coach.Id && p.TransactionStatus == WalletTransactionStatus.SUCCESS)
+        .OrderByDescending(p => p.CreatedAt)
+        .ToListAsync();
+
+    var coachPayouts = await context.CoachPayouts
+        .AsNoTracking()
+        .Where(p => p.CoachId == coach.Id)
+        .OrderByDescending(p => p.RequestDate)
+        .ToListAsync();
+
+    var pendingPayout = coachPayouts
+        .FirstOrDefault(p => p.Status == PayoutStatus.Pending)?
+        .ToCoachPayoutDto();
+
+    var coachPayoutDtos = coachPayouts
+        .Select(cp => cp.ToCoachPayoutDto())
+        .ToList();
+
+    var transactionDtos = payments
+        .Select(p =>
         {
-            var coach = await context.Coaches.FirstOrDefaultAsync(c => c.PhoneNumber == coachPhoneNumber);
-            if (coach == null)
+            var programStatus = p.WorkoutProgram != null &&
+                                p.WorkoutProgram.Status != WorkoutProgramStatus.WRITING &&
+                                p.WorkoutProgram.Status != WorkoutProgramStatus.NOTSTARTED
+                ? "طراحی شده"
+                : "طراحی نشده";
+
+            return new TransactionDto
             {
-                return new ApiResponse { Action = false, Message = "مربی یافت نشد." };
-            }
-
-            var payments = await context.Payments
-                .Where(p => p.CoachId == coach.Id && p.PaymentStatus == PaymentStatus.SUCCESS)
-                .Include(p => p.Athlete.User)
-                .Include(p => p.WorkoutProgram)
-                .Include(p => p.CoachService)
-                .OrderByDescending(p => p.PaymentDate)
-                .ToListAsync();
-            var walletTransactions = await context.WalletTransactions
-                .Where(p => p.CoachId == coach.Id && p.TransactionStatus == WalletTransactionStatus.SUCCESS)
-                .ToListAsync();
-
-            var coachPayout = await context.CoachPayouts.Where(p => p.CoachId == coach.Id)
-                .OrderByDescending(p => p.RequestDate).ToListAsync();
-
-            var pendingPayout = coachPayout.Find(c => c.Status == PayoutStatus.Pending)?.ToCoachPayoutDto();
-
-
-            var coachPayoutDto = coachPayout.Select(c => c.ToCoachPayoutDto()).ToList();
-            var coachAmount = coach.Amount;
-            var coachCartNumber = await context.CoachCardNumbers.Where(c => c.CoachId == coach.Id).AnyAsync();
-
-            var transactionDto = payments.Select(p =>
-            {
-                var programStatus = (p.WorkoutProgram != null &&
-                                     p.WorkoutProgram.Status != WorkoutProgramStatus.WRITING &&
-                                     p.WorkoutProgram.Status != WorkoutProgramStatus.NOTSTARTED)
-                    ? "طراحی شده"
-                    : "طراحی نشده";
-
-                return new TransactionDto
-                {
-                    Amount = p.Amount,
-                    Type = "افزایش",
-                    Date = p.PaymentDate.ToString(CultureInfo.CurrentCulture),
-                    Description = $"فروش سرویس {p.CoachService.Title}",
-                    BuyerName = p.Athlete?.User != null
-                        ? $"{p.Athlete.User.FirstName} {p.Athlete.User.LastName}"
-                        : "نامشخص",
-                    ReferenceId = p.RefId.ToString(),
-                    ProgramStatus = programStatus,
-                    OriginalAmount = p.OriginalAmount,
-                    CodeDiscountAmount = p.CodeDiscountAmount,
-                    // PublicDiscountAmount = p.PublicDiscountAmount,
-                    AppFee = p.AppFee
-                };
-            }).ToList();
-            var walletTransactionsDto = walletTransactions.Select(wt => new TransactionDto
-            {
-                Amount = wt.Amount,
+                Amount = p.Amount,
                 Type = "افزایش",
-                Date = wt.CreatedAt.ToString(CultureInfo.CurrentCulture),
-                Description = "افزایش موجودی حساب",
-                ProgramStatus = "",
-                BuyerName = "",
-                ReferenceId = wt.ReferenceId
-            }).ToList();
-            transactionDto.AddRange(walletTransactionsDto);
-            
-            
-
-            return new ApiResponse
-            {
-                Action = true, Message = "لیست تراکنش‌ها با موفقیت دریافت شد.", Result = new
-                {
-                    coachAmount,
-                    pendingPayout,
-                    transactionDto,
-                    coachPayoutDto,
-                    CardNumberIsSet = coachCartNumber
-                }
+                Date = p.PaymentDate.ToString(CultureInfo.CurrentCulture),
+                Description = $"فروش سرویس {p.CoachService?.Title ?? "نامشخص"}",
+                BuyerName = p.Athlete?.User != null
+                    ? $"{p.Athlete.User.FirstName} {p.Athlete.User.LastName}"
+                    : "نامشخص",
+                ReferenceId = p.RefId.ToString(),
+                ProgramStatus = programStatus,
+                OriginalAmount = p.OriginalAmount,
+                CodeDiscountAmount = p.CodeDiscountAmount,
+                AppFee = p.AppFee
             };
+        })
+        .ToList();
+
+    var walletTransactionsDto = walletTransactions
+        .Select(wt => new TransactionDto
+        {
+            Amount = wt.Amount,
+            Type = "افزایش",
+            Date = wt.CreatedAt.ToString(CultureInfo.CurrentCulture),
+            Description = "افزایش موجودی حساب",
+            ProgramStatus = "",
+            BuyerName = "",
+            ReferenceId = wt.ReferenceId,
+            IsWalletCharge = true
+        })
+        .ToList();
+
+    transactionDtos.AddRange(walletTransactionsDto);
+
+    var directProgramDtos = payments
+        .Where(p => p.PaymentType == PaymentType.WALLET)
+        .Select(p => p.ToDirectProgramDto())
+        .ToList();
+
+    coachPayoutDtos.AddRange(directProgramDtos);
+
+    return new ApiResponse
+    {
+        Action = true,
+        Message = "لیست تراکنش‌ها با موفقیت دریافت شد.",
+        Result = new
+        {
+            coachAmount = coach.Amount,
+            pendingPayout,
+            transactionDtos,
+            coachPayoutDtos,
+            CardNumberIsSet = await context.CoachCardNumbers
+                .AsNoTracking()
+                .AnyAsync(c => c.CoachId == coach.Id)
         }
+    };
+}
 
 
         private static string GetStatus(WorkoutProgram program)

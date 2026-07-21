@@ -12,7 +12,8 @@ public class TransactionDto
     public string? ProgramStatus { get; set; }
     public double OriginalAmount { get; set; }
     public double CodeDiscountAmount { get; set; }
+    public bool IsWalletCharge { get; set; } = false;
     // public double PublicDiscountAmount { get; set; }
-    
-    
+
+
 }
