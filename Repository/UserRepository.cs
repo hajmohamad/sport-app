@@ -354,12 +354,7 @@ public async Task<ApiResponse> Login(string userPhoneNumber)
         if (user is null)
             return new ApiResponse { Message = "User not found", Action = false };
 
-        var findUserName = await dbContext.Users
-            .FirstOrDefaultAsync(x => x.Id != user.Id);
-
-        if (findUserName is not null)
-            return new ApiResponse { Message = "Username already exists", Action = false };
-
+       
         user.FirstName = editUserProfileDto.FirstName;
         user.LastName = editUserProfileDto.LastName;
         user.BirthDate = Convert.ToDateTime(editUserProfileDto.BirthDate);
