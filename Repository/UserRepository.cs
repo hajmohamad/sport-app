@@ -355,12 +355,11 @@ public async Task<ApiResponse> Login(string userPhoneNumber)
             return new ApiResponse { Message = "User not found", Action = false };
 
         var findUserName = await dbContext.Users
-            .FirstOrDefaultAsync(x => x.UserName == editUserProfileDto.UserName && x.Id != user.Id);
+            .FirstOrDefaultAsync(x => x.Id != user.Id);
 
         if (findUserName is not null)
             return new ApiResponse { Message = "Username already exists", Action = false };
 
-        user.UserName = editUserProfileDto.UserName;
         user.FirstName = editUserProfileDto.FirstName;
         user.LastName = editUserProfileDto.LastName;
         user.BirthDate = Convert.ToDateTime(editUserProfileDto.BirthDate);
