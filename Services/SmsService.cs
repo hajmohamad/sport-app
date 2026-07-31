@@ -290,12 +290,13 @@ public class SmsService(IConfiguration config, ILogger<SmsService> logger) : ISm
 
         var message =
             $"{athleteName} عزیز، درخواست شما برای مربی ارسال شد.\n" +
-            $"{link}";
+            $"chaarset.ir/program/{link}/";
 
         return await SendLikeToLikeSms(mobileNumber, message);
     }
 
-    public async Task<SmsResponse> AthleteSuccessfullySmsNotificationForBuyFromSite(string mobileNumber, string serviceName, string link)
+    public async Task<SmsResponse> AthleteSuccessfullySmsNotificationForBuyFromSite(string mobileNumber,
+        string serviceName, string wpKey)
     {
         logger.LogInformation(
             "Preparing AthleteSuccessfullySmsNotificationForBuyFromSite. PhoneNumber: {PhoneNumber}, ServiceName: {ServiceName}",
@@ -303,13 +304,15 @@ public class SmsService(IConfiguration config, ILogger<SmsService> logger) : ISm
             serviceName);
 
         var message =
-            $"پرداخت شما برای سرویس «{serviceName}» با موفقیت انجام شد.\n\n" +
-            $"{link}";
-
+            "🏋️‍♂️ ورزشکار عزیز\n" +
+            "پرداخت شما برای سرویس «برنامه تمرینی» با موفقیت انجام شد. 🎉\n\n" +
+            "لطفاً از طریق لینک زیر به سوالات مربی پاسخ دهید تا برنامه‌ی اختصاصی شما طراحی شود:\n" +
+            $"chaarset.ir/program/{wpKey}/";
+        
         return await SendLikeToLikeSms(mobileNumber, message);
     }
 
-    public async Task<SmsResponse> WorkoutReadySms(string mobileNumber, string athleteName, string serviceName, string link)
+    public async Task<SmsResponse> WorkoutReadySms(string mobileNumber, string athleteName, string serviceName, string wpKey)
     {
         logger.LogInformation(
             "Preparing WorkoutReadySms. PhoneNumber: {PhoneNumber}, AthleteName: {AthleteName}, ServiceName: {ServiceName}",
@@ -319,7 +322,7 @@ public class SmsService(IConfiguration config, ILogger<SmsService> logger) : ISm
 
         var message =
             $"{athleteName} عزیز، برنامه {serviceName} آماده شد.\n\n" +
-            $"{link}";
+            $"chaarset.ir/program/{wpKey}/";
 
         return await SendLikeToLikeSms(mobileNumber, message);
     }

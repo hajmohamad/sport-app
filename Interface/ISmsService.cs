@@ -15,9 +15,10 @@ public interface ISmsService
     Task<SmsResponse> AthleteSuccessfullySmsNotification(string mobileNumber, string athleteName, string serviceName);
     Task<SmsResponse> NotifyAthleteOfProgramLinkSms(string mobileNumber, string athleteName, string link);
 
-    Task<SmsResponse> AthleteSuccessfullySmsNotificationForBuyFromSite(string mobileNumber, string serviceName, string link);
+    Task<SmsResponse> AthleteSuccessfullySmsNotificationForBuyFromSite(string mobileNumber, string serviceName,
+        string wpKey);
 
-    Task<SmsResponse> WorkoutReadySms(string mobileNumber, string athleteName, string serviceName, string link);
+    Task<SmsResponse> WorkoutReadySms(string mobileNumber, string athleteName, string serviceName, string wpKey);
 
     Task<SmsResponse> SendPaymentAttemptSms(string phoneNumber, string serviceTitle, string coachName, string websiteUrl);
     Task<SmsResponse> SendProgramExpiredReminderSms(string phoneNumber, string athleteName, int daysSinceEnd, string websiteUrl);

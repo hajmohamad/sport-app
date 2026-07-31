@@ -770,8 +770,8 @@ public class BuyFromSiteRepository(
 
             await sms.AthleteSuccessfullySmsNotificationForBuyFromSite(
                 payment.Athlete.PhoneNumber,
-                wpKey,
-                payment.CoachService.Title
+                payment.CoachService.Title,
+                wpKey
             );
 
             return new ApiResponse
