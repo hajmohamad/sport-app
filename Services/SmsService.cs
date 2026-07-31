@@ -259,7 +259,7 @@ public class SmsService(IConfiguration config, ILogger<SmsService> logger) : ISm
 
         var message =
             $"{coachName} عزیز، یک نفر {serviceName} رو ازت خریداری کرد.\n" +
-            $"مبلغ {price} تومان به زودی دریافت می‌کنی.\n\n" +
+            $"میتونی همین الان در عرض چند دقیقه برنامه رو طراحی و مبلغ {price} تومان رو دریافت کنی.\n\n" +
             "chaarset.ir";
 
         return await SendLikeToLikeSms(phoneNumber, message);
