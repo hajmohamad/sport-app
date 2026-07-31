@@ -32,6 +32,9 @@ public class User
     [DataType(DataType.DateTime)]
     [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd HH:mm:ss}")]
     public DateTime LastLogin { get; set; } 
+    [DataType(DataType.DateTime)]
+    [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd HH:mm:ss}")]
+    public DateTime? LastSeenApp { get; set; }
     public Gender Gender { get; set; }
 
     public string ImageProfile { get; set; } = "";

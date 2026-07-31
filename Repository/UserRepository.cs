@@ -307,26 +307,39 @@ public async Task<ApiResponse> Login(string userPhoneNumber)
     return new ApiResponse { Action = true, Message = "CodeIsSuccessFullySend" };
 }
 
-    public async Task<ApiResponse> GenerateAccessToken(string refreshToken)
-    {
-        var user = await dbContext.Users
-            .AsNoTracking()
-            .Where(u => u.RefreshToken == refreshToken&&!u.UserIsBan)
-            .Select(u => new TokenUserDto
-            {
-                Id = u.Id,
-                TypeOfUser = u.TypeOfUser,
-                AthleteId = u.AthleteId, 
-                CoachId = u.CoachId,
-                PhoneNumber = u.PhoneNumber,
-                LastLogin = u.LastLogin,
-                
-            })
-            .FirstOrDefaultAsync();
+public async Task<ApiResponse> GenerateAccessToken(string refreshToken)
+{
+    var user = await dbContext.Users
+        .FirstOrDefaultAsync(user =>
+            user.RefreshToken == refreshToken && !user.UserIsBan);
 
-        if (user is null) return new ApiResponse() { Message = "Invalid refresh token", Action = false };
-        return user.LastLogin.AddDays(180) < DateTime.Now ? new ApiResponse() { Message = "Refresh token expired", Action = false } : new ApiResponse() { Message = "Success", Action = true, Result = new { AccessToken = tokenService.CreateTokenForApp(user) } };
-    }
+    if (user is null)
+        return new ApiResponse { Message = "Invalid refresh token", Action = false };
+
+    if (user.LastLogin.AddDays(180) < DateTime.UtcNow)
+        return new ApiResponse { Message = "Refresh token expired", Action = false };
+
+    user.LastSeenApp = DateTime.UtcNow;
+    await dbContext.SaveChangesAsync();
+
+    var tokenUser = new TokenUserDto
+    {
+        Id = user.Id,
+        TypeOfUser = user.TypeOfUser,
+        AthleteId = user.AthleteId,
+        CoachId = user.CoachId,
+        PhoneNumber = user.PhoneNumber,
+        LastLogin = user.LastLogin,
+    };
+
+    return new ApiResponse
+    {
+        Message = "Success",
+        Action = true,
+        Result = new { AccessToken = tokenService.CreateTokenForApp(tokenUser) }
+    };
+}
+
 
     public async Task<ApiResponse> AddUsername(string phoneNumber, string username)
     {
