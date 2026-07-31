@@ -321,11 +321,13 @@ public class SmsService(IConfiguration config, ILogger<SmsService> logger) : ISm
             serviceName);
 
         var message =
-            $"{athleteName} عزیز، برنامه {serviceName} آماده شد.\n\n" +
+            $"{athleteName} عزیز، برنامه {serviceName} که منتظرش بودی آماده شد!\n" +
+            "همین الان به اپلیکیشن چارسِت برو و برنامه‌ات رو مشاهده کن.\n\n" +
             $"chaarset.ir/program/{wpKey}/";
 
         return await SendLikeToLikeSms(mobileNumber, message);
     }
+
 
     public async Task<SmsResponse> SendPaymentAttemptSms(string phoneNumber, string serviceTitle, string coachName, string websiteUrl)
     {
