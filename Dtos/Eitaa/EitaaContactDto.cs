@@ -4,7 +4,7 @@ namespace sport_app_backend.Dtos.Eitaa;
 
 public class EitaaContactDto
 {
-    [JsonPropertyName("phone_number")]
+    [JsonPropertyName("phone")]
     public string? PhoneNumber { get; set; }
 
     [JsonPropertyName("first_name")]

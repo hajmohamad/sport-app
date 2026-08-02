@@ -127,185 +127,162 @@ public class EitaaAuthService(
 
     }
 
-    public async Task<ApiResponse> CompleteLoginAsync(
-        EitaaCompleteLoginRequestDto request,
-        CancellationToken cancellationToken = default)
+public async Task<ApiResponse> CompleteLoginAsync(
+    EitaaCompleteLoginRequestDto request,
+    CancellationToken cancellationToken = default)
+{
+    if (string.IsNullOrWhiteSpace(request.LinkingToken))
+        return Failed("Linking token is required.");
+
+    var tokenHash = tokenService.Sha256Hex(request.LinkingToken);
+
+    // اینها خارج از تراکنش مشکلی ندارند
+    var session = await dbContext.EitaaLoginSessions
+        .SingleOrDefaultAsync(x => x.TokenHash == tokenHash, cancellationToken);
+
+    if (session is null) return Failed("Invalid linking token.");
+    if (session.ConsumedAt is not null) return Failed("Linking token has already been used.");
+    if (session.ExpiresAt <= DateTime.UtcNow) return Failed("Linking token has expired.");
+
+    var validation = eitaaDataValidator.Validate(request.ContactData);
+    if (!validation.IsValid) return Failed(validation.Error ?? "Invalid Eitaa contactData.");
+
+    if (!ValidateAuthDate(validation.Data, out var authDateError))
+        return Failed(authDateError);
+
+    EitaaContactDto? contact;
+    try
     {
-        if (string.IsNullOrWhiteSpace(request.LinkingToken))
+        contact = ExtractContact(validation.Data);
+    }
+    catch (JsonException)
+    {
+        return Failed("Eitaa contact data has invalid JSON.");
+    }
+
+    if (contact is null || string.IsNullOrWhiteSpace(contact.PhoneNumber))
+        return Failed("Phone number is missing in contact data.");
+
+    if (contact.UserId.HasValue && contact.UserId.Value.ToString() != session.EitaaUserId)
+        return Failed("The shared contact does not belong to the Eitaa user.");
+
+    string normalizedPhoneNumber;
+    try
+    {
+        normalizedPhoneNumber = PhoneNumberHelper.NormalizeIranPhoneNumber(contact.PhoneNumber);
+    }
+    catch (ArgumentException)
+    {
+        return Failed("Invalid Iranian phone number.");
+    }
+
+    // نکته اصلی: تراکنش را داخل execution strategy اجرا کن
+    var strategy = dbContext.Database.CreateExecutionStrategy();
+
+    try
+    {
+        return await strategy.ExecuteAsync(async () =>
         {
-            return Failed("Linking token is required.");
-        }
+            await using var transaction =
+                await dbContext.Database.BeginTransactionAsync(cancellationToken);
 
-        var tokenHash = tokenService.Sha256Hex(request.LinkingToken);
+            try
+            {
+                var existingExternalAccount =
+                    await dbContext.UserExternalAccounts
+                        .Include(x => x.User).ThenInclude(x => x.Athlete)
+                        .Include(x => x.User).ThenInclude(x => x.Coach)
+                        .SingleOrDefaultAsync(
+                            x => x.Provider == Provider.Eita &&
+                                 x.ProviderUserId == session.EitaaUserId,
+                            cancellationToken);
 
-        var session = await dbContext.EitaaLoginSessions
-            .SingleOrDefaultAsync(
-                x => x.TokenHash == tokenHash,
-                cancellationToken);
+                if (existingExternalAccount is not null)
+                {
+                    if (existingExternalAccount.User.UserIsBan)
+                        return Failed("User is banned.");
 
-        if (session is null)
-        {
-            return Failed("Invalid linking token.");
-        }
+                    if (existingExternalAccount.User.PhoneNumber != normalizedPhoneNumber)
+                        return Failed("This Eitaa account is already linked.");
 
-        if (session.ConsumedAt is not null)
-        {
-            return Failed("Linking token has already been used.");
-        }
+                    session.ConsumedAt = DateTime.UtcNow;
+                    existingExternalAccount.LastLoginAt = DateTime.UtcNow;
+                    existingExternalAccount.User.LastLogin = DateTime.Now;
 
-        if (session.ExpiresAt <= DateTime.UtcNow)
-        {
-            return Failed("Linking token has expired.");
-        }
+                    await dbContext.SaveChangesAsync(cancellationToken);
+                    await transaction.CommitAsync(cancellationToken);
 
-        var validation = eitaaDataValidator.Validate(request.ContactData);
+                    return await CreateAuthenticatedResponseAsync(existingExternalAccount.User);
+                }
 
-        if (!validation.IsValid)
-        {
-            return Failed(validation.Error ?? "Invalid Eitaa contactData.");
-        }
-
-        if (!ValidateAuthDate(validation.Data, out var authDateError))
-        {
-            return Failed(authDateError);
-        }
-
-        EitaaContactDto? contact;
-
-        try
-        {
-            contact = ExtractContact(validation.Data);
-        }
-        catch (JsonException)
-        {
-            return Failed("Eitaa contact data has invalid JSON.");
-        }
-
-        if (contact is null || string.IsNullOrWhiteSpace(contact.PhoneNumber))
-        {
-            return Failed("Phone number is missing in contact data.");
-        }
-
-        if (contact.UserId.HasValue &&
-            contact.UserId.Value.ToString() != session.EitaaUserId)
-        {
-            return Failed("The shared contact does not belong to the Eitaa user.");
-        }
-
-        string normalizedPhoneNumber;
-
-        try
-        {
-            normalizedPhoneNumber =
-                PhoneNumberHelper.NormalizeIranPhoneNumber(contact.PhoneNumber);
-        }
-        catch (ArgumentException)
-        {
-            return Failed("Invalid Iranian phone number.");
-        }
-
-        await using var transaction =
-            await dbContext.Database.BeginTransactionAsync(cancellationToken);
-
-        try
-        {
-            var existingExternalAccount =
-                await dbContext.UserExternalAccounts
-                    .Include(x => x.User)
-                    .ThenInclude(x => x.Athlete)
-                    .Include(x => x.User)
-                    .ThenInclude(x => x.Coach)
+                var user = await dbContext.Users
+                    .Include(x => x.Athlete)
+                    .Include(x => x.Coach)
                     .SingleOrDefaultAsync(
-                        x => x.Provider ==Provider.Eita &&
-                             x.ProviderUserId == session.EitaaUserId,
+                        x => x.PhoneNumber == normalizedPhoneNumber,
                         cancellationToken);
 
-            if (existingExternalAccount is not null)
-            {
-                if (existingExternalAccount.User.UserIsBan)
+                if (user is null)
                 {
-                    return Failed("User is banned.");
+                    user = await CreateNewAthleteUser(
+                        normalizedPhoneNumber, session, cancellationToken);
+                }
+                else
+                {
+                    if (user.UserIsBan)
+                        return Failed("User is banned.");
+
+                    user.LastLogin = DateTime.Now;
+
+                    if (string.IsNullOrWhiteSpace(user.FirstName))
+                        user.FirstName = session.FirstName ?? "";
+
+                    if (string.IsNullOrWhiteSpace(user.LastName))
+                        user.LastName = session.LastName ?? "";
                 }
 
-                if (existingExternalAccount.User.PhoneNumber != normalizedPhoneNumber)
+                var externalAccount = new UserExternalAccount
                 {
-                    return Failed("This Eitaa account is already linked.");
-                }
+                    UserId = user.Id,
+                    User = user,
+                    Provider = Provider.Eita,
+                    ProviderUserId = session.EitaaUserId,
+                    ProviderUsername = session.EitaaUsername,
+                    FirstName = session.FirstName,
+                    LastName = session.LastName,
+                    CreatedAt = DateTime.UtcNow,
+                    LastLoginAt = DateTime.UtcNow
+                };
+
+                await dbContext.UserExternalAccounts.AddAsync(externalAccount, cancellationToken);
 
                 session.ConsumedAt = DateTime.UtcNow;
-                existingExternalAccount.LastLoginAt = DateTime.UtcNow;
-                existingExternalAccount.User.LastLogin = DateTime.Now;
 
                 await dbContext.SaveChangesAsync(cancellationToken);
                 await transaction.CommitAsync(cancellationToken);
 
-                return await CreateAuthenticatedResponseAsync(
-                    existingExternalAccount.User);
+                return await CreateAuthenticatedResponseAsync(user);
             }
-
-            var user = await dbContext.Users
-                .Include(x => x.Athlete)
-                .Include(x => x.Coach)
-                .SingleOrDefaultAsync(
-                    x => x.PhoneNumber == normalizedPhoneNumber,
-                    cancellationToken);
-
-            if (user is null)
+            catch (DbUpdateException)
             {
-                user = await CreateNewAthleteUser(normalizedPhoneNumber,session, cancellationToken);
+                await transaction.RollbackAsync(cancellationToken);
+                return Failed("The phone number or Eitaa account has already been linked.");
             }
-            else
+            catch
             {
-                if (user.UserIsBan)
-                {
-                    return Failed("User is banned.");
-                }
-
-                user.LastLogin = DateTime.Now;
-
-                if (string.IsNullOrWhiteSpace(user.FirstName))
-                {
-                    user.FirstName = session.FirstName ?? "";
-                }
-
-                if (string.IsNullOrWhiteSpace(user.LastName))
-                {
-                    user.LastName = session.LastName ?? "";
-                }
+                await transaction.RollbackAsync(cancellationToken);
+                throw;
             }
-
-            var externalAccount = new UserExternalAccount
-            {
-                UserId = user.Id,
-                User = user,
-                Provider = Provider.Eita,
-                ProviderUserId = session.EitaaUserId,
-                ProviderUsername = session.EitaaUsername,
-                FirstName = session.FirstName,
-                LastName = session.LastName,
-                CreatedAt = DateTime.UtcNow,
-                LastLoginAt = DateTime.UtcNow
-            };
-
-            await dbContext.UserExternalAccounts.AddAsync(
-                externalAccount,
-                cancellationToken);
-
-            session.ConsumedAt = DateTime.UtcNow;
-
-            await dbContext.SaveChangesAsync(cancellationToken);
-            await transaction.CommitAsync(cancellationToken);
-
-            return await CreateAuthenticatedResponseAsync(user);
-        }
-        catch (DbUpdateException)
-        {
-            await transaction.RollbackAsync(cancellationToken);
-
-            return Failed(
-                "The phone number or Eitaa account has already been linked.");
-        }
+        });
     }
+    catch (InvalidOperationException ex) when (
+        ex.Message.Contains("does not support user-initiated transactions",
+            StringComparison.OrdinalIgnoreCase))
+    {
+        throw;
+    }
+}
+
     private async Task<User> CreateNewAthleteUser(
         string phoneNumber,
         EitaaLoginSession session,
@@ -430,32 +407,48 @@ public class EitaaAuthService(
 
             if (!string.IsNullOrWhiteSpace(json))
             {
-                return JsonSerializer.Deserialize<EitaaContactDto>(json);
+                try
+                {
+                    return JsonSerializer.Deserialize<EitaaContactDto>(
+                        json,
+                        new JsonSerializerOptions
+                        {
+                            PropertyNameCaseInsensitive = true
+                        });
+                }
+                catch (JsonException)
+                {
+                    // JSON نامعتبر است؛ ادامه با فرمت فیلدهای جداگانه
+                }
             }
         }
 
         var phoneNumber = GetValue(data, "phone_number")
                           ?? GetValue(data, "phone");
 
-        if (string.IsNullOrWhiteSpace(phoneNumber))
-        {
-            return null;
-        }
-
-        long? userId = null;
         var rawUserId = GetValue(data, "user_id");
 
-        if (long.TryParse(rawUserId, out var parsedUserId))
+        long? userId = long.TryParse(rawUserId, out var parsedUserId)
+            ? parsedUserId
+            : null;
+
+        var firstName = GetValue(data, "first_name");
+        var lastName = GetValue(data, "last_name");
+
+        if (string.IsNullOrWhiteSpace(phoneNumber) &&
+            userId is null &&
+            string.IsNullOrWhiteSpace(firstName) &&
+            string.IsNullOrWhiteSpace(lastName))
         {
-            userId = parsedUserId;
+            return null;
         }
 
         return new EitaaContactDto
         {
             PhoneNumber = phoneNumber,
             UserId = userId,
-            FirstName = GetValue(data, "first_name"),
-            LastName = GetValue(data, "last_name")
+            FirstName = firstName,
+            LastName = lastName
         };
     }
 
