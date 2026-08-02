@@ -23,52 +23,54 @@ public class DataValidator(IConfiguration configuration) : IDataValidator
             return Invalid("Eitaa bot token is not configured.");
         }
 
-        Dictionary<string, StringValues> parsed;
+        var pairs = rawData.Split('&')
+            .Select(part => part.Split('=', 2))
+            .Where(parts => parts.Length == 2)
+            .Select(parts => new { Key = parts[0], Value = parts[1] })
+            .ToList();
 
-        try
-        {
-            parsed = QueryHelpers.ParseQuery(rawData);
-        }
-        catch
-        {
-            return Invalid("Invalid query string format.");
-        }
-
-        if (!parsed.TryGetValue("hash", out var receivedHashValues))
+        var hashPair = pairs.FirstOrDefault(x => x.Key == "hash");
+        if (hashPair == null)
         {
             return Invalid("Hash is missing.");
         }
 
-        var receivedHash = receivedHashValues.ToString();
+        var receivedHash = Uri.UnescapeDataString(hashPair.Value).ToLowerInvariant();
 
-        if (string.IsNullOrWhiteSpace(receivedHash))
-        {
-            return Invalid("Hash is empty.");
-        }
-
-        var dataCheckString = string.Join("\n", parsed
-            .Where(x => !string.Equals(x.Key, "hash", StringComparison.Ordinal))
+     
+        var dataCheckString = string.Join("\n", pairs
+            .Where(x => x.Key != "hash")
             .OrderBy(x => x.Key, StringComparer.Ordinal)
-            .Select(x => $"{x.Key}={x.Value}"));
+            .Select(x => $"{x.Key}={Uri.UnescapeDataString(x.Value)}"));
 
         var calculatedHash = CalculateHash(dataCheckString, botToken);
 
         if (!FixedTimeEqualsHex(calculatedHash, receivedHash))
         {
+            var calculatedHashAlternative = CalculateHashAlternative(dataCheckString, botToken);
+            if (FixedTimeEqualsHex(calculatedHashAlternative, receivedHash))
+            {
+                return new EitaaValidationResult
+                {
+                    IsValid = true,
+                    Data = ParseToDictionary(rawData)
+                };
+            }
+
             return Invalid("Invalid hash.");
         }
 
         return new EitaaValidationResult
         {
             IsValid = true,
-            Data = parsed
+            Data = ParseToDictionary(rawData)
         };
     }
 
+    // روش استاندارد (استفاده از بایت‌های خام به عنوان کلید مرحله دوم)
     private static string CalculateHash(string dataCheckString, string botToken)
     {
         byte[] secretKey;
-
         using (var hmac = new HMACSHA256(Encoding.UTF8.GetBytes("WebAppData")))
         {
             secretKey = hmac.ComputeHash(Encoding.UTF8.GetBytes(botToken));
@@ -79,6 +81,30 @@ public class DataValidator(IConfiguration configuration) : IDataValidator
             var hashBytes = hmac.ComputeHash(Encoding.UTF8.GetBytes(dataCheckString));
             return Convert.ToHexString(hashBytes).ToLowerInvariant();
         }
+    }
+
+    // روش جایگزین (مخصوص فرمول ارائه شده در مستندات ایتا که از رشته Hex کلید می‌سازد)
+    private static string CalculateHashAlternative(string dataCheckString, string botToken)
+    {
+        byte[] secretKeyBytes;
+        using (var hmac = new HMACSHA256(Encoding.UTF8.GetBytes("WebAppData")))
+        {
+            secretKeyBytes = hmac.ComputeHash(Encoding.UTF8.GetBytes(botToken));
+        }
+        
+        // تبدیل بایت‌ها به رشته هگزادسیمال متنی طبق مستندات ایتا
+        var secretKeyHex = Convert.ToHexString(secretKeyBytes).ToLowerInvariant();
+
+        using (var hmac = new HMACSHA256(Encoding.UTF8.GetBytes(secretKeyHex)))
+        {
+            var hashBytes = hmac.ComputeHash(Encoding.UTF8.GetBytes(dataCheckString));
+            return Convert.ToHexString(hashBytes).ToLowerInvariant();
+        }
+    }
+
+    private static Dictionary<string, StringValues> ParseToDictionary(string rawData)
+    {
+        return QueryHelpers.ParseQuery(rawData);
     }
 
     private static bool FixedTimeEqualsHex(string leftHex, string rightHex)
