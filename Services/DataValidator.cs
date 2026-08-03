@@ -36,13 +36,13 @@ public class DataValidator(IConfiguration configuration) : IDataValidator
             return Invalid("Hash is missing.");
         }
 
-        var receivedHash = Uri.UnescapeDataString(hashPair.Value).ToLowerInvariant();
+        var receivedHash = hashPair.Value.ToLowerInvariant();
 
      
         var dataCheckString = string.Join("\n", pairs
             .Where(x => x.Key != "hash")
             .OrderBy(x => x.Key, StringComparer.Ordinal)
-            .Select(x => $"{x.Key}={Uri.UnescapeDataString(x.Value)}"));
+            .Select(x => $"{x.Key}={x.Value}")); // 
 
         var calculatedHash = CalculateHash(dataCheckString, botToken);
 
@@ -68,7 +68,6 @@ public class DataValidator(IConfiguration configuration) : IDataValidator
         };
     }
 
-    // روش استاندارد (استفاده از بایت‌های خام به عنوان کلید مرحله دوم)
     private static string CalculateHash(string dataCheckString, string botToken)
     {
         byte[] secretKey;

@@ -144,7 +144,7 @@ public async Task<ApiResponse> CompleteLoginAsync(
     if (session.ConsumedAt is not null) return Failed("Linking token has already been used.");
     if (session.ExpiresAt <= DateTime.UtcNow) return Failed("Linking token has expired.");
 
-    var validation = eitaaDataValidator.Validate(request.ContactData);
+    var validation = eitaaDataValidator.Validate(request.Contact);
     if (!validation.IsValid) return Failed(validation.Error ?? "Invalid Eitaa contactData.");
 
     if (!ValidateAuthDate(validation.Data, out var authDateError))
