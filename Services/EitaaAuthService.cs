@@ -292,8 +292,8 @@ public async Task<ApiResponse> CompleteLoginAsync(
         {
             UserName = await GenerateUniqueUsername(cancellationToken),
             PhoneNumber = phoneNumber,
-            FirstName = session.FirstName ?? "",
-            LastName = session.LastName ?? "",
+            FirstName = session.FirstName ?? " ",
+            LastName = session.LastName ?? " ",
             TypeOfUser = TypeOfUser.ATHLETE,
             LastLogin = DateTime.Now,
             CreateDate = DateTime.Now.Date

@@ -1,3 +1,4 @@
+using System.Net;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -38,16 +39,17 @@ public class DataValidator(IConfiguration configuration) : IDataValidator
 
         var receivedHash = hashPair.Value.ToLowerInvariant();
 
-     
+        // **اینجا تغییر اعمال شده است**
         var dataCheckString = string.Join("\n", pairs
             .Where(x => x.Key != "hash")
             .OrderBy(x => x.Key, StringComparer.Ordinal)
-            .Select(x => $"{x.Key}={x.Value}")); // 
+            .Select(x => $"{x.Key}={WebUtility.UrlDecode(x.Value)}")); // <-- از UrlDecode استفاده کنید
 
         var calculatedHash = CalculateHash(dataCheckString, botToken);
 
         if (!FixedTimeEqualsHex(calculatedHash, receivedHash))
         {
+            // روش جایگزین را هم با همین dataCheckString صحیح تست می‌کنیم
             var calculatedHashAlternative = CalculateHashAlternative(dataCheckString, botToken);
             if (FixedTimeEqualsHex(calculatedHashAlternative, receivedHash))
             {
