@@ -9,6 +9,6 @@ public class EitaaCompleteLoginRequestDto
     public string LinkingToken { get; set; } = null!;
 
     [Required]
-    public string Contact { get; set; } = null!;
+    public string ContactData { get; set; } = null!;
 }
 
