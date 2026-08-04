@@ -12,10 +12,12 @@
       <schema-mapping>
         <introspection-scope>
           <node kind="schema">
-            <name qname="RepairShop" />
             <name qname="@" />
-            <name qname="RepairShopDB" />
+            <name qname="RepairShop" />
             <name qname="sport_app" />
+            <name qname="sport_restore_ttz" />
+            <name qname="sport_restore_ttz1" />
+            <name qname="RepairShopDB" />
             <name qname="sport-app-backend" />
           </node>
         </introspection-scope>

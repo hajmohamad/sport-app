@@ -25,7 +25,8 @@ public class BuyFromSiteRepository(
     ISmsService sms,
     IStorage Storage,
     IZarinPal zarinPal,
-    IConfiguration config)
+    IConfiguration config,
+    IChatRepository chatRepository)
     : IBuyFromSiteRepository
 {
     public async Task<ApiResponse> GenerateAccessToken(string refreshToken)
@@ -666,6 +667,8 @@ public class BuyFromSiteRepository(
         
         await dbContext.Athletes.AddAsync(athlete);
         await dbContext.SaveChangesAsync();
+        await chatRepository.CreateSupportConversation(newUser.Id);
+
 
         return newUser;
     }
@@ -765,6 +768,14 @@ public class BuyFromSiteRepository(
             var confirmResult = await ConfirmTransactionId(payment, result.Data.Ref_id);
             if (!confirmResult.Action)
                 return confirmResult;
+            var conversationResult =
+                await chatRepository.CreateCoachAthleteConversation(
+                    payment.Coach.UserId,
+                    payment.Athlete.UserId);
+            if (!conversationResult.Action)
+            {
+                return conversationResult;
+            }
 
             var wpKey = tokenService.HashEncode(payment.WorkoutProgram!.Id);
 

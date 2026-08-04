@@ -17,21 +17,35 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="11e104f8-869d-4d9d-9802-b48455f5eb31" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/Controller/ChatController.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Dtos/Chat/AthleteChatListDto.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Dtos/Chat/ChatListItemDto.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Dtos/Chat/ChatMessageDto.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Dtos/Chat/CoachChatListDto.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Dtos/Chat/SendMessageDto.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Dtos/Chat/UploadAttachmentDto.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Hubs/ChatHub.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Interface/IChatRepository.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Mappers/ChatMapper.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Models/Chat/ChatMessage.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Models/Chat/Conversation.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Models/Chat/ConversationParticipant.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Repository/ChatRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/dataSources.local.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/dataSources/3e138e79-63f8-4f1b-a97d-8b1a569a4f0c.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/dataSources/3e138e79-63f8-4f1b-a97d-8b1a569a4f0c.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/dataSources/b995594b-b1c6-4f7b-a3d8-4a5b1ad21ad7.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/dataSources/b995594b-b1c6-4f7b-a3d8-4a5b1ad21ad7.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dtos/Training/WorkoutProgramResponseDto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Dtos/Training/WorkoutProgramResponseDto.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dtos/WorkoutProgramTemplateDto/WorkoutProgramTemplateCreateDto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Dtos/WorkoutProgramTemplateDto/WorkoutProgramTemplateCreateDto.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Mappers/ProgramMappers.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Mappers/ProgramMappers.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Mappers/WorkoutProgramTemplateMapper.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Mappers/WorkoutProgramTemplateMapper.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Migrations/ApplicationDbContextModelSnapshot.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Migrations/ApplicationDbContextModelSnapshot.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Models/Program/WorkoutProgram.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/Program/WorkoutProgram.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Models/Program/WorkoutProgramTemplate/WorkoutProgramTemplate.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/Program/WorkoutProgramTemplate/WorkoutProgramTemplate.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Repository/AthleteRepo/AthleteRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Repository/AthleteRepo/AthleteRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Data/ApplicationDBContext.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Data/ApplicationDBContext.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Interface/IStorage.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Interface/IStorage.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Program.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Repository/BuyFromSiteRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Repository/BuyFromSiteRepository.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Repository/CoachRepo/CoachRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Repository/CoachRepo/CoachRepository.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Repository/UserRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Repository/UserRepository.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Repository/WorkoutProgramTemplateRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Repository/WorkoutProgramTemplateRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Services/Storage.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Services/Storage.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/appsettings.Development.json" beforeDir="false" afterPath="$PROJECT_DIR$/appsettings.Development.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/projectTest/AthleteRepositoryTests.cs" beforeDir="false" afterPath="$PROJECT_DIR$/projectTest/AthleteRepositoryTests.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/projectTest/BuyFromSiteRepositoryTests.cs" beforeDir="false" afterPath="$PROJECT_DIR$/projectTest/BuyFromSiteRepositoryTests.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/projectTest/CoachRepositoryTests.cs" beforeDir="false" afterPath="$PROJECT_DIR$/projectTest/CoachRepositoryTests.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sport-app-backend.sln.DotSettings.user" beforeDir="false" afterPath="$PROJECT_DIR$/sport-app-backend.sln.DotSettings.user" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -50,7 +64,7 @@
     <option name="PUSH_AUTO_UPDATE" value="true" />
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="master" />
+        <entry key="$PROJECT_DIR$" value="stagingMain" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -95,7 +109,9 @@
 }</component>
   <component name="HighlightingSettingsPerFile">
     <setting file="file://$USER_HOME$/.nuget/packages/microsoft.net.test.sdk/17.14.1/build/net8.0/Microsoft.NET.Test.Sdk.Program.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/649f9a5315084d038b64e29ea11b1fb57000/46/c3eb4cbf/IConfiguration.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/71e52421c6904ee8851944a0b013698923200/1c/bf2e6586/ILogger`1.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/b8bc8de0156140769b359b2643b54ee1219600/dc/dc604bbf/ActionMethodExecutor.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/BackgroundServices/ProgramRenewalReminderService.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/BackgroundServices/TrainingReminderService.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Controller/AdminController.cs" root0="FORCE_HIGHLIGHTING" />
@@ -103,10 +119,16 @@
     <setting file="file://$PROJECT_DIR$/Controller/AthleteController/AthleteActivityController.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Controller/AthleteController/BuyProgramFromApplicationController.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Controller/AthleteController/WaterAndWeightController.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Controller/ChatController.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Controller/CoachController/DiscountCodeController.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Controller/EitaaAuthController.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Controller/InAppMessageController.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Controller/NotificationController.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Dtos/Chat/AthleteChatListDto.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Dtos/Chat/ChatMessageDto.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Dtos/Chat/CoachChatListDto.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Dtos/Chat/SendMessageDto.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Dtos/Chat/UploadAttachmentDto.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Dtos/Coach/CoachBuyRequestDto.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Dtos/Eitaa/EitaaCompleteLoginRequestDto.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Dtos/Eitaa/EitaaContactDto.cs" root0="FORCE_HIGHLIGHTING" />
@@ -114,6 +136,7 @@
     <setting file="file://$PROJECT_DIR$/Dtos/Eitaa/EitaaUserDto.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Dtos/Eitaa/EitaaValidationResult.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Dtos/WorkoutProgramTemplateDto/WorkoutProgramTemplateCreateDto.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Hubs/ChatHub.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Interface/Athlete/IAchievements.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Interface/Athlete/IActivity.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Interface/Athlete/IBuyProgramFromApplications.cs" root0="FORCE_HIGHLIGHTING" />
@@ -121,11 +144,13 @@
     <setting file="file://$PROJECT_DIR$/Interface/Coach/IChangePhotosRepository.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Interface/Coach/IWorkoutProgramTemplateRepository.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Interface/ICalculator.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Interface/IChatRepository.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Interface/IDataValidator.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Interface/IEitaaAuthService.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Interface/IInAppMessageRepository.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Interface/INotification.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Interface/IStorage.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Mappers/ChatMapper.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Mappers/ExercisesMappers.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Mappers/PhoneNumberHelper.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Mappers/ProgramMappers.cs" root0="FORCE_HIGHLIGHTING" />
@@ -133,6 +158,9 @@
     <setting file="file://$PROJECT_DIR$/Models/Account/Coach/CoachCardNumber.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Models/Actions/Exercise.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Models/AthleteChangePhoto.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Models/Chat/ChatMessage.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Models/Chat/Conversation.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Models/Chat/ConversationParticipant.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Models/InAppMessage.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Models/NotificationSubscription.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Models/Payments/DiscountCodeCoachService.cs" root0="FORCE_HIGHLIGHTING" />
@@ -150,6 +178,7 @@
     <setting file="file://$PROJECT_DIR$/Repository/AthleteRepo/AthleteRepository.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Repository/AthleteRepo/BuyProgramFromApplicationRepository.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Repository/AthleteRepo/WaterAndWeightRepository.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Repository/ChatRepository.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Repository/CoachRepo/DiscountCodeRepository.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Repository/InAppMessageRepository.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Repository/NotificationRepository.cs" root0="FORCE_HIGHLIGHTING" />
@@ -179,43 +208,44 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;.NET Launch Settings Profile.sport-app-backend: http.executor&quot;: &quot;Run&quot;,
-    &quot;.NET Launch Settings Profile.sport-app-backend: https.executor&quot;: &quot;Run&quot;,
-    &quot;ASKED_SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;Docker.Dockerfile.executor&quot;: &quot;Run&quot;,
-    &quot;HTTP Request.sport-app-backend | #1.executor&quot;: &quot;Run&quot;,
-    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.cidr.known.project.marker&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.readMode.enableVisualFormatting&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.typescript.service.memoryLimit.init&quot;: &quot;true&quot;,
-    &quot;cidr.known.project.marker&quot;: &quot;true&quot;,
-    &quot;codeWithMe.voiceChat.enabledByDefault&quot;: &quot;false&quot;,
-    &quot;database.data.extractors.current.export.id&quot;: &quot;Comma-separated (CSV)_id&quot;,
-    &quot;database.data.extractors.current.id&quot;: &quot;Comma-separated (CSV)_id&quot;,
-    &quot;full.screen.before.presentation.mode&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;stagingMain&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;RiderPMCOptionsPageId&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    ".NET Launch Settings Profile.sport-app-backend: http.executor": "Run",
+    ".NET Launch Settings Profile.sport-app-backend: https.executor": "Run",
+    "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "Docker.Dockerfile.executor": "Run",
+    "HTTP Request.sport-app-backend | #1.executor": "Run",
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
+    "RunOnceActivity.cidr.known.project.marker": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "RunOnceActivity.readMode.enableVisualFormatting": "true",
+    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
+    "ShowUsagesActions.previewPropertyKey": "true",
+    "cidr.known.project.marker": "true",
+    "codeWithMe.voiceChat.enabledByDefault": "false",
+    "database.data.extractors.current.export.id": "Comma-separated (CSV)_id",
+    "database.data.extractors.current.id": "Comma-separated (CSV)_id",
+    "full.screen.before.presentation.mode": "true",
+    "git-widget-placeholder": "chat",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "RiderPMCOptionsPageId",
+    "vue.rearranger.settings.migration": "true"
   },
-  &quot;keyToStringList&quot;: {
-    &quot;ChangesTree.GroupingKeys&quot;: [
-      &quot;repository&quot;
+  "keyToStringList": {
+    "ChangesTree.GroupingKeys": [
+      "repository"
     ],
-    &quot;DatabaseDriversLRU&quot;: [
-      &quot;mysql&quot;
+    "DatabaseDriversLRU": [
+      "mysql"
     ]
   }
-}</component>
+}]]></component>
   <component name="RunManager" selected=".NET Launch Settings Profile.sport-app-backend: https">
     <configuration name="sport-app-backend | #1" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" temporary="true" nameIsGenerated="true" path="$PROJECT_DIR$/sport-app-backend.http" executionIdentifier="#1" runType="Run single request">
       <method v="2" />
@@ -458,102 +488,16 @@
       <workItem from="1784290514637" duration="2703000" />
       <workItem from="1784293275451" duration="316000" />
       <workItem from="1784304746871" duration="1006000" />
-    </task>
-    <task id="LOCAL-00037" summary="add WorkoutProgramFeedback">
-      <option name="closed" value="true" />
-      <created>1776620304142</created>
-      <option name="number" value="00037" />
-      <option name="presentableId" value="LOCAL-00037" />
-      <option name="project" value="LOCAL" />
-      <updated>1776620304142</updated>
-    </task>
-    <task id="LOCAL-00038" summary="edit endpoint">
-      <option name="closed" value="true" />
-      <created>1776622472510</created>
-      <option name="number" value="00038" />
-      <option name="presentableId" value="LOCAL-00038" />
-      <option name="project" value="LOCAL" />
-      <updated>1776622472510</updated>
-    </task>
-    <task id="LOCAL-00039" summary="fix CoachRepository.cs">
-      <option name="closed" value="true" />
-      <created>1776622829048</created>
-      <option name="number" value="00039" />
-      <option name="presentableId" value="LOCAL-00039" />
-      <option name="project" value="LOCAL" />
-      <updated>1776622829048</updated>
-    </task>
-    <task id="LOCAL-00040" summary="fix name">
-      <option name="closed" value="true" />
-      <created>1776623248149</created>
-      <option name="number" value="00040" />
-      <option name="presentableId" value="LOCAL-00040" />
-      <option name="project" value="LOCAL" />
-      <updated>1776623248149</updated>
-    </task>
-    <task id="LOCAL-00041" summary="fix merge">
-      <option name="closed" value="true" />
-      <created>1777223691494</created>
-      <option name="number" value="00041" />
-      <option name="presentableId" value="LOCAL-00041" />
-      <option name="project" value="LOCAL" />
-      <updated>1777223691494</updated>
-    </task>
-    <task id="LOCAL-00042" summary="edit Dockerfile">
-      <option name="closed" value="true" />
-      <created>1777223797575</created>
-      <option name="number" value="00042" />
-      <option name="presentableId" value="LOCAL-00042" />
-      <option name="project" value="LOCAL" />
-      <updated>1777223797575</updated>
-    </task>
-    <task id="LOCAL-00043" summary="fix bug in buy from site and edit dto">
-      <option name="closed" value="true" />
-      <created>1777226984097</created>
-      <option name="number" value="00043" />
-      <option name="presentableId" value="LOCAL-00043" />
-      <option name="project" value="LOCAL" />
-      <updated>1777226984097</updated>
-    </task>
-    <task id="LOCAL-00044" summary="edit end point">
-      <option name="closed" value="true" />
-      <created>1777387041746</created>
-      <option name="number" value="00044" />
-      <option name="presentableId" value="LOCAL-00044" />
-      <option name="project" value="LOCAL" />
-      <updated>1777387041746</updated>
-    </task>
-    <task id="LOCAL-00045" summary="addBaleAndEitaaToSocialMediaLink and PaymentAttempt.cs">
-      <option name="closed" value="true" />
-      <created>1777821328713</created>
-      <option name="number" value="00045" />
-      <option name="presentableId" value="LOCAL-00045" />
-      <option name="project" value="LOCAL" />
-      <updated>1777821328713</updated>
-    </task>
-    <task id="LOCAL-00046" summary="add ServiceForDiscountDto.cs">
-      <option name="closed" value="true" />
-      <created>1777987162649</created>
-      <option name="number" value="00046" />
-      <option name="presentableId" value="LOCAL-00046" />
-      <option name="project" value="LOCAL" />
-      <updated>1777987162649</updated>
-    </task>
-    <task id="LOCAL-00047" summary="edit disable discountcode to change discountcode">
-      <option name="closed" value="true" />
-      <created>1778064207438</created>
-      <option name="number" value="00047" />
-      <option name="presentableId" value="LOCAL-00047" />
-      <option name="project" value="LOCAL" />
-      <updated>1778064207438</updated>
-    </task>
-    <task id="LOCAL-00048" summary="change end point">
-      <option name="closed" value="true" />
-      <created>1778089029611</created>
-      <option name="number" value="00048" />
-      <option name="presentableId" value="LOCAL-00048" />
-      <option name="project" value="LOCAL" />
-      <updated>1778089029611</updated>
+      <workItem from="1785152180950" duration="272000" />
+      <workItem from="1785153963381" duration="1287000" />
+      <workItem from="1785338252947" duration="6663000" />
+      <workItem from="1785345611538" duration="960000" />
+      <workItem from="1785438021206" duration="711000" />
+      <workItem from="1785524746725" duration="8210000" />
+      <workItem from="1785614425556" duration="1264000" />
+      <workItem from="1785615699067" duration="3633000" />
+      <workItem from="1785639318973" duration="6027000" />
+      <workItem from="1785749588942" duration="22057000" />
     </task>
     <task id="LOCAL-00049" summary="fix bugs">
       <option name="closed" value="true" />
@@ -851,7 +795,103 @@
       <option name="project" value="LOCAL" />
       <updated>1784292834447</updated>
     </task>
-    <option name="localTasksCounter" value="86" />
+    <task id="LOCAL-00086" summary="edit username">
+      <option name="closed" value="true" />
+      <created>1785438267766</created>
+      <option name="number" value="00086" />
+      <option name="presentableId" value="LOCAL-00086" />
+      <option name="project" value="LOCAL" />
+      <updated>1785438267766</updated>
+    </task>
+    <task id="LOCAL-00087" summary="edit EditUserProfile">
+      <option name="closed" value="true" />
+      <created>1785438322181</created>
+      <option name="number" value="00087" />
+      <option name="presentableId" value="LOCAL-00087" />
+      <option name="project" value="LOCAL" />
+      <updated>1785438322181</updated>
+    </task>
+    <task id="LOCAL-00088" summary="fix bug in sms service">
+      <option name="closed" value="true" />
+      <created>1785529869812</created>
+      <option name="number" value="00088" />
+      <option name="presentableId" value="LOCAL-00088" />
+      <option name="project" value="LOCAL" />
+      <updated>1785529869812</updated>
+    </task>
+    <task id="LOCAL-00089" summary="fix bugs">
+      <option name="closed" value="true" />
+      <created>1785530856427</created>
+      <option name="number" value="00089" />
+      <option name="presentableId" value="LOCAL-00089" />
+      <option name="project" value="LOCAL" />
+      <updated>1785530856427</updated>
+    </task>
+    <task id="LOCAL-00090" summary="edit message">
+      <option name="closed" value="true" />
+      <created>1785531007554</created>
+      <option name="number" value="00090" />
+      <option name="presentableId" value="LOCAL-00090" />
+      <option name="project" value="LOCAL" />
+      <updated>1785531007554</updated>
+    </task>
+    <task id="LOCAL-00091" summary="add lastseen app">
+      <option name="closed" value="true" />
+      <created>1785532212058</created>
+      <option name="number" value="00091" />
+      <option name="presentableId" value="LOCAL-00091" />
+      <option name="project" value="LOCAL" />
+      <updated>1785532212058</updated>
+    </task>
+    <task id="LOCAL-00092" summary="add eita token">
+      <option name="closed" value="true" />
+      <created>1785614653623</created>
+      <option name="number" value="00092" />
+      <option name="presentableId" value="LOCAL-00092" />
+      <option name="project" value="LOCAL" />
+      <updated>1785614653623</updated>
+    </task>
+    <task id="LOCAL-00093" summary="edit DataValidator.cs">
+      <option name="closed" value="true" />
+      <created>1785634118345</created>
+      <option name="number" value="00093" />
+      <option name="presentableId" value="LOCAL-00093" />
+      <option name="project" value="LOCAL" />
+      <updated>1785634118345</updated>
+    </task>
+    <task id="LOCAL-00094" summary="fix bugs">
+      <option name="closed" value="true" />
+      <created>1785640926105</created>
+      <option name="number" value="00094" />
+      <option name="presentableId" value="LOCAL-00094" />
+      <option name="project" value="LOCAL" />
+      <updated>1785640926105</updated>
+    </task>
+    <task id="LOCAL-00095" summary="edit daravalidator">
+      <option name="closed" value="true" />
+      <created>1785753140860</created>
+      <option name="number" value="00095" />
+      <option name="presentableId" value="LOCAL-00095" />
+      <option name="project" value="LOCAL" />
+      <updated>1785753140860</updated>
+    </task>
+    <task id="LOCAL-00096" summary="edit complate request">
+      <option name="closed" value="true" />
+      <created>1785753613977</created>
+      <option name="number" value="00096" />
+      <option name="presentableId" value="LOCAL-00096" />
+      <option name="project" value="LOCAL" />
+      <updated>1785753613977</updated>
+    </task>
+    <task id="LOCAL-00097" summary="edit DataValidator.cs">
+      <option name="closed" value="true" />
+      <created>1785754657495</created>
+      <option name="number" value="00097" />
+      <option name="presentableId" value="LOCAL-00097" />
+      <option name="project" value="LOCAL" />
+      <updated>1785754657495</updated>
+    </task>
+    <option name="localTasksCounter" value="98" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -873,10 +913,33 @@
     <option name="OPEN_GENERIC_TABS">
       <map>
         <entry key="b5d6b5bd-2628-4314-a7ce-d9c78b433f4f" value="TOOL_WINDOW" />
+        <entry key="20c88448-1ea4-467a-827c-1fa41b953ddc" value="TOOL_WINDOW" />
       </map>
     </option>
     <option name="TAB_STATES">
       <map>
+        <entry key="20c88448-1ea4-467a-827c-1fa41b953ddc">
+          <value>
+            <State>
+              <option name="CUSTOM_BOOLEAN_PROPERTIES">
+                <map>
+                  <entry key="Show.Git.Branches" value="true" />
+                </map>
+              </option>
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="origin/master" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
+          </value>
+        </entry>
         <entry key="MAIN">
           <value>
             <State>
@@ -885,7 +948,7 @@
                   <entry key="branch">
                     <value>
                       <list>
-                        <option value="stagingMain" />
+                        <option value="chat" />
                       </list>
                     </value>
                   </entry>
@@ -904,16 +967,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
-    <MESSAGE value="edit ProgramRenewalReminderService.cs" />
-    <MESSAGE value="add coachSlug" />
-    <MESSAGE value="add slug and name to verify payment and get workout program" />
-    <MESSAGE value="edit pdf" />
-    <MESSAGE value="add time to webSite" />
-    <MESSAGE value="edit GetCoachService" />
-    <MESSAGE value="edit GetLastMonthWeightReport" />
-    <MESSAGE value="edit GetLastMonthWeightReport and add last weight to day dont have eny data" />
-    <MESSAGE value="add show website" />
-    <MESSAGE value="ADD ActiveShowWebsiteCoach" />
     <MESSAGE value="remove urlsite fron verifi coach" />
     <MESSAGE value="add support new version" />
     <MESSAGE value="apply local unstaged changes" />
@@ -929,7 +982,17 @@
     <MESSAGE value="edit endpoint and migrations" />
     <MESSAGE value="editCoachReoisitory" />
     <MESSAGE value="fix bug in new repository" />
-    <option name="LAST_COMMIT_MESSAGE" value="fix bug in new repository" />
+    <MESSAGE value="edit username" />
+    <MESSAGE value="edit EditUserProfile" />
+    <MESSAGE value="fix bug in sms service" />
+    <MESSAGE value="edit message" />
+    <MESSAGE value="add lastseen app" />
+    <MESSAGE value="add eita token" />
+    <MESSAGE value="fix bugs" />
+    <MESSAGE value="edit daravalidator" />
+    <MESSAGE value="edit complate request" />
+    <MESSAGE value="edit DataValidator.cs" />
+    <option name="LAST_COMMIT_MESSAGE" value="edit DataValidator.cs" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1038,39 +1101,39 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Repository/CoachRepo/CoachRepository.cs</url>
-          <line>759</line>
+          <line>812</line>
           <properties documentPath="$PROJECT_DIR$/Repository/CoachRepo/CoachRepository.cs" containingFunctionPresentation="Method 'UpdateDiscountCode'">
             <startOffsets>
-              <option value="21641" />
+              <option value="24098" />
             </startOffsets>
             <endOffsets>
-              <option value="21715" />
+              <option value="24172" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="31" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Repository/CoachRepo/CoachRepository.cs</url>
-          <line>774</line>
+          <line>827</line>
           <properties documentPath="$PROJECT_DIR$/Repository/CoachRepo/CoachRepository.cs" containingFunctionPresentation="Method 'UpdateDiscountCode'">
             <startOffsets>
-              <option value="21728" />
+              <option value="24185" />
             </startOffsets>
             <endOffsets>
-              <option value="21729" />
+              <option value="24186" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="32" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Repository/CoachRepo/CoachRepository.cs</url>
-          <line>1951</line>
+          <line>2021</line>
           <properties documentPath="$PROJECT_DIR$/Repository/CoachRepo/CoachRepository.cs" containingFunctionPresentation="Method 'GetCoachChecklist'">
             <startOffsets>
-              <option value="74122" />
+              <option value="76452" />
             </startOffsets>
             <endOffsets>
-              <option value="74123" />
+              <option value="76453" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="40" />
@@ -1100,6 +1163,45 @@
             </endOffsets>
           </properties>
           <option name="timeStamp" value="43" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Services/EitaaAuthService.cs</url>
+          <line>140</line>
+          <properties documentPath="$PROJECT_DIR$/Services/EitaaAuthService.cs" containingFunctionPresentation="Lambda expression inside Method 'CompleteLoginAsync'">
+            <startOffsets>
+              <option value="4281" />
+            </startOffsets>
+            <endOffsets>
+              <option value="4305" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="44" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Services/EitaaAuthService.cs</url>
+          <line>132</line>
+          <properties documentPath="$PROJECT_DIR$/Services/EitaaAuthService.cs" containingFunctionPresentation="Method 'CompleteLoginAsync'">
+            <startOffsets>
+              <option value="3972" />
+            </startOffsets>
+            <endOffsets>
+              <option value="3973" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="45" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Repository/CoachRepo/CoachRepository.cs</url>
+          <line>1505</line>
+          <properties documentPath="$PROJECT_DIR$/Repository/CoachRepo/CoachRepository.cs" containingFunctionPresentation="Method 'GetAthletesWithStatus'">
+            <startOffsets>
+              <option value="58822" />
+            </startOffsets>
+            <endOffsets>
+              <option value="58823" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="46" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

@@ -9,6 +9,7 @@ using sport_app_backend.Models.Account.Coach;
 using sport_app_backend.Models.Actions;
 using sport_app_backend.Models.Actions.CouchExercise;
 using sport_app_backend.Models.Challenge_Achievement;
+using sport_app_backend.Models.Chat;
 using sport_app_backend.Models.Login_Sinup;
 using sport_app_backend.Models.Payments;
 using sport_app_backend.Models.Program;
@@ -129,7 +130,67 @@ public class ApplicationDbContext : DbContext
         .WithMany(x => x.AllExerciseInDays)
         .HasForeignKey(x => x.TemplateProgramInDayId)
         .OnDelete(DeleteBehavior.Cascade);
+    
+    modelBuilder.Entity<Conversation>(entity =>
+    {
+        entity.HasKey(x => x.Id);
 
+        entity.Property(x => x.Type).IsRequired();
+        entity.Property(x => x.CreatedAt).IsRequired();
+
+        entity.Property(x => x.LastMessageText)
+            .HasMaxLength(1000);
+
+        entity.HasMany(x => x.Participants)
+            .WithOne(x => x.Conversation)
+            .HasForeignKey(x => x.ConversationId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        entity.HasMany(x => x.Messages)
+            .WithOne(x => x.Conversation)
+            .HasForeignKey(x => x.ConversationId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        entity.HasIndex(x => x.LastMessageAt);
+    });
+
+    modelBuilder.Entity<ConversationParticipant>(entity =>
+    {
+        entity.HasKey(x => x.Id);
+
+        entity.Property(x => x.JoinedAt).IsRequired();
+
+        entity.HasOne(x => x.User)
+            .WithMany()
+            .HasForeignKey(x => x.UserId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        entity.HasIndex(x => new { x.ConversationId, x.UserId })
+            .IsUnique();
+    });
+
+    modelBuilder.Entity<ChatMessage>(entity =>
+    {
+        entity.HasKey(x => x.Id);
+
+        entity.Property(x => x.Text)
+            .HasMaxLength(4000);
+
+
+
+        entity.Property(x => x.SentAt).IsRequired();
+
+        entity.HasOne(x => x.SenderUser)
+            .WithMany()
+            .HasForeignKey(x => x.SenderUserId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        entity.HasIndex(x => new { x.ConversationId, x.Id });
+
+        
+    });
+
+   
 }
 
     public DbSet<User> Users { get; set; }
@@ -179,6 +240,13 @@ public class ApplicationDbContext : DbContext
     public DbSet<WorkoutProgramTemplate> WorkoutProgramTemplates { get; set; }
     public DbSet<TemplateProgramInDay> TemplateProgramInDays { get; set; }
     public DbSet<TemplateSingleExercise> TemplateSingleExercises { get; set; }
+    public DbSet<Conversation> Conversations { get; set; }
+
+    public DbSet<ConversationParticipant> ConversationParticipants { get; set; }
+
+    public DbSet<ChatMessage> ChatMessages { get; set; }
+
+
 
     
 

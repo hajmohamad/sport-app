@@ -16,6 +16,7 @@ using Serilog;
 using Serilog.Events;
 using sport_app_backend.BackgroundServices;
 using sport_app_backend.Handler;
+using sport_app_backend.Hubs;
 using sport_app_backend.Interface.Athlete;
 using sport_app_backend.Interface.Coach;
 using sport_app_backend.Repository.AthleteRepo;
@@ -194,6 +195,36 @@ builder.Services.AddScoped<IDataValidator, DataValidator>();
 builder.Services.AddScoped<IEitaaAuthService, EitaaAuthService>();
 builder.Services.AddScoped<IEitaaAuthService, EitaaAuthService>();
 
+builder.Services.AddSignalR();
+
+builder.Services.AddScoped<IChatRepository, ChatRepository>();
+
+
+builder.Services
+    .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        // TokenValidationParameters فعلی پروژه خودت اینجا باقی بماند
+
+        options.Events = new JwtBearerEvents
+        {
+            OnMessageReceived = context =>
+            {
+                var accessToken = context.Request.Query["access_token"];
+                var path = context.HttpContext.Request.Path;
+
+                if (!string.IsNullOrEmpty(accessToken) &&
+                    path.StartsWithSegments("/hubs/chat"))
+                {
+                    context.Token = accessToken;
+                }
+
+                return Task.CompletedTask;
+            }
+        };
+    });
+
+
 
 
 
@@ -223,6 +254,8 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+app.MapHub<ChatHub>("/hubs/chat");
+
 app.MapDefaultControllerRoute();
 
     if (!app.Environment.IsDevelopment())

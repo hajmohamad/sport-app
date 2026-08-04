@@ -115,6 +115,92 @@ public class Storage : IStorage
         }
     }
 
+  
+    public async Task<ApiResponse> UploadFile(
+    IFormFile file,
+    string url,
+    string? folderName)
+{
+    if (file == null || file.Length == 0)
+    {
+        return new ApiResponse
+        {
+            Action = false,
+            Message = "Invalid file"
+        };
+    }
+
+    using var client = CreateClient();
+
+    folderName = NormalizeFolder(folderName);
+
+    var extension = NormalizeExtension(Path.GetExtension(file.FileName));
+
+    if (string.IsNullOrEmpty(extension))
+    {
+        extension = GuessExtensionFromContentType(file.ContentType)
+                    ?? ".bin";
+    }
+
+    var objectKey = BuildObjectKey(folderName, extension);
+
+    try
+    {
+        using var memoryStream = new MemoryStream();
+
+        await file.CopyToAsync(memoryStream);
+        memoryStream.Position = 0;
+
+        var contentType = !string.IsNullOrWhiteSpace(file.ContentType)
+            ? file.ContentType
+            : GuessContentTypeFromExtension(extension)
+              ?? "application/octet-stream";
+
+        var request = new PutObjectRequest
+        {
+            BucketName = _bucketName,
+            Key = objectKey,
+            InputStream = memoryStream,
+            ContentType = contentType,
+
+            // فقط اگر Bucket / Provider شما public ACL را پشتیبانی می‌کند
+            CannedACL = S3CannedACL.PublicRead
+        };
+
+        await client.PutObjectAsync(request);
+
+        var fileUrl = BuildPublicUrl(objectKey);
+
+        if (IsValidUrlForDelete(url))
+        {
+            await DeleteObjectAsync(client, url);
+        }
+
+        return new ApiResponse
+        {
+            Action = true,
+            Message = "File uploaded successfully",
+            Result = fileUrl
+        };
+    }
+    catch (AmazonS3Exception e)
+    {
+        return new ApiResponse
+        {
+            Action = false,
+            Message = $"Error uploading to S3: {e.Message}"
+        };
+    }
+    catch (Exception e)
+    {
+        return new ApiResponse
+        {
+            Action = false,
+            Message = $"Unexpected error: {e.Message}"
+        };
+    }
+}
+
     public async Task<ApiResponse> RemovePhoto(string url)
     {
         using var client = CreateClient();

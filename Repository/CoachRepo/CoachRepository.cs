@@ -29,7 +29,8 @@ namespace sport_app_backend.Repository.CoachRepo
         ITokenService token,
         ICalculator calculator,
         IExerciseCacheService exerciseCache,
-        IZarinPal zarinPal
+        IZarinPal zarinPal,
+        IChatRepository chatRepository
         ) : ICoachRepository
     {
         #region buildProgram
@@ -106,7 +107,6 @@ namespace sport_app_backend.Repository.CoachRepo
                     }
 
 
-                    // ثبت رکورد پرداخت با وضعیت موفق (چون از کیف پول کسر شده)
                     var payment = new Payment
                     {
                         AthleteId = athleteId,
@@ -160,6 +160,15 @@ namespace sport_app_backend.Repository.CoachRepo
 
                     await context.SaveChangesAsync();
                     await transaction.CommitAsync();
+                    var conversationResult =
+                        await chatRepository.CreateCoachAthleteConversation(
+                            payment.Coach.UserId,
+                            payment.Athlete.UserId);
+                    if (!conversationResult.Action)
+                    {
+                        return conversationResult;
+                    }
+
 
                     return new ApiResponse
                     {
@@ -223,6 +232,8 @@ namespace sport_app_backend.Repository.CoachRepo
         
             await context.Athletes.AddAsync(athlete);
             await context.SaveChangesAsync();
+            await chatRepository.CreateSupportConversation(newUser.Id);
+
 
             return newUser;
         }

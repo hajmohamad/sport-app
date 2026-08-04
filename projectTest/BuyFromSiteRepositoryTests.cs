@@ -30,6 +30,8 @@ namespace sport_app_backend.Tests.Repository
         private readonly Mock<IStorage> _mockLiaraStorage;
         private readonly Mock<IZarinPal> _mockZarinPal;
         private readonly Mock<IConfiguration> _mockConfig;
+        private readonly Mock<IChatRepository> _mockChat;
+
         private readonly BuyFromSiteRepository _repository;
 
         public BuyFromSiteRepositoryTests(ITestOutputHelper testOutputHelper)
@@ -46,6 +48,7 @@ namespace sport_app_backend.Tests.Repository
             _mockLiaraStorage = new Mock<IStorage>();
             _mockZarinPal = new Mock<IZarinPal>();
             _mockConfig = new Mock<IConfiguration>();
+            _mockChat = new Mock<IChatRepository>();
 
             _repository = new BuyFromSiteRepository(
                 _dbContext,
@@ -53,7 +56,9 @@ namespace sport_app_backend.Tests.Repository
                 _mockSmsService.Object,
                 _mockLiaraStorage.Object,
                 _mockZarinPal.Object,
-                _mockConfig.Object
+                _mockConfig.Object,
+                _mockChat.Object
+                
             );
         }
 

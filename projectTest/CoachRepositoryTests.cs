@@ -33,6 +33,7 @@ namespace sport_app_backend.projectTest
         private readonly ApplicationDbContext _context;
         private readonly CoachRepository _repository;
         private readonly  Mock<IExerciseCacheService> _mockExerciseCache;
+        private readonly  Mock<IChatRepository> _mockChatRepository;
 
         public CoachRepositoryTests()
         {
@@ -42,6 +43,7 @@ namespace sport_app_backend.projectTest
             _mockCalculator = new Mock<ICalculator>();
             _mockExerciseCache = new Mock<IExerciseCacheService>();
             _mockZarinpal = new Mock<IZarinPal>();
+            _mockChatRepository = new Mock<IChatRepository>();
 
 
 
@@ -57,7 +59,8 @@ namespace sport_app_backend.projectTest
                 _mockTokenService.Object,
                 _mockCalculator.Object,
                 _mockExerciseCache.Object,
-                _mockZarinpal.Object
+                _mockZarinpal.Object,
+                _mockChatRepository.Object
             );
         }
 
