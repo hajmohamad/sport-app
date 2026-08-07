@@ -39,16 +39,16 @@ builder.Host.UseSerilog((context, configuration) =>
 
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowFrontendLocalhost", policy =>
+    options.AddPolicy("AllowFrontend", policy =>
     {
         policy.WithOrigins(
                 "http://localhost:21345",
-                "https://charsetpwa..run",
-                "https://charset-pwa-staging..run",
                 "https://app.chaarset.ir",
                 "https://chaarset.ir",
                 "https://charset-i-os-pwa.vercel.app",
-                "https://charset-pwa.pages.dev"
+                "https://charset-pwa.pages.dev",
+                "https://frontstaging.chaarset.ir",
+                "https://app.chaarset.ir"
             )
             .AllowAnyHeader()
             .AllowAnyMethod()
