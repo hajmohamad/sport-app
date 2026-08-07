@@ -6,6 +6,7 @@ using sport_app_backend.Data;
 using sport_app_backend.Dtos.Chat;
 using sport_app_backend.Hubs;
 using sport_app_backend.Interface;
+using sport_app_backend.Interface.Cash;
 using sport_app_backend.Mappers;
 using sport_app_backend.Models;
 using sport_app_backend.Models.Account;
@@ -19,7 +20,8 @@ public class ChatRepository(
     ApplicationDbContext context,
     IHubContext<ChatHub> hubContext,
     IStorage storage,
-    IConfiguration configuration) : IChatRepository
+    IConfiguration configuration,
+    IChatCacheService chatCacheService) : IChatRepository
 {
     private const int DefaultMessageTake = 50;
     private const int MinimumMessageTake = 30;
@@ -759,59 +761,23 @@ public async Task<ApiResponse> BackfillCoachAthleteConversationsFromSuccessfulPa
 
     var athleteUserId = athlete.UserId;
 
-    var successfulPayments = await context.Payments
-        .AsNoTracking()
-        .Where(x =>
-            x.AthleteId == athlete.Id &&
-            x.PaymentStatus == PaymentStatus.SUCCESS &&
-            x.WorkoutProgram != null)
-        .Include(x => x.Coach)
-            .ThenInclude(x => x.User)
-        .Include(x => x.WorkoutProgram)
-        .ToListAsync();
-
-    var selectedPayments = successfulPayments
-        .GroupBy(x => x.CoachId)
-        .Select(group => group
-            .OrderByDescending(x =>
-                x.WorkoutProgram!.Status == WorkoutProgramStatus.ACTIVE)
-            .ThenByDescending(x => x.WorkoutProgram!.StartDate)
-            .First())
-        .ToList();
-
-    var coachUserIds = selectedPayments
-        .Select(x => x.Coach.UserId)
-        .Distinct()
-        .ToList();
-
-    var conversations = await GetAthleteCoachConversations(
-        athleteUserId,
-        coachUserIds);
+    var conversations = await GetAthleteConversations(
+        athleteUserId);
 
     var result = new AthleteChatListDto
     {
         Support = await GetSupportChatItem(athlete.UserId)
     };
 
-    foreach (var payment in selectedPayments)
+    foreach (var conversation in conversations)
     {
-        var coach = payment.Coach;
-        var program = payment.WorkoutProgram!;
-
-        var conversation = FindConversation(
-            conversations,
-            athleteUserId,
-            coach.UserId);
-
-        if (conversation is null)
-        {
-            continue;
-        }
-
+        var coach = conversation.Participants.FirstOrDefault(x => x.UserId != athleteUserId);
+        
+        if (coach == null) continue;
         var item = await BuildChatListItem(
             conversation,
             coach.User,
-            program,
+            null,
             athleteUserId);
 
         result.Coaches.Add(item);
@@ -959,23 +925,17 @@ public async Task<ApiResponse> BackfillCoachAthleteConversationsFromSuccessfulPa
             .ToListAsync();
     }
 
-    private async Task<List<Conversation>> GetAthleteCoachConversations(
-        int athleteUserId,
-        List<int> coachUserIds)
+    private async Task<List<Conversation>> GetAthleteConversations(
+        int athleteUserId)
     {
-        if (coachUserIds.Count == 0)
-        {
-            return [];
-        }
+   
 
         return await context.Conversations
             .AsNoTracking()
             .Where(x =>
                 x.Type == ConversationType.CoachAthlete &&
                 x.Participants.Count == 2 &&
-                x.Participants.Any(p => p.UserId == athleteUserId) &&
-                x.Participants.Any(p => coachUserIds.Contains(p.UserId)))
-            .Include(x => x.Participants)
+                x.Participants.Any(p => p.UserId == athleteUserId) ).Include(x => x.Participants)
                 .ThenInclude(x => x.User)
             .ToListAsync();
     }
@@ -1030,7 +990,7 @@ public async Task<ApiResponse> BackfillCoachAthleteConversationsFromSuccessfulPa
     private async Task<ChatListItemDto> BuildChatListItem(
         Conversation conversation,
         User otherUser,
-        WorkoutProgram program,
+        WorkoutProgram? program,
         int currentUserId)
     {
         return new ChatListItemDto
@@ -1040,9 +1000,12 @@ public async Task<ApiResponse> BackfillCoachAthleteConversationsFromSuccessfulPa
             FullName = GetFullName(otherUser),
             PhoneNumber = otherUser.PhoneNumber,
             ProfileImageUrl = otherUser.ImageProfile,
-            Service = program.Title,
-            LastExerciseDate = program.LastExerciseDate,
-            Status = program.GetStatus(),
+
+            Service = program?.Title,
+            
+            LastExerciseDate = program?.LastExerciseDate,
+            Status = program?.GetStatus() ?? "active",
+
             LastMessageId = conversation.LastMessageId,
             LastMessageText = conversation.LastMessageText,
             LastMessageAt = conversation.LastMessageAt,
@@ -1052,6 +1015,7 @@ public async Task<ApiResponse> BackfillCoachAthleteConversationsFromSuccessfulPa
             IsSupport = false
         };
     }
+
 
     private async Task<int> GetUnreadCountForUser(
         long conversationId,
