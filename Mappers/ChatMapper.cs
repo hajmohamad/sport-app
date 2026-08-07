@@ -9,22 +9,26 @@ public static class ChatMapper
 {
     public static ChatMessageDto ChatMessageDto(
         this ChatMessage message,
-        int currentUserId)
+        int currentUserId,
+        long? lastReadMessageId)
     {
+        var sender = message.SenderUser;
+
         return new ChatMessageDto
         {
             Id = message.Id,
             ConversationId = message.ConversationId,
             SenderUserId = message.SenderUserId,
-            SenderFullName = GetFullName(message.SenderUser),
-            SenderProfileImageUrl = message.SenderUser.ImageProfile,
+            SenderFullName = sender is null ? string.Empty : GetFullName(sender),
+            SenderProfileImageUrl = sender?.ImageProfile,
             Type = message.Type.ToString(),
             Text = message.Text,
             SentAt = message.SentAt,
             IsMine = message.SenderUserId == currentUserId,
             FileUrl = message.FileUrl,
-            
-            
+            IsRead = message.SenderUserId == currentUserId &&
+                     lastReadMessageId.HasValue &&
+                     lastReadMessageId.Value >= message.Id
         };
     }
 
@@ -71,6 +75,7 @@ public static class ChatMapper
             IsSupport = true
         };
     }
+
     public static string GetStatus(this WorkoutProgram program)
     {
         if (program.Status != WorkoutProgramStatus.ACTIVE)
@@ -79,7 +84,7 @@ public static class ChatMapper
         }
 
         if (program.LastExerciseDate is null ||
-            program.LastExerciseDate < DateTime.UtcNow.Date.AddDays(-4))
+            program.LastExerciseDate.Value.Date < DateTime.UtcNow.Date.AddDays(-4))
         {
             return "NeedsFollowUp";
         }
@@ -92,7 +97,6 @@ public static class ChatMapper
 
         return "Active";
     }
-
 
     public static ChatListItemDto ToProgramListItem(
         this Conversation conversation,

@@ -667,7 +667,6 @@ public class BuyFromSiteRepository(
         
         await dbContext.Athletes.AddAsync(athlete);
         await dbContext.SaveChangesAsync();
-        await chatRepository.CreateSupportConversation(newUser.Id);
 
 
         return newUser;

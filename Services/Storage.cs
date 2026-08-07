@@ -117,7 +117,7 @@ public class Storage : IStorage
 
   
     public async Task<ApiResponse> UploadFile(
-    IFormFile file,
+    IFormFile? file,
     string url,
     string? folderName)
 {

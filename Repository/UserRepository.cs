@@ -254,7 +254,6 @@ private async Task<User> CreateNewUser(string phoneNumber)
     await tokenService.CreateRefreshToken(newUser);
     await dbContext.Users.AddAsync(newUser);
     await dbContext.SaveChangesAsync();
-    await chatRepository.CreateSupportConversation(newUser.Id);
 
     
     return newUser;

@@ -26,28 +26,52 @@ public class ChatController(
     private async Task<int> GetCoachIdAsync()
     {
         var coachIdClaim = User.FindFirst("coach_id")?.Value;
-        if (int.TryParse(coachIdClaim, out var coachId)) return coachId;
+        if (int.TryParse(coachIdClaim, out var coachId))
+        {
+            return coachId;
+        }
 
         var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
-        return await dbContext.Coaches
+        if (string.IsNullOrEmpty(phoneNumber))
+        {
+            return 0;
+        }
+
+        var id = await dbContext.Coaches
             .AsNoTracking()
             .Where(c => c.PhoneNumber == phoneNumber)
             .Select(c => c.Id)
             .FirstOrDefaultAsync();
-    }
+        return id;
 
+
+    }
     private async Task<int> GetAthleteIdAsync()
     {
-        var athleteClaim = User.FindFirst("athlete_id")?.Value;
-        if (int.TryParse(athleteClaim, out var athleteId)) return athleteId;
+        var athleteIdClaim = User.FindFirst("athlete_id")?.Value 
+                             ?? User.FindFirst("Athlete_id")?.Value;
+
+        if (int.TryParse(athleteIdClaim, out var athleteId))
+        {
+            return athleteId;
+        }
 
         var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
-        return await dbContext.Athletes
+
+        if (string.IsNullOrEmpty(phoneNumber))
+        {
+            return 0;
+        }
+
+        var id = await dbContext.Athletes
             .AsNoTracking()
             .Where(c => c.PhoneNumber == phoneNumber)
             .Select(c => c.Id)
             .FirstOrDefaultAsync();
+
+        return id;
     }
+
 
     #endregion
 
@@ -56,10 +80,10 @@ public class ChatController(
     public async Task<IActionResult> GetCoachChats()
     {
         var coachId = await GetCoachIdAsync();
-        if (coachId == 0) return Unauthorized(new ApiResponse { Action = false, Message = "شناسه مربی یافت نشد." });
-
+        if (coachId == 0) return Unauthorized(new ApiResponse { Action = false, Message = "خطای احراز هویت." });
         var result = await chatRepository.GetCoachChatList(coachId);
         return result.Action ? Ok(result) : BadRequest(result);
+
     }
 
     [HttpGet("athlete/list")]
@@ -89,6 +113,15 @@ public class ChatController(
     public async Task<IActionResult> GetMessages(long conversationId, [FromQuery] long? beforeMessageId)
     {
         var userId = GetUserId();
+        if (userId == 0)
+        {
+            return Unauthorized(new ApiResponse
+            {
+                Action = false,
+                Message = "خطای احراز هویت."
+            });
+        }
+
         var result = await chatRepository.GetConversationMessages(userId, conversationId, beforeMessageId,20);
         return result.Action ? Ok(result) : BadRequest(result);
     }
@@ -102,19 +135,29 @@ public class ChatController(
         return result.Action ? Ok(result) : BadRequest(result);
     }
     [HttpPost("conversations/{conversationId:long}/attachments")]
+    [Authorize(Roles = "Coach,Athlete")]
+    [Consumes("multipart/form-data")]
     public async Task<IActionResult> UploadAttachment(
         [FromRoute] long conversationId,
         IFormFile? file)
     {
         var userId = GetUserId();
-        
+
+        if (userId == 0)
+        {
+            return Unauthorized(new ApiResponse
+            {
+                Action = false,
+                Message = "خطای احراز هویت."
+            });
+        }
 
         if (file is null || file.Length == 0)
         {
             return BadRequest(new ApiResponse
             {
                 Action = false,
-                Message = "تصویر ارسال نشده است."
+                Message = "فایل ارسال نشده است."
             });
         }
 
@@ -123,9 +166,20 @@ public class ChatController(
             conversationId,
             file);
 
-        if (!result.Action)
-            return BadRequest(result);
+        return result.Action ? Ok(result) : BadRequest(result);
+    }
 
-        return Ok(result);
+    [HttpPost("BackFile")]
+    public async Task<IActionResult> BackFile()
+    {
+        var result = await chatRepository.BackfillCoachAthleteConversationsFromSuccessfulPayments();
+
+        return result.Action ? Ok(new
+        {
+            result
+        }) : BadRequest(new
+        {
+            result
+        });
     }
 }

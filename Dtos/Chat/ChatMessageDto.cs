@@ -24,4 +24,5 @@ public class ChatMessageDto
     
     public string? FileUrl { get; set; }
     public string? ContentType { get; set; }
+    public required bool IsRead { get; set; }
 }

@@ -232,7 +232,6 @@ namespace sport_app_backend.Repository.CoachRepo
         
             await context.Athletes.AddAsync(athlete);
             await context.SaveChangesAsync();
-            await chatRepository.CreateSupportConversation(newUser.Id);
 
 
             return newUser;

@@ -5,7 +5,6 @@ namespace sport_app_backend.Interface;
 
 public interface IChatRepository
 {
-    Task<ApiResponse> GetMyConversations(int userId);
 
     Task<ApiResponse> GetConversationMessages(
         int userId,
@@ -24,20 +23,19 @@ public interface IChatRepository
 
     Task<ApiResponse> UploadAttachment(
         int userId,
-        long conversationId,
+        long? conversationId,
         IFormFile file);
 
     Task<ApiResponse> CreateCoachAthleteConversation(
         int coachUserId,
         int athleteUserId);
+    Task<ApiResponse> GetCoachChatList(int coachId);
 
-    Task<ApiResponse> CreateSupportConversation(int userId);
-
-    Task<ApiResponse> GetCoachChatList(int coachUserId);
-
-    Task<ApiResponse> GetAthleteChatList(int athleteUserId);
+    Task<ApiResponse> GetAthleteChatList(int athleteId);
 
     Task<ApiResponse> AddSystemMessage(
         long conversationId,
         string text);
+
+    Task<ApiResponse> BackfillCoachAthleteConversationsFromSuccessfulPayments();
 }
