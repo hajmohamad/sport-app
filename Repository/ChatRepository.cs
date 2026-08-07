@@ -83,178 +83,194 @@ public class ChatRepository(
         return Success("پیام‌های گفتگو با موفقیت دریافت شدند.", result);
     }
 
-    public async Task<ApiResponse> SendMessage(int senderUserId, SendMessageDto dto)
+public async Task<ApiResponse> SendMessage(int senderUserId, SendMessageDto dto)
+{
+    if (senderUserId <= 0)
     {
-        if (senderUserId <= 0)
-        {
-            return Failure("شناسه ارسال‌کننده نامعتبر است.");
-        }
-        var normalizedText = NormalizeMessageText(dto.Text);
+        return Failure("شناسه ارسال‌کننده نامعتبر است.");
+    }
+    
+    var normalizedText = NormalizeMessageText(dto.Text);
 
-        if (string.IsNullOrWhiteSpace(normalizedText))
-        {
-            return Failure("متن پیام نمی‌تواند خالی باشد.");
-        }
-
-        var resolvedConversation = await ResolveConversationIdOrCreateSupport(
-            senderUserId,
-            dto.ConversationId);
-
-        if (!resolvedConversation.Action)
-        {
-            return Failure(resolvedConversation.Message);
-        }
-
-        var conversationId = resolvedConversation.ConversationId;
-
-        var conversation = await context.Conversations
-            .Include(x => x.Participants)
-            .FirstOrDefaultAsync(x => x.Id == conversationId);
-
-        if (conversation is null)
-        {
-            return Failure("گفتگو یافت نشد.");
-        }
-
-        if (conversation.IsClosed)
-        {
-            return Failure("این گفتگو بسته شده است.");
-        }
-
-        var isParticipant = conversation.Participants.Any(x => x.UserId == senderUserId);
-
-        if (!isParticipant)
-        {
-            return Failure("شما عضو این گفتگو نیستید.");
-        }
-
-        var now = DateTime.UtcNow;
-
-        var message = new ChatMessage
-        {
-            ConversationId = conversation.Id,
-            SenderUserId = senderUserId,
-            Type = ChatMessageType.Text,
-            Text = normalizedText,
-            SentAt = now
-        };
-
-        context.ChatMessages.Add(message);
-
-        conversation.LastMessageAt = now;
-        conversation.LastMessageText = BuildConversationPreview(message);
-
-        await context.SaveChangesAsync();
-
-        conversation.LastMessageId = message.Id;
-        await context.SaveChangesAsync();
-
-        var messageWithSender = await context.ChatMessages
-            .AsNoTracking()
-            .Include(x => x.SenderUser)
-            .FirstAsync(x => x.Id == message.Id);
-
-        ChatMessageDto? senderMessageDto = null;
-
-        foreach (var participant in conversation.Participants)
-        {
-            var otherParticipantLastReadMessageId = conversation.Participants
-                .FirstOrDefault(x => x.UserId != participant.UserId)
-                ?.LastReadMessageId;
-
-            var messageDto = messageWithSender.ChatMessageDto(
-                participant.UserId,
-                otherParticipantLastReadMessageId);
-
-            if (participant.UserId == senderUserId)
-            {
-                senderMessageDto = messageDto;
-            }
-
-            await hubContext.Clients
-                .Group($"user_{participant.UserId}")
-                .SendAsync("ReceiveMessage", messageDto);
-
-            await hubContext.Clients
-                .Group($"user_{participant.UserId}")
-                .SendAsync("ChatListUpdated", new
-                {
-                    ConversationId = conversation.Id,
-                    LastMessageId = message.Id,
-                    LastMessageText = conversation.LastMessageText,
-                    LastMessageAt = conversation.LastMessageAt
-                });
-        }
-
-        return Success("پیام با موفقیت ارسال شد.", senderMessageDto);
+    if (string.IsNullOrWhiteSpace(normalizedText))
+    {
+        return Failure("متن پیام نمی‌تواند خالی باشد.");
     }
 
-    public async Task<ApiResponse> MarkAsRead(
-        int userId,
-        long conversationId,
-        long lastReadMessageId)
+    var resolvedConversation = await ResolveConversationIdOrCreateSupport(
+        senderUserId,
+        dto.ConversationId);
+
+    if (!resolvedConversation.Action)
     {
-        if (userId <= 0 || conversationId <= 0 || lastReadMessageId <= 0)
+        return Failure(resolvedConversation.Message);
+    }
+    var conversationId = resolvedConversation.ConversationId;
+    var conversation = await context.Conversations
+        .Include(x => x.Participants)
+            .ThenInclude(p => p.User) 
+        .FirstOrDefaultAsync(x => x.Id == conversationId);
+
+    if (conversation is null)
+    {
+        return Failure("گفتگو یافت نشد.");
+    }
+
+    if (conversation.IsClosed)
+    {
+        return Failure("این گفتگو بسته شده است.");
+    }
+    
+    var senderParticipant = conversation.Participants.FirstOrDefault(p => p.UserId == senderUserId);
+    
+    if (senderParticipant is null)
+    {
+        return Failure("شما عضو این گفتگو نیستید یا اطلاعات کاربری شما یافت نشد.");
+    }
+
+    var now = DateTime.UtcNow;
+
+    var message = new ChatMessage
+    {
+        ConversationId = conversation.Id,
+        SenderUserId = senderUserId,
+        Type = ChatMessageType.Text,
+        Text = normalizedText,
+        SentAt = now,
+        SenderUser = senderParticipant.User 
+    };
+
+    context.ChatMessages.Add(message);
+
+    conversation.LastMessageAt = now;
+    conversation.LastMessageText = BuildConversationPreview(message);
+    
+    var otherParticipant = conversation.Participants.FirstOrDefault(x => x.UserId != senderUserId);
+    if (otherParticipant != null)
+    {
+        otherParticipant.UnreadCount++;
+    }
+
+    await context.SaveChangesAsync();
+
+    conversation.LastMessageId = message.Id;
+    
+    await context.SaveChangesAsync();
+
+
+    ChatMessageDto? senderMessageDto = null;
+
+    foreach (var participant in conversation.Participants)
+    {
+        var otherParticipantLastReadMessageId = conversation.Participants
+            .FirstOrDefault(x => x.UserId != participant.UserId)
+            ?.LastReadMessageId;
+
+       
+        var messageDto = message.ChatMessageDto(
+            participant.UserId,
+            otherParticipantLastReadMessageId);
+
+        if (participant.UserId == senderUserId)
         {
-            return Failure("اطلاعات خواندن پیام نامعتبر است.");
+            senderMessageDto = messageDto;
         }
-
-        var participant = await context.ConversationParticipants
-            .Include(x => x.Conversation)
-                .ThenInclude(x => x.Participants)
-            .FirstOrDefaultAsync(x =>
-                x.ConversationId == conversationId &&
-                x.UserId == userId);
-
-        if (participant is null)
-        {
-            return Failure("شما عضو این گفتگو نیستید.");
-        }
-
-        var messageExistsInConversation = await context.ChatMessages
-            .AsNoTracking()
-            .AnyAsync(x =>
-                x.Id == lastReadMessageId &&
-                x.ConversationId == conversationId);
-
-        if (!messageExistsInConversation)
-        {
-            return Failure("پیام انتخاب‌شده متعلق به این گفتگو نیست.");
-        }
-
-        if (participant.LastReadMessageId.HasValue &&
-            participant.LastReadMessageId.Value >= lastReadMessageId)
-        {
-            return Success("پیام‌ها قبلاً به‌عنوان خوانده‌شده ثبت شده‌اند.");
-        }
-
-        participant.LastReadMessageId = lastReadMessageId;
-        participant.LastReadAt = DateTime.UtcNow;
-
-        await context.SaveChangesAsync();
 
         await hubContext.Clients
-            .Group($"chat_{conversationId}")
-            .SendAsync("MessagesRead", new
+            .Group($"user_{participant.UserId}")
+            .SendAsync("ReceiveMessage", messageDto);
+
+        await hubContext.Clients
+            .Group($"user_{participant.UserId}")
+            .SendAsync("ChatListUpdated", new
             {
-                ConversationId = conversationId,
-                ReaderUserId = userId,
-                LastReadMessageId = lastReadMessageId,
-                LastReadAt = participant.LastReadAt
+                conversation.Id,
+                conversation.LastMessageId,
+                conversation.LastMessageText,
+                conversation.LastMessageAt,
+                // ارسال شمارنده جدید تا UI به‌روز شود
+                UnreadCount = participant.UnreadCount 
             });
-
-        foreach (var conversationParticipant in participant.Conversation.Participants)
-        {
-            await hubContext.Clients
-                .Group($"user_{conversationParticipant.UserId}")
-                .SendAsync("ChatListUpdated", new
-                {
-                    ConversationId = conversationId
-                });
-        }
-
-        return Success("پیام‌ها به‌عنوان خوانده‌شده ثبت شدند.");
     }
+
+    return Success("پیام با موفقیت ارسال شد.", senderMessageDto);
+}
+
+
+    
+public async Task<ApiResponse> MarkAsRead(
+    int userId,
+    long conversationId,
+    long lastReadMessageId)
+{
+    if (userId <= 0 || conversationId <= 0 || lastReadMessageId <= 0)
+    {
+        return Failure("اطلاعات خواندن پیام نامعتبر است.");
+    }
+
+    var participant = await context.ConversationParticipants
+        .Include(x => x.Conversation)
+            .ThenInclude(x => x.Participants)
+        .FirstOrDefaultAsync(x =>
+            x.ConversationId == conversationId &&
+            x.UserId == userId);
+
+    if (participant is null)
+    {
+        return Failure("شما عضو این گفتگو نیستید.");
+    }
+
+    var messageExistsInConversation = await context.ChatMessages
+        .AsNoTracking()
+        .AnyAsync(x =>
+            x.Id == lastReadMessageId &&
+            x.ConversationId == conversationId);
+
+    if (!messageExistsInConversation)
+    {
+        return Failure("پیام انتخاب‌شده متعلق به این گفتگو نیست.");
+    }
+    
+    bool needsUpdate = false;
+    
+    if (participant.UnreadCount > 0)
+    {
+        participant.UnreadCount = 0;
+        needsUpdate = true;
+    }
+
+    if (!participant.LastReadMessageId.HasValue || participant.LastReadMessageId.Value < lastReadMessageId)
+    {
+        participant.LastReadMessageId = lastReadMessageId;
+        participant.LastReadAt = DateTime.UtcNow;
+        needsUpdate = true;
+    }
+
+    if (!needsUpdate) return Success("پیام‌ها به‌عنوان خوانده‌شده ثبت شدند.");
+    await context.SaveChangesAsync();
+
+     
+    await hubContext.Clients
+        .Group($"chat_{conversationId}")
+        .SendAsync("MessagesRead", new
+        {
+            ConversationId = conversationId,
+            ReaderUserId = userId,
+            LastReadMessageId = lastReadMessageId,
+            LastReadAt = participant.LastReadAt
+        });
+
+    // ✅ اصلاح کلیدی: نوتیفیکیشن فقط به کاربر فعلی ارسال می‌شود
+    await hubContext.Clients
+        .Group($"user_{userId}") // <--- فقط به گروه کاربری که پیام را خوانده
+        .SendAsync("ChatListUpdated", new
+        {
+            ConversationId = conversationId,
+            UnreadCount = 0 // حالا این مقدار فقط برای UI کاربر صحیح ارسال می‌شود
+        });
+
+    return Success("پیام‌ها به‌عنوان خوانده‌شده ثبت شدند.");
+}
 
     public async Task<ApiResponse> UploadAttachment(
     int userId,
@@ -318,11 +334,6 @@ public class ChatRepository(
         }
     }
 
-    if (!isPdf && !isImage)
-    {
-        return Failure("نوع فایل پشتیبانی نمی‌شود.");
-    }
-
     var resolvedConversation = await ResolveConversationIdOrCreateSupport(
         userId,
         conversationId);
@@ -336,6 +347,7 @@ public class ChatRepository(
 
     var conversation = await context.Conversations
         .Include(x => x.Participants)
+            .ThenInclude(p => p.User) 
         .FirstOrDefaultAsync(x => x.Id == resolvedConversationId);
 
     if (conversation is null)
@@ -347,18 +359,15 @@ public class ChatRepository(
     {
         return Failure("این گفتگو بسته شده است.");
     }
-
-    var isParticipant = conversation.Participants.Any(x => x.UserId == userId);
-
-    if (!isParticipant)
+    
+    var senderParticipant = conversation.Participants.FirstOrDefault(p => p.UserId == userId);
+    
+    if (senderParticipant is null)
     {
         return Failure("شما عضو این گفتگو نیستید.");
     }
-
-    // تعیین مسیر پوشه برای ذخیره فایل
+    
     var folderPath = $"chat/{resolvedConversationId}";
-
-    // استفاده از متد جدید UploadFile بر اساس اینترفیس معرفی شده
     var uploadResult = await storage.UploadFile(file, string.Empty, folderPath);
 
     if (!uploadResult.Action || uploadResult.Result is null)
@@ -374,34 +383,36 @@ public class ChatRepository(
         SenderUserId = userId,
         Type = isPdf ? ChatMessageType.File : ChatMessageType.Image,
         SentAt = now,
-        FileUrl = uploadResult.Result.ToString()
+        FileUrl = uploadResult.Result.ToString(),
+        SenderUser = senderParticipant.User 
     };
 
     context.ChatMessages.Add(message);
 
     conversation.LastMessageAt = now;
     conversation.LastMessageText = BuildConversationPreview(message);
+    
+    var otherParticipant = conversation.Participants.FirstOrDefault(x => x.UserId != userId);
+    if (otherParticipant != null)
+    {
+        otherParticipant.UnreadCount++;
+    }
 
-    await context.SaveChangesAsync();
+    await context.SaveChangesAsync(); 
 
     conversation.LastMessageId = message.Id;
-    await context.SaveChangesAsync();
+    await context.SaveChangesAsync(); 
 
-    var messageWithSender = await context.ChatMessages
-        .AsNoTracking()
-        .Include(x => x.SenderUser)
-        .FirstAsync(x => x.Id == message.Id);
 
     ChatMessageDto? senderMessageDto = null;
-
-    // بهینه‌سازی: خواندن LastReadMessageId مستقیماً از حافظه موقت به جای اجرای کوئری در حلقه N+1
+    
     foreach (var participant in conversation.Participants)
     {
         var otherParticipantLastReadMessageId = conversation.Participants
             .FirstOrDefault(x => x.UserId != participant.UserId)
             ?.LastReadMessageId;
 
-        var messageDto = messageWithSender.ChatMessageDto(
+        var messageDto = message.ChatMessageDto(
             participant.UserId,
             otherParticipantLastReadMessageId);
 
@@ -418,15 +429,17 @@ public class ChatRepository(
             .Group($"user_{participant.UserId}")
             .SendAsync("ChatListUpdated", new
             {
-                ConversationId = conversation.Id,
-                LastMessageId = message.Id,
-                LastMessageText = conversation.LastMessageText,
-                LastMessageAt = conversation.LastMessageAt
+                conversation.Id, 
+                conversation.LastMessageId,
+                conversation.LastMessageText,
+                conversation.LastMessageAt,
+                UnreadCount = participant.UnreadCount 
             });
     }
 
     return Success("فایل با موفقیت ارسال شد.", senderMessageDto);
 }
+
 
     public async Task<ApiResponse> BackfillCoachAthleteConversationsFromSuccessfulPayments()
     {
@@ -441,7 +454,7 @@ public class ChatRepository(
             .ToListAsync();
 
         foreach (var pair in pairs)
-            {
+        {
             await CreateCoachAthleteConversation(
                 pair.CoachUserId,
                 pair.AthleteUserId);
@@ -810,7 +823,6 @@ public class ChatRepository(
         return Success("پیام سیستمی با موفقیت ثبت شد.", messageDto);
     }
 
-    // ---------------- متدهای خصوصی کمکی ----------------
 
     private async Task<List<Conversation>> GetCoachAthleteConversations(int coachUserId, List<int> athleteUserIds)
     {
@@ -836,10 +848,7 @@ public class ChatRepository(
             .Select(p => new
             {
                 p.ConversationId,
-                UnreadCount = context.ChatMessages.Count(m => 
-                    m.ConversationId == p.ConversationId && 
-                    m.SenderUserId != currentUserId && 
-                    (p.LastReadMessageId == null || m.Id > p.LastReadMessageId))
+                p.UnreadCount
             })
             .ToDictionaryAsync(x => x.ConversationId, x => x.UnreadCount);
 
@@ -934,44 +943,20 @@ public class ChatRepository(
 
         var supportParticipant = conversation.Participants
             .FirstOrDefault(x => x.UserId == supportUserId);
+        var userParticipant = conversation.Participants.FirstOrDefault(x => x.UserId == userId);
+        if (supportParticipant?.User is null || userParticipant is null) return null;
+
 
         if (supportParticipant?.User is null)
         {
             return null;
         }
 
-        return conversation.ToSupportListItem(supportParticipant.User, await GetUnreadCountForUser(
-            conversation.Id,
-            userId));
+        return conversation.ToSupportListItem(
+            supportParticipant.User, 
+            userParticipant.UnreadCount); 
     }
 
-    private async Task<int> GetUnreadCountForUser(long conversationId, int userId)
-    {
-        var participant = await context.ConversationParticipants
-            .AsNoTracking()
-            .FirstOrDefaultAsync(x =>
-                x.ConversationId == conversationId &&
-                x.UserId == userId);
-
-        if (participant is null)
-        {
-            return 0;
-        }
-
-        var unreadMessagesQuery = context.ChatMessages
-            .AsNoTracking()
-            .Where(x =>
-                x.ConversationId == conversationId &&
-                x.SenderUserId != userId );
-
-        if (participant.LastReadMessageId.HasValue)
-        {
-            unreadMessagesQuery = unreadMessagesQuery
-                .Where(x => x.Id > participant.LastReadMessageId.Value);
-        }
-
-        return await unreadMessagesQuery.CountAsync();
-    }
 
     private static string BuildConversationPreview(ChatMessage message)
     {

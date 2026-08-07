@@ -24,6 +24,8 @@ public class ConversationParticipant
     public Conversation Conversation { get; set; } = null!;
 
     public User User { get; set; } = null!;
+    public int UnreadCount { get; set; } = 0;
+
 }
 
 
