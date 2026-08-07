@@ -53,7 +53,7 @@ public class ChatRepository(
         
         var otherParticipant = conversationParticipant
             .FirstOrDefault(x => x.UserId != userId);
-        if (otherParticipant != null)
+        if (otherParticipant is null)
         {
             return Failure("کاربر مقابل پیدا نشد");
         }
