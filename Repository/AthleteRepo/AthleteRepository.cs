@@ -365,6 +365,10 @@ namespace sport_app_backend.Repository.AthleteRepo
             targetProgram.Status = WorkoutProgramStatus.ACTIVE;
             athlete.ActiveWorkoutProgramId = targetProgram.Id;
             targetProgram.StartDate = DateTime.Now;
+            
+            workoutCache
+                .RemoveActiveWorkoutProgram(
+                    athlete.Id);
 
             await context.SaveChangesAsync();
             return new ApiResponse { Action = true, Message = "Program activated successfully." };
@@ -553,9 +557,7 @@ namespace sport_app_backend.Repository.AthleteRepo
 
             if (resultData.StartDate is not null)
             {
-                passFiveDay =
-                    resultData.StartDate.Value.AddDays(5)
-                    < now.Date;
+                passFiveDay = resultData.StartDate.Value.AddDays(5) < now.Date;
             }
 
             var shouldGetFeedback =
@@ -566,12 +568,9 @@ namespace sport_app_backend.Repository.AthleteRepo
 
             if (resultData.StartDate != null)
             {
-                var programEndDate =
-                    resultData.StartDate.Value
-                        .AddDays(resultData.ProgramDuration * 7);
+                var programEndDate = resultData.StartDate.Value.AddDays(resultData.ProgramDuration * 7);
 
-                var daysSinceEnd =
-                    (now - programEndDate).Days;
+                var daysSinceEnd = (now - resultData.StartDate).Value.Days;
 
                 var remainingSessions =
                     resultData.TotalSessionCount -
@@ -585,13 +584,11 @@ namespace sport_app_backend.Repository.AthleteRepo
 
                 if (isProgramExpired)
                 {
-                    renewalMessage =
-                        $"{daysSinceEnd} روز از آخرین برنامه تمرینی که دریافت کردی گذشته.";
+                    renewalMessage = $"{daysSinceEnd} روز از آخرین برنامه تمرینی که دریافت کردی گذشته.";
                 }
                 else if (isSeventyPercentCompleted)
                 {
-                    renewalMessage =
-                        $"کمتر از {remainingSessions} جلسه از برنامه تمرینیت باقی مونده.";
+                    renewalMessage = $"کمتر از {remainingSessions} جلسه از برنامه تمرینیت باقی مونده.";
                 }
             }
 
