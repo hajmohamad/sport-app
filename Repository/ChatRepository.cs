@@ -86,14 +86,14 @@ public class ChatRepository(
             .Take(take)
             .ToListAsync();
 
-        var result = messages
+        var messageList = messages
             .OrderBy(x => x.Id)
             .Select(x => x.ChatMessageDto(userId, otherParticipant.LastReadMessageId))
             .ToList();
 
         return Success("پیام‌های گفتگو با موفقیت دریافت شدند.", new
         {
-            result,
+            messageList,
             otherUserNameAndPhoto
         });
     }
