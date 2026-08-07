@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using sport_app_backend.Data;
 using sport_app_backend.Infrastructure.Cache;
+using sport_app_backend.Models;
 using sport_app_backend.Models.Program;
 
 namespace sport_app_backend.Services.Cash;
@@ -53,4 +54,30 @@ public class WorkoutProgramCacheService(
             CacheKeys.ActiveWorkoutProgram(
                 athleteId));
     }
+    public async Task<Dictionary<int, WorkoutProgram>> GetCoachWorkoutProgramAthleteUserIdByCoachUserId(int coachUserId)
+    {
+        var key = CacheKeys.GetCoachWorkoutProgram(coachUserId);
+
+        return await cache.GetOrCreateAsync(key, async entry =>
+        {
+            entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(1);
+
+            var allCoachPrograms = await context.WorkoutPrograms
+                .AsNoTracking()
+                .Where(x => x.Coach.UserId == coachUserId)
+                .Include(x => x.Athlete)
+                .ThenInclude(x => x.User)
+                .ToListAsync();
+
+            return allCoachPrograms
+                .GroupBy(x => x.AthleteId)
+                .Select(group => group
+                    .OrderByDescending(x => x.Status == WorkoutProgramStatus.ACTIVE)
+                    .ThenByDescending(x => x.StartDate)
+                    .First())
+                .ToDictionary(x => x.Athlete.UserId, x => x);
+        }) ?? new Dictionary<int, WorkoutProgram>();
+    }
+
+
 }

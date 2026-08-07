@@ -29,5 +29,8 @@ public static class CacheKeys
 
     public static string UserChatListVersion(int userId)
         => $"chat:list:version:user:{userId}";
+
+    public static string GetCoachWorkoutProgram(int coachUserId)
+        => $"coach-programs-:{coachUserId}";
     
 }

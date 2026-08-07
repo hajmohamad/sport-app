@@ -12,6 +12,7 @@ using sport_app_backend.Models.Account;
 using sport_app_backend.Models.Chat;
 using sport_app_backend.Models.Payments;
 using sport_app_backend.Models.Program;
+using sport_app_backend.Services.Cash;
 
 namespace sport_app_backend.Repository;
 
@@ -19,7 +20,8 @@ public class ChatRepository(
     ApplicationDbContext context,
     IHubContext<ChatHub> hubContext,
     IStorage storage,
-    IConfiguration configuration) : IChatRepository
+    IConfiguration configuration,
+    WorkoutProgramCacheService workoutCache) : IChatRepository
 {
     private const int DefaultMessageTake = 50;
     private const int MinimumMessageTake = 20;
@@ -57,6 +59,7 @@ public class ChatRepository(
         {
             return Failure("کاربر مقابل پیدا نشد");
         }
+        
 
         take = NormalizeMessageTake(take);
         var messagesQuery = context.ChatMessages
@@ -73,11 +76,24 @@ public class ChatRepository(
             messagesQuery = messagesQuery.Where(x => x.Id < beforeMessageId.Value);
         }
 
+        var athleteStatus = "";
+
+        if (otherParticipant.Role == ConversationParticipantRole.Athlete)
+        {
+            var programs = await workoutCache.GetCoachWorkoutProgramAthleteUserIdByCoachUserId(userId);
+
+            if (programs.TryGetValue(otherParticipant.UserId, out var program))
+            {
+                athleteStatus = program.GetStatus();
+            }
+        }
+
         var otherUserNameAndPhoto= new
             {
                 FullName = GetFullName(otherParticipant!.User),
                 Photo = otherParticipant.User.ImageProfile,
                 phoneNumber=otherParticipant.User.PhoneNumber,
+                athleteStatus
             };
         
 
@@ -90,7 +106,14 @@ public class ChatRepository(
             .OrderBy(x => x.Id)
             .Select(x => x.ChatMessageDto(userId, otherParticipant.LastReadMessageId))
             .ToList();
-
+        
+        await context.ConversationParticipants
+            .Where(x =>
+                x.ConversationId == conversationId &&
+                x.UserId == userId)
+            .ExecuteUpdateAsync(update =>
+                update.SetProperty(x => x.UnreadCount, 0));
+        
         return Success("پیام‌های گفتگو با موفقیت دریافت شدند.", new
         {
             messageList,
@@ -639,48 +662,23 @@ public async Task<ApiResponse> MarkAsRead(
         {
             return Failure("شناسه مربی نامعتبر است.");
         }
+        
+        var conversations = await GetCoachAthleteConversations(coachUserId);
+        var coachPrograms= workoutCache.GetCoachWorkoutProgramAthleteUserIdByCoachUserId(coachUserId).Result;
 
-        var allCoachPrograms = await context.WorkoutPrograms
-            .AsNoTracking()
-            .Where(x => x.CoachId == coachId)
-            .Include(x => x.Athlete)
-                .ThenInclude(x => x.User)
-            .ToListAsync();
-
-        var selectedPrograms = allCoachPrograms
-            .GroupBy(x => x.AthleteId)
-            .Select(group => group
-                .OrderByDescending(x => x.Status == WorkoutProgramStatus.ACTIVE)
-                .ThenByDescending(x => x.StartDate)
-                .First())
-            .ToList();
-
-        var athleteUserIds = selectedPrograms
-            .Select(x => x.Athlete.UserId)
-            .Distinct()
-            .ToList();
-
-        var conversations = await GetCoachAthleteConversations(coachUserId, athleteUserIds);
-        var conversationIds = conversations.Select(c => c.Id).ToList();
-
-        var unreadCountsDict = await GetUnreadCountsBatch(conversationIds, coachUserId);
 
         var result = new CoachChatListDto
         {
             Support = await GetSupportChatItem(coachUserId) 
         };
 
-        foreach (var program in selectedPrograms)
+        foreach (var conversation in conversations)
         {
-            var athlete = program.Athlete;
-
-            var conversation = FindConversation(conversations, coachUserId, athlete.UserId);
-            if (conversation is null) continue;
-
-            unreadCountsDict.TryGetValue(conversation.Id, out int unreadCount);
+            var coachParticipants = conversation.Participants.FirstOrDefault(u => u.UserId==coachUserId);
             var athleteParticipant = conversation.Participants.FirstOrDefault(x => x.UserId != coachUserId);
+            var program = coachPrograms[athleteParticipant!.UserId];
 
-            var item = BuildChatListItem(conversation, athlete.User, program, unreadCount,athleteParticipant.UnreadCount);
+            var item = BuildChatListItem(conversation, athleteParticipant.User, program,coachParticipants!.UnreadCount,athleteParticipant.UnreadCount);
 
             switch (program.GetStatus())
             {
@@ -724,7 +722,6 @@ public async Task<ApiResponse> MarkAsRead(
 
         var conversations = await GetAthleteConversations(athleteUserId);
         
-        // بهینه‌سازی: اعمال سیستم خواندن Batch برای ورزشکاران برای جلوگیری از N+1
         var conversationIds = conversations.Select(c => c.Id).ToList();
         var unreadCountsDict = await GetUnreadCountsBatch(conversationIds, athleteUserId);
 
@@ -840,15 +837,13 @@ public async Task<ApiResponse> MarkAsRead(
     }
 
 
-    private async Task<List<Conversation>> GetCoachAthleteConversations(int coachUserId, List<int> athleteUserIds)
+    private async Task<List<Conversation>> GetCoachAthleteConversations(int coachUserId)
     {
-        if (athleteUserIds.Count == 0) return new List<Conversation>();
 
         return await context.Conversations
             .AsNoTracking()
             .Where(x => x.Type == ConversationType.CoachAthlete && 
-                        x.Participants.Any(p => p.UserId == coachUserId) &&
-                        x.Participants.Any(p => athleteUserIds.Contains(p.UserId)))
+                        x.Participants.Any(p => p.UserId == coachUserId) )
             .Include(x => x.Participants)
                 .ThenInclude(x => x.User)
             .ToListAsync();
@@ -871,13 +866,7 @@ public async Task<ApiResponse> MarkAsRead(
         return unreadCounts;
     }
 
-    private static Conversation? FindConversation(IEnumerable<Conversation> conversations, int firstUserId, int secondUserId)
-    {
-        return conversations.FirstOrDefault(x =>
-            x.Participants.Count == 2 &&
-            x.Participants.Any(p => p.UserId == firstUserId) &&
-            x.Participants.Any(p => p.UserId == secondUserId));
-    }
+ 
 
     private static ChatListItemDto BuildChatListItem(
         Conversation conversation,
