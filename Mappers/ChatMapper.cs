@@ -10,17 +10,13 @@ public static class ChatMapper
     public static ChatMessageDto ChatMessageDto(
         this ChatMessage message,
         int currentUserId,
-        long? lastReadMessageId)
-    {
-        var sender = message.SenderUser;
+        long? lastReadMessageId){
 
         return new ChatMessageDto
         {
             Id = message.Id,
             ConversationId = message.ConversationId,
-            SenderUserId = message.SenderUserId,
-            SenderFullName = sender is null ? string.Empty : GetFullName(sender),
-            SenderProfileImageUrl = sender?.ImageProfile,
+            UserId = message.SenderUserId,
             Type = message.Type.ToString(),
             Text = message.Text,
             SentAt = message.SentAt,

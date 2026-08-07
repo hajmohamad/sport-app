@@ -8,7 +8,7 @@ public class ChatMessageDto
 
     public long ConversationId { get; set; }
 
-    public int SenderUserId { get; set; }
+    public int UserId { get; set; }
 
     public string SenderFullName { get; set; } = string.Empty;
 

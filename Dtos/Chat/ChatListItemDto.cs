@@ -27,4 +27,5 @@ public class ChatListItemDto
     public int UnreadCount { get; set; }
 
     public bool IsSupport { get; set; }
+    public bool OtherUserRead { get; set; }
 }

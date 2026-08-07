@@ -22,7 +22,7 @@ public class ChatRepository(
     IConfiguration configuration) : IChatRepository
 {
     private const int DefaultMessageTake = 50;
-    private const int MinimumMessageTake = 30;
+    private const int MinimumMessageTake = 20;
     private const int MaximumMessageTake = 100;
     private const long MaximumAttachmentSize = 10 * 1024 * 1024;
 
@@ -41,6 +41,7 @@ public class ChatRepository(
         var conversationParticipant = await context.ConversationParticipants
             .AsNoTracking()
             .Where(x => x.ConversationId == conversationId)
+            .Include(conversationParticipant => conversationParticipant.User)
             .ToListAsync();
             
         var userParticipant = conversationParticipant.FirstOrDefault(x => x.UserId == userId);
@@ -50,9 +51,12 @@ public class ChatRepository(
             return Failure("شما عضو این گفتگو نیستید.");
         }
         
-        var otherParticipantLastReadMessageId = conversationParticipant
-            .FirstOrDefault(x => x.UserId != userId)
-            ?.LastReadMessageId;
+        var otherParticipant = conversationParticipant
+            .FirstOrDefault(x => x.UserId != userId);
+        if (otherParticipant != null)
+        {
+            return Failure("کاربر مقابل پیدا نشد");
+        }
 
         take = NormalizeMessageTake(take);
         var messagesQuery = context.ChatMessages
@@ -69,18 +73,29 @@ public class ChatRepository(
             messagesQuery = messagesQuery.Where(x => x.Id < beforeMessageId.Value);
         }
 
+        var otherUserNameAndPhoto= new
+            {
+                FullName = GetFullName(otherParticipant!.User),
+                Photo = otherParticipant.User.ImageProfile,
+                phoneNumber=otherParticipant.User.PhoneNumber,
+            };
+        
+
         var messages = await messagesQuery
-            .Include(x => x.SenderUser)
             .OrderByDescending(x => x.Id)
             .Take(take)
             .ToListAsync();
 
         var result = messages
             .OrderBy(x => x.Id)
-            .Select(x => x.ChatMessageDto(userId, otherParticipantLastReadMessageId))
+            .Select(x => x.ChatMessageDto(userId, otherParticipant.LastReadMessageId))
             .ToList();
 
-        return Success("پیام‌های گفتگو با موفقیت دریافت شدند.", result);
+        return Success("پیام‌های گفتگو با موفقیت دریافت شدند.", new
+        {
+            result,
+            otherUserNameAndPhoto
+        });
     }
 
 public async Task<ApiResponse> SendMessage(int senderUserId, SendMessageDto dto)
@@ -663,8 +678,9 @@ public async Task<ApiResponse> MarkAsRead(
             if (conversation is null) continue;
 
             unreadCountsDict.TryGetValue(conversation.Id, out int unreadCount);
+            var athleteParticipant = conversation.Participants.FirstOrDefault(x => x.UserId != coachUserId);
 
-            var item = BuildChatListItem(conversation, athlete.User, program, unreadCount);
+            var item = BuildChatListItem(conversation, athlete.User, program, unreadCount,athleteParticipant.UnreadCount);
 
             switch (program.GetStatus())
             {
@@ -724,12 +740,12 @@ public async Task<ApiResponse> MarkAsRead(
             
             unreadCountsDict.TryGetValue(conversation.Id, out int unreadCount);
 
-            // رفع باگ: قبلاً به جای unreadCount، متغیر athleteUserId پاس داده شده بود!
             var item = BuildChatListItem(
                 conversation,
                 coach.User,
                 null,
-                unreadCount); 
+                unreadCount,
+                coach.UnreadCount); 
 
             result.Coaches.Add(item);
         }
@@ -867,7 +883,8 @@ public async Task<ApiResponse> MarkAsRead(
         Conversation conversation,
         User otherUser,
         WorkoutProgram? program,
-        int unreadCount)
+        int unreadCount,
+        int otherUserUnreadCount)
     {
         return new ChatListItemDto
         {
@@ -883,7 +900,9 @@ public async Task<ApiResponse> MarkAsRead(
             LastMessageText = conversation.LastMessageText,
             LastMessageAt = conversation.LastMessageAt,
             UnreadCount = unreadCount,
-            IsSupport = false
+            IsSupport = false,
+            OtherUserRead = otherUserUnreadCount==0
+            
         };
     }
 

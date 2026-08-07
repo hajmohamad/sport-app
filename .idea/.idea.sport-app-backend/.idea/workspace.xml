@@ -18,12 +18,10 @@
   <component name="ChangeListManager">
     <list default="true" id="11e104f8-869d-4d9d-9802-b48455f5eb31" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Controller/ChatController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Controller/ChatController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Infrastructure/Cache/CacheKeys.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Infrastructure/Cache/CacheKeys.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Interface/IChatRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Interface/IChatRepository.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Program.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dtos/Chat/ChatListItemDto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Dtos/Chat/ChatListItemDto.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dtos/Chat/ChatMessageDto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Dtos/Chat/ChatMessageDto.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Mappers/ChatMapper.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Mappers/ChatMapper.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Repository/ChatRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Repository/ChatRepository.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sport-app-backend.sln.DotSettings.user" beforeDir="false" afterPath="$PROJECT_DIR$/sport-app-backend.sln.DotSettings.user" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -478,38 +476,6 @@
       <workItem from="1785639318973" duration="6027000" />
       <workItem from="1785749588942" duration="22057000" />
     </task>
-    <task id="LOCAL-00052" summary="edit Storage.cs">
-      <option name="closed" value="true" />
-      <created>1779573149802</created>
-      <option name="number" value="00052" />
-      <option name="presentableId" value="LOCAL-00052" />
-      <option name="project" value="LOCAL" />
-      <updated>1779573149802</updated>
-    </task>
-    <task id="LOCAL-00053" summary="edit appsetting">
-      <option name="closed" value="true" />
-      <created>1779574160545</created>
-      <option name="number" value="00053" />
-      <option name="presentableId" value="LOCAL-00053" />
-      <option name="project" value="LOCAL" />
-      <updated>1779574160545</updated>
-    </task>
-    <task id="LOCAL-00054" summary="change update">
-      <option name="closed" value="true" />
-      <created>1780129182177</created>
-      <option name="number" value="00054" />
-      <option name="presentableId" value="LOCAL-00054" />
-      <option name="project" value="LOCAL" />
-      <updated>1780129182177</updated>
-    </task>
-    <task id="LOCAL-00055" summary="add paymentid To get all training section">
-      <option name="closed" value="true" />
-      <created>1781206719878</created>
-      <option name="number" value="00055" />
-      <option name="presentableId" value="LOCAL-00055" />
-      <option name="project" value="LOCAL" />
-      <updated>1781206719879</updated>
-    </task>
     <task id="LOCAL-00056" summary="remove">
       <option name="closed" value="true" />
       <created>1781444042065</created>
@@ -870,7 +836,39 @@
       <option name="project" value="LOCAL" />
       <updated>1786078144882</updated>
     </task>
-    <option name="localTasksCounter" value="101" />
+    <task id="LOCAL-00101" summary="edit and fix some bugs">
+      <option name="closed" value="true" />
+      <created>1786080687126</created>
+      <option name="number" value="00101" />
+      <option name="presentableId" value="LOCAL-00101" />
+      <option name="project" value="LOCAL" />
+      <updated>1786080687126</updated>
+    </task>
+    <task id="LOCAL-00102" summary="add readCount">
+      <option name="closed" value="true" />
+      <created>1786087033747</created>
+      <option name="number" value="00102" />
+      <option name="presentableId" value="LOCAL-00102" />
+      <option name="project" value="LOCAL" />
+      <updated>1786087033747</updated>
+    </task>
+    <task id="LOCAL-00103" summary="add ApplicationDbContextModelSnapshot.cs">
+      <option name="closed" value="true" />
+      <created>1786087045418</created>
+      <option name="number" value="00103" />
+      <option name="presentableId" value="LOCAL-00103" />
+      <option name="project" value="LOCAL" />
+      <updated>1786087045418</updated>
+    </task>
+    <task id="LOCAL-00104" summary="edit fix bugs">
+      <option name="closed" value="true" />
+      <created>1786116258709</created>
+      <option name="number" value="00104" />
+      <option name="presentableId" value="LOCAL-00104" />
+      <option name="project" value="LOCAL" />
+      <updated>1786116258709</updated>
+    </task>
+    <option name="localTasksCounter" value="105" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -946,10 +944,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
-    <MESSAGE value="add enum for CoachProfileStatus" />
-    <MESSAGE value="edit GetCoachChecklist" />
-    <MESSAGE value="edit support time and fix bugs in get coachProfile" />
-    <MESSAGE value="add show website to profile response" />
     <MESSAGE value="add eita feature for login and build all mini app" />
     <MESSAGE value="add migrations for eitaa" />
     <MESSAGE value="add feature for coach can add build program without Payment.cs" />
@@ -971,7 +965,11 @@
     <MESSAGE value="edit Program.cs" />
     <MESSAGE value="edit chat and fix bugs" />
     <MESSAGE value="edit athlete Chat list" />
-    <option name="LAST_COMMIT_MESSAGE" value="edit athlete Chat list" />
+    <MESSAGE value="edit and fix some bugs" />
+    <MESSAGE value="add readCount" />
+    <MESSAGE value="add ApplicationDbContextModelSnapshot.cs" />
+    <MESSAGE value="edit fix bugs" />
+    <option name="LAST_COMMIT_MESSAGE" value="edit fix bugs" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
