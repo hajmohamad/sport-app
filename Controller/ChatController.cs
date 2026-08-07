@@ -81,7 +81,9 @@ public class ChatController(
     {
         var coachId = await GetCoachIdAsync();
         if (coachId == 0) return Unauthorized(new ApiResponse { Action = false, Message = "خطای احراز هویت." });
-        var result = await chatRepository.GetCoachChatList(coachId);
+        var userId = GetUserId();
+        if (userId == 0) return Unauthorized(new ApiResponse { Action = false, Message = "خطای احراز هویت." });
+        var result = await chatRepository.GetCoachChatList(coachId,userId);
         return result.Action ? Ok(result) : BadRequest(result);
 
     }

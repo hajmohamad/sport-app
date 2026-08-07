@@ -21,4 +21,13 @@ public static class CacheKeys
     public static string TrainingSession(int trainingSessionId)
         => $"training-session:{trainingSessionId}";
     
+    public static string CoachChatListByUserId(int coachUserId)
+        => $"chat:coach:list:user:{coachUserId}";
+
+    public static string AthleteChatListByUserId(int athleteUserId)
+        => $"chat:athlete:list:user:{athleteUserId}";
+
+    public static string UserChatListVersion(int userId)
+        => $"chat:list:version:user:{userId}";
+    
 }
