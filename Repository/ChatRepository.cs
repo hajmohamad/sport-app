@@ -1070,6 +1070,7 @@ public async Task<ApiResponse> GetCoachChatList(int coachId, int coachUserId, st
         result.NeedsFollowUp = SortChatItems(result.NeedsFollowUp);
         result.NearingCompletion = SortChatItems(result.NearingCompletion);
         result.Inactive = SortChatItems(result.Inactive);
+        result.All= SortChatItems(result.All);
     }
 
     private static List<ChatListItemDto> SortChatItems(IEnumerable<ChatListItemDto> items)
