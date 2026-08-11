@@ -75,17 +75,20 @@ public class ChatController(
 
     #endregion
 
+    
     [HttpGet("coach/list")]
     [Authorize(Roles = "Coach")]
-    public async Task<IActionResult> GetCoachChats()
+    public async Task<IActionResult> GetCoachChats([FromQuery] string? status = null) // اضافه کردن پارامتر status
     {
         var coachId = await GetCoachIdAsync();
         if (coachId == 0) return Unauthorized(new ApiResponse { Action = false, Message = "خطای احراز هویت." });
+    
         var userId = GetUserId();
         if (userId == 0) return Unauthorized(new ApiResponse { Action = false, Message = "خطای احراز هویت." });
-        var result = await chatRepository.GetCoachChatList(coachId,userId);
-        return result.Action ? Ok(result) : BadRequest(result);
 
+        var result = await chatRepository.GetCoachChatList(coachId, userId, status); 
+    
+        return result.Action ? Ok(result) : BadRequest(result);
     }
 
     [HttpGet("athlete/list")]

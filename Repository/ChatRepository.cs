@@ -298,13 +298,12 @@ public async Task<ApiResponse> MarkAsRead(
             LastReadAt = participant.LastReadAt
         });
 
-    // ✅ اصلاح کلیدی: نوتیفیکیشن فقط به کاربر فعلی ارسال می‌شود
     await hubContext.Clients
-        .Group($"user_{userId}") // <--- فقط به گروه کاربری که پیام را خوانده
+        .Group($"user_{userId}")
         .SendAsync("ChatListUpdated", new
         {
             ConversationId = conversationId,
-            UnreadCount = 0 // حالا این مقدار فقط برای UI کاربر صحیح ارسال می‌شود
+            UnreadCount = 0 
         });
 
     return Success("پیام‌ها به‌عنوان خوانده‌شده ثبت شدند.");
@@ -656,51 +655,87 @@ public async Task<ApiResponse> MarkAsRead(
         return Success("گفتگوی پشتیبانی با موفقیت ایجاد شد.", conversation.Id);
     }
 
-    public async Task<ApiResponse> GetCoachChatList(int coachId, int coachUserId)
+public async Task<ApiResponse> GetCoachChatList(int coachId, int coachUserId, string? status = null)
+{
+    if (coachId <= 0)
     {
-        if (coachId <= 0)
-        {
-            return Failure("شناسه مربی نامعتبر است.");
-        }
+        return Failure("شناسه مربی نامعتبر است.");
+    }
+
+    var conversations = await GetCoachAthleteConversations(coachUserId);
+    var coachPrograms = await workoutCache.GetCoachWorkoutProgramAthleteUserIdByCoachUserId(coachUserId);
+
+    var result = new CoachChatListDto
+    {
+        Support = await GetSupportChatItem(coachUserId)
+    };
+
+    foreach (var conversation in conversations)
+    {
+        var coachParticipant = conversation.Participants.FirstOrDefault(u => u.UserId == coachUserId);
+        var athleteParticipant = conversation.Participants.FirstOrDefault(x => x.UserId != coachUserId);
         
-        var conversations = await GetCoachAthleteConversations(coachUserId);
-        var coachPrograms= workoutCache.GetCoachWorkoutProgramAthleteUserIdByCoachUserId(coachUserId).Result;
-
-
-        var result = new CoachChatListDto
+        if (athleteParticipant == null || !coachPrograms.TryGetValue(athleteParticipant.UserId, out var program))
         {
-            Support = await GetSupportChatItem(coachUserId) 
-        };
-
-        foreach (var conversation in conversations)
-        {
-            var coachParticipants = conversation.Participants.FirstOrDefault(u => u.UserId==coachUserId);
-            var athleteParticipant = conversation.Participants.FirstOrDefault(x => x.UserId != coachUserId);
-            var program = coachPrograms[athleteParticipant!.UserId];
-
-            var item = BuildChatListItem(conversation, athleteParticipant.User, program,coachParticipants!.UnreadCount,athleteParticipant.UnreadCount);
-
-            switch (program.GetStatus())
-            {
-                case "Active":
-                    result.Active.Add(item);
-                    break;
-                case "NeedsFollowUp":
-                    result.NeedsFollowUp.Add(item);
-                    break;
-                case "NearingCompletion":
-                    result.NearingCompletion.Add(item);
-                    break;
-                default:
-                    result.Inactive.Add(item);
-                    break;
-            }
+            continue; 
         }
 
-        SortCoachResult(result);
+        var item = BuildChatListItem(conversation, athleteParticipant.User, program, coachParticipant!.UnreadCount, athleteParticipant.UnreadCount);
 
+        result.All.Add(item);
+
+        switch (program.GetStatus())
+        {
+            case "Active":
+                result.Active.Add(item);
+                break;
+            case "NeedsFollowUp":
+                result.NeedsFollowUp.Add(item);
+                break;
+            case "NearingCompletion":
+                result.NearingCompletion.Add(item);
+                break;
+            default:
+                result.Inactive.Add(item);
+                break;
+        }
+    }
+
+    SortCoachResult(result); 
+    
+    
+
+    if (string.IsNullOrWhiteSpace(status))
+    {
         return Success("لیست چت‌های مربی با موفقیت دریافت شد.", result);
     }
+    else
+    {
+        object responseData;
+        switch (status.ToLowerInvariant())
+        {
+            case "all":
+                responseData = result.All;
+                break;
+            case "active":
+                responseData = result.Active;
+                break;
+            case "needsfollowup":
+                responseData = result.NeedsFollowUp;
+                break;
+            case "nearingcompletion":
+                responseData = result.NearingCompletion;
+                break;
+            case "inactive":
+                responseData = result.Inactive;
+                break;
+            default:
+                return Failure("استاتوس ارسالی نامعتبر است.");
+        }
+        return Success("لیست فیلتر شده چت‌ها با موفقیت دریافت شد.", responseData);
+    }
+}
+
 
     public async Task<ApiResponse> GetAthleteChatList(int athleteId)
     {

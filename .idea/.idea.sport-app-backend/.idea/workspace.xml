@@ -17,10 +17,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="11e104f8-869d-4d9d-9802-b48455f5eb31" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/dataSources.local.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dtos/Chat/ChatListItemDto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Dtos/Chat/ChatListItemDto.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dtos/Chat/ChatMessageDto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Dtos/Chat/ChatMessageDto.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Mappers/ChatMapper.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Mappers/ChatMapper.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Controller/ChatController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Controller/ChatController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dtos/Chat/CoachChatListDto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Dtos/Chat/CoachChatListDto.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Interface/IChatRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Interface/IChatRepository.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Repository/ChatRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Repository/ChatRepository.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -185,44 +186,44 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    ".NET Launch Settings Profile.sport-app-backend: http.executor": "Run",
-    ".NET Launch Settings Profile.sport-app-backend: https.executor": "Run",
-    "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "Docker.Dockerfile.executor": "Run",
-    "HTTP Request.sport-app-backend | #1.executor": "Run",
-    "ModuleVcsDetector.initialDetectionPerformed": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
-    "RunOnceActivity.cidr.known.project.marker": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "RunOnceActivity.readMode.enableVisualFormatting": "true",
-    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
-    "ShowUsagesActions.previewPropertyKey": "true",
-    "cidr.known.project.marker": "true",
-    "codeWithMe.voiceChat.enabledByDefault": "false",
-    "database.data.extractors.current.export.id": "Comma-separated (CSV)_id",
-    "database.data.extractors.current.id": "Comma-separated (CSV)_id",
-    "full.screen.before.presentation.mode": "true",
-    "git-widget-placeholder": "stagingMain",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "RiderPMCOptionsPageId",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;.NET Launch Settings Profile.sport-app-backend: http.executor&quot;: &quot;Run&quot;,
+    &quot;.NET Launch Settings Profile.sport-app-backend: https.executor&quot;: &quot;Run&quot;,
+    &quot;ASKED_SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;Docker.Dockerfile.executor&quot;: &quot;Run&quot;,
+    &quot;HTTP Request.sport-app-backend | #1.executor&quot;: &quot;Run&quot;,
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.cidr.known.project.marker&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.readMode.enableVisualFormatting&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.typescript.service.memoryLimit.init&quot;: &quot;true&quot;,
+    &quot;ShowUsagesActions.previewPropertyKey&quot;: &quot;true&quot;,
+    &quot;cidr.known.project.marker&quot;: &quot;true&quot;,
+    &quot;codeWithMe.voiceChat.enabledByDefault&quot;: &quot;false&quot;,
+    &quot;database.data.extractors.current.export.id&quot;: &quot;Comma-separated (CSV)_id&quot;,
+    &quot;database.data.extractors.current.id&quot;: &quot;Comma-separated (CSV)_id&quot;,
+    &quot;full.screen.before.presentation.mode&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;stagingMain&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;RiderPMCOptionsPageId&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   },
-  "keyToStringList": {
-    "ChangesTree.GroupingKeys": [
-      "repository"
+  &quot;keyToStringList&quot;: {
+    &quot;ChangesTree.GroupingKeys&quot;: [
+      &quot;repository&quot;
     ],
-    "DatabaseDriversLRU": [
-      "mysql"
+    &quot;DatabaseDriversLRU&quot;: [
+      &quot;mysql&quot;
     ]
   }
-}]]></component>
+}</component>
   <component name="RunManager" selected=".NET Launch Settings Profile.sport-app-backend: https">
     <configuration name="sport-app-backend | #1" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" temporary="true" nameIsGenerated="true" path="$PROJECT_DIR$/sport-app-backend.http" executionIdentifier="#1" runType="Run single request">
       <method v="2" />
@@ -475,46 +476,10 @@
       <workItem from="1785615699067" duration="3633000" />
       <workItem from="1785639318973" duration="6027000" />
       <workItem from="1785749588942" duration="22057000" />
-    </task>
-    <task id="LOCAL-00056" summary="remove">
-      <option name="closed" value="true" />
-      <created>1781444042065</created>
-      <option name="number" value="00056" />
-      <option name="presentableId" value="LOCAL-00056" />
-      <option name="project" value="LOCAL" />
-      <updated>1781444042065</updated>
-    </task>
-    <task id="LOCAL-00057" summary="add coachWebSiteUrl for url">
-      <option name="closed" value="true" />
-      <created>1781615111272</created>
-      <option name="number" value="00057" />
-      <option name="presentableId" value="LOCAL-00057" />
-      <option name="project" value="LOCAL" />
-      <updated>1781615111273</updated>
-    </task>
-    <task id="LOCAL-00058">
-      <option name="closed" value="true" />
-      <created>1781615766426</created>
-      <option name="number" value="00058" />
-      <option name="presentableId" value="LOCAL-00058" />
-      <option name="project" value="LOCAL" />
-      <updated>1781615766426</updated>
-    </task>
-    <task id="LOCAL-00059" summary="edit endpoint">
-      <option name="closed" value="true" />
-      <created>1781615934586</created>
-      <option name="number" value="00059" />
-      <option name="presentableId" value="LOCAL-00059" />
-      <option name="project" value="LOCAL" />
-      <updated>1781615934586</updated>
-    </task>
-    <task id="LOCAL-00060" summary="edit website url ind point and edit coach website">
-      <option name="closed" value="true" />
-      <created>1781627489755</created>
-      <option name="number" value="00060" />
-      <option name="presentableId" value="LOCAL-00060" />
-      <option name="project" value="LOCAL" />
-      <updated>1781627489755</updated>
+      <workItem from="1786155746233" duration="275000" />
+      <workItem from="1786156106590" duration="1527000" />
+      <workItem from="1786160021036" duration="1385000" />
+      <workItem from="1786449445635" duration="527000" />
     </task>
     <task id="LOCAL-00061" summary="edit ProgramRenewalReminderService.cs">
       <option name="closed" value="true" />
@@ -868,7 +833,47 @@
       <option name="project" value="LOCAL" />
       <updated>1786116258709</updated>
     </task>
-    <option name="localTasksCounter" value="105" />
+    <task id="LOCAL-00105" summary="add data to messages">
+      <option name="closed" value="true" />
+      <created>1786122235355</created>
+      <option name="number" value="00105" />
+      <option name="presentableId" value="LOCAL-00105" />
+      <option name="project" value="LOCAL" />
+      <updated>1786122235355</updated>
+    </task>
+    <task id="LOCAL-00106" summary="fix bugs">
+      <option name="closed" value="true" />
+      <created>1786123886684</created>
+      <option name="number" value="00106" />
+      <option name="presentableId" value="LOCAL-00106" />
+      <option name="project" value="LOCAL" />
+      <updated>1786123886684</updated>
+    </task>
+    <task id="LOCAL-00107" summary="edit responese">
+      <option name="closed" value="true" />
+      <created>1786124802310</created>
+      <option name="number" value="00107" />
+      <option name="presentableId" value="LOCAL-00107" />
+      <option name="project" value="LOCAL" />
+      <updated>1786124802310</updated>
+    </task>
+    <task id="LOCAL-00108" summary="add cash for coachWorkoutList">
+      <option name="closed" value="true" />
+      <created>1786133807601</created>
+      <option name="number" value="00108" />
+      <option name="presentableId" value="LOCAL-00108" />
+      <option name="project" value="LOCAL" />
+      <updated>1786133807601</updated>
+    </task>
+    <task id="LOCAL-00109" summary="edit cors">
+      <option name="closed" value="true" />
+      <created>1786134209510</created>
+      <option name="number" value="00109" />
+      <option name="presentableId" value="LOCAL-00109" />
+      <option name="project" value="LOCAL" />
+      <updated>1786134209510</updated>
+    </task>
+    <option name="localTasksCounter" value="110" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -944,10 +949,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
-    <MESSAGE value="add eita feature for login and build all mini app" />
-    <MESSAGE value="add migrations for eitaa" />
-    <MESSAGE value="add feature for coach can add build program without Payment.cs" />
-    <MESSAGE value="workoutProgramTemplate" />
     <MESSAGE value="edit git ignore" />
     <MESSAGE value="edit endpoint and migrations" />
     <MESSAGE value="editCoachReoisitory" />
@@ -958,7 +959,6 @@
     <MESSAGE value="edit message" />
     <MESSAGE value="add lastseen app" />
     <MESSAGE value="add eita token" />
-    <MESSAGE value="fix bugs" />
     <MESSAGE value="edit daravalidator" />
     <MESSAGE value="edit complate request" />
     <MESSAGE value="edit DataValidator.cs" />
@@ -969,7 +969,12 @@
     <MESSAGE value="add readCount" />
     <MESSAGE value="add ApplicationDbContextModelSnapshot.cs" />
     <MESSAGE value="edit fix bugs" />
-    <option name="LAST_COMMIT_MESSAGE" value="edit fix bugs" />
+    <MESSAGE value="add data to messages" />
+    <MESSAGE value="fix bugs" />
+    <MESSAGE value="edit responese" />
+    <MESSAGE value="add cash for coachWorkoutList" />
+    <MESSAGE value="edit cors" />
+    <option name="LAST_COMMIT_MESSAGE" value="edit cors" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1014,7 +1019,14 @@
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Controller/AthleteController/AchievementController.cs</url>
           <line>27</line>
-          <properties documentPath="$PROJECT_DIR$/Controller/AchievementController.cs" containingFunctionPresentation="Method 'CompleteNewChallenge'" />
+          <properties documentPath="$PROJECT_DIR$/Controller/AchievementController.cs" containingFunctionPresentation="Method 'CompleteNewChallenge'">
+            <startOffsets>
+              <option value="903" />
+            </startOffsets>
+            <endOffsets>
+              <option value="904" />
+            </endOffsets>
+          </properties>
           <option name="timeStamp" value="10" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
@@ -1059,7 +1071,14 @@
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Controller/CoachController/CoachController.cs</url>
           <line>519</line>
-          <properties documentPath="$PROJECT_DIR$/Controller/CoachController.cs" containingFunctionPresentation="Method 'RemovePineExercise'" />
+          <properties documentPath="$PROJECT_DIR$/Controller/CoachController.cs" containingFunctionPresentation="Method 'RemovePineExercise'">
+            <startOffsets>
+              <option value="19349" />
+            </startOffsets>
+            <endOffsets>
+              <option value="19350" />
+            </endOffsets>
+          </properties>
           <option name="timeStamp" value="28" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">

@@ -29,7 +29,7 @@ public interface IChatRepository
     Task<ApiResponse> CreateCoachAthleteConversation(
         int coachUserId,
         int athleteUserId);
-    Task<ApiResponse> GetCoachChatList(int coachId,int coachUserId);
+    Task<ApiResponse> GetCoachChatList(int coachId, int coachUserId, string? status = null);
 
     Task<ApiResponse> GetAthleteChatList(int athleteId);
 
