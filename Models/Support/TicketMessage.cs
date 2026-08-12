@@ -17,7 +17,7 @@ public class TicketMessage
     public string MessageText { get; set; } = string.Empty;
 
     [DataType(DataType.DateTime)]
-    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+    public DateTime CreatedAt { get; set; } = DateTime.Now;
 
     public bool IsFromSupport { get; set; }
 

@@ -23,11 +23,8 @@ using WebPush;
 
 namespace sport_app_backend.Data;
 
-public class ApplicationDbContext : DbContext
+public class ApplicationDbContext(DbContextOptions dbContextOptions) : DbContext(dbContextOptions)
 {
-    public ApplicationDbContext(DbContextOptions dbContextOptions)
-        : base(dbContextOptions)
-    { }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
 {
     base.OnModelCreating(modelBuilder);

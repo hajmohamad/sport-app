@@ -49,7 +49,7 @@ public class DiscountCodeRepository(
                 UsageLimit = discountCodeCreateDto.UsageLimit,
                 ExpiresAt = discountCodeCreateDto.ExpiresAt,
                 Status = discountCodeCreateDto.ExpiresAt.HasValue &&
-                         discountCodeCreateDto.ExpiresAt.Value <= DateTime.UtcNow
+                         discountCodeCreateDto.ExpiresAt.Value <= DateTime.Now
                     ? DiscountCodeStatus.EXPIRED
                     : DiscountCodeStatus.ACTIVE,
                 AppliesToAllServices = discountCodeCreateDto.AppliesToAllServices
@@ -111,7 +111,7 @@ public class DiscountCodeRepository(
             discountCode.DiscountPercent = discountCodeUpdateDto.DiscountPercent;
             discountCode.UsageLimit = discountCodeUpdateDto.UsageLimit;
             discountCode.ExpiresAt = discountCodeUpdateDto.ExpiresAt;
-            discountCode.UpdatedAt = DateTime.UtcNow;
+            discountCode.UpdatedAt = DateTime.Now;
 
             var existingServiceIds = discountCode.DiscountCodeCoachServices.Select(s => s.CoachServiceId).ToList();
             var newServiceIds = discountCodeUpdateDto.CoachServiceId ?? new List<int>();
@@ -140,7 +140,7 @@ public class DiscountCodeRepository(
                 discountCode.Status = status;
             }
 
-            if (discountCode.ExpiresAt.HasValue && discountCode.ExpiresAt.Value <= DateTime.UtcNow)
+            if (discountCode.ExpiresAt.HasValue && discountCode.ExpiresAt.Value <= DateTime.Now)
             {
                 discountCode.Status = DiscountCodeStatus.EXPIRED;
             }
@@ -255,7 +255,7 @@ public class DiscountCodeRepository(
                 discountCode.Status = statusEnum;
             }
 
-            discountCode.UpdatedAt = DateTime.UtcNow;
+            discountCode.UpdatedAt = DateTime.Now;
             await context.SaveChangesAsync();
 
             return new ApiResponse
@@ -332,7 +332,7 @@ public class DiscountCodeRepository(
             {
                 if (discountCode.Status != DiscountCodeStatus.INACTIVE &&
                     discountCode.ExpiresAt.HasValue &&
-                    discountCode.ExpiresAt.Value <= DateTime.UtcNow &&
+                    discountCode.ExpiresAt.Value <= DateTime.Now &&
                     discountCode.Status != DiscountCodeStatus.EXPIRED)
                 {
                     discountCode.Status = DiscountCodeStatus.EXPIRED;

@@ -14,7 +14,7 @@ public class ChatMessage
 
     public string? Text { get; set; }
 
-    public DateTime SentAt { get; set; } = DateTime.UtcNow;
+    public DateTime SentAt { get; set; } = DateTime.Now;
 
     public DateTime? EditedAt { get; set; }
     

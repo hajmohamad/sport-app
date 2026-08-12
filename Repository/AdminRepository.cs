@@ -139,13 +139,13 @@ namespace sport_app_backend.Repository
             {
                 TicketId = ticketId,
                 MessageText = dto.MessageText,
-                CreatedAt = DateTime.UtcNow,
+                CreatedAt = DateTime.Now,
                 IsFromSupport = true,
                 SenderId = null // فرستنده ادمین است و ایدی در دیتابیس null ثبت می‌شود
             };
 
             ticket.Status = TicketStatus.Answered;
-            ticket.UpdatedAt = DateTime.UtcNow;
+            ticket.UpdatedAt = DateTime.Now;
 
             await context.TicketMessages.AddAsync(newMessage);
             await context.SaveChangesAsync();
@@ -182,7 +182,7 @@ namespace sport_app_backend.Repository
             }
 
             ticket.Status = TicketStatus.Closed;
-            ticket.UpdatedAt = DateTime.UtcNow;
+            ticket.UpdatedAt = DateTime.Now;
 
             await context.SaveChangesAsync();
 

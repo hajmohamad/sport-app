@@ -5,6 +5,10 @@ using Microsoft.AspNetCore.Http;
 using sport_app_backend.Interface;
 using sport_app_backend.Models;
 using System.Net;
+using System.Net.Mime;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.Formats.Webp;
+using SixLabors.ImageSharp.Processing;
 
 namespace sport_app_backend.Services;
 
@@ -45,77 +49,136 @@ public class Storage : IStorage
         return new AmazonS3Client(credentials, s3Config);
     }
 
-    public async Task<ApiResponse> UploadImage(IFormFile image, string url, string? folderName)
+
+public async Task<ApiResponse> UploadImage(IFormFile image, string url, string? folderName)
+{
+    if (image == null || image.Length == 0)
     {
-        if (image == null || image.Length == 0)
+        return new ApiResponse
         {
-            return new ApiResponse { Action = false, Message = "Invalid image file" };
+            Action = false,
+            Message = "Invalid image file"
+        };
+    }
+
+    using var client = CreateClient();
+
+    folderName = NormalizeFolder(folderName);
+
+    try
+    {
+        using var sourceStream = new MemoryStream();
+        await image.CopyToAsync(sourceStream);
+        sourceStream.Position = 0;
+
+        // اگر فایل از قبل WebP باشد، دوباره تبدیلش نکن
+        bool alreadyWebp =
+            string.Equals(Path.GetExtension(image.FileName), ".webp", StringComparison.OrdinalIgnoreCase) ||
+            string.Equals(image.ContentType, "image/webp", StringComparison.OrdinalIgnoreCase);
+
+        using var webpStream = new MemoryStream();
+        bool converted = false;
+
+        if (!alreadyWebp)
+        {
+            converted = TryConvertToWebP(sourceStream, webpStream, quality: 80);
         }
 
-        using var client = CreateClient();
+        Stream uploadStream;
+        string extension;
+        string contentType;
 
-        folderName = NormalizeFolder(folderName);
-
-        var extension = NormalizeExtension(Path.GetExtension(image.FileName));
-        if (string.IsNullOrEmpty(extension))
+        if (converted)
         {
-            extension = GuessExtensionFromContentType(image.ContentType) ?? ".webp"; // fallback
+            uploadStream = webpStream;
+            uploadStream.Position = 0;
+
+            extension = ".webp";
+            contentType = "image/webp";
+        }
+        else
+        {
+            uploadStream = sourceStream;
+            uploadStream.Position = 0;
+
+            extension = NormalizeExtension(Path.GetExtension(image.FileName));
+            if (string.IsNullOrEmpty(extension))
+            {
+                extension = GuessExtensionFromContentType(image.ContentType) ?? ".webp";
+            }
+
+            contentType = !string.IsNullOrWhiteSpace(image.ContentType)
+                ? image.ContentType
+                : GuessContentTypeFromExtension(extension) ?? "application/octet-stream";
         }
 
         var objectKey = BuildObjectKey(folderName, extension);
 
-        try
+        var request = new PutObjectRequest
         {
-            using var memoryStream = new MemoryStream();
-            await image.CopyToAsync(memoryStream);
-            memoryStream.Position = 0;
+            BucketName = _bucketName,
+            Key = objectKey,
+            InputStream = uploadStream,
+            ContentType = contentType,
+            CannedACL = S3CannedACL.PublicRead
+        };
 
-            var contentType = !string.IsNullOrWhiteSpace(image.ContentType)
-                ? image.ContentType
-                : GuessContentTypeFromExtension(extension) ?? "application/octet-stream";
+        await client.PutObjectAsync(request);
 
-            var request = new PutObjectRequest
-            {
-                BucketName = _bucketName,
-                Key = objectKey,                 
-                InputStream = memoryStream,
-                ContentType = contentType,
-                CannedACL = S3CannedACL.PublicRead
-            };
+        var fileUrl = BuildPublicUrl(objectKey);
 
-            await client.PutObjectAsync(request);
-
-            var fileUrl = BuildPublicUrl(objectKey);
-
-            if (IsValidUrlForDelete(url))
-                await DeleteObjectAsync(client, url);
-
-            return new ApiResponse
-            {
-                Action = true,
-                Message = "Image uploaded successfully",
-                Result = fileUrl 
-            };
-        }
-        catch (AmazonS3Exception e)
+        if (IsValidUrlForDelete(url))
         {
-            return new ApiResponse
-            {
-                Action = false,
-                Message = $"Error uploading to S3: {e.Message}"
-            };
+            await DeleteObjectAsync(client, url);
         }
-        catch (Exception e)
+
+        return new ApiResponse
         {
-            return new ApiResponse
-            {
-                Action = false,
-                Message = $"Unexpected error: {e.Message}"
-            };
-        }
+            Action = true,
+            Message = "Image uploaded successfully",
+            Result = fileUrl
+        };
     }
+    catch (AmazonS3Exception e)
+    {
+        return new ApiResponse
+        {
+            Action = false,
+            Message = $"Error uploading to S3: {e.Message}"
+        };
+    }
+    catch (Exception e)
+    {
+        return new ApiResponse
+        {
+            Action = false,
+            Message = $"Unexpected error: {e.Message}"
+        };
+    }
+}
 
-  
+private static bool TryConvertToWebP(Stream input, Stream output, int quality = 80)
+{
+    try
+    {
+        input.Position = 0;
+
+        using var image = Image.Load(input);
+        image.Save(output, new WebpEncoder
+        {
+            Quality = quality
+        });
+
+        output.Position = 0;
+        return true;
+    }
+    catch
+    {
+        // اگر تصویر قابل تبدیل نبود، فایل اصلی آپلود شود
+        return false;
+    }
+}
+
     public async Task<ApiResponse> UploadFile(
     IFormFile? file,
     string url,

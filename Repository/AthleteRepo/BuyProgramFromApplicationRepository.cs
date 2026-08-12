@@ -34,7 +34,7 @@
 //                 if (discountCode is not null)
 //                 {
 //                     discountCode.UsedCount += 1;
-//                     discountCode.UpdatedAt = DateTime.UtcNow;
+//                     discountCode.UpdatedAt = DateTime.Now;
 //                 }
 //             }
 //
@@ -132,14 +132,14 @@
 //             return new ApiResponse { Action = false, Message = "کد غیرفعال شده" };
 //         }
 //
-//         if (discountCode.ExpiresAt.HasValue && discountCode.ExpiresAt.Value <= DateTime.UtcNow)
+//         if (discountCode.ExpiresAt.HasValue && discountCode.ExpiresAt.Value <= DateTime.Now)
 //         {
 //             discountCode.Status = DiscountCodeStatus.EXPIRED;
 //             await context.SaveChangesAsync();
 //             return new ApiResponse { Action = false, Message = "کد تاریخش گذشته" };
 //         }
 //
-//         if (discountCode.StartsAt.HasValue && discountCode.StartsAt.Value > DateTime.UtcNow)
+//         if (discountCode.StartsAt.HasValue && discountCode.StartsAt.Value > DateTime.Now)
 //         {
 //             return new ApiResponse { Action = false, Message = "کد هنوز فعال نشده است" };
 //         }

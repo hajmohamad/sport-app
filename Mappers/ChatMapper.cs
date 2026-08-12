@@ -80,7 +80,7 @@ public static class ChatMapper
         }
 
         if (program.LastExerciseDate is null ||
-            program.LastExerciseDate.Value.Date < DateTime.UtcNow.Date.AddDays(-4))
+            program.LastExerciseDate.Value.Date < DateTime.Now.Date.AddDays(-4))
         {
             return "NeedsFollowUp";
         }

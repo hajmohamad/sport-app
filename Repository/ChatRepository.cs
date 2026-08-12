@@ -166,7 +166,7 @@ public async Task<ApiResponse> SendMessage(int senderUserId, SendMessageDto dto)
         return Failure("شما عضو این گفتگو نیستید یا اطلاعات کاربری شما یافت نشد.");
     }
 
-    var now = DateTime.UtcNow;
+    var now = DateTime.Now;
 
     var message = new ChatMessage
     {
@@ -280,7 +280,7 @@ public async Task<ApiResponse> MarkAsRead(
     if (!participant.LastReadMessageId.HasValue || participant.LastReadMessageId.Value < lastReadMessageId)
     {
         participant.LastReadMessageId = lastReadMessageId;
-        participant.LastReadAt = DateTime.UtcNow;
+        participant.LastReadAt = DateTime.Now;
         needsUpdate = true;
     }
 
@@ -412,7 +412,7 @@ public async Task<ApiResponse> MarkAsRead(
         return uploadResult;
     }
 
-    var now = DateTime.UtcNow;
+    var now = DateTime.Now;
 
     var message = new ChatMessage
     {
@@ -519,7 +519,7 @@ public async Task<ApiResponse> MarkAsRead(
             return Success("گفتگو از قبل وجود دارد.", existingConversation.Id);
         }
 
-        var now = DateTime.UtcNow;
+        var now = DateTime.Now;
 
         var conversation = new Conversation
         {
@@ -604,7 +604,7 @@ public async Task<ApiResponse> MarkAsRead(
             return Success("گفتگوی پشتیبانی از قبل وجود دارد.", existingConversation.Id);
         }
 
-        var now = DateTime.UtcNow;
+        var now = DateTime.Now;
 
         var conversation = new Conversation
         {
@@ -823,7 +823,7 @@ public async Task<ApiResponse> GetCoachChatList(int coachId, int coachUserId, st
             return Failure("هیچ عضوی برای گفتگو یافت نشد.");
         }
 
-        var now = DateTime.UtcNow;
+        var now = DateTime.Now;
 
         var systemMessage = new ChatMessage
         {

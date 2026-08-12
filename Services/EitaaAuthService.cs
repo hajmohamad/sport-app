@@ -73,7 +73,7 @@ public class EitaaAuthService(
 
             var now = DateTime.Now;
 
-            externalAccount.LastLoginAt = DateTime.UtcNow;
+            externalAccount.LastLoginAt = DateTime.Now;
             externalAccount.User.LastLogin = now;
 
             await dbContext.SaveChangesAsync(cancellationToken);
@@ -85,12 +85,12 @@ public class EitaaAuthService(
             .Where(x =>
                 x.EitaaUserId == eitaaUserId &&
                 x.ConsumedAt == null &&
-                x.ExpiresAt > DateTime.UtcNow)
+                x.ExpiresAt > DateTime.Now)
             .ToListAsync(cancellationToken);
 
         foreach (var activeSession in activeSessions)
         {
-            activeSession.ExpiresAt = DateTime.UtcNow;
+            activeSession.ExpiresAt = DateTime.Now;
         }
 
         var linkingToken = tokenService.GenerateSecureToken();
@@ -102,8 +102,8 @@ public class EitaaAuthService(
             EitaaUsername = eitaaUser.Username,
             FirstName = eitaaUser.FirstName,
             LastName = eitaaUser.LastName,
-            CreatedAt = DateTime.UtcNow,
-            ExpiresAt = DateTime.UtcNow.AddMinutes(GetLinkingTokenExpireMinutes())
+            CreatedAt = DateTime.Now,
+            ExpiresAt = DateTime.Now.AddMinutes(GetLinkingTokenExpireMinutes())
         };
 
         await dbContext.EitaaLoginSessions.AddAsync(
@@ -142,7 +142,7 @@ public async Task<ApiResponse> CompleteLoginAsync(
 
     if (session is null) return Failed("Invalid linking token.");
     if (session.ConsumedAt is not null) return Failed("Linking token has already been used.");
-    if (session.ExpiresAt <= DateTime.UtcNow) return Failed("Linking token has expired.");
+    if (session.ExpiresAt <= DateTime.Now) return Failed("Linking token has expired.");
 
     var validation = eitaaDataValidator.Validate(request.ContactData);
     if (!validation.IsValid) return Failed(validation.Error ?? "Invalid Eitaa contactData.");
@@ -205,8 +205,8 @@ public async Task<ApiResponse> CompleteLoginAsync(
                     if (existingExternalAccount.User.PhoneNumber != normalizedPhoneNumber)
                         return Failed("This Eitaa account is already linked.");
 
-                    session.ConsumedAt = DateTime.UtcNow;
-                    existingExternalAccount.LastLoginAt = DateTime.UtcNow;
+                    session.ConsumedAt = DateTime.Now;
+                    existingExternalAccount.LastLoginAt = DateTime.Now;
                     existingExternalAccount.User.LastLogin = DateTime.Now;
 
                     await dbContext.SaveChangesAsync(cancellationToken);
@@ -250,13 +250,13 @@ public async Task<ApiResponse> CompleteLoginAsync(
                     ProviderUsername = session.EitaaUsername,
                     FirstName = session.FirstName,
                     LastName = session.LastName,
-                    CreatedAt = DateTime.UtcNow,
-                    LastLoginAt = DateTime.UtcNow
+                    CreatedAt = DateTime.Now,
+                    LastLoginAt = DateTime.Now
                 };
 
                 await dbContext.UserExternalAccounts.AddAsync(externalAccount, cancellationToken);
 
-                session.ConsumedAt = DateTime.UtcNow;
+                session.ConsumedAt = DateTime.Now;
 
                 await dbContext.SaveChangesAsync(cancellationToken);
                 await transaction.CommitAsync(cancellationToken);
@@ -484,7 +484,7 @@ public async Task<ApiResponse> CompleteLoginAsync(
             return false;
         }
 
-        var now = DateTime.UtcNow;
+        var now = DateTime.Now;
 
         if (authDate > now.AddMinutes(5))
         {

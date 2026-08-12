@@ -242,7 +242,7 @@ namespace sport_app_backend.Mappers
         //         return 0;
         //     }
         //
-        //     var now = DateTime.UtcNow;
+        //     var now = DateTime.Now;
         //  
         //
         //     if (coachService.PublicDiscountExpiresAt.HasValue && coachService.PublicDiscountExpiresAt.Value <= now)
@@ -275,7 +275,7 @@ namespace sport_app_backend.Mappers
                 return DiscountCodeStatus.INACTIVE;
             }
 
-            if (discountCode.UsageLimit<=discountCode.UsedCount||(discountCode.ExpiresAt.HasValue && discountCode.ExpiresAt.Value <= DateTime.UtcNow))
+            if (discountCode.UsageLimit<=discountCode.UsedCount||(discountCode.ExpiresAt.HasValue && discountCode.ExpiresAt.Value <= DateTime.Now))
             {
                 return DiscountCodeStatus.EXPIRED;
             }

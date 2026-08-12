@@ -26,7 +26,7 @@ public class UserExternalAccount
     [MaxLength(100)]
     public string? LastName { get; set; }
 
-    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+    public DateTime CreatedAt { get; set; } = DateTime.Now;
 
     public DateTime? LastLoginAt { get; set; }
 }

@@ -545,7 +545,7 @@ public class BuyFromSiteRepository(
                 AthleteId = athleteId,
                 CoachId = coachService.CoachId,
                 CoachServiceId = coachService.Id,
-                DateTime = DateTime.UtcNow
+                DateTime = DateTime.Now
 
             };
             await dbContext.PaymentAttempts.AddAsync(newPaymentAttempt);
@@ -553,7 +553,7 @@ public class BuyFromSiteRepository(
         }
         else
         {
-            havLastAttempt.DateTime = DateTime.UtcNow;
+            havLastAttempt.DateTime = DateTime.Now;
             havLastAttempt.CoachId = coachService.CoachId;
             havLastAttempt.CoachServiceId = coachService.Id;
         }
@@ -1072,7 +1072,7 @@ public class BuyFromSiteRepository(
                 if (discountCode is not null)
                 {
                     discountCode.UsedCount += 1;
-                    discountCode.UpdatedAt = DateTime.UtcNow;
+                    discountCode.UpdatedAt = DateTime.Now;
                 }
             }
 
@@ -1179,7 +1179,7 @@ public class BuyFromSiteRepository(
         return new ApiResponse { Action = false, Message = "این کد تخفیف غیرفعال است." };
     }
     
-    bool isExpiredByDate = discountCode.ExpiresAt.HasValue && discountCode.ExpiresAt.Value <= DateTime.UtcNow;
+    bool isExpiredByDate = discountCode.ExpiresAt.HasValue && discountCode.ExpiresAt.Value <= DateTime.Now;
     bool isExpiredByUsage = discountCode.UsageLimit.HasValue && discountCode.UsedCount >= discountCode.UsageLimit.Value;
 
     if (discountCode.Status == DiscountCodeStatus.EXPIRED || isExpiredByDate || isExpiredByUsage)

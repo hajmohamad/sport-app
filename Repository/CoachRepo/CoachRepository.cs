@@ -505,7 +505,7 @@ namespace sport_app_backend.Repository.CoachRepo
                 WebSiteUrl = coach.WebSiteUrl
             };
 
-            var timePassed = DateTime.UtcNow - coach.WebSiteUrlUpDateTime;
+            var timePassed = DateTime.Now - coach.WebSiteUrlUpDateTime;
             var daysPassed = timePassed.Days;
 
             if (string.IsNullOrEmpty(coach.WebSiteUrl))
@@ -580,7 +580,7 @@ namespace sport_app_backend.Repository.CoachRepo
 
             if (!string.IsNullOrEmpty(coach.WebSiteUrl))
             {
-                var timePassed = DateTime.UtcNow - coach.WebSiteUrlUpDateTime;
+                var timePassed = DateTime.Now - coach.WebSiteUrlUpDateTime;
                 if (timePassed.Days < 14)
                 {
                     var daysRemaining = 14 - timePassed.Days;
@@ -593,7 +593,7 @@ namespace sport_app_backend.Repository.CoachRepo
             }
 
             coach.WebSiteUrl = newUrl;
-            coach.WebSiteUrlUpDateTime = DateTime.UtcNow;
+            coach.WebSiteUrlUpDateTime = DateTime.Now;
 
             context.Coaches.Update(coach);
             await context.SaveChangesAsync();

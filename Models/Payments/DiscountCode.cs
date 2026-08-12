@@ -25,8 +25,8 @@ public class DiscountCode
     public DateTime? ExpiresAt { get; set; }
 
     public DiscountCodeStatus Status { get; set; } = DiscountCodeStatus.ACTIVE;
-    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-    public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
+    public DateTime CreatedAt { get; set; } = DateTime.Now;
+    public DateTime UpdatedAt { get; set; } = DateTime.Now;
 
     public bool IsDeleted { get; set; } = false;
     public bool AppliesToAllServices { get; set; }

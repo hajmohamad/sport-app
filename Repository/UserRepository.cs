@@ -318,10 +318,10 @@ public async Task<ApiResponse> GenerateAccessToken(string refreshToken)
     if (user is null)
         return new ApiResponse { Message = "Invalid refresh token", Action = false };
 
-    if (user.LastLogin.AddDays(180) < DateTime.UtcNow)
+    if (user.LastLogin.AddDays(180) < DateTime.Now)
         return new ApiResponse { Message = "Refresh token expired", Action = false };
 
-    user.LastSeenApp = DateTime.UtcNow;
+    user.LastSeenApp = DateTime.Now;
     await dbContext.SaveChangesAsync();
 
     var tokenUser = new TokenUserDto
@@ -875,7 +875,7 @@ public async Task<ApiResponse> ReplyToSupportTicket(int userId, int ticketId, Re
     };
 
     ticket.Status = TicketStatus.Pending;
-    ticket.UpdatedAt = DateTime.UtcNow;
+    ticket.UpdatedAt = DateTime.Now;
 
     await dbContext.TicketMessages.AddAsync(newMessage);
     await dbContext.SaveChangesAsync();

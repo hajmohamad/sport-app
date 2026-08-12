@@ -6,7 +6,7 @@ public class Conversation
 
     public ConversationType Type { get; set; } = ConversationType.CoachAthlete;
 
-    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+    public DateTime CreatedAt { get; set; } = DateTime.Now;
 
     public DateTime? LastMessageAt { get; set; }
 

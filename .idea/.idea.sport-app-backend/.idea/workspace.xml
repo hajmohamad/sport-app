@@ -18,11 +18,31 @@
   <component name="ChangeListManager">
     <list default="true" id="11e104f8-869d-4d9d-9802-b48455f5eb31" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/dataSources.local.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/dataSources/b995594b-b1c6-4f7b-a3d8-4a5b1ad21ad7.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/dataSources/b995594b-b1c6-4f7b-a3d8-4a5b1ad21ad7.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Controller/ChatController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Controller/ChatController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dtos/Chat/CoachChatListDto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Dtos/Chat/CoachChatListDto.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Interface/IChatRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Interface/IChatRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BackgroundServices/TrainingReminderService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/BackgroundServices/TrainingReminderService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Data/ApplicationDBContext.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Data/ApplicationDBContext.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Mappers/ChatMapper.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Mappers/ChatMapper.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Mappers/CoachMappers.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Mappers/CoachMappers.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Models/Account/Coach/Coach.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/Account/Coach/Coach.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Models/AthleteChangePhoto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/AthleteChangePhoto.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Models/Chat/ChatMessage.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/Chat/ChatMessage.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Models/Chat/Conversation.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/Chat/Conversation.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Models/Chat/ConversationParticipant.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/Chat/ConversationParticipant.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Models/Payments/DiscountCode.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/Payments/DiscountCode.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Models/Support/TicketMessage.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/Support/TicketMessage.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Models/UserExternalAccount/EitaaLoginSession.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/UserExternalAccount/EitaaLoginSession.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Models/UserExternalAccount/UserExternalAccount.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/UserExternalAccount/UserExternalAccount.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Repository/AdminRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Repository/AdminRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Repository/AthleteRepo/BuyProgramFromApplicationRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Repository/AthleteRepo/BuyProgramFromApplicationRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Repository/BuyFromSiteRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Repository/BuyFromSiteRepository.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Repository/ChatRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Repository/ChatRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Repository/CoachRepo/CoachRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Repository/CoachRepo/CoachRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Repository/CoachRepo/DiscountCodeRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Repository/CoachRepo/DiscountCodeRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Repository/UserRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Repository/UserRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Services/EitaaAuthService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Services/EitaaAuthService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Services/Storage.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Services/Storage.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sport-app-backend.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/sport-app-backend.csproj" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -479,23 +499,13 @@
       <workItem from="1786155746233" duration="275000" />
       <workItem from="1786156106590" duration="1527000" />
       <workItem from="1786160021036" duration="1385000" />
-      <workItem from="1786449445635" duration="527000" />
-    </task>
-    <task id="LOCAL-00061" summary="edit ProgramRenewalReminderService.cs">
-      <option name="closed" value="true" />
-      <created>1781627500407</created>
-      <option name="number" value="00061" />
-      <option name="presentableId" value="LOCAL-00061" />
-      <option name="project" value="LOCAL" />
-      <updated>1781627500407</updated>
-    </task>
-    <task id="LOCAL-00062" summary="add coachSlug">
-      <option name="closed" value="true" />
-      <created>1781631691589</created>
-      <option name="number" value="00062" />
-      <option name="presentableId" value="LOCAL-00062" />
-      <option name="project" value="LOCAL" />
-      <updated>1781631691589</updated>
+      <workItem from="1786449445635" duration="1631000" />
+      <workItem from="1786462959171" duration="22000" />
+      <workItem from="1786463212249" duration="6000" />
+      <workItem from="1786464547082" duration="285000" />
+      <workItem from="1786465933770" duration="603000" />
+      <workItem from="1786476136168" duration="4034000" />
+      <workItem from="1786517031996" duration="343000" />
     </task>
     <task id="LOCAL-00063" summary="add slug and name to verify payment and get workout program">
       <option name="closed" value="true" />
@@ -873,7 +883,23 @@
       <option name="project" value="LOCAL" />
       <updated>1786134209510</updated>
     </task>
-    <option name="localTasksCounter" value="110" />
+    <task id="LOCAL-00110" summary="edit coach chat list item">
+      <option name="closed" value="true" />
+      <created>1786449991251</created>
+      <option name="number" value="00110" />
+      <option name="presentableId" value="LOCAL-00110" />
+      <option name="project" value="LOCAL" />
+      <updated>1786449991252</updated>
+    </task>
+    <task id="LOCAL-00111" summary="edit">
+      <option name="closed" value="true" />
+      <created>1786450505417</created>
+      <option name="number" value="00111" />
+      <option name="presentableId" value="LOCAL-00111" />
+      <option name="project" value="LOCAL" />
+      <updated>1786450505417</updated>
+    </task>
+    <option name="localTasksCounter" value="112" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -949,8 +975,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
-    <MESSAGE value="edit git ignore" />
-    <MESSAGE value="edit endpoint and migrations" />
     <MESSAGE value="editCoachReoisitory" />
     <MESSAGE value="fix bug in new repository" />
     <MESSAGE value="edit username" />
@@ -974,7 +998,9 @@
     <MESSAGE value="edit responese" />
     <MESSAGE value="add cash for coachWorkoutList" />
     <MESSAGE value="edit cors" />
-    <option name="LAST_COMMIT_MESSAGE" value="edit cors" />
+    <MESSAGE value="edit coach chat list item" />
+    <MESSAGE value="edit" />
+    <option name="LAST_COMMIT_MESSAGE" value="edit" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1034,10 +1060,10 @@
           <line>69</line>
           <properties documentPath="$PROJECT_DIR$/BackgroundServices/TrainingReminderService.cs" containingFunctionPresentation="Method 'ExecuteAsync'">
             <startOffsets>
-              <option value="2650" />
+              <option value="2647" />
             </startOffsets>
             <endOffsets>
-              <option value="2698" />
+              <option value="2695" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="15" />
@@ -1047,10 +1073,10 @@
           <line>42</line>
           <properties documentPath="$PROJECT_DIR$/BackgroundServices/TrainingReminderService.cs" containingFunctionPresentation="Method 'ExecuteAsync'">
             <startOffsets>
-              <option value="1731" />
+              <option value="1728" />
             </startOffsets>
             <endOffsets>
-              <option value="1764" />
+              <option value="1761" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="17" />
@@ -1086,10 +1112,10 @@
           <line>811</line>
           <properties documentPath="$PROJECT_DIR$/Repository/CoachRepo/CoachRepository.cs" containingFunctionPresentation="Method 'UpdateDiscountCode'">
             <startOffsets>
-              <option value="24026" />
+              <option value="24017" />
             </startOffsets>
             <endOffsets>
-              <option value="24100" />
+              <option value="24091" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="31" />
@@ -1099,10 +1125,10 @@
           <line>826</line>
           <properties documentPath="$PROJECT_DIR$/Repository/CoachRepo/CoachRepository.cs" containingFunctionPresentation="Method 'UpdateDiscountCode'">
             <startOffsets>
-              <option value="24113" />
+              <option value="24104" />
             </startOffsets>
             <endOffsets>
-              <option value="24114" />
+              <option value="24105" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="32" />
@@ -1112,10 +1138,10 @@
           <line>2020</line>
           <properties documentPath="$PROJECT_DIR$/Repository/CoachRepo/CoachRepository.cs" containingFunctionPresentation="Method 'GetCoachChecklist'">
             <startOffsets>
-              <option value="76380" />
+              <option value="76371" />
             </startOffsets>
             <endOffsets>
-              <option value="76381" />
+              <option value="76372" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="40" />
@@ -1151,10 +1177,10 @@
           <line>140</line>
           <properties documentPath="$PROJECT_DIR$/Services/EitaaAuthService.cs" containingFunctionPresentation="Lambda expression inside Method 'CompleteLoginAsync'">
             <startOffsets>
-              <option value="4281" />
+              <option value="4266" />
             </startOffsets>
             <endOffsets>
-              <option value="4305" />
+              <option value="4290" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="44" />
@@ -1164,10 +1190,10 @@
           <line>132</line>
           <properties documentPath="$PROJECT_DIR$/Services/EitaaAuthService.cs" containingFunctionPresentation="Method 'CompleteLoginAsync'">
             <startOffsets>
-              <option value="3972" />
+              <option value="3957" />
             </startOffsets>
             <endOffsets>
-              <option value="3973" />
+              <option value="3958" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="45" />
@@ -1177,10 +1203,10 @@
           <line>1504</line>
           <properties documentPath="$PROJECT_DIR$/Repository/CoachRepo/CoachRepository.cs" containingFunctionPresentation="Method 'GetAthletesWithStatus'">
             <startOffsets>
-              <option value="58750" />
+              <option value="58741" />
             </startOffsets>
             <endOffsets>
-              <option value="58751" />
+              <option value="58742" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="46" />
