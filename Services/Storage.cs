@@ -52,7 +52,7 @@ public class Storage : IStorage
 
 public async Task<ApiResponse> UploadImage(IFormFile image, string url, string? folderName)
 {
-    if (image == null || image.Length == 0)
+    if (image.Length == 0)
     {
         return new ApiResponse
         {
@@ -71,7 +71,6 @@ public async Task<ApiResponse> UploadImage(IFormFile image, string url, string? 
         await image.CopyToAsync(sourceStream);
         sourceStream.Position = 0;
 
-        // اگر فایل از قبل WebP باشد، دوباره تبدیلش نکن
         bool alreadyWebp =
             string.Equals(Path.GetExtension(image.FileName), ".webp", StringComparison.OrdinalIgnoreCase) ||
             string.Equals(image.ContentType, "image/webp", StringComparison.OrdinalIgnoreCase);
@@ -174,7 +173,6 @@ private static bool TryConvertToWebP(Stream input, Stream output, int quality = 
     }
     catch
     {
-        // اگر تصویر قابل تبدیل نبود، فایل اصلی آپلود شود
         return false;
     }
 }

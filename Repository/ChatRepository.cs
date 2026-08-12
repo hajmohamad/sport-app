@@ -405,7 +405,9 @@ public async Task<ApiResponse> MarkAsRead(
     }
     
     var folderPath = $"chat/{resolvedConversationId}";
-    var uploadResult = await storage.UploadFile(file, string.Empty, folderPath);
+    var uploadResult = isImage
+        ? await storage.UploadImage(file, string.Empty, folderPath) 
+        : await storage.UploadFile(file, string.Empty, folderPath); 
 
     if (!uploadResult.Action || uploadResult.Result is null)
     {
