@@ -25,97 +25,106 @@ public class ChatRepository(
 
 
 
-    public async Task<ApiResponse> GetConversationMessages(
-        int userId,
-        long conversationId,
-        long? beforeMessageId,
-        int take)
-    {
-        if (userId <= 0 || conversationId <= 0)
-        {
-            return Failure("اطلاعات گفتگو نامعتبر است.");
-        }
+public async Task<ApiResponse> GetConversationMessages(
+    int userId,
+    long conversationId,
+    long? beforeMessageId,
+    int take)
+{
+    if (userId <= 0 || conversationId <= 0)
+        return Failure("اطلاعات گفتگو نامعتبر است.");
 
-        var conversationParticipant = await context.ConversationParticipants
+    var conversation = await context.Conversations
+        .AsNoTracking()
+        .Select(c => new { c.Id, c.Type })
+        .FirstOrDefaultAsync(c => c.Id == conversationId);
+
+    if (conversation == null) return Failure("گفتگو یافت نشد.");
+
+    bool isChannel = conversation.Type == ConversationType.Channel;
+    
+    object? otherUserNameAndPhoto = new
+    {
+        FullName = $"اطلاع رسانی چارست",
+        Photo = "",
+        phoneNumber = "09395327229",
+        athleteStatus = "Channel"
+    };
+    long? otherLastReadId = null;
+
+    if (!isChannel)
+    {
+        var participants = await context.ConversationParticipants
             .AsNoTracking()
             .Where(x => x.ConversationId == conversationId)
-            .Include(conversationParticipant => conversationParticipant.User)
-            .ToListAsync();
-            
-        var userParticipant = conversationParticipant.FirstOrDefault(x => x.UserId == userId);
-
-        if (userParticipant is null)
-        {
-            return Failure("شما عضو این گفتگو نیستید.");
-        }
-        
-        var otherParticipant = conversationParticipant
-            .FirstOrDefault(x => x.UserId != userId);
-        if (otherParticipant is null)
-        {
-            return Failure("کاربر مقابل پیدا نشد");
-        }
-        
-
-        take = ChatMapper.NormalizeMessageTake(take);
-        var messagesQuery = context.ChatMessages
-            .AsNoTracking()
-            .Where(x => x.ConversationId == conversationId);
-
-        if (beforeMessageId.HasValue)
-        {
-            if (beforeMessageId.Value <= 0)
+            .Select(p => new
             {
-                return Failure("شناسه پیام نامعتبر است.");
-            }
+                p.UserId,
+                p.Role,
+                p.LastReadMessageId,
+                User = new { p.User.FirstName, p.User.LastName, p.User.ImageProfile, p.User.PhoneNumber }
+            })
+            .ToListAsync();
 
-            messagesQuery = messagesQuery.Where(x => x.Id < beforeMessageId.Value);
-        }
+        var userParticipant = participants.FirstOrDefault(x => x.UserId == userId);
+        if (userParticipant is null) return Failure("شما عضو این گفتگو نیستید.");
+
+        var otherParticipant = participants.FirstOrDefault(x => x.UserId != userId);
+        if (otherParticipant is null) return Failure("کاربر مقابل پیدا نشد.");
+
+        otherLastReadId = otherParticipant.LastReadMessageId;
 
         var athleteStatus = "";
-
         if (otherParticipant.Role == ConversationParticipantRole.Athlete)
         {
             var programs = await workoutCache.GetCoachWorkoutProgramAthleteUserIdByCoachUserId(userId);
-
             if (programs.TryGetValue(otherParticipant.UserId, out var program))
             {
                 athleteStatus = program.GetStatus();
             }
         }
 
-        var otherUserNameAndPhoto= new
-            {
-                FullName = GetFullName(otherParticipant!.User),
-                Photo = otherParticipant.User.ImageProfile,
-                phoneNumber=otherParticipant.User.PhoneNumber,
-                athleteStatus
-            };
-        
-
-        var messages = await messagesQuery
-            .OrderByDescending(x => x.Id)
-            .Take(take)
-            .ToListAsync();
-
-        var messageList = messages
-            .OrderBy(x => x.Id)
-            .Select(x => x.ChatMessageDto(userId, otherParticipant.LastReadMessageId))
-            .ToList();
-        
-        await context.ConversationParticipants
-            .Where(x =>
-                x.ConversationId == conversationId &&
-                x.UserId == userId)
-            .ExecuteUpdateAsync(update =>
-                update.SetProperty(x => x.UnreadCount, 0));
-        
-        return Success("پیام‌های گفتگو با موفقیت دریافت شدند.", new
+        otherUserNameAndPhoto = new
         {
-            messageList,
-            otherUserNameAndPhoto
-        });
+            FullName = $"{otherParticipant.User.FirstName} {otherParticipant.User.LastName}".Trim(),
+            Photo = otherParticipant.User.ImageProfile,
+            phoneNumber = otherParticipant.User.PhoneNumber,
+            athleteStatus
+        };
     }
+  
+    await context.ConversationParticipants
+        .Where(x => x.ConversationId == conversationId && x.UserId == userId)
+        .ExecuteUpdateAsync(update => update.SetProperty(x => x.UnreadCount, 0));
+
+    take = ChatMapper.NormalizeMessageTake(take);
+    var messagesQuery = context.ChatMessages
+        .AsNoTracking()
+        .Where(x => x.ConversationId == conversationId);
+
+    if (beforeMessageId.HasValue && beforeMessageId.Value > 0)
+    {
+        messagesQuery = messagesQuery.Where(x => x.Id < beforeMessageId.Value);
+    }
+
+    var messages = await messagesQuery
+        .OrderByDescending(x => x.Id)
+        .Take(take)
+        .ToListAsync();
+
+    var messageList = messages
+        .OrderBy(x => x.Id)
+        .Select(x => x.ChatMessageDto(userId, isChannel ? null : otherLastReadId))
+        .ToList();
+
+    return Success("پیام‌ها با موفقیت دریافت شدند.", new
+    {
+        messageList,
+        otherUserNameAndPhoto 
+    });
+}
+
+
 
 public async Task<ApiResponse> SendMessage(int senderUserId, SendMessageDto dto)
 {
@@ -150,7 +159,7 @@ public async Task<ApiResponse> SendMessage(int senderUserId, SendMessageDto dto)
         return Failure("گفتگو یافت نشد.");
     }
 
-    if (conversation.IsClosed)
+    if (conversation.IsClosed||conversation.Type==ConversationType.Channel)
     {
         return Failure("این گفتگو بسته شده است.");
     }
@@ -313,8 +322,15 @@ public async Task<ApiResponse> MarkAsRead(
     long? conversationId,
     IFormFile file)
 {
-    if (ChatMapper.CheckUploadAttachment(senderUserId, file, out var isPdf, out var isImage, out var apiResponse)) return apiResponse!;
-
+    if (ChatMapper.CheckUploadAttachment(
+            senderUserId,
+            file,
+            out var isPdf,
+            out var isImage,
+            out var isVideo,
+            out var apiResponse))
+        return apiResponse!;
+    
     var resolvedConversation = await ResolveConversationIdOrCreateSupport(
         senderUserId,
         conversationId);
@@ -354,9 +370,11 @@ public async Task<ApiResponse> MarkAsRead(
     }
     
     var folderPath = $"chat/{resolvedConversationId}";
-    var uploadResult = isImage
-        ? await storage.UploadImage(file, string.Empty, folderPath) 
-        : await storage.UploadFile(file, string.Empty, folderPath); 
+    var uploadResult = (isVideo || isPdf)
+        ? await storage.UploadFile(file, string.Empty, folderPath)
+        : await storage.UploadImage(file, string.Empty, folderPath);
+
+
 
     if (!uploadResult.Action || uploadResult.Result is null)
     {
@@ -369,7 +387,9 @@ public async Task<ApiResponse> MarkAsRead(
     {
         ConversationId = conversation.Id,
         SenderUserId = senderUserId,
-        Type = isPdf ? ChatMessageType.File : ChatMessageType.Image,
+        Type = isVideo
+            ? ChatMessageType.Video
+            : (isPdf ? ChatMessageType.File : ChatMessageType.Image),
         SentAt = now,
         FileUrl = uploadResult.Result.ToString(),
         SenderUser = senderParticipant.User 
@@ -427,6 +447,7 @@ public async Task<ApiResponse> MarkAsRead(
     return Success("پیام با موفقیت ارسال شد.", senderMessageDto); }
 
 
+ 
     public async Task<ApiResponse> BackfillCoachAthleteConversationsFromSuccessfulPayments()
     {
         var pairs = await context.WorkoutPrograms
@@ -616,7 +637,9 @@ public async Task<ApiResponse> GetCoachChatList(int coachId, int coachUserId, st
 
     var result = new CoachChatListDto
     {
-        Support = await GetSupportChatItem(coachUserId)
+        Support = await GetSupportChatItem(coachUserId),
+        SupportChannel = await GetSupportChannelChatItem(coachUserId)
+        
     };
 
     foreach (var conversation in conversations)
@@ -711,7 +734,8 @@ public async Task<ApiResponse> GetCoachChatList(int coachId, int coachUserId, st
 
         var result = new AthleteChatListDto
         {
-            Support = await GetSupportChatItem(athleteUserId)
+            Support = await GetSupportChatItem(athleteUserId),
+            SupportChannel = await GetSupportChannelChatItem(athleteUserId)
         };
 
         foreach (var conversation in conversations)
@@ -737,6 +761,62 @@ public async Task<ApiResponse> GetCoachChatList(int coachId, int coachUserId, st
 
         return Success("لیست چت‌های ورزشکار با موفقیت دریافت شد.", result);
     }
+    public async Task<ApiResponse> AddNewUserToChannel(int userId, bool isCoach)
+    {
+        if (userId <= 0)
+        {
+            return Failure("شناسه کاربر نامعتبر است.");
+        }
+
+        var supportChannelId = GetSupportChannelId();
+        if (supportChannelId <= 0)
+        {
+            return Failure("شناسه کانال اطلاع‌رسانی در تنظیمات سیستم یافت نشد.");
+        }
+
+        var channel = await context.Conversations
+            .FirstOrDefaultAsync(x => x.Id == supportChannelId && x.Type == ConversationType.Channel);
+
+        if (channel == null)
+        {
+            return Failure("کانال اطلاع‌رسانی یافت نشد.");
+        }
+
+        // var existingParticipant = await context.ConversationParticipants
+        //     .AnyAsync(x => x.ConversationId == supportChannelId && x.UserId == userId);
+        //
+        // if (existingParticipant)
+        // {
+        //     return Success("کاربر در حال حاضر عضو کانال می‌باشد.");
+        // }
+
+        var now = DateTime.Now;
+        var newParticipant = new ConversationParticipant
+        {
+            ConversationId = supportChannelId,
+            UserId = userId,
+            // نقش کاربر در کانال معمولاً User یا Participant ساده است
+            Role = isCoach ? ConversationParticipantRole.Coach : ConversationParticipantRole.Athlete,
+            JoinedAt = now,
+            UnreadCount = 0 // یا می‌توانید تعداد پیام‌های کل کانال را بشمارید و اینجا قرار دهید
+        };
+
+        await context.ConversationParticipants.AddAsync(newParticipant);
+    
+        try
+        {
+            await context.SaveChangesAsync();
+        }
+        catch (Exception ex)
+        {
+            return Failure("خطا در عضویت در کانال: " + ex.Message);
+        }
+
+        
+
+        return Success("کاربر با موفقیت به کانال اضافه شد.");
+    }
+
 
     public async Task<ApiResponse> AddSystemMessage(int coachUserId, int athleteUserId, string text)
 {
@@ -910,6 +990,24 @@ public async Task<ApiResponse> GetCoachChatList(int coachId, int coachUserId, st
             supportParticipant.User, 
             userParticipant.UnreadCount); 
     }
+    private async Task<ChatListItemDto?> GetSupportChannelChatItem(int userId)
+    {
+        var supportChannelId = GetSupportChannelId();
+        var conversation = await context.Conversations
+            .AsNoTracking()
+            .FirstOrDefaultAsync(x => x.Type == ConversationType.Channel && x.Id == supportChannelId);
+        
+        if (conversation is null) return null;
+  
+        var unreadCount = await context.ConversationParticipants
+            .Where(cp => cp.ConversationId == conversation.Id && cp.UserId == userId)
+            .Select(p => p.UnreadCount)
+            .FirstOrDefaultAsync();
+
+        return conversation.ToChannelListItem(unreadCount); 
+    }
+
+
 
 
    
@@ -931,6 +1029,10 @@ public async Task<ApiResponse> GetCoachChatList(int coachId, int coachUserId, st
     private int GetSupportUserId()
     {
         return configuration.GetValue<int>("Chat:SupportUserId", 1);
+    }
+    private int GetSupportChannelId()
+    {
+        return configuration.GetValue<int>("Chat:SupportChannelId", 2);
     }
 
     private async Task NotifyConversationCreated(

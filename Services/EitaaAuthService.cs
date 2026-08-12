@@ -17,7 +17,8 @@ public class EitaaAuthService(
     ApplicationDbContext dbContext,
     IDataValidator eitaaDataValidator,
     ITokenService tokenService,
-    IConfiguration configuration)
+    IConfiguration configuration,
+    IChatRepository chatRepository)
     : IEitaaAuthService
 {
 
@@ -224,6 +225,7 @@ public async Task<ApiResponse> CompleteLoginAsync(
 
                 if (user is null)
                 {
+                    
                     user = await CreateNewAthleteUser(
                         normalizedPhoneNumber, session, cancellationToken);
                 }
@@ -288,6 +290,7 @@ public async Task<ApiResponse> CompleteLoginAsync(
         EitaaLoginSession session,
         CancellationToken cancellationToken)
     {
+        
         var newUser = new User
         {
             UserName = await GenerateUniqueUsername(cancellationToken),
@@ -314,6 +317,7 @@ public async Task<ApiResponse> CompleteLoginAsync(
 
         newUser.Athlete = athlete;
         newUser.AthleteId = athlete.Id;
+        await chatRepository.AddNewUserToChannel(newUser.Id, false);
 
         await dbContext.SaveChangesAsync(cancellationToken);
 

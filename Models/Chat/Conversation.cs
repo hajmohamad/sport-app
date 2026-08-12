@@ -25,5 +25,6 @@ public class Conversation
 public enum ConversationType
 {
     CoachAthlete = 1,
-    UserSupport = 2
+    UserSupport = 2,
+    Channel = 3
 }

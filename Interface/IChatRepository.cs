@@ -34,6 +34,7 @@ public interface IChatRepository
     Task<ApiResponse> GetAthleteChatList(int athleteId);
 
     Task<ApiResponse> AddSystemMessage(int coachUserId, int athleteUserId, string text);
+    Task<ApiResponse> AddNewUserToChannel(int userId,bool isCoach);
 
 
     Task<ApiResponse> BackfillCoachAthleteConversationsFromSuccessfulPayments();

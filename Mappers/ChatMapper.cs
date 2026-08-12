@@ -11,7 +11,8 @@
         private const int DefaultMessageTake = 50;
         private const int MinimumMessageTake = 20;
         private const int MaximumMessageTake = 100;
-        private const long MaximumAttachmentSize = 10 * 1024 * 1024;
+        private const long MaximumAttachmentSize = 10 * 1024 * 1024;   // تصویر/PDF
+        private const long MaximumVideoSize = 20 * 1024 * 1024;   
         private static readonly string[] AllowedAttachmentContentTypes =
         [
             "image/jpeg",
@@ -19,7 +20,16 @@
             "image/png",
             "image/webp",
             "image/gif",
-            "application/pdf"
+            "application/pdf",
+            "video/mp4",
+            "video/webm",
+            "video/quicktime",     // .mov
+            "video/x-msvideo",     // .avi
+            "video/x-matroska",    // .mkv
+            "video/mpeg",
+            "video/ogg",
+            "video/3gpp",
+            "video/mp2t"
         ];
         public static ChatMessageDto ChatMessageDto(
             this ChatMessage message,
@@ -62,6 +72,27 @@
                 UnreadCount = unreadCount,
                 IsSupport = true,
                 LastMessageStatus = conversation.LastMessageStatus(unreadCount,supportUser.Id)
+                
+            };
+        }
+        public static ChatListItemDto ToChannelListItem(
+            this Conversation conversation,
+           int unreadCount)
+        {
+            return new ChatListItemDto
+            {
+                ConversationId = conversation.Id,
+                UserId = 0,
+                FullName = "کانال اطلاع رسانی چارست",
+                PhoneNumber = "09395327229",
+                ProfileImageUrl = "",
+                Service = "پشتیبانی",
+                Status = "Channel",
+                LastMessageText = conversation.LastMessageText,
+                LastMessageAt = conversation.LastMessageAt,
+                UnreadCount = unreadCount,
+                IsSupport = true,
+                LastMessageStatus = "noMessage"
                 
             };
         }
@@ -126,26 +157,61 @@
         }
 
 
-        public static bool CheckUploadAttachment(int userId, IFormFile file, out bool isPdf, out bool isImage,
+
+
+        public static bool CheckUploadAttachment(
+            int userId,
+            IFormFile file,
+            out bool isPdf,
+            out bool isImage,
+            out bool isVideo,
             out ApiResponse? apiResponse)
         {
+            isPdf = false;
+            isImage = false;
+            isVideo = false;
+            apiResponse = null;
+
             if (userId <= 0)
             {
-                isPdf = false;
-                isImage = false;
                 apiResponse = Failure("شناسه کاربر نامعتبر است.");
                 return true;
             }
 
             if (file is null || file.Length <= 0)
             {
-                isPdf = false;
-                isImage = false;
                 apiResponse = Failure("فایل انتخاب نشده است.");
                 return true;
             }
 
-            if (file.Length > MaximumAttachmentSize)
+            var contentType = file.ContentType?.Trim().ToLowerInvariant();
+
+            if (string.IsNullOrWhiteSpace(contentType) ||
+                !AllowedAttachmentContentTypes.Contains(contentType, StringComparer.OrdinalIgnoreCase))
+            {
+                apiResponse = Failure("فقط تصویر، فایل PDF و ویدیو مجاز هستند.");
+                return true;
+            }
+
+            isVideo = contentType.StartsWith("video/");
+            isImage = contentType.StartsWith("image/");
+            isPdf = string.Equals(contentType, "application/pdf", StringComparison.OrdinalIgnoreCase);
+
+            var extension = Path.GetExtension(file.FileName)?.ToLowerInvariant();
+
+            // ── بررسی سایز (ویدیو ۲۰ مگ، بقیه ۱۰ مگ) ──
+            if (isVideo)
+            {
+                if (file.Length > MaximumVideoSize)
+                {
+                    isPdf = false;
+                    isImage = false;
+                    isVideo = false;
+                    apiResponse = Failure("حجم ویدیو نباید بیشتر از ۲۰ مگابایت باشد.");
+                    return true;
+                }
+            }
+            else if (file.Length > MaximumAttachmentSize)
             {
                 isPdf = false;
                 isImage = false;
@@ -153,27 +219,15 @@
                 return true;
             }
 
-            var contentType = file.ContentType?.Trim().ToLowerInvariant();
-
-            if (string.IsNullOrWhiteSpace(contentType) ||
-                !AllowedAttachmentContentTypes.Contains(
-                    contentType,
-                    StringComparer.OrdinalIgnoreCase))
+            // ── بررسی پسوند ──
+            if (string.IsNullOrWhiteSpace(extension))
             {
                 isPdf = false;
                 isImage = false;
-                apiResponse = Failure("فقط تصویر و فایل PDF مجاز هستند.");
+                isVideo = false;
+                apiResponse = Failure("پسوند فایل نامعتبر است.");
                 return true;
             }
-
-            var extension = Path.GetExtension(file.FileName)?.ToLowerInvariant();
-
-            isPdf = string.Equals(
-                contentType,
-                "application/pdf",
-                StringComparison.OrdinalIgnoreCase);
-
-            isImage = contentType.StartsWith("image/");
 
             if (isPdf && extension != ".pdf")
             {
@@ -183,26 +237,43 @@
 
             if (isImage)
             {
-                var allowedImageExtensions = new[]
-                {
-                    ".jpg",
-                    ".jpeg",
-                    ".png",
-                    ".webp",
-                    ".gif"
-                };
-
-                if (string.IsNullOrWhiteSpace(extension) ||
-                    !allowedImageExtensions.Contains(extension))
+                var allowedImageExtensions = new[] { ".jpg", ".jpeg", ".png", ".webp", ".gif" };
+                if (!allowedImageExtensions.Contains(extension))
                 {
                     apiResponse = Failure("پسوند تصویر نامعتبر است.");
                     return true;
                 }
             }
 
-            apiResponse = null;
+            if (isVideo)
+            {
+                if (!IsValidVideoExtension(contentType, extension))
+                {
+                    apiResponse = Failure("پسوند ویدیو نامعتبر است.");
+                    return true;
+                }
+            }
+
             return false;
         }
+
+private static bool IsValidVideoExtension(string contentType, string extension)
+{
+    return contentType switch
+    {
+        "video/mp4" => extension is ".mp4" or ".m4v",
+        "video/webm" => extension == ".webm",
+        "video/quicktime" => extension is ".mov" or ".qt",
+        "video/x-msvideo" => extension == ".avi",
+        "video/x-matroska" => extension == ".mkv",
+        "video/mpeg" => extension is ".mpeg" or ".mpg",
+        "video/ogg" => extension is ".ogv" or ".ogg",
+        "video/3gpp" => extension == ".3gp",
+        "video/mp2t" => extension == ".ts",
+        _ => true // در حالت غیرقابل‌پیش‌بینی، اگر contentType معتبر بود، رد نکن
+    };
+}
+
         public static ApiResponse Success(string message, object? result = null)
         {
             return new ApiResponse
@@ -256,6 +327,7 @@
                 ChatMessageType.Text => message.Text ?? string.Empty,
                 ChatMessageType.Image => "تصویر",
                 ChatMessageType.File => "فایل",
+                ChatMessageType.Video => "ویدیو",
                 ChatMessageType.System => message.Text ?? "پیام سیستمی",
                 _ => "پیام جدید"
             };

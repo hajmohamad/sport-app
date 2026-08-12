@@ -5,4 +5,5 @@ public class AthleteChatListDto
     public List<ChatListItemDto> Coaches { get; set; } = [];
 
     public ChatListItemDto? Support { get; set; }
+    public  ChatListItemDto? SupportChannel { get; set; }
 }

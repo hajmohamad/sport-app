@@ -18,10 +18,16 @@
   <component name="ChangeListManager">
     <list default="true" id="11e104f8-869d-4d9d-9802-b48455f5eb31" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dtos/Chat/ChatMessageDto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Dtos/Chat/ChatMessageDto.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dtos/Chat/AthleteChatListDto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Dtos/Chat/AthleteChatListDto.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dtos/Chat/CoachChatListDto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Dtos/Chat/CoachChatListDto.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Interface/IChatRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Interface/IChatRepository.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Mappers/ChatMapper.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Mappers/ChatMapper.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Models/Chat/ChatMessage.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/Chat/ChatMessage.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Models/Chat/Conversation.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/Chat/Conversation.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Repository/BuyFromSiteRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Repository/BuyFromSiteRepository.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Repository/ChatRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Repository/ChatRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Repository/UserRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Repository/UserRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Services/EitaaAuthService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Services/EitaaAuthService.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -484,15 +490,7 @@
       <workItem from="1786464547082" duration="285000" />
       <workItem from="1786465933770" duration="603000" />
       <workItem from="1786476136168" duration="4034000" />
-      <workItem from="1786517031996" duration="18753000" />
-    </task>
-    <task id="LOCAL-00068" summary="edit GetLastMonthWeightReport and add last weight to day dont have eny data">
-      <option name="closed" value="true" />
-      <created>1782303965180</created>
-      <option name="number" value="00068" />
-      <option name="presentableId" value="LOCAL-00068" />
-      <option name="project" value="LOCAL" />
-      <updated>1782303965180</updated>
+      <workItem from="1786517031996" duration="26253000" />
     </task>
     <task id="LOCAL-00069" summary="add show website">
       <option name="closed" value="true" />
@@ -878,7 +876,15 @@
       <option name="project" value="LOCAL" />
       <updated>1786540661854</updated>
     </task>
-    <option name="localTasksCounter" value="117" />
+    <task id="LOCAL-00117" summary="SenderMessageCanNull">
+      <option name="closed" value="true" />
+      <created>1786542093078</created>
+      <option name="number" value="00117" />
+      <option name="presentableId" value="LOCAL-00117" />
+      <option name="project" value="LOCAL" />
+      <updated>1786542093078</updated>
+    </task>
+    <option name="localTasksCounter" value="118" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -954,7 +960,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
-    <MESSAGE value="edit message" />
     <MESSAGE value="add lastseen app" />
     <MESSAGE value="add eita token" />
     <MESSAGE value="edit daravalidator" />
@@ -979,7 +984,8 @@
     <MESSAGE value="edit upload attachment" />
     <MESSAGE value="addLastSenderUserIdToConversations" />
     <MESSAGE value="add systemMessage" />
-    <option name="LAST_COMMIT_MESSAGE" value="add systemMessage" />
+    <MESSAGE value="SenderMessageCanNull" />
+    <option name="LAST_COMMIT_MESSAGE" value="SenderMessageCanNull" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1153,26 +1159,26 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Services/EitaaAuthService.cs</url>
-          <line>140</line>
+          <line>141</line>
           <properties documentPath="$PROJECT_DIR$/Services/EitaaAuthService.cs" containingFunctionPresentation="Lambda expression inside Method 'CompleteLoginAsync'">
             <startOffsets>
-              <option value="4266" />
+              <option value="4302" />
             </startOffsets>
             <endOffsets>
-              <option value="4290" />
+              <option value="4326" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="44" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Services/EitaaAuthService.cs</url>
-          <line>132</line>
+          <line>133</line>
           <properties documentPath="$PROJECT_DIR$/Services/EitaaAuthService.cs" containingFunctionPresentation="Method 'CompleteLoginAsync'">
             <startOffsets>
-              <option value="3957" />
+              <option value="3993" />
             </startOffsets>
             <endOffsets>
-              <option value="3958" />
+              <option value="3994" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="45" />

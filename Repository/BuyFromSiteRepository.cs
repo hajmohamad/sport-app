@@ -498,6 +498,7 @@ public class BuyFromSiteRepository(
     }
     private async Task<ApiResponse> GenerateSuccessResponse(User user)
     {
+        await chatRepository.AddNewUserToChannel(user.Id, false);
         return new ApiResponse
         {
             Action = true,

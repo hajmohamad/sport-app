@@ -60,6 +60,7 @@ public class UserRepository(
                 await dbContext.Coaches.AddAsync(user.Coach);
                 await dbContext.SaveChangesAsync();
                 // await  AddTemplateProgramForNewCouch(user.Coach,user.Gender);
+                await chatRepository.AddNewUserToChannel(user.Id, true);
                 return new ApiResponse()
                 {
                     Message = "Coach added successfully",
@@ -91,6 +92,8 @@ public class UserRepository(
                 user.TypeOfUser = TypeOfUser.ATHLETE;
                 await dbContext.Athletes.AddAsync(user.Athlete);
                 await dbContext.SaveChangesAsync();
+                await chatRepository.AddNewUserToChannel(user.Id, false);
+
                 return new ApiResponse()
                 {
                     Message = "Athlete added successfully",
