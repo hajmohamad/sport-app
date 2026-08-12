@@ -15,17 +15,12 @@ public class ChatListItemDto
     public string? Service { get; set; }
 
     public DateTime? LastExerciseDate { get; set; }
-
     public string Status { get; set; } = string.Empty;
-
-    public long? LastMessageId { get; set; }
-
+    public int? LastMessageSenderId { get; set; }
     public string? LastMessageText { get; set; }
-
     public DateTime? LastMessageAt { get; set; }
-
     public int UnreadCount { get; set; }
-
     public bool IsSupport { get; set; }
-    public bool OtherUserRead { get; set; }
+    public required string LastMessageStatus {get; set; }
+    //noMessage ,readMessage , unreadMessage 
 }

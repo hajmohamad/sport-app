@@ -17,32 +17,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="11e104f8-869d-4d9d-9802-b48455f5eb31" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/dataSources.local.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/dataSources/b995594b-b1c6-4f7b-a3d8-4a5b1ad21ad7.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/dataSources/b995594b-b1c6-4f7b-a3d8-4a5b1ad21ad7.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BackgroundServices/TrainingReminderService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/BackgroundServices/TrainingReminderService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Data/ApplicationDBContext.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Data/ApplicationDBContext.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dtos/Chat/ChatListItemDto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Dtos/Chat/ChatListItemDto.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Interface/IChatRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Interface/IChatRepository.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Mappers/ChatMapper.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Mappers/ChatMapper.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Mappers/CoachMappers.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Mappers/CoachMappers.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Models/Account/Coach/Coach.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/Account/Coach/Coach.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Models/AthleteChangePhoto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/AthleteChangePhoto.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Models/Chat/ChatMessage.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/Chat/ChatMessage.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Models/Chat/Conversation.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/Chat/Conversation.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Models/Chat/ConversationParticipant.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/Chat/ConversationParticipant.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Models/Payments/DiscountCode.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/Payments/DiscountCode.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Models/Support/TicketMessage.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/Support/TicketMessage.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Models/UserExternalAccount/EitaaLoginSession.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/UserExternalAccount/EitaaLoginSession.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Models/UserExternalAccount/UserExternalAccount.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/UserExternalAccount/UserExternalAccount.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Repository/AdminRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Repository/AdminRepository.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Repository/AthleteRepo/BuyProgramFromApplicationRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Repository/AthleteRepo/BuyProgramFromApplicationRepository.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Repository/BuyFromSiteRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Repository/BuyFromSiteRepository.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Repository/ChatRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Repository/ChatRepository.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Repository/CoachRepo/CoachRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Repository/CoachRepo/CoachRepository.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Repository/CoachRepo/DiscountCodeRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Repository/CoachRepo/DiscountCodeRepository.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Repository/UserRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Repository/UserRepository.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Services/EitaaAuthService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Services/EitaaAuthService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Services/Storage.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Services/Storage.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sport-app-backend.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/sport-app-backend.csproj" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -505,31 +485,7 @@
       <workItem from="1786464547082" duration="285000" />
       <workItem from="1786465933770" duration="603000" />
       <workItem from="1786476136168" duration="4034000" />
-      <workItem from="1786517031996" duration="343000" />
-    </task>
-    <task id="LOCAL-00063" summary="add slug and name to verify payment and get workout program">
-      <option name="closed" value="true" />
-      <created>1781868091058</created>
-      <option name="number" value="00063" />
-      <option name="presentableId" value="LOCAL-00063" />
-      <option name="project" value="LOCAL" />
-      <updated>1781868091058</updated>
-    </task>
-    <task id="LOCAL-00064" summary="edit pdf">
-      <option name="closed" value="true" />
-      <created>1781957344605</created>
-      <option name="number" value="00064" />
-      <option name="presentableId" value="LOCAL-00064" />
-      <option name="project" value="LOCAL" />
-      <updated>1781957344605</updated>
-    </task>
-    <task id="LOCAL-00065" summary="add time to webSite">
-      <option name="closed" value="true" />
-      <created>1782053231632</created>
-      <option name="number" value="00065" />
-      <option name="presentableId" value="LOCAL-00065" />
-      <option name="project" value="LOCAL" />
-      <updated>1782053231632</updated>
+      <workItem from="1786517031996" duration="15971000" />
     </task>
     <task id="LOCAL-00066" summary="edit GetCoachService">
       <option name="closed" value="true" />
@@ -899,7 +855,31 @@
       <option name="project" value="LOCAL" />
       <updated>1786450505417</updated>
     </task>
-    <option name="localTasksCounter" value="112" />
+    <task id="LOCAL-00112" summary="convert image to webp &#10;and conver time utc to time">
+      <option name="closed" value="true" />
+      <created>1786517468834</created>
+      <option name="number" value="00112" />
+      <option name="presentableId" value="LOCAL-00112" />
+      <option name="project" value="LOCAL" />
+      <updated>1786517468835</updated>
+    </task>
+    <task id="LOCAL-00113" summary="convert .ImageSharp to version 2.1.10">
+      <option name="closed" value="true" />
+      <created>1786517798166</created>
+      <option name="number" value="00113" />
+      <option name="presentableId" value="LOCAL-00113" />
+      <option name="project" value="LOCAL" />
+      <updated>1786517798166</updated>
+    </task>
+    <task id="LOCAL-00114" summary="edit upload attachment">
+      <option name="closed" value="true" />
+      <created>1786520045351</created>
+      <option name="number" value="00114" />
+      <option name="presentableId" value="LOCAL-00114" />
+      <option name="project" value="LOCAL" />
+      <updated>1786520045352</updated>
+    </task>
+    <option name="localTasksCounter" value="115" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -975,9 +955,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
-    <MESSAGE value="editCoachReoisitory" />
-    <MESSAGE value="fix bug in new repository" />
-    <MESSAGE value="edit username" />
     <MESSAGE value="edit EditUserProfile" />
     <MESSAGE value="fix bug in sms service" />
     <MESSAGE value="edit message" />
@@ -1000,7 +977,10 @@
     <MESSAGE value="edit cors" />
     <MESSAGE value="edit coach chat list item" />
     <MESSAGE value="edit" />
-    <option name="LAST_COMMIT_MESSAGE" value="edit" />
+    <MESSAGE value="convert image to webp &#10;and conver time utc to time" />
+    <MESSAGE value="convert .ImageSharp to version 2.1.10" />
+    <MESSAGE value="edit upload attachment" />
+    <option name="LAST_COMMIT_MESSAGE" value="edit upload attachment" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1223,6 +1203,19 @@
             </endOffsets>
           </properties>
           <option name="timeStamp" value="52" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Services/Storage.cs</url>
+          <line>73</line>
+          <properties documentPath="$PROJECT_DIR$/Services/Storage.cs" containingFunctionPresentation="Method 'UploadImage'">
+            <startOffsets>
+              <option value="2370" />
+            </startOffsets>
+            <endOffsets>
+              <option value="2593" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="53" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

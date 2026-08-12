@@ -13,7 +13,6 @@ using sport_app_backend.Models.Chat;
 using sport_app_backend.Models.Payments;
 using sport_app_backend.Models.Program;
 using sport_app_backend.Services.Cash;
-
 namespace sport_app_backend.Repository;
 
 public class ChatRepository(
@@ -23,10 +22,7 @@ public class ChatRepository(
     IConfiguration configuration,
     WorkoutProgramCacheService workoutCache) : IChatRepository
 {
-    private const int DefaultMessageTake = 50;
-    private const int MinimumMessageTake = 20;
-    private const int MaximumMessageTake = 100;
-    private const long MaximumAttachmentSize = 10 * 1024 * 1024;
+
 
 
     public async Task<ApiResponse> GetConversationMessages(
@@ -61,7 +57,7 @@ public class ChatRepository(
         }
         
 
-        take = NormalizeMessageTake(take);
+        take = ChatMapper.NormalizeMessageTake(take);
         var messagesQuery = context.ChatMessages
             .AsNoTracking()
             .Where(x => x.ConversationId == conversationId);
@@ -135,15 +131,15 @@ public async Task<ApiResponse> SendMessage(int senderUserId, SendMessageDto dto)
         return Failure("متن پیام نمی‌تواند خالی باشد.");
     }
 
-    var resolvedConversation = await ResolveConversationIdOrCreateSupport(
+    var (action, m, conversationId) = await ResolveConversationIdOrCreateSupport(
         senderUserId,
         dto.ConversationId);
 
-    if (!resolvedConversation.Action)
+    if (!action)
     {
-        return Failure(resolvedConversation.Message);
+        return Failure(m);
     }
-    var conversationId = resolvedConversation.ConversationId;
+
     var conversation = await context.Conversations
         .Include(x => x.Participants)
             .ThenInclude(p => p.User) 
@@ -178,20 +174,18 @@ public async Task<ApiResponse> SendMessage(int senderUserId, SendMessageDto dto)
         SenderUser = senderParticipant.User 
     };
 
-    context.ChatMessages.Add(message);
+    await context.ChatMessages.AddAsync(message);
 
     conversation.LastMessageAt = now;
-    conversation.LastMessageText = BuildConversationPreview(message);
+    conversation.LastMessageText = ChatMapper.BuildConversationPreview(message);
     
     var otherParticipant = conversation.Participants.FirstOrDefault(x => x.UserId != senderUserId);
-    if (otherParticipant != null)
+    if (otherParticipant is null)
     {
-        otherParticipant.UnreadCount++;
+        return Failure("کاربر مقابل پیدا نشد");
     }
-
-    await context.SaveChangesAsync();
-
-    conversation.LastMessageId = message.Id;
+    otherParticipant.UnreadCount++;
+    conversation.LastMessageSenderId = message.SenderUserId;
     
     await context.SaveChangesAsync();
 
@@ -200,14 +194,15 @@ public async Task<ApiResponse> SendMessage(int senderUserId, SendMessageDto dto)
 
     foreach (var participant in conversation.Participants)
     {
-        var otherParticipantLastReadMessageId = conversation.Participants
-            .FirstOrDefault(x => x.UserId != participant.UserId)
-            ?.LastReadMessageId;
+        var other = conversation.Participants
+            .FirstOrDefault(x => x.UserId != participant.UserId);
 
-       
+        var otherLastReadId = other?.LastReadMessageId;
+        var otherUnread = other?.UnreadCount ?? 0;
+
         var messageDto = message.ChatMessageDto(
             participant.UserId,
-            otherParticipantLastReadMessageId);
+            otherLastReadId);
 
         if (participant.UserId == senderUserId)
         {
@@ -222,14 +217,18 @@ public async Task<ApiResponse> SendMessage(int senderUserId, SendMessageDto dto)
             .Group($"user_{participant.UserId}")
             .SendAsync("ChatListUpdated", new
             {
-                conversation.Id,
-                conversation.LastMessageId,
-                conversation.LastMessageText,
-                conversation.LastMessageAt,
-                // ارسال شمارنده جدید تا UI به‌روز شود
-                UnreadCount = participant.UnreadCount 
+                ConversationId = conversation.Id,
+                LastMessageId = message.Id,
+                LastMessageStatus = conversation.LastMessageStatus(
+                    otherUnread,
+                    other?.UserId ?? 0),
+                LastMessageText = conversation.LastMessageText,
+                LastMessageAt = conversation.LastMessageAt,
+                UnreadCount = participant.UnreadCount
             });
     }
+
+
 
     return Success("پیام با موفقیت ارسال شد.", senderMessageDto);
 }
@@ -310,69 +309,14 @@ public async Task<ApiResponse> MarkAsRead(
 }
 
     public async Task<ApiResponse> UploadAttachment(
-    int userId,
+    int senderUserId,
     long? conversationId,
     IFormFile file)
 {
-    if (userId <= 0)
-    {
-        return Failure("شناسه کاربر نامعتبر است.");
-    }
-
-    if (file is null || file.Length <= 0)
-    {
-        return Failure("فایل انتخاب نشده است.");
-    }
-
-    if (file.Length > MaximumAttachmentSize)
-    {
-        return Failure("حجم فایل نباید بیشتر از ۱۰ مگابایت باشد.");
-    }
-
-    var contentType = file.ContentType?.Trim().ToLowerInvariant();
-
-    if (string.IsNullOrWhiteSpace(contentType) ||
-        !AllowedAttachmentContentTypes.Contains(
-            contentType,
-            StringComparer.OrdinalIgnoreCase))
-    {
-        return Failure("فقط تصویر و فایل PDF مجاز هستند.");
-    }
-
-    var extension = Path.GetExtension(file.FileName)?.ToLowerInvariant();
-
-    var isPdf = string.Equals(
-        contentType,
-        "application/pdf",
-        StringComparison.OrdinalIgnoreCase);
-
-    var isImage = contentType.StartsWith("image/");
-
-    if (isPdf && extension != ".pdf")
-    {
-        return Failure("پسوند فایل PDF نامعتبر است.");
-    }
-
-    if (isImage)
-    {
-        var allowedImageExtensions = new[]
-        {
-            ".jpg",
-            ".jpeg",
-            ".png",
-            ".webp",
-            ".gif"
-        };
-
-        if (string.IsNullOrWhiteSpace(extension) ||
-            !allowedImageExtensions.Contains(extension))
-        {
-            return Failure("پسوند تصویر نامعتبر است.");
-        }
-    }
+    if (ChatMapper.CheckUploadAttachment(senderUserId, file, out var isPdf, out var isImage, out var apiResponse)) return apiResponse!;
 
     var resolvedConversation = await ResolveConversationIdOrCreateSupport(
-        userId,
+        senderUserId,
         conversationId);
 
     if (!resolvedConversation.Action)
@@ -397,11 +341,16 @@ public async Task<ApiResponse> MarkAsRead(
         return Failure("این گفتگو بسته شده است.");
     }
     
-    var senderParticipant = conversation.Participants.FirstOrDefault(p => p.UserId == userId);
+    var senderParticipant = conversation.Participants.FirstOrDefault(p => p.UserId == senderUserId);
     
     if (senderParticipant is null)
     {
         return Failure("شما عضو این گفتگو نیستید.");
+    }
+    var otherParticipant = conversation.Participants.FirstOrDefault(x => x.UserId != senderUserId);
+    if (otherParticipant is null)
+    {
+        return Failure("کاربر مقابل پیدا نشد");
     }
     
     var folderPath = $"chat/{resolvedConversationId}";
@@ -419,7 +368,7 @@ public async Task<ApiResponse> MarkAsRead(
     var message = new ChatMessage
     {
         ConversationId = conversation.Id,
-        SenderUserId = userId,
+        SenderUserId = senderUserId,
         Type = isPdf ? ChatMessageType.File : ChatMessageType.Image,
         SentAt = now,
         FileUrl = uploadResult.Result.ToString(),
@@ -429,17 +378,11 @@ public async Task<ApiResponse> MarkAsRead(
     context.ChatMessages.Add(message);
 
     conversation.LastMessageAt = now;
-    conversation.LastMessageText = BuildConversationPreview(message);
+    conversation.LastMessageText = ChatMapper.BuildConversationPreview(message);
     
-    var otherParticipant = conversation.Participants.FirstOrDefault(x => x.UserId != userId);
-    if (otherParticipant != null)
-    {
-        otherParticipant.UnreadCount++;
-    }
-
-    await context.SaveChangesAsync(); 
-
-    conversation.LastMessageId = message.Id;
+    
+    otherParticipant.UnreadCount++;
+    conversation.LastMessageSenderId = message.SenderUserId;
     await context.SaveChangesAsync(); 
 
 
@@ -447,15 +390,17 @@ public async Task<ApiResponse> MarkAsRead(
     
     foreach (var participant in conversation.Participants)
     {
-        var otherParticipantLastReadMessageId = conversation.Participants
-            .FirstOrDefault(x => x.UserId != participant.UserId)
-            ?.LastReadMessageId;
+        var other = conversation.Participants
+            .FirstOrDefault(x => x.UserId != participant.UserId);
+
+        var otherLastReadId = other?.LastReadMessageId;
+        var otherUnread = other?.UnreadCount ?? 0;
 
         var messageDto = message.ChatMessageDto(
             participant.UserId,
-            otherParticipantLastReadMessageId);
+            otherLastReadId);
 
-        if (participant.UserId == userId)
+        if (participant.UserId == senderUserId)
         {
             senderMessageDto = messageDto;
         }
@@ -468,16 +413,18 @@ public async Task<ApiResponse> MarkAsRead(
             .Group($"user_{participant.UserId}")
             .SendAsync("ChatListUpdated", new
             {
-                conversation.Id, 
-                conversation.LastMessageId,
-                conversation.LastMessageText,
-                conversation.LastMessageAt,
-                UnreadCount = participant.UnreadCount 
+                ConversationId = conversation.Id,
+                LastMessageId = message.Id,
+                LastMessageStatus = conversation.LastMessageStatus(
+                    otherUnread,
+                    other?.UserId ?? 0),
+                 conversation.LastMessageText,
+                 conversation.LastMessageAt,
+                 participant.UnreadCount
             });
     }
-
-    return Success("فایل با موفقیت ارسال شد.", senderMessageDto);
-}
+    
+    return Success("پیام با موفقیت ارسال شد.", senderMessageDto); }
 
 
     public async Task<ApiResponse> BackfillCoachAthleteConversationsFromSuccessfulPayments()
@@ -682,7 +629,7 @@ public async Task<ApiResponse> GetCoachChatList(int coachId, int coachUserId, st
             continue; 
         }
 
-        var item = BuildChatListItem(conversation, athleteParticipant.User, program, coachParticipant!.UnreadCount, athleteParticipant.UnreadCount);
+        var item = conversation.BuildChatListItem( athleteParticipant.User, program, coachParticipant!.UnreadCount, athleteParticipant.UnreadCount);
 
         result.All.Add(item);
 
@@ -774,8 +721,7 @@ public async Task<ApiResponse> GetCoachChatList(int coachId, int coachUserId, st
             
             unreadCountsDict.TryGetValue(conversation.Id, out int unreadCount);
 
-            var item = BuildChatListItem(
-                conversation,
+            var item = conversation.BuildChatListItem(
                 coach.User,
                 null,
                 unreadCount,
@@ -839,11 +785,9 @@ public async Task<ApiResponse> GetCoachChatList(int coachId, int coachUserId, st
         context.ChatMessages.Add(systemMessage);
 
         conversation.LastMessageAt = now;
-        conversation.LastMessageText = BuildConversationPreview(systemMessage);
-
-        await context.SaveChangesAsync();
-
-        conversation.LastMessageId = systemMessage.Id;
+        conversation.LastMessageText = ChatMapper.BuildConversationPreview(systemMessage);
+        
+        conversation.LastMessageSenderId = systemMessage.SenderUserId;
         await context.SaveChangesAsync();
 
         var messageWithSender = await context.ChatMessages
@@ -902,35 +846,7 @@ public async Task<ApiResponse> GetCoachChatList(int coachId, int coachUserId, st
 
         return unreadCounts;
     }
-
- 
-
-    private static ChatListItemDto BuildChatListItem(
-        Conversation conversation,
-        User otherUser,
-        WorkoutProgram? program,
-        int unreadCount,
-        int otherUserUnreadCount)
-    {
-        return new ChatListItemDto
-        {
-            ConversationId = conversation.Id,
-            UserId = otherUser.Id,
-            FullName = $"{otherUser.FirstName} {otherUser.LastName}",
-            PhoneNumber = otherUser.PhoneNumber,
-            ProfileImageUrl = otherUser.ImageProfile,
-            Service = program?.Title,
-            LastExerciseDate = program?.LastExerciseDate,
-            Status = program?.GetStatus() ?? "active",
-            LastMessageId = conversation.LastMessageId,
-            LastMessageText = conversation.LastMessageText,
-            LastMessageAt = conversation.LastMessageAt,
-            UnreadCount = unreadCount,
-            IsSupport = false,
-            OtherUserRead = otherUserUnreadCount==0
-            
-        };
-    }
+    
 
     private async Task<Conversation?> FindCoachAthleteConversation(int coachUserId, int athleteUserId)
     {
@@ -991,58 +907,27 @@ public async Task<ApiResponse> GetCoachChatList(int coachId, int coachUserId, st
         var userParticipant = conversation.Participants.FirstOrDefault(x => x.UserId == userId);
         if (supportParticipant?.User is null || userParticipant is null) return null;
 
-
-        if (supportParticipant?.User is null)
-        {
-            return null;
-        }
-
         return conversation.ToSupportListItem(
             supportParticipant.User, 
             userParticipant.UnreadCount); 
     }
 
 
-    private static string BuildConversationPreview(ChatMessage message)
-    {
-        return message.Type switch
-        {
-            ChatMessageType.Text => message.Text ?? string.Empty,
-            ChatMessageType.Image => "تصویر",
-            ChatMessageType.File => "فایل",
-            ChatMessageType.System => message.Text ?? "پیام سیستمی",
-            _ => "پیام جدید"
-        };
-    }
+   
 
     private static string? NormalizeMessageText(string? text)
     {
         return string.IsNullOrWhiteSpace(text) ? null : text.Trim();
     }
 
-    private static string GetConversationService(ConversationType conversationType)
-    {
-        return conversationType switch
-        {
-            ConversationType.CoachAthlete => "برنامه تمرینی",
-            ConversationType.UserSupport => "پشتیبانی",
-            _ => "گفتگو"
-        };
-    }
+
 
     private static string GetFullName(User user)
     {
         var fullName = $"{user.FirstName} {user.LastName}".Trim();
         return string.IsNullOrWhiteSpace(fullName) ? user.PhoneNumber : fullName;
     }
-
-    private static int NormalizeMessageTake(int take)
-    {
-        if (take <= 0) return DefaultMessageTake;
-        if (take < MinimumMessageTake) return MinimumMessageTake;
-        if (take > MaximumMessageTake) return MaximumMessageTake;
-        return take;
-    }
+    
 
     private int GetSupportUserId()
     {
@@ -1134,17 +1019,6 @@ public async Task<ApiResponse> GetCoachChatList(int coachId, int coachUserId, st
             _ => 0
         };
     }
-    private static readonly string[] AllowedAttachmentContentTypes =
-    [
-        "image/jpeg",
-        "image/jpg",
-        "image/png",
-        "image/webp",
-        "image/gif",
-        "application/pdf"
-    ];
-
-
     private static ApiResponse Success(string message, object? result = null)
     {
         return new ApiResponse

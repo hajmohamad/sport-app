@@ -11,9 +11,8 @@ public class Conversation
     public DateTime? LastMessageAt { get; set; }
 
     public string? LastMessageText { get; set; }
-
-    public long? LastMessageId { get; set; }
-
+    public int LastMessageSenderId { get; set; }
+    
     public bool IsClosed { get; set; } = false;
 
     public DateTime? ClosedAt { get; set; }

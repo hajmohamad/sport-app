@@ -22,7 +22,7 @@ public interface IChatRepository
         long lastReadMessageId);
 
     Task<ApiResponse> UploadAttachment(
-        int userId,
+        int senderUserId,
         long? conversationId,
         IFormFile file);
 
