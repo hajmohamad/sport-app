@@ -738,84 +738,83 @@ public async Task<ApiResponse> GetCoachChatList(int coachId, int coachUserId, st
         return Success("لیست چت‌های ورزشکار با موفقیت دریافت شد.", result);
     }
 
-    public async Task<ApiResponse> AddSystemMessage(long conversationId, string text)
+    public async Task<ApiResponse> AddSystemMessage(int coachUserId, int athleteUserId, string text)
+{
+    if (string.IsNullOrWhiteSpace(text))
     {
-        if (conversationId <= 0)
-        {
-            return Failure("شناسه گفتگو نامعتبر است.");
-        }
-
-        if (string.IsNullOrWhiteSpace(text))
-        {
-            return Failure("متن پیام سیستمی نمی‌تواند خالی باشد.");
-        }
-
-        var conversation = await context.Conversations
-            .Include(x => x.Participants)
-            .FirstOrDefaultAsync(x => x.Id == conversationId);
-
-        if (conversation is null)
-        {
-            return Failure("گفتگو یافت نشد.");
-        }
-
-        if (conversation.IsClosed)
-        {
-            return Failure("این گفتگو بسته شده است.");
-        }
-
-        var senderParticipant = conversation.Participants.FirstOrDefault();
-
-        if (senderParticipant is null)
-        {
-            return Failure("هیچ عضوی برای گفتگو یافت نشد.");
-        }
-
-        var now = DateTime.Now;
-
-        var systemMessage = new ChatMessage
-        {
-            ConversationId = conversationId,
-            SenderUserId = senderParticipant.UserId,
-            Type = ChatMessageType.System,
-            Text = text.Trim(),
-            SentAt = now,
-        };
-
-        context.ChatMessages.Add(systemMessage);
-
-        conversation.LastMessageAt = now;
-        conversation.LastMessageText = ChatMapper.BuildConversationPreview(systemMessage);
-        
-        conversation.LastMessageSenderId = systemMessage.SenderUserId;
-        await context.SaveChangesAsync();
-
-        var messageWithSender = await context.ChatMessages
-            .AsNoTracking()
-            .Include(x => x.SenderUser)
-            .FirstAsync(x => x.Id == systemMessage.Id);
-
-        var messageDto = messageWithSender.ChatMessageDto(senderParticipant.UserId, null);
-
-        await hubContext.Clients
-            .Group($"chat_{conversationId}")
-            .SendAsync("ReceiveMessage", messageDto);
-
-        foreach (var participant in conversation.Participants)
-        {
-            await hubContext.Clients
-                .Group($"user_{participant.UserId}")
-                .SendAsync("ChatListUpdated", new
-                {
-                    ConversationId = conversationId,
-                    LastMessageId = systemMessage.Id,
-                    LastMessageText = conversation.LastMessageText,
-                    LastMessageAt = conversation.LastMessageAt
-                });
-        }
-
-        return Success("پیام سیستمی با موفقیت ثبت شد.", messageDto);
+        return Failure("متن پیام سیستمی نمی‌تواند خالی باشد.");
     }
+
+    var conversation = await context.Conversations
+        .Include(x => x.Participants)
+        .FirstOrDefaultAsync(x =>
+            x.Type == ConversationType.CoachAthlete &&
+            x.Participants.Any(p => p.UserId == coachUserId) &&
+            x.Participants.Any(p => p.UserId == athleteUserId));
+
+    if (conversation is null)
+    {
+        return Failure("گفتگوی بین مربی و ورزشکار یافت نشد.");
+    }
+
+    if (conversation.IsClosed)
+    {
+        return Failure("این گفتگو بسته شده است.");
+    }
+
+    var senderParticipant = conversation.Participants
+        .FirstOrDefault(p => p.UserId == coachUserId);
+
+    if (senderParticipant is null)
+    {
+        return Failure("عضو ارسال‌کننده در گفتگو یافت نشد.");
+    }
+
+    var now = DateTime.Now;
+
+    var systemMessage = new ChatMessage
+    {
+        ConversationId = conversation.Id,
+        SenderUserId = senderParticipant.UserId,
+        Type = ChatMessageType.System,
+        Text = text.Trim(),
+        SentAt = now,
+    };
+
+    context.ChatMessages.Add(systemMessage);
+
+    conversation.LastMessageAt = now;
+    conversation.LastMessageText = ChatMapper.BuildConversationPreview(systemMessage);
+    conversation.LastMessageSenderId = systemMessage.SenderUserId;
+
+    await context.SaveChangesAsync();
+
+    var messageWithSender = await context.ChatMessages
+        .AsNoTracking()
+        .Include(x => x.SenderUser)
+        .FirstAsync(x => x.Id == systemMessage.Id);
+
+    var messageDto = messageWithSender.ChatMessageDto(senderParticipant.UserId, null);
+
+    await hubContext.Clients
+        .Group($"chat_{conversation.Id}")
+        .SendAsync("ReceiveMessage", messageDto);
+
+    foreach (var participant in conversation.Participants)
+    {
+        await hubContext.Clients
+            .Group($"user_{participant.UserId}")
+            .SendAsync("ChatListUpdated", new
+            {
+                ConversationId = conversation.Id,
+                LastMessageId = systemMessage.Id,
+                LastMessageText = conversation.LastMessageText,
+                LastMessageAt = conversation.LastMessageAt
+            });
+    }
+
+    return Success("پیام سیستمی با موفقیت ثبت شد.", messageDto);
+}
 
 
     private async Task<List<Conversation>> GetCoachAthleteConversations(int coachUserId)

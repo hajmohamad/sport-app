@@ -29,7 +29,8 @@ namespace sport_app_backend.Repository.AthleteRepo
         ApplicationDbContext context,
      
         ITokenService tokenService,
-        ICalculator calculator
+        ICalculator calculator,
+        IChatRepository chatRepository
         ,AthleteCacheService athleteCache,
         WorkoutProgramCacheService workoutCache,
         TrainingSessionCacheService trainingSessionCache) : IAthleteRepository
@@ -695,7 +696,7 @@ namespace sport_app_backend.Repository.AthleteRepo
 
         var trainingSession =
             await context.TrainingSessions
-                .Include(ts => ts.WorkoutProgram)
+                .Include(ts => ts.WorkoutProgram).ThenInclude(c=>c.Coach)
                 .FirstOrDefaultAsync(z =>
                     z.Id == dto.TrainingSessionId);
 
@@ -719,6 +720,7 @@ namespace sport_app_backend.Repository.AthleteRepo
             DateTime.Now;
 
         trainingSession.WorkoutProgram.CompletedSessionCount++;
+        
 
         var activity = new Activity()
         {
@@ -743,6 +745,8 @@ namespace sport_app_backend.Repository.AthleteRepo
         await context.Activities.AddAsync(activity);
 
         await context.SaveChangesAsync();
+        await chatRepository.AddSystemMessage(athlete.UserId, trainingSession.WorkoutProgram.Coach.UserId,
+            $"تمرین جلسه {trainingSession.DayNumber} به پایان رسید.");
 
         trainingSessionCache
             .RemoveTrainingSession(
