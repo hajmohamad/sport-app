@@ -18,10 +18,9 @@
   <component name="ChangeListManager">
     <list default="true" id="11e104f8-869d-4d9d-9802-b48455f5eb31" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dtos/Chat/ChatListItemDto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Dtos/Chat/ChatListItemDto.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Interface/IChatRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Interface/IChatRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dtos/Chat/ChatMessageDto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Dtos/Chat/ChatMessageDto.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Mappers/ChatMapper.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Mappers/ChatMapper.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Models/Chat/Conversation.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/Chat/Conversation.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Models/Chat/ChatMessage.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Models/Chat/ChatMessage.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Repository/ChatRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Repository/ChatRepository.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -485,23 +484,7 @@
       <workItem from="1786464547082" duration="285000" />
       <workItem from="1786465933770" duration="603000" />
       <workItem from="1786476136168" duration="4034000" />
-      <workItem from="1786517031996" duration="15971000" />
-    </task>
-    <task id="LOCAL-00066" summary="edit GetCoachService">
-      <option name="closed" value="true" />
-      <created>1782299124125</created>
-      <option name="number" value="00066" />
-      <option name="presentableId" value="LOCAL-00066" />
-      <option name="project" value="LOCAL" />
-      <updated>1782299124125</updated>
-    </task>
-    <task id="LOCAL-00067" summary="edit GetLastMonthWeightReport">
-      <option name="closed" value="true" />
-      <created>1782303294712</created>
-      <option name="number" value="00067" />
-      <option name="presentableId" value="LOCAL-00067" />
-      <option name="project" value="LOCAL" />
-      <updated>1782303294712</updated>
+      <workItem from="1786517031996" duration="18753000" />
     </task>
     <task id="LOCAL-00068" summary="edit GetLastMonthWeightReport and add last weight to day dont have eny data">
       <option name="closed" value="true" />
@@ -879,7 +862,23 @@
       <option name="project" value="LOCAL" />
       <updated>1786520045352</updated>
     </task>
-    <option name="localTasksCounter" value="115" />
+    <task id="LOCAL-00115" summary="addLastSenderUserIdToConversations">
+      <option name="closed" value="true" />
+      <created>1786539363135</created>
+      <option name="number" value="00115" />
+      <option name="presentableId" value="LOCAL-00115" />
+      <option name="project" value="LOCAL" />
+      <updated>1786539363135</updated>
+    </task>
+    <task id="LOCAL-00116" summary="add systemMessage">
+      <option name="closed" value="true" />
+      <created>1786540661854</created>
+      <option name="number" value="00116" />
+      <option name="presentableId" value="LOCAL-00116" />
+      <option name="project" value="LOCAL" />
+      <updated>1786540661854</updated>
+    </task>
+    <option name="localTasksCounter" value="117" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -955,8 +954,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
-    <MESSAGE value="edit EditUserProfile" />
-    <MESSAGE value="fix bug in sms service" />
     <MESSAGE value="edit message" />
     <MESSAGE value="add lastseen app" />
     <MESSAGE value="add eita token" />
@@ -980,7 +977,9 @@
     <MESSAGE value="convert image to webp &#10;and conver time utc to time" />
     <MESSAGE value="convert .ImageSharp to version 2.1.10" />
     <MESSAGE value="edit upload attachment" />
-    <option name="LAST_COMMIT_MESSAGE" value="edit upload attachment" />
+    <MESSAGE value="addLastSenderUserIdToConversations" />
+    <MESSAGE value="add systemMessage" />
+    <option name="LAST_COMMIT_MESSAGE" value="add systemMessage" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

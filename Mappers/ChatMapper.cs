@@ -116,7 +116,8 @@
 
         public static string LastMessageStatus(this Conversation conversation,int otherUserUnreadCount,int otherUserId)
         {
-
+            if (conversation.LastMessageText is null || conversation.LastMessageSenderId == 0)
+                return "noMessage";
             if (conversation.LastMessageText is null||otherUserId==conversation.LastMessageSenderId)
             {
                 return "noMessage";

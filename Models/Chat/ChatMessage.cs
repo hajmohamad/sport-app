@@ -8,7 +8,7 @@ public class ChatMessage
 
     public long ConversationId { get; set; }
 
-    public int SenderUserId { get; set; }
+    public int? SenderUserId { get; set; }
 
     public ChatMessageType Type { get; set; } = ChatMessageType.Text;
 

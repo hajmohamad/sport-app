@@ -775,7 +775,7 @@ public async Task<ApiResponse> GetCoachChatList(int coachId, int coachUserId, st
     var systemMessage = new ChatMessage
     {
         ConversationId = conversation.Id,
-        SenderUserId = senderParticipant.UserId,
+        SenderUserId = null,
         Type = ChatMessageType.System,
         Text = text.Trim(),
         SentAt = now,
@@ -785,7 +785,7 @@ public async Task<ApiResponse> GetCoachChatList(int coachId, int coachUserId, st
 
     conversation.LastMessageAt = now;
     conversation.LastMessageText = ChatMapper.BuildConversationPreview(systemMessage);
-    conversation.LastMessageSenderId = systemMessage.SenderUserId;
+    conversation.LastMessageSenderId = 0;
 
     await context.SaveChangesAsync();
 
