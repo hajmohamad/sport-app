@@ -1,17 +1,12 @@
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using sport_app_backend.Data;
 using sport_app_backend.Dtos.Chat;
 using sport_app_backend.Hubs;
 using sport_app_backend.Interface;
 using sport_app_backend.Mappers;
 using sport_app_backend.Models;
-using sport_app_backend.Models.Account;
 using sport_app_backend.Models.Chat;
-using sport_app_backend.Models.Payments;
-using sport_app_backend.Models.Program;
 using sport_app_backend.Services.Cash;
 namespace sport_app_backend.Repository;
 
@@ -41,9 +36,9 @@ public async Task<ApiResponse> GetConversationMessages(
 
     if (conversation == null) return Failure("گفتگو یافت نشد.");
 
-    bool isChannel = conversation.Type == ConversationType.Channel;
+    var isChannel = conversation.Type == ConversationType.Channel;
     
-    object? otherUserNameAndPhoto = new
+    object otherUserNameAndPhoto = new
     {
         FullName = $"اطلاع رسانی چارست",
         Photo = "",
@@ -102,7 +97,7 @@ public async Task<ApiResponse> GetConversationMessages(
         .AsNoTracking()
         .Where(x => x.ConversationId == conversationId);
 
-    if (beforeMessageId.HasValue && beforeMessageId.Value > 0)
+    if (beforeMessageId is > 0)
     {
         messagesQuery = messagesQuery.Where(x => x.Id < beforeMessageId.Value);
     }
@@ -231,9 +226,9 @@ public async Task<ApiResponse> SendMessage(int senderUserId, SendMessageDto dto)
                 LastMessageStatus = conversation.LastMessageStatus(
                     otherUnread,
                     other?.UserId ?? 0),
-                LastMessageText = conversation.LastMessageText,
-                LastMessageAt = conversation.LastMessageAt,
-                UnreadCount = participant.UnreadCount
+                 conversation.LastMessageText,
+                conversation.LastMessageAt,
+               participant.UnreadCount
             });
     }
 
@@ -303,7 +298,7 @@ public async Task<ApiResponse> MarkAsRead(
             ConversationId = conversationId,
             ReaderUserId = userId,
             LastReadMessageId = lastReadMessageId,
-            LastReadAt = participant.LastReadAt
+            participant.LastReadAt
         });
 
     await hubContext.Clients
@@ -326,7 +321,6 @@ public async Task<ApiResponse> MarkAsRead(
             senderUserId,
             file,
             out var isPdf,
-            out var isImage,
             out var isVideo,
             out var apiResponse))
         return apiResponse!;
@@ -638,7 +632,7 @@ public async Task<ApiResponse> GetCoachChatList(int coachId, int coachUserId, st
     var result = new CoachChatListDto
     {
         Support = await GetSupportChatItem(coachUserId),
-        SupportChannel = await GetSupportChannelChatItem(coachUserId)
+        Channels = [await GetSupportChannelChatItem(coachUserId)]
         
     };
 
@@ -735,7 +729,7 @@ public async Task<ApiResponse> GetCoachChatList(int coachId, int coachUserId, st
         var result = new AthleteChatListDto
         {
             Support = await GetSupportChatItem(athleteUserId),
-            SupportChannel = await GetSupportChannelChatItem(athleteUserId)
+            Channels = [await GetSupportChannelChatItem(athleteUserId)]
         };
 
         foreach (var conversation in conversations)
@@ -888,8 +882,8 @@ public async Task<ApiResponse> GetCoachChatList(int coachId, int coachUserId, st
             {
                 ConversationId = conversation.Id,
                 LastMessageId = systemMessage.Id,
-                LastMessageText = conversation.LastMessageText,
-                LastMessageAt = conversation.LastMessageAt
+                conversation.LastMessageText,
+               conversation.LastMessageAt
             });
     }
 
@@ -1017,22 +1011,15 @@ public async Task<ApiResponse> GetCoachChatList(int coachId, int coachUserId, st
         return string.IsNullOrWhiteSpace(text) ? null : text.Trim();
     }
 
-
-
-    private static string GetFullName(User user)
-    {
-        var fullName = $"{user.FirstName} {user.LastName}".Trim();
-        return string.IsNullOrWhiteSpace(fullName) ? user.PhoneNumber : fullName;
-    }
     
 
     private int GetSupportUserId()
     {
-        return configuration.GetValue<int>("Chat:SupportUserId", 1);
+        return configuration.GetValue("Chat:SupportUserId", 1);
     }
     private int GetSupportChannelId()
     {
-        return configuration.GetValue<int>("Chat:SupportChannelId", 2);
+        return configuration.GetValue("Chat:SupportChannelId", 2);
     }
 
     private async Task NotifyConversationCreated(

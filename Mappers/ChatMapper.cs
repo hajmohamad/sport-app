@@ -161,14 +161,12 @@
 
         public static bool CheckUploadAttachment(
             int userId,
-            IFormFile file,
+            IFormFile? file,
             out bool isPdf,
-            out bool isImage,
             out bool isVideo,
             out ApiResponse? apiResponse)
         {
             isPdf = false;
-            isImage = false;
             isVideo = false;
             apiResponse = null;
 
@@ -184,7 +182,7 @@
                 return true;
             }
 
-            var contentType = file.ContentType?.Trim().ToLowerInvariant();
+            var contentType = file.ContentType.Trim().ToLowerInvariant();
 
             if (string.IsNullOrWhiteSpace(contentType) ||
                 !AllowedAttachmentContentTypes.Contains(contentType, StringComparer.OrdinalIgnoreCase))
@@ -194,10 +192,10 @@
             }
 
             isVideo = contentType.StartsWith("video/");
-            isImage = contentType.StartsWith("image/");
+            var isImage = contentType.StartsWith("image/");
             isPdf = string.Equals(contentType, "application/pdf", StringComparison.OrdinalIgnoreCase);
 
-            var extension = Path.GetExtension(file.FileName)?.ToLowerInvariant();
+            var extension = Path.GetExtension(file.FileName).ToLowerInvariant();
 
             // ── بررسی سایز (ویدیو ۲۰ مگ، بقیه ۱۰ مگ) ──
             if (isVideo)
@@ -205,7 +203,6 @@
                 if (file.Length > MaximumVideoSize)
                 {
                     isPdf = false;
-                    isImage = false;
                     isVideo = false;
                     apiResponse = Failure("حجم ویدیو نباید بیشتر از ۲۰ مگابایت باشد.");
                     return true;
@@ -214,7 +211,6 @@
             else if (file.Length > MaximumAttachmentSize)
             {
                 isPdf = false;
-                isImage = false;
                 apiResponse = Failure("حجم فایل نباید بیشتر از ۱۰ مگابایت باشد.");
                 return true;
             }
@@ -223,7 +219,6 @@
             if (string.IsNullOrWhiteSpace(extension))
             {
                 isPdf = false;
-                isImage = false;
                 isVideo = false;
                 apiResponse = Failure("پسوند فایل نامعتبر است.");
                 return true;
@@ -284,7 +279,7 @@ private static bool IsValidVideoExtension(string contentType, string extension)
             };
         }
 
-        public static ApiResponse Failure(string message)
+        private static ApiResponse Failure(string message)
         {
             return new ApiResponse
             {
@@ -295,19 +290,13 @@ private static bool IsValidVideoExtension(string contentType, string extension)
 
         public static int NormalizeMessageTake(int take)
         {
-            if (take <= 0) return DefaultMessageTake;
-            if (take < MinimumMessageTake) return MinimumMessageTake;
-            if (take > MaximumMessageTake) return MaximumMessageTake;
-            return take;
-        }
-
-        private static string GetFullName(User user)
-        {
-            var fullName = $"{user.FirstName} {user.LastName}".Trim();
-
-            return string.IsNullOrWhiteSpace(fullName)
-                ? user.PhoneNumber
-                : fullName;
+            return take switch
+            {
+                <= 0 => DefaultMessageTake,
+                < MinimumMessageTake => MinimumMessageTake,
+                > MaximumMessageTake => MaximumMessageTake,
+                _ => take
+            };
         }
 
         public static string GetConversationService(
