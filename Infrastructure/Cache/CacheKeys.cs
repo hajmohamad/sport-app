@@ -2,13 +2,14 @@ namespace sport_app_backend.Infrastructure.Cache;
 
 public static class CacheKeys
 {
-    public const string AllExercises = "all_exercises";
+    public const string AllExercises = "exercises:all";
 
     public static string CoachPins(int coachId)
-        => $"coach_pins_{coachId}";
+        => $"coach:{coachId}:pins";
 
-    public static string CoachLastWorkout(int coachId)
-        => $"coach_lastWorkout_{coachId}";
+    public static string CoachLastWorkout(int coachId, int athleteId)
+        => $"coach:{coachId}:athlete:{athleteId}:last-workouts";
+
     public static string Athlete(int athleteId)
         => $"athlete:{athleteId}";
 
@@ -20,7 +21,7 @@ public static class CacheKeys
 
     public static string TrainingSession(int trainingSessionId)
         => $"training-session:{trainingSessionId}";
-    
+
     public static string CoachChatListByUserId(int coachUserId)
         => $"chat:coach:list:user:{coachUserId}";
 
@@ -32,5 +33,4 @@ public static class CacheKeys
 
     public static string GetCoachWorkoutProgram(int coachUserId)
         => $"coach-programs-:{coachUserId}";
-    
 }

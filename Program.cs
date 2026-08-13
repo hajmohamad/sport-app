@@ -22,6 +22,7 @@ using sport_app_backend.Interface.Coach;
 using sport_app_backend.Repository.AthleteRepo;
 using sport_app_backend.Repository.CoachRepo;
 using sport_app_backend.Services.Cash;
+using sport_app_backend.Infrastructure.Cache;
 
 Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()
@@ -228,6 +229,8 @@ builder.Services.AddScoped<IExerciseCacheService, ExerciseCacheService>();
 builder.Services.AddScoped<AthleteCacheService>();
 builder.Services.AddScoped<WorkoutProgramCacheService>();
 builder.Services.AddScoped<TrainingSessionCacheService>();
+builder.Services.Configure<ExerciseCacheOptions>(
+    builder.Configuration.GetSection(ExerciseCacheOptions.SectionName));
 
 
 builder.Services.AddScoped<IDataValidator, DataValidator>();

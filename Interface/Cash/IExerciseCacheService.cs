@@ -12,4 +12,10 @@ public interface IExerciseCacheService
     Task UpdateCoachPinsAsync(int coachId, BaseCategory category, int exerciseId);
 
     Task RemoveCoachPinAsync(int coachId, int exerciseId);
+
+    Task InvalidateAllExercisesAsync();
+
+    Task InvalidateCoachPinsAsync(int coachId);
+
+    Task InvalidateLastWorkoutsAsync(int coachId, int athleteId);
 }

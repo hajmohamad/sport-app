@@ -1214,6 +1214,7 @@ namespace sport_app_backend.Repository.CoachRepo
                     }; 
                     await context.LastWorkoutExercises.AddAsync(workoutExercises);
                     await context.SaveChangesAsync();
+                    await exerciseCache.InvalidateLastWorkoutsAsync(coach.Id, athlete.Id);
                     
                     if (athlete.ActiveWorkoutProgramId is null)
                     {
@@ -1857,7 +1858,6 @@ namespace sport_app_backend.Repository.CoachRepo
 
             var exercises = await exerciseCache.GetAllExercisesAsync();
             var pins = await exerciseCache.GetCoachPinsAsync(coachId);
-            Dictionary<int, List<int>> lastWorkouts; 
             List<int> lastIds = new List<int>();
 
             if (athleteId.HasValue)
