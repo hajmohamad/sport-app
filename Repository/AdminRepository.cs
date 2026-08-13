@@ -17,6 +17,7 @@ using sport_app_backend.Data;
 using sport_app_backend.Dtos;
 using sport_app_backend.Interface;
 using sport_app_backend.Models;
+using sport_app_backend.Models.Account.Coach;
 using sport_app_backend.Models.Support;
 
 
@@ -234,7 +235,7 @@ namespace sport_app_backend.Repository
             if (coach is null)
                 return new ApiResponse() { Message = "coach not found", Action = false };
 
-            coach.Verified = true;
+            coach.CoachStatus = CoachStatus.Visible;
          
             await  context.SaveChangesAsync();
 
@@ -338,7 +339,7 @@ namespace sport_app_backend.Repository
                 };
             }
 
-            if (!coach.ShowWebsite)
+            if (coach.CoachStatus<=CoachStatus.Unverified)
             {
                 return new ApiResponse
                 {
@@ -431,9 +432,9 @@ namespace sport_app_backend.Repository
                     c.User.FirstName,
                     c.User.LastName,
                     c.User.ImageProfile,
-                    c.Verified,
+                    WebsiteStatus = c.CoachStatus,
                     coachSlug= c.WebSiteUrl
-                }).Where(c=>c.Verified).ToListAsync();
+                }).Where(c=>c.WebsiteStatus==CoachStatus.Visible).ToListAsync();
             if (coaches.Count==0)
             {
                 return new ApiResponse()
@@ -457,13 +458,15 @@ namespace sport_app_backend.Repository
             var coach = await context.Coaches.FirstOrDefaultAsync(c => c.PhoneNumber == coachPhoneNumber);
             if (coach is null)
                 return new ApiResponse() { Message = "coach not found", Action = false };
-            coach.ShowWebsite = true;
+            coach.CoachStatus = CoachStatus.HiddenInList;
             await  context.SaveChangesAsync();
             return new ApiResponse()
             {
                 Message = "coach verified successfully",
                 Action = true
-            };        }
+            };
+            
+        }
     }
     
 }

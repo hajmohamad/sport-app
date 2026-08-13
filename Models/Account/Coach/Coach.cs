@@ -37,8 +37,6 @@ public class Coach
 
     [StringLength(20)]
     public string EitaaUserName { get; set; } = "";
-    public bool Verified { get; set; } = false;
-    public bool ShowWebsite { get; set; } = false;
     public double Amount { get; set; } = 0;
     public double ServiceFee { get; set; } = 0.1;
     public List<DiscountCode> DiscountCodes { get; set; } = [];
@@ -48,7 +46,17 @@ public class Coach
     public CoachCardNumber? CoachCardNumber { get; set; }
     public List<AthleteChangePhoto> AthleteChangePhotos { get; set; } = [];
     public List<WorkoutProgramFeedback> WorkoutProgramFeedbacks { get; set; } = [];
+    [StringLength(40)]
     public string Slogan { get; set; } = "";
+    [StringLength(400)]
     public string SiteDescription { get; set; } = "";
+    public CoachStatus CoachStatus { get; set; } = CoachStatus.None;
+}
 
+public enum CoachStatus
+{
+    None = 0,
+    Unverified = 1,
+    HiddenInList = 2,
+    Visible = 3     
 }

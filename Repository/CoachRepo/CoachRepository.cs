@@ -1072,39 +1072,45 @@ namespace sport_app_backend.Repository.CoachRepo
         {
             var user = await context.Users
                 .Include(u => u.Coach)
-                .ThenInclude(c => c.CoachingServices)
-                .Include(c=>c.Coach.AthleteChangePhotos)
-                .Include(u=>u.Coach.WorkoutProgramFeedbacks)
+                .ThenInclude(c => c!.CoachingServices)
+                .Include(u => u.Coach!.AthleteChangePhotos)
+                .Include(u => u.Coach!.WorkoutProgramFeedbacks)
                 .FirstOrDefaultAsync(u => u.PhoneNumber == phoneNumber);
 
             if (user?.Coach == null)
                 return new ApiResponse { Action = false, Message = "Coach not found" };
 
-            var coachingService = user.Coach.CoachingServices
+            var coachingServiceDto = user.Coach.CoachingServices
                 .Where(x => !x.IsDeleted)
-                .ToList();
-
-            var coachingServiceDto = coachingService
                 .Select(x => x.ToCoachingServiceResponse())
                 .ToList();
 
             var numberOfProgram = await context.Payments
-                .Where(p =>
+                .CountAsync(p =>
                     p.CoachId == user.Coach.Id &&
                     p.PaymentStatus == PaymentStatus.SUCCESS &&
                     p.WorkoutProgram != null &&
                     p.WorkoutProgram.Status != WorkoutProgramStatus.WRITING &&
                     p.WorkoutProgram.Status != WorkoutProgramStatus.NOTSTARTED &&
-                    p.WorkoutProgram.Status != WorkoutProgramStatus.UNCOMPLETEDQUESTION)
-                .CountAsync();
+                    p.WorkoutProgram.Status != WorkoutProgramStatus.UNCOMPLETEDQUESTION);
 
             var numberOfAthlete = await context.Payments
-                .Where(p =>
-                    p.CoachId == user.Coach.Id &&
-                    p.PaymentStatus == PaymentStatus.SUCCESS)
+                .Where(p => p.CoachId == user.Coach.Id &&
+                            p.PaymentStatus == PaymentStatus.SUCCESS)
                 .Select(p => p.AthleteId)
                 .Distinct()
                 .CountAsync();
+
+            if (user.Coach.CoachStatus == CoachStatus.None)
+            {
+                var profileCompleted = CoachMappers.ValidateCoachProfile(user, coachingServiceDto);
+
+                if (profileCompleted.IsFullyCompleted)
+                {
+                    user.Coach.CoachStatus = CoachStatus.Unverified;
+                    await context.SaveChangesAsync();
+                }
+            }
 
             return new ApiResponse
             {
@@ -1113,8 +1119,7 @@ namespace sport_app_backend.Repository.CoachRepo
                 Result = user.ToCoachProfileResponseDto(
                     coachingServiceDto,
                     numberOfProgram,
-                    numberOfAthlete
-                )
+                    numberOfAthlete)
             };
         }
 
