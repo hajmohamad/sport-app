@@ -948,8 +948,6 @@ public async Task<ApiResponse> GetCoachChatList(int coachId, int coachUserId, st
         return await context.Conversations
             .AsNoTracking()
             .Where(x =>
-                x.Type == ConversationType.CoachAthlete &&
-                x.Participants.Count == 2 &&
                 x.Participants.Any(p => p.UserId == athleteUserId) )
             .Include(x => x.Participants)
                 .ThenInclude(x => x.User)
