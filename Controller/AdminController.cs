@@ -1,5 +1,7 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using sport_app_backend.Dtos;
+using sport_app_backend.Dtos.Admin;
 using sport_app_backend.Interface;
 using sport_app_backend.Models;
 using sport_app_backend.Models.Payments;
@@ -8,29 +10,17 @@ using sport_app_backend.Services;
 
 namespace sport_app_backend.Controller
 {
-    
+
     [Route("api/[controller]")]
     [ApiController]
     public class AdminController(
         IAdminRepository adminRepository,
-        IWebHostEnvironment webHostEnvironment, IConfiguration config) : ControllerBase
+        IWebHostEnvironment webHostEnvironment,
+        IConfiguration config) : ControllerBase
     {
-      
-        [HttpPut("Verified_coach/{coachPhoneNumber}")]
-        public async Task<IActionResult> Verified_coach([FromRoute] string coachPhoneNumber)
-        {
-            var result = await adminRepository.VerifiedCoach(coachPhoneNumber);
-            if (result.Action == false) return BadRequest(result);
-            return Ok(result);
-        }
-        [HttpPut("ActiveShowWebsiteCoach/{coachPhoneNumber}")]
-        public async Task<IActionResult> ShowWebsite_coach([FromRoute] string coachPhoneNumber)
-        {
-            var result = await adminRepository.ActiveShowWebsiteCoach(coachPhoneNumber);
-            if (result.Action == false) return BadRequest(result);
-            return Ok(result);
-        }
-      
+
+
+
         [HttpGet("GetVerifiedCoaches")]
         public async Task<IActionResult> GetVerifiedCoaches()
         {
@@ -38,10 +28,9 @@ namespace sport_app_backend.Controller
             return Ok(result);
         }
 
-
         
-
         [HttpGet("GetAllCoachPayouts")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetAllCoachPayouts()
         {
             var result = await adminRepository.GetAllCoachPayouts();
@@ -49,15 +38,17 @@ namespace sport_app_backend.Controller
         }
 
         [HttpPut("UpdateCoachPayoutStatus/{payoutId}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> UpdateCoachPayoutStatus(int payoutId, [FromQuery] string newStatus,
-            [FromQuery] string? transactionReference,IFormFile? file)
+            [FromQuery] string? transactionReference, IFormFile? file)
         {
             if (!Enum.TryParse<PayoutStatus>(newStatus, true, out var statusEnum))
             {
                 return BadRequest(new { Message = "مقدار وضعیت ارسال شده نامعتبر است." });
             }
 
-            var result = await adminRepository.UpdateCoachPayoutStatus(payoutId, statusEnum, transactionReference,file);
+            var result =
+                await adminRepository.UpdateCoachPayoutStatus(payoutId, statusEnum, transactionReference, file);
             if (!result.Action)
             {
                 return BadRequest(result);
@@ -65,10 +56,10 @@ namespace sport_app_backend.Controller
 
             return Ok(result);
         }
-        
+
 
         [HttpGet("GetCoachService/{coachSlug}")]
-        public async Task<IActionResult> GetCoachService([FromRoute]string coachSlug)
+        public async Task<IActionResult> GetCoachService([FromRoute] string coachSlug)
         {
             var result = await adminRepository.GetCoachService(coachSlug);
             if (!result.Action)
@@ -78,7 +69,7 @@ namespace sport_app_backend.Controller
 
             return Ok(result);
         }
-        
+
         //
         // [HttpPost("sendMassageToCoach")]
         // [TypeFilter(typeof(IpAddressFilter))]
@@ -94,7 +85,9 @@ namespace sport_app_backend.Controller
         //
         //     return Ok(result);
         // } 
-          [HttpGet("SupportTickets")]
+        [HttpGet("SupportTickets")]
+        [Authorize(Roles = "Admin")]
+
         public async Task<IActionResult> GetSupportTickets([FromQuery] TicketStatus? status)
         {
             var response = await adminRepository.GetAllSupportTicketsAsync(status);
@@ -102,11 +95,14 @@ namespace sport_app_backend.Controller
             {
                 return BadRequest(response);
             }
+
             return Ok(response);
         }
 
 
         [HttpGet("SupportTickets/{ticketId}")]
+        [Authorize(Roles = "Admin")]
+
         public async Task<IActionResult> GetSupportTicketDetails(int ticketId)
         {
             var response = await adminRepository.GetSupportTicketDetailsAsync(ticketId);
@@ -114,11 +110,14 @@ namespace sport_app_backend.Controller
             {
                 return NotFound(response);
             }
+
             return Ok(response);
         }
 
-  
+
         [HttpPost("SupportTickets/{ticketId}/Reply")]
+        [Authorize(Roles = "Admin")]
+
         public async Task<IActionResult> ReplyToTicket(int ticketId, [FromBody] ReplyTicketDto replyDto)
         {
             if (replyDto == null || string.IsNullOrWhiteSpace(replyDto.MessageText))
@@ -131,11 +130,14 @@ namespace sport_app_backend.Controller
             {
                 return BadRequest(response);
             }
+
             return Ok(response);
         }
 
-        
+
         [HttpPost("SupportTickets/{ticketId}/Close")]
+        [Authorize(Roles = "Admin")]
+
         public async Task<IActionResult> CloseTicket(int ticketId)
         {
             var response = await adminRepository.CloseSupportTicketAsync(ticketId);
@@ -143,11 +145,44 @@ namespace sport_app_backend.Controller
             {
                 return BadRequest(response);
             }
+
             return Ok(response);
         }
-    }
-  
 
-       
-    
+        [HttpPut("change-coach-status")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> ChangeCoachStatus([FromBody] ChangeCoachStatusDto request)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var result = await adminRepository.ChangeCoachStatusAsync(request);
+
+            if (result.Action)
+            {
+                return Ok(result);
+            }
+
+            return NotFound(result);
+        }
+
+        [HttpGet("coaches")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> GetAllCoaches()
+        {
+            try
+            {
+                var result = await adminRepository.GetAllCoachesAsync();
+                return Ok(result);
+            }
+            catch (System.Exception ex)
+            {
+                return StatusCode(500, new { Action = false, Message = ex.Message });
+            }
+        }
+    }
+
+
+
+
 }

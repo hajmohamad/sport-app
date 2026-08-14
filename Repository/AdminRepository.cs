@@ -15,6 +15,8 @@ using sport_app_backend.Services;
 using Microsoft.EntityFrameworkCore;
 using sport_app_backend.Data;
 using sport_app_backend.Dtos;
+using sport_app_backend.Dtos.Account;
+using sport_app_backend.Dtos.Admin;
 using sport_app_backend.Interface;
 using sport_app_backend.Models;
 using sport_app_backend.Models.Account.Coach;
@@ -23,9 +25,40 @@ using sport_app_backend.Models.Support;
 
 namespace sport_app_backend.Repository
 {
-    public class AdminRepository(ApplicationDbContext context, ISmsService sms,    IStorage storage) : IAdminRepository
+    public class AdminRepository(ApplicationDbContext context, ISmsService sms,    IStorage storage,ITokenService _tokenService) : IAdminRepository
     {
-          // دریافت لیست تیکت‌ها همراه با فیلتر اختیاری بر اساس وضعیت
+        public async Task<ApiResponse> AdminLoginAsync(AdminLoginRequestDto loginDto)
+        {
+            var adminUser = await context.Admins
+                .FirstOrDefaultAsync(a => a.Username == loginDto.Username);
+
+            if (adminUser == null)
+            {
+                throw new Exception("نام کاربری یا رمز عبور اشتباه است، یا حساب کاربری غیرفعال شده است.");
+            }
+
+            bool isPasswordValid = BCrypt.Net.BCrypt.Verify(loginDto.Password, adminUser.PasswordHash);
+    
+            if (!isPasswordValid)
+            {
+                throw new Exception("نام کاربری یا رمز عبور اشتباه است.");
+            }
+
+            var token = _tokenService.CreateAdminToken(adminUser);
+
+            return new ApiResponse
+            {
+                Action = true,
+                Message = "لاگین با موفقیت انجام شد.",
+                Result = new 
+                { 
+                    Token = token,
+                    Role = "Admin",
+                 adminUser.Username
+                }
+            };
+        }
+        
         public async Task<ApiResponse> GetAllSupportTicketsAsync(TicketStatus? status = null)
         {
             var query = context.SupportTickets
@@ -229,24 +262,6 @@ namespace sport_app_backend.Repository
           
         }
 
-        public async Task<ApiResponse> VerifiedCoach(string coachPhoneNumber)
-        {
-            var coach = await context.Coaches.FirstOrDefaultAsync(c => c.PhoneNumber == coachPhoneNumber);
-            if (coach is null)
-                return new ApiResponse() { Message = "coach not found", Action = false };
-
-            coach.CoachStatus = CoachStatus.Visible;
-         
-            await  context.SaveChangesAsync();
-
-            
-            
-            return new ApiResponse()
-            {
-                Message = "coach verified successfully",
-                Action = true
-            };
-        }
         public async Task<ApiResponse> GetAllCoachPayouts()
         {
             var payouts = await context.CoachPayouts
@@ -404,25 +419,6 @@ namespace sport_app_backend.Repository
 
        
 
-        public async Task<ApiResponse> SetCoachWebsiteUrl(string phoneNumber, string webSiteUrl)
-        {
-            var coach = await context.Coaches.FirstOrDefaultAsync(c => c.PhoneNumber == phoneNumber);
-            if (coach is null)
-            {
-                return new ApiResponse()
-                {
-                    Action = false,
-                    Message = "coach Not Found"
-                };
-            }
-            coach.WebSiteUrl = webSiteUrl;
-            await context.SaveChangesAsync();
-            return new ApiResponse()
-            {
-                Action = true,
-                Message = "success"
-            };
-        }
 
         public async Task<ApiResponse> GetVerifiedCoaches()
         {
@@ -452,21 +448,57 @@ namespace sport_app_backend.Repository
             };
 
         }
-
-        public async Task<ApiResponse> ActiveShowWebsiteCoach(string coachPhoneNumber)
+   
+        public async Task<ApiResponse> ChangeCoachStatusAsync(ChangeCoachStatusDto requestDto)
         {
-            var coach = await context.Coaches.FirstOrDefaultAsync(c => c.PhoneNumber == coachPhoneNumber);
+            var coach = await context.Coaches.FirstOrDefaultAsync(c => c.Id == requestDto.CoachId);
+    
             if (coach is null)
-                return new ApiResponse() { Message = "coach not found", Action = false };
-            coach.CoachStatus = CoachStatus.HiddenInList;
-            await  context.SaveChangesAsync();
+            {
+                return new ApiResponse() 
+                { 
+                    Message = "مربی مورد نظر یافت نشد.", 
+                    Action = false 
+                };
+            }
+
+            coach.CoachStatus = requestDto.Status;
+ 
+            await context.SaveChangesAsync();
+    
             return new ApiResponse()
             {
-                Message = "coach verified successfully",
+                Message = "وضعیت مربی با موفقیت تغییر کرد.",
                 Action = true
             };
-            
         }
+
+        public async Task<ApiResponse> GetAllCoachesAsync()
+        {
+            var coaches = await context.Coaches
+                .Include(c=>c.User)
+                .OrderByDescending(c => c.Id) 
+                .Select(c => new 
+                {
+                    Id = c.Id,
+                    FullName = c.User.FirstName + " " + c.User.LastName, 
+                    PhoneNumber = c.PhoneNumber,
+                    Status = c.CoachStatus.ToString(),
+                    StatusName = c.CoachStatus.ToString(), 
+                    CreatedAt = c.User.CreateDate 
+            
+                  
+                })
+                .ToListAsync();
+
+            return new ApiResponse()
+            {
+                Message = "لیست مربیان با موفقیت دریافت شد.",
+                Action = true,
+                Result = coaches 
+            };
+        }
+
     }
     
 }

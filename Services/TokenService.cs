@@ -23,6 +23,7 @@ public class TokenService: ITokenService
         private readonly SymmetricSecurityKey _key;
         private readonly ApplicationDbContext _context;
         private readonly IHashids _hashids;
+        
 
         public TokenService(IConfiguration config,ApplicationDbContext dbContext)
         {    
@@ -112,6 +113,29 @@ public class TokenService: ITokenService
         var token = tokenHandler.CreateToken(tokenDescriptor);
         return tokenHandler.WriteToken(token);
     }
+    public string CreateAdminToken(Admin admin)
+    {
+        var claims = new System.Collections.Generic.List<System.Security.Claims.Claim>
+        {
+            new System.Security.Claims.Claim(System.Security.Claims.ClaimTypes.NameIdentifier, admin.Id.ToString()),
+            new System.Security.Claims.Claim(System.Security.Claims.ClaimTypes.Name, admin.Username),
+            new System.Security.Claims.Claim(System.Security.Claims.ClaimTypes.Role, "Admin")
+        };
+        var tokenDescriptor = new SecurityTokenDescriptor
+        {
+            Subject = new ClaimsIdentity(claims),
+            Expires = DateTime.Now.AddHours(5),
+            SigningCredentials = new SigningCredentials(_key, SecurityAlgorithms.HmacSha512Signature),
+            Issuer = _config["JWT:Issuer"],
+            Audience = _config["JWT:Audience"]
+        };
+
+        var tokenHandler = new JwtSecurityTokenHandler();
+        var token = tokenHandler.CreateToken(tokenDescriptor);
+        return tokenHandler.WriteToken(token);
+
+    }
+
     public string CreateTokenForSite(User user)
     {
         var claims = new List<Claim>

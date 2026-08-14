@@ -242,6 +242,7 @@ public class ApplicationDbContext(DbContextOptions dbContextOptions) : DbContext
     public DbSet<ConversationParticipant> ConversationParticipants { get; set; }
 
     public DbSet<ChatMessage> ChatMessages { get; set; }
+    public DbSet<Admin> Admins { get; set; }
 
 
 

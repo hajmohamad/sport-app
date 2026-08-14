@@ -14,7 +14,7 @@ public interface ITokenService
         int DecodeHash(string hash);
         string GenerateSecureToken();
         string Sha256Hex(string input);
-
+        string CreateAdminToken(Admin admin);
 
 
 }
