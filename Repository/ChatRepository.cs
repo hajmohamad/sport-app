@@ -18,6 +18,14 @@ public class ChatRepository(
     WorkoutProgramCacheService workoutCache) : IChatRepository
 {
 
+    private int GetSupportUserId()
+    {
+        return configuration.GetValue("Chat:SupportUserId", 3);
+    }
+    private int GetSupportChannelId()
+    {
+        return configuration.GetValue("Chat:SupportChannelId", 2);
+    }
 
 
 public async Task<ApiResponse> GetConversationMessages(
@@ -442,319 +450,300 @@ public async Task<ApiResponse> MarkAsRead(
 
 
  
-    public async Task<ApiResponse> BackfillCoachAthleteConversationsFromSuccessfulPayments()
-    {
-        var pairs = await context.WorkoutPrograms
-            .AsNoTracking()
-            .Select(p => new
-            {
-                CoachUserId = p.Coach.UserId,
-                AthleteUserId = p.Athlete.UserId
-            })
-            .Distinct()
-            .ToListAsync();
+    
 
-        foreach (var pair in pairs)
-        {
-            await CreateCoachAthleteConversation(
-                pair.CoachUserId,
-                pair.AthleteUserId);
-        }
-
-        return Success("گفتگوهای مربی و ورزشکار بر اساس پرداخت‌های موفق بررسی و ایجاد شدند.");
-    }
-
-    public async Task<ApiResponse> CreateCoachAthleteConversation(int coachUserId, int athleteUserId)
-    {
-        if (coachUserId <= 0 || athleteUserId <= 0)
-        {
-            return Failure("شناسه کاربران نامعتبر است.");
-        }
-
-        if (coachUserId == athleteUserId)
-        {
-            return Failure("امکان ایجاد گفتگو با خود کاربر وجود ندارد.");
-        }
-        
-        var existingConversation = await FindCoachAthleteConversation(coachUserId, athleteUserId);
-
-        if (existingConversation is not null)
-        {
-            return Success("گفتگو از قبل وجود دارد.", existingConversation.Id);
-        }
-
-        var now = DateTime.Now;
-
-        var conversation = new Conversation
-        {
-            Type = ConversationType.CoachAthlete,
-            CreatedAt = now,
-            IsClosed = false,
-            Participants =
-            [
-                new ConversationParticipant
-                {
-                    UserId = coachUserId,
-                    Role = ConversationParticipantRole.Coach,
-                    JoinedAt = now
-                },
-                new ConversationParticipant
-                {
-                    UserId = athleteUserId,
-                    Role = ConversationParticipantRole.Athlete,
-                    JoinedAt = now
-                }
-            ]
-        };
-
-        await context.Conversations.AddAsync(conversation);
-
-        try
-        {
-            await context.SaveChangesAsync();
-        }
-        catch (DbUpdateException)
-        {
-            var existingAfterConflict = await FindCoachAthleteConversation(coachUserId, athleteUserId);
-
-            if (existingAfterConflict is not null)
-            {
-                return Success("گفتگو از قبل وجود دارد.", existingAfterConflict.Id);
-            }
-
-            throw;
-        }
-
-        await NotifyConversationCreated(
-            conversation.Id,
-            ConversationType.CoachAthlete,
-            coachUserId,
-            athleteUserId);
-
-        return Success("گفتگوی مربی و ورزشکار با موفقیت ایجاد شد.", conversation.Id);
-    }
-
-    private async Task<ApiResponse> CreateSupportConversation(int userId)
-    {
-        var supportUserId = GetSupportUserId();
-
-        if (userId <= 0 || supportUserId <= 0)
-        {
-            return Failure("شناسه کاربر یا پشتیبان نامعتبر است.");
-        }
-
-        if (userId == supportUserId)
-        {
-            return Failure("کاربر پشتیبانی نمی‌تواند با خودش گفتگو داشته باشد.");
-        }
-
-        var userExists = await context.Users
-            .AsNoTracking()
-            .AnyAsync(x => x.Id == userId);
-
-        var supportUserExists = await context.Users
-            .AsNoTracking()
-            .AnyAsync(x => x.Id == supportUserId);
-
-        if (!userExists || !supportUserExists)
-        {
-            return Failure("کاربر یا حساب پشتیبانی یافت نشد.");
-        }
-
-        var existingConversation = await FindSupportConversation(userId, supportUserId);
-
-        if (existingConversation is not null)
-        {
-            return Success("گفتگوی پشتیبانی از قبل وجود دارد.", existingConversation.Id);
-        }
-
-        var now = DateTime.Now;
-
-        var conversation = new Conversation
-        {
-            Type = ConversationType.UserSupport,
-            CreatedAt = now,
-            IsClosed = false,
-            Participants =
-            [
-                new ConversationParticipant
-                {
-                    UserId = userId,
-                    Role = ConversationParticipantRole.User,
-                    JoinedAt = now
-                },
-                new ConversationParticipant
-                {
-                    UserId = supportUserId,
-                    Role = ConversationParticipantRole.Support,
-                    JoinedAt = now
-                }
-            ]
-        };
-
-        await context.Conversations.AddAsync(conversation);
-
-        try
-        {
-            await context.SaveChangesAsync();
-        }
-        catch (DbUpdateException)
-        {
-            var existingAfterConflict = await FindSupportConversation(userId, supportUserId);
-
-            if (existingAfterConflict is not null)
-            {
-                return Success("گفتگوی پشتیبانی از قبل وجود دارد.", existingAfterConflict.Id);
-            }
-
-            throw;
-        }
-
-        await NotifyConversationCreated(
-            conversation.Id,
-            ConversationType.UserSupport,
-            userId,
-            supportUserId);
-
-        return Success("گفتگوی پشتیبانی با موفقیت ایجاد شد.", conversation.Id);
-    }
-
-public async Task<ApiResponse> GetCoachChatList(int coachId, int coachUserId, string? status = null)
+    public async Task<ApiResponse> GetCoachChatList(
+    int coachId,
+    int coachUserId,
+    string? status = null)
 {
-    if (coachId <= 0)
+    if (coachId <= 0 || coachUserId <= 0)
     {
         return Failure("شناسه مربی نامعتبر است.");
     }
 
-    var conversations = await GetCoachAthleteConversations(coachUserId);
-    var coachPrograms = await workoutCache.GetCoachWorkoutProgramAthleteUserIdByCoachUserId(coachUserId);
+    var conversations = await GetAllUserConversations(coachUserId);
 
-    var result = new CoachChatListDto
-    {
-        Support = await GetSupportChatItem(coachUserId),
-        Channels = [await GetSupportChannelChatItem(coachUserId)]
-        
-    };
+    var coachPrograms =
+        await workoutCache
+            .GetCoachWorkoutProgramAthleteUserIdByCoachUserId(coachUserId);
+
+    var result = new CoachChatListDto();
 
     foreach (var conversation in conversations)
     {
-        var coachParticipant = conversation.Participants.FirstOrDefault(u => u.UserId == coachUserId);
-        var athleteParticipant = conversation.Participants.FirstOrDefault(x => x.UserId != coachUserId);
-        
-        if (athleteParticipant == null || !coachPrograms.TryGetValue(athleteParticipant.UserId, out var program))
+        var currentParticipant = conversation.Participants
+            .FirstOrDefault(p => p.UserId == coachUserId);
+
+        if (currentParticipant is null)
         {
-            continue; 
+            continue;
         }
 
-        var item = conversation.BuildChatListItem( athleteParticipant.User, program, coachParticipant!.UnreadCount, athleteParticipant.UnreadCount);
-
-        result.All.Add(item);
-
-        switch (program.GetStatus())
+        switch (conversation.Type)
         {
-            case "Active":
-                result.Active.Add(item);
+            case ConversationType.CoachAthlete:
+            {
+                var athleteParticipant = conversation.Participants
+                    .FirstOrDefault(p =>
+                        p.UserId != coachUserId &&
+                        p.Role == ConversationParticipantRole.Athlete);
+
+                if (athleteParticipant?.User is null)
+                {
+                    continue;
+                }
+
+                if (!coachPrograms.TryGetValue(
+                        athleteParticipant.UserId,
+                        out var program))
+                {
+                    continue;
+                }
+
+                var item = conversation.BuildChatListItem(
+                    athleteParticipant.User,
+                    program,
+                    currentParticipant.UnreadCount,
+                    athleteParticipant.UnreadCount);
+
+                result.All.Add(item);
+
+                switch (program.GetStatus())
+                {
+                    case "Active":
+                        result.Active.Add(item);
+                        break;
+
+                    case "NeedsFollowUp":
+                        result.NeedsFollowUp.Add(item);
+                        break;
+
+                    case "NearingCompletion":
+                        result.NearingCompletion.Add(item);
+                        break;
+
+                    default:
+                        result.Inactive.Add(item);
+                        break;
+                }
+
                 break;
-            case "NeedsFollowUp":
-                result.NeedsFollowUp.Add(item);
+            }
+
+            case ConversationType.UserSupport:
+            {
+                var supportUserId = GetSupportUserId();
+
+                var supportParticipant = conversation.Participants
+                    .FirstOrDefault(p => p.UserId == supportUserId);
+
+                if (supportParticipant?.User is not null)
+                {
+                    result.Support = conversation.ToSupportListItem(
+                        supportParticipant.User,
+                        currentParticipant.UnreadCount);
+                }
+
                 break;
-            case "NearingCompletion":
-                result.NearingCompletion.Add(item);
+            }
+
+            case ConversationType.Channel:
+            {
+                var channelItem = conversation.ToChannelListItem(
+                    currentParticipant.UnreadCount);
+
+                result.Channels =
+                [
+                    channelItem
+                ];
+
                 break;
-            default:
-                result.Inactive.Add(item);
-                break;
+            }
         }
     }
 
-    SortCoachResult(result); 
-    
-    
+    SortCoachResult(result);
 
     if (string.IsNullOrWhiteSpace(status))
     {
-        return Success("لیست چت‌های مربی با موفقیت دریافت شد.", result);
+        return Success(
+            "لیست چت‌های مربی با موفقیت دریافت شد.",
+            result);
     }
-    else
+
+    object filteredResult = status.Trim().ToLowerInvariant() switch
     {
-        object responseData;
-        switch (status.ToLowerInvariant())
-        {
-            case "all":
-                responseData = result.All;
-                break;
-            case "active":
-                responseData = result.Active;
-                break;
-            case "needsfollowup":
-                responseData = result.NeedsFollowUp;
-                break;
-            case "nearingcompletion":
-                responseData = result.NearingCompletion;
-                break;
-            case "inactive":
-                responseData = result.Inactive;
-                break;
-            default:
-                return Failure("استاتوس ارسالی نامعتبر است.");
-        }
-        return Success("لیست فیلتر شده چت‌ها با موفقیت دریافت شد.", responseData);
+        "all" => result.All,
+        "active" => result.Active,
+        "needsfollowup" => result.NeedsFollowUp,
+        "nearingcompletion" => result.NearingCompletion,
+        "inactive" => result.Inactive,
+        _ => null!
+    };
+
+    return Success(
+        "لیست فیلترشده چت‌ها با موفقیت دریافت شد.",
+        filteredResult);
+}
+    public async Task<ApiResponse> GetAthleteChatList(int athleteUserId)
+{
+    if (athleteUserId <= 0)
+    {
+        return Failure("شناسه ورزشکار نامعتبر است.");
     }
+    
+
+    var conversations =
+        await GetAllUserConversations(athleteUserId);
+
+    var result = new AthleteChatListDto
+    {
+        Coaches = [],
+        Channels = []
+    };
+    var supportUserId = GetSupportUserId();
+    if (supportUserId == athleteUserId)
+    {
+        GetListForSupportUser(athleteUserId, conversations, result);
+
+        return Success(
+            "لیست چت‌های ورزشکار با موفقیت دریافت شد.",
+            result);
+    }
+
+    foreach (var conversation in conversations)
+    {
+        var currentParticipant = conversation.Participants
+            .FirstOrDefault(p => p.UserId == athleteUserId);
+
+        if (currentParticipant is null)
+        {
+            continue;
+        }
+
+        switch (conversation.Type)
+        {
+          
+            case ConversationType.UserSupport:
+            {
+
+                var supportParticipant = conversation.Participants
+                    .FirstOrDefault(p => p.UserId == supportUserId);
+
+                if (supportParticipant?.User is not null)
+                {
+                    result.Support = conversation.ToSupportListItem(
+                        supportParticipant.User,
+                        currentParticipant.UnreadCount);
+                }
+
+                break;
+            }
+
+            case ConversationType.Channel:
+            {
+                var channelItem = conversation.ToChannelListItem(
+                    currentParticipant.UnreadCount);
+
+                result.Channels.Add(channelItem);
+
+                break;
+            }
+
+            default:
+                var coachParticipant = conversation.Participants
+                    .FirstOrDefault(p =>
+                        p.UserId != athleteUserId);
+
+                if (coachParticipant?.User is null)
+                {
+                    continue;
+                }
+
+                var item = conversation.BuildChatListItem(
+                    coachParticipant.User,
+                    null,
+                    currentParticipant.UnreadCount,
+                    coachParticipant.UnreadCount);
+
+                result.Coaches.Add(item);   
+                break;
+        }
+    }
+
+    result.Coaches = result.Coaches
+        .OrderByDescending(x => x.LastMessageAt)
+        .ThenBy(x => x.FullName)
+        .ToList();
+
+    result.Channels = result.Channels
+        .OrderByDescending(x => x?.LastMessageAt)
+        .ToList();
+
+    return Success(
+        "لیست چت‌های ورزشکار با موفقیت دریافت شد.",
+        result);
 }
 
-
-    public async Task<ApiResponse> GetAthleteChatList(int athleteId)
+    private static void GetListForSupportUser(int athleteUserId, List<Conversation> conversations, AthleteChatListDto result)
     {
-        if (athleteId <= 0)
-        {
-            return Failure("شناسه ورزشکار نامعتبر است.");
-        }
-
-        var athlete = await context.Athletes
-            .AsNoTracking()
-            .FirstOrDefaultAsync(x => x.Id == athleteId);
-
-        if (athlete is null)
-        {
-            return Failure("ورزشکار یافت نشد.");
-        }
-
-        var athleteUserId = athlete.UserId;
-
-        var conversations = await GetAthleteConversations(athleteUserId);
-        
-        var conversationIds = conversations.Select(c => c.Id).ToList();
-        var unreadCountsDict = await GetUnreadCountsBatch(conversationIds, athleteUserId);
-
-        var result = new AthleteChatListDto
-        {
-            Support = await GetSupportChatItem(athleteUserId),
-            Channels = [await GetSupportChannelChatItem(athleteUserId)]
-        };
-
         foreach (var conversation in conversations)
         {
-            var coach = conversation.Participants.FirstOrDefault(x => x.UserId != athleteUserId);
-            if (coach == null) continue;
-            
-            unreadCountsDict.TryGetValue(conversation.Id, out int unreadCount);
+            var currentParticipant = conversation.Participants
+                .FirstOrDefault(p => p.UserId == athleteUserId);
 
-            var item = conversation.BuildChatListItem(
-                coach.User,
-                null,
-                unreadCount,
-                coach.UnreadCount); 
+            if (currentParticipant is null)
+            {
+                continue;
+            }
 
-            result.Coaches.Add(item);
+            switch (conversation.Type)
+            {
+                
+
+                case ConversationType.Channel:
+                {
+                    var channelItem = conversation.ToChannelListItem(
+                        currentParticipant.UnreadCount);
+
+                    result.Channels.Add(channelItem);
+
+                    break;
+                }
+                
+                case ConversationType.CoachAthlete:
+                default:
+                    var coachParticipant = conversation.Participants
+                        .FirstOrDefault(p =>
+                            p.UserId != athleteUserId);
+
+                    if (coachParticipant?.User is null)
+                    {
+                        continue;
+                    }
+
+                    var item = conversation.BuildChatListItem(
+                        coachParticipant.User,
+                        null,
+                        currentParticipant.UnreadCount,
+                        coachParticipant.UnreadCount);
+
+                    result.Coaches.Add(item);   
+                    break;
+            }
         }
-
         result.Coaches = result.Coaches
             .OrderByDescending(x => x.LastMessageAt)
             .ThenBy(x => x.FullName)
             .ToList();
 
-        return Success("لیست چت‌های ورزشکار با موفقیت دریافت شد.", result);
+        result.Channels = result.Channels
+            .OrderByDescending(x => x?.LastMessageAt)
+            .ToList();
     }
+
+
     public async Task<ApiResponse> AddNewUserToChannel(int userId, bool isCoach)
     {
         if (userId <= 0)
@@ -889,47 +878,102 @@ public async Task<ApiResponse> GetCoachChatList(int coachId, int coachUserId, st
 
     return Success("پیام سیستمی با موفقیت ثبت شد.", messageDto);
 }
-
-
-    private async Task<List<Conversation>> GetCoachAthleteConversations(int coachUserId)
+    private async Task<ApiResponse> CreateSupportConversation(int userId)
     {
+        var supportUserId = GetSupportUserId();
 
-        return await context.Conversations
+        if (userId <= 0 || supportUserId <= 0)
+        {
+            return Failure("شناسه کاربر یا پشتیبان نامعتبر است.");
+        }
+
+        if (userId == supportUserId)
+        {
+            return Failure("کاربر پشتیبانی نمی‌تواند با خودش گفتگو داشته باشد.");
+        }
+
+        var userExists = await context.Users
             .AsNoTracking()
-            .Where(x => x.Type == ConversationType.CoachAthlete && 
-                        x.Participants.Any(p => p.UserId == coachUserId) )
-            .Include(x => x.Participants)
-                .ThenInclude(x => x.User)
-            .ToListAsync();
-    }
+            .AnyAsync(x => x.Id == userId);
 
-    private async Task<Dictionary<long, int>> GetUnreadCountsBatch(List<long> conversationIds, int currentUserId)
-    {
-        if (conversationIds.Count == 0) return new Dictionary<long, int>();
-
-        var unreadCounts = await context.ConversationParticipants
+        var supportUserExists = await context.Users
             .AsNoTracking()
-            .Where(p => conversationIds.Contains(p.ConversationId) && p.UserId == currentUserId)
-            .Select(p => new
+            .AnyAsync(x => x.Id == supportUserId);
+
+        if (!userExists || !supportUserExists)
+        {
+            return Failure("کاربر یا حساب پشتیبانی یافت نشد.");
+        }
+
+        var existingConversation = await FindSupportConversation(userId, supportUserId);
+
+        if (existingConversation is not null)
+        {
+            return Success("گفتگوی پشتیبانی از قبل وجود دارد.", existingConversation.Id);
+        }
+
+        var now = DateTime.Now;
+
+        var conversation = new Conversation
+        {
+            Type = ConversationType.UserSupport,
+            CreatedAt = now,
+            IsClosed = false,
+            Participants =
+            [
+                new ConversationParticipant
+                {
+                    UserId = userId,
+                    Role = ConversationParticipantRole.User,
+                    JoinedAt = now
+                },
+                new ConversationParticipant
+                {
+                    UserId = supportUserId,
+                    Role = ConversationParticipantRole.Support,
+                    JoinedAt = now
+                }
+            ]
+        };
+
+        await context.Conversations.AddAsync(conversation);
+
+        try
+        {
+            await context.SaveChangesAsync();
+        }
+        catch (DbUpdateException)
+        {
+            var existingAfterConflict = await FindSupportConversation(userId, supportUserId);
+
+            if (existingAfterConflict is not null)
             {
-                p.ConversationId,
-                p.UnreadCount
-            })
-            .ToDictionaryAsync(x => x.ConversationId, x => x.UnreadCount);
+                return Success("گفتگوی پشتیبانی از قبل وجود دارد.", existingAfterConflict.Id);
+            }
 
-        return unreadCounts;
+            throw;
+        }
+
+        await NotifyConversationCreated(
+            conversation.Id,
+            ConversationType.UserSupport,
+            userId,
+            supportUserId);
+
+        return Success("گفتگوی پشتیبانی با موفقیت ایجاد شد.", conversation.Id);
     }
-    
 
-    private async Task<Conversation?> FindCoachAthleteConversation(int coachUserId, int athleteUserId)
+
+    
+    private async Task<bool> CoachAthleteConversationIsExist(int coachUserId, int athleteUserId)
     {
         return await context.Conversations
             .Include(x => x.Participants)
-            .FirstOrDefaultAsync(x =>
+            .Where(x =>
                 x.Type == ConversationType.CoachAthlete &&
                 x.Participants.Count == 2 &&
                 x.Participants.Any(p => p.UserId == coachUserId) &&
-                x.Participants.Any(p => p.UserId == athleteUserId));
+                x.Participants.Any(p => p.UserId == athleteUserId)).AnyAsync();
     }
 
     private async Task<Conversation?> FindSupportConversation(int userId, int supportUserId)
@@ -943,66 +987,7 @@ public async Task<ApiResponse> GetCoachChatList(int coachId, int coachUserId, st
                 x.Participants.Any(p => p.UserId == supportUserId));
     }
     
-    private async Task<List<Conversation>> GetAthleteConversations(int athleteUserId)
-    {
-        return await context.Conversations
-            .AsNoTracking()
-            .Where(x =>
-                x.Participants.Any(p => p.UserId == athleteUserId) )
-            .Include(x => x.Participants)
-                .ThenInclude(x => x.User)
-            .ToListAsync();
-    }
-
-    private async Task<ChatListItemDto?> GetSupportChatItem(int userId)
-    {
-        var supportUserId = GetSupportUserId();
-
-        var conversation = await context.Conversations
-            .AsNoTracking()
-            .Include(x => x.Participants)
-                .ThenInclude(x => x.User)
-            .FirstOrDefaultAsync(x =>
-                x.Type == ConversationType.UserSupport &&
-                x.Participants.Count == 2 &&
-                x.Participants.Any(p => p.UserId == userId) &&
-                x.Participants.Any(p => p.UserId == supportUserId));
-
-        if (conversation is null)
-        {
-            return null;
-        }
-
-        var supportParticipant = conversation.Participants
-            .FirstOrDefault(x => x.UserId == supportUserId);
-        var userParticipant = conversation.Participants.FirstOrDefault(x => x.UserId == userId);
-        if (supportParticipant?.User is null || userParticipant is null) return null;
-
-        return conversation.ToSupportListItem(
-            supportParticipant.User, 
-            userParticipant.UnreadCount); 
-    }
-    private async Task<ChatListItemDto?> GetSupportChannelChatItem(int userId)
-    {
-        var supportChannelId = GetSupportChannelId();
-        var conversation = await context.Conversations
-            .AsNoTracking()
-            .FirstOrDefaultAsync(x => x.Type == ConversationType.Channel && x.Id == supportChannelId);
-        
-        if (conversation is null) return null;
-  
-        var unreadCount = await context.ConversationParticipants
-            .Where(cp => cp.ConversationId == conversation.Id && cp.UserId == userId)
-            .Select(p => p.UnreadCount)
-            .FirstOrDefaultAsync();
-
-        return conversation.ToChannelListItem(unreadCount); 
-    }
-
-
-
-
-   
+    
 
     private static string? NormalizeMessageText(string? text)
     {
@@ -1011,14 +996,6 @@ public async Task<ApiResponse> GetCoachChatList(int coachId, int coachUserId, st
 
     
 
-    private int GetSupportUserId()
-    {
-        return configuration.GetValue("Chat:SupportUserId", 1);
-    }
-    private int GetSupportChannelId()
-    {
-        return configuration.GetValue("Chat:SupportChannelId", 2);
-    }
 
     private async Task NotifyConversationCreated(
         long conversationId,
@@ -1089,6 +1066,17 @@ public async Task<ApiResponse> GetCoachChatList(int coachId, int coachUserId, st
 
         return (true, string.Empty, supportConversationId);
     }
+    private async Task<List<Conversation>> GetAllUserConversations(int userId)
+    {
+        return await context.Conversations
+            .AsNoTracking()
+            .Where(c => c.Participants.Any(p => p.UserId == userId))
+            .Include(c => c.Participants)
+            .ThenInclude(p => p.User)
+            .OrderByDescending(c => c.LastMessageAt)
+            .ToListAsync();
+    }
+
 
     private static long ExtractLongId(object? value)
     {
@@ -1123,4 +1111,100 @@ public async Task<ApiResponse> GetCoachChatList(int coachId, int coachUserId, st
             Message = message
         };
     }
+
+    #region backfill
+    public async Task<ApiResponse> BackfillCoachAthleteConversationsFromSuccessfulPayments()
+    {
+        var pairs = await context.WorkoutPrograms
+            .AsNoTracking()
+            .Select(p => new
+            {
+                CoachUserId = p.Coach.UserId,
+                AthleteUserId = p.Athlete.UserId
+            })
+            .Distinct()
+            .ToListAsync();
+
+        foreach (var pair in pairs)
+        {
+            await CreateCoachAthleteConversation(
+                pair.CoachUserId,
+                pair.AthleteUserId);
+        }
+
+        return Success("گفتگوهای مربی و ورزشکار بر اساس پرداخت‌های موفق بررسی و ایجاد شدند.");
+    }
+
+    public async Task<ApiResponse> CreateCoachAthleteConversation(int coachUserId, int athleteUserId)
+    {
+        if (coachUserId <= 0 || athleteUserId <= 0)
+        {
+            return Failure("شناسه کاربران نامعتبر است.");
+        }
+
+        if (coachUserId == athleteUserId)
+        {
+            return Failure("امکان ایجاد گفتگو با خود کاربر وجود ندارد.");
+        }
+        
+        var existingConversation = await CoachAthleteConversationIsExist(coachUserId, athleteUserId);
+
+        if (existingConversation)
+        {
+            return Success("گفتگو از قبل وجود دارد.");
+        }
+
+        var now = DateTime.Now;
+
+        var conversation = new Conversation
+        {
+            Type = ConversationType.CoachAthlete,
+            CreatedAt = now,
+            IsClosed = false,
+            Participants =
+            [
+                new ConversationParticipant
+                {
+                    UserId = coachUserId,
+                    Role = ConversationParticipantRole.Coach,
+                    JoinedAt = now
+                },
+                new ConversationParticipant
+                {
+                    UserId = athleteUserId,
+                    Role = ConversationParticipantRole.Athlete,
+                    JoinedAt = now
+                }
+            ]
+        };
+
+        await context.Conversations.AddAsync(conversation);
+
+        try
+        {
+            await context.SaveChangesAsync();
+        }
+        catch (DbUpdateException)
+        {
+            var existingAfterConflict = await CoachAthleteConversationIsExist(coachUserId, athleteUserId);
+
+            if (existingAfterConflict )
+            {
+                return Success("گفتگو از قبل وجود دارد.", existingAfterConflict);
+            }
+
+            throw;
+        }
+
+        await NotifyConversationCreated(
+            conversation.Id,
+            ConversationType.CoachAthlete,
+            coachUserId,
+            athleteUserId);
+
+        return Success("گفتگوی مربی و ورزشکار با موفقیت ایجاد شد.", conversation.Id);
+    }
+    
+
+    #endregion
 }

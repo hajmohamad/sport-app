@@ -95,10 +95,11 @@ public class ChatController(
     [Authorize(Roles = "Athlete")]
     public async Task<IActionResult> GetAthleteChats()
     {
-        var athleteId = await GetAthleteIdAsync();
-        if (athleteId == 0) return Unauthorized(new ApiResponse { Action = false, Message = "شناسه ورزشکار یافت نشد." });
+        var userId = GetUserId();
+        if (userId == 0) return Unauthorized(new ApiResponse { Action = false, Message = "خطای احراز هویت." });
 
-        var result = await chatRepository.GetAthleteChatList(athleteId);
+
+        var result = await chatRepository.GetAthleteChatList(userId);
         return result.Action ? Ok(result) : BadRequest(result);
     }
 
@@ -174,17 +175,17 @@ public class ChatController(
         return result.Action ? Ok(result) : BadRequest(result);
     }
 
-    [HttpPost("BackFile")]
-    public async Task<IActionResult> BackFile()
-    {
-        var result = await chatRepository.BackfillCoachAthleteConversationsFromSuccessfulPayments();
-
-        return result.Action ? Ok(new
-        {
-            result
-        }) : BadRequest(new
-        {
-            result
-        });
-    }
+    // [HttpPost("BackFile")]
+    // public async Task<IActionResult> BackFile()
+    // {
+    //     var result = await chatRepository.BackfillCoachAthleteConversationsFromSuccessfulPayments();
+    //
+    //     return result.Action ? Ok(new
+    //     {
+    //         result
+    //     }) : BadRequest(new
+    //     {
+    //         result
+    //     });
+    // }
 }

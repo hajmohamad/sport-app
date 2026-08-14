@@ -31,7 +31,7 @@ public interface IChatRepository
         int athleteUserId);
     Task<ApiResponse> GetCoachChatList(int coachId, int coachUserId, string? status = null);
 
-    Task<ApiResponse> GetAthleteChatList(int athleteId);
+    Task<ApiResponse> GetAthleteChatList(int athleteUserId);
 
     Task<ApiResponse> AddSystemMessage(int coachUserId, int athleteUserId, string text);
     Task<ApiResponse> AddNewUserToChannel(int userId,bool isCoach);
