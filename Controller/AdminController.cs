@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using sport_app_backend.Dtos;
+using sport_app_backend.Dtos.Account;
 using sport_app_backend.Dtos.Admin;
 using sport_app_backend.Interface;
 using sport_app_backend.Models;
@@ -180,6 +181,18 @@ namespace sport_app_backend.Controller
                 return StatusCode(500, new { Action = false, Message = ex.Message });
             }
         }
+        [HttpPost("loginAdmin")]
+        public async Task<IActionResult> LoginAdmin([FromBody] AdminLoginRequestDto adminLoginRequestDto)
+        {
+            var response = await adminRepository.AdminLoginAsync(adminLoginRequestDto);
+            if (!response.Action)
+            {
+                return BadRequest(response);
+            }
+
+            return Ok(response);
+        }
+        
     }
 
 

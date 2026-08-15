@@ -29,6 +29,21 @@ namespace sport_app_backend.Repository
     {
         public async Task<ApiResponse> AdminLoginAsync(AdminLoginRequestDto loginDto)
         {
+            // var hashedPassword = BCrypt.Net.BCrypt.HashPassword("mohamadrahi");
+            //
+            // var admin = new Admin()
+            // {
+            //     Username = "mohamad",
+            //     FullName = "mohamadrahi",
+            //     PasswordHash = hashedPassword ,
+            //     IsActive = false// ← اینجا فقط هش ذخیره میشه، نه خود رمز!
+            // };
+            //
+            // context.Admins.Add(admin);
+            // await context.SaveChangesAsync();
+            // throw new Exception("نام کاربری یا رمز عبور اشتباه است، یا حساب کاربری غیرفعال شده است.");
+            //
+
             var adminUser = await context.Admins
                 .FirstOrDefaultAsync(a => a.Username == loginDto.Username);
 
