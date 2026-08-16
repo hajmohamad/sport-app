@@ -708,6 +708,7 @@ public async Task<ApiResponse> MarkAsRead(
                         currentParticipant.UnreadCount);
 
                     result.Channels.Add(channelItem);
+                    result.Coaches.Add(channelItem);
 
                     break;
                 }
