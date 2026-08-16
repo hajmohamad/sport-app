@@ -49,8 +49,8 @@ public async Task<ApiResponse> GetConversationMessages(
     object otherUserNameAndPhoto = new
     {
         FullName = $"اطلاع رسانی چارست",
-        Photo = "",
-        phoneNumber = "09395327229",
+        Photo = "https://chaarset.s3.ir-thr-at1.arvanstorage.ir/channel.jpg",
+        phoneNumber = " ",
         athleteStatus = "Channel"
     };
     long? otherLastReadId = null;
@@ -87,7 +87,7 @@ public async Task<ApiResponse> GetConversationMessages(
             }
         }
 
-        otherUserNameAndPhoto = new
+        otherUserNameAndPhoto = new 
         {
             FullName = $"{otherParticipant.User.FirstName} {otherParticipant.User.LastName}".Trim(),
             Photo = otherParticipant.User.ImageProfile,
@@ -988,8 +988,6 @@ public async Task<ApiResponse> MarkAsRead(
                 x.Participants.Any(p => p.UserId == supportUserId));
     }
     
-    
-
     private static string? NormalizeMessageText(string? text)
     {
         return string.IsNullOrWhiteSpace(text) ? null : text.Trim();

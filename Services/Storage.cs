@@ -6,6 +6,7 @@ using sport_app_backend.Interface;
 using sport_app_backend.Models;
 using System.Net;
 using System.Net.Mime;
+using ImageMagick;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Formats.Webp;
 using SixLabors.ImageSharp.Processing;
@@ -162,11 +163,11 @@ private static bool TryConvertToWebP(Stream input, Stream output, int quality = 
     {
         input.Position = 0;
 
-        using var image = Image.Load(input);
-        image.Save(output, new WebpEncoder
-        {
-            Quality = quality
-        });
+        using var image = new MagickImage(input);
+        image.AutoOrient();           
+        image.Format = MagickFormat.WebP;
+        image.Quality = (uint)quality;
+        image.Write(output);
 
         output.Position = 0;
         return true;
@@ -394,6 +395,8 @@ private static bool TryConvertToWebP(Stream input, Stream output, int quality = 
             "image/png" => ".png",
             "image/webp" => ".webp",
             "image/gif" => ".gif",
+            "image/heic" => ".heic",
+            "image/heif" => ".heif",
             _ => null
         };
     }
@@ -408,6 +411,8 @@ private static bool TryConvertToWebP(Stream input, Stream output, int quality = 
             ".png" => "image/png",
             ".webp" => "image/webp",
             ".gif" => "image/gif",
+            ".heic" => "image/heic",
+            ".heif" => "image/heif",
             _ => null
         };
     }

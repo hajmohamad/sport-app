@@ -20,6 +20,8 @@
             "image/png",
             "image/webp",
             "image/gif",
+            "image/heic",
+            "image/heif",
             "application/pdf",
             "video/mp4",
             "video/webm",
@@ -85,7 +87,7 @@
                 UserId = 0,
                 FullName = "کانال اطلاع رسانی چارست",
                 PhoneNumber = "09395327229",
-                ProfileImageUrl = "",
+                ProfileImageUrl = "https://chaarset.s3.ir-thr-at1.arvanstorage.ir/channel.jpg",
                 Service = "پشتیبانی",
                 Status = "Channel",
                 LastMessageText = conversation.LastMessageText,
@@ -232,7 +234,7 @@
 
             if (isImage)
             {
-                var allowedImageExtensions = new[] { ".jpg", ".jpeg", ".png", ".webp", ".gif" };
+                var allowedImageExtensions = new[] { ".jpg", ".jpeg", ".png", ".webp", ".gif", ".heic", ".heif" };
                 if (!allowedImageExtensions.Contains(extension))
                 {
                     apiResponse = Failure("پسوند تصویر نامعتبر است.");
@@ -265,6 +267,7 @@ private static bool IsValidVideoExtension(string contentType, string extension)
         "video/ogg" => extension is ".ogv" or ".ogg",
         "video/3gpp" => extension == ".3gp",
         "video/mp2t" => extension == ".ts",
+
         _ => true // در حالت غیرقابل‌پیش‌بینی، اگر contentType معتبر بود، رد نکن
     };
 }

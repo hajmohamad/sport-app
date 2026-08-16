@@ -15,6 +15,7 @@
     <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
     <PackageReference Include="CoreAdmin" Version="3.0.0" />
     <PackageReference Include="Hashids.net" Version="1.7.0" />
+    <PackageReference Include="Magick.NET-Q16-AnyCPU" Version="14.16.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.11" />
