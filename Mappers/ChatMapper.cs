@@ -66,7 +66,7 @@
                 UserId = supportUser.Id,
                 FullName = "پشتیبانی چارست",
                 PhoneNumber = supportUser.PhoneNumber,
-                ProfileImageUrl = supportUser.ImageProfile,
+                ProfileImageUrl = "https://chaarset.s3.ir-thr-at1.arvanstorage.ir/support.jpg",
                 Service = "پشتیبانی",
                 Status = "Support",
                 LastMessageText = conversation.LastMessageText,
