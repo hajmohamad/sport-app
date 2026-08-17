@@ -48,7 +48,6 @@ public class Coach
     public List<WorkoutProgramFeedback> WorkoutProgramFeedbacks { get; set; } = [];
     [StringLength(40)]
     public string Slogan { get; set; } = "";
-    [StringLength(400)]
     public string SiteDescription { get; set; } = "";
     public CoachStatus CoachStatus { get; set; } = CoachStatus.None;
 }
