@@ -45,14 +45,17 @@ public async Task<ApiResponse> GetConversationMessages(
     if (conversation == null) return Failure("گفتگو یافت نشد.");
 
     var isChannel = conversation.Type == ConversationType.Channel;
+    var isSupport = conversation.Type == ConversationType.UserSupport;
+
     
     object otherUserNameAndPhoto = new
     {
         FullName = $"اطلاع رسانی چارست",
         Photo = "https://chaarset.s3.ir-thr-at1.arvanstorage.ir/channel.jpg",
-        phoneNumber = " ",
+        phoneNumber = "",
         athleteStatus = "Channel"
     };
+    
     long? otherLastReadId = null;
 
     if (!isChannel)
@@ -93,6 +96,17 @@ public async Task<ApiResponse> GetConversationMessages(
             Photo = otherParticipant.User.ImageProfile,
             phoneNumber = otherParticipant.User.PhoneNumber,
             athleteStatus
+        };
+    }
+
+    if (isSupport)
+    {
+        otherUserNameAndPhoto = new
+        {
+            FullName = $"پشتیبانی چارست",
+            Photo = "https://chaarset.s3.ir-thr-at1.arvanstorage.ir/support.jpg",
+            phoneNumber = " ",
+            athleteStatus = "Channel"
         };
     }
   

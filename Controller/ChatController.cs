@@ -175,17 +175,17 @@ public class ChatController(
         return result.Action ? Ok(result) : BadRequest(result);
     }
 
-    // [HttpPost("BackFile")]
-    // public async Task<IActionResult> BackFile()
-    // {
-    //     var result = await chatRepository.BackfillCoachAthleteConversationsFromSuccessfulPayments();
-    //
-    //     return result.Action ? Ok(new
-    //     {
-    //         result
-    //     }) : BadRequest(new
-    //     {
-    //         result
-    //     });
-    // }
+    [HttpPost("BackFile")]
+    public async Task<IActionResult> BackFile()
+    {
+        var result = await chatRepository.BackfillCoachAthleteConversationsFromSuccessfulPayments();
+    
+        return result.Action ? Ok(new
+        {
+            result
+        }) : BadRequest(new
+        {
+            result
+        });
+    }
 }
