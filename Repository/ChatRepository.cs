@@ -106,7 +106,7 @@ public async Task<ApiResponse> GetConversationMessages(
             FullName = $"پشتیبانی چارست",
             Photo = "https://chaarset.s3.ir-thr-at1.arvanstorage.ir/support.jpg",
             phoneNumber = " ",
-            athleteStatus = "Channel"
+            athleteStatus = ""
         };
     }
   
