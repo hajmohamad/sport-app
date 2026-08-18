@@ -86,7 +86,7 @@
                 ConversationId = conversation.Id,
                 UserId = 0,
                 FullName = "کانال اطلاع رسانی چارست",
-                PhoneNumber = "09395327229",
+                PhoneNumber = "",
                 ProfileImageUrl = "https://chaarset.s3.ir-thr-at1.arvanstorage.ir/channel.jpg",
                 Service = "پشتیبانی",
                 Status = "Channel",
