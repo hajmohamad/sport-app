@@ -498,7 +498,6 @@ public class BuyFromSiteRepository(
     }
     private async Task<ApiResponse> GenerateSuccessResponse(User user)
     {
-        await chatRepository.AddNewUserToChannel(user.Id, false);
         return new ApiResponse
         {
             Action = true,
@@ -647,7 +646,7 @@ public class BuyFromSiteRepository(
 
 
     private async Task<User> CreateNewAthleteUser(string phoneNumber)
-    {
+    {   
         var newUser = new User
         {
             UserName = await GenerateUniqueUsername(),
@@ -657,6 +656,7 @@ public class BuyFromSiteRepository(
         };
         await dbContext.Users.AddAsync(newUser);
         await dbContext.SaveChangesAsync();
+
         
         var athlete = new Athlete()
         {
@@ -668,6 +668,8 @@ public class BuyFromSiteRepository(
         
         await dbContext.Athletes.AddAsync(athlete);
         await dbContext.SaveChangesAsync();
+        await chatRepository.AddNewUserToChannel(newUser.Id, false);
+
 
 
         return newUser;
