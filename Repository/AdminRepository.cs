@@ -17,16 +17,92 @@ using sport_app_backend.Data;
 using sport_app_backend.Dtos;
 using sport_app_backend.Dtos.Account;
 using sport_app_backend.Dtos.Admin;
+using sport_app_backend.Dtos.Chat;
 using sport_app_backend.Interface;
 using sport_app_backend.Models;
 using sport_app_backend.Models.Account.Coach;
+using sport_app_backend.Models.Chat;
 using sport_app_backend.Models.Support;
 
 
 namespace sport_app_backend.Repository
 {
-    public class AdminRepository(ApplicationDbContext context, ISmsService sms,    IStorage storage,ITokenService _tokenService) : IAdminRepository
+    public class AdminRepository(ApplicationDbContext context, ISmsService sms,    IStorage storage,ITokenService _tokenService,
+        IConfiguration configuration) : IAdminRepository
     {
+        public async Task<ApiResponse> PublishToChannelAsync(PublishToChannelDto dto)
+    {
+        var normalizedText = dto.Text?.Trim();
+
+        if (string.IsNullOrWhiteSpace(normalizedText) && dto.File is null)
+        {
+            return Failure("پیام نمی‌تواند خالی باشد. لطفاً متن یا فایل را ارسال کنید.");
+        }
+
+        var supportChannelId = configuration.GetValue<long>("Chat:SupportChannelId", 2);
+        var supportUserId = configuration.GetValue<int>("Chat:SupportUserId", 3);
+
+        var channel = await context.Conversations
+            .FirstOrDefaultAsync(c => c.Id == supportChannelId && c.Type == ConversationType.Channel);
+
+        if (channel is null)
+        {
+            return Failure("کانال اطلاع‌رسانی یافت نشد.");
+        }
+
+        var now = DateTime.Now;
+        var message = new ChatMessage
+        {
+            ConversationId = channel.Id,
+            SenderUserId = supportUserId, 
+            SentAt = now
+        };
+
+        if (dto.File is not null)
+        {
+            if (ChatMapper.CheckUploadAttachment(supportUserId, dto.File, out var isPdf, out var isVideo, out var validationResponse))
+            {
+                return validationResponse!;
+            }
+
+            var folderPath = $"chat/{channel.Id}";
+            var uploadResult = (isVideo || isPdf)
+                ? await storage.UploadFile(dto.File, string.Empty, folderPath)
+                : await storage.UploadImage(dto.File, string.Empty, folderPath);
+
+            if (!uploadResult.Action || uploadResult.Result is null)
+            {
+                return uploadResult;
+            }
+
+            message.Type = isVideo ? ChatMessageType.Video : (isPdf ? ChatMessageType.File : ChatMessageType.Image);
+            message.FileUrl = uploadResult.Result.ToString();
+        }
+
+        if (!string.IsNullOrWhiteSpace(normalizedText))
+        {
+            if (message.Type == default)
+            {
+                message.Type = ChatMessageType.Text;
+            }
+            message.Text = normalizedText;
+        }
+
+        context.ChatMessages.Add(message);
+
+        channel.LastMessageAt = now;
+        channel.LastMessageText = ChatMapper.BuildConversationPreview(message);
+        channel.LastMessageSenderId = supportUserId;
+
+        await context.ConversationParticipants
+            .Where(p => p.ConversationId == channel.Id)
+            .ExecuteUpdateAsync(s => s.SetProperty(p => p.UnreadCount, p => p.UnreadCount + 1));
+
+        await context.SaveChangesAsync();
+        
+        return Success("پست با موفقیت در کانال منتشر شد.", message.ChatMessageDto(supportUserId, null));
+    }
+        
         public async Task<ApiResponse> AdminLoginAsync(AdminLoginRequestDto loginDto)
         {
             // var hashedPassword = BCrypt.Net.BCrypt.HashPassword("mohamadrahi");
@@ -512,6 +588,14 @@ namespace sport_app_backend.Repository
                 Action = true,
                 Result = coaches 
             };
+        }
+        private static ApiResponse Success(string message, object? result = null)
+        {
+            return new ApiResponse { Action = true, Message = message, Result = result };
+        }
+        private static ApiResponse Failure(string message)
+        {
+            return new ApiResponse { Action = false, Message = message };
         }
 
     }

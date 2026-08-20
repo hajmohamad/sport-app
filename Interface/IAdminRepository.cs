@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using sport_app_backend.Dtos;
 using sport_app_backend.Dtos.Account;
 using sport_app_backend.Dtos.Admin;
+using sport_app_backend.Dtos.Chat;
 using sport_app_backend.Models;
 using sport_app_backend.Models.Payments;
 using sport_app_backend.Models.Support;
@@ -31,5 +32,7 @@ namespace sport_app_backend.Interface
 
          // متد دریافت لیست تمامی مربیان
          Task<ApiResponse> GetAllCoachesAsync();
+         Task<ApiResponse> PublishToChannelAsync(PublishToChannelDto dto);
+
     }
 }

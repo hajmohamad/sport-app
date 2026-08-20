@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using sport_app_backend.Dtos;
 using sport_app_backend.Dtos.Account;
 using sport_app_backend.Dtos.Admin;
+using sport_app_backend.Dtos.Chat;
 using sport_app_backend.Interface;
 using sport_app_backend.Models;
 using sport_app_backend.Models.Payments;
@@ -191,6 +192,24 @@ namespace sport_app_backend.Controller
             }
 
             return Ok(response);
+        }
+        [HttpPost("PublishToChannel")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> PublishToChannel([FromForm] PublishToChannelDto dto)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var result = await adminRepository.PublishToChannelAsync(dto);
+
+            if (!result.Action)
+            {
+                return BadRequest(result);
+            }
+
+            return Ok(result);
         }
         
     }
