@@ -34,6 +34,21 @@ public async Task<ApiResponse> GetConversationMessages(
     long? beforeMessageId,
     int take)
 {
+    if (conversationId == -1)
+    {
+        return Success("پیام‌ها با موفقیت دریافت شدند.", new
+        {
+            otherUserNameAndPhoto = new
+            {
+                FullName = "پشتیبانی چارست",
+                Photo = "https://chaarset.s3.ir-thr-at1.arvanstorage.ir/support.jpg",
+                phoneNumber = "",
+                athleteStatus = ""
+            },
+            messageList = new List<ChatMessageDto>()
+        });
+    }
+
     if (userId <= 0 || conversationId <= 0)
         return Failure("اطلاعات گفتگو نامعتبر است.");
 
@@ -576,6 +591,7 @@ public async Task<ApiResponse> MarkAsRead(
             }
         }
     }
+    result.Support ??= ChatMapper.ToSupportListItem(null, null, 0);
 
     SortCoachResult(result);
 
@@ -651,7 +667,6 @@ public async Task<ApiResponse> MarkAsRead(
                         supportParticipant.User,
                         currentParticipant.UnreadCount);
                 }
-
                 break;
             }
 
@@ -694,7 +709,7 @@ public async Task<ApiResponse> MarkAsRead(
     result.Channels = result.Channels
         .OrderByDescending(x => x?.LastMessageAt)
         .ToList();
-
+    result.Support ??= ChatMapper.ToSupportListItem(null, null, 0);
     return Success(
         "لیست چت‌های ورزشکار با موفقیت دریافت شد.",
         result);
@@ -1052,32 +1067,33 @@ public async Task<ApiResponse> MarkAsRead(
         {
             return (false, "شناسه کاربر نامعتبر است.", 0);
         }
-
-        if (conversationId.HasValue)
+        switch (conversationId)
         {
-            if (conversationId.Value <= 0)
-            {
+            case null:
                 return (false, "شناسه گفتگو نامعتبر است.", 0);
+            case -1:
+            {
+                var createSupportResult = await CreateSupportConversation(userId);
+
+                if (!createSupportResult.Action)
+                {
+                    return (false, createSupportResult.Message, 0);
+                }
+
+                var supportConversationId = ExtractLongId(createSupportResult.Result);
+
+                if (supportConversationId <= 0)
+                {
+                    return (false, "شناسه گفتگوی پشتیبانی نامعتبر است.", 0);
+                }
+
+                return (true, string.Empty, supportConversationId);
             }
-
-            return (true, string.Empty, conversationId.Value);
+            case <= 0:
+                return (false, "شناسه گفتگو نامعتبر است.", 0);
+            default:
+                return (true, string.Empty, conversationId.Value);
         }
-
-        var createSupportResult = await CreateSupportConversation(userId);
-
-        if (!createSupportResult.Action)
-        {
-            return (false, createSupportResult.Message, 0);
-        }
-
-        var supportConversationId = ExtractLongId(createSupportResult.Result);
-
-        if (supportConversationId <= 0)
-        {
-            return (false, "شناسه گفتگوی پشتیبانی نامعتبر است.", 0);
-        }
-
-        return (true, string.Empty, supportConversationId);
     }
     private async Task<List<Conversation>> GetAllUserConversations(int userId)
     {

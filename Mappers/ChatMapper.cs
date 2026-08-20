@@ -56,10 +56,29 @@
 
      
         public static ChatListItemDto ToSupportListItem(
-            this Conversation conversation,
-            User supportUser,
+            this Conversation? conversation,
+            User? supportUser,
             int unreadCount)
         {
+            if (conversation is null||supportUser is null)
+            {
+                return new ChatListItemDto
+                {
+                    ConversationId = -1,
+                    UserId = -1,
+                    FullName = "پشتیبانی چارست",
+                    PhoneNumber = "",
+                    ProfileImageUrl = "https://chaarset.s3.ir-thr-at1.arvanstorage.ir/support.jpg",
+                    Service = "پشتیبانی",
+                    Status = "Support",
+                    LastMessageText = null,
+                    LastMessageAt = null,
+                    UnreadCount = 0,
+                    IsSupport = true,
+                    LastMessageStatus = "noMessage"
+                
+                };
+            }
             return new ChatListItemDto
             {
                 ConversationId = conversation.Id,
@@ -77,6 +96,7 @@
                 
             };
         }
+      
         public static ChatListItemDto ToChannelListItem(
             this Conversation conversation,
            int unreadCount)
