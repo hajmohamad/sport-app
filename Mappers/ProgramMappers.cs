@@ -2,6 +2,7 @@ using System.Globalization;
 using sport_app_backend.Dtos;
 using sport_app_backend.Dtos.Payment;
 using sport_app_backend.Dtos.ProgramDto;
+using sport_app_backend.Dtos.Training;
 using sport_app_backend.Models.Account;
 using sport_app_backend.Models.Actions;
 using sport_app_backend.Models.Program;
@@ -38,8 +39,8 @@ public static class ProgramMappers
             ProgramPriority = workoutProgram.ProgramPriority.ToString(),
             Status = workoutProgram.Status.ToString(),
             Description = workoutProgram.Description,
-            Days = workoutProgram.ProgramInDays.ToProgramInDayDto()
-
+            Days = workoutProgram.ProgramInDays.ToProgramInDayDto(),
+            WorkoutProgramTemplateName=workoutProgram.WorkoutProgramTemplateName
         };
     }
     public static AllPaymentResponseDto ToAllWorkoutProgramResponseDto(this WorkoutProgram workoutProgram)
