@@ -17,17 +17,18 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="11e104f8-869d-4d9d-9802-b48455f5eb31" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Services/ActiveConversationService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Hubs/ChatHub.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Hubs/ChatHub.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Interface/INotification.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Interface/INotification.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Mappers/PaymentMappers.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Mappers/PaymentMappers.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Dtos/Notification/NotificationRequest.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Interface/INotificationQueue.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Interface/INotificationService.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Repository/NotificationService.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Services/NotificationBackgroundWorker.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Services/Queue/NotificationQueue.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Controller/NotificationController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Controller/NotificationController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Interface/INotification.cs" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Program.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Repository/ChatRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Repository/ChatRepository.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Repository/NotificationRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Repository/NotificationRepository.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Services/WebPushNotificationService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Services/WebPushNotificationService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Repository/NotificationRepository.cs" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/appsettings.Development.json" beforeDir="false" afterPath="$PROJECT_DIR$/appsettings.Development.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sport-app-backend.sln.DotSettings.user" beforeDir="false" afterPath="$PROJECT_DIR$/sport-app-backend.sln.DotSettings.user" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -125,6 +126,7 @@
     <setting file="file://$PROJECT_DIR$/Dtos/Eitaa/EitaaLoginRequestDto.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Dtos/Eitaa/EitaaUserDto.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Dtos/Eitaa/EitaaValidationResult.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Dtos/Notification/NotificationRequest.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Dtos/WorkoutProgramTemplateDto/WorkoutProgramTemplateCreateDto.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Hubs/ChatHub.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Interface/Athlete/IAchievements.cs" root0="FORCE_HIGHLIGHTING" />
@@ -138,7 +140,7 @@
     <setting file="file://$PROJECT_DIR$/Interface/IDataValidator.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Interface/IEitaaAuthService.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Interface/IInAppMessageRepository.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Interface/INotification.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Interface/INotificationQueue.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Interface/IStorage.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Mappers/ChatMapper.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Mappers/ExercisesMappers.cs" root0="FORCE_HIGHLIGHTING" />
@@ -172,13 +174,14 @@
     <setting file="file://$PROJECT_DIR$/Repository/ChatRepository.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Repository/CoachRepo/DiscountCodeRepository.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Repository/InAppMessageRepository.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Repository/NotificationRepository.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Repository/UserRepository.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Repository/WorkoutProgramTemplateRepository.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Services/ActiveConversationService.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Services/Calculator.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Services/DataValidator.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Services/EitaaAuthService.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Services/NotificationBackgroundWorker.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Services/Queue/NotificationQueue.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Services/WebPushNotificationService.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/projectTest/AthleteControllerTests.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/projectTest/AthleteRepositoryTests.cs" root0="FORCE_HIGHLIGHTING" />
@@ -514,15 +517,7 @@
       <workItem from="1786883603460" duration="3753000" />
       <workItem from="1786888931100" duration="549000" />
       <workItem from="1787417545253" duration="272000" />
-      <workItem from="1787427736472" duration="1607000" />
-    </task>
-    <task id="LOCAL-00078" summary="add eita feature for login and build all mini app">
-      <option name="closed" value="true" />
-      <created>1783723665240</created>
-      <option name="number" value="00078" />
-      <option name="presentableId" value="LOCAL-00078" />
-      <option name="project" value="LOCAL" />
-      <updated>1783723665241</updated>
+      <workItem from="1787427736472" duration="3232000" />
     </task>
     <task id="LOCAL-00079" summary="add migrations for eitaa">
       <option name="closed" value="true" />
@@ -908,7 +903,15 @@
       <option name="project" value="LOCAL" />
       <updated>1787415632099</updated>
     </task>
-    <option name="localTasksCounter" value="127" />
+    <task id="LOCAL-00127" summary="add notif to message">
+      <option name="closed" value="true" />
+      <created>1787429362259</created>
+      <option name="number" value="00127" />
+      <option name="presentableId" value="LOCAL-00127" />
+      <option name="project" value="LOCAL" />
+      <updated>1787429362259</updated>
+    </task>
+    <option name="localTasksCounter" value="128" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -984,7 +987,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
-    <MESSAGE value="add readCount" />
     <MESSAGE value="add ApplicationDbContextModelSnapshot.cs" />
     <MESSAGE value="edit fix bugs" />
     <MESSAGE value="add data to messages" />
@@ -1009,7 +1011,8 @@
     <MESSAGE value="add adminlogin" />
     <MESSAGE value="add channel to support chat list" />
     <MESSAGE value="add TrainingReminderService" />
-    <option name="LAST_COMMIT_MESSAGE" value="add TrainingReminderService" />
+    <MESSAGE value="add notif to message" />
+    <option name="LAST_COMMIT_MESSAGE" value="add notif to message" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

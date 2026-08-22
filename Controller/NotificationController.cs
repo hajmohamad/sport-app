@@ -12,7 +12,7 @@ namespace sport_app_backend.Controller;
 
 [ApiController]
 [Route("api/notifications")]
-public class NotificationController(INotification notification,ApplicationDbContext db,IWebPushNotificationService webPushNotificationService) : ControllerBase
+public class NotificationController(INotificationService notification,ApplicationDbContext db,IWebPushNotificationService webPushNotificationService) : ControllerBase
 {
     [HttpPost("subscribe")]
     [Authorize(Roles = "Athlete,Coach")]
@@ -21,7 +21,7 @@ public class NotificationController(INotification notification,ApplicationDbCont
         var phoneNumber = User.FindFirst(ClaimTypes.Name)?.Value;
         if (phoneNumber is null) return BadRequest("PhoneNumber is null");
 
-        var result = await notification.AddNewSubscribe(phoneNumber, dto);
+        var result = await notification.AddNewSubscribeAsync(phoneNumber, dto);
         if (!result.Action) return BadRequest(result);
         return Ok(result);
     }

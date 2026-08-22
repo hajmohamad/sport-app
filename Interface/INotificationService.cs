@@ -1,0 +1,11 @@
+using sport_app_backend.Controller;
+using sport_app_backend.Dtos;
+using sport_app_backend.Models;
+
+namespace sport_app_backend.Interface;
+
+public interface INotificationService
+{
+    Task<ApiResponse> AddNewSubscribeAsync(string phoneNumber, NotificationSubscriptionDto notificationDto);
+    Task SendPushNotificationAsync(int userId, string title, string body);
+}

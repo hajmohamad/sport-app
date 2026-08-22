@@ -204,7 +204,6 @@ builder.Services.AddSingleton<ISmsService, SmsService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<ICoachRepository, CoachRepository>();
 builder.Services.AddScoped<IWebPushNotificationService, WebPushNotificationService>();
-builder.Services.AddScoped<INotification,NotificationRepository>();
 builder.Services.AddHostedService<TrainingReminderService>();
 builder.Services.AddHostedService<ProgramRenewalReminderService>();
 builder.Services.AddHostedService<PaymentAttemptSmsService>();
@@ -228,20 +227,20 @@ builder.Services.AddScoped<IExerciseCacheService, ExerciseCacheService>();
 builder.Services.AddScoped<AthleteCacheService>();
 builder.Services.AddScoped<WorkoutProgramCacheService>();
 builder.Services.AddScoped<TrainingSessionCacheService>();
-
-
 builder.Services.AddScoped<IDataValidator, DataValidator>();
 builder.Services.AddScoped<IEitaaAuthService, EitaaAuthService>();
-
 builder.Services.AddSignalR();
-
 builder.Services.AddScoped<IChatRepository, ChatRepository>();
-
-
-
 builder.Services.AddSingleton<ActiveConversationService>();
 
+#region Notification 
+builder.Services.AddMemoryCache();
 
+builder.Services.AddSingleton<INotificationQueue, NotificationQueue>();
+builder.Services.AddHostedService<NotificationBackgroundWorker>();
+builder.Services.AddScoped<INotificationService, NotificationService>();
+builder.Services.AddScoped<IWebPushNotificationService, WebPushNotificationService>();
+#endregion
 
 
 

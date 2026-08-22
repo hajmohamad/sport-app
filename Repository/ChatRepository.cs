@@ -16,8 +16,8 @@ public class ChatRepository(
     IHubContext<ChatHub> hubContext,
     IStorage storage,
     IConfiguration configuration,
-    INotification notification,
     ActiveConversationService activeConversations,
+    INotificationService notificationService,
     WorkoutProgramCacheService workoutCache) : IChatRepository
 {
 
@@ -258,7 +258,7 @@ public async Task<ApiResponse> SendMessage(int senderUserId, SendMessageDto dto)
             var senderName = senderParticipant.User.ToFullName();
             var messageText = message.Text?.Trim();
 
-            await notification.SendPushNotification(
+            await notificationService.SendPushNotificationAsync(
                 participant.UserId,
                 $"پیام جدید از {senderName}",
                 string.IsNullOrWhiteSpace(messageText) ? "عکس" : messageText
