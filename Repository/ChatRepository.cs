@@ -7,6 +7,7 @@ using sport_app_backend.Interface;
 using sport_app_backend.Mappers;
 using sport_app_backend.Models;
 using sport_app_backend.Models.Chat;
+using sport_app_backend.Services;
 using sport_app_backend.Services.Cash;
 namespace sport_app_backend.Repository;
 
@@ -15,6 +16,8 @@ public class ChatRepository(
     IHubContext<ChatHub> hubContext,
     IStorage storage,
     IConfiguration configuration,
+    INotification notification,
+    ActiveConversationService activeConversations,
     WorkoutProgramCacheService workoutCache) : IChatRepository
 {
 
@@ -248,6 +251,19 @@ public async Task<ApiResponse> SendMessage(int senderUserId, SendMessageDto dto)
         if (participant.UserId == senderUserId)
         {
             senderMessageDto = messageDto;
+        }
+        if (participant.UserId != senderUserId
+            && !activeConversations.IsUserInConversation(participant.UserId, conversation.Id))
+        {
+            var senderName = senderParticipant.User.ToFullName();
+            var messageText = message.Text?.Trim();
+
+            await notification.SendPushNotification(
+                participant.UserId,
+                $"پیام جدید از {senderName}",
+                string.IsNullOrWhiteSpace(messageText) ? "عکس" : messageText
+            );
+            
         }
 
         await hubContext.Clients

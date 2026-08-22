@@ -7,4 +7,6 @@ namespace sport_app_backend.Interface;
 public interface INotification
 {
     Task<ApiResponse> AddNewSubscribe(string phoneNumber, NotificationSubscriptionDto notification);
+    Task SendPushNotification(int userId, string title, string body);
+
 }

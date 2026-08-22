@@ -239,6 +239,8 @@ builder.Services.AddScoped<IChatRepository, ChatRepository>();
 
 
 
+builder.Services.AddSingleton<ActiveConversationService>();
+
 
 
 

@@ -34,4 +34,5 @@ public class WebPushNotificationService(IConfiguration config):IWebPushNotificat
 
        await webPushClient.SendNotificationAsync(subscription, payload, vapid);
     }
+    
 }

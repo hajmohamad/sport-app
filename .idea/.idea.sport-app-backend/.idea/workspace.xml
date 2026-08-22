@@ -17,14 +17,16 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="11e104f8-869d-4d9d-9802-b48455f5eb31" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/dataSources.local.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/dataSources/b995594b-b1c6-4f7b-a3d8-4a5b1ad21ad7.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/dataSources/b995594b-b1c6-4f7b-a3d8-4a5b1ad21ad7.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Services/ActiveConversationService.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.sport-app-backend/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Mappers/ChatMapper.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Mappers/ChatMapper.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Hubs/ChatHub.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Hubs/ChatHub.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Interface/INotification.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Interface/INotification.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Mappers/PaymentMappers.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Mappers/PaymentMappers.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Program.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Repository/ChatRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Repository/ChatRepository.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Services/Storage.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Services/Storage.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/nuget.config" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/sport-app-backend.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/sport-app-backend.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Repository/NotificationRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Repository/NotificationRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Services/WebPushNotificationService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Services/WebPushNotificationService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/appsettings.Development.json" beforeDir="false" afterPath="$PROJECT_DIR$/appsettings.Development.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/sport-app-backend.sln.DotSettings.user" beforeDir="false" afterPath="$PROJECT_DIR$/sport-app-backend.sln.DotSettings.user" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -93,7 +95,10 @@
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/51bdb2654e8f4169b707ee2bc215de369e00/dc/0e711e76/CacheExtensions.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/649f9a5315084d038b64e29ea11b1fb57000/46/c3eb4cbf/IConfiguration.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/71e52421c6904ee8851944a0b013698923200/1c/bf2e6586/ILogger`1.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/a6ca83fd68634bcf88b36fa07a3599b426a020/65/7ba82f56/EntityFrameworkQueryableExtensions.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/b2a0e678edf746d68f2328a92442c8fd49600/1f/860bb346/FirebaseMessaging.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/b8bc8de0156140769b359b2643b54ee1219600/dc/dc604bbf/ActionMethodExecutor.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/f8350a1ab7394363a06b62d52f873e3cd83a00/76/8b47ea10/CancellationToken.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/BackgroundServices/ProgramRenewalReminderService.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/BackgroundServices/TrainingReminderService.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Controller/AdminController.cs" root0="FORCE_HIGHLIGHTING" />
@@ -111,6 +116,7 @@
     <setting file="file://$PROJECT_DIR$/Dtos/Chat/AthleteChatListDto.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Dtos/Chat/ChatMessageDto.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Dtos/Chat/CoachChatListDto.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Dtos/Chat/PublishToChannelDto.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Dtos/Chat/SendMessageDto.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Dtos/Chat/UploadAttachmentDto.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Dtos/Coach/CoachBuyRequestDto.cs" root0="FORCE_HIGHLIGHTING" />
@@ -169,6 +175,7 @@
     <setting file="file://$PROJECT_DIR$/Repository/NotificationRepository.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Repository/UserRepository.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Repository/WorkoutProgramTemplateRepository.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Services/ActiveConversationService.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Services/Calculator.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Services/DataValidator.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Services/EitaaAuthService.cs" root0="FORCE_HIGHLIGHTING" />
@@ -506,14 +513,8 @@
       <workItem from="1786876155394" duration="10000" />
       <workItem from="1786883603460" duration="3753000" />
       <workItem from="1786888931100" duration="549000" />
-    </task>
-    <task id="LOCAL-00077" summary="add show website to profile response">
-      <option name="closed" value="true" />
-      <created>1783198046618</created>
-      <option name="number" value="00077" />
-      <option name="presentableId" value="LOCAL-00077" />
-      <option name="project" value="LOCAL" />
-      <updated>1783198046618</updated>
+      <workItem from="1787417545253" duration="272000" />
+      <workItem from="1787427736472" duration="1607000" />
     </task>
     <task id="LOCAL-00078" summary="add eita feature for login and build all mini app">
       <option name="closed" value="true" />
@@ -899,7 +900,15 @@
       <option name="project" value="LOCAL" />
       <updated>1786884158228</updated>
     </task>
-    <option name="localTasksCounter" value="126" />
+    <task id="LOCAL-00126" summary="add TrainingReminderService">
+      <option name="closed" value="true" />
+      <created>1787415632099</created>
+      <option name="number" value="00126" />
+      <option name="presentableId" value="LOCAL-00126" />
+      <option name="project" value="LOCAL" />
+      <updated>1787415632099</updated>
+    </task>
+    <option name="localTasksCounter" value="127" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -975,7 +984,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
-    <MESSAGE value="edit and fix some bugs" />
     <MESSAGE value="add readCount" />
     <MESSAGE value="add ApplicationDbContextModelSnapshot.cs" />
     <MESSAGE value="edit fix bugs" />
@@ -1000,7 +1008,8 @@
     <MESSAGE value="admin migrations" />
     <MESSAGE value="add adminlogin" />
     <MESSAGE value="add channel to support chat list" />
-    <option name="LAST_COMMIT_MESSAGE" value="add channel to support chat list" />
+    <MESSAGE value="add TrainingReminderService" />
+    <option name="LAST_COMMIT_MESSAGE" value="add TrainingReminderService" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1132,19 +1141,6 @@
             </endOffsets>
           </properties>
           <option name="timeStamp" value="40" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/Models/Program/WorkoutProgram.cs</url>
-          <line>23</line>
-          <properties documentPath="$PROJECT_DIR$/Models/Program/WorkoutProgram.cs" containingFunctionPresentation="Property 'ProgramLevel'">
-            <startOffsets>
-              <option value="922" />
-            </startOffsets>
-            <endOffsets>
-              <option value="926" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="43" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Services/EitaaAuthService.cs</url>

@@ -3,11 +3,13 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using sport_app_backend.Data;
+using sport_app_backend.Models.Account;
+using sport_app_backend.Services;
 
 namespace sport_app_backend.Hubs;
 
 [Authorize]
-public class ChatHub(ApplicationDbContext context) : Hub
+public class ChatHub(ApplicationDbContext context,ActiveConversationService activeConversations) : Hub
 {
     public override async Task OnConnectedAsync()
     {
@@ -64,12 +66,28 @@ public class ChatHub(ApplicationDbContext context) : Hub
         }
 
         await Groups.AddToGroupAsync(Context.ConnectionId, $"chat_{conversationId}");
+        activeConversations.UserOpenedConversation(user.Id, conversationId); 
+
     }
 
     public async Task LeaveConversation(long conversationId)
     {
+        var user = await GetUserAsync();
+        if (user is not null)
+            activeConversations.UserClosedConversation(user.Id, conversationId); 
+
         await Groups.RemoveFromGroupAsync(Context.ConnectionId, $"chat_{conversationId}");
     }
+    public override async Task OnDisconnectedAsync(Exception? exception)
+    {
+        var user = await GetUserAsync();
+        if (user is not null)
+        {
+            activeConversations.UserDisconnected(user.Id);
+        }
+        await base.OnDisconnectedAsync(exception);
+    }
+
 
     public async Task TypingStarted(long conversationId)
     {
@@ -100,6 +118,13 @@ public class ChatHub(ApplicationDbContext context) : Hub
                 PhoneNumber = user.PhoneNumber,
                 FullName = $"{user.FirstName} {user.LastName}".Trim()
             });
+    }
+    private async Task<User?> GetUserAsync()
+    {
+        var phoneNumber = Context.User?.FindFirst(ClaimTypes.Name)?.Value;
+        if (string.IsNullOrWhiteSpace(phoneNumber)) { Context.Abort(); return null; }
+        return await context.Users.AsNoTracking()
+            .FirstOrDefaultAsync(x => x.PhoneNumber == phoneNumber);
     }
 
     public async Task TypingStopped(long conversationId)

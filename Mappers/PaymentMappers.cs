@@ -2,6 +2,7 @@
 using sport_app_backend.Dtos;
 using sport_app_backend.Dtos.Payment;
 using sport_app_backend.Dtos.Training;
+using sport_app_backend.Models.Account;
 using sport_app_backend.Models.Payments;
 using sport_app_backend.Models.Program;
 
@@ -53,6 +54,11 @@ public static class PaymentMappers
             
         };
         
+    }
+
+    public static string ToFullName(this User user)
+    {
+        return user.FirstName + " " + user.LastName;
     }
     // public static PaymentResponseDto ToAthletePaymentResponseDto(this Payment payment)
     // {

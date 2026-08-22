@@ -63,4 +63,19 @@ public class NotificationRepository(ApplicationDbContext db,IWebPushNotification
             Message = "Notification Subscription added",
         };
     }
+    public async Task SendPushNotification(int userId, string title, string body)
+    {
+        var subscriptions = await db.NotificationSubscriptions
+            .Where(n => n.UserId == userId)
+            .ToListAsync();
+
+        if (!subscriptions.Any())
+            return;
+
+        var sendTasks = subscriptions
+            .Select(sub => webPushNotificationService.SendAsync(sub, title, body));
+
+        await Task.WhenAll(sendTasks);
+    }
+
 }
