@@ -205,7 +205,7 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<ICoachRepository, CoachRepository>();
 builder.Services.AddScoped<IWebPushNotificationService, WebPushNotificationService>();
 builder.Services.AddScoped<INotification,NotificationRepository>();
-// builder.Services.AddHostedService<TrainingReminderService>();
+builder.Services.AddHostedService<TrainingReminderService>();
 builder.Services.AddHostedService<ProgramRenewalReminderService>();
 builder.Services.AddHostedService<PaymentAttemptSmsService>();
 builder.Services.AddHostedService<QuestionReminderService >();
