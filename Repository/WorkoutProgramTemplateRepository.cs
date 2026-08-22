@@ -252,9 +252,7 @@ public class WorkoutProgramTemplateRepository(ApplicationDbContext context) : IW
                 context.SingleExercises.RemoveRange(oldExercises);
                 context.ProgramInDays.RemoveRange(program.ProgramInDays);
             }
-
-            // کپی عمیق از Template به Program
-            program.Title = template.Title;
+            program.WorkoutProgramTemplateName = template.Title;
             program.Description = template.Description;
             program.ProgramDuration = template.ProgramDuration;
             program.ProgramLevel = template.ProgramLevel;
@@ -288,4 +286,64 @@ public class WorkoutProgramTemplateRepository(ApplicationDbContext context) : IW
             };
         }
     }
+    public async Task<ApiResponse> RemoveTemplateFromProgram(int coachId, int paymentId)
+    {
+        try
+        {
+
+            var program = await context.WorkoutPrograms
+                .Include(x => x.ProgramInDays)
+                .ThenInclude(x => x.AllExerciseInDays)
+                .FirstOrDefaultAsync(x => x.PaymentId == paymentId && x.CoachId == coachId);
+
+            if (program is null)
+            {
+                return new ApiResponse
+                {
+                    Action = false,
+                    Message = "برنامه یافت نشد."
+                };
+            }
+
+            if (program.Status is not WorkoutProgramStatus.WRITING and WorkoutProgramStatus.NOTSTARTED)
+            {
+                return new ApiResponse
+                {
+                    Action = false,
+                    Message = "دسترسی ندارید"
+                };
+            }
+        
+
+            if (program.ProgramInDays.Count > 0)
+            {
+                var oldExercises = program.ProgramInDays.SelectMany(x => x.AllExerciseInDays).ToList();
+                context.SingleExercises.RemoveRange(oldExercises);
+                context.ProgramInDays.RemoveRange(program.ProgramInDays);
+            }
+            program.WorkoutProgramTemplateName = null;
+            program.Description = "";
+            program.ProgramDuration = 0;
+            program.ProgramLevel = 0;
+            program.ProgramPriority = 0;
+         
+
+            await context.SaveChangesAsync();
+
+            return new ApiResponse
+            {
+                Action = true,
+                Message = "قالب با موفقیت از برنامه حذف شد"
+            };
+        }
+        catch (Exception e)
+        {
+            return new ApiResponse
+            {
+                Action = false,
+                Message = e.Message
+            };
+        }
+    }
+
 }

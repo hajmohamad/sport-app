@@ -1,4 +1,5 @@
-﻿using sport_app_backend.Models.Question.A_Question;
+﻿using sport_app_backend.Dtos.Training;
+using sport_app_backend.Models.Question.A_Question;
 
 namespace sport_app_backend.Dtos;
 

@@ -14,4 +14,6 @@ public interface IWorkoutProgramTemplateRepository
     Task<ApiResponse> GetAllTemplates(int coachId);
 
     Task<ApiResponse> ApplyTemplateToProgram(int coachId, int dtoTemplateId, int dtoPaymentId);
+    Task<ApiResponse> RemoveTemplateFromProgram(int coachId, int paymentId);
+
 }

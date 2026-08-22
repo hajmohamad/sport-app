@@ -14,6 +14,7 @@ public class WorkoutProgram
     public required int CoachId { get; set; }
     public Coach Coach {get; set;} = null!;
     public required int AthleteId { get; set; }
+    public string? WorkoutProgramTemplateName { get; set; }
     public Athlete Athlete {get; set;} = null!;
     [MaxLength(50)]
     public string Title { get; set; }="";

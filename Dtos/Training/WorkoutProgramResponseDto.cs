@@ -1,8 +1,6 @@
-using System.ComponentModel.DataAnnotations;
 using sport_app_backend.Dtos.ProgramDto;
-using sport_app_backend.Models.Program;
 
-namespace sport_app_backend.Dtos;
+namespace sport_app_backend.Dtos.Training;
 
 public class WorkoutProgramResponseDto
 { 
@@ -20,4 +18,5 @@ public class WorkoutProgramResponseDto
     public int Duration { get; set; }
     public string Description { get; set; } = "";
     public List<ProgramInDayDto>? Days { get; set; } = [];
+    public string? WorkoutProgramTemplateName { get; set; }
 }

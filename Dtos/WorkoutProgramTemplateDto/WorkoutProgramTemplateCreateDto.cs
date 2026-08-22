@@ -45,3 +45,7 @@ public class CreateWorkoutProgramFromTemplateDto
     public int TemplateId { get; set; }
     public int PaymentId { get; set; }
 }
+public class ClearTemplateFromWorkoutProgramDto
+{
+    public int PaymentId { get; set; }
+}

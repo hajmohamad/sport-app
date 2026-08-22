@@ -922,7 +922,7 @@ namespace sport_app_backend.Repository.CoachRepo
                 .ThenInclude(e => e.Exercise)
                 .FirstOrDefaultAsync(p => p.Coach.PhoneNumber == phoneNumber && p.Id == paymentId);
             if (payment is null) return new ApiResponse() { Message = "Payment not found", Action = false };
-            var ear = 0.0; // مقدار پیش‌فرض
+            var ear = 0.0; 
             if (payment.AthleteQuestion != null)
             {
                 ear = calculator.BmrCalculator(new BmrRequestDto()

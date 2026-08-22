@@ -102,6 +102,17 @@ public class WorkoutProgramTemplateController(IWorkoutProgramTemplateRepository 
         var result = await repository.ApplyTemplateToProgram(coachId, dto.TemplateId, dto.PaymentId);
         return Ok(result);
     }
+    [HttpDelete("ClearProgram")]
+    public async Task<IActionResult> ClearProgram([FromBody] ClearTemplateFromWorkoutProgramDto dto)
+    {
+        var coachId = await GetCoachIdAsync();
+        if (coachId == 0)
+        {
+            return Unauthorized(new ApiResponse { Action = false, Message = "خطای احراز هویت." });
+        }
+        var result = await repository.RemoveTemplateFromProgram(coachId, dto.PaymentId);
+        return Ok(result);
+    }
     private async Task<int> GetCoachIdAsync()
     {
         var coachIdClaim = User.FindFirst("coach_id")?.Value;
