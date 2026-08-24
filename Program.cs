@@ -22,6 +22,7 @@ using sport_app_backend.Interface.Coach;
 using sport_app_backend.Repository.AthleteRepo;
 using sport_app_backend.Repository.CoachRepo;
 using sport_app_backend.Services.Cash;
+using sport_app_backend.Services.Queue;
 
 Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()

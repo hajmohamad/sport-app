@@ -250,6 +250,26 @@ public class UserController(IUserRepository userRepository) : ControllerBase
         var userIdClaim = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
         return int.TryParse(userIdClaim, out var userId) ? userId : 0;
     }
+    [HttpGet("update")]
+    public Task<IActionResult> GetUpdate()
+    {
+        try
+        {
+            var updateFeatures = new List<string>
+            {
+                "قابلیت چت مستقیم بین ورزشکار و مربی",
+                "گزارش‌ گیری خودکار تمرین ورزشکار برای مربی",
+                "چت مستقیم با پشتیبانی تیم چارست",
+                "قابلیت نوتیفیکیشن"
+            };
+      
+            return Task.FromResult<IActionResult>(Ok(updateFeatures));
+        }
+        catch (Exception exception)
+        {
+            return Task.FromException<IActionResult>(exception);
+        }
+    }
 
  
 

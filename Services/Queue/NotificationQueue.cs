@@ -2,18 +2,14 @@ using System.Threading.Channels;
 using sport_app_backend.Dtos.Notification;
 using sport_app_backend.Interface;
 
+namespace sport_app_backend.Services.Queue;
 
 public class NotificationQueue : INotificationQueue
 {
-    private readonly Channel<NotificationRequest> _channel;
-
-    public NotificationQueue()
+    private readonly Channel<NotificationRequest> _channel = Channel.CreateUnbounded<NotificationRequest>(new UnboundedChannelOptions
     {
-        _channel = Channel.CreateUnbounded<NotificationRequest>(new UnboundedChannelOptions
-        {
-            SingleReader = true 
-        });
-    }
+        SingleReader = true 
+    });
 
     public async ValueTask EnqueueAsync(NotificationRequest request)
     {
