@@ -12,12 +12,10 @@ namespace sport_app_backend.Repository;
 
 public class NotificationService(
     ApplicationDbContext db,
-    IWebPushNotificationService webPushService,
     INotificationQueue notificationQueue,
     IMemoryCache cache)
     : INotificationService
 {
-    private readonly IWebPushNotificationService _webPushService = webPushService;
 
     public async Task<ApiResponse> AddNewSubscribeAsync(string phoneNumber, NotificationSubscriptionDto notificationDto)
     {

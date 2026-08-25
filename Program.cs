@@ -33,7 +33,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Host.UseSerilog((context, configuration) =>
 {
     configuration
-        .MinimumLevel.Is(LogEventLevel.Information) 
+        .MinimumLevel.Is(LogEventLevel.Warning) 
         .Enrich.FromLogContext()
         .WriteTo.Console(); 
 });

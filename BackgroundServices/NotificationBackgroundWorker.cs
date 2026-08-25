@@ -1,11 +1,10 @@
-
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using sport_app_backend.Data;
 using sport_app_backend.Interface;
 using sport_app_backend.Models;
 
-namespace sport_app_backend.Services;
+namespace sport_app_backend.BackgroundServices;
 
 public class NotificationBackgroundWorker(
     ILogger<NotificationBackgroundWorker> logger,

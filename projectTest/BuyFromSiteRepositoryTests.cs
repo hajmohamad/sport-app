@@ -56,7 +56,6 @@ namespace sport_app_backend.Tests.Repository
                 _mockSmsService.Object,
                 _mockLiaraStorage.Object,
                 _mockZarinPal.Object,
-                _mockConfig.Object,
                 _mockChat.Object
                 
             );

@@ -23,9 +23,8 @@ public class BuyFromSiteRepository(
     ApplicationDbContext dbContext,
     ITokenService tokenService,
     ISmsService sms,
-    IStorage Storage,
+    IStorage storage,
     IZarinPal zarinPal,
-    IConfiguration config,
     IChatRepository chatRepository)
     : IBuyFromSiteRepository
 {
@@ -159,10 +158,10 @@ public class BuyFromSiteRepository(
                     var frontLink = athleteImage.FrontLink;
                     if (frontLink is { Length: > 1 })
                     {
-                        await Storage.RemovePhoto(frontLink);
+                        await storage.RemovePhoto(frontLink);
                     }
 
-                    var response = await Storage.UploadImage(file, "","bodyImage");
+                    var response = await storage.UploadImage(file, "","bodyImage");
                     if (response.Action)
                     {
                         athleteImage.FrontLink = response.Result as string;
@@ -179,10 +178,10 @@ public class BuyFromSiteRepository(
                     var frontLink = athleteImage.BackLink;
                     if (frontLink is { Length: > 1 })
                     {
-                        await Storage.RemovePhoto(frontLink);
+                        await storage.RemovePhoto(frontLink);
                     }
 
-                    var response = await Storage.UploadImage(file, "","bodyImage");
+                    var response = await storage.UploadImage(file, "","bodyImage");
                     if (response.Action)
                     {
                         athleteImage.BackLink = response.Result as string;
@@ -199,10 +198,10 @@ public class BuyFromSiteRepository(
                     var frontLink = athleteImage.SideLink;
                     if (frontLink is { Length: > 1 })
                     {
-                        await Storage.RemovePhoto(frontLink);
+                        await storage.RemovePhoto(frontLink);
                     }
 
-                    var response = await Storage.UploadImage(file, "","bodyImage");
+                    var response = await storage.UploadImage(file, "","bodyImage");
                     if (response.Action)
                     {
                         athleteImage.SideLink = response.Result as string;
@@ -226,7 +225,7 @@ public class BuyFromSiteRepository(
         }
         else
         {
-            var response = await Storage.UploadImage(file, "","bodyImage");
+            var response = await storage.UploadImage(file, "","bodyImage");
             if (!response.Action)
             {
                 return response;
@@ -296,7 +295,7 @@ public class BuyFromSiteRepository(
                     var frontLink = athleteImage.FrontLink;
                     if (frontLink is { Length: > 1 })
                     {
-                        var removeResponse = await Storage.RemovePhoto(frontLink);
+                        var removeResponse = await storage.RemovePhoto(frontLink);
                         if (!removeResponse.Action)
                         {
                             return removeResponse;
@@ -319,7 +318,7 @@ public class BuyFromSiteRepository(
                     var backLink = athleteImage.BackLink;
                     if (backLink is { Length: > 1 })
                     {
-                        var removeResponse = await Storage.RemovePhoto(backLink);
+                        var removeResponse = await storage.RemovePhoto(backLink);
                         if (!removeResponse.Action)
                         {
                             return removeResponse;
@@ -342,7 +341,7 @@ public class BuyFromSiteRepository(
                     var sideLink = athleteImage.SideLink;
                     if (sideLink is { Length: > 1 })
                     {
-                        var removeResponse = await Storage.RemovePhoto(sideLink);
+                        var removeResponse = await storage.RemovePhoto(sideLink);
                         if (!removeResponse.Action)
                         {
                             return removeResponse;
