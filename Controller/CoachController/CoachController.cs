@@ -74,7 +74,7 @@ namespace sport_app_backend.Controller.CoachController
             return Ok(result);
         }
 
-        [HttpGet("coach/payments")]
+        [HttpGet("payments")]
         [Authorize(Roles = "Coach")]
 
         public async Task<IActionResult> GetCoachPayments(

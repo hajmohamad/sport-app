@@ -1920,8 +1920,13 @@ namespace sport_app_backend.Repository.CoachRepo
                     IsPinned = x.IsPinned,
                     IsInLastProgram = x.IsLast
                 });
-
-            return (result, total);
+            if (pinnedIds.Count != 0 || page != 1) return (result, total);
+            var allExerciseResponseDtos = result.ToArray();
+            foreach (var item in allExerciseResponseDtos.Take(2))
+            {
+                item.IsPinned = true;
+            }
+            return (allExerciseResponseDtos, total);
         }
 
 
